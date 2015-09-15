@@ -1,8 +1,6 @@
 TADA Frontend
 ================
 
-An opinionated example application built with Marionette.js.
-
 ## Quick start
 
 
