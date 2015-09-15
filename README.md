@@ -3,7 +3,6 @@ TADA Frontend
 
 ## Quick start
 
-
 ```sh
 git clone https://github.com/klpdotorg/tada-frontend.git && cd tada-frontend
 ```
