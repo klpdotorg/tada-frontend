@@ -16,8 +16,6 @@ var _ = require('lodash');
 var browserSync = require('browser-sync');
 var reload = browserSync.reload;
 
-var api = require('./api/api');
-
 gulp.task('clean', function(cb) {
   del([
     'app/tmp'
@@ -130,11 +128,8 @@ gulp.task('test', [
 gulp.task('watch', ['build'], function(cb) {
   browserSync({
     server: {
-      baseDir: 'dist',
-      middleware: function(req, res, next) {
-        api(req, res, next);
-      }
-    }
+      baseDir: 'dist'
+      }    
   });
 
   reporter = 'dot';
