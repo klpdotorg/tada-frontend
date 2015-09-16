@@ -27,9 +27,7 @@ export default LayoutView.extend({
     this.navbar.show(new NavbarView());
     this.secondaryMenu.show(new SecondaryMenuView());
     this.schooltypes.show(new SchooltypesView());
-    //this.treetoggler.show(new TreetogglerView());
-    //this.sidebar.show(new SidebarView());
-    //this.schooltypes.show(new SchoolTypesView());
-
+    this.treetoggler.show(new TreetogglerView());
+    this.sidebar.show(new SidebarView());
   }
 });
