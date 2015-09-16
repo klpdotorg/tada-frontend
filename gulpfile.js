@@ -12,9 +12,14 @@ var source = require('vinyl-source-stream');
 var stylish = require('jshint-stylish');
 var buffer = require('vinyl-buffer');
 var _ = require('lodash');
-
 var browserSync = require('browser-sync');
 var reload = browserSync.reload;
+var symlink = require('gulp-sym')
+ 
+gulp.task('assets', function(){
+  return gulp.src(['./src/assets/fonts/', './src/assets/images/'])
+    .pipe(symlink(['./dist/assets/fonts','./dist/assets/images'], {force: true}))
+});
 
 gulp.task('clean', function(cb) {
   del([
@@ -33,12 +38,6 @@ gulp.task('sass', function() {
     .on('error', $.sass.logError)
     .pipe($.rename('bundle.css'))
     .pipe(gulp.dest('./dist'))
-});
-
-gulp.task('assets', function() {
-  return gulp.src('./src/assets/**/*',{ "base" : "./src/" })
-    .pipe(changed('./dist'))
-    .pipe(gulp.dest('./dist'));
 });
 
 /*
