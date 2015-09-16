@@ -102,9 +102,9 @@ var reporter = 'spec';
 
 gulp.task('mocha', ['jshint'], function() {
   return gulp.src([
-    './test/setup/node.js',
-    './test/setup/helpers.js',
-    './test/unit/**/*.js'
+    //'./test/setup/node.js',
+    //'./test/setup/helpers.js',
+    //'./test/unit/**/*.js'
   ], { read: false })
     .pipe($.plumber())
     .pipe($.mocha({ reporter: reporter }));
