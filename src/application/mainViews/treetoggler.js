@@ -16,8 +16,7 @@ export default ItemView.extend({
     console.log("treetoggler view rendered");
   },
   toggleSidebar(event) {
-    console.log("clicked toggle");
     event.preventDefault();
-    sidebarChannel.request("toggle");
+    var x = sidebarChannel.request("toggle");
   }
 });

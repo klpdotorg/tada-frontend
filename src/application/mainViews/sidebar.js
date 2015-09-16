@@ -15,8 +15,6 @@ export default ItemView.extend({
     console.log("sidebar view rendered");
   },
   toggle() {
-    console.log("this.$", this.$);
     this.$el.parent().slideToggle();
-    console.log("called sidebar toggle");
   }
 });
