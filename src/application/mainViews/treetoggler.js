@@ -7,7 +7,7 @@ let sidebarChannel = Radio.channel("sidebar");
 
 export default ItemView.extend({
   template: template,
-  tagName: 'a',
+  tagName: 'div',
   className: 'btn btn-primary btn-xs',
   events: {
     'click': 'toggleSidebar'
