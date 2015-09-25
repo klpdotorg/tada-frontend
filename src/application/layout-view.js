@@ -1,9 +1,7 @@
 import {LayoutView} from 'backbone.marionette';
 import template from './layout-template.hbs';
 import HeaderView from './mainViews/header';
-import SecondaryMenuView from './mainViews/secondaryMenu';
-import SchooltypesView from './mainViews/schooltypes';
-import TreetogglerView from './mainViews/treetoggler';
+import navbarView from './mainViews/navbar';
 import SidebarView from './mainViews/sidebar';
 
 
@@ -14,9 +12,7 @@ export default LayoutView.extend({
   regions: {    
     flashes : '.application__flashes',
     header: '.main__header',
-    secondaryMenu: '.main__secondaryMenu',
-    schooltypes: '.main__schooltypes',
-    treetoggler: '.main__treetoggler',
+    navbar: '.main__navbar',        
     sidebar: '.main__sidebar',
     content: '.main__content',
     overlay : '.application__overlay'
@@ -25,9 +21,8 @@ export default LayoutView.extend({
   onRender() {
     console.log("application layout rendered");
     this.header.show(new HeaderView());
-    this.secondaryMenu.show(new SecondaryMenuView());
-    this.schooltypes.show(new SchooltypesView());
-    this.treetoggler.show(new TreetogglerView());
+    this.navbar.show(new navbarView());    
+    //this.treetoggler.show(new TreetogglerView());
     this.sidebar.show(new SidebarView());    
   }
 });
