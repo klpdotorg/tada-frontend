@@ -21,8 +21,7 @@ export default LayoutView.extend({
   onRender() {
     console.log("application layout rendered");
     this.header.show(new HeaderView());
-    this.navbar.show(new navbarView());    
-    //this.treetoggler.show(new TreetogglerView());
+    this.navbar.show(new navbarView());        
     this.sidebar.show(new SidebarView());    
   }
 });
