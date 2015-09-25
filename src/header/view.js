@@ -24,7 +24,7 @@ export default ItemView.extend({
   },
 
   serializeWhere(props) {
-    return _.invoke(this.collection.where(props), 'toJSON');
+    //return _.invoke(this.collection.where(props), 'toJSON');
   },
 
   ui: {
