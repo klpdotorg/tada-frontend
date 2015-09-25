@@ -1,6 +1,6 @@
 import Backbone from 'backbone';
 import {ItemView} from 'backbone.marionette';
-import template from './navbar.hbs';
+import template from './header.hbs';
 
 export default ItemView.extend({
   template: template,
