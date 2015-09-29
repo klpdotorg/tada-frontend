@@ -1,0 +1,12 @@
+{
+  'extends': 'airbnb/legacy',  
+  'ecmaFeatures': {'modules': true},
+  'rules': {
+  		'id-length': [2, {'min': 2, 'properties': 'never','exceptions': ['$','_']}],
+  		'comma-dangle': 0,
+  		'func-names': 0,
+  		'spaced-comment': 1,
+  		'no-console': 1
+
+    }
+}

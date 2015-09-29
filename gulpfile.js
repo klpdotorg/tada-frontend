@@ -1,10 +1,8 @@
 var gulp = require('gulp');
 var $ = require('gulp-load-plugins')({
   rename: {
-    'gulp-ruby-sass': 'sass'
-  }
+    'gulp-ruby-sass': 'sass'}
 });
-var changed = require('gulp-changed');
 var browserify = require('browserify');
 var del = require('del');
 var watchify = require('watchify');
@@ -14,17 +12,45 @@ var buffer = require('vinyl-buffer');
 var _ = require('lodash');
 var browserSync = require('browser-sync');
 var reload = browserSync.reload;
-var symlink = require('gulp-sym')
- 
-gulp.task('assets', function(){
+var symlink = require('gulp-sym');
+var eslint = require('gulp-eslint');
+var options = {debug: true};
+var browserifier = browserify('./src/main.js', options);
+var bundler = _.memoize(function(watch) {
+  if (watch) {
+    _.extend(options, watchify.args);
+  }
+  if (watch) {
+    browserifier = watchify(browserifier);
+  }
+
+  return browserifier;
+});
+
+var handleErrors = function() {
+  var args = Array.prototype.slice.call(arguments);
+  delete args[0].stream;
+  $.util.log.apply(null, args);
+  this.emit('end');
+};
+
+var reporter = 'spec';
+
+gulp.task('assets', function() {
   return gulp.src(['./src/assets/fonts/', './src/assets/images/'])
-    .pipe(symlink(['./dist/assets/fonts','./dist/assets/images'], {force: true}))
+    .pipe(symlink(['./dist/assets/fonts', './dist/assets/images'], {force: true}));
 });
 
 gulp.task('clean', function(cb) {
   del([
     'app/tmp'
   ], cb);
+});
+
+gulp.task('lint', function() {
+  return gulp.src(['src/**/*.js', './*.js'])
+    .pipe(eslint())
+    .pipe(eslint.format());
 });
 
 gulp.task('html', function() {
@@ -37,7 +63,7 @@ gulp.task('sass', function() {
   return $.sass('sass/style.scss')
     .on('error', $.sass.logError)
     .pipe($.rename('bundle.css'))
-    .pipe(gulp.dest('./dist'))
+    .pipe(gulp.dest('./dist'));
 });
 
 /*
@@ -50,29 +76,6 @@ gulp.task('styles', function() {
     .pipe(reload({ stream: true }));
 });
 */
-
-var bundler = _.memoize(function(watch) {
-  var options = {debug: true};
-
-  if (watch) {
-    _.extend(options, watchify.args);
-  }
-
-  var b = browserify('./src/main.js', options);
-
-  if (watch) {
-    b = watchify(b);
-  }
-
-  return b;
-});
-
-var handleErrors = function() {
-  var args = Array.prototype.slice.call(arguments);
-  delete args[0].stream;
-  $.util.log.apply(null, args);
-  this.emit('end');
-};
 
 function bundle(cb, watch) {
   return bundler(watch).bundle()
@@ -98,25 +101,24 @@ gulp.task('jshint', function() {
     .pipe($.jshint.reporter(stylish));
 });
 
-var reporter = 'spec';
-
 gulp.task('mocha', ['jshint'], function() {
   return gulp.src([
-    //'./test/setup/node.js',
-    //'./test/setup/helpers.js',
-    //'./test/unit/**/*.js'
+  //'./test/setup/node.js',
+  //'./test/setup/helpers.js',
+  //'./test/unit/**/*.js'
   ], { read: false })
     .pipe($.plumber())
     .pipe($.mocha({ reporter: reporter }));
 });
 
 gulp.task('build', [
+  'lint',
   'clean',
   'html',
   'sass',
   'scripts',
   'assets'
-  //'test'
+//'test'
 ]);
 
 gulp.task('test', [
@@ -124,11 +126,11 @@ gulp.task('test', [
   'mocha'
 ]);
 
-gulp.task('watch', ['build'], function(cb) {
+gulp.task('watch', ['build'], function() {
   browserSync({
     server: {
       baseDir: 'dist'
-      }    
+    }
   });
 
   reporter = 'dot';
