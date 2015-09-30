@@ -16,6 +16,9 @@ npm install -g gulp
 gulp
 ```
 
+
 Once that's done, open up http://localhost:3000/ in your browser.
+
+Please refer to the [JavaScript Style Guide](https://github.com/klpdotorg/tada-frontend/wiki/JavaScript-Style-Guide) before contributing. 
 
 &copy; 2015 KLP. Distributed under [ISC license](LICENSE.md).
