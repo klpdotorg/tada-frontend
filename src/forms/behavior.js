@@ -3,7 +3,7 @@ import {Behavior} from 'backbone.marionette';
 
 export default Behavior.extend({
   events: {
-    'submit form' : 'handleSubmit'
+    'submit form': 'handleSubmit'
   },
 
   initialize() {

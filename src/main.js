@@ -5,16 +5,14 @@ import $ from 'jquery';
 import Application from './application/application';
 
 import ModalService from './modal/service';
-import HeaderService from './header/service';
+//import HeaderService from './header/service';
 import FlashesService from './flashes/service';
 
 import IndexRouter from './index/router';
 // import ColorsRouter from './colors/router';
 // import BooksRouter from './books/router';
 
-let app = new Application();
-console.log("called main foo bar");
-
+var app = new Application();
 ModalService.setup({
   container: app.layout.overlay
 });
@@ -27,12 +25,12 @@ FlashesService.setup({
   container: app.layout.flashes
 });
 
-$(document).ajaxError(() => {
+$(document).ajaxError = function() {
   FlashesService.add({
     type: 'danger',
     title: 'Server Error'
   });
-});
+};
 
 app.index = new IndexRouter({
   container: app.layout.content

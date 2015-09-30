@@ -3,9 +3,8 @@ import template from './item-template.hbs';
 
 export default ItemView.extend({
   template: template,
-
   className() {
-    return `flashes__alert alert alert-${this.model.get('type')}`;
+    //return `flashes__alert alert alert-${this.model.get('type')}`;
   },
 
   attributes: {

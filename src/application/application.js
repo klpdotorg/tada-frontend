@@ -5,43 +5,38 @@ import nprogress from 'nprogress';
 import {Application} from 'backbone.marionette';
 import LayoutView from './layout-view';
 
-let routerChannel = Radio.channel('router');
+var routerChannel = Radio.channel('router');
 
 nprogress.configure({
   showSpinner: false
 });
 
 export default Application.extend({
-  initialize() {
+  initialize: function() {
     this.$body = $(document.body);
     this.layout = new LayoutView();
     this.layout.render();
 
     this.listenTo(routerChannel, {
-      'before:enter:route' : this.onBeforeEnterRoute,
-      'enter:route'        : this.onEnterRoute,
-      'error:route'        : this.onErrorRoute
+      'before:enter:route': this.onBeforeEnterRoute,
+      'enter:route': this.onEnterRoute,
+      'error:route': this.onErrorRoute
     });
   },
 
-  onBeforeEnterRoute() {
+  onBeforeEnterRoute: function() {
     this.transitioning = true;
     // Don't show for synchronous route changes
-    _.defer(() => {
+    _.defer(function() {
       if (this.transitioning) {
         nprogress.start();
       }
     });
   },
 
-  onEnterRoute() {
+  onEnterRoute: function() {
     this.transitioning = false;
     this.$body.scrollTop(0);
     nprogress.done();
-  },
-
-  onErrorRoute() {
-    this.transitioning = false;
-    nprogress.done(true);
   }
 });

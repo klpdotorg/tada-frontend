@@ -1,11 +1,10 @@
-import Backbone from 'backbone';
 import {ItemView} from 'backbone.marionette';
 import template from './header.hbs';
 
 export default ItemView.extend({
   template: template,
   className: 'container-fluid',
-  onRender() {
-    console.log("navbar view rendered");
+  onRender: function() {
+    console.log('navbar view rendered');
   }
 });

@@ -6,8 +6,8 @@ export default LayoutView.extend({
   className: 'modal fade',
 
   attributes: {
-    'tabindex' : -1,
-    'role' : 'dialog'
+    'tabindex': -1,
+    'role': 'dialog'
   },
 
   regions: {
@@ -15,8 +15,8 @@ export default LayoutView.extend({
   },
 
   triggers: {
-    'shown.bs.modal'  : 'modal:show',
-    'hidden.bs.modal' : 'modal:hide',
+    'shown.bs.modal': 'modal:show',
+    'hidden.bs.modal': 'modal:hide',
   },
 
   initialize() {

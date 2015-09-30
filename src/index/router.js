@@ -1,5 +1,5 @@
 import {Router} from 'backbone-routing';
-import HeaderService from '../header/service';
+//import HeaderService from '../header/service';
 import IndexRoute from './route';
 
 export default Router.extend({

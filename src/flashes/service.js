@@ -2,7 +2,7 @@ import Service from 'backbone.service';
 import Collection from './collection';
 import CollectionView from './collection-view';
 
-const FlashesService = Service.extend({
+var FlashesService = Service.extend({
   setup(options = {}) {
     this.container = options.container;
   },

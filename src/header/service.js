@@ -2,7 +2,7 @@ import Service from 'backbone.service';
 import {Collection} from 'backbone';
 import View from './view';
 
-const HeaderService = Service.extend({
+var HeaderService = Service.extend({
   setup(options = {}) {
     this.container = options.container;
   },
@@ -24,14 +24,14 @@ const HeaderService = Service.extend({
   },
 
   remove(model) {
-    model = this.collection.findWhere(model);
-    this.collection.remove(model);
+    var modelInCollection = this.collection.findWhere(model);
+    this.collection.remove(modelInCollection);
   },
 
   activate(model) {
+    var modelInCollection = this.collection.findWhere(model);
     this.collection.invoke('set', 'active', false);
-    model = this.collection.findWhere(model);
-    if (model) {
+    if (modelInCollection) {
       model.set('active', true);
     }
   }

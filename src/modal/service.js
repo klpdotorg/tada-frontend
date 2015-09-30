@@ -2,14 +2,14 @@ import ModalService from 'backbone-service-modals';
 
 import LayoutView from './layout-view';
 
-import AlertView   from './alert/view';
+import AlertView from './alert/view';
 import ConfirmView from './confirm/view';
-import PromptView  from './prompt/view';
+import PromptView from './prompt/view';
 
-const WiresModalService = ModalService.extend({
-  AlertView   : AlertView,
-  ConfirmView : ConfirmView,
-  PromptView  : PromptView,
+var WiresModalService = ModalService.extend({
+  AlertView: AlertView,
+  ConfirmView: ConfirmView,
+  PromptView: PromptView,
 
   setup(options = {}) {
     this.container = options.container;

@@ -10,8 +10,8 @@ export default ItemView.extend({
   },
 
   triggers: {
-    'click .btn-primary' : 'confirm',
-    'click .btn-default' : 'cancel',
-    'click .close'       : 'cancel'
+    'click .btn-primary': 'confirm',
+    'click .btn-default': 'cancel',
+    'click .close': 'cancel'
   }
 });

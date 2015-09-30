@@ -15,8 +15,8 @@ export default ItemView.extend({
   },
 
   triggers: {
-    'click .btn-default' : 'cancel',
-    'click .close'       : 'cancel'
+    'click .btn-default': 'cancel',
+    'click .close': 'cancel'
   },
 
   events: {
@@ -24,8 +24,8 @@ export default ItemView.extend({
   },
 
   submit(e) {
-    e.preventDefault();
     var val = this.ui.input.val();
+    e.preventDefault();
     this.trigger('submit', val);
   }
 });
