@@ -5,11 +5,13 @@
   "main": "webpack.config.js",
   "dependencies": {
     "css-loader": "^0.21.0",
+    "keymirror": "^0.1.1",
     "style-loader": "^0.13.0"
   },
   "devDependencies": {
     "babel-core": "^5.0.0",
     "babel-loader": "^5.3.3",
+    "flux": "^2.1.1",
     "jsx-loader": "^0.13.2",
     "node-sass": "^3.3.3",
     "react": "^0.14.1",

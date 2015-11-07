@@ -22,6 +22,7 @@ var SideBar = React.createClass ({
 	render: function() {
 		return (
 			<div id="sidebar" className="main__sidebar">
+				<div className="treeview">
 				<ul className="nav-sidebar">
 					{
 						this.state.results.map(function(result){
@@ -31,6 +32,7 @@ var SideBar = React.createClass ({
 						})
 					}
 				</ul>
+				</div>
 			</div>
 		);
 	}

@@ -1,7 +1,7 @@
 module.exports = {
 	entry: 
 	{ 
-		App: [ "./components/main.js", 
+		App: [ "./js/components/main.js", 
 		"webpack-dev-server/client?http://localhost:8080/"
 		]
 	},

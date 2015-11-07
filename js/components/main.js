@@ -4,7 +4,7 @@
 */
 'use strict'
 
-require('../sass/style.scss');
+require('../../sass/style.scss');
 import ReactDOM from 'react';
 import App from './Application';
 

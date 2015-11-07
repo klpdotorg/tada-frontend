@@ -2,12 +2,13 @@
 * Main TADA App entry point. This composes the other elements of the page and returns it
 */
 import React, {Component} from 'react';
-import '../sass/style.scss';
+import '../../sass/style.scss';
 import HeaderBar from './MainHeader';
 import TreeTogglerSpacingDiv from './TreeTogglerSpacingDiv';
 import NavBar from './MainNavBar';
 import SecondaryNavBar from './SecondaryNavBar';
 import MainContentWrapper from './MainContentWrapper';
+import AppDispatcher from '../dispatcher/AppDispatcher';
 
 
 var App = React.createClass({
