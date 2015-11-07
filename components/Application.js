@@ -1,31 +1,17 @@
+/*
+* Main TADA App entry point. This composes the other elements of the page and returns it
+*/
 import React, {Component} from 'react';
 import '../sass/style.scss';
 import HeaderBar from './MainHeader';
 import TreeTogglerSpacingDiv from './TreeTogglerSpacingDiv';
 import NavBar from './MainNavBar';
 import SecondaryNavBar from './SecondaryNavBar';
-import MainContentArea from './ContentArea';
+import MainContentWrapper from './MainContentWrapper';
 
 
 var App = React.createClass({
- getInitialState: function() {
-    return {results: []};
-  },
-			componentDidMount: function() 
-			{
-				$.ajax({
-			type: "GET",
-			dataType: "json",
-			url: "http://tadadev.klp.org.in/api/v1/boundaries/",//TODO: Make a call that fetches only schools and districts
-			success: function(data){
-				console.log(data.results);
-				this.setState({
-					results: data.results
-					});
-			}.bind(this)
-			});
-			}
-			,
+ 
 			render: function()
 			{
 				return (
@@ -34,16 +20,7 @@ var App = React.createClass({
 						<TreeTogglerSpacingDiv/>
 						<NavBar/>
 						<SecondaryNavBar/>
-						<ul className="nav-sidebar">
-						{
-							this.state.results.map(function(result){
-								return (
-									<li className="glyphicon-plus"><a href="">{result.name}</a></li>
-								);
-							})
-						}
-						</ul>
-						<MainContentArea/>
+						<MainContentWrapper/>
 					</div>
 				);
 			}

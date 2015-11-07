@@ -1,3 +1,7 @@
+/*
+* Main header at the top of the page 
+*/
+
 import React, { Component } from 'react';
 
 class HeaderBar extends React.Component {

@@ -1,3 +1,7 @@
+/*
+* Main navigation bar - PrimarySchool/PreSchool selector
+*/
+
 import React, {Component} from 'react';
 
 var unselectedTabColor = {

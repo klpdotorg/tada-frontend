@@ -1,8 +1,14 @@
 module.exports = {
-	entry: "./components/main.js",
+	entry: 
+	{ 
+		App: [ "./components/main.js", 
+		"webpack-dev-server/client?http://localhost:8080/"
+		]
+	},
 	output: {
 		path: './build',
-		filename: "bundle.js"
+		filename: "bundle.js",
+		publicPath: 'http://localhost:8080/'
 	},
 	module: {
 		loaders: [

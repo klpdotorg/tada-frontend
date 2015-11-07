@@ -1,3 +1,6 @@
+/*
+* Secondary navigation bar for filtering/search etc..
+*/
 import React, {Component} from 'react';
 
 export default class SecondaryNavBar extends React.Component{

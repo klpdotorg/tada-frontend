@@ -1,3 +1,5 @@
+/* Main entry point for the app. Start here to understand the UI composition */
+
 /* This line is needed. Else see warnings about not using React.render even though it is not being used
 */
 'use strict'
