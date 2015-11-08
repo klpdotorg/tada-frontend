@@ -1,4 +1,5 @@
 import React from 'react';
+import $ from 'jquery';
 
 var SideBar = React.createClass ({
 	getInitialState: function() {
@@ -18,7 +19,7 @@ var SideBar = React.createClass ({
 					}.bind(this) //end of success callback
 		});//end of ajax block
 	},
-	
+
 	render: function() {
 		return (
 			<div id="sidebar" className="main__sidebar">
