@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Frontend for TADA built using React.js",
   "main": "webpack.config.js",
+  "start": "node server.js",
   "dependencies": {
     "flux": "^2.1.1",
     "jquery": "^2.1.4",
