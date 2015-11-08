@@ -12,4 +12,4 @@ import App from './Application';
 
 console.log('inside entry.js');
 ReactDOM.render(<App/>, document.getElementById('application'));
-console.log('Done rendering')
+console.log('D')

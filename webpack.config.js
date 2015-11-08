@@ -1,7 +1,7 @@
 module.exports = {
-	entry: 
-	{ 
-		App: [ "./js/components/main.js", 
+	entry:
+	{
+		App: [ "./js/components/main.js",
 		"webpack-dev-server/client?http://localhost:8080/"
 		]
 	},
@@ -20,13 +20,13 @@ module.exports = {
 				loader: 'style!css!sass'
 			},
 			{
-                test: /\.js$/,
-                loaders: ['jsx','babel'],
-                exclude: /node_modules/
-            }
-		]
-	},
-	resolve: {
-		extensions: ['', '.js', '.json', '.css']
-	}
-}
+        test: /\.js$/,
+        loaders: ['jsx','babel'],
+        exclude: /node_modules/
+      }
+      ]
+    },
+    resolve: {
+      extensions: ['', '.js', '.json', '.css']
+    }
+  }
