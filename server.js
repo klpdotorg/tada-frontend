@@ -5,4 +5,6 @@ var compiler = webpack(config);
 var server = new webpackDevServer(compiler, {
   contentBase: "./build"
 });
-server.listen(8080);
+server.listen(8080, function() {
+  console.log('TADA listening on *:', 8080);
+});
