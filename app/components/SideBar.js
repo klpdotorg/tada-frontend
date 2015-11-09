@@ -22,19 +22,17 @@ var SideBar = React.createClass ({
 
 	render: function() {
 		return (
-			<div id="sidebar" className="main__sidebar">
-				<div className="treeview">
-				<ul className="nav-sidebar">
-					{
-						this.state.results.map(function(result){
-							return (
-								<li className="glyphicon-none glyphicon-plus"><a href="">{result.name}</a></li>
-							);
-						})
-					}
-				</ul>
-				</div>
-			</div>
+			<div id="wrapper" className="">
+         <div id="sidebar-wrapper">
+            <div id="treetoggler">
+              <a href="#menu-toggle" className="btn btn-primary btn-xs" id="menu-toggle">
+                <span id="toggler-icon" className="glyphicon glyphicon-resize-horizontal"></span>
+              </a>
+            </div>
+          <div id="treeview_side" className="treeview"></div>
+        </div>
+      </div>
+
 		);
 	}
 });
