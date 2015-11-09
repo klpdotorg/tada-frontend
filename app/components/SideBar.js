@@ -1,5 +1,7 @@
 import React from 'react';
+import TreeView from './treeView';
 import $ from 'jquery';
+
 
 var SideBar = React.createClass ({
 	getInitialState: function() {
@@ -29,7 +31,7 @@ var SideBar = React.createClass ({
                 <span id="toggler-icon" className="glyphicon glyphicon-resize-horizontal"></span>
               </a>
             </div>
-          <div id="treeview_side" className="treeview"></div>
+          <div id="treeview_side" className="treeview"><TreeView/></div>
         </div>
       </div>
 
