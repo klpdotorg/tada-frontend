@@ -21,25 +21,25 @@ export default class MainContentArea extends React.Component{
           <form className="form-horizontal" role="form">
 
             <div className="form-group">
-              <label className="control-label col-sm-2" for="name">Name:</label>
+              <label className="control-label col-sm-2" htmlFor="name">Name:</label>
               <div className="col-sm-10">
                 <input type="text" className="form-control" id="name"></input>
               </div>
             </div>
             <div className="form-group">
-              <label className="control-label col-sm-2" for="address">Address:</label>
+              <label className="control-label col-sm-2" htmlFor="address">Address:</label>
               <div className="col-sm-10">
-                <textarea type="password" className="form-control" id="address" rows="3">                </textarea>
+                <textarea type="password" className="form-control" id="address" rows="3"></textarea>
               </div>
             </div>
             <div className="form-group">
-              <label className="control-label col-sm-2" for="pincode">Pincode:</label>
+              <label className="control-label col-sm-2" htmlFor="pincode">Pincode:</label>
               <div className="col-sm-10">
                 <input type="text" className="form-control" id="pincode"></input>
               </div>
             </div>
             <div className="form-group">
-              <label className="control-label col-sm-2" for="category">Category:</label>
+              <label className="control-label col-sm-2" htmlFor="category">Category:</label>
               <div className="col-sm-10">
                 <select className="form-control" id="category">
                   <option>Lower Primary School</option>
@@ -49,7 +49,7 @@ export default class MainContentArea extends React.Component{
               </div>
             </div>
             <div className="form-group">
-              <label className="control-label col-sm-2" for="medium">Medium:</label>
+              <label className="control-label col-sm-2" htmlFor="medium">Medium:</label>
               <div className="col-sm-10">
                 <select className="form-control" id="medium">
                   <option>Kannada</option>
@@ -59,7 +59,7 @@ export default class MainContentArea extends React.Component{
               </div>
             </div>
             <div className="form-group">
-              <label className="control-label col-sm-2" for="mgmt">Mangament:</label>
+              <label className="control-label col-sm-2" htmlFor="mgmt">Mangament:</label>
               <div className="col-sm-10">
                 <select className="form-control" id="mgmt">
                   <option>Government - State</option>
@@ -70,7 +70,7 @@ export default class MainContentArea extends React.Component{
               </div>
             </div>
             <div className="form-group">
-              <label className="control-label col-sm-2" for="disecode">DISE Code:</label>
+              <label className="control-label col-sm-2" htmlFor="disecode">DISE Code:</label>
               <div className="col-sm-10">
                 <input type="text" className="form-control" id="disecode"></input>
               </div>

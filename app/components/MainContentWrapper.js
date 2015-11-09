@@ -6,7 +6,7 @@ export default class MainContentWrapper extends React.Component {
 	render()
 	{
 		return (
-			<div id="wrapper" class="main__wrapper">
+			<div id="wrapper" className="main__wrapper">
 				<SideBar/>
 				<MainContentArea/>
 			</div>
