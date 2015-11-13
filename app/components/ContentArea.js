@@ -82,7 +82,7 @@ export default class MainContentArea extends React.Component{
             </div>
           </form>
         </div>
-        <div className="col-md-2"><button type="submit" className="btn btn-primary">Add className</button></div>
+        <div className="col-md-2"><button type="submit" className="btn btn-primary">Add Class</button></div>
       </div>
   </div>
 					</div>
