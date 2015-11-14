@@ -9,9 +9,12 @@
     "flux": "^2.1.1",
     "jquery": "^2.1.4",
     "keymirror": "^0.1.1",
+    "lodash": "^3.10.1",
     "react": "^0.14.1",
     "react-dom": "^0.14.1",
-    "react-treeview": "^0.4.2"
+    "react-redux": "^4.0.0",
+    "react-treeview": "^0.4.2",
+    "redux": "^3.0.4"
   },
   "devDependencies": {
     "css-loader": "^0.21.0",
