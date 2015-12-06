@@ -22,7 +22,7 @@ const routes = (
         
         <Route path="/" component={App}>
           <IndexRoute component={App} />
-            <Route path="login" component={LoginHandler}/>
+            <Route path="district/:districtId" component={LoginHandler}/>
         </Route>
     </Router>
 );

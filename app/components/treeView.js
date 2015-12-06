@@ -51,7 +51,7 @@ const CompanyPeople = React.createClass({
           const name = boundary.name;
           const label = <span className="node">{name}</span>;
           return (
-            <Link key={boundary.id} to="/login"><TreeView key={name + '|' + i} nodeLabel={label} defaultCollapsed={false}>
+            <Link key={boundary.id} to={`/district/${boundary.id}`}><TreeView key={name + '|' + i} nodeLabel={label} defaultCollapsed={false}>
               {/*node.people.map(person => {
                 const label2 = <span className="node">{person.name}</span>;
                 return (

@@ -3,7 +3,8 @@ import React from 'react';
 let LoginHandler = React.createClass({ 
 
   render() {
-    return(<div>Welcome to login</div>);
+  	console.log('In district',this.props.children);
+    return(<div>You clicked on district {this.props.params.districtId}</div>);
   }
 });
 
