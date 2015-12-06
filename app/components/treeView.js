@@ -1,5 +1,6 @@
 import React from 'react';
 import TreeView from 'react-treeview';
+import {Link} from 'react-router';
 
 // This example data format is totally arbitrary. No data massaging is
 // required and you use regular js in `render` to iterate through and
@@ -50,7 +51,7 @@ const CompanyPeople = React.createClass({
           const name = boundary.name;
           const label = <span className="node">{name}</span>;
           return (
-            <TreeView key={name + '|' + i} nodeLabel={label} defaultCollapsed={false}>
+            <Link key={boundary.id} to="/login"><TreeView key={name + '|' + i} nodeLabel={label} defaultCollapsed={false}>
               {/*node.people.map(person => {
                 const label2 = <span className="node">{person.name}</span>;
                 return (
@@ -61,7 +62,7 @@ const CompanyPeople = React.createClass({
                   </TreeView>
                 );
               })*/}
-            </TreeView>
+            </TreeView></Link>
           );
         })}
       </div>

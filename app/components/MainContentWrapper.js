@@ -8,7 +8,7 @@ export default class MainContentWrapper extends React.Component {
 		return (
 			<div id="wrapper" className="main__wrapper">
 				<SideBar/>
-				<MainContentArea/>
+				<MainContentArea children={this.props.children}/>
 			</div>
 		);
 	}

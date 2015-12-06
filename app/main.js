@@ -7,8 +7,26 @@ import { createStore } from 'redux'
 import App from './components/Application'
 import { Provider } from 'react-redux'
 import tada from './reducers/Tada'
+import { DefaultRoute, Router, Link, Route, RouteHandler, IndexRoute } from 'react-router';
+import LoginHandler from './components/Login';
+import createHistory from 'history/lib/createHashHistory';
 
 let store = createStore(tada);
+
+const history = createHistory({
+    queryKey: false
+});
+
+const routes = (
+    <Router history={history}>
+        
+        <Route path="/" component={App}>
+          <IndexRoute component={App} />
+            <Route path="login" component={LoginHandler}/>
+        </Route>
+    </Router>
+);
+
 
 ReactDOM.render(
   <Provider store={store}>
@@ -16,4 +34,6 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('application')
   );
+
+ReactDOM.render(routes, document.getElementById('application'));
 
