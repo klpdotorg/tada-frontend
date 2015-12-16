@@ -31,17 +31,17 @@ const CompanyPeople = React.createClass({
 /**
    * Event handler for 'change' events coming from the stores
    */
-  _onChange(){
+  _onChange: function() {
     console.log('Received change from stores');
   },
 
-  getInitialState() {
+  getInitialState: function() {
       return {results: []};
     },
 
-  componentDidMount() 
+  componentDidMount: function() 
   {
-    this.changeListener = this._onChange;
+    console.log('Treeview componentdidmount..')
     TadaStore.addChangeListener(this._onChange);
     $.ajax({
       type: "GET",
@@ -56,14 +56,14 @@ const CompanyPeople = React.createClass({
     });
   },
 
-  componentWillUnmount()
+  componentWillUnmount: function()
   {
     TadaStore.removeChangeListener(this._onChange.bind(this));
   },
 
   
 
-  render() {
+  render: function() {
     return (
       <div>
         {this.state.results.map((boundary, i) => {

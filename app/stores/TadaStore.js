@@ -1,41 +1,38 @@
-import Dispatcher from '../dispatcher/AppDispatcher';
+import AppDispatcher from '../dispatcher/AppDispatcher';
 import AppConstants from '../constants/AppConstants';
 var EventEmitter = require('events');
 var assign = require('object-assign');
 var ActionTypes = AppConstants.ActionTypes;
+var merge = require('merge');
 
 var currentSchoolSelection = null;
 var CHANGE_EVENT = 'viewchange';
 
-class TadaStore extends EventEmitter {
+var TadaStore= merge(EventEmitter.prototype, {
 
-	constructor() {
-		super();
-		console.log('Inside TadaStore init..');
-	
-	}
-
-	emitChange() {
+	emitChange: function() {
 		this.emit(CHANGE_EVENT);
-	}
+	},
 
-	addChangeListener(callback) {
+	addChangeListener: function(callback) {
 		this.on(CHANGE_EVENT, callback);
-	}
+	},
 
-	removeChangeListener(callback) {
+	removeChangeListener: function(callback) {
 		this.removeListener(CHANGE_EVENT, callback);
-	}
+	},
 
-	getCurrentSchoolSelection() {
+	getCurrentSchoolSelection: function() {
 		return currentSchoolSelection;
 	}
-};
+});
 
 
-TadaStore.dispatchToken = Dispatcher.register(function(action) {
+TadaStore.dispatchToken = AppDispatcher.register(function(action) {
+	console.log('Registering for callbacks');
 	switch(action.type) {
 		case ActionTypes.PRIMARY_SELECTED:
+			console.log('primary selected');
 			currentSchoolSelection = 'primary';
 			TadaStore.emitChange();
 			break;
