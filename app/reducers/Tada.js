@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { TOGGLE_SIDE_NAV } from '../actions/TadaActions';
+import { TOGGLE_SIDE_NAV } from '../actions/TadaActionCreators';
 import merge from 'lodash/object/merge'
 
 export function tada(state = {sideNavExpanded: true}, action) {

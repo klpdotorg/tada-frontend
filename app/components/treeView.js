@@ -1,6 +1,7 @@
 import React from 'react';
 import TreeView from 'react-treeview';
 import {Link} from 'react-router';
+import TadaStore from '../stores/TadaStore';
 
 // This example data format is totally arbitrary. No data massaging is
 // required and you use regular js in `render` to iterate through and
@@ -27,11 +28,21 @@ const dataSource = [
 // [controlled component](http://facebook.github.io/react/docs/forms.html#controlled-components)
 // is preferred.
 const CompanyPeople = React.createClass({
+/**
+   * Event handler for 'change' events coming from the stores
+   */
+  _onChange(){
+    console.log('Received change from stores');
+  },
+
   getInitialState() {
       return {results: []};
     },
 
-  componentDidMount() {
+  componentDidMount() 
+  {
+    this.changeListener = this._onChange;
+    TadaStore.addChangeListener(this._onChange);
     $.ajax({
       type: "GET",
       dataType: "json",
@@ -44,6 +55,14 @@ const CompanyPeople = React.createClass({
           }.bind(this)
     });
   },
+
+  componentWillUnmount()
+  {
+    TadaStore.removeChangeListener(this._onChange.bind(this));
+  },
+
+  
+
   render() {
     return (
       <div>
@@ -51,7 +70,8 @@ const CompanyPeople = React.createClass({
           const name = boundary.name;
           const label = <span className="node">{name}</span>;
           return (
-            <Link key={boundary.id} to={`/district/${boundary.id}`}><TreeView key={name + '|' + i} nodeLabel={label} defaultCollapsed={false}>
+            <Link key={boundary.id} to={`/district/${boundary.id}`} on>
+              <TreeView key={name + '|' + i} nodeLabel={label} defaultCollapsed={false}>
               {/*node.people.map(person => {
                 const label2 = <span className="node">{person.name}</span>;
                 return (

@@ -7,11 +7,8 @@ import ReactDOM from 'react-dom';
 import '../../sass/style.scss';
 import HeaderBar from './MainHeader';
 import TreeTogglerSpacingDiv from './TreeTogglerSpacingDiv';
-import NavBar from './MainNavBar';
-import SecondaryNavBar from './SecondaryNavBar';
-import MainContentWrapper from './MainContentWrapper';
-import AppDispatcher from '../dispatcher/AppDispatcher';
 
+import TadaContainer from './TadaContainer';
 
 var App = React.createClass({
  			componentDidMount: function() {
@@ -32,9 +29,7 @@ var App = React.createClass({
 					<div>
 						<HeaderBar/>
 						<TreeTogglerSpacingDiv/>
-						<NavBar/>
-						<SecondaryNavBar/>
-						<MainContentWrapper children={this.props.children}/>
+						<TadaContainer children={this.props.children}/>
 						
 					</div>
 				);

@@ -3,7 +3,7 @@
 */
 
 import React, {Component} from 'react';
-import TadaActions from '../actions/TadaActions';
+import TadaActionCreators from '../actions/TadaActionCreators';
 
 
 var unselectedTabColor = {
@@ -26,13 +26,13 @@ export default class NavBar extends React.Component {
 	handleClickPrimarySchool()
 	{
 		console.log('Primary school clicked');
-		TadaActions.showPrimarySchoolHierarchy();
+		TadaActionCreators.showPrimarySchoolHierarchy();
 
 	}
 	handleClickPreSchool()
 	{
 		console.log('Preschool clicked');
-		TadaActions.showPreSchoolHierarchy();
+		TadaActionCreators.showPreSchoolHierarchy();
 	}
 	render() {
 		return(

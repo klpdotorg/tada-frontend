@@ -6,10 +6,13 @@
   "start": "node server.js",
   "dependencies": {
     "classnames": "^2.2.0",
+    "event-emitter": "^0.3.4",
+    "events": "^1.1.0",
     "flux": "^2.1.1",
     "jquery": "^2.1.4",
     "keymirror": "^0.1.1",
     "lodash": "^3.10.1",
+    "object-assign": "^4.0.1",
     "react": "^0.14.1",
     "react-dom": "^0.14.1",
     "react-redux": "^4.0.0",
