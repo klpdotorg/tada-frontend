@@ -5,16 +5,19 @@ var assign = require('object-assign');
 var ActionTypes = AppConstants.ActionTypes;
 var merge = require('merge');
 
-var currentSchoolSelection = null;
+var currentSchoolSelection = 'primary';
 var CHANGE_EVENT = 'viewchange';
 
 var TadaStore= merge(EventEmitter.prototype, {
 
-	emitChange: function() {
+	emitChange: function() 
+	{
+		console.log('Sending change event');
 		this.emit(CHANGE_EVENT);
 	},
 
-	addChangeListener: function(callback) {
+	addChangeListener: function(callback) 
+	{
 		this.on(CHANGE_EVENT, callback);
 	},
 
@@ -29,8 +32,8 @@ var TadaStore= merge(EventEmitter.prototype, {
 
 
 TadaStore.dispatchToken = AppDispatcher.register(function(action) {
-	console.log('Registering for callbacks');
-	switch(action.type) {
+	console.log('Handling callback..');
+	switch(action.actionType) {
 		case ActionTypes.PRIMARY_SELECTED:
 			console.log('primary selected');
 			currentSchoolSelection = 'primary';
