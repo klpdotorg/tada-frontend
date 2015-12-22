@@ -13,16 +13,16 @@ var data = [
 // is preferred.
 const SchoolsNavTree = React.createClass({
 
- 
+
  /* Called when a component is reacting to a props change. Invoked before render is called. */
   componentWillReceiveProps: function(nextProps){
     console.log('SchoolsNavTree componentWillReceiveProps', nextProps.boundaries);
   },
 
-  componentDidMount: function() 
+  componentDidMount: function()
   {
     console.log('Treeview componentdidmount..')
-    
+
   },
 
   componentWillUnmount: function()
@@ -31,11 +31,11 @@ const SchoolsNavTree = React.createClass({
 
 
   render: function() {
-    return ( 
+    return (
       <div>
           {this.props.boundaries.map((boundary,i) => {
             const name = boundary.name;
-            const label = <span className="node" onClick={this.props.onBoundaryClick({id: boundary.id, type: boundary.boundary_type})}>{name}</span>;
+            const label = <span className="node" onClick={this.props.onBoundaryClick.bind(null,{id: boundary.id, type: boundary.boundary_type})}>{name}</span>;
             return (
               <Link key={boundary.id} to={`/district/${boundary.id}`}>
               <TreeView key={name + '|' + i} nodeLabel={label} defaultCollapsed={false} >
