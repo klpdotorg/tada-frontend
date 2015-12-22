@@ -33,25 +33,15 @@ const SchoolsNavTree = React.createClass({
   render: function() {
     return ( 
       <div>
-        {this.props.boundaries.map((boundary, i) => {
-          const name = boundary.name;
-          const label = <span className="node">{name}</span>;
-          return (
-            <Link key={boundary.id} to={`/district/${boundary.id}`} on>
-              <TreeView key={name + '|' + i} nodeLabel={label} defaultCollapsed={false}>
-              {/*node.people.map(person => {
-                const label2 = <span className="node">{person.name}</span>;
-                return (
-                  <TreeView nodeLabel={label2} key={person.name} defaultCollapsed={false}>
-                    <div className="info">age: {person.age}</div>
-                    <div className="info">sex: {person.sex}</div>
-                    <div className="info">role: {person.role}</div>
-                  </TreeView>
-                );
-              })*/}
-            </TreeView></Link>
-          );
-        })}
+          {this.props.boundaries.map((boundary,i) => {
+            const name = boundary.name;
+            const label = <span className="node" onClick={this.props.onBoundaryClick({id: boundary.id, type: boundary.boundary_type})}>{name}</span>;
+            return (
+              <Link key={boundary.id} to={`/district/${boundary.id}`}>
+              <TreeView key={name + '|' + i} nodeLabel={label} defaultCollapsed={false} >
+              </TreeView></Link>
+            );
+          })}
       </div>
     );
   },

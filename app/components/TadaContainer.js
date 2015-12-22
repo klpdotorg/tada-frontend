@@ -76,13 +76,18 @@ let TadaContainer = React.createClass({
     TadaStore.removeChangeListener(this._onChange.bind(this));
   },
 
+  handleBoundaryClick: function(boundary)
+  {
+  	console.log("On boundary click..", boundary);
+  },
+
   render: function() {
   	console.log('Rendering TadaContainer');
     return(
     <div>
     	<NavBar/>
 		<SecondaryNavBar/>
-		<MainContentWrapper boundaries={this.state.boundaries} children={this.props.children}/>
+		<MainContentWrapper onBoundaryClick={this.handleBoundaryClick} boundaries={this.state.boundaries} children={this.props.children}/>
     </div>);
   }
 });

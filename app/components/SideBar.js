@@ -29,7 +29,7 @@ var SideBar = React.createClass ({
                 <span id="toggler-icon" onClick={this.toggleTree} className="glyphicon glyphicon-resize-horizontal"></span>
               </a>
             </div>
-          <div id="treeview_side" className="treeview"><SchoolsNavTree boundaries={this.props.boundaries}/></div>
+          <div id="treeview_side" className="treeview"><SchoolsNavTree onBoundaryClick={this.props.onBoundaryClick} boundaries={this.props.boundaries}/></div>
         </div>
 		);
 	}
