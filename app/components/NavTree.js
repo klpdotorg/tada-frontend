@@ -38,16 +38,16 @@ const SchoolsNavTree = React.createClass({
   },
 
   constructSubTree: function(node)
-  {  
+  {
       if(node)
       {
-      node.map((boundary,i) => {
+      return node.map((boundary,i) => {
       const name= boundary.name;
       const label = <span className="node">{name}</span>;
       return (
         <Link key={boundary.id} to={`/dashboard`}>
            <TreeView key={name} nodeLabel={label} defaultCollapsed={false} >
-              
+
               {
                 this.constructSubTree(boundary.children)
               }
@@ -55,19 +55,19 @@ const SchoolsNavTree = React.createClass({
         </Link>
         );
      })}
-    
-    
+
+
   },
 
   render: function() {
      var data = [
-     
+
         {id: 414, name: "Bagalkot", "boundary_type": 1},
         {id: 433, name: "Bangalore Rural", "boundary_type": 1, children: [{id: 586, name: "Devanahalli"}, {id:334, name: "Jakkasandra"}, {id:445, name: "Thimmanayakanahalli"}]}
-      
+
 ];
     return (
-     
+
       <div>
           {
             data.map((boundary,i) => {
@@ -76,7 +76,7 @@ const SchoolsNavTree = React.createClass({
               return (
               <Link key={boundary.id} to={`/dashboard`}>
                  <TreeView key={name + '|' + i} nodeLabel={label} defaultCollapsed={false} >
-                    
+
                     {
                       this.constructSubTree(boundary.children)
                     }
