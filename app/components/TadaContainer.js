@@ -9,6 +9,7 @@ import SecondaryNavBar from './SecondaryNavBar';
 import MainContentWrapper from './MainContentWrapper';
 import TadaStore from '../stores/TadaStore';
 
+var parentId = 1;
 let TadaContainer = React.createClass({ 
 
 //In order to make REST call, need to know whether 
@@ -32,14 +33,25 @@ let TadaContainer = React.createClass({
     
   },
 
-  fetchBoundariesFromServer: function()
+  fetchBoundariesFromServer: function(parentBoundaryId)
   {
+  	if(!parentBoundaryId)
+  	{
+  		parentId = 1;
+  	}
+  	else
+  	{
+  		parentId=parentBoundaryId;
+  	}
+  	//Set it to 1 if there's no parent passed in.
+  
   	if(this.state.currentSchoolSelection == "primary")
   	{
   		$.ajax({
 	      type: "GET",
 	      dataType: "json",
-	      url: "http://tadadev.klp.org.in/api/v1/boundaries/?boundary_type=1&category=district",//TODO: Make a call that fetches only schools and districts
+	      url: "http://tadadev.klp.org.in/api/v1/boundaries/",//TODO: Make a call that fetches only schools and districts
+	      data: {boundary_type:1, parent: parentId},
 	      success: function(data) {
 	            console.log(data.results);
 	            this.setState( {
@@ -79,6 +91,8 @@ let TadaContainer = React.createClass({
   handleBoundaryClick: function(boundary)
   {
   	console.log("On boundary click..", boundary);
+  	//Now go and fetch the children from the server..and render..
+  	this.fetchBoundariesFromServer(boundary.id)
   },
 
   render: function() {

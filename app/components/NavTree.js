@@ -4,8 +4,8 @@ import {Link} from 'react-router';
 import TadaStore from '../stores/TadaStore';
 
 var data = [
-  {id: 1, name: "Test Boundary1"},
-  {id: 2, name: "Test Boundary2"}
+  {id: 414, name: "Bagalkot", "boundary_type": 1},
+  {id: 433, name: "Bangalore Rural", "boundary_type": 1, children: {id: 586, name: "Devanahalli"}}
 ];
 
 // For the sake of simplicity, we're gonna use `defaultCollapsed`. Usually, a
@@ -13,16 +13,19 @@ var data = [
 // is preferred.
 const SchoolsNavTree = React.createClass({
 
- 
+
+  getInitialData: function(){
+    return data;
+  },
  /* Called when a component is reacting to a props change. Invoked before render is called. */
   componentWillReceiveProps: function(nextProps){
     console.log('SchoolsNavTree componentWillReceiveProps', nextProps.boundaries);
   },
 
-  componentDidMount: function() 
+  componentDidMount: function()
   {
-    console.log('Treeview componentdidmount..')
-    
+    console.log('Treeview componentdidmount..', this.data);
+
   },
 
   componentWillUnmount: function()
@@ -31,21 +34,56 @@ const SchoolsNavTree = React.createClass({
 
   handleClick: function(boundary)
   {
-    this.props.onBoundaryClick({id: boundary.id, type: boundary.boundary_type});
+    //this.props.onBoundaryClick({id: boundary.id, type: boundary.boundary_type});
+  },
+
+  constructSubTree: function(node)
+  {  
+      if(node)
+      {
+      node.map((boundary,i) => {
+      const name= boundary.name;
+      const label = <span className="node">{name}</span>;
+      return (
+        <Link key={boundary.id} to={`/dashboard`}>
+           <TreeView key={name} nodeLabel={label} defaultCollapsed={false} >
+              
+              {
+                this.constructSubTree(boundary.children)
+              }
+            </TreeView>
+        </Link>
+        );
+     })}
+    
+    
   },
 
   render: function() {
-    return ( 
+     var data = [
+     
+        {id: 414, name: "Bagalkot", "boundary_type": 1},
+        {id: 433, name: "Bangalore Rural", "boundary_type": 1, children: [{id: 586, name: "Devanahalli"}, {id:334, name: "Jakkasandra"}, {id:445, name: "Thimmanayakanahalli"}]}
+      
+];
+    return (
+     
       <div>
-          {this.props.boundaries.map((boundary,i) => {
-            const name = boundary.name;
-            const label = <span className="node" onClick={this.handleClick.bind(null,boundary)=>{name}</span>;
-            return (
-              <Link key={boundary.id} to={`/district/${boundary.id}`}>
-              <TreeView key={name + '|' + i} nodeLabel={label} defaultCollapsed={false} >
-              </TreeView></Link>
-            );
-          })}
+          {
+            data.map((boundary,i) => {
+              const name=boundary.name;
+              const label = <span className="node"> {name} </span>;
+              return (
+              <Link key={boundary.id} to={`/dashboard`}>
+                 <TreeView key={name + '|' + i} nodeLabel={label} defaultCollapsed={false} >
+                    
+                    {
+                      this.constructSubTree(boundary.children)
+                    }
+                  </TreeView>
+              </Link>
+                );
+            })}
       </div>
     );
   },
