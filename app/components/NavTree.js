@@ -30,7 +30,7 @@ const SchoolsNavTree = React.createClass({
   },
 
   constructSubTree: function(node)
-  {  
+  {
       if(node)
       {
       return node.map((boundary,i) => {
@@ -39,7 +39,7 @@ const SchoolsNavTree = React.createClass({
       return (
         //<Link key={boundary.id | i} to={`/district/boundary.id`}>
            <TreeView key={name} nodeLabel={label} defaultCollapsed={false} >
-              
+
               {
                 this.constructSubTree(boundary.children)
               }
@@ -47,14 +47,13 @@ const SchoolsNavTree = React.createClass({
        // </Link>
         );
      })}
-    
-    
+
+
   },
 
   render: function() {
-    
     return (
-     
+
       <div>
           {
             this.props.boundaries.map((boundary,i) => {
@@ -63,7 +62,7 @@ const SchoolsNavTree = React.createClass({
               return (
               //
                  <TreeView key={name + '|' + i} nodeLabel={label} defaultCollapsed={false} >
-                    
+
                     {
                       this.constructSubTree(boundary.children)
                     }
