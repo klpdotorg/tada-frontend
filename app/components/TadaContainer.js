@@ -9,7 +9,39 @@ import SecondaryNavBar from './SecondaryNavBar';
 import MainContentWrapper from './MainContentWrapper';
 import TadaStore from '../stores/TadaStore';
 
+var _=require('lodash');
+
 var parentId = 1;
+var boundaries = [];
+var boundaries2 = [
+    {
+        id: 123,
+        name: 'Dharwad',
+        children: [
+            {
+                id: 111,
+                name: 'Something',
+                children: [
+                    {
+                        id: 222,
+                        name: 'Cluster 1',
+                        children: [
+                            {
+                                id: 444,
+                                name: 'Some school name',
+                                
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        id: 456,
+        name: 'Karwar'
+    }
+];
 let TadaContainer = React.createClass({ 
 
 //In order to make REST call, need to know whether 
@@ -33,8 +65,42 @@ let TadaContainer = React.createClass({
     
   },
 
+  searchAndModifyState: function(boundariesObj, key, results)
+  {
+  	  if(key == boundariesObj.id)
+  	  {
+
+  	  	return boundariesObj;
+  	  }
+  	  else {
+  	  	var result=[];
+  	  	for(var i in boundariesObj)
+  	  	{
+  	  		var element = boundariesObj[i];
+  	  		if(element.id == key)
+  	  		{
+  	  			console.log("FOUND ELEMENT with ID ", key);
+  	  			element.children = results;
+  	  			break;
+  	  		}
+  	  		if(element.children)
+  	  		{
+  	  			console.log("Found a children array");
+  	  			return this.searchAndModifyState(element.children,key, results);
+  	  		}
+  	  	}
+  	  }
+
+  },
+
+  handleSuccessfulFetch: function(data)
+  {
+  	
+  },
+
   fetchBoundariesFromServer: function(parentBoundaryId)
   {
+  	var index=-1;
   	if(!parentBoundaryId)
   	{
   		parentId = 1;
@@ -53,11 +119,26 @@ let TadaContainer = React.createClass({
 	      url: "http://tadadev.klp.org.in/api/v1/boundaries/",//TODO: Make a call that fetches only schools and districts
 	      data: {boundary_type:1, parent: parentId},
 	      success: function(data) {
-	            console.log(data.results);
-	            this.setState( {
-	              boundaries: data.results
-	            });
-	          }.bind(this)
+				console.log(data.results);
+	            if(parentId == 1)
+	            {
+		            this.setState( {
+		              boundaries: data.results
+		            });
+	        	}
+	        	else
+	        	{
+
+	        		//manipulate the DS to set the results in the right location
+	        		// Find the id=parentId in the DS and set the children accordingly
+	        		var stateCopy = this.state.boundaries;
+	        		stateCopy = this.searchAndModifyState(stateCopy, parentId, data.results);
+	        		this.setState(stateCopy);
+	        		//index.children = data.results;
+	        		//this.setState({boundaries: stateCopy});
+	        		//console.log(parent);
+	        	}
+	      }.bind(this)
 	    });
   	}
   	else
