@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-export default class MainContentArea extends React.Component{
+export default class MainContentArea extends React.Component {
   constructor()
   {
     super();
@@ -11,13 +11,13 @@ export default class MainContentArea extends React.Component{
   /* Called just before a component is mounted for the first time. Using this to render the default Welcome screen (IndexRoute)*/
   componentWillMount(){
     console.log('componentWillMount in MainContentArea', this.props.children);
-    this.setState({children: this.props.children});
+    //this.setState({children: this.props.children});
   }
 
   /* Called when a component is reacting to a props change. Invoked before render is called. */
   componentWillReceiveProps(nextProps){
     console.log('componentWillReceiveProps', nextProps.children);
-    this.setState({children: nextProps.children});
+    //this.setState({children: nextProps.children});
   }
 
 	render(){
@@ -26,7 +26,7 @@ export default class MainContentArea extends React.Component{
 		return (
 			<div id="main-content-wrapper" className="main__content">
 				<div className="container-fluid">
-            {this.state.children}
+            {this.props.children}
 				</div>
 			</div>
 		);

@@ -18,5 +18,6 @@ module.exports = {
     },
     resolve: {
       extensions: ['', '.js', '.json', '.css']
-    }
+    },
+    devtool: 'source-map'
   }

@@ -1,5 +1,5 @@
 import React from 'react';
-import TreeView from './treeView';
+import SchoolsNavTree from './NavTree';
 var classNames = require('classnames');
 import $ from 'jquery';
 
@@ -12,7 +12,11 @@ var SideBar = React.createClass ({
     this.setState({isExpanded: !this.state.isExpanded})
   },
 	componentDidMount() {
-
+    console.log("In Sidebar:", this.props.boundaries);
+  },
+   /* Called when a component is reacting to a props change. Invoked before render is called. */
+  componentWillReceiveProps(nextProps){
+    console.log('Sidebar componentWillReceiveProps', nextProps.boundaries);
   },
 
 	render: function() {
@@ -25,7 +29,7 @@ var SideBar = React.createClass ({
                 <span id="toggler-icon" onClick={this.toggleTree} className="glyphicon glyphicon-resize-horizontal"></span>
               </a>
             </div>
-          <div id="treeview_side" className="treeview"><TreeView/></div>
+          <div id="treeview_side" className="treeview"><SchoolsNavTree onBoundaryClick={this.props.onBoundaryClick} boundaries={this.props.boundaries}/></div>
         </div>
 		);
 	}
