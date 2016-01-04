@@ -20,7 +20,7 @@ const history = createHistory({
 
 const routes = (
     <Router history={history}>
-        
+
         <Route path="/" component={App}>
           <IndexRoute component={Dashboard} />
             <Route path="dashboard" component={Dashboard}/>
@@ -28,7 +28,6 @@ const routes = (
         </Route>
     </Router>
 );
-
 
 ReactDOM.render(
   <Provider store={store}>
