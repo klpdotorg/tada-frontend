@@ -12,6 +12,8 @@ import TadaStore from '../stores/TadaStore';
 var _=require('lodash');
 
 var parentId = 1;
+var childrenByParentId =[];
+var boundaryDetails=[];
 var boundaries = [];
 var boundaries2 = [
     {
@@ -50,8 +52,8 @@ let TadaContainer = React.createClass({
 //But as various clicks come in (inverse flow), need to determine from that.
   getInitialState: function() 
   {
-      TadaStore.getCurrentSchoolSelection();
-      return {currentSchoolSelection: "primary", boundaries: []};
+      
+      return {currentSchoolSelection: TadaStore.getCurrentSchoolSelection(), boundaries: []};
   },
 	/**
    * Event handler for 'change' events coming from the stores
@@ -120,10 +122,45 @@ let TadaContainer = React.createClass({
 	      data: {boundary_type:1, parent: parentId},
 	      success: function(data) {
 				console.log(data.results);
+                var childBoundaries = [];
+                
+                var response = data.results;
+                //Loop through and map to the local DS accordingly
+                response.map((boundary, i) =>{
+                  childBoundaries.push(boundary.id);
+                  //compute boundary.path
+                  var path="";
+                  if(parentId == 1)
+                  {
+                    path="/district/" + boundary.id;
+                  }
+                  else if(boundary.boundary_category == "10")
+                  {
+                    //path is parent's path plus child's
+                    parent = boundaryDetails[boundary.parent];
+                    path = parent.path + "/block/" + boundary.id; 
+                  }
+                  else if(boundary.boundary_category == "11")
+                  {
+                    parent = boundaryDetails[boundary.parent];
+                    path = parent.path + "/cluster/" + boundary.id; 
+                  }
+                  boundary.path = path;
+                  boundaryDetails[boundary.id]=boundary;
+                });
+                childrenByParentId[parentId]= childBoundaries;
+                console.log("children by parent id array", childrenByParentId);
+                this.setState( {
+                  boundariesByParentId: childrenByParentId,
+                  boundarydetails: boundaryDetails
+                });
 	            if(parentId == 1)
 	            {
+                //Change parentId to something else
+                
+                
 		            this.setState( {
-		              boundaries: data.results
+		              boundaries: response,
 		            });
 	        	}
 	        	else
@@ -182,7 +219,7 @@ let TadaContainer = React.createClass({
     <div>
     	<NavBar/>
 		<SecondaryNavBar/>
-		<MainContentWrapper onBoundaryClick={this.handleBoundaryClick} boundaries={this.state.boundaries} children={this.props.children}/>
+		<MainContentWrapper onBoundaryClick={this.handleBoundaryClick} boundaries={this.state.boundaries} boundaryDetails={this.state.boundaryDetails} boundaryMap={this.state.childrenByParentId} children={this.props.children}/>
     </div>);
   }
 });
