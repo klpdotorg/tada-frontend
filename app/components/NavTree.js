@@ -51,27 +51,68 @@ const SchoolsNavTree = React.createClass({
 
   },
 
-  render: function() {
-    return (
-
-      <div>
-          {
-            this.props.boundaries.map((boundary,i) => {
-              const name=boundary.name;
-              const label = <Link key={boundary.id | i} to={`/district/boundary.id`}><span className="node"  onClick={this.props.onBoundaryClick.bind(null,{id: boundary.id, type: boundary.boundary_type})}> {name} </span></Link>;
-              return (
+  /*
+  Data is of the format: [
+  {
+    "123": [22,45,67,89]
+    "22" : [1,2,3]
+    "2" : [99]
+    "45" : [66, 77]
+  }
+  ]
+  */
+  renderSubTree: function(node, boundaryHierarchy, visitedBoundaries)
+  {
+    if(node && $.inArray(node,visitedBoundaries)<0)
+    {
+      var children = boundaryHierarchy[node];
+      visitedBoundaries.push(node);
+      return (
               //
-                 <TreeView key={name + '|' + i} nodeLabel={label} defaultCollapsed={false} >
-
+                 <TreeView key={node} nodeLabel={node} defaultCollapsed={false} >
                     {
-                      this.constructSubTree(boundary.children)
+                      (() => {
+                        console.log("Creating TreeView");
+                        if(children.length > 0)
+                        {
+                            children.map((child,i)=>{
+                            console.log("Processing child " + child);
+                            this.renderSubTree(child,boundaryHierarchy, visitedBoundaries)
+                        });                      
+                        }
+                        }
+                      )()
+                      
                     }
                   </TreeView>
               //</Link>
                 );
-            })}
-      </div>
-    );
+    }
+  },
+
+//boundaryDetails={this.state.boundaryDetails} boundaryParentChildMap={this.state.childrenByParentId}
+  render: function() {
+    var copyOfMap = $.extend(true, {}, this.props.boundaryParentChildMap);
+    var firstElement = Object.keys(copyOfMap)[0];
+    var visitedBoundaries = [];
+    
+      return (
+        <div>
+            { 
+              (() => {
+                for(var element in copyOfMap)
+                {
+                  console.log("Processing element " + element);
+                  this.renderSubTree(element,copyOfMap, visitedBoundaries);                 
+
+                }
+              })()             
+              
+            }
+        </div>
+      );
+    
+  
   },
 });
 

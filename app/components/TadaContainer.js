@@ -53,7 +53,13 @@ let TadaContainer = React.createClass({
   getInitialState: function() 
   {
       
-      return {currentSchoolSelection: TadaStore.getCurrentSchoolSelection(), boundaries: []};
+      return( 
+      {
+        currentSchoolSelection: "primary", 
+        boundaries: [],
+        boundarydetails: [],
+        boundariesByParentId: []
+      });
   },
 	/**
    * Event handler for 'change' events coming from the stores
@@ -125,56 +131,50 @@ let TadaContainer = React.createClass({
                 var childBoundaries = [];
                 
                 var response = data.results;
+
+
                 //Loop through and map to the local DS accordingly
                 response.map((boundary, i) =>{
-                  childBoundaries.push(boundary.id);
-                  //compute boundary.path
-                  var path="";
+                  var path = "";
+                  // Special case the first case where parentId = 1. i.e. districts
                   if(parentId == 1)
                   {
-                    path="/district/" + boundary.id;
+                     path="/district/" + boundary.id;
+                     childrenByParentId[boundary.id] = [];
                   }
-                  else if(boundary.boundary_category == "10")
+                  else
                   {
-                    //path is parent's path plus child's
-                    parent = boundaryDetails[boundary.parent];
-                    path = parent.path + "/block/" + boundary.id; 
-                  }
-                  else if(boundary.boundary_category == "11")
-                  {
-                    parent = boundaryDetails[boundary.parent];
-                    path = parent.path + "/cluster/" + boundary.id; 
+                    childBoundaries.push(boundary.id);
+                    //compute boundary.path
+                    if(boundary.boundary_category == "10")
+                    {
+                      //path is parent's path plus child's
+                      parent = boundaryDetails[boundary.parent];
+                      path = parent.path + "/block/" + boundary.id; 
+                    }
+                    else if(boundary.boundary_category == "11")
+                    {
+                      parent = boundaryDetails[boundary.parent];
+                      path = parent.path + "/cluster/" + boundary.id; 
+                    }
+                  
                   }
                   boundary.path = path;
                   boundaryDetails[boundary.id]=boundary;
+
                 });
-                childrenByParentId[parentId]= childBoundaries;
+                if(parentId != 1)
+                {
+                  childrenByParentId[parentId]= childBoundaries;
+                }
                 console.log("children by parent id array", childrenByParentId);
                 this.setState( {
                   boundariesByParentId: childrenByParentId,
                   boundarydetails: boundaryDetails
                 });
-	            if(parentId == 1)
-	            {
-                //Change parentId to something else
-                
-                
-		            this.setState( {
-		              boundaries: response,
-		            });
-	        	}
-	        	else
-	        	{
-
-	        		//manipulate the DS to set the results in the right location
-	        		// Find the id=parentId in the DS and set the children accordingly
-	        		var stateCopy = this.state.boundaries;
-	        		stateCopy = this.searchAndModifyState(stateCopy, parentId, data.results);
-	        		this.setState(stateCopy);
-	        		//index.children = data.results;
-	        		//this.setState({boundaries: stateCopy});
-	        		//console.log(parent);
-	        	}
+	           
+	        	
+	        	
 	      }.bind(this)
 	    });
   	}
@@ -219,7 +219,7 @@ let TadaContainer = React.createClass({
     <div>
     	<NavBar/>
 		<SecondaryNavBar/>
-		<MainContentWrapper onBoundaryClick={this.handleBoundaryClick} boundaries={this.state.boundaries} boundaryDetails={this.state.boundaryDetails} boundaryMap={this.state.childrenByParentId} children={this.props.children}/>
+		<MainContentWrapper onBoundaryClick={this.handleBoundaryClick} boundaries={this.state.boundaries} boundaryDetails={this.state.boundarydetails} boundaryParentChildMap={this.state.boundariesByParentId} children={this.props.children}/>
     </div>);
   }
 });
