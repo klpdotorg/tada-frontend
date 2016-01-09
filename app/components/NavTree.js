@@ -67,13 +67,17 @@ const SchoolsNavTree = React.createClass({
     {
       var children = boundaryHierarchy[node];
       visitedBoundaries.push(node);
+     
+      var boundary = this.props.boundaryDetails[node];
+      console.log("Route is" , boundary.path);
+      const label = <Link key={boundary.name} to={`boundary.path`}><span className="node"  onClick={this.props.onBoundaryClick.bind(null,{id: boundary.id, type: boundary.boundary_type})}> {boundary.name} </span></Link>;
       return (
               //
-                 <TreeView key={node} nodeLabel={node} defaultCollapsed={false} >
+                 <TreeView key={node} nodeLabel={label} defaultCollapsed={false} >
                     {
                       (() => {
                         console.log("Creating TreeView");
-                        if(children.length > 0)
+                        if(children && children.length > 0)
                         {
                             return children.map((child,i)=>{
                             console.log("Processing child " + child);
