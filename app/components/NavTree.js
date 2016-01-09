@@ -78,11 +78,11 @@ const SchoolsNavTree = React.createClass({
                             children.map((child,i)=>{
                             console.log("Processing child " + child);
                             this.renderSubTree(child,boundaryHierarchy, visitedBoundaries)
-                        });                      
+                        });
                         }
                         }
                       )()
-                      
+
                     }
                   </TreeView>
               //</Link>
@@ -93,26 +93,29 @@ const SchoolsNavTree = React.createClass({
 //boundaryDetails={this.state.boundaryDetails} boundaryParentChildMap={this.state.childrenByParentId}
   render: function() {
     var copyOfMap = $.extend(true, {}, this.props.boundaryParentChildMap);
-    var firstElement = Object.keys(copyOfMap)[0];
+    var firstElement = Object.keys(copyOfMap);
     var visitedBoundaries = [];
-    
+
       return (
         <div>
-            { 
-              (() => {
-                for(var element in copyOfMap)
-                {
-                  console.log("Processing element " + element);
-                  this.renderSubTree(element,copyOfMap, visitedBoundaries);                 
+            {
+              Object.keys(copyOfMap).map(function(element, i) {
+                return this.renderSubTree(element, copyOfMap, visitedBoundaries)
+              }.bind(this))
+              // (() => {
+              //   for(var element in copyOfMap)
+              //   {
+              //     console.log("Processing element " + element);
+              //     return this.renderSubTree(element,copyOfMap, visitedBoundaries);
 
-                }
-              })()             
-              
+              //   }
+              // })()
+
             }
         </div>
       );
-    
-  
+
+
   },
 });
 
