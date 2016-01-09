@@ -75,7 +75,7 @@ const SchoolsNavTree = React.createClass({
                         console.log("Creating TreeView");
                         if(children.length > 0)
                         {
-                            children.map((child,i)=>{
+                            return children.map((child,i)=>{
                             console.log("Processing child " + child);
                             this.renderSubTree(child,boundaryHierarchy, visitedBoundaries)
                         });                      
