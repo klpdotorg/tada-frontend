@@ -81,7 +81,7 @@ const SchoolsNavTree = React.createClass({
                         {
                             return children.map((child,i)=>{
                             console.log("Processing child " + child);
-                            this.renderSubTree(child,boundaryHierarchy, visitedBoundaries)
+                            return this.renderSubTree(child,boundaryHierarchy, visitedBoundaries)
                         });
                         }
                         }
