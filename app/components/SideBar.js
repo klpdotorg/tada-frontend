@@ -1,40 +1,36 @@
 import React from 'react';
+import SchoolsNavTree from './NavTree';
+var classNames = require('classnames');
 import $ from 'jquery';
 
+
 var SideBar = React.createClass ({
-	getInitialState: function() {
-    	return {results: []};
+	getInitialState() {
+    	return {isExpanded: false, results: []};
   	},
-	componentDidMount: function()
-	{
-		$.ajax({
-			type: "GET",
-			dataType: "json",
-			url: "http://tadadev.klp.org.in/api/v1/boundaries/",//TODO: Make a call that fetches only schools and districts
-			success: function(data) {
-						console.log(data.results);
-						this.setState( {
-							results: data.results
-						});
-					}.bind(this) //end of success callback
-		});//end of ajax block
-	},
+  toggleTree() {
+    this.setState({isExpanded: !this.state.isExpanded})
+  },
+	componentDidMount() {
+    console.log("In Sidebar:", this.props.boundaries);
+  },
+   /* Called when a component is reacting to a props change. Invoked before render is called. */
+  componentWillReceiveProps(nextProps){
+    console.log('Sidebar componentWillReceiveProps', nextProps.boundaries);
+  },
 
 	render: function() {
+  var sidebarClass = classNames({
+  'toggled': this.state.isExpanded})
 		return (
-			<div id="sidebar" className="main__sidebar">
-				<div className="treeview">
-				<ul className="nav-sidebar">
-					{
-						this.state.results.map(function(result){
-							return (
-								<li className="glyphicon-none glyphicon-plus"><a href="">{result.name}</a></li>
-							);
-						})
-					}
-				</ul>
-				</div>
-			</div>
+         <div id="sidebar-wrapper">
+            <div id="treetoggler">
+              <a href="#menu-toggle" className="btn btn-primary btn-xs" id="menu-toggle">
+                <span id="toggler-icon" onClick={this.toggleTree} className="glyphicon glyphicon-resize-horizontal"></span>
+              </a>
+            </div>
+          <div id="treeview_side" className="treeview"><SchoolsNavTree onBoundaryClick={this.props.onBoundaryClick} boundaries={this.props.boundaries}/></div>
+        </div>
 		);
 	}
 });
