@@ -51,27 +51,75 @@ const SchoolsNavTree = React.createClass({
 
   },
 
-  render: function() {
-    return (
-
-      <div>
-          {
-            this.props.boundaries.map((boundary,i) => {
-              const name=boundary.name;
-              const label = <Link key={boundary.id | i} to={`/dashboard`}><span className="node"  onClick={this.props.onBoundaryClick.bind(null,{id: boundary.id, type: boundary.boundary_type})}> {name} </span></Link>;
-              return (
+  /*
+  Data is of the format: [
+  {
+    "123": [22,45,67,89]
+    "22" : [1,2,3]
+    "2" : [99]
+    "45" : [66, 77]
+  }
+  ]
+  */
+  renderSubTree: function(node, boundaryHierarchy, visitedBoundaries)
+  {
+    if(node && $.inArray(node,visitedBoundaries)<0)
+    {
+      var children = boundaryHierarchy[node];
+      visitedBoundaries.push(node);
+     
+      var boundary = this.props.boundaryDetails[node];
+      console.log("Route is" , boundary.path);
+      const label = <Link key={boundary.name} to={boundary.path}><span className="node"  onClick={this.props.onBoundaryClick.bind(null,{id: boundary.id, type: boundary.boundary_type})}> {boundary.name} </span></Link>;
+      return (
               //
-                 <TreeView key={name + '|' + i} nodeLabel={label} defaultCollapsed={false} >
-
+                 <TreeView key={node} nodeLabel={label} defaultCollapsed={false} >
                     {
-                      this.constructSubTree(boundary.children)
+                      (() => {
+                        console.log("Creating TreeView");
+                        if(children && children.length > 0)
+                        {
+                            return children.map((child,i)=>{
+                            console.log("Processing child " + child);
+                            return this.renderSubTree(child,boundaryHierarchy, visitedBoundaries)
+                        });
+                        }
+                        }
+                      )()
+
                     }
                   </TreeView>
               //</Link>
                 );
-            })}
-      </div>
-    );
+    }
+  },
+
+//boundaryDetails={this.state.boundaryDetails} boundaryParentChildMap={this.state.childrenByParentId}
+  render: function() {
+    var copyOfMap = $.extend(true, {}, this.props.boundaryParentChildMap);
+    var firstElement = Object.keys(copyOfMap);
+    var visitedBoundaries = [];
+
+      return (
+        <div>
+            {
+              Object.keys(copyOfMap).map(function(element, i) {
+                return this.renderSubTree(element, copyOfMap, visitedBoundaries)
+              }.bind(this))
+              // (() => {
+              //   for(var element in copyOfMap)
+              //   {
+              //     console.log("Processing element " + element);
+              //     return this.renderSubTree(element,copyOfMap, visitedBoundaries);
+
+              //   }
+              // })()
+
+            }
+        </div>
+      );
+
+
   },
 });
 

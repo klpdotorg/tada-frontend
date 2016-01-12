@@ -9,7 +9,9 @@ import Dashboard from './components/Dashboard';
 import { Provider } from 'react-redux';
 import tada from './reducers/Tada';
 import { DefaultRoute, Router, Link, Route, RouteHandler, IndexRoute } from 'react-router';
-import LoginHandler from './components/Login';
+import PrimaryDistrict from './components/PrimaryDistrictScreen';
+import PrimaryBlock from './components/PrimaryBlockScreen';
+import PrimaryCluster from './components/PrimaryClusterScreen';
 import createHistory from 'history/lib/createHashHistory';
 
 let store = createStore(tada);
@@ -24,7 +26,9 @@ const routes = (
         <Route path="/" component={App}>
           <IndexRoute component={Dashboard} />
             <Route path="dashboard" component={Dashboard}/>
-            <Route path="district/:districtId" component={LoginHandler}/>
+            <Route path="district/:districtId" component={PrimaryDistrict}/>
+            <Route path="district/:districtId/block/:blockId" component={PrimaryBlock}/>
+            <Route path="district/:districtId/block/:blockId/cluster/:clusterId" component={PrimaryCluster}/>
         </Route>
     </Router>
 );
