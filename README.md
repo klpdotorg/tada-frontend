@@ -5,12 +5,6 @@ Front-end code for TADA app using React
 ```
 git clone https://github.com/klpdotorg/tada-frontend && cd tada-frontend
 npm install
-npm run dev
+npm start
 ```
-
-Go to [http://localhost:8080/](http://localhost:8080/)
-
-Build bundle.js before deploy
-```
-npm run deploy
-```
+Go to http://localhost:8080/

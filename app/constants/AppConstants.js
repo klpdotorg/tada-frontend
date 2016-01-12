@@ -4,10 +4,7 @@
 
 var keyMirror = require('keymirror');
 
-module.exports = {
-  ActionTypes: keyMirror({
+module.exports = keyMirror({
   PRIMARY_SELECTED: null,
   PRESCHOOL_SELECTED: null,
-})
-
-};
+});
