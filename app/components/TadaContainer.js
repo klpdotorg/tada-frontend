@@ -73,39 +73,6 @@ let TadaContainer = React.createClass({
     
   },
 
-  searchAndModifyState: function(boundariesObj, key, results)
-  {
-  	  if(key == boundariesObj.id)
-  	  {
-
-  	  	return boundariesObj;
-  	  }
-  	  else {
-  	  	var result=[];
-  	  	for(var i in boundariesObj)
-  	  	{
-  	  		var element = boundariesObj[i];
-  	  		if(element.id == key)
-  	  		{
-  	  			console.log("FOUND ELEMENT with ID ", key);
-  	  			element.children = results;
-  	  			break;
-  	  		}
-  	  		if(element.children)
-  	  		{
-  	  			console.log("Found a children array");
-  	  			return this.searchAndModifyState(element.children,key, results);
-  	  		}
-  	  	}
-  	  }
-
-  },
-
-  handleSuccessfulFetch: function(data)
-  {
-  	
-  },
-
   fetchBoundariesFromServer: function(parentBoundaryId)
   {
   	var index=-1;
@@ -168,6 +135,7 @@ let TadaContainer = React.createClass({
                   childrenByParentId[parentId]= childBoundaries;
                 }
                 console.log("children by parent id array", childrenByParentId);
+                TadaStore.setBoundaryDetails(boundaryDetails);
                 this.setState( {
                   boundariesByParentId: childrenByParentId,
                   boundarydetails: boundaryDetails
