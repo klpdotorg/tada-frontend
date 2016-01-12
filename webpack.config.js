@@ -1,20 +1,22 @@
-var path = require('path');
-
 module.exports = {
-    entry: [
-      path.resolve(__dirname, 'app/main.js')
-    ],
-    output: {
-        path: path.resolve(__dirname, 'build'),
-        filename: 'bundle.js',
-    },
-    module: {
-      loaders: [
-        {test: /\.css$/, loader: "style!css"},
-        {test: /\.scss$/, loader: 'style!css!sass'},
-        {test: /\.js$/, loaders: ['jsx','babel'], exclude: /node_modules/ }]
+	entry:
+	{
+		App: [ "./app/main.js",
+		"webpack-dev-server/client?http://localhost:8080/"
+		]
+	},
+	output: {
+		path: '/',
+		filename: "bundle.js",
+		publicPath: 'http://localhost:8080/'
+	},
+	module: {
+		loaders: [
+			{test: /\.css$/, loader: "style!css"},
+			{test: /\.scss$/, loader: 'style!css!sass'},
+			{test: /\.js$/, loaders: ['jsx','babel'], exclude: /node_modules/ }]
     },
     resolve: {
       extensions: ['', '.js', '.json', '.css']
     }
-};
+  }
