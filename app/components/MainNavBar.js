@@ -6,13 +6,9 @@ import React, {Component} from 'react';
 import TadaActionCreators from '../actions/TadaActionCreators';
 
 
-var unselectedTabColor = {
-	backgroundColor: '#26b262'
-}
+var unselectedTabColor = 'brand-green-bg';
+var selectedTabColor = 'brand-orange-bg';
 
-var selectedTabColor = {
-				backgroundColor: '#ec6608'
-			}
 var bottomMargin = {
 				marginBottom: '0px'
 			}
@@ -40,8 +36,8 @@ export default class NavBar extends React.Component {
 				<div className="nav nav-pills">
 				<div className="col-lg-12 inst-tabs">
 				<ul className="nav nav-tabs" id="myTab" style={bottomMargin}>
-      				<li className="active"><a data-toggle="tab" style={selectedTabColor} onClick={this.handleClickPrimarySchool}>Primary School</a></li>
-      				<li><a data-toggle="tab" style={unselectedTabColor} onClick={this.handleClickPreSchool}> Preschool</a></li>
+      				<li><a data-toggle="tab" className={selectedTabColor} onClick={this.handleClickPrimarySchool}>Primary School</a></li>
+      				<li><a data-toggle="tab" className={unselectedTabColor} onClick={this.handleClickPreSchool}> Preschool</a></li>
     			</ul>
 				</div>
 				</div>
