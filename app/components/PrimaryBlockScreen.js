@@ -15,9 +15,9 @@ let PrimaryBlock = React.createClass({
     			<li><a href={districtPath}>{district.name}</a></li>
     			<li className="active">{block.name}</li>
     		</ol>
-    		<div className="form-heading heading-border"> Insufficient Permissions</div>
+    		<h4 className="heading-border heading-err"> Insufficient Permissions</h4>
     		<p>You need administrator privileges to modify Boundary details.</p>
-    		<div className="form-heading heading-border"> View Details</div>
+    		<h4 className="heading-border brand-blue"> View Details</h4>
     		<p> Name: {block.name} </p>
     	</div>
     	);

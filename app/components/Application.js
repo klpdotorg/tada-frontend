@@ -4,7 +4,7 @@
 import React, {Component} from 'react';
 import { render } from 'react-dom';
 import ReactDOM from 'react-dom';
-import '../../sass/style.scss';
+import '../../assets/sass/style.scss';
 import HeaderBar from './MainHeader';
 import TreeTogglerSpacingDiv from './TreeTogglerSpacingDiv';
 

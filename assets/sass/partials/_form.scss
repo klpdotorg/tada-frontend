@@ -17,17 +17,27 @@
   border-radius: 50%;
 }
 
-.form-heading {
-  padding-top: 20px;
-  padding-bottom: 20px;
-  color: #3891e3;
-  font-size: 120%;
-  padding-left: 10px;
+.form-heading %form-heading {
+  extend: %heading-secondary;
+  color: $brand-blue;
 }
 
-.heading-border:after {
-  content: '';
-  display: block;
-  width: 400px;
-  height: 2px;
-  background-color: #3891e3; }
+.form-heading-err {
+  extend: %form-heading;
+  color: $pink-salmon;
+}
+.form-heading-err:before {
+  content: "\f023";
+  font-family: FontAwesome;
+  color: $pink-salmon;
+}
+
+.form-heading-warn {
+  extend: %form-heading;
+  color: $yellow-mild;
+}
+.form-heading-warn:before {
+  content: "\f071";
+  font-family: FontAwesome;
+  color: $yellow-mild;
+}

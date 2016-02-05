@@ -21,7 +21,7 @@ let Institution = React.createClass({
           <li> <a href={clusterPath}> {cluster.name}</a></li>
           <li className="active"> {institution.name}</li>
         </ol>
-        <div className="form-heading heading-border"> Institution Details</div>
+        <h4 className="heading-border"> Institution Details</h4>
         
         <p> Name: {institution.name} </p>
       </div>);
