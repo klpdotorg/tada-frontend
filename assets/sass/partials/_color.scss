@@ -1,0 +1,234 @@
+/*-------------------------------------*/
+// COLORS
+
+// color: base font
+$font-base-color: #5F5F5F;
+
+// colors: brand
+$brand-orange: #ec6608;
+$brand-green: #26b262;
+$brand-blue: #3891e3;
+$brand-turquoise: #24b2b6;
+$brand-purple: #7575bc;
+$brand-red: #cb0012;
+
+// colors: common
+$black: #000;
+$white: #fff;
+$grey-mist: #f6f6f6;
+$grey-cloud: #d8d8d8;
+$grey-silver: #bbb;
+$grey-steel: #898989;
+$grey-gravel: #4d4d4d;
+
+$red-mild: #e17e5b;
+$maroon: #a31460;
+$pink-salmon: #f87c84;
+
+$yellow-mild: #ffeda0;
+$orange-mild: lighten($brand-orange, 20%);
+
+$green-pista: #addd8e;
+$green-leaf: #44c28c;
+
+$blue-ink: #2c3e50;
+$blue-sky: lighten($brand-blue, 32%);
+$purple-amethyst: #7b7795;
+
+// colors - links
+$link-color: $brand-blue;
+$link-hover-color: lighten($brand-blue, 15%);
+
+
+// orange
+.brand-orange, %brand-orange {
+  color: $brand-orange;
+}
+
+.brand-orange-bg, %brand-orange-bg {
+  background-color: $brand-orange;
+}
+
+// green
+.brand-green, %brand-green, .brand-school {
+  color: $brand-green;
+}
+
+.brand-green-bg, %brand-green-bg, .brand-school-bg {
+  background-color: $brand-green;
+}
+
+// blue
+.brand-blue, %brand-blue, .brand-school-cluster {
+  color: $brand-blue;
+}
+
+.brand-blue-bg, %brand-blue-bg, .brand-school-cluster-bg {
+  background-color: $brand-blue;
+}
+
+// turquoise
+.brand-turquoise, %brand-turquoise, .brand-school-block {
+  color: $brand-turquoise;
+}
+
+.brand-turquoise-bg, %brand-turquoise-bg, .brand-school-block-bg {
+  background-color: $brand-turquoise;
+}
+
+// purple
+.brand-purple, %brand-purple, .brand-preschool {
+  color: $brand-purple;
+}
+
+.brand-purple-bg, %brand-purple-bg, .brand-preschool-bg {
+  background-color: $brand-purple;
+}
+
+
+// red
+.brand-red, %brand-red, .brand-preschool-project {
+  color: $brand-red;
+}
+
+.brand-red-bg, %brand-red-bg, .brand-preschool-project-bg {
+  background-color: $brand-red;
+}
+
+
+// colors: others
+
+// purple-amethyst
+.purple-amethyst, %purple-amethyst, .brand-school-district {
+  color: $purple-amethyst;
+}
+
+.purple-amethyst-bg, %purple-amethyst-bg, .brand-school-district-bg {
+  background-color: $purple-amethyst;
+}
+
+// maroon 
+.maroon, %maroon, .brand-preschool-district {
+  color: $maroon;
+}
+
+.maroon-bg, %maroon-bg, .brand-preschool-district-bg {
+  background-color: $maroon;
+}
+
+// pink-salmon
+.pink-salmon, %pink-salmon, .brand-preschool-circle {
+  color: $pink-salmon;
+}
+
+.pink-salmon-bg, %pink-salmon-bg, .brand-preschool-circle-bg {
+  background-color: $pink-salmon;
+}
+
+// white
+.white, %white {
+  color: $white;
+}
+
+.white-bg, %white-bg {
+  background-color: $white;
+}
+
+// yellow-mild
+.yellow-mild, %yellow-mild {
+  color: $yellow-mild;
+}
+
+.yellow-mild-bg, %yellow-mild-bg {
+  background-color: $yellow-mild;
+}
+
+// orange-mild
+.orange-mild, %orange-mild {
+  color: $orange-mild;
+}
+
+.orange-mild-bg, %orange-mild-bg {
+  background-color: $orange-mild;
+}
+
+// green-pista
+.green-pista, %green-pista {
+  color: $green-pista;
+}
+
+.green-pista-bg, %green-pista-bg {
+  background-color: $green-pista;
+}
+
+// green-leaf 
+.green-leaf, %green-leaf {
+  color: $green-leaf;
+}
+
+.green-leaf-bg, %green-leaf-bg {
+  background-color: $green-leaf;
+}
+// black
+.black, %black {
+  color: $black;
+}
+
+.black-bg, %black-bg {
+  background-color: $black;
+}
+
+// grey-mist
+.grey-mist, %grey-mist {
+  color: $grey-mist;
+}
+
+.grey-mist-bg, %grey-mist-bg {
+  background-color: $grey-mist;
+}
+
+// grey-cloud
+.grey-cloud, %grey-cloud {
+  color: $grey-cloud;
+}
+
+.grey-cloud-bg, %grey-cloud-bg {
+  background-color: $grey-cloud;
+}
+
+// grey-silver
+.grey-silver, %grey-silver {
+  color: $grey-silver;
+}
+
+.grey-silver-bg, %grey-silver-bg {
+  background-color: $grey-silver;
+}
+
+// grey-steel
+.grey-steel, %grey-steel {
+  color: $grey-steel;
+}
+
+.grey-steel-bg, %grey-steel-bg {
+  background-color: $grey-steel;
+}
+
+// grey-gravel
+.grey-gravel, %grey-gravel {
+  color: $grey-gravel;
+}
+
+.grey-gravel-bg, %grey-gravel-bg {
+  background-color: $grey-gravel;
+}
+
+// colors: link
+
+.link-color, %link-color {
+  color: $link-color;
+}
+
+.link-hover-color, %link-hover-color {
+  color: $link-hover-color;
+}
