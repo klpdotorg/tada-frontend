@@ -29,27 +29,7 @@ const SchoolsNavTree = React.createClass({
     //this.props.onBoundaryClick({id: boundary.id, type: boundary.boundary_type});
   },
 
-  constructSubTree: function(node)
-  {
-      if(node)
-      {
-      return node.map((boundary,i) => {
-      const name= boundary.name;
-      const label = <Link key={boundary.id | i} to={`/district/boundary.id`}><span className="node"  onClick={this.props.onBoundaryClick.bind(null,{id: boundary.id, type: boundary.boundary_type})}>{name}</span></Link>;
-      return (
-        //<Link key={boundary.id | i} to={`/district/boundary.id`}>
-           <TreeView key={name} nodeLabel={label} defaultCollapsed={false} >
-
-              {
-                this.constructSubTree(boundary.children)
-              }
-            </TreeView>
-       // </Link>
-        );
-     })}
-
-
-  },
+ 
 
   /*
   Data is of the format: [
@@ -69,7 +49,6 @@ const SchoolsNavTree = React.createClass({
       visitedBoundaries.push(node);
      
       var boundary = this.props.boundaryDetails[node];
-      console.log("Route is" , boundary.path);
       const label = <Link key={boundary.name} to={boundary.path}><span className="node"  onClick={this.props.onBoundaryClick.bind(null,{id: boundary.id, type: boundary.boundary_type})}> {boundary.name} </span></Link>;
       return (
               //
@@ -106,14 +85,6 @@ const SchoolsNavTree = React.createClass({
               Object.keys(copyOfMap).map(function(element, i) {
                 return this.renderSubTree(element, copyOfMap, visitedBoundaries)
               }.bind(this))
-              // (() => {
-              //   for(var element in copyOfMap)
-              //   {
-              //     console.log("Processing element " + element);
-              //     return this.renderSubTree(element,copyOfMap, visitedBoundaries);
-
-              //   }
-              // })()
 
             }
         </div>

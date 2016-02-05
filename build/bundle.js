@@ -83,9 +83,17 @@
 
 	var _reactRouter = __webpack_require__(191);
 
-	var _componentsLogin = __webpack_require__(294);
+	var _componentsPrimaryDistrictScreen = __webpack_require__(294);
 
-	var _componentsLogin2 = _interopRequireDefault(_componentsLogin);
+	var _componentsPrimaryDistrictScreen2 = _interopRequireDefault(_componentsPrimaryDistrictScreen);
+
+	var _componentsPrimaryBlockScreen = __webpack_require__(295);
+
+	var _componentsPrimaryBlockScreen2 = _interopRequireDefault(_componentsPrimaryBlockScreen);
+
+	var _componentsPrimaryClusterScreen = __webpack_require__(296);
+
+	var _componentsPrimaryClusterScreen2 = _interopRequireDefault(_componentsPrimaryClusterScreen);
 
 	var _historyLibCreateHashHistory = __webpack_require__(194);
 
@@ -107,7 +115,9 @@
 	        { path: '/', component: _componentsApplication2['default'] },
 	        _react2['default'].createElement(_reactRouter.IndexRoute, { component: _componentsDashboard2['default'] }),
 	        _react2['default'].createElement(_reactRouter.Route, { path: 'dashboard', component: _componentsDashboard2['default'] }),
-	        _react2['default'].createElement(_reactRouter.Route, { path: 'district/:districtId', component: _componentsLogin2['default'] })
+	        _react2['default'].createElement(_reactRouter.Route, { path: 'district/:districtId', component: _componentsPrimaryDistrictScreen2['default'] }),
+	        _react2['default'].createElement(_reactRouter.Route, { path: 'district/:districtId/block/:blockId', component: _componentsPrimaryBlockScreen2['default'] }),
+	        _react2['default'].createElement(_reactRouter.Route, { path: 'district/:districtId/block/:blockId/cluster/:clusterId', component: _componentsPrimaryClusterScreen2['default'] })
 	    )
 	);
 
@@ -20844,7 +20854,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, '__esModule', {
-	    value: true
+	  value: true
 	});
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -20872,146 +20882,150 @@
 	var _ = __webpack_require__(249);
 
 	var parentId = 1;
+	var childrenByParentId = [];
+	var boundaryDetails = [];
 	var boundaries = [];
 	var boundaries2 = [{
-	    id: 123,
-	    name: 'Dharwad',
+	  id: 123,
+	  name: 'Dharwad',
+	  children: [{
+	    id: 111,
+	    name: 'Something',
 	    children: [{
-	        id: 111,
-	        name: 'Something',
-	        children: [{
-	            id: 222,
-	            name: 'Cluster 1',
-	            children: [{
-	                id: 444,
-	                name: 'Some school name'
+	      id: 222,
+	      name: 'Cluster 1',
+	      children: [{
+	        id: 444,
+	        name: 'Some school name'
 
-	            }]
-	        }]
+	      }]
 	    }]
+	  }]
 	}, {
-	    id: 456,
-	    name: 'Karwar'
+	  id: 456,
+	  name: 'Karwar'
 	}];
 	var TadaContainer = _react2['default'].createClass({
-	    displayName: 'TadaContainer',
+	  displayName: 'TadaContainer',
 
-	    //In order to make REST call, need to know whether
-	    // 1. Primary/Preschool was clicked
-	    // 2. Category = whether district/cluster/block etc..Initially category will be district
-	    //But as various clicks come in (inverse flow), need to determine from that.
-	    getInitialState: function getInitialState() {
-	        _storesTadaStore2['default'].getCurrentSchoolSelection();
-	        return { currentSchoolSelection: "primary", boundaries: [] };
-	    },
-	    /**
-	      * Event handler for 'change' events coming from the stores
-	      */
-	    _onChange: function _onChange() {
-	        console.log('Received change from stores');
-	        this.setState({ currentSchoolSelection: _storesTadaStore2['default'].getCurrentSchoolSelection() });
-	        console.log(_storesTadaStore2['default'].getCurrentSchoolSelection());
-	        this.fetchBoundariesFromServer();
-	    },
+	  //In order to make REST call, need to know whether
+	  // 1. Primary/Preschool was clicked
+	  // 2. Category = whether district/cluster/block etc..Initially category will be district
+	  //But as various clicks come in (inverse flow), need to determine from that.
+	  getInitialState: function getInitialState() {
 
-	    searchAndModifyState: function searchAndModifyState(boundariesObj, key, results) {
-	        if (key == boundariesObj.id) {
+	    return {
+	      currentSchoolSelection: "primary",
+	      boundaries: [],
+	      boundarydetails: [],
+	      boundariesByParentId: []
+	    };
+	  },
+	  /**
+	    * Event handler for 'change' events coming from the stores
+	    */
+	  _onChange: function _onChange() {
+	    console.log('Received change from stores');
+	    this.setState({ currentSchoolSelection: _storesTadaStore2['default'].getCurrentSchoolSelection() });
+	    console.log(_storesTadaStore2['default'].getCurrentSchoolSelection());
+	    this.fetchBoundariesFromServer();
+	  },
 
-	            return boundariesObj;
-	        } else {
-	            var result = [];
-	            for (var i in boundariesObj) {
-	                var element = boundariesObj[i];
-	                if (element.id == key) {
-	                    console.log("FOUND ELEMENT with ID ", key);
-	                    element.children = results;
-	                    break;
-	                }
-	                if (element.children) {
-	                    console.log("Found a children array");
-	                    return this.searchAndModifyState(element.children, key, results);
-	                }
-	            }
-	        }
-	    },
-
-	    handleSuccessfulFetch: function handleSuccessfulFetch(data) {},
-
-	    fetchBoundariesFromServer: function fetchBoundariesFromServer(parentBoundaryId) {
-	        var index = -1;
-	        if (!parentBoundaryId) {
-	            parentId = 1;
-	        } else {
-	            parentId = parentBoundaryId;
-	        }
-	        //Set it to 1 if there's no parent passed in.
-
-	        if (this.state.currentSchoolSelection == "primary") {
-	            $.ajax({
-	                type: "GET",
-	                dataType: "json",
-	                url: "http://tadadev.klp.org.in/api/v1/boundaries/", //TODO: Make a call that fetches only schools and districts
-	                data: { boundary_type: 1, parent: parentId },
-	                success: (function (data) {
-	                    console.log(data.results);
-	                    if (parentId == 1) {
-	                        this.setState({
-	                            boundaries: data.results
-	                        });
-	                    } else {
-
-	                        //manipulate the DS to set the results in the right location
-	                        // Find the id=parentId in the DS and set the children accordingly
-	                        var stateCopy = this.state.boundaries;
-	                        stateCopy = this.searchAndModifyState(stateCopy, parentId, data.results);
-	                        this.setState(stateCopy);
-	                        //index.children = data.results;
-	                        //this.setState({boundaries: stateCopy});
-	                        //console.log(parent);
-	                    }
-	                }).bind(this)
-	            });
-	        } else {
-	            $.ajax({
-	                type: "GET",
-	                dataType: "json",
-	                url: "http://tadadev.klp.org.in/api/v1/boundaries/?boundary_type=2&category=district", //TODO: Make a call that fetches only schools and districts
-	                success: (function (data) {
-	                    console.log(data.results);
-	                    this.setState({
-	                        boundaries: data.results
-	                    });
-	                }).bind(this)
-	            });
-	        }
-	    },
-
-	    componentDidMount: function componentDidMount() {
-	        console.log('Treeview componentdidmount..');
-	        _storesTadaStore2['default'].addChangeListener(this._onChange);
-	        this.fetchBoundariesFromServer();
-	    },
-
-	    componentWillUnmount: function componentWillUnmount() {
-	        _storesTadaStore2['default'].removeChangeListener(this._onChange.bind(this));
-	    },
-
-	    handleBoundaryClick: function handleBoundaryClick(boundary) {
-	        console.log("On boundary click..", boundary);
-	        //Now go and fetch the children from the server..and render..
-	        this.fetchBoundariesFromServer(boundary.id);
-	    },
-
-	    render: function render() {
-	        console.log('Rendering TadaContainer');
-	        return _react2['default'].createElement(
-	            'div',
-	            null,
-	            _react2['default'].createElement(_MainNavBar2['default'], null),
-	            _react2['default'].createElement(_SecondaryNavBar2['default'], null),
-	            _react2['default'].createElement(_MainContentWrapper2['default'], { onBoundaryClick: this.handleBoundaryClick, boundaries: this.state.boundaries, children: this.props.children })
-	        );
+	  fetchBoundariesFromServer: function fetchBoundariesFromServer(parentBoundaryId) {
+	    var index = -1;
+	    if (!parentBoundaryId) {
+	      parentId = 1;
+	    } else {
+	      parentId = parentBoundaryId;
 	    }
+	    //Set it to 1 if there's no parent passed in.
+
+	    if (this.state.currentSchoolSelection == "primary") {
+	      $.ajax({
+	        type: "GET",
+	        dataType: "json",
+	        url: "http://tadadev.klp.org.in/api/v1/boundaries/", //TODO: Make a call that fetches only schools and districts
+	        data: { boundary_type: 1, parent: parentId },
+	        success: (function (data) {
+	          console.log(data.results);
+	          var childBoundaries = [];
+
+	          var response = data.results;
+
+	          //Loop through and map to the local DS accordingly
+	          response.map(function (boundary, i) {
+	            var path = "";
+	            // Special case the first case where parentId = 1. i.e. districts
+	            if (parentId == 1) {
+	              path = "/district/" + boundary.id;
+	              childrenByParentId[boundary.id] = [];
+	            } else {
+	              childBoundaries.push(boundary.id);
+	              //compute boundary.path
+	              if (boundary.boundary_category == "10") {
+	                //path is parent's path plus child's
+	                parent = boundaryDetails[boundary.parent];
+	                path = parent.path + "/block/" + boundary.id;
+	              } else if (boundary.boundary_category == "11") {
+	                parent = boundaryDetails[boundary.parent];
+	                path = parent.path + "/cluster/" + boundary.id;
+	              }
+	            }
+	            boundary.path = path;
+	            boundaryDetails[boundary.id] = boundary;
+	          });
+	          if (parentId != 1) {
+	            childrenByParentId[parentId] = childBoundaries;
+	          }
+	          console.log("children by parent id array", childrenByParentId);
+	          _storesTadaStore2['default'].setBoundaryDetails(boundaryDetails);
+	          this.setState({
+	            boundariesByParentId: childrenByParentId,
+	            boundarydetails: boundaryDetails
+	          });
+	        }).bind(this)
+	      });
+	    } else {
+	      $.ajax({
+	        type: "GET",
+	        dataType: "json",
+	        url: "http://tadadev.klp.org.in/api/v1/boundaries/?boundary_type=2&category=district", //TODO: Make a call that fetches only schools and districts
+	        success: (function (data) {
+	          console.log(data.results);
+	          this.setState({
+	            boundaries: data.results
+	          });
+	        }).bind(this)
+	      });
+	    }
+	  },
+
+	  componentDidMount: function componentDidMount() {
+	    console.log('Treeview componentdidmount..');
+	    _storesTadaStore2['default'].addChangeListener(this._onChange);
+	    this.fetchBoundariesFromServer();
+	  },
+
+	  componentWillUnmount: function componentWillUnmount() {
+	    _storesTadaStore2['default'].removeChangeListener(this._onChange.bind(this));
+	  },
+
+	  handleBoundaryClick: function handleBoundaryClick(boundary) {
+	    console.log("On boundary click..", boundary);
+	    //Now go and fetch the children from the server..and render..
+	    this.fetchBoundariesFromServer(boundary.id);
+	  },
+
+	  render: function render() {
+	    console.log('Rendering TadaContainer');
+	    return _react2['default'].createElement(
+	      'div',
+	      null,
+	      _react2['default'].createElement(_MainNavBar2['default'], null),
+	      _react2['default'].createElement(_SecondaryNavBar2['default'], null),
+	      _react2['default'].createElement(_MainContentWrapper2['default'], { onBoundaryClick: this.handleBoundaryClick, boundaries: this.state.boundaries, boundaryDetails: this.state.boundarydetails, boundaryParentChildMap: this.state.boundariesByParentId, children: this.props.children })
+	    );
+	  }
 	});
 
 	exports['default'] = TadaContainer;
@@ -21738,7 +21752,7 @@
 				return _react2['default'].createElement(
 					'div',
 					{ id: 'wrapper', className: 'main__wrapper' },
-					_react2['default'].createElement(_SideBar2['default'], { onBoundaryClick: this.props.onBoundaryClick, boundaries: this.props.boundaries }),
+					_react2['default'].createElement(_SideBar2['default'], { onBoundaryClick: this.props.onBoundaryClick, boundaries: this.props.boundaries, boundaryDetails: this.props.boundaryDetails, boundaryParentChildMap: this.props.boundaryParentChildMap }),
 					_react2['default'].createElement(_ContentArea2['default'], { children: this.props.children })
 				);
 			}
@@ -21881,7 +21895,7 @@
 	      _react2['default'].createElement(
 	        'div',
 	        { id: 'treeview_side', className: 'treeview' },
-	        _react2['default'].createElement(_NavTree2['default'], { onBoundaryClick: this.props.onBoundaryClick, boundaries: this.props.boundaries })
+	        _react2['default'].createElement(_NavTree2['default'], { onBoundaryClick: this.props.onBoundaryClick, boundaries: this.props.boundaries, boundaryDetails: this.props.boundaryDetails, boundaryParentChildMap: this.props.boundaryParentChildMap })
 	      )
 	    );
 	  }
@@ -21965,36 +21979,78 @@
 	    }
 	  },
 
-	  render: function render() {
+	  /*
+	  Data is of the format: [
+	  {
+	    "123": [22,45,67,89]
+	    "22" : [1,2,3]
+	    "2" : [99]
+	    "45" : [66, 77]
+	  }
+	  ]
+	  */
+	  renderSubTree: function renderSubTree(node, boundaryHierarchy, visitedBoundaries) {
 	    var _this2 = this;
+
+	    if (node && $.inArray(node, visitedBoundaries) < 0) {
+	      var children = boundaryHierarchy[node];
+	      visitedBoundaries.push(node);
+
+	      var boundary = this.props.boundaryDetails[node];
+	      console.log("Route is", boundary.path);
+	      var label = _react2['default'].createElement(
+	        _reactRouter.Link,
+	        { key: boundary.name, to: boundary.path },
+	        _react2['default'].createElement(
+	          'span',
+	          { className: 'node', onClick: this.props.onBoundaryClick.bind(null, { id: boundary.id, type: boundary.boundary_type }) },
+	          ' ',
+	          boundary.name,
+	          ' '
+	        )
+	      );
+	      return(
+	        //
+	        _react2['default'].createElement(
+	          _reactTreeview2['default'],
+	          { key: node, nodeLabel: label, defaultCollapsed: false },
+	          (function () {
+	            console.log("Creating TreeView");
+	            if (children && children.length > 0) {
+	              return children.map(function (child, i) {
+	                console.log("Processing child " + child);
+	                return _this2.renderSubTree(child, boundaryHierarchy, visitedBoundaries);
+	              });
+	            }
+	          })()
+	        )
+	        //</Link>
+
+	      );
+	    }
+	  },
+
+	  //boundaryDetails={this.state.boundaryDetails} boundaryParentChildMap={this.state.childrenByParentId}
+	  render: function render() {
+	    var copyOfMap = $.extend(true, {}, this.props.boundaryParentChildMap);
+	    var firstElement = Object.keys(copyOfMap);
+	    var visitedBoundaries = [];
 
 	    return _react2['default'].createElement(
 	      'div',
 	      null,
-	      this.props.boundaries.map(function (boundary, i) {
-	        var name = boundary.name;
-	        var label = _react2['default'].createElement(
-	          _reactRouter.Link,
-	          { key: boundary.id | i, to: '/district/boundary.id' },
-	          _react2['default'].createElement(
-	            'span',
-	            { className: 'node', onClick: _this2.props.onBoundaryClick.bind(null, { id: boundary.id, type: boundary.boundary_type }) },
-	            ' ',
-	            name,
-	            ' '
-	          )
-	        );
-	        return(
-	          //
-	          _react2['default'].createElement(
-	            _reactTreeview2['default'],
-	            { key: name + '|' + i, nodeLabel: label, defaultCollapsed: false },
-	            _this2.constructSubTree(boundary.children)
-	          )
-	          //</Link>
+	      Object.keys(copyOfMap).map((function (element, i) {
+	        return this.renderSubTree(element, copyOfMap, visitedBoundaries);
+	      }).bind(this))
+	      // (() => {
+	      //   for(var element in copyOfMap)
+	      //   {
+	      //     console.log("Processing element " + element);
+	      //     return this.renderSubTree(element,copyOfMap, visitedBoundaries);
 
-	        );
-	      })
+	      //   }
+	      // })()
+
 	    );
 	  }
 	});
@@ -26922,6 +26978,7 @@
 
 	var currentSchoolSelection = 'primary';
 	var CHANGE_EVENT = 'viewchange';
+	var boundaryDetailsById = {};
 
 	var TadaStore = merge(EventEmitter.prototype, {
 
@@ -26940,6 +26997,14 @@
 
 		getCurrentSchoolSelection: function getCurrentSchoolSelection() {
 			return currentSchoolSelection;
+		},
+
+		setBoundaryDetails: function setBoundaryDetails(boundaryDetails) {
+			this.boundaryDetailsById = boundaryDetails;
+		},
+
+		getBoundaryDetailsById: function getBoundaryDetailsById(boundaryId) {
+			return this.boundaryDetailsById[boundaryId];
 		}
 	});
 
@@ -51172,21 +51237,109 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var LoginHandler = _react2['default'].createClass({
-	  displayName: 'LoginHandler',
+	var _storesTadaStore = __webpack_require__(242);
+
+	var _storesTadaStore2 = _interopRequireDefault(_storesTadaStore);
+
+	var PrimaryDistrict = _react2['default'].createClass({
+	  displayName: 'PrimaryDistrict',
 
 	  render: function render() {
-	    console.log('In district', this.props.children);
+	    var districtId = this.props.params.districtId;
+	    var boundary = _storesTadaStore2['default'].getBoundaryDetailsById(districtId);
 	    return _react2['default'].createElement(
 	      'div',
 	      null,
-	      'You clicked on district ',
-	      this.props.params.districtId
+	      'You are at ',
+	      boundary.name
 	    );
 	  }
 	});
 
-	exports['default'] = LoginHandler;
+	exports['default'] = PrimaryDistrict;
+	module.exports = exports['default'];
+
+/***/ },
+/* 295 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _storesTadaStore = __webpack_require__(242);
+
+	var _storesTadaStore2 = _interopRequireDefault(_storesTadaStore);
+
+	var PrimaryBlock = _react2['default'].createClass({
+	  displayName: 'PrimaryBlock',
+
+	  render: function render() {
+	    var block = _storesTadaStore2['default'].getBoundaryDetailsById(this.props.params.blockId);
+	    var district = _storesTadaStore2['default'].getBoundaryDetailsById(this.props.params.districtId);
+	    return _react2['default'].createElement(
+	      'div',
+	      null,
+	      'You are at ',
+	      district.name,
+	      '> ',
+	      block.name
+	    );
+	  }
+	});
+
+	exports['default'] = PrimaryBlock;
+	module.exports = exports['default'];
+
+/***/ },
+/* 296 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _storesTadaStore = __webpack_require__(242);
+
+	var _storesTadaStore2 = _interopRequireDefault(_storesTadaStore);
+
+	var PrimaryCluster = _react2['default'].createClass({
+	  displayName: 'PrimaryCluster',
+
+	  render: function render() {
+	    var block = _storesTadaStore2['default'].getBoundaryDetailsById(this.props.params.blockId);
+	    var district = _storesTadaStore2['default'].getBoundaryDetailsById(this.props.params.districtId);
+	    var cluster = _storesTadaStore2['default'].getBoundaryDetailsById(this.props.params.clusterId);
+	    return _react2['default'].createElement(
+	      'div',
+	      null,
+	      'You are at ',
+	      district.name,
+	      '> ',
+	      block.name,
+	      '> ',
+	      cluster.name
+	    );
+	  }
+	});
+
+	exports['default'] = PrimaryCluster;
 	module.exports = exports['default'];
 
 /***/ }

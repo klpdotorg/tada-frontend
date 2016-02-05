@@ -73,28 +73,56 @@ let TadaContainer = React.createClass({
     
   },
 
-  fetchBoundariesFromServer: function(parentBoundaryId)
+  //Method fetches institutions belonging to a particular Id from the institutions endpoint
+  fetchInstitutionDetails: function(parentBoundaryId)
   {
-  	var index=-1;
-  	if(!parentBoundaryId)
-  	{
-  		parentId = 1;
-  	}
-  	else
-  	{
-  		parentId=parentBoundaryId;
-  	}
-  	//Set it to 1 if there's no parent passed in.
-  
-  	if(this.state.currentSchoolSelection == "primary")
-  	{
-  		$.ajax({
-	      type: "GET",
-	      dataType: "json",
-	      url: "http://tadadev.klp.org.in/api/v1/boundaries/",//TODO: Make a call that fetches only schools and districts
-	      data: {boundary_type:1, parent: parentId},
-	      success: function(data) {
-				console.log(data.results);
+    var institutionsUrl = "http://tadadev.klp.org.in/api/v1/institutions/?";
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: institutionsUrl,//TODO: Make a call that fetches only schools and districts
+        data: {boundary: parentBoundaryId},
+        success: function(data) 
+        {
+          console.log("Institution details", data.results);
+          var response = data.results; 
+           var childBoundaries = [];
+           //Loop through and map to the local DS accordingly
+          response.map((institution, i) =>{
+                  var path = "";
+                  
+                  childBoundaries.push(institution.id);
+                  parent = boundaryDetails[parentBoundaryId];
+                  path = parent.path + "/institution/" + institution.id;   
+                  institution.path = path;
+                  boundaryDetails[institution.id]=institution;
+
+          });
+          if(parentId != 1)
+          {
+            childrenByParentId[parentBoundaryId]= childBoundaries;
+          }
+          TadaStore.setBoundaryDetails(boundaryDetails);
+          this.setState( {
+            boundariesByParentId: childrenByParentId,
+            boundarydetails: boundaryDetails
+          });               
+    }.bind(this)
+      });
+  },
+
+  //Method fetches boundary details from the boundaries endpoint
+  fetchBoundaryDetails: function(parentBoundaryId)
+  {
+    if(this.state.currentSchoolSelection == "primary")
+    {
+      $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: "http://tadadev.klp.org.in/api/v1/boundaries/",//TODO: Make a call that fetches only schools and districts
+        data: {boundary_type:1, parent: parentId},
+        success: function(data) {
+        console.log(data.results);
                 var childBoundaries = [];
                 
                 var response = data.results;
@@ -140,26 +168,55 @@ let TadaContainer = React.createClass({
                   boundariesByParentId: childrenByParentId,
                   boundarydetails: boundaryDetails
                 });
-	           
-	        	
-	        	
-	      }.bind(this)
-	    });
+             
+            
+            
+        }.bind(this)
+      });
+    }
+    else
+    {
+       $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: "http://tadadev.klp.org.in/api/v1/boundaries/?boundary_type=2&category=district",//TODO: Make a call that fetches only schools and districts
+        success: function(data) {
+              console.log(data.results);
+              this.setState( {
+                boundaries: data.results
+              });
+            }.bind(this)
+      });
+    }
+  },
+
+  fetchBoundariesFromServer: function(parentBoundaryId)
+  {
+  	var index=-1;
+    //Set it to 1 if there's no parent passed in.
+  	if(!parentBoundaryId)
+  	{
+  		parentId = 1;
   	}
   	else
   	{
-  		 $.ajax({
-	      type: "GET",
-	      dataType: "json",
-	      url: "http://tadadev.klp.org.in/api/v1/boundaries/?boundary_type=2&category=district",//TODO: Make a call that fetches only schools and districts
-	      success: function(data) {
-	            console.log(data.results);
-	            this.setState( {
-	              boundaries: data.results
-	            });
-	          }.bind(this)
-	    });
+  		parentId=parentBoundaryId;
   	}
+  	var parentBoundaryType = 10;
+    if(this.state.boundarydetails.length >0 )
+    {
+      parentBoundaryType = this.state.boundarydetails[parentId].boundary_category;
+    }
+    //If boundary type is a circle (preschool, 15) or a cluster (primary, 11), then fetch from the instituions endpoint 
+    if(parentBoundaryType == 11 || parentBoundaryType == 15)
+    {
+      this.fetchInstitutionDetails(parentId);
+    }
+    else
+    {
+      this.fetchBoundaryDetails(parentId);
+    }
+  
   },
 
  componentDidMount: function() 

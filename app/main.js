@@ -12,6 +12,7 @@ import { DefaultRoute, Router, Link, Route, RouteHandler, IndexRoute } from 'rea
 import PrimaryDistrict from './components/PrimaryDistrictScreen';
 import PrimaryBlock from './components/PrimaryBlockScreen';
 import PrimaryCluster from './components/PrimaryClusterScreen';
+import Institution from './components/InstitutionDetailsScreen';
 import createHistory from 'history/lib/createHashHistory';
 
 let store = createStore(tada);
@@ -29,6 +30,8 @@ const routes = (
             <Route path="district/:districtId" component={PrimaryDistrict}/>
             <Route path="district/:districtId/block/:blockId" component={PrimaryBlock}/>
             <Route path="district/:districtId/block/:blockId/cluster/:clusterId" component={PrimaryCluster}/>
+            <Route path="district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId" component={Institution}/>
+
         </Route>
     </Router>
 );
