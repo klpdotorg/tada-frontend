@@ -25,11 +25,13 @@ class HeaderBar extends React.Component {
 				<img src="assets/images/KLP_logo.png"/>
 			</a>
 			</div>
+
 		 	<div id="navbar" className="navbar-collapse collapse">
      		<p className="app-name navbar-text pull-left">Data Entry Operations 2015-2016</p>
      		<p className="navbar-text pull-right">
      		<button type="button" className="btn btn-primary"><span className="glyphicon glyphicon-user"></span></button>
      		<Link to="/logout" onClick={this.handleLogout}><span className="btn btn-primary glyphicon glyphicon-off"></span></Link>
+
     </p>
 
     <p className="login-msg navbar-text pull-right">Hello there <span className="fa fa-smile-o"></span> ! Mohsina Taj

@@ -1,0 +1,97 @@
+
+/*-------------------------TOP LEVEL NAVIGATION - WELCOME PANEL-----------------------*/
+.navbar-fixed-top {
+  border: 0;
+}
+
+.navbar-white {
+  background-color: #ffffff;
+  border-color: #ffffff;
+}
+
+.nav > li > a {
+  position: relative;
+  display: block;
+  padding: 10px 5px;
+}
+
+.app-name {
+  color: #898989;
+  font-size: 110%;
+  font-weight: bold;
+}
+
+.login-msg {
+  color: #898989;
+  font-size: 90%;
+}
+
+/*-------------------------NAV TABS FOR SCHOOL PRESCHOOL -----------------------*/
+
+
+.inst-tabs {
+  padding-top: 20px;
+  padding-left: 20px;
+}
+
+.nav .nav-tab {
+  box-shadow: 0 1px 3px rgba(0,0,0,.25);
+  color: $white;
+}
+
+.nav-tabs {
+	padding-top:10px;
+}
+
+/*http://codepen.io/marifrahman/pen/aAEpD*/
+.tab-content{
+  padding:3px 0px 0px 8px; 
+  border-top: 1px solid $grey-silver;
+  margin-left:1px;
+}
+
+
+.box-shadow {
+  -webkit-box-shadow: 0 1px 3px rgba(0,0,0,.25);
+     -moz-box-shadow: 0 1px 3px rgba(0,0,0,.25);
+          box-shadow: 0 1px 3px rgba(0,0,0,.25);
+}
+
+/* tab color */
+.nav-tabs>li>a {
+    color:$white;
+}
+
+/* active tab color */
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
+  color: $white;
+}
+
+/*-------------------------TREE TOGGLER-----------------------*/
+
+#treetoggler { 
+  position: fixed; 
+  top: 175px;
+  left:15px; 
+  z-index: 99999;
+}
+
+#treetoggler a:hover { 
+  background: #222;
+  color: #fff; 
+}
+
+/*-------------------------SECONDARY NAV BAR - BUTTONS -----------------------*/
+
+#secondary-menu {
+  padding-right: 10px;
+}
+
+.padded-btn {
+	margin-left: 1px;
+	margin-right: 1px;
+}
+
+.all-padded-btn {
+  margin: 8px 1px 8px 1px;
+}

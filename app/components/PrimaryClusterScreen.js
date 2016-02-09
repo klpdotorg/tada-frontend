@@ -18,9 +18,9 @@ let PrimaryCluster = React.createClass({
     			<li> <a href={blockPath}> {block.name}</a></li>
     			<li className="active"> {cluster.name}</li>
     		</ol>
-    		<div className="form-heading heading-border"> Limited Permissions</div>
+    		<h4 className="heading-border heading-warn"> Limited Permissions</h4>
     		<p>You need administrator privileges to modify Boundary details. But you may add institutions here.</p>
-    		<div className="form-heading heading-border"> View Details</div>
+    		<h4 className="heading-border brand-blue"> View Details</h4>
     		<p> Name: {cluster.name} </p>
     	</div>);
   }

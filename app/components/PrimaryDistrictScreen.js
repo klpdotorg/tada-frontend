@@ -13,9 +13,9 @@ let PrimaryDistrict = React.createClass({
     		<ol className="breadcrumb">
     			<li className="active">{boundary.name}</li>
     		</ol>
-    		<div className="form-heading heading-border"> Insufficient Permissions</div>
+    		<h4 className="heading-err heading-border"> Insufficient Permissions</h4>
     		<p>You need administrator privileges to modify Boundary details.</p>
-    		<div className="form-heading heading-border"> View Details</div>
+    		<h4 className="brand-blue heading-border"> View Details</h4>
     		<p> Name: {boundary.name} </p>
     	</div>
     );

@@ -31,6 +31,7 @@
     "jsx-loader": "^0.13.2",
     "node-sass": "^3.3.3",
     "react-router": "^1.0.0",
+    "file-loader": "^0.8.5",
     "sass-loader": "^3.1.1",
     "style-loader": "^0.13.0",
     "webpack": "^1.12.2",

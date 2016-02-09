@@ -1,0 +1,43 @@
+/*
+ * Placeholder dashboard ideas
+ */
+
+.placeholders {
+  margin-bottom: 30px;
+  text-align: center;
+}
+.placeholders h4 {
+  margin-bottom: 0;
+}
+.placeholder {
+  margin-bottom: 20px;
+}
+.placeholder img {
+  display: inline-block;
+  border-radius: 50%;
+}
+
+.form-heading %form-heading {
+  extend: %heading-secondary;
+  color: $brand-blue;
+}
+
+.form-heading-err {
+  extend: %form-heading;
+  color: $pink-salmon;
+}
+.form-heading-err:before {
+  content: "\f023";
+  font-family: FontAwesome;
+  color: $pink-salmon;
+}
+
+.form-heading-warn {
+  extend: %form-heading;
+  color: $yellow-mild;
+}
+.form-heading-warn:before {
+  content: "\f071";
+  font-family: FontAwesome;
+  color: $yellow-mild;
+}
