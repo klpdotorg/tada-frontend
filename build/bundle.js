@@ -95,6 +95,10 @@
 
 	var _componentsPrimaryClusterScreen2 = _interopRequireDefault(_componentsPrimaryClusterScreen);
 
+	var _componentsInstitutionDetailsScreen = __webpack_require__(297);
+
+	var _componentsInstitutionDetailsScreen2 = _interopRequireDefault(_componentsInstitutionDetailsScreen);
+
 	var _historyLibCreateHashHistory = __webpack_require__(194);
 
 	var _historyLibCreateHashHistory2 = _interopRequireDefault(_historyLibCreateHashHistory);
@@ -117,7 +121,8 @@
 	        _react2['default'].createElement(_reactRouter.Route, { path: 'dashboard', component: _componentsDashboard2['default'] }),
 	        _react2['default'].createElement(_reactRouter.Route, { path: 'district/:districtId', component: _componentsPrimaryDistrictScreen2['default'] }),
 	        _react2['default'].createElement(_reactRouter.Route, { path: 'district/:districtId/block/:blockId', component: _componentsPrimaryBlockScreen2['default'] }),
-	        _react2['default'].createElement(_reactRouter.Route, { path: 'district/:districtId/block/:blockId/cluster/:clusterId', component: _componentsPrimaryClusterScreen2['default'] })
+	        _react2['default'].createElement(_reactRouter.Route, { path: 'district/:districtId/block/:blockId/cluster/:clusterId', component: _componentsPrimaryClusterScreen2['default'] }),
+	        _react2['default'].createElement(_reactRouter.Route, { path: 'district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId', component: _componentsInstitutionDetailsScreen2['default'] })
 	    )
 	);
 
@@ -20931,15 +20936,42 @@
 	    this.fetchBoundariesFromServer();
 	  },
 
-	  fetchBoundariesFromServer: function fetchBoundariesFromServer(parentBoundaryId) {
-	    var index = -1;
-	    if (!parentBoundaryId) {
-	      parentId = 1;
-	    } else {
-	      parentId = parentBoundaryId;
-	    }
-	    //Set it to 1 if there's no parent passed in.
+	  //Method fetches institutions belonging to a particular Id from the institutions endpoint
+	  fetchInstitutionDetails: function fetchInstitutionDetails(parentBoundaryId) {
+	    var institutionsUrl = "http://tadadev.klp.org.in/api/v1/institutions/?";
+	    $.ajax({
+	      type: "GET",
+	      dataType: "json",
+	      url: institutionsUrl, //TODO: Make a call that fetches only schools and districts
+	      data: { boundary: parentBoundaryId },
+	      success: (function (data) {
+	        console.log("Institution details", data.results);
+	        var response = data.results;
+	        var childBoundaries = [];
+	        //Loop through and map to the local DS accordingly
+	        response.map(function (institution, i) {
+	          var path = "";
 
+	          childBoundaries.push(institution.id);
+	          parent = boundaryDetails[parentBoundaryId];
+	          path = parent.path + "/institution/" + institution.id;
+	          institution.path = path;
+	          boundaryDetails[institution.id] = institution;
+	        });
+	        if (parentId != 1) {
+	          childrenByParentId[parentBoundaryId] = childBoundaries;
+	        }
+	        _storesTadaStore2['default'].setBoundaryDetails(boundaryDetails);
+	        this.setState({
+	          boundariesByParentId: childrenByParentId,
+	          boundarydetails: boundaryDetails
+	        });
+	      }).bind(this)
+	    });
+	  },
+
+	  //Method fetches boundary details from the boundaries endpoint
+	  fetchBoundaryDetails: function fetchBoundaryDetails(parentBoundaryId) {
 	    if (this.state.currentSchoolSelection == "primary") {
 	      $.ajax({
 	        type: "GET",
@@ -20997,6 +21029,26 @@
 	          });
 	        }).bind(this)
 	      });
+	    }
+	  },
+
+	  fetchBoundariesFromServer: function fetchBoundariesFromServer(parentBoundaryId) {
+	    var index = -1;
+	    //Set it to 1 if there's no parent passed in.
+	    if (!parentBoundaryId) {
+	      parentId = 1;
+	    } else {
+	      parentId = parentBoundaryId;
+	    }
+	    var parentBoundaryType = 10;
+	    if (this.state.boundarydetails.length > 0) {
+	      parentBoundaryType = this.state.boundarydetails[parentId].boundary_category;
+	    }
+	    //If boundary type is a circle (preschool, 15) or a cluster (primary, 11), then fetch from the instituions endpoint
+	    if (parentBoundaryType == 11 || parentBoundaryType == 15) {
+	      this.fetchInstitutionDetails(parentId);
+	    } else {
+	      this.fetchBoundaryDetails(parentId);
 	    }
 	  },
 
@@ -21950,35 +22002,6 @@
 	    //this.props.onBoundaryClick({id: boundary.id, type: boundary.boundary_type});
 	  },
 
-	  constructSubTree: function constructSubTree(node) {
-	    var _this = this;
-
-	    if (node) {
-	      return node.map(function (boundary, i) {
-	        var name = boundary.name;
-	        var label = _react2['default'].createElement(
-	          _reactRouter.Link,
-	          { key: boundary.id | i, to: '/district/boundary.id' },
-	          _react2['default'].createElement(
-	            'span',
-	            { className: 'node', onClick: _this.props.onBoundaryClick.bind(null, { id: boundary.id, type: boundary.boundary_type }) },
-	            name
-	          )
-	        );
-	        return(
-	          //<Link key={boundary.id | i} to={`/district/boundary.id`}>
-	          _react2['default'].createElement(
-	            _reactTreeview2['default'],
-	            { key: name, nodeLabel: label, defaultCollapsed: false },
-	            _this.constructSubTree(boundary.children)
-	          )
-	          // </Link>
-
-	        );
-	      });
-	    }
-	  },
-
 	  /*
 	  Data is of the format: [
 	  {
@@ -21990,14 +22013,13 @@
 	  ]
 	  */
 	  renderSubTree: function renderSubTree(node, boundaryHierarchy, visitedBoundaries) {
-	    var _this2 = this;
+	    var _this = this;
 
 	    if (node && $.inArray(node, visitedBoundaries) < 0) {
 	      var children = boundaryHierarchy[node];
 	      visitedBoundaries.push(node);
 
 	      var boundary = this.props.boundaryDetails[node];
-	      console.log("Route is", boundary.path);
 	      var label = _react2['default'].createElement(
 	        _reactRouter.Link,
 	        { key: boundary.name, to: boundary.path },
@@ -22019,7 +22041,7 @@
 	            if (children && children.length > 0) {
 	              return children.map(function (child, i) {
 	                console.log("Processing child " + child);
-	                return _this2.renderSubTree(child, boundaryHierarchy, visitedBoundaries);
+	                return _this.renderSubTree(child, boundaryHierarchy, visitedBoundaries);
 	              });
 	            }
 	          })()
@@ -22042,15 +22064,6 @@
 	      Object.keys(copyOfMap).map((function (element, i) {
 	        return this.renderSubTree(element, copyOfMap, visitedBoundaries);
 	      }).bind(this))
-	      // (() => {
-	      //   for(var element in copyOfMap)
-	      //   {
-	      //     console.log("Processing element " + element);
-	      //     return this.renderSubTree(element,copyOfMap, visitedBoundaries);
-
-	      //   }
-	      // })()
-
 	    );
 	  }
 	});
@@ -51247,11 +51260,41 @@
 	  render: function render() {
 	    var districtId = this.props.params.districtId;
 	    var boundary = _storesTadaStore2['default'].getBoundaryDetailsById(districtId);
+	    var districtPath = "#" + boundary.path;
 	    return _react2['default'].createElement(
 	      'div',
 	      null,
-	      'You are at ',
-	      boundary.name
+	      _react2['default'].createElement(
+	        'ol',
+	        { className: 'breadcrumb' },
+	        _react2['default'].createElement(
+	          'li',
+	          { className: 'active' },
+	          boundary.name
+	        )
+	      ),
+	      _react2['default'].createElement(
+	        'div',
+	        { className: 'form-heading heading-border' },
+	        ' Insufficient Permissions'
+	      ),
+	      _react2['default'].createElement(
+	        'p',
+	        null,
+	        'You need administrator privileges to modify Boundary details.'
+	      ),
+	      _react2['default'].createElement(
+	        'div',
+	        { className: 'form-heading heading-border' },
+	        ' View Details'
+	      ),
+	      _react2['default'].createElement(
+	        'p',
+	        null,
+	        ' Name: ',
+	        boundary.name,
+	        ' '
+	      )
 	    );
 	  }
 	});
@@ -51284,14 +51327,52 @@
 
 	  render: function render() {
 	    var block = _storesTadaStore2['default'].getBoundaryDetailsById(this.props.params.blockId);
+	    var blockPath = "#" + block.path;
 	    var district = _storesTadaStore2['default'].getBoundaryDetailsById(this.props.params.districtId);
+	    var districtPath = "#" + district.path;
 	    return _react2['default'].createElement(
 	      'div',
 	      null,
-	      'You are at ',
-	      district.name,
-	      '> ',
-	      block.name
+	      _react2['default'].createElement(
+	        'ol',
+	        { className: 'breadcrumb' },
+	        _react2['default'].createElement(
+	          'li',
+	          null,
+	          _react2['default'].createElement(
+	            'a',
+	            { href: districtPath },
+	            district.name
+	          )
+	        ),
+	        _react2['default'].createElement(
+	          'li',
+	          { className: 'active' },
+	          block.name
+	        )
+	      ),
+	      _react2['default'].createElement(
+	        'div',
+	        { className: 'form-heading heading-border' },
+	        ' Insufficient Permissions'
+	      ),
+	      _react2['default'].createElement(
+	        'p',
+	        null,
+	        'You need administrator privileges to modify Boundary details.'
+	      ),
+	      _react2['default'].createElement(
+	        'div',
+	        { className: 'form-heading heading-border' },
+	        ' View Details'
+	      ),
+	      _react2['default'].createElement(
+	        'p',
+	        null,
+	        ' Name: ',
+	        block.name,
+	        ' '
+	      )
 	    );
 	  }
 	});
@@ -51324,22 +51405,166 @@
 
 	  render: function render() {
 	    var block = _storesTadaStore2['default'].getBoundaryDetailsById(this.props.params.blockId);
+	    var blockPath = "#" + block.path;
 	    var district = _storesTadaStore2['default'].getBoundaryDetailsById(this.props.params.districtId);
+	    var districtPath = "#" + district.path;
 	    var cluster = _storesTadaStore2['default'].getBoundaryDetailsById(this.props.params.clusterId);
+	    var clusterPath = "#" + cluster.path;
 	    return _react2['default'].createElement(
 	      'div',
 	      null,
-	      'You are at ',
-	      district.name,
-	      '> ',
-	      block.name,
-	      '> ',
-	      cluster.name
+	      _react2['default'].createElement(
+	        'ol',
+	        { className: 'breadcrumb' },
+	        _react2['default'].createElement(
+	          'li',
+	          null,
+	          _react2['default'].createElement(
+	            'a',
+	            { href: districtPath },
+	            district.name
+	          )
+	        ),
+	        _react2['default'].createElement(
+	          'li',
+	          null,
+	          ' ',
+	          _react2['default'].createElement(
+	            'a',
+	            { href: blockPath },
+	            ' ',
+	            block.name
+	          )
+	        ),
+	        _react2['default'].createElement(
+	          'li',
+	          { className: 'active' },
+	          ' ',
+	          cluster.name
+	        )
+	      ),
+	      _react2['default'].createElement(
+	        'div',
+	        { className: 'form-heading heading-border' },
+	        ' Limited Permissions'
+	      ),
+	      _react2['default'].createElement(
+	        'p',
+	        null,
+	        'You need administrator privileges to modify Boundary details. But you may add institutions here.'
+	      ),
+	      _react2['default'].createElement(
+	        'div',
+	        { className: 'form-heading heading-border' },
+	        ' View Details'
+	      ),
+	      _react2['default'].createElement(
+	        'p',
+	        null,
+	        ' Name: ',
+	        cluster.name,
+	        ' '
+	      )
 	    );
 	  }
 	});
 
 	exports['default'] = PrimaryCluster;
+	module.exports = exports['default'];
+
+/***/ },
+/* 297 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _storesTadaStore = __webpack_require__(242);
+
+	var _storesTadaStore2 = _interopRequireDefault(_storesTadaStore);
+
+	var Institution = _react2['default'].createClass({
+	  displayName: 'Institution',
+
+	  render: function render() {
+	    var block = _storesTadaStore2['default'].getBoundaryDetailsById(this.props.params.blockId);
+	    var blockPath = "#" + block.path;
+	    var district = _storesTadaStore2['default'].getBoundaryDetailsById(this.props.params.districtId);
+	    var districtPath = "#" + district.path;
+	    var cluster = _storesTadaStore2['default'].getBoundaryDetailsById(this.props.params.clusterId);
+	    var clusterPath = "#" + cluster.path;
+	    var institution = _storesTadaStore2['default'].getBoundaryDetailsById(this.props.params.institutionId);
+	    var institutionPath = "#" + institution.path;
+	    return _react2['default'].createElement(
+	      'div',
+	      null,
+	      _react2['default'].createElement(
+	        'ol',
+	        { className: 'breadcrumb' },
+	        _react2['default'].createElement(
+	          'li',
+	          null,
+	          _react2['default'].createElement(
+	            'a',
+	            { href: districtPath },
+	            district.name
+	          )
+	        ),
+	        _react2['default'].createElement(
+	          'li',
+	          null,
+	          ' ',
+	          _react2['default'].createElement(
+	            'a',
+	            { href: blockPath },
+	            ' ',
+	            block.name
+	          )
+	        ),
+	        _react2['default'].createElement(
+	          'li',
+	          null,
+	          ' ',
+	          _react2['default'].createElement(
+	            'a',
+	            { href: clusterPath },
+	            ' ',
+	            cluster.name
+	          )
+	        ),
+	        _react2['default'].createElement(
+	          'li',
+	          { className: 'active' },
+	          ' ',
+	          institution.name
+	        )
+	      ),
+	      _react2['default'].createElement(
+	        'div',
+	        { className: 'form-heading heading-border' },
+	        ' Institution Details'
+	      ),
+	      _react2['default'].createElement(
+	        'p',
+	        null,
+	        ' Name: ',
+	        institution.name,
+	        ' '
+	      )
+	    );
+	  }
+	});
+
+	exports['default'] = Institution;
 	module.exports = exports['default'];
 
 /***/ }
