@@ -34,14 +34,24 @@ const Login = React.createClass({
 
     render() {
       return (
+        <div className="navbar-header">
+          <a className="navbar-brand" href="#">
+            <img src="assets/images/KLP_logo.png"/>
+          </a>
+        
         <form onSubmit={this.handleSubmit}>
           <label><input ref="email" placeholder="email" defaultValue="tada@klp.org.in" /></label>
           <label><input ref="pass" placeholder="password" /></label> (hint: tada)<br />
-          <button type="submit">login</button>
+          <div className="form-group">        
+              <div className="col-sm-offset-2 col-sm-10">
+                <button type="submit" className="btn btn-primary">Submit</button>
+              </div>
+          </div>
           {this.state.error && (
             <p>Bad login information</p>
           )}
         </form>
+        </div>
       )
     }
 })

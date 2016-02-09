@@ -5,7 +5,6 @@
 import React, { Component } from 'react';
 import auth from './Auth';
 import {Link} from 'react-router';
-import MyButton from './MyButton';
 
 class HeaderBar extends React.Component {
 	contextTypes: {
