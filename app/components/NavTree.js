@@ -52,7 +52,7 @@ const SchoolsNavTree = React.createClass({
       const label = <Link key={boundary.name} to={boundary.path}><span className="node"  onClick={this.props.onBoundaryClick.bind(null,{id: boundary.id, type: boundary.boundary_type})}> {boundary.name} </span></Link>;
       return (
               //
-                 <TreeView key={node} nodeLabel={label} defaultCollapsed={false} >
+                 <TreeView key={node} nodeLabel={label} defaultCollapsed={true} >
                     {
                       (() => {
                         console.log("Creating TreeView");
