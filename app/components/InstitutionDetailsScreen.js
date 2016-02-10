@@ -97,7 +97,7 @@ let Institution = React.createClass({
           </div>    
           </div>
         </div>
-
+        
       <div>
         <ol className="breadcrumb">
           <li><a href={districtPath}>{district.name}</a></li>
@@ -109,7 +109,7 @@ let Institution = React.createClass({
         
         <p> Name: {institution.name} </p>
 
-      </div>);
+      </div></div>);
   }
 });
 

@@ -36,8 +36,8 @@ export default class NavBar extends React.Component {
 				<div className="nav nav-pills">
 				<div className="col-lg-12 inst-tabs">
 				<ul className="nav nav-tabs" id="myTab" style={bottomMargin}>
-      				<li><a data-toggle="tab" className={selectedTabColor} onClick={this.handleClickPrimarySchool}>Primary School</a></li>
-      				<li><a data-toggle="tab" className={unselectedTabColor} onClick={this.handleClickPreSchool}> Preschool</a></li>
+      				<li><a data-toggle="tab" className={selectedTabColor} onClick={this.handleClickPrimarySchool.bind(this)}>Primary School</a></li>
+      				<li><a data-toggle="tab" className={unselectedTabColor} onClick={this.handleClickPreSchool.bind(this)}> Preschool</a></li>
     			</ul>
 				</div>
 				</div>
