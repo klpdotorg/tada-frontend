@@ -1,10 +1,10 @@
 import React from 'react';
-import TadaStore from '../stores/TadaStore';
+import TadaStore from '../stores/TadaStore';    
 
+var PreschoolProject = React.createClass({ 
 
-let PreschoolProjectScreen = React.createClass({ 
-
-  render() {
+  render() { 
+    console.log("Inside preschoolProject render");
   	var project = TadaStore.getBoundaryDetailsById(this.props.params.projectId);
     //Prepend the hash. Really figure out why react-router is inserting hash and get rid of it if possible
   	var projectPath = "#" + project.path;
@@ -20,9 +20,8 @@ let PreschoolProjectScreen = React.createClass({
     		<h4 className="heading-border heading-warn"> Limited Permissions</h4>
     		<p>You need administrator privileges to modify Boundary details. But you may add institutions here.</p>
     		<h4 className="heading-border brand-blue"> View Details</h4>
-    		<p> Name: {circle.name} </p>
     	</div>);
   }
 });
 
-export default PreschoolProjectScreen;  
+export default PreschoolProject;  

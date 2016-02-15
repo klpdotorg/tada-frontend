@@ -6,7 +6,7 @@ module.exports = {
       this.onChange(true)
       return
     }
-    pretendRequest(email, pass, (res) => {
+    sendLoginToServer(email, pass, (res) => {
       if (res.authenticated) {
         localStorage.token = res.token
         if (cb) cb(true)
@@ -33,6 +33,24 @@ module.exports = {
   },
 
   onChange() {}
+}
+
+function sendLoginToServer(email, pass, cb)
+{
+  $.ajax({
+        type: "POST",
+        url: "http://tadadev.klp.org.in/auth/login/",
+        data: {username:email, password: pass},
+        success: function(data){
+          if(data.auth_token)
+            cb({authenticated: true, auth_token: data.auth_token});
+          else
+            cb({authenticated: false});
+        },
+        error: function(data){
+          cb({authenticated: false});
+        }
+      });
 }
 
 function pretendRequest(email, pass, cb) {

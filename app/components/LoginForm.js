@@ -34,24 +34,53 @@ const Login = React.createClass({
 
     render() {
       return (
-        <div className="navbar-header">
-          <a className="navbar-brand" href="#">
-            <img src="assets/images/KLP_logo.png"/>
-          </a>
-        
-        <form onSubmit={this.handleSubmit}>
-          <label><input ref="email" placeholder="email" defaultValue="tada@klp.org.in" /></label>
-          <label><input ref="pass" placeholder="password" /></label> (hint: tada)<br />
-          <div className="form-group">        
-              <div className="col-sm-offset-2 col-sm-10">
-                <button type="submit" className="btn btn-primary">Submit</button>
+        <div id="login-page">
+          <nav className="main__header navbar navbar-white navbar-fixed-top">
+            <div id="header" className="container-fluid">
+              <div className="navbar-header">
+                <a className="navbar-brand" href="#">
+                  <img src="assets/images/KLP_logo.png"/>
+                </a>
               </div>
+
+              <div id="navbar" className="navbar-collapse collapse">
+                <p className="app-name navbar-text pull-left">Data Entry Operations 2015-2016</p>
+                <p className="navbar-text pull-right">
+                <Link to="/login" onClick={this.handleLogin} className="btn btn-primary padded-btn">SIGN UP</Link>
+                </p>
+              </div>
+            </div>
+          </nav>
+          
+          <div className="container-fluid absolute-center is-responsive">
+            <div className="row">
+                <div className="col-sm-12 col-md-10 col-md-offset-1">
+
+                  <form onSubmit={this.handleSubmit} id="loginForm">
+                    <div className="form-group input-group">
+                      <span className="input-group-addon"><i className="glyphicon glyphicon-user"></i></span>
+                      <input ref="email" className="form-control" type="text" name='email' placeholder="email id or username" defaultValue="tada@klp.org.in"/>          
+                    </div>
+                    <div className="form-group input-group">
+                      <span className="input-group-addon"><i className="glyphicon glyphicon-lock"></i></span>
+                      <input ref="pass" className="form-control" type="password" name='password' placeholder="(HINT: tada)"/>
+                    </div>
+                    <div className="form-group text-center">
+                      <button type="submit" className="btn btn-primary">Submit</button>
+                    </div>
+                    <div className="form-group text-center">
+                      <a href="#">Forgot Password</a>&nbsp;|&nbsp;<a href="#">Support</a>
+                    </div>
+                    {this.state.error && (
+                      <p>Bad login information. Recheck the username and/or password.</p>
+                    )}
+                  </form>        
+                </div>  
+            </div>
           </div>
-          {this.state.error && (
-            <p>Bad login information</p>
-          )}
-        </form>
+
         </div>
+         
       )
     }
 })

@@ -38,8 +38,7 @@ let TadaContainer = React.createClass({
    */
   _onChange: function() 
   {
-    console.log('Received change from stores');
-    this.setState({currentSchoolSelection: TadaStore.getCurrentSchoolSelection()});
+    //this.setState({currentSchoolSelection: TadaStore.getCurrentSchoolSelection()});
     console.log(TadaStore.getCurrentSchoolSelection());
     this.fetchBoundariesFromServer();
     
@@ -86,7 +85,7 @@ let TadaContainer = React.createClass({
   //Method fetches boundary details from the boundaries endpoint
   fetchBoundaryDetails: function(parentBoundaryId)
   {
-    if(this.state.currentSchoolSelection == "primary")
+    if(TadaStore.getCurrentSchoolSelection() == "primary")
     {
       $.ajax({
         type: "GET",
@@ -218,7 +217,7 @@ let TadaContainer = React.createClass({
   		parentId=parentBoundaryId;
   	}
   	var parentBoundaryCat = 10;
-    if(this.state.currentSchoolSelection == "preschool")
+    if(TadaStore.getCurrentSchoolSelection() == "preschool")
       parentBoundaryCat = 13;
     if(this.state.boundarydetails.length >0 && parentId!=1)
     {
@@ -252,7 +251,7 @@ let TadaContainer = React.createClass({
   {
   	console.log("On boundary click..", boundary);
   	//Now go and fetch the children from the server..and render..
-  	this.fetchBoundariesFromServer(boundary.id)
+  	this.fetchBoundariesFromServer(boundary.id);
   },
 
   render: function() {

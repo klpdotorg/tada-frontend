@@ -12,8 +12,8 @@ import { DefaultRoute, Router, Link, Route, RouteHandler, IndexRoute } from 'rea
 import PrimaryDistrict from './components/PrimaryDistrictScreen';
 import PrimaryBlock from './components/PrimaryBlockScreen';
 import PrimaryCluster from './components/PrimaryClusterScreen';
-import PreschoolProjectScreen from './components/PreschoolProjectScreen';
-import PreschoolCircleScreen from './components/PreschoolCircleScreen';
+import PreschoolProject from './components/PreschoolProjectScreen';
+import PreschoolCircle from './components/PreschoolCircleScreen';
 import Institution from './components/InstitutionDetailsScreen';
 import createHistory from 'history/lib/createHashHistory';
 import Login from './components/LoginForm';
@@ -96,12 +96,13 @@ const routes = (
         <Route path="/" component={App} onEnter={requireAuthentication}>
             <IndexRoute component={Dashboard}/>            
             <Route path="dashboard" component={Dashboard}/>
+            <Route path="district/:districtId/project/:projectId" component={PreschoolProject}/>
+            <Route path="district/:districtId/project/:projectId/circle/:circleId" component={PreschoolCircle}/>
             <Route path="district/:districtId" component={PrimaryDistrict}/>
             <Route path="district/:districtId/block/:blockId" component={PrimaryBlock}/>
             <Route path="district/:districtId/block/:blockId/cluster/:clusterId" component={PrimaryCluster}/>
             <Route path="district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId" component={Institution}/>
-            <Route path="district/:districtId/project/:projectId" component={PreschoolProjectScreen}/>
-            <Route path="district/:districtId/project/:projectId/circle/:circleId" component={PreschoolCircleScreen}/>
+            
         </Route>
     </Router>
 );

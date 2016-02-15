@@ -2,7 +2,7 @@ import React from 'react';
 import TadaStore from '../stores/TadaStore';
 
 
-let PreschoolCircleScreen = React.createClass({ 
+var PreschoolCircle = React.createClass({ 
 
   render() {
   	var project = TadaStore.getBoundaryDetailsById(this.props.params.projectId);
@@ -22,9 +22,9 @@ let PreschoolCircleScreen = React.createClass({
     		<h4 className="heading-border heading-warn"> Limited Permissions</h4>
     		<p>You need administrator privileges to modify Boundary details. But you may add institutions here.</p>
     		<h4 className="heading-border brand-blue"> View Details</h4>
-    		<p> Name: {circle.name} </p>
+    	
     	</div>);
   }
 });
 
-export default PreschoolCircleScreen;  
+export default PreschoolCircle;  

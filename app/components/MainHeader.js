@@ -29,8 +29,8 @@ class HeaderBar extends React.Component {
 		 	<div id="navbar" className="navbar-collapse collapse">
      		<p className="app-name navbar-text pull-left">Data Entry Operations 2015-2016</p>
      		<p className="navbar-text pull-right">
-     		<button type="button" className="btn btn-primary"><span className="glyphicon glyphicon-user"></span></button>
-     		<Link to="/logout" onClick={this.handleLogout}><span className="btn btn-primary glyphicon glyphicon-off"></span></Link>
+     		<button type="button" className="btn btn-primary padded-btn"><span className="glyphicon glyphicon-user"></span></button>
+     		<Link to="/logout" onClick={this.handleLogout} className="btn btn-primary padded-btn"><span className="glyphicon glyphicon-off"></span></Link>
 
     </p>
 
