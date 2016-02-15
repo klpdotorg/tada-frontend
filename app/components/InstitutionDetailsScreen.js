@@ -104,20 +104,20 @@ let Institution = React.createClass({
           </div>
         </div>
 
-        <div>
-          <ol className="breadcrumb">
-            <li><a href={districtPath}>{district.name}</a></li>
-            <li> <a href={blockPath}> {block.name}</a></li>
-            <li> <a href={clusterPath}> {cluster.name}</a></li>
-            <li className="active"> {institution.name}</li>
-          </ol>
-          <h4 className="heading-border"> Institution Details</h4>
-          
-          <p> Name: {institution.name} </p>
+        
+      <div>
+        <ol className="breadcrumb">
+          <li><a href={districtPath}>{district.name}</a></li>
+          <li> <a href={blockPath}> {block.name}</a></li>
+          <li> <a href={clusterPath}> {cluster.name}</a></li>
+          <li className="active"> {institution.name}</li>
+        </ol>
+        <h4 className="heading-border"> Institution Details</h4>
+        
+        <p> Name: {institution.name} </p>
 
-        </div>
-      </div>
-    );
+      </div></div>);
+
   }
 });
 

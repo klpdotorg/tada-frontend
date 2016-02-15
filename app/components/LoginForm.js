@@ -72,7 +72,7 @@ const Login = React.createClass({
                       <a href="#">Forgot Password</a>&nbsp;|&nbsp;<a href="#">Support</a>
                     </div>
                     {this.state.error && (
-                      <p>Bad login information</p>
+                      <p>Bad login information. Recheck the username and/or password.</p>
                     )}
                   </form>        
                 </div>  

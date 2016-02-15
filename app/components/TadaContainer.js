@@ -13,37 +13,10 @@ var _=require('lodash');
 
 var parentId = 1;
 var childrenByParentId =[];
+var preschoolChildrenByParentId = [];
 var boundaryDetails=[];
 var boundaries = [];
-var boundaries2 = [
-    {
-        id: 123,
-        name: 'Dharwad',
-        children: [
-            {
-                id: 111,
-                name: 'Something',
-                children: [
-                    {
-                        id: 222,
-                        name: 'Cluster 1',
-                        children: [
-                            {
-                                id: 444,
-                                name: 'Some school name',
-                                
-                            }
-                        ]
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        id: 456,
-        name: 'Karwar'
-    }
-];
+
 let TadaContainer = React.createClass({ 
 
 //In order to make REST call, need to know whether 
@@ -56,18 +29,16 @@ let TadaContainer = React.createClass({
       return( 
       {
         currentSchoolSelection: "primary", 
-        boundaries: [],
         boundarydetails: [],
         boundariesByParentId: []
       });
   },
 	/**
-   * Event handler for 'change' events coming from the stores
+   * Event handler for 'change' events coming from the stores   
    */
   _onChange: function() 
   {
-    console.log('Received change from stores');
-    this.setState({currentSchoolSelection: TadaStore.getCurrentSchoolSelection()});
+    //this.setState({currentSchoolSelection: TadaStore.getCurrentSchoolSelection()});
     console.log(TadaStore.getCurrentSchoolSelection());
     this.fetchBoundariesFromServer();
     
@@ -114,7 +85,7 @@ let TadaContainer = React.createClass({
   //Method fetches boundary details from the boundaries endpoint
   fetchBoundaryDetails: function(parentBoundaryId)
   {
-    if(this.state.currentSchoolSelection == "primary")
+    if(TadaStore.getCurrentSchoolSelection() == "primary")
     {
       $.ajax({
         type: "GET",
@@ -179,12 +150,55 @@ let TadaContainer = React.createClass({
        $.ajax({
         type: "GET",
         dataType: "json",
-        url: "http://tadadev.klp.org.in/api/v1/boundaries/?boundary_type=2&category=district",//TODO: Make a call that fetches only schools and districts
+        url: "http://tadadev.klp.org.in/api/v1/boundaries/",//TODO: Make a call that fetches only schools and districts
+         data: {boundary_type:2, parent: parentId},
         success: function(data) {
               console.log(data.results);
-              this.setState( {
-                boundaries: data.results
-              });
+              var childBoundaries = [];
+                
+                var response = data.results;
+
+
+                //Loop through and map to the local DS accordingly
+                response.map((boundary, i) =>{
+                  var path = "";
+                  // Special case the first case where parentId = 1. i.e. districts
+                  if(parentId == 1)
+                  {
+                     path="/district/" + boundary.id;
+                     preschoolChildrenByParentId[boundary.id] = [];
+                  }
+                  else
+                  {
+                    childBoundaries.push(boundary.id);
+                    //compute boundary.path
+                    if(boundary.boundary_category == "14")
+                    {
+                      //path is parent's path plus child's
+                      parent = boundaryDetails[boundary.parent];
+                      path = parent.path + "/project/" + boundary.id; 
+                    }
+                    else if(boundary.boundary_category == "15")
+                    {
+                      parent = boundaryDetails[boundary.parent];
+                      path = parent.path + "/circle/" + boundary.id; 
+                    }
+                  
+                  }
+                  boundary.path = path;
+                  boundaryDetails[boundary.id]=boundary;
+
+                });
+                if(parentId != 1)
+                {
+                  preschoolChildrenByParentId[parentId]= childBoundaries;
+                }
+                
+                TadaStore.setBoundaryDetails(boundaryDetails);
+                this.setState( {
+                  boundariesByParentId: preschoolChildrenByParentId,
+                  boundarydetails: boundaryDetails
+                });
             }.bind(this)
       });
     }
@@ -202,13 +216,15 @@ let TadaContainer = React.createClass({
   	{
   		parentId=parentBoundaryId;
   	}
-  	var parentBoundaryType = 10;
-    if(this.state.boundarydetails.length >0 )
+  	var parentBoundaryCat = 10;
+    if(TadaStore.getCurrentSchoolSelection() == "preschool")
+      parentBoundaryCat = 13;
+    if(this.state.boundarydetails.length >0 && parentId!=1)
     {
-      parentBoundaryType = this.state.boundarydetails[parentId].boundary_category;
+      parentBoundaryCat = this.state.boundarydetails[parentId].boundary_category;
     }
     //If boundary type is a circle (preschool, 15) or a cluster (primary, 11), then fetch from the instituions endpoint 
-    if(parentBoundaryType == 11 || parentBoundaryType == 15)
+    if(parentBoundaryCat == 11 || parentBoundaryCat == 15)
     {
       this.fetchInstitutionDetails(parentId);
     }
@@ -235,16 +251,17 @@ let TadaContainer = React.createClass({
   {
   	console.log("On boundary click..", boundary);
   	//Now go and fetch the children from the server..and render..
-  	this.fetchBoundariesFromServer(boundary.id)
+  	this.fetchBoundariesFromServer(boundary.id);
   },
 
   render: function() {
   	console.log('Rendering TadaContainer');
+    
     return(
     <div>
     	<NavBar/>
 		<SecondaryNavBar/>
-		<MainContentWrapper onBoundaryClick={this.handleBoundaryClick} boundaries={this.state.boundaries} boundaryDetails={this.state.boundarydetails} boundaryParentChildMap={this.state.boundariesByParentId} children={this.props.children}/>
+		<MainContentWrapper onBoundaryClick={this.handleBoundaryClick} boundaryDetails={this.state.boundarydetails} boundaryParentChildMap={this.state.boundariesByParentId} children={this.props.children}/>
     </div>);
   }
 });

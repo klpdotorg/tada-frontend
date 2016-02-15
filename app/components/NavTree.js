@@ -49,7 +49,7 @@ const SchoolsNavTree = React.createClass({
       visitedBoundaries.push(node);
      
       var boundary = this.props.boundaryDetails[node];
-      const label = <Link key={boundary.name} to={boundary.path}><span className="node"  onClick={this.props.onBoundaryClick.bind(null,{id: boundary.id, type: boundary.boundary_type})}> {boundary.name} </span></Link>;
+      const label = <Link key={boundary.name} to={boundary.path} onClick={this.props.onBoundaryClick.bind(null,{id: boundary.id, type: boundary.boundary_type})}><span className="node"> {boundary.name} </span></Link>;
       return (
               //
                  <TreeView key={node} nodeLabel={label} defaultCollapsed={true} >
@@ -78,7 +78,6 @@ const SchoolsNavTree = React.createClass({
     var copyOfMap = $.extend(true, {}, this.props.boundaryParentChildMap);
     var firstElement = Object.keys(copyOfMap);
     var visitedBoundaries = [];
-
       return (
         <div>
             {
