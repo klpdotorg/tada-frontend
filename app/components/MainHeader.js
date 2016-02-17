@@ -5,6 +5,7 @@
 import React, { Component } from 'react';
 import auth from './Auth';
 import {Link} from 'react-router';
+import klplogo from '../../assets/images/KLP_logo.png';
 
 class HeaderBar extends React.Component {
 	contextTypes: {
@@ -22,7 +23,7 @@ class HeaderBar extends React.Component {
 			<div id="header" className="container-fluid">
 			<div className="navbar-header">
 			<a className="navbar-brand" href="#">
-				<img src="assets/images/KLP_logo.png"/>
+				<img src={klplogo}/>
 			</a>
 			</div>
 

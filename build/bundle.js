@@ -204,12 +204,12 @@
 	    { path: '/', component: App, onEnter: requireAuthentication },
 	    _react2['default'].createElement(_reactRouter.IndexRoute, { component: _componentsDashboard2['default'] }),
 	    _react2['default'].createElement(_reactRouter.Route, { path: 'dashboard', component: _componentsDashboard2['default'] }),
+	    _react2['default'].createElement(_reactRouter.Route, { path: 'district/:districtId/project/:projectId', component: _componentsPreschoolProjectScreen2['default'] }),
+	    _react2['default'].createElement(_reactRouter.Route, { path: 'district/:districtId/project/:projectId/circle/:circleId', component: _componentsPreschoolCircleScreen2['default'] }),
 	    _react2['default'].createElement(_reactRouter.Route, { path: 'district/:districtId', component: _componentsPrimaryDistrictScreen2['default'] }),
 	    _react2['default'].createElement(_reactRouter.Route, { path: 'district/:districtId/block/:blockId', component: _componentsPrimaryBlockScreen2['default'] }),
 	    _react2['default'].createElement(_reactRouter.Route, { path: 'district/:districtId/block/:blockId/cluster/:clusterId', component: _componentsPrimaryClusterScreen2['default'] }),
-	    _react2['default'].createElement(_reactRouter.Route, { path: 'district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId', component: _componentsInstitutionDetailsScreen2['default'] }),
-	    _react2['default'].createElement(_reactRouter.Route, { path: 'district/:districtId/project/:projectId', component: _componentsPreschoolProjectScreen2['default'] }),
-	    _react2['default'].createElement(_reactRouter.Route, { path: 'district/:districtId/project/:projectId/circle/:circleId', component: _componentsPreschoolCircleScreen2['default'] })
+	    _react2['default'].createElement(_reactRouter.Route, { path: 'district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId', component: _componentsInstitutionDetailsScreen2['default'] })
 	  )
 	);
 
@@ -19801,7 +19801,7 @@
 /* 160 */
 /***/ function(module, exports) {
 
-	'use strict';
+	"use strict";
 
 	module.exports = {
 	  login: function login(email, pass, cb) {
@@ -19813,7 +19813,7 @@
 	      this.onChange(true);
 	      return;
 	    }
-	    pretendRequest(email, pass, function (res) {
+	    sendLoginToServer(email, pass, function (res) {
 	      if (res.authenticated) {
 	        localStorage.token = res.token;
 	        if (cb) cb(true);
@@ -19841,6 +19841,20 @@
 
 	  onChange: function onChange() {}
 	};
+
+	function sendLoginToServer(email, pass, cb) {
+	  $.ajax({
+	    type: "POST",
+	    url: "http://tadadev.klp.org.in/auth/login/",
+	    data: { username: email, password: pass },
+	    success: function success(data) {
+	      if (data.auth_token) cb({ authenticated: true, auth_token: data.auth_token });else cb({ authenticated: false });
+	    },
+	    error: function error(data) {
+	      cb({ authenticated: false });
+	    }
+	  });
+	}
 
 	function pretendRequest(email, pass, cb) {
 	  setTimeout(function () {
@@ -28458,13 +28472,13 @@
 	      ),
 	      _react2['default'].createElement(
 	        'h4',
-	        { className: 'heading-border heading-err' },
+	        { cassName: 'heading-border heading-err' },
 	        ' Insufficient Permissions'
 	      ),
 	      _react2['default'].createElement(
 	        'p',
 	        null,
-	        'You need administrator privileges to modify Boundary details.'
+	        'Yolu need administrator privileges to modify Boundary details.'
 	      ),
 	      _react2['default'].createElement(
 	        'h4',
@@ -28549,6 +28563,19 @@
 	        )
 	      ),
 	      _react2['default'].createElement(
+	        'div',
+	        { className: 'container-fluid' },
+	        _react2['default'].createElement(
+	          'div',
+	          { className: 'col-md-2' },
+	          _react2['default'].createElement(
+	            'button',
+	            { type: 'submit', className: 'btn btn-primary' },
+	            'Add Institution'
+	          )
+	        )
+	      ),
+	      _react2['default'].createElement(
 	        'h4',
 	        { className: 'heading-border heading-warn' },
 	        ' Limited Permissions'
@@ -28597,8 +28624,8 @@
 
 	var _storesTadaStore2 = _interopRequireDefault(_storesTadaStore);
 
-	var PreschoolProjectScreen = _react2['default'].createClass({
-	  displayName: 'PreschoolProjectScreen',
+	var PreschoolProject = _react2['default'].createClass({
+	  displayName: 'PreschoolProject',
 
 	  render: function render() {
 	    console.log("Inside preschoolProject render");
@@ -28630,7 +28657,6 @@
 	          project.name
 	        )
 	      ),
-	      '.,., ,',
 	      _react2['default'].createElement(
 	        'h4',
 	        { className: 'heading-border heading-warn' },
@@ -28645,19 +28671,12 @@
 	        'h4',
 	        { className: 'heading-border brand-blue' },
 	        ' View Details'
-	      ),
-	      _react2['default'].createElement(
-	        'p',
-	        null,
-	        ' Name: ',
-	        circle.name,
-	        ' '
 	      )
 	    );
 	  }
 	});
 
-	exports['default'] = PreschoolProjectScreen;
+	exports['default'] = PreschoolProject;
 	module.exports = exports['default'];
 
 /***/ },
@@ -28680,8 +28699,8 @@
 
 	var _storesTadaStore2 = _interopRequireDefault(_storesTadaStore);
 
-	var PreschoolCircleScreen = _react2['default'].createClass({
-	  displayName: 'PreschoolCircleScreen',
+	var PreschoolCircle = _react2['default'].createClass({
+	  displayName: 'PreschoolCircle',
 
 	  render: function render() {
 	    var project = _storesTadaStore2['default'].getBoundaryDetailsById(this.props.params.projectId);
@@ -28738,19 +28757,12 @@
 	        'h4',
 	        { className: 'heading-border brand-blue' },
 	        ' View Details'
-	      ),
-	      _react2['default'].createElement(
-	        'p',
-	        null,
-	        ' Name: ',
-	        circle.name,
-	        ' '
 	      )
 	    );
 	  }
 	});
 
-	exports['default'] = PreschoolCircleScreen;
+	exports['default'] = PreschoolCircle;
 	module.exports = exports['default'];
 
 /***/ },
@@ -29248,7 +29260,7 @@
 	              this.state.error && _react2['default'].createElement(
 	                'p',
 	                null,
-	                'Bad login information'
+	                'Bad login information. Recheck the username and/or password.'
 	              )
 	            )
 	          )
@@ -29536,8 +29548,7 @@
 	    * Event handler for 'change' events coming from the stores   
 	    */
 	  _onChange: function _onChange() {
-	    console.log('Received change from stores');
-	    this.setState({ currentSchoolSelection: _storesTadaStore2['default'].getCurrentSchoolSelection() });
+	    //this.setState({currentSchoolSelection: TadaStore.getCurrentSchoolSelection()});
 	    console.log(_storesTadaStore2['default'].getCurrentSchoolSelection());
 	    this.fetchBoundariesFromServer();
 	  },
@@ -29578,7 +29589,7 @@
 
 	  //Method fetches boundary details from the boundaries endpoint
 	  fetchBoundaryDetails: function fetchBoundaryDetails(parentBoundaryId) {
-	    if (this.state.currentSchoolSelection == "primary") {
+	    if (_storesTadaStore2['default'].getCurrentSchoolSelection() == "primary") {
 	      $.ajax({
 	        type: "GET",
 	        dataType: "json",
@@ -29680,7 +29691,7 @@
 	      parentId = parentBoundaryId;
 	    }
 	    var parentBoundaryCat = 10;
-	    if (this.state.currentSchoolSelection == "preschool") parentBoundaryCat = 13;
+	    if (_storesTadaStore2['default'].getCurrentSchoolSelection() == "preschool") parentBoundaryCat = 13;
 	    if (this.state.boundarydetails.length > 0 && parentId != 1) {
 	      parentBoundaryCat = this.state.boundarydetails[parentId].boundary_category;
 	    }
@@ -30253,7 +30264,6 @@
 	    var copyOfMap = $.extend(true, {}, this.props.boundaryParentChildMap);
 	    var firstElement = Object.keys(copyOfMap);
 	    var visitedBoundaries = [];
-
 	    return _react2['default'].createElement(
 	      'div',
 	      null,

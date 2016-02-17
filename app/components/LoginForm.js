@@ -2,6 +2,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import { browserHistory, History, Router, Route, Link } from 'react-router';
 import auth from './Auth';
+var klplogo = require('../../assets/images/KLP_logo.png');
 
 const Login = React.createClass({
    mixins: [ History ],
@@ -20,14 +21,14 @@ const Login = React.createClass({
 
       auth.login(email, pass, (loggedIn) => {
         if (!loggedIn)
-          return this.setState({ error: true })
+          return this.setState({ error: true });
 
-        const { location } = this.props
+        const { location } = this.props;
 
         if (location.state && location.state.nextPathname) {
-          this.history.replaceState(null, location.state.nextPathname)
+          this.history.replaceState(null, location.state.nextPathname);
         } else {
-          this.history.replaceState(null, '/')
+          this.history.replaceState(null, '/');
         }
       })
     },
@@ -39,7 +40,7 @@ const Login = React.createClass({
             <div id="header" className="container-fluid">
               <div className="navbar-header">
                 <a className="navbar-brand" href="#">
-                  <img src="assets/images/KLP_logo.png"/>
+                  <img src={klplogo}/>
                 </a>
               </div>
 

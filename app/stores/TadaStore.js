@@ -8,6 +8,7 @@ var merge = require('merge');
 var currentSchoolSelection = 'primary';
 var CHANGE_EVENT = 'viewchange';
 var boundaryDetailsById = {};
+var userData = {};
 
 var TadaStore= merge(EventEmitter.prototype, {
 
@@ -36,6 +37,10 @@ var TadaStore= merge(EventEmitter.prototype, {
 
 	getBoundaryDetailsById: function(boundaryId){
 		return this.boundaryDetailsById[boundaryId];
+	},
+
+	setUserData: function(user){
+		this.userData = user;
 	}
 });
 
