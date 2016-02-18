@@ -4,8 +4,8 @@
   "description": "Frontend for TADA built using React.js",
   "main": "webpack.config.js",
   "scripts": {
-    "dev": "webpack-dev-server --devtool source-map --inline --progress --colors --content-base build",
-    "deploy": "webpack"
+    "dev": "webpack-dev-server --devtool source-map --inline --progress --colors --content-base dist  && cp index.html dist/index.html",
+    "deploy": "webpack  && cp index.html dist/index.html"
   },
   "dependencies": {
     "classnames": "^2.2.0",
