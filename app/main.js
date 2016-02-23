@@ -83,7 +83,6 @@ const history = createHistory({
 
 var requireAuthentication = function requireAuth(nextState, replaceState) 
 {
-  console.log("****************INSIDE REQURIE AUTH***************************");
   if (!auth.loggedIn())
     replaceState({ nextPathname: nextState.location.pathname }, '/login')
 }

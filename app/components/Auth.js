@@ -1,14 +1,16 @@
+import TadaStore from '../stores/TadaStore';
+
 module.exports = {
   login(email, pass, cb) {
-    cb = arguments[arguments.length - 1]
-    if (localStorage.token) {
-      if (cb) cb(true)
-      this.onChange(true)
-      return
+    cb = arguments[arguments.length - 1];
+    if (sessionStorage.token) {
+      if (cb) cb(true);
+      this.onChange(true);
+      return;
     }
     sendLoginToServer(email, pass, (res) => {
       if (res.authenticated) {
-        localStorage.token = res.token
+        sessionStorage.token = res.token
         if (cb) cb(true)
         this.onChange(true)
       } else {
@@ -19,17 +21,17 @@ module.exports = {
   },
 
   getToken() {
-    return localStorage.token
+    return sessionStorage.token
   },
 
   logout(cb) {
-    delete localStorage.token
+    delete sessionStorage.token
     if (cb) cb()
     this.onChange(false)
   },
 
   loggedIn() {
-    return !!localStorage.token
+    return !!sessionStorage.token
   },
 
   onChange() {}
@@ -41,9 +43,15 @@ function sendLoginToServer(email, pass, cb)
         type: "POST",
         url: "http://tadadev.klp.org.in/auth/login/",
         data: {username:email, password: pass},
-        success: function(data){
+        success: function(data)
+        {
           if(data.auth_token)
+          {
+            //Store the auth token in the stores.
+            TadaStore.setAuthToken(data.auth_token);
+            fetchuserData(data.auth_token);
             cb({authenticated: true, auth_token: data.auth_token});
+          }
           else
             cb({authenticated: false});
         },
@@ -51,6 +59,19 @@ function sendLoginToServer(email, pass, cb)
           cb({authenticated: false});
         }
       });
+}
+
+function fetchuserData(token)
+{
+  $.ajax({
+        type: "GET",
+        url: "http://tadadev.klp.org.in/auth/me/",
+        beforeSend: function(xhr){xhr.setRequestHeader('Authorization', 'Token ' + token);},
+        success: function(data){
+          TadaStore.setUserData(data);
+        }       
+      });
+
 }
 
 function pretendRequest(email, pass, cb) {
