@@ -9,6 +9,7 @@ var currentSchoolSelection = 'primary';
 var CHANGE_EVENT = 'viewchange';
 var boundaryDetailsById = {};
 var userData = {};
+var authToken = '';
 
 var TadaStore= merge(EventEmitter.prototype, {
 
@@ -31,7 +32,7 @@ var TadaStore= merge(EventEmitter.prototype, {
 		return currentSchoolSelection;
 	},
 
-	setBoundaryDetails: function(boundaryDetails){
+  	setBoundaryDetails: function(boundaryDetails){
 		this.boundaryDetailsById = boundaryDetails;
 	},
 
@@ -41,6 +42,21 @@ var TadaStore= merge(EventEmitter.prototype, {
 
 	setUserData: function(user){
 		this.userData = user;
+	},
+
+	getUserData: function(){
+		return this.userData;
+	},
+
+	setAuthToken: function(token){
+		this.authToken = token;
+		sessionStorage.authToken = token;
+	},
+
+	getAuthToken: function()
+	{
+		console.log('Token is ' + sessionStorage.token);
+		return sessionStorage.authToken;
 	}
 });
 

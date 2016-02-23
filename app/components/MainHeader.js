@@ -6,6 +6,7 @@ import React, { Component } from 'react';
 import auth from './Auth';
 import {Link} from 'react-router';
 import klplogo from '../../assets/images/KLP_logo.png';
+import TadaStore from '../stores/TadaStore';
 
 class HeaderBar extends React.Component {
 	contextTypes: {
@@ -18,6 +19,11 @@ class HeaderBar extends React.Component {
 	}
 
 	render() {
+		var userData = TadaStore.getUserData();
+
+		var userName = '';
+		if(userData)
+			userName=TadaStore.getUserData().username;
 		return (			
 		<nav className="main__header navbar navbar-white navbar-fixed-top">
 			<div id="header" className="container-fluid">
@@ -35,7 +41,7 @@ class HeaderBar extends React.Component {
 
     </p>
 
-    <p className="login-msg navbar-text pull-right">Hello there <span className="fa fa-smile-o"></span> ! Mohsina Taj
+    <p className="login-msg navbar-text pull-right">Hello there <span className="fa fa-smile-o"></span> {userName}! 
   	</p></div>
 			</div>
 		</nav>

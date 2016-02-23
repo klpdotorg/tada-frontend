@@ -53,6 +53,7 @@ let TadaContainer = React.createClass({
         dataType: "json",
         url: institutionsUrl,//TODO: Make a call that fetches only schools and districts
         data: {boundary: parentBoundaryId},
+        beforeSend: function(xhr){xhr.setRequestHeader('Authorization', 'Token ' + TadaStore.getAuthToken());},
         success: function(data) 
         {
           console.log("Institution details", data.results);
@@ -92,6 +93,7 @@ let TadaContainer = React.createClass({
         dataType: "json",
         url: "http://tadadev.klp.org.in/api/v1/boundaries/",//TODO: Make a call that fetches only schools and districts
         data: {boundary_type:1, parent: parentId},
+        beforeSend: function(xhr){xhr.setRequestHeader('Authorization', 'Token ' + TadaStore.getAuthToken());},
         success: function(data) {
         console.log(data.results);
                 var childBoundaries = [];
@@ -151,7 +153,8 @@ let TadaContainer = React.createClass({
         type: "GET",
         dataType: "json",
         url: "http://tadadev.klp.org.in/api/v1/boundaries/",//TODO: Make a call that fetches only schools and districts
-         data: {boundary_type:2, parent: parentId},
+        data: {boundary_type:2, parent: parentId},
+        beforeSend: function(xhr){xhr.setRequestHeader('Authorization', 'Token ' + TadaStore.getAuthToken());},
         success: function(data) {
               console.log(data.results);
               var childBoundaries = [];
