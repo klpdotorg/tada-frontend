@@ -3,6 +3,7 @@ import { render } from 'react-dom';
 import ReactDOM from 'react-dom';
 import auth from './Auth';
 import {Link} from 'react-router';
+var klplogo = require('../../assets/images/KLP_logo.png');
 
 class Logout extends React.Component {
 
@@ -23,7 +24,7 @@ class Logout extends React.Component {
 				<div id="header" className="container-fluid">
 					<div className="navbar-header">
 						<a className="navbar-brand" href="#">
-							<img src="assets/images/KLP_logo.png"/>
+							<img src={klplogo}/>
 						</a>
 					</div>
 
