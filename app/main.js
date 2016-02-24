@@ -84,7 +84,10 @@ const history = createHistory({
 var requireAuthentication = function requireAuth(nextState, replaceState) 
 {
   if (!auth.loggedIn())
-    replaceState({ nextPathname: nextState.location.pathname }, '/login')
+  {
+    console.log("NEXT STATE:", nextState.location.pathname);
+    replaceState({ nextPathname: nextState.location.pathname }, '/login');
+  }
 }
 
 const routes = (
