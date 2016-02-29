@@ -42,6 +42,7 @@ var TadaStore= merge(EventEmitter.prototype, {
 
 	setUserData: function(user){
 		this.userData = user;
+		this.emitChange();
 	},
 
 	getUserData: function(){

@@ -1,6 +1,9 @@
 /* Main entry point for the app. Start here to understand the UI composition */
 
 require('../assets/sass/style.scss');
+require('../assets/css/bootstrap/bootstrap.min.css');
+require('../assets/css/font-awesome/font-awesome.min.css');
+require('assets/fonts/bootstrap');
 import React from 'react';
 import ReactDOM from 'react-dom';
 import auth from './components/Auth';
