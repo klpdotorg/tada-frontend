@@ -1,6 +1,8 @@
 /* Main entry point for the app. Start here to understand the UI composition */
 
 require('../assets/sass/style.scss');
+require('bootstrap/dist/css/bootstrap.css');
+require('font-awesome/css/font-awesome.css');
 import React from 'react';
 import ReactDOM from 'react-dom';
 import auth from './components/Auth';
@@ -44,13 +46,13 @@ var App = React.createClass({
       auth.onChange = this.updateAuth;
       auth.login();
   },
-  
+
   componentDidMount: function() {
         console.log('app component did mount. much wow');
     },
 
-  
-    
+
+
     componentWillReceiveProps: function(newProps) {
         console.log('app container will receive props', arguments);
         console.log('thisProps', this.props.params);
@@ -58,7 +60,7 @@ var App = React.createClass({
         console.log('just this', this);
         console.log('app children', this.props.children);
     },
-  
+
   render: function()
   {
     console.log('app container props', this.props.children)
@@ -67,7 +69,7 @@ var App = React.createClass({
         <HeaderBar/>
         <TreeTogglerSpacingDiv/>
         <TadaContainer children={this.props.children}/>
-        
+
       </div>
     );
   }
@@ -81,7 +83,7 @@ const history = createHistory({
 
 
 
-var requireAuthentication = function requireAuth(nextState, replaceState) 
+var requireAuthentication = function requireAuth(nextState, replaceState)
 {
   if (!auth.loggedIn())
   {
@@ -96,7 +98,7 @@ const routes = (
         <Route path="login" component={Login}/>
         <Route path="logout" component={Logout}/>
         <Route path="/" component={App} onEnter={requireAuthentication}>
-            <IndexRoute component={Dashboard}/>            
+            <IndexRoute component={Dashboard}/>
             <Route path="dashboard" component={Dashboard}/>
             <Route path="district/:districtId/project/:projectId" component={PreschoolProject}/>
             <Route path="district/:districtId/project/:projectId/circle/:circleId" component={PreschoolCircle}/>
@@ -104,7 +106,7 @@ const routes = (
             <Route path="district/:districtId/block/:blockId" component={PrimaryBlock}/>
             <Route path="district/:districtId/block/:blockId/cluster/:clusterId" component={PrimaryCluster}/>
             <Route path="district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId" component={Institution}/>
-            
+
         </Route>
     </Router>
 );

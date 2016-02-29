@@ -13,17 +13,34 @@ class HeaderBar extends React.Component {
     	router: React.PropTypes.object.isRequired,
   	}
 
+  	constructor(props, context)
+  	{
+  		super(props,context);
+  		this.state = {
+  			userName: 'user',
+  		};
+  		this._onChange = this._onChange.bind(this);
+  	}
+
 	handleLogout()
 	{
 		auth.logout();
 	}
 
-	render() {
-		var userData = TadaStore.getUserData();
+	componentDidMount()
+  	{
+    	TadaStore.addChangeListener(this._onChange);
+  	}
 
-		var userName = '';
-		if(userData)
-			userName=TadaStore.getUserData().username;
+  	 _onChange()
+  	 {
+  	 	console.log("RECEIVED USERNAME CHANGE EVENT", TadaStore.getUserData().username);
+  	 	this.state.userName = TadaStore.getUserData().username;
+  	 }
+
+	render() {
+		
+		console.log("sessionStorage username is ", sessionStorage.username);
 		return (			
 		<nav className="main__header navbar navbar-white navbar-fixed-top">
 			<div id="header" className="container-fluid">
@@ -41,7 +58,7 @@ class HeaderBar extends React.Component {
 
     </p>
 
-    <p className="login-msg navbar-text pull-right">Hello there <span className="fa fa-smile-o"></span> {userName}! 
+    <p className="login-msg navbar-text pull-right">Hello there <span className="fa fa-smile-o"></span> {sessionStorage.username}! 
   	</p></div>
 			</div>
 		</nav>

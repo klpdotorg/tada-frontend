@@ -69,6 +69,7 @@ function fetchuserData(token)
         beforeSend: function(xhr){xhr.setRequestHeader('Authorization', 'Token ' + token);},
         success: function(data){
           TadaStore.setUserData(data);
+          sessionStorage.userData = data;
         }       
       });
 
