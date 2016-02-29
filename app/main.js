@@ -1,5 +1,5 @@
 /* Main entry point for the app. Start here to understand the UI composition */
-
+require('../assets/sass/lato.scss');
 require('../assets/sass/style.scss');
 require('bootstrap/dist/css/bootstrap.css');
 require('font-awesome/css/font-awesome.css');
