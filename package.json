@@ -13,6 +13,7 @@
     "event-emitter": "^0.3.4",
     "events": "^1.1.0",
     "flux": "^2.1.1",
+    "font-awesome": "^4.5.0",
     "jquery": "^2.2.1",
     "keymirror": "^0.1.1",
     "lodash": "^3.10.1",

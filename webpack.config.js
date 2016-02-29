@@ -7,7 +7,6 @@ module.exports = {
     ],
     output: {
         path: path.resolve(__dirname, 'dist'),
-        publicPath: "/dist/",
         filename: 'bundle.js',
     },
     module: {
@@ -16,7 +15,7 @@ module.exports = {
         {test: /\.css$/, loader: "style!css"},
         {test: /\.scss$/, loader: 'style!css!sass'},
         {test: /\.js$/, loaders: ['jsx','babel'], exclude: /node_modules/ }
-        
+
       ]
     },
     resolve: {
