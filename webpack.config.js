@@ -11,9 +11,7 @@ module.exports = {
     },
     module: {
       loaders: [
-        {test: /\.woff|\.woff2|\.svg|.eot|\.ttf|\.png|\.gif|\.ico|\.html/, loader: 'file?name=assets/fonts/bootstrap/[name].[ext]'},
-        {test: /\.woff|\.woff2|\.svg|.eot|\.ttf|\.png|\.gif|\.ico|\.html/, loader: 'file?name=assets/fonts/fontawesome/[name].[ext]'},
-        {test: /\.woff|\.woff2|\.svg|.eot|\.ttf|\.png|\.gif|\.ico|\.html/, loader: 'file?name=assets/fonts/lato/[name].[ext]'},
+        {test: /\.woff|\.woff2|\.svg|.eot|\.ttf|\.png|\.gif|\.ico|\.html/, loader: 'file-loader'},
         {test: /\.css$/, loader: "style!css"},
         {test: /\.scss$/, loader: 'style!css!sass'},
         {test: /\.js$/, loaders: ['jsx','babel'], exclude: /node_modules/ }

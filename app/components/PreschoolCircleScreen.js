@@ -20,7 +20,7 @@ var PreschoolCircle = React.createClass({
     			<li className="active"> {circle.name}</li>
     		</ol>
     		<h4 className="heading-border heading-warn"> Limited Permissions</h4>
-    		<p>You need administrator privileges to modify Boundary details. But you may add institutions here.</p>
+    		<p>preschool circle screen</p>
     		<h4 className="heading-border brand-blue"> View Details</h4>
     	
     	</div>);
