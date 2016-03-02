@@ -1,6 +1,6 @@
 import React from 'react';
-import Link from 'react-router';
-let Dashboard = React.createClass({ 
+import {Link} from 'react-router';
+let Dashboard = React.createClass({
 
   render() {
   	console.log('Rendering dashboard..',this.props.children);
@@ -24,4 +24,4 @@ let Dashboard = React.createClass({
   }
 });
 
-export default Dashboard;  
+export default Dashboard;
