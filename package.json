@@ -21,9 +21,7 @@
     "object-assign": "^4.0.1",
     "react": "^0.14.1",
     "react-dom": "^0.14.1",
-    "react-redux": "^4.0.0",
-    "react-treeview": "^0.4.3",
-    "redux": "^3.0.4"
+    "react-treeview": "^0.4.3"
   },
   "devDependencies": {
     "babel-core": "^5.0.0",
