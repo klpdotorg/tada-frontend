@@ -111,12 +111,12 @@ const routes = (
     </Router>
 );
 
-ReactDOM.render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
-  document.getElementById('application')
-  );
+// ReactDOM.render(
+//   <Provider store={store}>
+//     <App />
+//   </Provider>,
+//   document.getElementById('application')
+//   );
 
 ReactDOM.render(routes, document.getElementById('application'));
 
