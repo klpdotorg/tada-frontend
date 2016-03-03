@@ -6,10 +6,7 @@ require('font-awesome/css/font-awesome.css');
 import React from 'react';
 import ReactDOM from 'react-dom';
 import auth from './components/Auth';
-import { createStore } from 'redux';
 import Dashboard from './components/Dashboard';
-import { Provider } from 'react-redux';
-import tada from './reducers/Tada';
 import { DefaultRoute, Router, Link, Route, RouteHandler, IndexRoute } from 'react-router';
 import PrimaryDistrict from './components/PrimaryDistrictScreen';
 import PrimaryBlock from './components/PrimaryBlockScreen';
@@ -75,8 +72,6 @@ var App = React.createClass({
   }
 });
 
-let store = createStore(tada);
-
 const history = createHistory({
     queryKey: false
 });
@@ -110,13 +105,6 @@ const routes = (
         </Route>
     </Router>
 );
-
-// ReactDOM.render(
-//   <Provider store={store}>
-//     <App />
-//   </Provider>,
-//   document.getElementById('application')
-//   );
 
 ReactDOM.render(routes, document.getElementById('application'));
 
