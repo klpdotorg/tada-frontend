@@ -4,17 +4,21 @@
 import React, {Component} from 'react';
 import { render } from 'react-dom';
 import ReactDOM from 'react-dom';
-import '../../sass/style.scss';
+import '../../assets/sass/style.scss';
 import HeaderBar from './MainHeader';
 import TreeTogglerSpacingDiv from './TreeTogglerSpacingDiv';
+import auth from './Auth';
 
 import TadaContainer from './TadaContainer';
 
 var App = React.createClass({
- 			componentDidMount: function() {
+ 			
+ 	componentDidMount: function() {
         console.log('app component did mount. much wow');
     },
 
+	
+    
     componentWillReceiveProps: function(newProps) {
         console.log('app container will receive props', arguments);
         console.log('thisProps', this.props.params);
@@ -22,19 +26,20 @@ var App = React.createClass({
         console.log('just this', this);
         console.log('app children', this.props.children);
     },
-			render: function()
-			{
-				console.log('app container props', this.props.children)
-				return (
-					<div>
-						<HeaderBar/>
-						<TreeTogglerSpacingDiv/>
-						<TadaContainer children={this.props.children}/>
-						
-					</div>
-				);
-			}
-		});
+	
+	render: function()
+	{
+		console.log('app container props', this.props.children)
+		return (
+			<div>
+				<HeaderBar/>
+				<TreeTogglerSpacingDiv/>
+				<TadaContainer children={this.props.children}/>
+				
+			</div>
+		);
+	}
+});
 
 
 

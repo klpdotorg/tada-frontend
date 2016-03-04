@@ -19,11 +19,13 @@
   color: #898989;
   font-size: 110%;
   font-weight: bold;
+  font-family: Lato;
 }
 
 .login-msg {
   color: #898989;
   font-size: 90%;
+  font-family: Lato;
 }
 
 /*-------------------------NAV TABS FOR SCHOOL PRESCHOOL -----------------------*/
@@ -65,16 +67,6 @@
 /* active tab color */
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
   color: $white;
-}
-
-/*-------------------------SIDEBAR & MAIN WRAPPER -----------------------*/
-#sidebar-wrapper {
-	margin-left: -280px;
-	padding-left: 10px;
-}
-
-#main-content-wrapper {
-	margin-left: 10px;
 }
 
 /*-------------------------TREE TOGGLER-----------------------*/

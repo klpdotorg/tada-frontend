@@ -19,14 +19,16 @@ var bottomMargin = {
 export default class NavBar extends React.Component {
 
 
-	handleClickPrimarySchool()
+	handleClickPrimarySchool(e)
 	{
+		e.preventDefault();
 		console.log('Primary school clicked');
 		TadaActionCreators.showPrimarySchoolHierarchy();
 
 	}
-	handleClickPreSchool()
+	handleClickPreSchool(e)
 	{
+		e.preventDefault();
 		console.log('Preschool clicked');
 		TadaActionCreators.showPreSchoolHierarchy();
 	}

@@ -7,6 +7,9 @@ var merge = require('merge');
 
 var currentSchoolSelection = 'primary';
 var CHANGE_EVENT = 'viewchange';
+var boundaryDetailsById = {};
+var userData = {};
+var authToken = '';
 
 var TadaStore= merge(EventEmitter.prototype, {
 
@@ -27,6 +30,34 @@ var TadaStore= merge(EventEmitter.prototype, {
 
 	getCurrentSchoolSelection: function() {
 		return currentSchoolSelection;
+	},
+
+  	setBoundaryDetails: function(boundaryDetails){
+		this.boundaryDetailsById = boundaryDetails;
+	},
+
+	getBoundaryDetailsById: function(boundaryId){
+		return this.boundaryDetailsById[boundaryId];
+	},
+
+	setUserData: function(user){
+		this.userData = user;
+		this.emitChange();
+	},
+
+	getUserData: function(){
+		return this.userData;
+	},
+
+	setAuthToken: function(token){
+		this.authToken = token;
+		sessionStorage.token = token;
+	},
+
+	getAuthToken: function()
+	{
+		console.log('Token is ' + sessionStorage.token);
+		return sessionStorage.token;
 	}
 });
 
