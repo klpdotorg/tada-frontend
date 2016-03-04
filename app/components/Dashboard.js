@@ -1,9 +1,8 @@
 import React from 'react';
-import Link from 'react-router';
+import {Link} from 'react-router';
 let Dashboard = React.createClass({ 
 
   render() {
-  	console.log('Rendering dashboard..',this.props.children);
     return(
     	<div>
     		<Link to="logout">Logout</Link>

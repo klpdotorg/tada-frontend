@@ -21,8 +21,6 @@ export default class MainContentArea extends React.Component {
   }
 
 	render(){
-    
-    console.log("Content area children:", this.state.children);
 		return (
 			<div id="main-content-wrapper" className="main__content">
 				<div className="container-fluid">

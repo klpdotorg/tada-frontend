@@ -247,7 +247,7 @@ let TadaContainer = React.createClass({
 
   componentWillUnmount: function()
   {
-    TadaStore.removeChangeListener(this._onChange.bind(this));
+    TadaStore.removeChangeListener(this._onChange);
   },
 
   handleBoundaryClick: function(boundary)

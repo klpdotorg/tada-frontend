@@ -7,15 +7,6 @@ var klplogo = require('../../assets/images/KLP_logo.png');
 
 class Logout extends React.Component {
 
-	contextTypes: {
-    	router: React.PropTypes.object.isRequired,
-  	}
-
-	handleLogin()
-	{
-		auth.login();
-	}
-
 	render()
 	{
 		return (
@@ -31,7 +22,7 @@ class Logout extends React.Component {
 			 		<div id="navbar" className="navbar-collapse collapse">
 		     		<p className="app-name navbar-text pull-left">Data Entry Operations 2015-2016</p>
 		     		<p className="navbar-text pull-right">
-		     		<Link to="/login" onClick={this.handleLogin} className="btn btn-primary padded-btn">LOGIN</Link>
+		     		<Link to="/login" className="btn btn-primary padded-btn">LOGIN</Link>
 	    			</p>
     			</div>
 				</div>

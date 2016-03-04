@@ -10,7 +10,7 @@ import { createStore } from 'redux';
 import Dashboard from './components/Dashboard';
 import { Provider } from 'react-redux';
 import tada from './reducers/Tada';
-import { DefaultRoute, Router, Link, Route, RouteHandler, IndexRoute } from 'react-router';
+import { browserHistory, DefaultRoute, Router, Link, Route, RouteHandler, IndexRoute } from 'react-router';
 import PrimaryDistrict from './components/PrimaryDistrictScreen';
 import PrimaryBlock from './components/PrimaryBlockScreen';
 import PrimaryCluster from './components/PrimaryClusterScreen';
@@ -19,12 +19,11 @@ import PreschoolCircle from './components/PreschoolCircleScreen';
 import Institution from './components/InstitutionDetailsScreen';
 import createHistory from 'history/lib/createHashHistory';
 import Login from './components/LoginForm';
-import TestComp from './components/TestAuth';
 import HeaderBar from './components/MainHeader';
 import TreeTogglerSpacingDiv from './components/TreeTogglerSpacingDiv';
 import TadaContainer from './components/TadaContainer';
 import Logout from './components/Logout';
-
+import { createHashHistory } from 'history';
 
 
 var App = React.createClass({
@@ -42,13 +41,14 @@ var App = React.createClass({
 
   componentWillMount: function()
   {
-      console.log("*******LANDING PAGE WILL MOUNT********");
-      auth.onChange = this.updateAuth;
-      auth.login();
+     
+      //auth.onChange = this.updateAuth;
+      //auth.login();
   },
 
   componentDidMount: function() {
         console.log('app component did mount. much wow');
+        auth.onChange = this.updateAuth;
     },
 
 
@@ -63,7 +63,6 @@ var App = React.createClass({
 
   render: function()
   {
-    console.log('app container props', this.props.children)
     return (
       <div>
         <HeaderBar/>
@@ -75,11 +74,10 @@ var App = React.createClass({
   }
 });
 
+
 let store = createStore(tada);
 
-const history = createHistory({
-    queryKey: false
-});
+
 
 
 
@@ -90,11 +88,11 @@ var requireAuthentication = function requireAuth(nextState, replaceState)
     console.log("NEXT STATE:", nextState.location.pathname);
     replaceState({ nextPathname: nextState.location.pathname }, '/login');
   }
+  console.log("NEXT STATE:" , nextState.location.pathname);
 }
 
 const routes = (
-    <Router history={history}>
-        <Route path="test" component={TestComp}/>
+    <Router history={browserHistory}>
         <Route path="login" component={Login}/>
         <Route path="logout" component={Logout}/>
         <Route path="/" component={App} onEnter={requireAuthentication}>

@@ -39,8 +39,9 @@ class HeaderBar extends React.Component {
   	 }
 
 	render() {
-		
-		console.log("sessionStorage username is ", sessionStorage.username);
+		var userinfo = $.parseJSON(sessionStorage.getItem('userdata'));
+
+		console.log("sessionStorage username is ", userinfo);
 		return (			
 		<nav className="main__header navbar navbar-white navbar-fixed-top">
 			<div id="header" className="container-fluid">
@@ -58,7 +59,7 @@ class HeaderBar extends React.Component {
 
     </p>
 
-    <p className="login-msg navbar-text pull-right">Hello there <span className="fa fa-smile-o"></span> {sessionStorage.username}! 
+    <p className="login-msg navbar-text pull-right">Hello there <span className="fa fa-smile-o"></span> {userinfo.username}! 
   	</p></div>
 			</div>
 		</nav>

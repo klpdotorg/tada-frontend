@@ -51,13 +51,13 @@ var TadaStore= merge(EventEmitter.prototype, {
 
 	setAuthToken: function(token){
 		this.authToken = token;
-		sessionStorage.authToken = token;
+		sessionStorage.token = token;
 	},
 
 	getAuthToken: function()
 	{
 		console.log('Token is ' + sessionStorage.token);
-		return sessionStorage.authToken;
+		return sessionStorage.token;
 	}
 });
 

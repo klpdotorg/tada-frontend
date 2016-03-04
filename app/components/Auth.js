@@ -10,7 +10,7 @@ module.exports = {
     }
     sendLoginToServer(email, pass, (res) => {
       if (res.authenticated) {
-        sessionStorage.token = res.token
+        sessionStorage.token = res.auth_token
         if (cb) cb(true)
         this.onChange(true)
       } else {
@@ -25,7 +25,8 @@ module.exports = {
   },
 
   logout(cb) {
-    delete sessionStorage.token
+    delete sessionStorage.token;
+    delete sessionStorage.userdata;
     if (cb) cb()
     this.onChange(false)
   },
@@ -49,7 +50,7 @@ function sendLoginToServer(email, pass, cb)
           {
             //Store the auth token in the stores.
             TadaStore.setAuthToken(data.auth_token);
-            fetchuserData(data.auth_token);
+            //fetchuserData(data.auth_token);
             cb({authenticated: true, auth_token: data.auth_token});
           }
           else
@@ -61,19 +62,7 @@ function sendLoginToServer(email, pass, cb)
       });
 }
 
-function fetchuserData(token)
-{
-  $.ajax({
-        type: "GET",
-        url: "http://tadadev.klp.org.in/auth/me/",
-        beforeSend: function(xhr){xhr.setRequestHeader('Authorization', 'Token ' + token);},
-        success: function(data){
-          TadaStore.setUserData(data);
-          sessionStorage.userData = data;
-        }       
-      });
 
-}
 
 function pretendRequest(email, pass, cb) {
   setTimeout(() => {
