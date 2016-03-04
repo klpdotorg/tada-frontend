@@ -7,13 +7,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import auth from './components/Auth';
 import Dashboard from './components/Dashboard';
-<<<<<<< HEAD
-import { Provider } from 'react-redux';
-import tada from './reducers/Tada';
+
 import { browserHistory, DefaultRoute, Router, Link, Route, RouteHandler, IndexRoute } from 'react-router';
-=======
-import { DefaultRoute, Router, Link, Route, RouteHandler, IndexRoute } from 'react-router';
->>>>>>> 356aac4219398eef450cd1d9917a44c9db44d3b6
+
 import PrimaryDistrict from './components/PrimaryDistrictScreen';
 import PrimaryBlock from './components/PrimaryBlockScreen';
 import PrimaryCluster from './components/PrimaryClusterScreen';

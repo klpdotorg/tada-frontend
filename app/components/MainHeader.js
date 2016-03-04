@@ -16,10 +16,7 @@ class HeaderBar extends React.Component {
   	constructor(props, context)
   	{
   		super(props,context);
-  		this.state = {
-  			userName: 'user',
-  		};
-  		this._onChange = this._onChange.bind(this);
+  		
   	}
 
 	handleLogout()
@@ -27,16 +24,9 @@ class HeaderBar extends React.Component {
 		auth.logout();
 	}
 
-	componentDidMount()
-  	{
-    	TadaStore.addChangeListener(this._onChange);
-  	}
+	
 
-  	 _onChange()
-  	 {
-  	 	console.log("RECEIVED USERNAME CHANGE EVENT", TadaStore.getUserData().username);
-  	 	this.state.userName = TadaStore.getUserData().username;
-  	 }
+ 
 
 	render() {
 		var userinfo = $.parseJSON(sessionStorage.getItem('userdata'));

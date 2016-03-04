@@ -85,7 +85,7 @@ const Login = React.createClass({
                       <input ref="pass" className="form-control" type="password" name='password' placeholder="(HINT: tada)"/>
                     </div>
                     <div className="form-group text-center">
-                      <button type="submit" className="btn btn-primary" onClick={this.handleSubmit.bind(this)}>Submit</button>
+                      <button type="submit" className="btn btn-primary" onClick={this.handleSubmit}>Submit</button>
                     </div>
                     <div className="form-group text-center">
                       <a href="#">Forgot Password</a>&nbsp;|&nbsp;<a href="#">Support</a>
