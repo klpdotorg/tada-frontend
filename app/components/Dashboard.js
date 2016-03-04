@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router';
-let Dashboard = React.createClass({ 
 
+let Dashboard = React.createClass({ 
   render() {
     return(
     	<div>
@@ -23,4 +23,4 @@ let Dashboard = React.createClass({
   }
 });
 
-export default Dashboard;  
+export default Dashboard;
