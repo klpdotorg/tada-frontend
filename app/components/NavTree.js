@@ -24,12 +24,11 @@ const SchoolsNavTree = React.createClass({
   {
   },
 
-  handleClick: function(boundary)
-  {
-    //this.props.onBoundaryClick({id: boundary.id, type: boundary.boundary_type});
+  handleClick: function(boundary){
+    this.props.onBoundaryClick({id: boundary.id, type: boundary.boundary_type});
   },
 
- 
+
 
   /*
   Data is of the format: [
@@ -47,12 +46,12 @@ const SchoolsNavTree = React.createClass({
     {
       var children = boundaryHierarchy[node];
       visitedBoundaries.push(node);
-     
+
       var boundary = this.props.boundaryDetails[node];
-      const label = <Link key={boundary.name} to={boundary.path} onClick={this.props.onBoundaryClick.bind(null,{id: boundary.id, type: boundary.boundary_type})}><span className="node"> {boundary.name} </span></Link>;
+      const label = <Link key={boundary.name} to={boundary.path}><span className="node"> {boundary.name} </span></Link>;
       return (
-              //
-                 <TreeView key={node} nodeLabel={label} defaultCollapsed={true} >
+
+                 <TreeView key={node} onClick={this.props.onBoundaryClick.bind(null,{id: boundary.id, type: boundary.boundary_type})} nodeLabel={label} defaultCollapsed={true} >
                     {
                       (() => {
                         console.log("Creating TreeView");
@@ -68,7 +67,6 @@ const SchoolsNavTree = React.createClass({
 
                     }
                   </TreeView>
-              //</Link>
                 );
     }
   },
