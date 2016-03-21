@@ -8,6 +8,7 @@ import NavBar from './MainNavBar';
 import SecondaryNavBar from './SecondaryNavBar';
 import MainContentWrapper from './MainContentWrapper';
 import TadaStore from '../stores/TadaStore';
+import {connect} from 'react-redux';
 
 var _=require('lodash');
 
@@ -269,4 +270,15 @@ let TadaContainer = React.createClass({
   }
 });
 
-export default TadaContainer;  
+var mapStateToProps = function(state){
+  return {boundaryDetails: state.entitydetails, boundaryParentChildMap: state.entitiesByParentId }
+}
+
+var mapDispatchToProps = function(dispatch){
+  return {
+    onBoundaryClick: function(boundary){
+      dispatch(handleBoundaryClick(boundary))
+    }
+  }
+}
+module.exports = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(TadaContainer); 

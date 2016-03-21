@@ -25,11 +25,7 @@ var TadaActionCreators = {
 	    });
 	  },
 
-	  testActionCreator: function() {
-	  	return {
-	  		type: 'TEST_ACTION';
-	  	}
-	  }
+	 
 };
 
 module.exports=TadaActionCreators;
