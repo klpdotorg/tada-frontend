@@ -9,7 +9,7 @@ import auth from './components/Auth';
 import Dashboard from './components/Dashboard';
 
 import { browserHistory, DefaultRoute, Router, Link, Route, RouteHandler, IndexRoute } from 'react-router';
-
+import {Provider} from 'react-redux';
 import PrimaryDistrict from './components/PrimaryDistrictScreen';
 import PrimaryBlock from './components/PrimaryBlockScreen';
 import PrimaryCluster from './components/PrimaryClusterScreen';
@@ -23,7 +23,9 @@ import TreeTogglerSpacingDiv from './components/TreeTogglerSpacingDiv';
 import TadaContainer from './components/TadaContainer';
 import Logout from './components/Logout';
 import { createHashHistory } from 'history';
-
+import { createStore, applyMiddleware, combineReducers } from 'redux';
+import thunk from 'redux-thunk';
+import * as reducers from './reducers/TadaReducers';
 
 var App = React.createClass({
   getInitialState: function() {
@@ -87,23 +89,37 @@ var requireAuthentication = function requireAuth(nextState, replaceState)
   console.log("NEXT STATE:" , nextState.location.pathname);
 }
 
-const routes = (
-    <Router history={browserHistory}>
-        <Route path="login" component={Login}/>
-        <Route path="logout" component={Logout}/>
-        <Route path="/" component={App} onEnter={requireAuthentication}>
-            <IndexRoute component={Dashboard}/>
-            <Route path="dashboard" component={Dashboard}/>
-            <Route path="district/:districtId/project/:projectId" component={PreschoolProject}/>
-            <Route path="district/:districtId/project/:projectId/circle/:circleId" component={PreschoolCircle}/>
-            <Route path="district/:districtId" component={PrimaryDistrict}/>
-            <Route path="district/:districtId/block/:blockId" component={PrimaryBlock}/>
-            <Route path="district/:districtId/block/:blockId/cluster/:clusterId" component={PrimaryCluster}/>
-            <Route path="district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId" component={Institution}/>
+function createTadaStore()
+{
+  var reducer = combineReducers(reducers);
+  var finalCreateStore = applyMiddleware(thunk)(createStore);
+  var store = finalCreateStore(reducer);
 
-        </Route>
-    </Router>
+  return store
+}
+
+const tadastore = createTadaStore();
+
+const routes = (
+    <Provider store={tadastore}>
+      <Router history={browserHistory}>
+          <Route path="login" component={Login}/>
+          <Route path="logout" component={Logout}/>
+          <Route path="/" component={App} onEnter={requireAuthentication}>
+              <IndexRoute component={Dashboard}/>
+              <Route path="dashboard" component={Dashboard}/>
+              <Route path="district/:districtId/project/:projectId" component={PreschoolProject}/>
+              <Route path="district/:districtId/project/:projectId/circle/:circleId" component={PreschoolCircle}/>
+              <Route path="district/:districtId" component={PrimaryDistrict}/>
+              <Route path="district/:districtId/block/:blockId" component={PrimaryBlock}/>
+              <Route path="district/:districtId/block/:blockId/cluster/:clusterId" component={PrimaryCluster}/>
+              <Route path="district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId" component={Institution}/>
+
+          </Route>
+      </Router>
+    </Provider>
 );
+
 
 ReactDOM.render(routes, document.getElementById('application'));
 

@@ -21,7 +21,10 @@
     "object-assign": "^4.0.1",
     "react": "^0.14.1",
     "react-dom": "^0.14.1",
-    "react-treeview": "^0.4.3"
+    "react-redux": "^4.4.0",
+    "react-treeview": "^0.4.3",
+    "redux-thunk": "^2.0.1",
+    "whatwg-fetch": "^0.11.0"
   },
   "devDependencies": {
     "babel-core": "^5.0.0",

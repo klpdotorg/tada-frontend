@@ -23,6 +23,12 @@ var TadaActionCreators = {
 	      id: 2,
 	      selected: true
 	    });
+	  },
+
+	  testActionCreator: function() {
+	  	return {
+	  		type: 'TEST_ACTION';
+	  	}
 	  }
 };
 

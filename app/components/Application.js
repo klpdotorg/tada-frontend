@@ -20,6 +20,7 @@ var App = React.createClass({
 	
     
     componentWillReceiveProps: function(newProps) {
+    	console.log('STORE IS: ', this.props.store);
         console.log('app container will receive props', arguments);
         console.log('thisProps', this.props.params);
         console.log('thisState', this.state);

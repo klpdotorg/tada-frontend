@@ -4,6 +4,10 @@ import TadaStore from '../stores/TadaStore';
 
 let PrimaryCluster = React.createClass({ 
 
+  handleAddInstitution() {
+
+  },
+  
   render() {
   	var block = TadaStore.getBoundaryDetailsById(this.props.params.blockId);
   	var blockPath = "#" + block.path;
