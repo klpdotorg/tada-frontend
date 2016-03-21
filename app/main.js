@@ -23,57 +23,57 @@ import TreeTogglerSpacingDiv from './components/TreeTogglerSpacingDiv';
 import TadaContainer from './components/TadaContainer';
 import Logout from './components/Logout';
 import { createHashHistory } from 'history';
-import { createStore, applyMiddleware, combineReducers } from 'redux';
+import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
 import thunk from 'redux-thunk';
 import * as reducers from './reducers/TadaReducers';
 
 var App = React.createClass({
   getInitialState: function() {
-      return {
-        loggedIn: auth.loggedIn()
-      }
-    },
+    return {
+      loggedIn: auth.loggedIn()
+    }
+  },
 
-    updateAuth: function(loggedIn) {
-      this.setState({
-        loggedIn: loggedIn
-      })
-    },
+  updateAuth: function(loggedIn) {
+    this.setState({
+      loggedIn: loggedIn
+    })
+  },
 
   componentWillMount: function()
   {
-     
+
       //auth.onChange = this.updateAuth;
       //auth.login();
-  },
+    },
 
-  componentDidMount: function() {
-        console.log('app component did mount. much wow');
-        auth.onChange = this.updateAuth;
+    componentDidMount: function() {
+      console.log('app component did mount. much wow');
+      auth.onChange = this.updateAuth;
     },
 
 
 
     componentWillReceiveProps: function(newProps) {
-        console.log('app container will receive props', arguments);
-        console.log('thisProps', this.props.params);
-        console.log('thisState', this.state);
-        console.log('just this', this);
-        console.log('app children', this.props.children);
+      console.log('app container will receive props', arguments);
+      console.log('thisProps', this.props.params);
+      console.log('thisState', this.state);
+      console.log('just this', this);
+      console.log('app children', this.props.children);
     },
 
-  render: function()
-  {
-    return (
-      <div>
+    render: function()
+    {
+      return (
+        <div>
         <HeaderBar/>
         <TreeTogglerSpacingDiv/>
         <TadaContainer children={this.props.children}/>
 
-      </div>
-    );
-  }
-});
+        </div>
+        );
+    }
+  });
 
 
 
@@ -92,34 +92,37 @@ var requireAuthentication = function requireAuth(nextState, replaceState)
 function createTadaStore()
 {
   var reducer = combineReducers(reducers);
-  var finalCreateStore = applyMiddleware(thunk)(createStore);
-  var store = finalCreateStore(reducer);
+  var finalCreateStore = compose(
+    applyMiddleware(thunk),
+    window.devToolsExtension ? window.devToolsExtension() : f => f
+    )(createStore);
+    var store = finalCreateStore(reducer);
 
-  return store
-}
+    return store
+  }
 
-const tadastore = createTadaStore();
+  const tadastore = createTadaStore();
 
-const routes = (
+  const routes = (
     <Provider store={tadastore}>
-      <Router history={browserHistory}>
-          <Route path="login" component={Login}/>
-          <Route path="logout" component={Logout}/>
-          <Route path="/" component={App} onEnter={requireAuthentication}>
-              <IndexRoute component={Dashboard}/>
-              <Route path="dashboard" component={Dashboard}/>
-              <Route path="district/:districtId/project/:projectId" component={PreschoolProject}/>
-              <Route path="district/:districtId/project/:projectId/circle/:circleId" component={PreschoolCircle}/>
-              <Route path="district/:districtId" component={PrimaryDistrict}/>
-              <Route path="district/:districtId/block/:blockId" component={PrimaryBlock}/>
-              <Route path="district/:districtId/block/:blockId/cluster/:clusterId" component={PrimaryCluster}/>
-              <Route path="district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId" component={Institution}/>
+    <Router history={browserHistory}>
+    <Route path="login" component={Login}/>
+    <Route path="logout" component={Logout}/>
+    <Route path="/" component={App} onEnter={requireAuthentication}>
+    <IndexRoute component={Dashboard}/>
+    <Route path="dashboard" component={Dashboard}/>
+    <Route path="district/:districtId/project/:projectId" component={PreschoolProject}/>
+    <Route path="district/:districtId/project/:projectId/circle/:circleId" component={PreschoolCircle}/>
+    <Route path="district/:districtId" component={PrimaryDistrict}/>
+    <Route path="district/:districtId/block/:blockId" component={PrimaryBlock}/>
+    <Route path="district/:districtId/block/:blockId/cluster/:clusterId" component={PrimaryCluster}/>
+    <Route path="district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId" component={Institution}/>
 
-          </Route>
-      </Router>
+    </Route>
+    </Router>
     </Provider>
-);
+    );
 
 
-ReactDOM.render(routes, document.getElementById('application'));
+  ReactDOM.render(routes, document.getElementById('application'));
 

@@ -27,7 +27,7 @@ var TadaActionCreators = {
 
 	  testActionCreator: function() {
 	  	return {
-	  		type: 'TEST_ACTION';
+	  		type: 'TEST_ACTION'
 	  	}
 	  }
 };
