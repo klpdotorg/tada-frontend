@@ -10,7 +10,7 @@ import ReactDOM from 'react-dom';
 import auth from './components/Auth';
 import Dashboard from './components/Dashboard';
 
-import { browserHistory, DefaultRoute, Router, Link, Route, RouteHandler, IndexRoute } from 'react-router';
+import {DefaultRoute, Router, Link, Route, RouteHandler, IndexRoute } from 'react-router';
 import {Provider} from 'react-redux';
 import PrimaryDistrict from './components/PrimaryDistrictScreen';
 import PrimaryBlock from './components/PrimaryBlockScreen';
@@ -18,16 +18,18 @@ import PrimaryCluster from './components/PrimaryClusterScreen';
 import PreschoolProject from './components/PreschoolProjectScreen';
 import PreschoolCircle from './components/PreschoolCircleScreen';
 import Institution from './components/InstitutionDetailsScreen';
-import createHistory from 'history/lib/createHashHistory';
+import createBrowserHistory from 'history/lib/createBrowserHistory';
 import Login from './components/LoginForm';
 import HeaderBar from './components/MainHeader';
 import TreeTogglerSpacingDiv from './components/TreeTogglerSpacingDiv';
 import TadaContainer from './components/TadaContainer';
 import Logout from './components/Logout';
-import { createHashHistory } from 'history';
 import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
+import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
 import thunk from 'redux-thunk';
 import * as reducers from './reducers/TadaReducers';
+
+const browserHistory = createBrowserHistory()
 
 var App = React.createClass({
   getInitialState: function() {
@@ -91,9 +93,8 @@ var requireAuthentication = function requireAuth(nextState, replaceState)
   console.log("NEXT STATE:" , nextState.location.pathname);
 }
 
-function createTadaStore()
-{
-  var reducer = combineReducers(reducers);
+function createTadaStore() {
+  var reducer = combineReducers({...reducers, routing: routerReducer});
   var finalCreateStore = compose(
     applyMiddleware(thunk),
     window.devToolsExtension ? window.devToolsExtension() : f => f
@@ -101,13 +102,15 @@ function createTadaStore()
     var store = finalCreateStore(reducer);
 
     return store
-  }
+}
 
   const tadastore = createTadaStore();
 
+  const history = syncHistoryWithStore(browserHistory, tadastore)
+
   const routes = (
     <Provider store={tadastore}>
-    <Router history={browserHistory}>
+    <Router history={history}>
     <Route path="login" component={Login}/>
     <Route path="logout" component={Logout}/>
     <Route path="/" component={App} onEnter={requireAuthentication}>
