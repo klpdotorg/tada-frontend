@@ -8,7 +8,8 @@ import NavBar from './MainNavBar';
 import SecondaryNavBar from './SecondaryNavBar';
 import MainContentWrapper from './MainContentWrapper';
 import TadaStore from '../stores/TadaStore';
-import {connect} from 'react-redux';
+import {connect, ReactRedux} from 'react-redux';
+import * as actioncreators from '../actions/TadaActionCreators2';
 
 var _=require('lodash');
 
@@ -244,6 +245,7 @@ let TadaContainer = React.createClass({
     console.log('Treeview componentdidmount..')
     TadaStore.addChangeListener(this._onChange);
     this.fetchBoundariesFromServer();
+    dispatch(fetchEntities(1,'primaryschool'));
   },
 
   componentWillUnmount: function()
@@ -258,17 +260,24 @@ let TadaContainer = React.createClass({
   	this.fetchBoundariesFromServer(boundary.id);
   },
 
+ 
+
   render: function() {
   	console.log('Rendering TadaContainer');
     
     return(
     <div>
-    	<NavBar/>
+    	<NavBar onPrimaryClick={this.props.onPrimaryClick}/>
 		<SecondaryNavBar/>
 		<MainContentWrapper onBoundaryClick={this.handleBoundaryClick} boundaryDetails={this.state.boundarydetails} boundaryParentChildMap={this.state.boundariesByParentId} children={this.props.children}/>
     </div>);
   }
 });
+
+var handleSchoolSelection=function()
+{
+    console.log("tada container received school selection");
+}
 
 var mapStateToProps = function(state){
   return {boundaryDetails: state.entitydetails, boundaryParentChildMap: state.entitiesByParentId }
@@ -278,7 +287,10 @@ var mapDispatchToProps = function(dispatch){
   return {
     onBoundaryClick: function(boundary){
       dispatch(handleBoundaryClick(boundary))
+    },
+    onPrimaryClick: function(){
+      dispatch(actioncreators.showPrimarySchoolHierarchy())
     }
   }
 }
-module.exports = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(TadaContainer); 
+module.exports = connect(mapStateToProps, mapDispatchToProps)(TadaContainer); 

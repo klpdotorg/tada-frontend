@@ -23,9 +23,7 @@ var TadaActionCreators = {
 	      id: 2,
 	      selected: true
 	    });
-	  },
-
-	 
+	  }
 };
 
 module.exports=TadaActionCreators;
