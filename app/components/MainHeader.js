@@ -49,7 +49,7 @@ class HeaderBar extends React.Component {
 
     </p>
 
-    <p className="login-msg navbar-text pull-right">Hello there <span className="fa fa-smile-o"></span> {userinfo.username}! 
+    <p className="login-msg navbar-text pull-right">Hello there <span className="fa fa-smile-o"></span> Mohsina Taj! 
   	</p></div>
 			</div>
 		</nav>

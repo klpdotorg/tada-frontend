@@ -41,11 +41,12 @@ export function requestLogin(username){
 	}
 }
 
-export function loginSuccess(data){
+export function loginSuccess(authtoken){
+	sessionStorage.setItem('token', authtoken);
 	return {
 		type: 'LOGIN_SUCCESS',
 		authenticated: true,
-		auth_token: data.auth_token
+		auth_token: authtoken
 	}
 }
 
@@ -58,22 +59,26 @@ export function loginError()
 	}
 }
 
+
+
 export function sendLoginToServer(email, pass)
 {
-	return function(dispatch){
+	return function(dispatch, getState){
+		
 		return $.ajax({
 	        type: "POST",
 	        url: "http://tadadev.klp.org.in/auth/login/",
 	        data: {username:email, password: pass},
 	        success: function(data)
 	        {
-	        	dispatch(loginSuccess(data));
+	        	dispatch(loginSuccess(data.auth_token));
 	          
 	        },
 	        error: function(data){
 	          dispatch(loginError());
 	        }
 	      });
+		
 	}
 }
 

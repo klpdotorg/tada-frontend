@@ -4,6 +4,7 @@ import { browserHistory, History, Router, Route, Link } from 'react-router';
 import { connect } from 'react-redux';
 import TadaStore from '../stores/TadaStore';
 import {sendLoginToServer} from '../actions/TadaActionCreators2';
+import {push, replace} from 'react-router-redux';
 
 var klplogo = require('../../assets/images/KLP_logo.png');
 
@@ -12,9 +13,12 @@ class Login extends Component{
 
    mixins: [ History ]
 
+   
+
    constructor(props)
    {
       super(props);
+      var redirectRoute = this.props.location.query.next || '/login';
       this.handleSubmit = this.handleSubmit.bind(this)
    }
 
@@ -38,22 +42,24 @@ class Login extends Component{
 
       const {dispatch} = this.props;
 
-      dispatch(sendLoginToServer(email,pass));
+      dispatch(sendLoginToServer(email,pass)).then(() => {
+        const { location } = this.props;
+      
+        if (location.state && location.state.nextPathname) {
+           //browserHistory.push(location.state.nextPathname);
+           dispatch(push(location.state.nextPathname));
+        } else {
+           dispatch(push('/'));
+        }
+      });
 
       //this.fetchuserData(sessionStorage.token);
       
-      const { location } = this.props;
       
-       if (location.state && location.state.nextPathname) {
-         this.history.replaceState(null, location.state.nextPathname);
-
-       } else {
-         this.history.replaceState(null, '/');
-       }
       
     }
 
-    fetchuserData(token)
+    fetchuserData(token) 
     {
       $.ajax({
         type: "GET",
@@ -65,6 +71,17 @@ class Login extends Component{
         }       
       });
 
+    }
+
+    requireAuth(nextState, replaceState)
+    {
+      const {authenticated} = this.props;
+      console.log("is logged in", authenticated);
+      if (!authenticated)
+      {
+        console.log("NEXT STATE:", nextState.location.pathname);
+        replaceState({ nextPathname: nextState.location.pathname }, '/login');
+      }
     }
 
     render() {
@@ -124,6 +141,8 @@ class Login extends Component{
       )
     }
 }
+
+
 
 function mapStateToProps(state) {
   const { authenticated, auth_token } = state

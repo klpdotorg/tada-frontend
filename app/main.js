@@ -9,7 +9,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import auth from './components/Auth';
 import Dashboard from './components/Dashboard';
-
 import {DefaultRoute, Router, Link, Route, RouteHandler, IndexRoute } from 'react-router';
 import {Provider} from 'react-redux';
 import PrimaryDistrict from './components/PrimaryDistrictScreen';
@@ -19,7 +18,7 @@ import PreschoolProject from './components/PreschoolProjectScreen';
 import PreschoolCircle from './components/PreschoolCircleScreen';
 import Institution from './components/InstitutionDetailsScreen';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
-import Login from './components/LoginForm';
+import Login, {requireAuth} from './components/LoginForm';
 import HeaderBar from './components/MainHeader';
 import TreeTogglerSpacingDiv from './components/TreeTogglerSpacingDiv';
 import TadaContainer from './components/TadaContainer';
@@ -83,15 +82,7 @@ var App = React.createClass({
 
 
 
-var requireAuthentication = function requireAuth(nextState, replaceState)
-{
-  if (!auth.loggedIn())
-  {
-    console.log("NEXT STATE:", nextState.location.pathname);
-    replaceState({ nextPathname: nextState.location.pathname }, '/login');
-  }
-  console.log("NEXT STATE:" , nextState.location.pathname);
-}
+
 
 function createTadaStore() {
   var reducer = combineReducers({...reducers, routing: routerReducer});
@@ -108,23 +99,31 @@ function createTadaStore() {
 
   const history = syncHistoryWithStore(browserHistory, tadastore)
 
+  var requireAuthentication = function requireAuth(nextState, replaceState)
+  {    
+    if (!sessionStorage.getItem('token'))
+    {
+      console.log("NEXT STATE:", nextState.location.pathname);
+      replaceState({ nextPathname: nextState.location.pathname }, '/login');
+    }
+  }
+
   const routes = (
     <Provider store={tadastore}>
-    <Router history={history}>
-    <Route path="login" component={Login}/>
-    <Route path="logout" component={Logout}/>
-    <Route path="/" component={App} onEnter={requireAuthentication}>
-    <IndexRoute component={Dashboard}/>
-    <Route path="dashboard" component={Dashboard}/>
-    <Route path="district/:districtId/project/:projectId" component={PreschoolProject}/>
-    <Route path="district/:districtId/project/:projectId/circle/:circleId" component={PreschoolCircle}/>
-    <Route path="district/:districtId" component={PrimaryDistrict}/>
-    <Route path="district/:districtId/block/:blockId" component={PrimaryBlock}/>
-    <Route path="district/:districtId/block/:blockId/cluster/:clusterId" component={PrimaryCluster}/>
-    <Route path="district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId" component={Institution}/>
-
-    </Route>
-    </Router>
+      <Router history={history}>
+        <Route path="login" component={Login}/>
+        <Route path="logout" component={Logout}/>
+        <Route path="/" component={App} onEnter={requireAuthentication}>
+            <IndexRoute component={Dashboard}/>
+            <Route path="dashboard" component={Dashboard}/>
+            <Route path="district/:districtId/project/:projectId" component={PreschoolProject}/>
+            <Route path="district/:districtId/project/:projectId/circle/:circleId" component={PreschoolCircle}/>
+            <Route path="district/:districtId" component={PrimaryDistrict}/>
+            <Route path="district/:districtId/block/:blockId" component={PrimaryBlock}/>
+            <Route path="district/:districtId/block/:blockId/cluster/:clusterId" component={PrimaryCluster}/>
+            <Route path="district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId" component={Institution}/>
+        </Route>
+      </Router>
     </Provider>
     );
 
