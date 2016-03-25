@@ -28,13 +28,16 @@ class TadaContainer extends React.Component{
   constructor(props)
   {
       super(props);
-      console.log("in TadaContainer constructor", typeof this.props.dispatch, this.props);
       this.state=
       {
         currentSchoolSelection: "primary",
         boundarydetails: [],
         boundariesByParentId: []
       }
+
+      this.fetchBoundaryDetails = this.fetchBoundaryDetails.bind(this)
+      this.fetchBoundariesFromServer = this.fetchBoundariesFromServer.bind(this)
+
   }
 	/**
    * Event handler for 'change' events coming from the stores
@@ -267,6 +270,7 @@ class TadaContainer extends React.Component{
   	console.log("On boundary click..", boundary);
   	//Now go and fetch the children from the server..and render..
   	this.fetchBoundariesFromServer(boundary.id);
+    this.props.onBoundaryClick(boundary.id);
   }
 
 
@@ -277,7 +281,7 @@ class TadaContainer extends React.Component{
     <div>
     	<NavBar onPrimaryClick={this.props.onPrimaryClick}/>
 		  <SecondaryNavBar/>
-		  <MainContentWrapper onBoundaryClick={this.handleBoundaryClick} boundaryDetails={this.state.boundarydetails} boundaryParentChildMap={this.state.boundariesByParentId} children={this.props.children}/>
+		  <MainContentWrapper onBoundaryClicked={this.handleBoundaryClick} boundaryDetails={this.state.boundarydetails} boundaryParentChildMap={this.state.boundariesByParentId} children={this.props.children}/>
     </div>);
   }
 }
