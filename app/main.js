@@ -85,7 +85,7 @@ var App = React.createClass({
 
 
 function createTadaStore() {
-  var reducer = combineReducers({...reducers, routing: routerReducer});
+  var reducer = combineReducers(reducers);
   var finalCreateStore = compose(
     applyMiddleware(thunk),
     window.devToolsExtension ? window.devToolsExtension() : f => f
@@ -97,7 +97,7 @@ function createTadaStore() {
 
   const tadastore = createTadaStore();
 
-  const history = syncHistoryWithStore(browserHistory, tadastore)
+  //const history = syncHistoryWithStore(browserHistory, tadastore)
 
   var requireAuthentication = function requireAuth(nextState, replaceState)
   {    
@@ -110,7 +110,7 @@ function createTadaStore() {
 
   const routes = (
     <Provider store={tadastore}>
-      <Router history={history}>
+      <Router history={browserHistory}>
         <Route path="login" component={Login}/>
         <Route path="logout" component={Logout}/>
         <Route path="/" component={App} onEnter={requireAuthentication}>

@@ -4,7 +4,6 @@ import { browserHistory, History, Router, Route, Link } from 'react-router';
 import { connect } from 'react-redux';
 import TadaStore from '../stores/TadaStore';
 import {sendLoginToServer} from '../actions/TadaActionCreators2';
-import {push, replace} from 'react-router-redux';
 
 var klplogo = require('../../assets/images/KLP_logo.png');
 
@@ -46,10 +45,11 @@ class Login extends Component{
         const { location } = this.props;
       
         if (location.state && location.state.nextPathname) {
-           //browserHistory.push(location.state.nextPathname);
-           dispatch(push(location.state.nextPathname));
+           this.history.replaceState(null, location.state.nextPathname);
+           //dispatch(push(location.state.nextPathname));
         } else {
-           dispatch(push('/'));
+            this.history.replaceState(null, '/');
+           //dispatch(push('/'));
         }
       });
 
