@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import { render } from 'react-dom';
+import { Router, Route, Link } from 'react-router';
 import { connect } from 'react-redux';
 import TadaStore from '../stores/TadaStore';
 import {sendLoginToServer} from '../actions/TadaActionCreators2';
@@ -7,9 +8,14 @@ import {sendLoginToServer} from '../actions/TadaActionCreators2';
 var klplogo = require('../../assets/images/KLP_logo.png');
 
 
-class Login extends Component {
+class Login extends Component{
 
-   constructor(props) {
+   mixins: [ History ]
+
+
+
+   constructor(props)
+   {
       super(props);
       var redirectRoute = this.props.location.query.next || '/login';
       this.handleSubmit = this.handleSubmit.bind(this)
