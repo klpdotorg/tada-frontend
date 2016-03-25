@@ -47,10 +47,10 @@ class Login extends Component{
 
 
         if (location.state && location.state.nextPathname) {
-           this.props.history.replaceState(null, location.state.nextPathname);
+           this.props.history.replace(location.state.nextPathname);
            //dispatch(push(location.state.nextPathname));
         } else {
-            this.props.history.replaceState(null, '/');
+            this.props.history.replace('/');
            //dispatch(push('/'));
         }
       });
@@ -75,14 +75,14 @@ class Login extends Component{
 
     }
 
-    requireAuth(nextState, replaceState)
+    requireAuth(nextState, replace)
     {
       const {authenticated} = this.props;
       console.log("is logged in", authenticated);
       if (!authenticated)
       {
         console.log("NEXT STATE:", nextState.location.pathname);
-        replaceState({ nextPathname: nextState.location.pathname }, '/login');
+        replace('/login');
       }
     }
 

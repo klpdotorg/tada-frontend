@@ -96,12 +96,12 @@ function createTadaStore() {
 
   const history = syncHistoryWithStore(browserHistory, tadastore)
 
-  var requireAuthentication = function requireAuth(nextState, replaceState)
+  var requireAuthentication = function requireAuth(nextState, replace)
   {
     if (!sessionStorage.getItem('token'))
     {
       console.log("NEXT STATE:", nextState.location.pathname);
-      replaceState({ nextPathname: nextState.location.pathname }, '/login');
+      replace('/login');
     }
   }
 
