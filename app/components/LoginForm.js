@@ -1,19 +1,34 @@
-import React from 'react';
+import React, {Component} from 'react';
 import { render } from 'react-dom';
 import { browserHistory, History, Router, Route, Link } from 'react-router';
-import auth from './Auth';
+import { connect } from 'react-redux';
 import TadaStore from '../stores/TadaStore';
+import {sendLoginToServer} from '../actions/TadaActionCreators2';
+
 var klplogo = require('../../assets/images/KLP_logo.png');
 
-const Login = React.createClass({
 
-   mixins: [ History ],
+class Login extends Component{
 
-    getInitialState() {
-      return {
-        error: false
-      }
-    },
+   mixins: [ History ]
+
+   constructor(props)
+   {
+      super(props);
+      this.handleSubmit = this.handleSubmit.bind(this)
+   }
+
+  componentDidMount() {
+    const { dispatch } = this.props
+    console.log("Login component did mount", dispatch);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    
+      const { dispatch } = nextProps
+      console.log("Login component will receive props", dispatch);
+    
+  }
 
     handleSubmit(event) {
       event.preventDefault()
@@ -21,21 +36,22 @@ const Login = React.createClass({
       const email = this.refs.email.value
       const pass = this.refs.pass.value
 
-      auth.login(email, pass, (loggedIn) => {
-        if (!loggedIn)
-          return this.setState({ error: true });
-      console.log("Session storage token is", sessionStorage.token);
-      this.fetchuserData(sessionStorage.token);
-        const { location } = this.props;
-        
-        if (location.state && location.state.nextPathname) {
-          this.history.replaceState(null, location.state.nextPathname);
+      const {dispatch} = this.props;
 
-        } else {
-          this.history.replaceState(null, '/');
-        }
-      })
-    },
+      dispatch(sendLoginToServer(email,pass));
+
+      //this.fetchuserData(sessionStorage.token);
+      
+      const { location } = this.props;
+      
+       if (location.state && location.state.nextPathname) {
+         this.history.replaceState(null, location.state.nextPathname);
+
+       } else {
+         this.history.replaceState(null, '/');
+       }
+      
+    }
 
     fetchuserData(token)
     {
@@ -49,9 +65,14 @@ const Login = React.createClass({
         }       
       });
 
-    },
+    }
 
     render() {
+      const { authenticated, token, error } = this.props;
+      console.log("Login render authenticated: ", authenticated);
+      console.log("Login render token: ", token);
+      console.log("Login render error: ", error);
+
       return (
         <div id="login-page">
           <nav className="main__header navbar navbar-white navbar-fixed-top">
@@ -90,7 +111,7 @@ const Login = React.createClass({
                     <div className="form-group text-center">
                       <a href="#">Forgot Password</a>&nbsp;|&nbsp;<a href="#">Support</a>
                     </div>
-                    {this.state.error && (
+                    {error && (
                       <p>Bad login information. Recheck the username and/or password.</p>
                     )}
                   </form>        
@@ -102,6 +123,14 @@ const Login = React.createClass({
          
       )
     }
-})
+}
 
-module.exports = Login;
+function mapStateToProps(state) {
+  const { authenticated, auth_token } = state
+  return {
+    authenticated,
+    auth_token
+  }
+}
+
+export default connect(mapStateToProps)(Login)

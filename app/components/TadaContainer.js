@@ -3,7 +3,7 @@ This component will be the owner of state in the chain of responsibility. It enc
 all the other main content areas of TADA UI that require state storage.
 */
 
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import NavBar from './MainNavBar';
 import SecondaryNavBar from './SecondaryNavBar';
 import MainContentWrapper from './MainContentWrapper';
@@ -11,7 +11,7 @@ import TadaStore from '../stores/TadaStore';
 import {connect, ReactRedux} from 'react-redux';
 import * as actioncreators from '../actions/TadaActionCreators2';
 
-var _=require('lodash');
+
 
 var parentId = 1;
 var childrenByParentId =[];
@@ -19,35 +19,36 @@ var preschoolChildrenByParentId = [];
 var boundaryDetails=[];
 var boundaries = [];
 
-let TadaContainer = React.createClass({ 
+class TadaContainer extends React.Component{ 
 
 //In order to make REST call, need to know whether 
 // 1. Primary/Preschool was clicked
 // 2. Category = whether district/cluster/block etc..Initially category will be district
 //But as various clicks come in (inverse flow), need to determine from that.
-  getInitialState: function() 
+  constructor(props) 
   {
-      
-      return( 
+      super(props);
+      console.log("in TadaContainer constructor", this.props.dispatch);
+      this.state= 
       {
         currentSchoolSelection: "primary", 
         boundarydetails: [],
         boundariesByParentId: []
-      });
-  },
+      }
+  }
 	/**
    * Event handler for 'change' events coming from the stores   
    */
-  _onChange: function() 
+  _onChange() 
   {
     //this.setState({currentSchoolSelection: TadaStore.getCurrentSchoolSelection()});
     console.log(TadaStore.getCurrentSchoolSelection());
     this.fetchBoundariesFromServer();
     
-  },
+  }
 
   //Method fetches institutions belonging to a particular Id from the institutions endpoint
-  fetchInstitutionDetails: function(parentBoundaryId)
+  fetchInstitutionDetails(parentBoundaryId)
   {
     var institutionsUrl = "http://tadadev.klp.org.in/api/v1/institutions/?";
     $.ajax({
@@ -83,10 +84,10 @@ let TadaContainer = React.createClass({
           });               
     }.bind(this)
       });
-  },
+  }
 
   //Method fetches boundary details from the boundaries endpoint
-  fetchBoundaryDetails: function(parentBoundaryId)
+  fetchBoundaryDetails(parentBoundaryId)
   {
     if(TadaStore.getCurrentSchoolSelection() == "primary")
     {
@@ -207,9 +208,9 @@ let TadaContainer = React.createClass({
             }.bind(this)
       });
     }
-  },
+  }
 
-  fetchBoundariesFromServer: function(parentBoundaryId)
+  fetchBoundariesFromServer(parentBoundaryId)
   {
   	var index=-1;
     //Set it to 1 if there's no parent passed in.
@@ -238,41 +239,49 @@ let TadaContainer = React.createClass({
       this.fetchBoundaryDetails(parentId);
     }
   
-  },
+  }
 
- componentDidMount: function() 
-  {
-    console.log('Treeview componentdidmount..')
+  componentDidMount() 
+  {  
+    console.log('TadaContainer componentdidmount..', this.props)
+    const {dispatch} = this.props;
     TadaStore.addChangeListener(this._onChange);
     this.fetchBoundariesFromServer();
-    dispatch(fetchEntities(1,'primaryschool'));
-  },
+    dispatch(actioncreators.showPreschoolHierarchy());
+  }
 
-  componentWillUnmount: function()
+  componentWillReceiveProps(nextProps)
+  {
+    console.log('TadaContainer componentWillReceiveProps..', this.props)
+    console.log(this.props.dispatch);
+  }
+
+  componentWillUnmount()
   {
     TadaStore.removeChangeListener(this._onChange);
-  },
+  }
 
-  handleBoundaryClick: function(boundary)
+  handleBoundaryClick(boundary)
   {
   	console.log("On boundary click..", boundary);
   	//Now go and fetch the children from the server..and render..
   	this.fetchBoundariesFromServer(boundary.id);
-  },
+  }
 
  
 
-  render: function() {
-  	console.log('Rendering TadaContainer');
-    
+  render() {
+  	console.log('Rendering TadaContainer');   
     return(
     <div>
     	<NavBar onPrimaryClick={this.props.onPrimaryClick}/>
-		<SecondaryNavBar/>
-		<MainContentWrapper onBoundaryClick={this.handleBoundaryClick} boundaryDetails={this.state.boundarydetails} boundaryParentChildMap={this.state.boundariesByParentId} children={this.props.children}/>
+		  <SecondaryNavBar/>
+		  <MainContentWrapper onBoundaryClick={this.handleBoundaryClick} boundaryDetails={this.state.boundarydetails} boundaryParentChildMap={this.state.boundariesByParentId} children={this.props.children}/>
     </div>);
   }
-});
+}
+
+
 
 var handleSchoolSelection=function()
 {
@@ -291,6 +300,6 @@ var mapDispatchToProps = function(dispatch){
     onPrimaryClick: function(){
       dispatch(actioncreators.showPrimarySchoolHierarchy())
     }
-  }
+  } 
 }
 module.exports = connect(mapStateToProps, mapDispatchToProps)(TadaContainer); 
