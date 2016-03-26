@@ -9,7 +9,7 @@ import SecondaryNavBar from './SecondaryNavBar';
 import MainContentWrapper from './MainContentWrapper';
 import TadaStore from '../stores/TadaStore';
 import {connect, ReactRedux} from 'react-redux';
-import * as actioncreators from '../actions/TadaActionCreators2';
+import {showPreschoolHierarchy} from '../actions/TadaActionCreators2';
 
 
 
@@ -247,7 +247,7 @@ class TadaContainer extends React.Component{
     const {dispatch} = this.props;
     TadaStore.addChangeListener(this._onChange);
     this.fetchBoundariesFromServer();
-    dispatch(actioncreators.showPreschoolHierarchy());
+    dispatch(showPreschoolHierarchy());
   }
 
   componentWillReceiveProps(nextProps)
