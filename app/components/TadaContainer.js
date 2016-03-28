@@ -8,7 +8,7 @@ import NavBar from './MainNavBar';
 import SecondaryNavBar from './SecondaryNavBar';
 import MainContentWrapper from './MainContentWrapper';
 import TadaStore from '../stores/TadaStore';
-import {connect, ReactRedux} from 'react-redux';
+import {connect} from 'react-redux';
 import {showPreschoolHierarchy} from '../actions/TadaActionCreators2';
 
 
@@ -19,7 +19,7 @@ var preschoolChildrenByParentId = [];
 var boundaryDetails=[];
 var boundaries = [];
 
-class TadaContainer extends React.Component{
+class TadaContainer extends Component{
 
 //In order to make REST call, need to know whether
 // 1. Primary/Preschool was clicked
@@ -247,7 +247,7 @@ class TadaContainer extends React.Component{
   componentDidMount()
   {
     console.log('TadaContainer componentdidmount..', this.props)
-    const {dispatch} = this.props;
+    const { dispatch } = this.props;
     TadaStore.addChangeListener(this._onChange);
     this.fetchBoundariesFromServer();
     dispatch(showPreschoolHierarchy());

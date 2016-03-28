@@ -36,21 +36,9 @@ class Login extends Component{
       const email = this.refs.email.value
       const pass = this.refs.pass.value
 
-      const {dispatch} = this.props;
+      this.props.onLoginSubmit(email, pass, this.props.location, this.props.history);
 
-      dispatch(sendLoginToServer(email,pass)).then(() => {
-        const { location } = this.props;
-
-
-
-        if (location.state && location.state.nextPathname) {
-           this.props.history.replace(location.state.nextPathname);
-           //dispatch(push(location.state.nextPathname));
-        } else {
-            this.props.history.replace('/');
-           //dispatch(push('/'));
-        }
-      });
+     
 
       //this.fetchuserData(sessionStorage.token);
 
@@ -136,13 +124,4 @@ Login.propTypes = {
   error: PropTypes.bool.isRequired
 }
 
-function mapStateToProps(state) {
-  console.log("mapStateToProps called", state);
-  return {
-    error: state.login.error,
-    token: state.login.token,
-    authenticated: state.login.authenticated
-  }
-}
-
-export default connect(mapStateToProps)(Login)
+export default Login;

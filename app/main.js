@@ -18,7 +18,7 @@ import PreschoolProject from './components/PreschoolProjectScreen';
 import PreschoolCircle from './components/PreschoolCircleScreen';
 import Institution from './components/InstitutionDetailsScreen';
 // import createBrowserHistory from 'history/lib/createBrowserHistory';
-import Login, {requireAuth} from './components/LoginForm';
+import LoginContainer from './containers/LoginContainer';
 import HeaderBar from './components/MainHeader';
 import TreeTogglerSpacingDiv from './components/TreeTogglerSpacingDiv';
 import TadaContainer from './components/TadaContainer';
@@ -86,7 +86,7 @@ function createTadaStore()
   const routes = (
     <Provider store={tadastore}>
       <Router history={history}>
-        <Route path="login" component={Login}/>
+        <Route path="login" component={LoginContainer}/>
         <Route path="logout" component={Logout}/>
         <Route path="/" component={App} onEnter={requireAuthentication}>
             <IndexRoute component={Dashboard}/>
