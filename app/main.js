@@ -9,7 +9,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import auth from './components/Auth';
 import Dashboard from './components/Dashboard';
-import {DefaultRoute, Router, Link, Route, RouteHandler, IndexRoute } from 'react-router';
+import {DefaultRoute, Router, Link, Route, RouteHandler, IndexRoute, browserHistory } from 'react-router';
 import {Provider} from 'react-redux';
 import PrimaryDistrict from './components/PrimaryDistrictScreen';
 import PrimaryBlock from './components/PrimaryBlockScreen';
@@ -17,7 +17,7 @@ import PrimaryCluster from './components/PrimaryClusterScreen';
 import PreschoolProject from './components/PreschoolProjectScreen';
 import PreschoolCircle from './components/PreschoolCircleScreen';
 import Institution from './components/InstitutionDetailsScreen';
-import createBrowserHistory from 'history/lib/createBrowserHistory';
+// import createBrowserHistory from 'history/lib/createBrowserHistory';
 import Login, {requireAuth} from './components/LoginForm';
 import HeaderBar from './components/MainHeader';
 import TreeTogglerSpacingDiv from './components/TreeTogglerSpacingDiv';
@@ -28,7 +28,7 @@ import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
 import thunk from 'redux-thunk';
 import * as reducers from './reducers/TadaReducers';
 
-const browserHistory = createBrowserHistory()
+//const browserHistory = createBrowserHistory()
 
 var App = React.createClass({
   getInitialState: function() {
@@ -78,14 +78,11 @@ var App = React.createClass({
     }
   });
 
-
-
-
-
-
-
 function createTadaStore() {
-  var reducer = combineReducers(reducers);
+  var reducer = combineReducers({
+    ...reducers,
+    routing: routerReducer
+  });
   var finalCreateStore = compose(
     applyMiddleware(thunk),
     window.devToolsExtension ? window.devToolsExtension() : f => f
@@ -97,20 +94,20 @@ function createTadaStore() {
 
   const tadastore = createTadaStore();
 
-  //const history = syncHistoryWithStore(browserHistory, tadastore)
+  const history = syncHistoryWithStore(browserHistory, tadastore)
 
-  var requireAuthentication = function requireAuth(nextState, replaceState)
-  {    
+  var requireAuthentication = function requireAuth(nextState, replace)
+  {
     if (!sessionStorage.getItem('token'))
     {
       console.log("NEXT STATE:", nextState.location.pathname);
-      replaceState({ nextPathname: nextState.location.pathname }, '/login');
+      replace('/login');
     }
   }
 
   const routes = (
     <Provider store={tadastore}>
-      <Router history={browserHistory}>
+      <Router history={history}>
         <Route path="login" component={Login}/>
         <Route path="logout" component={Logout}/>
         <Route path="/" component={App} onEnter={requireAuthentication}>

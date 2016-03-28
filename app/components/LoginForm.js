@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { render } from 'react-dom';
-import { browserHistory, History, Router, Route, Link } from 'react-router';
+import { Router, Route, Link } from 'react-router';
 import { connect } from 'react-redux';
 import TadaStore from '../stores/TadaStore';
 import {sendLoginToServer} from '../actions/TadaActionCreators2';
@@ -12,7 +12,7 @@ class Login extends Component{
 
    mixins: [ History ]
 
-   
+
 
    constructor(props)
    {
@@ -27,10 +27,10 @@ class Login extends Component{
   }
 
   componentWillReceiveProps(nextProps) {
-    
+
       const { dispatch } = nextProps
       console.log("Login component will receive props", dispatch);
-    
+
   }
 
     handleSubmit(event) {
@@ -43,23 +43,25 @@ class Login extends Component{
 
       dispatch(sendLoginToServer(email,pass)).then(() => {
         const { location } = this.props;
-      
+
+
+
         if (location.state && location.state.nextPathname) {
-           this.history.replaceState(null, location.state.nextPathname);
+           this.props.history.replace(location.state.nextPathname);
            //dispatch(push(location.state.nextPathname));
         } else {
-            this.history.replaceState(null, '/');
+            this.props.history.replace('/');
            //dispatch(push('/'));
         }
       });
 
       //this.fetchuserData(sessionStorage.token);
-      
-      
-      
+
+
+
     }
 
-    fetchuserData(token) 
+    fetchuserData(token)
     {
       $.ajax({
         type: "GET",
@@ -68,19 +70,19 @@ class Login extends Component{
         success: function(data){
           TadaStore.setUserData(data);
           sessionStorage.setItem("userdata",JSON.stringify(data));
-        }       
+        }
       });
 
     }
 
-    requireAuth(nextState, replaceState)
+    requireAuth(nextState, replace)
     {
       const {authenticated} = this.props;
       console.log("is logged in", authenticated);
       if (!authenticated)
       {
         console.log("NEXT STATE:", nextState.location.pathname);
-        replaceState({ nextPathname: nextState.location.pathname }, '/login');
+        replace('/login');
       }
     }
 
@@ -108,7 +110,7 @@ class Login extends Component{
               </div>
             </div>
           </nav>
-          
+
           <div className="container-fluid absolute-center is-responsive">
             <div className="row">
                 <div className="col-sm-12 col-md-10 col-md-offset-1">
@@ -116,7 +118,7 @@ class Login extends Component{
                   <form id="loginForm">
                     <div className="form-group input-group">
                       <span className="input-group-addon"><i className="glyphicon glyphicon-user"></i></span>
-                      <input ref="email" className="form-control" type="text" name='email' placeholder="email id or username" defaultValue="tada@klp.org.in"/>          
+                      <input ref="email" className="form-control" type="text" name='email' placeholder="email id or username" defaultValue="tada@klp.org.in"/>
                     </div>
                     <div className="form-group input-group">
                       <span className="input-group-addon"><i className="glyphicon glyphicon-lock"></i></span>
@@ -131,13 +133,13 @@ class Login extends Component{
                     {error && (
                       <p>Bad login information. Recheck the username and/or password.</p>
                     )}
-                  </form>        
-                </div>  
+                  </form>
+                </div>
             </div>
           </div>
 
         </div>
-         
+
       )
     }
 }
