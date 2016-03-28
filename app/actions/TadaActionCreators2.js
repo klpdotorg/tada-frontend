@@ -65,20 +65,27 @@ export function sendLoginToServer(email, pass)
 {
 	return function(dispatch, getState){
 		
-		return $.ajax({
-	        type: "POST",
-	        url: "http://tadadev.klp.org.in/auth/login/",
-	        data: {username:email, password: pass},
-	        success: function(data)
-	        {
-	        	dispatch(loginSuccess(data.auth_token));
-	          
-	        },
-	        error: function(data){
-	          dispatch(loginError());
-	        }
-	      });
-		
+		return fetch('http://tadadev.klp.org.in/auth/login/', {
+	        method: "POST",
+	        headers: {
+    			'Content-Type': 'application/json'
+  			},
+	        body: JSON.stringify({username:email, password: pass})
+	    }) . then(response =>{
+	    	if( response.status>=200 && response.status<300){
+	    		return response.json();
+	    	}
+	    	else {
+	    		const error = new Error(response.statusText);
+	    		error.response = response;
+	    		dispatch(loginError(error));
+	    		throw error;
+	    	}
+	    })
+	    . then(data =>{
+	    	 	dispatch(loginSuccess(data.auth_token))
+	    })
+	    .catch(error => { console.log('request failed', error)})
 	}
 }
 

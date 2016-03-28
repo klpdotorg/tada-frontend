@@ -1,15 +1,9 @@
 import AppConstants from '../constants/AppConstants';
 import {combineReducers} from 'redux';
 
-var initialState = {
-  authenticated: false,
-  schoolTypeSelection: 'PRIMARY_SELECTED',
-  isLoggingIn: false
-}
-
 var ActionTypes = AppConstants.ActionTypes;
 
-function schoolSelectionReducer(state = initialState, action) {
+export function schoolSelection(state = {schoolTypeSelection: 'PRIMARY_SELECTED'}, action) {
   switch (action.type) {
     case ActionTypes.PRIMARY_SELECTED:
       console.log("Primary selected in reducer");
@@ -26,7 +20,7 @@ function schoolSelectionReducer(state = initialState, action) {
   return state;
 }
 
-function entityStateReducer(state = initialState, action){
+export function entities(state = {}, action){
   switch(action.type) {
     case 'REQUEST_ENTITIES':
         console.log("Requesting entities");
@@ -39,7 +33,7 @@ function entityStateReducer(state = initialState, action){
   }
 }
 
-function loginStateReducer(state=initialState, action){
+export function login(state={authenticated: false, isLoggingIn: false, error: false, token: ''}, action){
   switch(action.type) {
     case 'REQUEST_LOGIN':
       return Object.assign({}, state, {
@@ -49,13 +43,15 @@ function loginStateReducer(state=initialState, action){
     case 'LOGIN_FAILED':
       return Object.assign({}, state, {
         authenticated: action.authenticated,
-        isLoggingIn: false
+        isLoggingIn: false,
+        error: true
       })
     case 'LOGIN_SUCCESS':
       return Object.assign({}, state, {
         authenticated: action.authenticated,
         token: action.auth_token,
-        isLoggingIn: false
+        isLoggingIn: false,
+        error: false
       })
 
     default:
@@ -64,10 +60,3 @@ function loginStateReducer(state=initialState, action){
 
 }
 
-const rootReducer = combineReducers({
-  schoolSelectionReducer,
-  entityStateReducer,
-  loginStateReducer
-})
-
-export default rootReducer;

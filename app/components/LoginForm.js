@@ -1,23 +1,20 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 import { render } from 'react-dom';
 import { Router, Route, Link } from 'react-router';
 import { connect } from 'react-redux';
 import TadaStore from '../stores/TadaStore';
 import {sendLoginToServer} from '../actions/TadaActionCreators2';
+import { routeActions, push } from 'react-router-redux';
 
 var klplogo = require('../../assets/images/KLP_logo.png');
 
 
 class Login extends Component{
 
-   mixins: [ History ]
-
-
-
    constructor(props)
    {
       super(props);
-      var redirectRoute = this.props.location.query.next || '/login';
+      //var redirectRoute = this.props.location.query.next || '/login';
       this.handleSubmit = this.handleSubmit.bind(this)
    }
 
@@ -28,7 +25,7 @@ class Login extends Component{
 
   componentWillReceiveProps(nextProps) {
 
-      const { dispatch } = nextProps
+      const { dispatch, authenticated, token, error } = nextProps
       console.log("Login component will receive props", dispatch);
 
   }
@@ -75,22 +72,11 @@ class Login extends Component{
 
     }
 
-    requireAuth(nextState, replace)
-    {
-      const {authenticated} = this.props;
-      console.log("is logged in", authenticated);
-      if (!authenticated)
-      {
-        console.log("NEXT STATE:", nextState.location.pathname);
-        replace('/login');
-      }
-    }
-
     render() {
-      const { authenticated, token, error } = this.props;
-      console.log("Login render authenticated: ", authenticated);
-      console.log("Login render token: ", token);
-      console.log("Login render error: ", error);
+      const { authenticated, token, error } = this.props
+      console.log("Login render authenticated: ", this.props.authenticated);
+      console.log("Login render token: ", this.props.token);
+      console.log("Login render error: ", this.props.error);
 
       return (
         <div id="login-page">
@@ -130,7 +116,7 @@ class Login extends Component{
                     <div className="form-group text-center">
                       <a href="#">Forgot Password</a>&nbsp;|&nbsp;<a href="#">Support</a>
                     </div>
-                    {error && (
+                    {this.props.error && (
                       <p>Bad login information. Recheck the username and/or password.</p>
                     )}
                   </form>
@@ -144,13 +130,18 @@ class Login extends Component{
     }
 }
 
-
+Login.propTypes = {
+  authenticated: PropTypes.bool.isRequired,
+  token: PropTypes.string.isRequired,
+  error: PropTypes.bool.isRequired
+}
 
 function mapStateToProps(state) {
-  const { authenticated, auth_token } = state
+  console.log("mapStateToProps called", state);
   return {
-    authenticated,
-    auth_token
+    error: state.login.error,
+    token: state.login.token,
+    authenticated: state.login.authenticated
   }
 }
 

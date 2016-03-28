@@ -5,7 +5,7 @@ require('../assets/sass/lato.scss');
 require('../assets/sass/style.scss');
 require('bootstrap/dist/css/bootstrap.css');
 require('font-awesome/css/font-awesome.css');
-import React from 'react';
+import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import auth from './components/Auth';
 import Dashboard from './components/Dashboard';
@@ -26,46 +26,21 @@ import Logout from './components/Logout';
 import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
 import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
 import thunk from 'redux-thunk';
-import * as reducers from './reducers/TadaReducers';
+import {schoolSelection, entities, login} from './reducers/TadaReducers';
 
 //const browserHistory = createBrowserHistory()
 
-var App = React.createClass({
-  getInitialState: function() {
-    return {
-      loggedIn: auth.loggedIn()
-    }
-  },
+class App extends Component{
 
-  updateAuth: function(loggedIn) {
-    this.setState({
-      loggedIn: loggedIn
-    })
-  },
-
-  componentWillMount: function()
-  {
-
-      //auth.onChange = this.updateAuth;
-      //auth.login();
-    },
-
-    componentDidMount: function() {
+    componentDidMount() {
       console.log('app component did mount. much wow');
-      auth.onChange = this.updateAuth;
-    },
+    }
 
+    componentWillReceiveProps(newProps) {
+      
+    }
 
-
-    componentWillReceiveProps: function(newProps) {
-      console.log('app container will receive props', arguments);
-      console.log('thisProps', this.props.params);
-      console.log('thisState', this.state);
-      console.log('just this', this);
-      console.log('app children', this.props.children);
-    },
-
-    render: function()
+    render()
     {
       return (
         <div>
@@ -76,19 +51,23 @@ var App = React.createClass({
         </div>
         );
     }
-  });
+  }
 
-function createTadaStore() {
+function createTadaStore() 
+{
   var reducer = combineReducers({
-    ...reducers,
+    schools: schoolSelection,
+    entities: entities,
+    login: login,
     routing: routerReducer
   });
+
   var finalCreateStore = compose(
     applyMiddleware(thunk),
     window.devToolsExtension ? window.devToolsExtension() : f => f
     )(createStore);
     var store = finalCreateStore(reducer);
-
+    console.log('Tada store created..');
     return store
 }
 
@@ -100,7 +79,6 @@ function createTadaStore() {
   {
     if (!sessionStorage.getItem('token'))
     {
-      console.log("NEXT STATE:", nextState.location.pathname);
       replace('/login');
     }
   }
