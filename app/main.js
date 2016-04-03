@@ -27,7 +27,7 @@ import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
 import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
 import thunk from 'redux-thunk';
 import {schoolSelection, entities, login} from './reducers/TadaReducers';
-
+import TadaContentContainer from './containers/TadaContentContainer';
 //const browserHistory = createBrowserHistory()
 
 class App extends Component{
@@ -47,7 +47,7 @@ class App extends Component{
         <HeaderBar/>
         <TreeTogglerSpacingDiv/>
         <TadaContainer children={this.props.children}/>
-
+        <TadaContentContainer children={this.props.children}/>
         </div>
         );
     }

@@ -1,6 +1,6 @@
 import Login from '../components/LoginForm';
 import { connect } from 'react-redux';
-import {sendLoginToServer} from '../actions/TadaActionCreators2';
+import {sendLoginToServer, fetchUserData} from '../actions/TadaActionCreators2';
 
 const mapStateToProps = (state) => {
   console.log("mapStateToProps called", state);
@@ -15,8 +15,11 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onLoginSubmit: (email, pass, location, history) => {
     	
-       //const {location} = this.props;
-       dispatch(sendLoginToServer(email, pass)).then(() => {
+       
+       dispatch(sendLoginToServer(email, pass)).then(() =>{
+       	fetchUserData(sessionStorage.token)
+       })
+       .then(() => {
         
         if (location.state && location.state.nextPathname) {
           history.replace(location.state.nextPathname);           

@@ -8,8 +8,8 @@ import NavBar from './MainNavBar';
 import SecondaryNavBar from './SecondaryNavBar';
 import MainContentWrapper from './MainContentWrapper';
 import TadaStore from '../stores/TadaStore';
-import {connect} from 'react-redux';
-import {showPreschoolHierarchy} from '../actions/TadaActionCreators2';
+import { connect } from 'react-redux';
+import {showPreschoolHierarchy, fetchBoundaryDetails} from '../actions/TadaActionCreators2';
 
 
 
@@ -39,6 +39,34 @@ class TadaContainer extends Component{
       this.fetchBoundariesFromServer = this.fetchBoundariesFromServer.bind(this)
 
   }
+
+  componentWillMount()
+  {
+    const {dispatch} = this.props;
+   // dispatch(fetchBoundaryDetails(1));
+  }
+
+  componentDidMount()
+  {
+    console.log('TadaContainer componentdidmount..', this.props)
+    const { dispatch } = this.props;
+    TadaStore.addChangeListener(this._onChange);
+    this.fetchBoundariesFromServer();
+    //dispatch(showPreschoolHierarchy());
+
+  }
+
+  componentWillReceiveProps(nextProps)
+  {
+    console.log('TadaContainer componentWillReceiveProps..', this.props)
+    console.log(this.props.dispatch);
+  }
+
+  componentWillUnmount()
+  {
+    TadaStore.removeChangeListener(this._onChange);
+  }
+
 	/**
    * Event handler for 'change' events coming from the stores
    */
@@ -244,27 +272,7 @@ class TadaContainer extends Component{
 
   }
 
-  componentDidMount()
-  {
-    console.log('TadaContainer componentdidmount..', this.props)
-    const { dispatch } = this.props;
-    TadaStore.addChangeListener(this._onChange);
-    this.fetchBoundariesFromServer();
-    dispatch(showPreschoolHierarchy());
-
-  }
-
-  componentWillReceiveProps(nextProps)
-  {
-    console.log('TadaContainer componentWillReceiveProps..', this.props)
-    console.log(this.props.dispatch);
-  }
-
-  componentWillUnmount()
-  {
-    TadaStore.removeChangeListener(this._onChange);
-  }
-
+  
   handleBoundaryClick(boundary)
   {
   	console.log("On boundary click..", boundary);
@@ -287,14 +295,8 @@ class TadaContainer extends Component{
 }
 
 
-
-var handleSchoolSelection=function()
-{
-    console.log("tada container received school selection");
-}
-
 var mapStateToProps = function(state){
-  return {boundaryDetails: state.entitydetails, boundaryParentChildMap: state.entitiesByParentId }
+  return {boundaryDetails: state.boundaryDetails, boundaryParentChildMap: state.boundariesByParentId }
 }
 
 var mapDispatchToProps = function(dispatch){

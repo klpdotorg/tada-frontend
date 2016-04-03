@@ -8,8 +8,8 @@ import '../../assets/sass/style.scss';
 import HeaderBar from './MainHeader';
 import TreeTogglerSpacingDiv from './TreeTogglerSpacingDiv';
 import auth from './Auth';
-
 import TadaContainer from './TadaContainer';
+import TadaContentContainer from '../containers/TadaContentContainer';
 
 var App = React.createClass({
  			
@@ -35,9 +35,8 @@ var App = React.createClass({
 		return (
 			<div>
 				<HeaderBar/>
-				<TreeTogglerSpacingDiv/>
-				<TadaContainer children={this.props.children}/>
-				
+				<TreeTogglerSpacingDiv/>				
+				<TadaContentContainer children={this.props.children}/>
 			</div>
 		);
 	}

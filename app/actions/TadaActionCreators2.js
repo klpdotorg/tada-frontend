@@ -19,18 +19,29 @@ export function showPreschoolHierarchy() {
 		type: 'PRESCHOOL_SELECTED'
 	}
 }
-export function requestEntities() {
+function requestDataFromServer() {
 	return {
-		type: 'REQUEST_ENTITIES',
+		type: 'REQUEST_SENT',
 		isFetching: true
 	}
 }
 
-export function receiveEntities(resp){
+function responseReceivedFromServer(resp){
 	console.log("Received entities");
 	return {
-		type: 'RECEIVE_ENTITIES',
-		entities: resp
+		type: 'RESPONSE_RECEIVED',
+		isFetching: false,
+		data: resp.results
+	}
+}
+
+function requestFailed(error)
+{
+	return {
+		type: 'REQUEST_FAILED',
+		statusCode: error.response.status,
+		statusText: error.response.statusText,
+		error: error.response
 	}
 }
 
@@ -41,7 +52,7 @@ export function requestLogin(username){
 	}
 }
 
-export function loginSuccess(authtoken){
+function loginSuccess(authtoken){
 	sessionStorage.setItem('token', authtoken);
 	return {
 		type: 'LOGIN_SUCCESS',
@@ -50,7 +61,7 @@ export function loginSuccess(authtoken){
 	}
 }
 
-export function loginError()
+function loginError()
 {
 	return {
 		type: 'LOGIN_FAILED',
@@ -59,7 +70,112 @@ export function loginError()
 	}
 }
 
+function userDataFetched(data)
+{
+	return {
+		type: 'USER_DATA_FETCHED',
+		username: data.username
+	}
+}
 
+
+
+export function fetchBoundaryDetails(parentBoundaryId)
+{
+	return function(dispatch, getState)
+	{
+		
+		var requestBody = {}
+		var boundaryType = -1;
+		if(getState().schools.schoolTypeSelection == "PRIMARY_SELECTED")
+			boundaryType = 1
+		else
+			boundaryType = 2;
+		requestBody = {parent: parentBoundaryId, boundary_type: boundaryType}
+	   	//Send info about the whole request so we can track failure
+	    //dispatch(requestDataFromServer())
+	    return fetch('http://tadadev.klp.org.in/api/v1/boundaries/?parent=' + parentBoundaryId + '&boundary_type='+boundaryType, {
+				      	method: 'GET',
+				      	headers: {
+				      		'Content-Type': 'application/json',
+				      		'Authorization': 'Token ' + sessionStorage.token
+				      	}
+	    			}). then(checkStatus). then(data => {
+	    				dispatch(responseReceivedFromServer(data))
+	    			}). catch(error => {
+	    				dispatch(requestFailed(error))
+	    			})       
+    }   
+}
+
+/*
+This function decides whether we need to go to the boundaries endpoint or the institutions endpoint for data
+*/
+export function fetchEntitiesFromServer(parentBoundaryId)
+{
+	return function(dispatch, getState)
+	{
+	  	var parentId=-1;
+	    //Set it to 1 if there's no parent passed in.
+	  	if(!parentBoundaryId)
+	  	{
+	  		parentId = 1;
+	  	}
+	  	else
+	  	{
+	  		parentId=parentBoundaryId;
+	  	}
+	  	//Initialize to the primary's district category (10)
+	  	var parentBoundaryCat = 10;
+		if(getState().schools.schoolTypeSelection == "PRESCHOOL_SELECTED")
+	      parentBoundaryCat = 13;
+	  	//If we have boundary details already and this is not the root district, then we retrieve the parent boundary category
+	  	// from the boundary itself. We need to identify whether this is an institution or a boundary and call the appropriate endpoint
+	    if(getState().entities.boundaryDetails.length >0 && parentId!=1)
+	    {
+	      parentBoundaryCat = getState().entities.boundaryDetails[parentId].boundary_category;
+	    }
+	    //If boundary type is a circle (preschool, 15) or a cluster (primary, 11), then fetch from the institutions endpoint
+	    if(parentBoundaryCat == 11 || parentBoundaryCat == 15)
+	    {
+	      fetchInstitutionDetails(parentId);
+	    }
+	    else
+	    {
+	      fetchBoundaryDetails(parentId);
+	    }
+	}	
+}
+
+export function fetchUserData(token)
+ {
+      return function(dispatch) {
+      	return fetch('http://tadadev.klp.org.in/auth/me/',{
+        method: "GET",
+        headers: {
+        	'Authorization':'Token ' + token,
+    		'Content-Type': 'application/json'
+    	},        
+      }). then(checkStatus(response))
+      . then(data => {
+      	dispatch(userDataFetched(data))
+      . catch(error => { dispatch(requestFailed(error));
+	    	console.log('request failed', error)})
+      })
+  }
+ }
+
+function checkStatus(response)
+{
+	if( response.status>=200 && response.status<300){
+	    		return response.json();
+	}
+	else {
+		const error = new Error(response.statusText);
+		error.response = response;
+		throw error;
+	}
+}
 
 export function sendLoginToServer(email, pass)
 {
@@ -85,7 +201,8 @@ export function sendLoginToServer(email, pass)
 	    . then(data =>{
 	    	 	dispatch(loginSuccess(data.auth_token))
 	    })
-	    .catch(error => { console.log('request failed', error)})
+	    .catch(error => { dispatch(loginError(error));
+	    	console.log('request failed', error)})
 	}
 }
 

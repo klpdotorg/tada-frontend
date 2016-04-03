@@ -20,14 +20,36 @@ export function schoolSelection(state = {schoolTypeSelection: 'PRIMARY_SELECTED'
   return state;
 }
 
-export function entities(state = {}, action){
+function computeRouterPathForEntity(entity)
+{
+  var parentEntityId = entity.parent;
+  if(parentEntityId == 1)
+  {
+     path="/district/" + boundary.id;
+  }
+  
+}
+
+function processBoundaryDetails(boundaryData)
+{
+  var boundaryInformation = {};
+  boundaryData.map(boundary =>{
+    var id = boundary.id;
+    boundaryInformation[id]=boundary
+  })
+  return boundaryInformation; 
+}
+
+export function entities(state = {boundariesByParentId: [], boundaryDetails: []}, action){
   switch(action.type) {
-    case 'REQUEST_ENTITIES':
-        console.log("Requesting entities");
-        return state;
-    case 'RECEIVE_ENTITIES':
-        console.log("Received entities", action.entities);
-        return state;
+    case 'REQUEST_SENT':
+        return {...state,isFetching: true}
+    case 'RESPONSE_RECEIVED':
+        console.log("Received entities", action.data);        
+        return { ...state, boundaryDetails: processBoundaryDetails(action.data)}
+    case 'REQUEST_FAILED':
+        console.log("Server request failed", action.error);
+        return { ...state, error: action.error, statusCode: action.statusCode, statusText: action.statusText, isFetching: false}
     default:
         return state;
   }

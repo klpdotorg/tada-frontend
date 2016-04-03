@@ -18,10 +18,6 @@ class Login extends Component{
       this.handleSubmit = this.handleSubmit.bind(this)
    }
 
-  componentDidMount() {
-    const { dispatch } = this.props
-    console.log("Login component did mount", dispatch);
-  }
 
   componentWillReceiveProps(nextProps) {
 
@@ -40,25 +36,13 @@ class Login extends Component{
 
      
 
-      //this.fetchuserData(sessionStorage.token);
+      
 
 
 
     }
 
-    fetchuserData(token)
-    {
-      $.ajax({
-        type: "GET",
-        url: "http://tadadev.klp.org.in/auth/me/",
-        beforeSend: function(xhr){xhr.setRequestHeader('Authorization', 'Token ' + token);},
-        success: function(data){
-          TadaStore.setUserData(data);
-          sessionStorage.setItem("userdata",JSON.stringify(data));
-        }
-      });
-
-    }
+   
 
     render() {
       const { authenticated, token, error } = this.props
