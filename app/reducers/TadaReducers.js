@@ -20,33 +20,86 @@ export function schoolSelection(state = {schoolTypeSelection: 'PRIMARY_SELECTED'
   return state;
 }
 
+/*
+Method computes the router path for an entity and returns it
+*/
 function computeRouterPathForEntity(entity)
 {
   var parentEntityId = entity.parent;
+  var path = '';
   if(parentEntityId == 1)
   {
-     path="/district/" + boundary.id;
+     path="/district/" + entity.id;
   }
-  
+  else
+  {
+    var parent = this.props.boundaryDetails[entity.parent];
+    
+    if(entity.boundary_category == "10")
+    {
+      //path is parent's path plus child's
+      
+      path = parent.path + "/block/" + entity.id;
+    }
+    else if(entity.boundary_category == "11")
+    {
+     
+      path = parent.path + "/cluster/" + entity.id;
+    }
+  }
+  entity.path = path;
+  return entity;
 }
 
-function processBoundaryDetails(boundaryData)
+function processBoundaryDetails(boundaryData, boundariesByParentId)
 {
   var boundaryInformation = {};
+  
+  //Making an assumption that the entire set will be the children of a parent
+  
+  //because that's how the REST queries are structured 
+  
+  var parentId = boundaryData[0].parent;
   boundaryData.map(boundary =>{
     var id = boundary.id;
-    boundaryInformation[id]=boundary
+    
+    //Special case the districts because they are top level entities and they have no parents. If
+    
+    //parent is 1, then just enter the results as the keys in the object
+
+    boundary = computeRouterPathForEntity(boundary)
+
+    if(parentId == 1)
+    {
+      boundariesByParentId[id]=[];
+    }
+    else
+    { 
+      if(!boundariesByParentId[parentId])
+      {
+        boundariesByParentId[parentId]=[];
+      }
+      else
+        boundariesByParentId[parentId].push(boundary.id);
+    }
+    boundaryInformation[id]=boundary;
   })
-  return boundaryInformation; 
+  /*
+    results.reduce(function(soFar, currentValue){
+      soFar[currentValue.parent] = currentValue.id;
+      return soFar;
+    })
+  */
+  return {boundaryDetails: boundaryInformation, boundariesByParentId: boundariesByParentId}; 
 }
 
-export function entities(state = {boundariesByParentId: [], boundaryDetails: []}, action){
+export function entities(state = {boundariesByParentId: {}, boundaryDetails: []}, action){
   switch(action.type) {
     case 'REQUEST_SENT':
         return {...state,isFetching: true}
     case 'RESPONSE_RECEIVED':
-        console.log("Received entities", action.data);        
-        return { ...state, boundaryDetails: processBoundaryDetails(action.data)}
+        console.log("Received entities", action.data);   
+        return Object.assign({},state, processBoundaryDetails(action.data, state.boundariesByParentId))
     case 'REQUEST_FAILED':
         console.log("Server request failed", action.error);
         return { ...state, error: action.error, statusCode: action.statusCode, statusText: action.statusText, isFetching: false}

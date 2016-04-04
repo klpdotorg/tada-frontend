@@ -8,7 +8,7 @@ export default class MainContentWrapper extends React.Component {
 	{
 		return (
 			<div id="wrapper" className="main__wrapper">
-				<SideBar onBoundaryClick={this.props.onBoundaryClicked} boundaries={this.props.boundaries} boundaryDetails={this.props.boundaryDetails} boundaryParentChildMap={this.props.boundaryParentChildMap}/>
+				<SideBar/>
 				<MainContentArea children={this.props.children}/>
 			</div>
 		);

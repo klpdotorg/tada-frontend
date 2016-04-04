@@ -5,9 +5,9 @@ import TadaStore from '../stores/TadaStore';
 let PrimaryBlock = React.createClass({ 
 
   render() {
-  	var block = TadaStore.getBoundaryDetailsById(this.props.params.blockId);
+  	var block = this.props.boundaryDetails[this.props.params.blockId];
   	var blockPath = "#" + block.path;
-  	var district = TadaStore.getBoundaryDetailsById(this.props.params.districtId);
+  	var district = this.props.boundaryDetails[this.props.params.districtId];
   	var districtPath = "#" + district.path;
     return(
     	<div>

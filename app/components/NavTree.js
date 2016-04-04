@@ -11,12 +11,12 @@ const SchoolsNavTree = React.createClass({
 
  /* Called when a component is reacting to a props change. Invoked before render is called. */
   componentWillReceiveProps: function(nextProps){
-    console.log('SchoolsNavTree componentWillReceiveProps', nextProps.boundaries);
+    console.log('SchoolsNavTree componentWillReceiveProps', nextProps.boundaryDetails);
   },
 
   componentDidMount: function()
   {
-    console.log('Treeview componentdidmount..', this.props.boundaries);
+    console.log('Treeview componentdidmount..', this.props.boundaryDetails);
 
   },
 
@@ -73,7 +73,7 @@ const SchoolsNavTree = React.createClass({
 
 //boundaryDetails={this.state.boundaryDetails} boundaryParentChildMap={this.state.childrenByParentId}
   render: function() {
-    var copyOfMap = $.extend(true, {}, this.props.boundaryParentChildMap);
+    var copyOfMap = $.extend(true, {}, this.props.boundariesByParentId);
     var firstElement = Object.keys(copyOfMap);
     var visitedBoundaries = [];
       return (
@@ -88,7 +88,7 @@ const SchoolsNavTree = React.createClass({
       );
 
 
-  },
+  }
 });
 
 export default SchoolsNavTree;

@@ -43,6 +43,7 @@ class TadaContainer extends Component{
   componentWillMount()
   {
     const {dispatch} = this.props;
+    console.log("TadaContainer props", this.props);
    // dispatch(fetchBoundaryDetails(1));
   }
 

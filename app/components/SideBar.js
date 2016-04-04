@@ -9,11 +9,11 @@ var SideBar = React.createClass ({
     	return {isExpanded: false, results: []};
   	},
 	componentDidMount() {
-    console.log("In Sidebar:", this.props.boundaries);
+    console.log("In Sidebar:", this.props.boundariesByParentId);
   },
    /* Called when a component is reacting to a props change. Invoked before render is called. */
   componentWillReceiveProps(nextProps){
-    console.log('Sidebar componentWillReceiveProps', nextProps.boundaries);
+    console.log('Sidebar componentWillReceiveProps', nextProps.boundariesByParentId);
   },
 
   toggleTree: function(e) {
@@ -22,6 +22,7 @@ var SideBar = React.createClass ({
   },
 
 	render: function() {
+    const {onBoundaryClick, boundariesByParentId, boundaryDetails} = this.props;
   var sidebarClass = classNames({
   'toggled': this.state.isExpanded})
 		return (
@@ -31,7 +32,7 @@ var SideBar = React.createClass ({
                 <span id="toggler-icon" className="glyphicon glyphicon-resize-horizontal"></span>
               </a>
             </div>
-          <div id="treeview_side" className="treeview"><SchoolsNavTree onBoundaryClick={this.props.onBoundaryClick} boundaries={this.props.boundaries} boundaryDetails={this.props.boundaryDetails} boundaryParentChildMap={this.props.boundaryParentChildMap}/></div>
+          <div id="treeview_side" className="treeview"><SchoolsNavTree onBoundaryClick={onBoundaryClick} boundaryDetails={boundaryDetails} boundariesByParentId={boundariesByParentId}/></div>
         </div>
 		);
 	}

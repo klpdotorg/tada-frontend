@@ -46,7 +46,7 @@ class App extends Component{
         <div>
         <HeaderBar/>
         <TreeTogglerSpacingDiv/>
-        <TadaContainer children={this.props.children}/>
+        {/*<TadaContainer children={this.props.children}/>*/}
         <TadaContentContainer children={this.props.children}/>
         </div>
         );
