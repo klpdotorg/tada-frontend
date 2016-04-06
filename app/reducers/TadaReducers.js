@@ -46,6 +46,10 @@ function computeRouterPathForEntity(entity, boundaryDetails)
      
       path = parent.path + "/cluster/" + entity.id;
     }
+    else
+    {
+      path = parent.path + "/institution/" + entity.id
+    }
   }
   entity.path = path;
   return entity;

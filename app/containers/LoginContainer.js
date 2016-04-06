@@ -1,6 +1,6 @@
 import Login from '../components/LoginForm';
 import { connect } from 'react-redux';
-import {sendLoginToServer, fetchUserData} from '../actions/TadaActionCreators2';
+import {sendLoginToServer, fetchUserData} from '../actions/TadaActionCreators';
 
 const mapStateToProps = (state) => {
   console.log("mapStateToProps called", state);

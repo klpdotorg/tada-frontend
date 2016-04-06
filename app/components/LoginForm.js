@@ -3,7 +3,7 @@ import { render } from 'react-dom';
 import { Router, Route, Link } from 'react-router';
 import { connect } from 'react-redux';
 import TadaStore from '../stores/TadaStore';
-import {sendLoginToServer} from '../actions/TadaActionCreators2';
+import {sendLoginToServer} from '../actions/TadaActionCreators';
 import { routeActions, push } from 'react-router-redux';
 
 var klplogo = require('../../assets/images/KLP_logo.png');

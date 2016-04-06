@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {fetchBoundaryDetails} from '../actions/TadaActionCreators2';
+import {fetchEntitiesFromServer} from '../actions/TadaActionCreators';
 import NavBar from '../components/MainNavBar';
 import SideBar from '../components/SideBar';
 import SecondaryNavBar from '../components/SecondaryNavBar';
@@ -25,7 +25,7 @@ class TadaContentContainer extends Component {
 	componentDidMount()
 	{
 		console.log("TadaContentContainer did mount");
-		this.props.fetchBoundaryDetails();
+		this.props.fetchEntityDetails();
 
 	}
 
@@ -61,7 +61,7 @@ var mapDispatchToProps = function(dispatch){
   return {
     onBoundaryClick: function(boundary){
       console.log("onBoundaryClick")
-      dispatch(fetchBoundaryDetails(boundary.id));
+      dispatch(fetchEntitiesFromServer(boundary.id));
     },
     onPrimaryClick: function(){
       console.log("onPrimaryClick")
@@ -69,9 +69,9 @@ var mapDispatchToProps = function(dispatch){
     showPreschoolHierarchy: function() {
       console.log("showPreschoolHierarchy");
     },
-    fetchBoundaryDetails: function() {
+    fetchEntityDetails: function() {
     	console.log("fetch boundaryDetails called");
-    	dispatch(fetchBoundaryDetails(1));
+    	dispatch(fetchEntitiesFromServer(1));
     }
   }
 }
