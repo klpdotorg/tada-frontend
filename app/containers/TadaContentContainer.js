@@ -61,6 +61,7 @@ var mapDispatchToProps = function(dispatch){
   return {
     onBoundaryClick: function(boundary){
       console.log("onBoundaryClick")
+      dispatch(fetchBoundaryDetails(boundary.id));
     },
     onPrimaryClick: function(){
       console.log("onPrimaryClick")

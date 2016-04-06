@@ -23,7 +23,7 @@ export function schoolSelection(state = {schoolTypeSelection: 'PRIMARY_SELECTED'
 /*
 Method computes the router path for an entity and returns it
 */
-function computeRouterPathForEntity(entity)
+function computeRouterPathForEntity(entity, boundaryDetails)
 {
   var parentEntityId = entity.parent;
   var path = '';
@@ -33,7 +33,7 @@ function computeRouterPathForEntity(entity)
   }
   else
   {
-    var parent = this.props.boundaryDetails[entity.parent];
+    var parent = boundaryDetails[entity.parent];
     
     if(entity.boundary_category == "10")
     {
@@ -51,10 +51,10 @@ function computeRouterPathForEntity(entity)
   return entity;
 }
 
-function processBoundaryDetails(boundaryData, boundariesByParentId)
+function processBoundaryDetails(boundaryData, boundariesByParentId, boundaryDetails)
 {
-  var boundaryInformation = {};
-  
+ 
+  var boundaryInformation = {}
   //Making an assumption that the entire set will be the children of a parent
   
   //because that's how the REST queries are structured 
@@ -67,7 +67,7 @@ function processBoundaryDetails(boundaryData, boundariesByParentId)
     
     //parent is 1, then just enter the results as the keys in the object
 
-    boundary = computeRouterPathForEntity(boundary)
+    boundary = computeRouterPathForEntity(boundary, boundaryDetails)
 
     if(parentId == 1)
     {
@@ -90,7 +90,9 @@ function processBoundaryDetails(boundaryData, boundariesByParentId)
       return soFar;
     })
   */
-  return {boundaryDetails: boundaryInformation, boundariesByParentId: boundariesByParentId}; 
+  var mergedBoundaryDetails = {}
+  Object.assign(mergedBoundaryDetails, boundaryDetails, boundaryInformation);
+  return {boundaryDetails: mergedBoundaryDetails, boundariesByParentId: boundariesByParentId}; 
 }
 
 export function entities(state = {boundariesByParentId: {}, boundaryDetails: []}, action){
@@ -99,7 +101,7 @@ export function entities(state = {boundariesByParentId: {}, boundaryDetails: []}
         return {...state,isFetching: true}
     case 'RESPONSE_RECEIVED':
         console.log("Received entities", action.data);   
-        return Object.assign({},state, processBoundaryDetails(action.data, state.boundariesByParentId))
+        return Object.assign({},state, processBoundaryDetails(action.data, state.boundariesByParentId, state.boundaryDetails))
     case 'REQUEST_FAILED':
         console.log("Server request failed", action.error);
         return { ...state, error: action.error, statusCode: action.statusCode, statusText: action.statusText, isFetching: false}
