@@ -56,6 +56,7 @@ export function requestLogin(username){
 }
 
 function loginSuccess(authtoken){
+	//This belongs in the reducer?
 	sessionStorage.setItem('token', authtoken);
 	return {
 		type: 'LOGIN_SUCCESS',
@@ -72,6 +73,22 @@ function loginError()
 		authenticated: false
 	}
 }
+
+function requestLogout(username){
+	return {
+		type: 'LOGOUT_REQUESTED',
+		username
+	}
+}
+
+export function logoutUser(username){
+	return function(dispatch, getState){
+		dispatch(requestLogout(username));
+		sessionStorage.delete('token');
+	}
+}
+
+
 
 function userDataFetched(data)
 {

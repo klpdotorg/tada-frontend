@@ -7,7 +7,6 @@ require('bootstrap/dist/css/bootstrap.css');
 require('font-awesome/css/font-awesome.css');
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
-import auth from './components/Auth';
 import Dashboard from './components/Dashboard';
 import {DefaultRoute, Router, Link, Route, RouteHandler, IndexRoute, browserHistory } from 'react-router';
 import {Provider} from 'react-redux';

@@ -1,7 +1,6 @@
 import React from 'react';
 import TreeView from 'react-treeview';
 import {Link} from 'react-router';
-import TadaStore from '../stores/TadaStore';
 
 
 // For the sake of simplicity, we're gonna use `defaultCollapsed`. Usually, a

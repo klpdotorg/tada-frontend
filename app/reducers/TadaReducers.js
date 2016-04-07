@@ -117,24 +117,13 @@ export function entities(state = {boundariesByParentId: {}, boundaryDetails: []}
 export function login(state={authenticated: false, isLoggingIn: false, error: false, token: ''}, action){
   switch(action.type) {
     case 'REQUEST_LOGIN':
-      return Object.assign({}, state, {
-          authenticated: false,
-          isLoggingIn: true
-        })
+      return {...state, authenticated: false, isLoggingIn: true}
     case 'LOGIN_FAILED':
-      return Object.assign({}, state, {
-        authenticated: action.authenticated,
-        isLoggingIn: false,
-        error: true
-      })
+      return {...state, authenticated: action.authenticated, isLoggingIn: false,error: true}
     case 'LOGIN_SUCCESS':
-      return Object.assign({}, state, {
-        authenticated: action.authenticated,
-        token: action.auth_token,
-        isLoggingIn: false,
-        error: false
-      })
-
+      return {...state, authenticated: action.authenticated, token: action.auth_token, isLoggingIn: false,error: false}
+    case 'USER_DATA_FETCHED':
+      return {...state, username: action.username}
     default:
       return state;
   }

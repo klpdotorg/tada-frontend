@@ -1,17 +1,16 @@
 import React from 'react';
-import TadaStore from '../stores/TadaStore';
 
 
 let Institution = React.createClass({ 
 
   render() {
-  	var block = TadaStore.getBoundaryDetailsById(this.props.params.blockId);
+  	var block = this.props.boundaryDetails(this.props.params.blockId);
     var blockPath = "#" + block.path;
-    var district = TadaStore.getBoundaryDetailsById(this.props.params.districtId);
+    var district = this.props.boundaryDetails(this.props.params.districtId);
     var districtPath = "#" + district.path;
-    var cluster = TadaStore.getBoundaryDetailsById(this.props.params.clusterId);
+    var cluster = this.props.boundaryDetails(this.props.params.clusterId);
     var clusterPath = "#" + cluster.path;
-    var institution = TadaStore.getBoundaryDetailsById(this.props.params.institutionId);
+    var institution = this.props.boundaryDetails(this.props.params.institutionId);
     var institutionPath = "#" + institution.path;
     return(
       <div className="container-fluid">

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {fetchEntitiesFromServer} from '../actions/TadaActionCreators';
+import {fetchEntitiesFromServer, logoutUser} from '../actions/TadaActionCreators';
 import NavBar from '../components/MainNavBar';
 import SideBar from '../components/SideBar';
 import SecondaryNavBar from '../components/SecondaryNavBar';
@@ -54,7 +54,9 @@ var mapStateToProps = function(state){
   return {
   	boundaryDetails: state.entities.boundaryDetails, 
   	boundariesByParentId: state.entities.boundariesByParentId,
-  	routerState: state.routing}
+  	routerState: state.routing,
+  	username: state.login.username
+  }
 }
 
 var mapDispatchToProps = function(dispatch){
@@ -72,6 +74,11 @@ var mapDispatchToProps = function(dispatch){
     fetchEntityDetails: function() {
     	console.log("fetch boundaryDetails called");
     	dispatch(fetchEntitiesFromServer(1));
+    },
+
+    handleLogout: function() {
+    	dispatch(logoutUser('deleteme'));
+    	//Figure out REST call for logout
     }
   }
 }

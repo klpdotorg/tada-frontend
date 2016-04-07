@@ -2,7 +2,6 @@ import React, {Component, PropTypes} from 'react';
 import { render } from 'react-dom';
 import { Router, Route, Link } from 'react-router';
 import { connect } from 'react-redux';
-import TadaStore from '../stores/TadaStore';
 import {sendLoginToServer} from '../actions/TadaActionCreators';
 import { routeActions, push } from 'react-router-redux';
 
