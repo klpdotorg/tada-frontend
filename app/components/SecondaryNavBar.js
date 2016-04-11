@@ -2,8 +2,43 @@
 * Secondary navigation bar for filtering/search etc..
 */
 import React, {Component} from 'react';
+import Modal from 'react-modal'
+
+const customStyles = {
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)'
+  }
+};
+
 
 export default class SecondaryNavBar extends React.Component{
+  constructor(props) {
+    super(props)
+    this.openModal = this.openModal.bind(this)
+    this.closeModal = this.closeModal.bind(this)
+    this.state = {
+      districtModalOpen: false
+    }
+  }
+
+  openModal(modalType) {
+    this.setState({
+      [modalType]: true
+    })
+  }
+
+  closeModal(modalType) {
+    this.setState({
+      [modalType]: false
+    })
+  }
+
+
 	render() {
 		return(
 			<div className="container-fluid">
@@ -22,9 +57,21 @@ export default class SecondaryNavBar extends React.Component{
 			<button type="button" className="btn btn-info navbar-btn all-padded-btn" data-toggle="tooltip" data-placement="bottom" title="Map Assessments"><span className="fa fa-table"></span></button>
 			<button type="button" className="btn btn-info navbar-btn all-padded-btn" data-toggle="tooltip" data-placement="bottom" title="Add User"><span className="fa fa-user-plus"></span></button>
 			<button type="button" className="btn btn-info navbar-btn all-padded-btn" data-toggle="tooltip" data-placement="bottom" title="Manage Permissions"><span className="fa fa-key"></span></button>
-			<button type="button" className="btn btn-info navbar-btn all-padded-btn" data-toggle="tooltip" data-placement="bottom" title="Create District"><span className="fa fa-map-marker"></span></button>
+			<button type="button" className="btn btn-info navbar-btn all-padded-btn" onClick={this.openModal.bind(null, 'districtModalOpen')} data-toggle="tooltip" data-placement="bottom" title="Create District"><span className="fa fa-map-marker"></span></button>
 			<button type="button" className="btn btn-primary navbar-btn all-padded-btn"><span className="glyphicon glyphicon-filter"></span> Filter by Programs</button>
   </p>
+
+    <Modal
+      isOpen={this.state.districtModalOpen}
+      onRequestClose={this.closeModal.bind(null, 'districtModalOpen')}
+      style={
+        customStyles
+      }
+    >
+    <label htmlFor="district" className="control-label">District</label>
+    <input id="district" type="text" className="form-control" placeholder="Text input" />
+    </Modal>
+
   		</div>
 	);
 	}
