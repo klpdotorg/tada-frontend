@@ -25,7 +25,7 @@ Method computes the router path for an entity and returns it
 */
 function computeRouterPathForEntity(entity, boundaryDetails)
 {
-  var parentEntityId = entity.parent;
+  var parentEntityId = getParentId(entity);
   var path = '';
   if(parentEntityId == 1)
   {
@@ -33,7 +33,7 @@ function computeRouterPathForEntity(entity, boundaryDetails)
   }
   else
   {
-    var parent = boundaryDetails[entity.parent];
+    var parent = boundaryDetails[parentEntityId];
     
     if(entity.boundary_category == "10")
     {
@@ -46,13 +46,42 @@ function computeRouterPathForEntity(entity, boundaryDetails)
      
       path = parent.path + "/cluster/" + entity.id;
     }
-    else
+    else if(entity.institution_gender)
     {
       path = parent.path + "/institution/" + entity.id
+      
+    }
+    else if(entity.group_type)
+    {
+      path = parent.path + "/" + entity.id + "/studentgroups/"
     }
   }
   entity.path = path;
   return entity;
+}
+
+/*
+Function returns the parent of a particular entity given the entity. This is data massaging on the client side
+because for institutions, the parent id is represented as "boundary" in the JSON. Whereas, for boundaries, it is
+represented as parent. We are treating everything as an "entity" and thus the need to abstract this away.
+*/
+function getParentId(entity)
+{
+  var parent = -1;
+  //Hack to figure out if we're dealing with a school or something else. This won't work. FIX IT!
+  if(entity.institution_gender)
+  {
+    parent = entity.boundary
+  }
+  else if(entity.group_type)
+  {
+    parent=entity.institution
+  }
+  else
+  {
+    parent = entity.parent
+  }
+  return parent;
 }
 
 function processBoundaryDetails(boundaryData, boundariesByParentId, boundaryDetails)
@@ -63,37 +92,41 @@ function processBoundaryDetails(boundaryData, boundariesByParentId, boundaryDeta
   
   //because that's how the REST queries are structured 
   
-  var parentId = boundaryData[0].parent;
-  boundaryData.map(boundary =>{
-    var id = boundary.id;
-    
-    //Special case the districts because they are top level entities and they have no parents. If
-    
-    //parent is 1, then just enter the results as the keys in the object
+  if(boundaryData.length > 0)
+  {
+    //Get the parent so we can compute router path
+    var parentId = getParentId(boundaryData[0]);
+    boundaryData.map(boundary =>{
+      var id = boundary.id;
+      
+      //Special case the districts because they are top level entities and they have no parents. If
+      
+      //parent is 1, then just enter the results as the keys in the object
 
-    boundary = computeRouterPathForEntity(boundary, boundaryDetails)
+      boundary = computeRouterPathForEntity(boundary, boundaryDetails)
 
-    if(parentId == 1)
-    {
-      boundariesByParentId[id]=[];
-    }
-    else
-    { 
-      if(!boundariesByParentId[parentId])
+      if(parentId == 1)
       {
-        boundariesByParentId[parentId]=[];
+        boundariesByParentId[id]=[];
       }
       else
-        boundariesByParentId[parentId].push(boundary.id);
-    }
-    boundaryInformation[id]=boundary;
-  })
+      { 
+        if(!boundariesByParentId[parentId])
+        {
+          boundariesByParentId[parentId]=[];
+        }
+        else
+          boundariesByParentId[parentId].push(boundary.id);
+      }
+      boundaryInformation[id]=boundary;
+    })
   /*
     results.reduce(function(soFar, currentValue){
       soFar[currentValue.parent] = currentValue.id;
       return soFar;
     })
   */
+} 
   var mergedBoundaryDetails = {}
   Object.assign(mergedBoundaryDetails, boundaryDetails, boundaryInformation);
   return {boundaryDetails: mergedBoundaryDetails, boundariesByParentId: boundariesByParentId}; 

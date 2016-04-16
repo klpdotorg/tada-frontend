@@ -18,6 +18,7 @@ class HeaderBar extends React.Component {
   	}
 
 	render() {
+		console.log("HeaderBar username is: ", this.props.username);
 		return (			
 		<nav className="main__header navbar navbar-white navbar-fixed-top">
 			<div id="header" className="container-fluid">

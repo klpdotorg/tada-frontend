@@ -148,13 +148,52 @@ export function fetchBoundaryDetails(parentBoundaryId)
   	}
   }
 
+function isInstitution(parentEntity)
+{
+	if(parentEntity.institution_gender)
+		return true
+	return false
+}
+
+function isStudentGroup(parentEntity)
+{
+
+}
+
+function isBoundary(parentEntity)
+{
+	if(parentEntity.boundary_category)
+		return true
+	return false
+}
+
+function fetchStudentGroupsForInstitution(institutionId)
+{
+	return function(dispatch, getState)
+  	{
+  		var url = "http://tadadev.klp.org.in/api/v1/institutions/" + institutionId + "/studentgroups/";
+  		return fetch(url,{
+  			method: 'GET',
+  			headers: {
+  				'Content-Type': 'application/json',
+  				'Authorization': 'Token ' + sessionStorage.token
+  			}
+  		}). then(checkStatus). then(data=> {
+  			dispatch(responseReceivedFromServer(data))
+  		}). catch(error => {
+  			dispatch(requestFailed(error))
+  		})
+  	}
+}
 /*
-This function decides whether we need to go to the boundaries endpoint or the institutions endpoint for data
+This function decides whether we need to go to the boundaries endpoint or the institutions endpoint or studentgroup/students endpoint for data.
+Everything is just one big nav tree in the UI.
 */
 export function fetchEntitiesFromServer(parentBoundaryId)
 {
 	return function(dispatch, getState)
 	{
+		const state = getState()
 	  	var parentId=-1;
 	    //Set it to 1 if there's no parent passed in.
 	  	if(!parentBoundaryId)
@@ -167,23 +206,41 @@ export function fetchEntitiesFromServer(parentBoundaryId)
 	  	}
 	  	//Initialize to the primary's district category (10)
 	  	var parentBoundaryCat = 10;
-		if(getState().schools.schoolTypeSelection == "PRESCHOOL_SELECTED")
+		if(state.schools.schoolTypeSelection == "PRESCHOOL_SELECTED")
 	      parentBoundaryCat = 13;
 	  	//If we have boundary details already and this is not the root district, then we retrieve the parent boundary category
 	  	// from the boundary itself. We need to identify whether this is an institution or a boundary and call the appropriate endpoint
-	    if(getState().entities.boundaryDetails.length >0 && parentId!=1)
+	    if(!jQuery.isEmptyObject(state.entities.boundaryDetails) && parentId!=1)
 	    {
-	      parentBoundaryCat = getState().entities.boundaryDetails[parentId].boundary_category;
-	    }
-	    //If boundary type is a circle (preschool, 15) or a cluster (primary, 11), then fetch from the institutions endpoint
-	    if(parentBoundaryCat == 11 || parentBoundaryCat == 15)
-	    {
-	      dispatch(fetchInstitutionDetails(parentId));
-	    }
-	    else
-	    {
-	      dispatch(fetchBoundaryDetails(parentId));
-	    }
+	   		//If the parent is a boundary, then figure out whether to branch off to the institutions endpoint or boundaries
+		  	if(isBoundary(state.entities.boundaryDetails[parentId]))
+		  	{
+		  		parentBoundaryCat = state.entities.boundaryDetails[parentId].boundary_category;
+			    //If boundary category is a circle (preschool, 15) or a cluster (primary, 11), then fetch from the institutions endpoint
+			    if(parentBoundaryCat == 11 || parentBoundaryCat == 15)
+			    {
+			      dispatch(fetchInstitutionDetails(parentId));
+			    }
+			    else
+			    {
+			      dispatch(fetchBoundaryDetails(parentId));
+			    }
+			}
+			//If the parent is an Institution, go to studentgroups endpoint to fetch student groups data
+			else if(isInstitution(state.entities.boundaryDetails[parentId]))
+			{
+				dispatch(fetchStudentGroupsForInstitution(parentId))
+			}
+			//Fetch students data because this is the only other option
+			else
+			{
+
+			}
+		}
+		else
+		{
+			dispatch(fetchBoundaryDetails(parentId));
+		}
 	}	
 }
 
@@ -198,7 +255,7 @@ export function fetchUserData(token)
     	},        
       }). then(checkStatus(response))
       . then(data => {
-      	dispatch(userDataFetched(data))
+      	dispatch(userDataFetched(data)) 
       . catch(error => { dispatch(requestFailed(error));
 	    	console.log('request failed', error)})
       })
