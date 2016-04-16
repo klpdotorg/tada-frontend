@@ -1,7 +1,6 @@
 import React from 'react';
 import TreeView from 'react-treeview';
 import {Link} from 'react-router';
-import TadaStore from '../stores/TadaStore';
 
 
 // For the sake of simplicity, we're gonna use `defaultCollapsed`. Usually, a
@@ -11,12 +10,12 @@ const SchoolsNavTree = React.createClass({
 
  /* Called when a component is reacting to a props change. Invoked before render is called. */
   componentWillReceiveProps: function(nextProps){
-    console.log('SchoolsNavTree componentWillReceiveProps', nextProps.boundaries);
+    console.log('SchoolsNavTree componentWillReceiveProps', nextProps.boundaryDetails);
   },
 
   componentDidMount: function()
   {
-    console.log('Treeview componentdidmount..', this.props.boundaries);
+    console.log('Treeview componentdidmount..', this.props.boundaryDetails);
 
   },
 
@@ -25,7 +24,7 @@ const SchoolsNavTree = React.createClass({
   },
 
   handleClick: function(boundary){
-    this.props.onBoundaryClick({id: boundary.id, type: boundary.boundary_type});
+    this.props.onBoundaryClick(boundary);
   },
 
 
@@ -48,10 +47,10 @@ const SchoolsNavTree = React.createClass({
       visitedBoundaries.push(node);
 
       var boundary = this.props.boundaryDetails[node];
-      const label = <Link key={boundary.name} to={boundary.path}><span className="node"> {boundary.name} </span></Link>;
+      const label = <Link key={boundary.name} to={boundary.path} onClick={this.props.onBoundaryClick.bind(null,boundary)}><span className="node"> {boundary.name} </span></Link>;
       return (
 
-                 <TreeView key={node} onClick={this.props.onBoundaryClick.bind(null,{id: boundary.id, type: boundary.boundary_type})} nodeLabel={label} defaultCollapsed={true} >
+                 <TreeView key={node} onClick={this.props.onBoundaryClick.bind(null,boundary)} nodeLabel={label} defaultCollapsed={true} >
                     {
                       (() => {
                         console.log("Creating TreeView");
@@ -73,7 +72,7 @@ const SchoolsNavTree = React.createClass({
 
 //boundaryDetails={this.state.boundaryDetails} boundaryParentChildMap={this.state.childrenByParentId}
   render: function() {
-    var copyOfMap = $.extend(true, {}, this.props.boundaryParentChildMap);
+    var copyOfMap = $.extend(true, {}, this.props.boundariesByParentId);
     var firstElement = Object.keys(copyOfMap);
     var visitedBoundaries = [];
       return (
@@ -88,7 +87,7 @@ const SchoolsNavTree = React.createClass({
       );
 
 
-  },
+  }
 });
 
 export default SchoolsNavTree;

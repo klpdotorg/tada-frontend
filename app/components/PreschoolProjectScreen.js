@@ -1,14 +1,13 @@
 import React from 'react';
-import TadaStore from '../stores/TadaStore';    
 
 var PreschoolProject = React.createClass({ 
 
   render() { 
     console.log("Inside preschoolProject render");
-  	var project = TadaStore.getBoundaryDetailsById(this.props.params.projectId);
+  	var project = this.props.boundaryDetails(this.props.params.projectId);
     //Prepend the hash. Really figure out why react-router is inserting hash and get rid of it if possible
   	var projectPath = "#" + project.path;
-  	var district = TadaStore.getBoundaryDetailsById(this.props.params.districtId);
+  	var district = this.props.boundaryDetails(this.props.params.districtId);
   	var districtPath = "#" + district.path;
   	
     return(

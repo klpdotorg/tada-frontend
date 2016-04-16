@@ -1,12 +1,11 @@
 import React from 'react';
-import TadaStore from '../stores/TadaStore';
 
 
 let PrimaryDistrict = React.createClass({ 
 
   render() {
   	var districtId = this.props.params.districtId;
-  	var boundary = TadaStore.getBoundaryDetailsById(districtId);
+  	var boundary = this.props.boundaryDetails[districtId];
   	var districtPath = "#" + boundary.path;
     return(
     	<div>

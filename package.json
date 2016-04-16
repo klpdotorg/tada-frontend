@@ -4,16 +4,18 @@
   "description": "Frontend for TADA built using React.js",
   "main": "webpack.config.js",
   "scripts": {
-    "dev": "mkdir -p dist && cp index.html dist/index.html && webpack-dev-server --devtool source-map --inline --progress --colors --content-base dist",
+    "dev": "mkdir -p dist && cp index.html dist/index.html && webpack-dev-server --devtool source-map --inline --progress --colors --content-base dist --history-api-fallback",
     "deploy": "webpack  && cp index.html dist/index.html"
   },
   "dependencies": {
     "bootstrap": "^3.3.6",
     "classnames": "^2.2.0",
+    "es6-promise": "^3.1.2",
     "event-emitter": "^0.3.4",
     "events": "^1.1.0",
     "flux": "^2.1.1",
     "font-awesome": "^4.5.0",
+    "isomorphic-fetch": "^2.2.1",
     "jquery": "^2.2.1",
     "keymirror": "^0.1.1",
     "lodash": "^3.10.1",
@@ -21,7 +23,12 @@
     "object-assign": "^4.0.1",
     "react": "^0.14.1",
     "react-dom": "^0.14.1",
-    "react-treeview": "^0.4.3"
+    "react-redux": "^4.4.0",
+    "react-router-redux": "^4.0.0",
+    "react-treeview": "^0.4.3",
+    "redux-thunk": "^2.0.1",
+    "whatwg-fetch": "^0.11.0",
+    "react-router": "^2.0.0"
   },
   "devDependencies": {
     "babel-core": "^5.0.0",
@@ -30,7 +37,7 @@
     "history": "^1.13.1",
     "jsx-loader": "^0.13.2",
     "node-sass": "^3.3.3",
-    "react-router": "^1.0.0",
+
     "file-loader": "^0.8.5",
     "sass-loader": "^3.1.1",
     "style-loader": "^0.13.0",

@@ -3,10 +3,8 @@
 */
 
 import React, { Component } from 'react';
-import auth from './Auth';
 import {Link} from 'react-router';
 import klplogo from '../../assets/images/KLP_logo.png';
-import TadaStore from '../stores/TadaStore';
 
 class HeaderBar extends React.Component {
 	contextTypes: {
@@ -19,19 +17,8 @@ class HeaderBar extends React.Component {
   		
   	}
 
-	handleLogout()
-	{
-		auth.logout();
-	}
-
-	
-
- 
-
 	render() {
-		var userinfo = $.parseJSON(sessionStorage.getItem('userdata'));
-
-		console.log("sessionStorage username is ", userinfo);
+		console.log("HeaderBar username is: ", this.props.username);
 		return (			
 		<nav className="main__header navbar navbar-white navbar-fixed-top">
 			<div id="header" className="container-fluid">
@@ -45,11 +32,11 @@ class HeaderBar extends React.Component {
      		<p className="app-name navbar-text pull-left">Data Entry Operations 2015-2016</p>
      		<p className="navbar-text pull-right">
      		<button type="button" className="btn btn-primary padded-btn"><span className="glyphicon glyphicon-user"></span></button>
-     		<Link to="/logout" onClick={this.handleLogout} className="btn btn-primary padded-btn"><span className="glyphicon glyphicon-off"></span></Link>
+     		<Link to="/logout" onClick={this.props.handleLogout} className="btn btn-primary padded-btn"><span className="glyphicon glyphicon-off"></span></Link>
 
     </p>
 
-    <p className="login-msg navbar-text pull-right">Hello there <span className="fa fa-smile-o"></span> {userinfo.username}! 
+    <p className="login-msg navbar-text pull-right">Hello there <span className="fa fa-smile-o"></span> {this.props.username}! 
   	</p></div>
 			</div>
 		</nav>

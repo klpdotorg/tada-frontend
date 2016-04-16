@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import { render } from 'react-dom';
 import ReactDOM from 'react-dom';
-import auth from './Auth';
 import {Link} from 'react-router';
 var klplogo = require('../../assets/images/KLP_logo.png');
 

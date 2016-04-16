@@ -1,95 +1,91 @@
 /* Main entry point for the app. Start here to understand the UI composition */
+require('es6-promise').polyfill();
+require('isomorphic-fetch');
 require('../assets/sass/lato.scss');
 require('../assets/sass/style.scss');
 require('bootstrap/dist/css/bootstrap.css');
 require('font-awesome/css/font-awesome.css');
-import React from 'react';
+import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
-import auth from './components/Auth';
 import Dashboard from './components/Dashboard';
-
-import { browserHistory, DefaultRoute, Router, Link, Route, RouteHandler, IndexRoute } from 'react-router';
-
+import {DefaultRoute, Router, Link, Route, RouteHandler, IndexRoute, browserHistory } from 'react-router';
+import {Provider} from 'react-redux';
 import PrimaryDistrict from './components/PrimaryDistrictScreen';
 import PrimaryBlock from './components/PrimaryBlockScreen';
 import PrimaryCluster from './components/PrimaryClusterScreen';
 import PreschoolProject from './components/PreschoolProjectScreen';
 import PreschoolCircle from './components/PreschoolCircleScreen';
 import Institution from './components/InstitutionDetailsScreen';
-import createHistory from 'history/lib/createHashHistory';
-import Login from './components/LoginForm';
+// import createBrowserHistory from 'history/lib/createBrowserHistory';
+import LoginContainer from './containers/LoginContainer';
 import HeaderBar from './components/MainHeader';
 import TreeTogglerSpacingDiv from './components/TreeTogglerSpacingDiv';
 import TadaContainer from './components/TadaContainer';
 import Logout from './components/Logout';
-import { createHashHistory } from 'history';
+import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
+import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
+import thunk from 'redux-thunk';
+import {schoolSelection, entities, login} from './reducers/TadaReducers';
+import TadaContentContainer from './containers/TadaContentContainer';
+//const browserHistory = createBrowserHistory()
 
+class App extends Component{
 
-var App = React.createClass({
-  getInitialState: function() {
-      return {
-        loggedIn: auth.loggedIn()
-      }
-    },
+    componentDidMount() {
+      console.log('app component did mount. much wow');
+    }
 
-    updateAuth: function(loggedIn) {
-      this.setState({
-        loggedIn: loggedIn
-      })
-    },
+    componentWillReceiveProps(newProps) {
+      
+    }
 
-  componentWillMount: function()
-  {
-     
-      //auth.onChange = this.updateAuth;
-      //auth.login();
-  },
-
-  componentDidMount: function() {
-        console.log('app component did mount. much wow');
-        auth.onChange = this.updateAuth;
-    },
-
-
-
-    componentWillReceiveProps: function(newProps) {
-        console.log('app container will receive props', arguments);
-        console.log('thisProps', this.props.params);
-        console.log('thisState', this.state);
-        console.log('just this', this);
-        console.log('app children', this.props.children);
-    },
-
-  render: function()
-  {
-    return (
-      <div>
+    render()
+    {
+      return (
+        <div>
         <HeaderBar/>
         <TreeTogglerSpacingDiv/>
-        <TadaContainer children={this.props.children}/>
-
-      </div>
-    );
+        {/*<TadaContainer children={this.props.children}/>*/}
+        <TadaContentContainer children={this.props.children}/>
+        </div>
+        );
+    }
   }
-});
 
-
-
-
-
-var requireAuthentication = function requireAuth(nextState, replaceState)
+function createTadaStore() 
 {
-  if (!auth.loggedIn())
-  {
-    console.log("NEXT STATE:", nextState.location.pathname);
-    replaceState({ nextPathname: nextState.location.pathname }, '/login');
-  }
-  console.log("NEXT STATE:" , nextState.location.pathname);
+  var reducer = combineReducers({
+    schools: schoolSelection,
+    entities: entities,
+    login: login,
+    routing: routerReducer
+  });
+
+  var finalCreateStore = compose(
+    applyMiddleware(thunk),
+    window.devToolsExtension ? window.devToolsExtension() : f => f
+    )(createStore);
+    var store = finalCreateStore(reducer);
+    console.log('Tada store created..');
+    return store
 }
 
-const routes = (
-    <Router history={browserHistory}>
-        <Route path="login" component={Login}/>
+  const tadastore = createTadaStore();
+
+  const history = syncHistoryWithStore(browserHistory, tadastore)
+
+  var requireAuthentication = function requireAuth(nextState, replace)
+  {
+    if (!sessionStorage.getItem('token'))
+    {
+      replace('/login');
+    }
+  }
+
+  const routes = (
+    <Provider store={tadastore}>
+      <Router history={history}>
+        <Route path="login" component={LoginContainer}/>
         <Route path="logout" component={Logout}/>
         <Route path="/" component={App} onEnter={requireAuthentication}>
             <IndexRoute component={Dashboard}/>
@@ -100,10 +96,11 @@ const routes = (
             <Route path="district/:districtId/block/:blockId" component={PrimaryBlock}/>
             <Route path="district/:districtId/block/:blockId/cluster/:clusterId" component={PrimaryCluster}/>
             <Route path="district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId" component={Institution}/>
-
         </Route>
-    </Router>
-);
+      </Router>
+    </Provider>
+    );
 
-ReactDOM.render(routes, document.getElementById('application'));
+
+  ReactDOM.render(routes, document.getElementById('application'));
 

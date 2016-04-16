@@ -12,6 +12,7 @@ module.exports = {
     module: {
       loaders: [
         {test: /\.woff|\.woff2|\.svg|.eot|\.ttf|\.png|\.gif|\.ico|\.html/, loader: 'file-loader'},
+        {test: /\.json$/, loader: 'file-loader'},
         {test: /\.css$/, loader: "style!css"},
         {test: /\.scss$/, loader: 'style!css!sass'},
         {test: /\.js$/, loaders: ['jsx','babel'], exclude: /node_modules/ }
@@ -26,6 +27,7 @@ module.exports = {
             $: "jquery",
             jQuery: "jquery",
              "window.jQuery": "jquery"
-        })
+        }),
+        new webpack.IgnorePlugin(/\/iconv-loader$/)
     ]
 };
