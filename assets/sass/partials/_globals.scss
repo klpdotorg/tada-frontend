@@ -1,0 +1,13 @@
+// mixin: transitions
+@mixin transition($tr-values...) {
+    -webkit-transition: $tr-values;
+    transition: $tr-values;
+}
+
+%transition-linear {
+  @include transition(all 0.2s linear);
+}
+
+%font-icon {
+  font-family: $font-icon;
+}
