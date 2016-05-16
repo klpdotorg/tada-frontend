@@ -13,12 +13,29 @@ const customStyles = {
 };
 
 export default class CreateDistrict extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      value: ''
+    }
+    this.handleChange = this.handleChange.bind(this)
+  }
+
+  handleChange(e) {
+    this.setState({
+      value: e.target.value
+    })
+  }
+
   render() {
     return (
       <Modal isOpen={ this.props.isOpen } onRequestClose={ this.props.onCloseModal } style={ customStyles }>
-        <label htmlFor="district" className="control-label">District</label>
-        <input id="district" type="text" className="form-control" placeholder="" />
-        <div className='button'>Save</div> <div className='button'>Discard</div>
+        <label htmlFor="district" className="control-label">Create new district</label>
+        <input id="district" value={ this.props.value } type="text" className="form-control" placeholder="District Name" onChange={ this.handleChange } />
+        <div className='button' onClick={ () => {
+                                            this.props.save(this.state.value)
+                                          } }>Save</div>
+        <div className='button' onClick={ this.props.closeModal }>Discard</div>
       </Modal>
     )
   }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {fetchEntitiesFromServer, logoutUser} from '../actions/TadaActionCreators';
+import { fetchEntitiesFromServer, logoutUser, saveNewDistrict } from '../actions/TadaActionCreators';
 import NavBar from '../components/MainNavBar';
 import SideBar from '../components/SideBar';
 import SecondaryNavBar from '../components/SecondaryNavBar';
@@ -8,78 +8,83 @@ import MainContentArea from '../components/ContentArea';
 
 class TadaContentContainer extends Component {
 
-	constructor(props)
-	{
-		console.log("TadaContentContainer constructor called")
-		super(props);
-		console.log(this.props.dispatch);
-	}
+  constructor(props) {
+    console.log("TadaContentContainer constructor called")
+    super(props)
+  }
 
-	componentWillMount()
-	{
-		console.log("TadaContentContainer componentWillMount", this.props);
-		const {dispatch} = this.props;
+  componentWillMount() {
+    console.log("TadaContentContainer componentWillMount", this.props);
+    const {dispatch} = this.props;
+  }
 
-	}
+  componentDidMount() {
+    console.log("TadaContentContainer did mount");
+    this.props.fetchEntityDetails();
+  }
 
-	componentDidMount()
-	{
-		console.log("TadaContentContainer did mount");
-		this.props.fetchEntityDetails();
+  componentWillReceiveProps(nextProps) {
+    const {dispatch} = nextProps;
+    console.log("TadaContentContainer Component will receive props", nextProps);
+  }
 
-	}
-
-	componentWillReceiveProps(nextProps)
-	{
-		const {dispatch} = nextProps;
-		console.log("TadaContentContainer Component will receive props", nextProps);
-	}
-
-	render() {
-		console.log('Rendering TadaContentContainer');
-		const {onBoundaryClick, boundaryDetails, boundariesByParentId } = this.props
-    return(
-    	<div>
-    		<NavBar/>
-		  	<SecondaryNavBar/>
-		  	<div id="wrapper" className="main__wrapper">
-				<SideBar onBoundaryClick={onBoundaryClick} boundaryDetails={boundaryDetails} boundariesByParentId={boundariesByParentId}/>
-				<MainContentArea boundaryDetails={boundaryDetails} children={this.props.children}/>
-			</div>
-    	</div>);
-	}
-}
-
-var mapStateToProps = function(state){
-  return {
-  	boundaryDetails: state.entities.boundaryDetails, 
-  	boundariesByParentId: state.entities.boundariesByParentId,
-  	routerState: state.routing,
-  	username: state.login.username
+  render() {
+    console.log('Rendering TadaContentContainer');
+    const {onBoundaryClick, boundaryDetails, boundariesByParentId, saveNewDistrict} = this.props
+    return (
+      <div>
+        <NavBar/>
+        <SecondaryNavBar toggleDistrictModal={ this.props.toggleDistrictModal } districtModalIsOpen={ this.props.districtModalIsOpen } saveNewDistrict={ saveNewDistrict } />
+        <div id="wrapper" className="main__wrapper">
+          <SideBar onBoundaryClick={ onBoundaryClick } boundaryDetails={ boundaryDetails } boundariesByParentId={ boundariesByParentId } />
+          <MainContentArea boundaryDetails={ boundaryDetails } children={ this.props.children } />
+        </div>
+      </div>);
   }
 }
 
-var mapDispatchToProps = function(dispatch){
+var mapStateToProps = function(state) {
   return {
-    onBoundaryClick: function(boundary){
+    boundaryDetails: state.entities.boundaryDetails,
+    boundariesByParentId: state.entities.boundariesByParentId,
+    routerState: state.routing,
+    username: state.login.username,
+    districtModalIsOpen: state.modal.createDistrictModalIsOpen
+  }
+}
+
+var mapDispatchToProps = function(dispatch) {
+  return {
+    onBoundaryClick: function(boundary) {
       console.log("onBoundaryClick")
       dispatch(fetchEntitiesFromServer(boundary.id));
     },
-    onPrimaryClick: function(){
+    onPrimaryClick: function() {
       console.log("onPrimaryClick")
     },
     showPreschoolHierarchy: function() {
       console.log("showPreschoolHierarchy");
     },
     fetchEntityDetails: function() {
-    	console.log("fetch boundaryDetails called");
-    	dispatch(fetchEntitiesFromServer(1));
+      console.log("fetch boundaryDetails called");
+      dispatch(fetchEntitiesFromServer(1));
     },
 
     handleLogout: function() {
-    	dispatch(logoutUser('deleteme'));
-    	//Figure out REST call for logout
+      dispatch(logoutUser('deleteme'));
+    },
+
+    toggleDistrictModal: function() {
+      dispatch({
+        type: 'TOGGLE_CREATE_DISTRICT_MODAL'
+      })
+    },
+
+    saveNewDistrict: function(name) {
+      console.log(name)
+      dispatch(saveNewDistrict(name))
     }
+
   }
 }
-module.exports = connect(mapStateToProps,mapDispatchToProps)(TadaContentContainer);
+module.exports = connect(mapStateToProps, mapDispatchToProps)(TadaContentContainer);

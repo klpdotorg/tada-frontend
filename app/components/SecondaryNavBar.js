@@ -7,8 +7,6 @@ import CreateDistrict from './Modals/CreateDistrict'
 export default class SecondaryNavBar extends React.Component {
   constructor(props) {
     super(props)
-    //this.openModal = this.openModal.bind(this)
-    //this.closeModal = this.closeModal.bind(this)
     this.state = {
       districtModalOpen: false
     }
@@ -25,7 +23,6 @@ export default class SecondaryNavBar extends React.Component {
       [modalType]: false
     })
   }
-
 
   render() {
     return (
@@ -44,14 +41,10 @@ export default class SecondaryNavBar extends React.Component {
           <button type="button" className="btn btn-info navbar-btn all-padded-btn" data-toggle="tooltip" data-placement="bottom" title="Map Assessments"><span className="fa fa-table"></span></button>
           <button type="button" className="btn btn-info navbar-btn all-padded-btn" data-toggle="tooltip" data-placement="bottom" title="Add User"><span className="fa fa-user-plus"></span></button>
           <button type="button" className="btn btn-info navbar-btn all-padded-btn" data-toggle="tooltip" data-placement="bottom" title="Manage Permissions"><span className="fa fa-key"></span></button>
-          <button type="button" className="btn btn-info navbar-btn all-padded-btn" onClick={ () => {
-                                                                                               this.openModal('districtModalOpen')
-                                                                                             } } data-toggle="tooltip" data-placement="bottom" title="Create District"><span className="fa fa-map-marker"></span></button>
+          <button type="button" className="btn btn-info navbar-btn all-padded-btn" onClick={ this.props.toggleDistrictModal } data-toggle="tooltip" data-placement="bottom" title="Create District"><span className="fa fa-map-marker"></span></button>
           <button type="button" className="btn btn-primary navbar-btn all-padded-btn"><span className="glyphicon glyphicon-filter"></span> Filter by Programs</button>
         </p>
-        <CreateDistrict isOpen={ this.state.districtModalOpen } onCloseModal={ () => {
-                                                                                 this.closeModal('districtModalOpen')
-                                                                               } } />
+        <CreateDistrict isOpen={ this.props.districtModalIsOpen } onCloseModal={ this.props.toggleDistrictModal } closeModal={ this.props.toggleDistrictModal } save={ this.props.saveNewDistrict } />
       </div>
       );
   }
