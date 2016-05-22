@@ -1,10 +1,10 @@
 /* Main entry point for the app. Start here to understand the UI composition */
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
-require('../assets/sass/lato.scss');
-require('../assets/sass/style.scss');
 require('bootstrap/dist/css/bootstrap.css');
 require('font-awesome/css/font-awesome.css');
+require('../assets/sass/lato.scss');
+require('../assets/sass/style.scss');
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Dashboard from './components/Dashboard';
@@ -52,11 +52,11 @@ class App extends Component {
 
 function createTadaStore() {
   var reducer = combineReducers({
-    schools: schoolSelection,
-    entities: entities,
-    login: login,
+    schoolSelection,
+    entities,
+    login,
     routing: routerReducer,
-    modal: modal
+    modal
   });
 
   var finalCreateStore = compose(

@@ -47,7 +47,7 @@
 
 /*http://codepen.io/marifrahman/pen/aAEpD*/
 .tab-content{
-  padding:3px 0px 0px 8px; 
+  padding:3px 0px 0px 8px;
   border-top: 1px solid $grey-silver;
   margin-left:1px;
 }
@@ -69,18 +69,23 @@
   color: $white;
 }
 
+.nav > li > a:hover, .nav > li > a:focus {
+    text-decoration: none;
+    background-color: $brand-green;
+}
+
 /*-------------------------TREE TOGGLER-----------------------*/
 
-#treetoggler { 
-  position: fixed; 
+#treetoggler {
+  position: fixed;
   top: 175px;
-  left:15px; 
+  left:15px;
   z-index: 99999;
 }
 
-#treetoggler a:hover { 
+#treetoggler a:hover {
   background: #222;
-  color: #fff; 
+  color: #fff;
 }
 
 /*-------------------------SECONDARY NAV BAR - BUTTONS -----------------------*/

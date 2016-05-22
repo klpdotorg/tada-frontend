@@ -1,24 +1,18 @@
-import AppConstants from '../constants/AppConstants';
-
-var ActionTypes = AppConstants.ActionTypes;
-
 export function schoolSelection(state = {
-    schoolTypeSelection: 'PRIMARY_SELECTED'
+    primarySchool: true
   }, action) {
   switch (action.type) {
-    case ActionTypes.PRIMARY_SELECTED:
-      console.log("Primary selected in reducer");
-      return Object.assign({}, state, {
-        schoolTypeSelection: action.type
-      })
-    case ActionTypes.PRESCHOOL_SELECTED:
-      return Object.assign({}, state, {
-        schoolTypeSelection: action.type
-      })
+    case 'PRIMARY_SELECTED':
+      return {
+        primarySchool: true
+      }
+    case 'PRESCHOOL_SELECTED':
+      return {
+        primarySchool: false
+      }
     default:
       return state
   }
-  return state;
 }
 
 /*
