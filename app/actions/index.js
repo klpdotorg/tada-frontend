@@ -85,8 +85,6 @@ export function logoutUser(username) {
   }
 }
 
-
-
 function userDataFetched(data) {
   return {
     type: 'USER_DATA_FETCHED',
@@ -94,14 +92,12 @@ function userDataFetched(data) {
   }
 }
 
-
-
 export function fetchBoundaryDetails(parentBoundaryId) {
   return function(dispatch, getState) {
 
     var requestBody = {}
     var boundaryType = -1;
-    if (getState().schools.schoolTypeSelection == "PRIMARY_SELECTED")
+    if (getState().schoolSelection.primarySchool)
       boundaryType = 1
     else
       boundaryType = 2;
@@ -190,7 +186,7 @@ export function fetchEntitiesFromServer(parentBoundaryId) {
     }
     //Initialize to the primary's district category (10)
     var parentBoundaryCat = 10;
-    if (state.schools.schoolTypeSelection == "PRESCHOOL_SELECTED")
+    if (!state.schoolSelection.primarySchool)
       parentBoundaryCat = 13;
     //If we have boundary details already and this is not the root district, then we retrieve the parent boundary category
     // from the boundary itself. We need to identify whether this is an institution or a boundary and call the appropriate endpoint

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchEntitiesFromServer, logoutUser, saveNewDistrict } from '../actions/TadaActionCreators';
+import { fetchEntitiesFromServer, logoutUser, saveNewDistrict } from '../actions/';
 import NavBar from '../components/MainNavBar';
 import SideBar from '../components/SideBar';
 import SecondaryNavBar from '../components/SecondaryNavBar';
@@ -9,7 +9,6 @@ import MainContentArea from '../components/ContentArea';
 class TadaContentContainer extends Component {
 
   constructor(props) {
-    console.log("TadaContentContainer constructor called")
     super(props)
   }
 
@@ -24,6 +23,7 @@ class TadaContentContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    console.log('props', nextProps)
     const {dispatch} = nextProps;
     console.log("TadaContentContainer Component will receive props", nextProps);
   }
@@ -33,7 +33,7 @@ class TadaContentContainer extends Component {
     const {onBoundaryClick, boundaryDetails, boundariesByParentId, saveNewDistrict} = this.props
     return (
       <div>
-        <NavBar/>
+        <NavBar onPrimaryClick={ this.props.onPrimaryClick } onPreSchoolClick={ this.props.onPreSchoolClick } primarySelected={ this.props.primarySelected } />
         <SecondaryNavBar toggleDistrictModal={ this.props.toggleDistrictModal } districtModalIsOpen={ this.props.districtModalIsOpen } saveNewDistrict={ saveNewDistrict } />
         <div id="wrapper" className="main__wrapper">
           <SideBar onBoundaryClick={ onBoundaryClick } boundaryDetails={ boundaryDetails } boundariesByParentId={ boundariesByParentId } />
@@ -49,7 +49,8 @@ var mapStateToProps = function(state) {
     boundariesByParentId: state.entities.boundariesByParentId,
     routerState: state.routing,
     username: state.login.username,
-    districtModalIsOpen: state.modal.createDistrictModalIsOpen
+    districtModalIsOpen: state.modal.createDistrictModalIsOpen,
+    primarySelected: state.schoolSelection.primarySchool
   }
 }
 
@@ -60,10 +61,14 @@ var mapDispatchToProps = function(dispatch) {
       dispatch(fetchEntitiesFromServer(boundary.id));
     },
     onPrimaryClick: function() {
-      console.log("onPrimaryClick")
+      dispatch({
+        type: 'PRIMARY_SELECTED'
+      })
     },
-    showPreschoolHierarchy: function() {
-      console.log("showPreschoolHierarchy");
+    onPreSchoolClick: function() {
+      dispatch({
+        type: 'PRESCHOOL_SELECTED'
+      })
     },
     fetchEntityDetails: function() {
       console.log("fetch boundaryDetails called");
