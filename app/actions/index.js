@@ -3,24 +3,13 @@ import config from '../config.js';
 
 const serverApiBase = config.PROD_SERVER_API_BASE;
 
-export function selectPrimarySchool() {
-  return {
-    type: 'PRIMARY_SELECTED'
-  }
-}
-
 export function showPrimarySchoolHierarchy() {
   return function(dispatch) {
     dispatch(selectPrimarySchool)
     return dispatch(fetchEntities(1, 1))
   }
 }
-export function showPreschoolHierarchy() {
-  console.log("show preschool hierarchy action creator")
-  return {
-    type: 'PRESCHOOL_SELECTED'
-  }
-}
+
 function requestDataFromServer() {
   return {
     type: 'REQUEST_SENT',
@@ -305,7 +294,3 @@ export function saveNewDistrict(name) {
     })
   }
 }
-
-
-
-
