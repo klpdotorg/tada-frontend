@@ -20,7 +20,6 @@ import Institution from './components/InstitutionDetailsScreen';
 import LoginContainer from './containers/LoginContainer';
 import HeaderBar from './components/MainHeader';
 import TreeTogglerSpacingDiv from './components/TreeTogglerSpacingDiv';
-import TadaContainer from './components/TadaContainer';
 import Logout from './components/Logout';
 import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
 import { syncHistoryWithStore, routerReducer } from 'react-router-redux'

@@ -12,7 +12,6 @@ class Login extends Component {
 
   constructor(props) {
     super(props);
-    //var redirectRoute = this.props.location.query.next || '/login';
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
@@ -32,13 +31,8 @@ class Login extends Component {
     this.props.onLoginSubmit(email, pass, this.props.location, this.props.history);
   }
 
-
-
   render() {
     const {authenticated, token, error} = this.props
-    console.log("Login render authenticated: ", this.props.authenticated);
-    console.log("Login render token: ", this.props.token);
-    console.log("Login render error: ", this.props.error);
 
     return (
       <div id="login-page">
