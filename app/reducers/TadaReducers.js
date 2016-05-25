@@ -118,10 +118,8 @@ export function entities(state = {
         isFetching: true
       }
     case 'RESPONSE_RECEIVED':
-      console.log("Received entities", action.data);
       return Object.assign({}, state, processBoundaryDetails(action.data, state.boundariesByParentId, state.boundaryDetails))
     case 'REQUEST_FAILED':
-      console.log("Server request failed", action.error);
       return {
         ...state,
         error: action.error,

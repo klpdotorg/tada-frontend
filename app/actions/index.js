@@ -18,7 +18,6 @@ function requestDataFromServer() {
 }
 
 function responseReceivedFromServer(resp) {
-  console.log("Received entities");
   return {
     type: 'RESPONSE_RECEIVED',
     isFetching: false,
@@ -86,16 +85,17 @@ export function fetchBoundaryDetails(parentBoundaryId) {
 
     var requestBody = {}
     var boundaryType = -1;
-    if (getState().schoolSelection.primarySchool)
+    if (getState().schoolSelection.primarySchool) {
       boundaryType = 1
-    else
+    } else {
       boundaryType = 2;
+    }
     requestBody = {
       parent: parentBoundaryId,
       boundary_type: boundaryType
     }
     //Send info about the whole request so we can track failure
-    //dispatch(requestDataFromServer())
+    dispatch(requestDataFromServer())
     return fetch(serverApiBase + 'boundaries/?parent=' + parentBoundaryId + '&boundary_type=' + boundaryType, {
       method: 'GET',
       headers: {
@@ -138,8 +138,9 @@ function isStudentGroup(parentEntity) {
 }
 
 function isBoundary(parentEntity) {
-  if (parentEntity.boundary_category)
+  if (parentEntity.boundary_category) {
     return true
+  }
   return false
 }
 

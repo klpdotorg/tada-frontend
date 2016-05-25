@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchEntitiesFromServer, logoutUser, saveNewDistrict } from '../actions/';
 import NavBar from '../components/MainNavBar';
+import MainHeader from '../components/MainHeader'
 import SideBar from '../components/SideBar';
 import SecondaryNavBar from '../components/SecondaryNavBar';
 import MainContentArea from '../components/ContentArea';
+import TreeTogglerSpacingDiv from '../components/TreeTogglerSpacingDiv';
 
 class TadaContentContainer extends Component {
 
@@ -13,26 +15,23 @@ class TadaContentContainer extends Component {
   }
 
   componentWillMount() {
-    console.log("TadaContentContainer componentWillMount", this.props);
     const {dispatch} = this.props;
   }
 
   componentDidMount() {
-    console.log("TadaContentContainer did mount");
     this.props.fetchEntityDetails();
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('props', nextProps)
     const {dispatch} = nextProps;
-    console.log("TadaContentContainer Component will receive props", nextProps);
   }
 
   render() {
-    console.log('Rendering TadaContentContainer');
     const {onBoundaryClick, boundaryDetails, boundariesByParentId, saveNewDistrict} = this.props
     return (
       <div>
+        <MainHeader handleLogout={ this.props.handleLogout } />
+        <TreeTogglerSpacingDiv/>
         <NavBar onPrimaryClick={ this.props.onPrimaryClick } onPreSchoolClick={ this.props.onPreSchoolClick } primarySelected={ this.props.primarySelected } />
         <SecondaryNavBar toggleDistrictModal={ this.props.toggleDistrictModal } districtModalIsOpen={ this.props.districtModalIsOpen } saveNewDistrict={ saveNewDistrict } />
         <div id="wrapper" className="main__wrapper">
@@ -57,7 +56,6 @@ var mapStateToProps = function(state) {
 var mapDispatchToProps = function(dispatch) {
   return {
     onBoundaryClick: function(boundary) {
-      console.log("onBoundaryClick")
       dispatch(fetchEntitiesFromServer(boundary.id));
     },
     onPrimaryClick: function() {
@@ -71,12 +69,11 @@ var mapDispatchToProps = function(dispatch) {
       })
     },
     fetchEntityDetails: function() {
-      console.log("fetch boundaryDetails called");
       dispatch(fetchEntitiesFromServer(1));
     },
 
     handleLogout: function() {
-      dispatch(logoutUser('deleteme'));
+      dispatch(logoutUser());
     },
 
     toggleDistrictModal: function() {
@@ -86,7 +83,6 @@ var mapDispatchToProps = function(dispatch) {
     },
 
     saveNewDistrict: function(name) {
-      console.log(name)
       dispatch(saveNewDistrict(name))
     }
 
