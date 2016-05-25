@@ -16,38 +16,14 @@ import PrimaryCluster from './components/PrimaryClusterScreen';
 import PreschoolProject from './components/PreschoolProjectScreen';
 import PreschoolCircle from './components/PreschoolCircleScreen';
 import Institution from './components/InstitutionDetailsScreen';
-// import createBrowserHistory from 'history/lib/createBrowserHistory';
 import LoginContainer from './containers/LoginContainer';
-import HeaderBar from './components/MainHeader';
-import TreeTogglerSpacingDiv from './components/TreeTogglerSpacingDiv';
 import Logout from './components/Logout';
 import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
 import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
 import thunk from 'redux-thunk';
 import { schoolSelection, entities, login, modal } from './reducers/TadaReducers';
-import TadaContentContainer from './containers/TadaContentContainer';
-//const browserHistory = createBrowserHistory()
+import App from './containers/TadaContentContainer';
 import fetch from 'isomorphic-fetch'
-
-class App extends Component {
-
-  componentDidMount() {
-    console.log('app component did mount. much wow');
-  }
-
-  componentWillReceiveProps(newProps) {
-  }
-
-  render() {
-    return (
-      <div>
-        <HeaderBar/>
-        <TreeTogglerSpacingDiv/>
-        <TadaContentContainer children={ this.props.children } />
-      </div>
-      );
-  }
-}
 
 function createTadaStore() {
   var reducer = combineReducers({
@@ -63,7 +39,6 @@ function createTadaStore() {
     window.devToolsExtension ? window.devToolsExtension() : f => f
   )(createStore);
   var store = finalCreateStore(reducer);
-  console.log('Tada store created..');
   return store
 }
 

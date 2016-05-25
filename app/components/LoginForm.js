@@ -19,7 +19,6 @@ class Login extends Component {
   componentWillReceiveProps(nextProps) {
 
     const {dispatch, authenticated, token, error} = nextProps
-    console.log("Login component will receive props", dispatch);
   }
 
   handleSubmit(event) {

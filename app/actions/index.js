@@ -18,7 +18,6 @@ function requestDataFromServer() {
 }
 
 function responseReceivedFromServer(resp) {
-  console.log("Received entities");
   return {
     type: 'RESPONSE_RECEIVED',
     isFetching: false,
@@ -43,8 +42,6 @@ export function requestLogin(username) {
 }
 
 function loginSuccess(authtoken) {
-  //This belongs in the reducer?
-  sessionStorage.setItem('token', authtoken);
   return {
     type: 'LOGIN_SUCCESS',
     authenticated: true,
@@ -60,17 +57,16 @@ function loginError() {
   }
 }
 
-function requestLogout(username) {
+function requestLogout() {
   return {
-    type: 'LOGOUT_REQUESTED',
-    username
+    type: 'LOGOUT'
   }
 }
 
-export function logoutUser(username) {
+export function logoutUser() {
   return function(dispatch, getState) {
-    dispatch(requestLogout(username));
-    sessionStorage.delete('token');
+    sessionStorage.removeItem('token');
+    dispatch(requestLogout());
   }
 }
 
@@ -86,16 +82,17 @@ export function fetchBoundaryDetails(parentBoundaryId) {
 
     var requestBody = {}
     var boundaryType = -1;
-    if (getState().schoolSelection.primarySchool)
+    if (getState().schoolSelection.primarySchool) {
       boundaryType = 1
-    else
+    } else {
       boundaryType = 2;
+    }
     requestBody = {
       parent: parentBoundaryId,
       boundary_type: boundaryType
     }
     //Send info about the whole request so we can track failure
-    //dispatch(requestDataFromServer())
+    dispatch(requestDataFromServer())
     return fetch(serverApiBase + 'boundaries/?parent=' + parentBoundaryId + '&boundary_type=' + boundaryType, {
       method: 'GET',
       headers: {
@@ -138,8 +135,9 @@ function isStudentGroup(parentEntity) {
 }
 
 function isBoundary(parentEntity) {
-  if (parentEntity.boundary_category)
+  if (parentEntity.boundary_category) {
     return true
+  }
   return false
 }
 
@@ -212,13 +210,11 @@ export function fetchUserData(token) {
         'Authorization': 'Token ' + token,
         'Content-Type': 'application/json'
       },
-    }).then(checkStatus(response))
-      .then(data => {
-        dispatch(userDataFetched(data))
-          .catch(error => {
-            dispatch(requestFailed(error));
-            console.log('request failed', error)
-          })
+    }).then(response => (checkStatus(response)))
+      .then(data => dispatch(userDataFetched(data)))
+      .catch(error => {
+        dispatch(requestFailed(error));
+        console.log('request failed', error)
       })
   }
 }
@@ -251,16 +247,16 @@ export function sendLoginToServer(email, pass) {
       } else {
         const error = new Error(response.statusText);
         error.response = response;
-        dispatch(loginError(error));
         throw error;
       }
     }).then(data => {
+      sessionStorage.setItem('token', data.auth_token);
       dispatch(loginSuccess(data.auth_token))
+      dispatch(fetchUserData(sessionStorage.token))
+    }).catch(error => {
+      dispatch(loginError(error));
+      console.error('request failed', error)
     })
-      .catch(error => {
-        dispatch(loginError(error));
-        console.log('request failed', error)
-      })
   }
 }
 
