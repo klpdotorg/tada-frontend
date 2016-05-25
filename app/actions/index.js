@@ -42,8 +42,6 @@ export function requestLogin(username) {
 }
 
 function loginSuccess(authtoken) {
-  //This belongs in the reducer?
-  sessionStorage.setItem('token', authtoken);
   return {
     type: 'LOGIN_SUCCESS',
     authenticated: true,
@@ -59,17 +57,16 @@ function loginError() {
   }
 }
 
-function requestLogout(username) {
+function requestLogout() {
   return {
-    type: 'LOGOUT_REQUESTED',
-    username
+    type: 'LOGOUT'
   }
 }
 
-export function logoutUser(username) {
+export function logoutUser() {
   return function(dispatch, getState) {
-    dispatch(requestLogout(username));
-    sessionStorage.delete('token');
+    sessionStorage.removeItem('token');
+    dispatch(requestLogout());
   }
 }
 
@@ -213,13 +210,11 @@ export function fetchUserData(token) {
         'Authorization': 'Token ' + token,
         'Content-Type': 'application/json'
       },
-    }).then(checkStatus(response))
-      .then(data => {
-        dispatch(userDataFetched(data))
-          .catch(error => {
-            dispatch(requestFailed(error));
-            console.log('request failed', error)
-          })
+    }).then(response => (checkStatus(response)))
+      .then(data => dispatch(userDataFetched(data)))
+      .catch(error => {
+        dispatch(requestFailed(error));
+        console.log('request failed', error)
       })
   }
 }
@@ -252,16 +247,16 @@ export function sendLoginToServer(email, pass) {
       } else {
         const error = new Error(response.statusText);
         error.response = response;
-        dispatch(loginError(error));
         throw error;
       }
     }).then(data => {
+      sessionStorage.setItem('token', data.auth_token);
       dispatch(loginSuccess(data.auth_token))
+      dispatch(fetchUserData(sessionStorage.token))
+    }).catch(error => {
+      dispatch(loginError(error));
+      console.error('request failed', error)
     })
-      .catch(error => {
-        dispatch(loginError(error));
-        console.log('request failed', error)
-      })
   }
 }
 

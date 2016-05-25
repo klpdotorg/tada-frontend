@@ -165,6 +165,13 @@ export function login(state = {
         ...state,
         username: action.username
       }
+    case 'LOGOUT':
+      return {
+        authenticated: false,
+        isLoggingIn: false,
+        error: false,
+        token: ''
+      }
     default:
       return state;
   }
