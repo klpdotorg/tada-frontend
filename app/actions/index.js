@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import config from '../config.js';
-
+import { push } from 'react-router-redux'
 const serverApiBase = config.PROD_SERVER_API_BASE;
 
 export function showPrimarySchoolHierarchy() {
@@ -202,7 +202,8 @@ export function fetchEntitiesFromServer(parentBoundaryId) {
   }
 }
 
-export function fetchUserData(token) {
+export function fetchUserData() {
+  const token = sessionStorage.getItem('token')
   return function(dispatch) {
     return fetch('http://tadadev.klp.org.in/auth/me/', {
       method: "GET",
@@ -211,7 +212,10 @@ export function fetchUserData(token) {
         'Content-Type': 'application/json'
       },
     }).then(response => (checkStatus(response)))
-      .then(data => dispatch(userDataFetched(data)))
+      .then(data => {
+        dispatch(loginSuccess(token))
+        dispatch(userDataFetched(data))
+      })
       .catch(error => {
         dispatch(requestFailed(error));
         console.log('request failed', error)
@@ -253,6 +257,7 @@ export function sendLoginToServer(email, pass) {
       sessionStorage.setItem('token', data.auth_token);
       dispatch(loginSuccess(data.auth_token))
       dispatch(fetchUserData(sessionStorage.token))
+      dispatch(push('/'))
     }).catch(error => {
       dispatch(loginError(error));
       console.error('request failed', error)
