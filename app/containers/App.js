@@ -8,40 +8,6 @@ import SecondaryNavBar from '../components/SecondaryNavBar';
 import MainContentArea from '../components/ContentArea';
 import TreeTogglerSpacingDiv from '../components/TreeTogglerSpacingDiv';
 
-class TadaContentContainer extends Component {
-
-  constructor(props) {
-    super(props)
-  }
-
-  componentWillMount() {
-    const {dispatch} = this.props;
-  }
-
-  componentDidMount() {
-    this.props.fetchEntityDetails();
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const {dispatch} = nextProps;
-  }
-
-  render() {
-    const {onBoundaryClick, boundaryDetails, boundariesByParentId, saveNewDistrict} = this.props
-    return (
-      <div>
-        <MainHeader handleLogout={ this.props.handleLogout } />
-        <TreeTogglerSpacingDiv/>
-        <NavBar onPrimaryClick={ this.props.onPrimaryClick } onPreSchoolClick={ this.props.onPreSchoolClick } primarySelected={ this.props.primarySelected } />
-        <SecondaryNavBar toggleDistrictModal={ this.props.toggleDistrictModal } districtModalIsOpen={ this.props.districtModalIsOpen } saveNewDistrict={ saveNewDistrict } />
-        <div id="wrapper" className="main__wrapper">
-          <SideBar onBoundaryClick={ onBoundaryClick } boundaryDetails={ boundaryDetails } boundariesByParentId={ boundariesByParentId } />
-          <MainContentArea boundaryDetails={ boundaryDetails } children={ this.props.children } />
-        </div>
-      </div>);
-  }
-}
-
 var mapStateToProps = function(state) {
   return {
     boundaryDetails: state.entities.boundaryDetails,
@@ -88,4 +54,38 @@ var mapDispatchToProps = function(dispatch) {
 
   }
 }
+
+class TadaContentContainer extends Component {
+
+  constructor(props) {
+    super(props)
+  }
+
+  componentWillMount() {}
+
+  componentDidMount() {
+    this.props.fetchEntityDetails();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const {dispatch} = nextProps;
+  }
+
+  render() {
+    const {onBoundaryClick, boundaryDetails, boundariesByParentId, saveNewDistrict} = this.props
+    return (
+      <div>
+        <MainHeader handleLogout={ this.props.handleLogout } />
+        <TreeTogglerSpacingDiv/>
+        <NavBar onPrimaryClick={ this.props.onPrimaryClick } onPreSchoolClick={ this.props.onPreSchoolClick } primarySelected={ this.props.primarySelected } />
+        <SecondaryNavBar toggleDistrictModal={ this.props.toggleDistrictModal } districtModalIsOpen={ this.props.districtModalIsOpen } saveNewDistrict={ saveNewDistrict } />
+        <div id="wrapper" className="main__wrapper">
+          <SideBar onBoundaryClick={ onBoundaryClick } boundaryDetails={ boundaryDetails } boundariesByParentId={ boundariesByParentId } />
+          <MainContentArea boundaryDetails={ boundaryDetails } children={ this.props.children } />
+        </div>
+      </div>);
+  }
+}
+
+
 module.exports = connect(mapStateToProps, mapDispatchToProps)(TadaContentContainer);

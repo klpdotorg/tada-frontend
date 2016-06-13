@@ -19,10 +19,10 @@ import Institution from './components/InstitutionDetailsScreen';
 import LoginContainer from './containers/LoginContainer';
 import Logout from './components/Logout';
 import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
-import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
+import { routerMiddleware, syncHistoryWithStore, routerReducer } from 'react-router-redux'
 import thunk from 'redux-thunk';
 import { schoolSelection, entities, login, modal } from './reducers/TadaReducers';
-import App from './containers/TadaContentContainer';
+import App from './containers/App';
 import fetch from 'isomorphic-fetch'
 
 function createTadaStore() {
@@ -36,6 +36,7 @@ function createTadaStore() {
 
   var finalCreateStore = compose(
     applyMiddleware(thunk),
+    applyMiddleware(routerMiddleware(browserHistory)),
     window.devToolsExtension ? window.devToolsExtension() : f => f
   )(createStore);
   var store = finalCreateStore(reducer);
@@ -72,4 +73,3 @@ const routes = (
 );
 
 ReactDOM.render(routes, document.getElementById('application'));
-

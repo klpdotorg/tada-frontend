@@ -27,11 +27,11 @@ class Login extends Component {
     const email = this.refs.email.value
     const pass = this.refs.pass.value
 
-    this.props.onLoginSubmit(email, pass, this.props.location, this.props.history);
+    this.props.onLoginSubmit(email, pass, this.props.location);
   }
 
   render() {
-    const {authenticated, token, error} = this.props
+    const {authenticated, token, error, } = this.props
 
     return (
       <div id="login-page">
@@ -45,7 +45,7 @@ class Login extends Component {
             <div id="navbar" className="navbar-collapse collapse">
               <p className="app-name navbar-text pull-left">Data Entry Operations 2015-2016</p>
               <p className="navbar-text pull-right">
-                <Link to="/login" onClick={ this.handleLogin } className="btn btn-primary padded-btn">SIGN UP</Link>
+                <Link to="/login" className="btn btn-primary padded-btn">SIGN UP</Link>
               </p>
             </div>
           </div>
