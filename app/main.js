@@ -24,18 +24,12 @@ import tadastore from './store';
 
 const history = syncHistoryWithStore(browserHistory, tadastore)
 
-var requireAuthentication = function requireAuth(nextState, replace) {
-  if (!sessionStorage.getItem('token')) {
-    replace('/login');
-  }
-}
-
 const routes = (
 <Provider store={tadastore}>
   <Router history={history}>
     <Route path="login" component={ LoginContainer } />
     <Route path="logout" component={ Logout } />
-    <Route path="/" component={App} onEnter={requireAuthentication}>
+    <Route path="/" component={App}>
       <IndexRoute component={ Dashboard } />
       <Route path="dashboard" component={ Dashboard } />
       <Route path="district/:districtId/project/:projectId" component={ PreschoolProject } />

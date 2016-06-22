@@ -4,7 +4,6 @@ import { browserHistory } from 'react-router';
 import { routerMiddleware, routerReducer } from 'react-router-redux';
 import { schoolSelection, entities, login, modal } from './reducers/TadaReducers';
 
-
 const reducer = combineReducers({
   schoolSelection,
   entities,
