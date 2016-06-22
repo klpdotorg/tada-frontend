@@ -61,13 +61,15 @@ class TadaContentContainer extends Component {
     super(props)
   }
 
-  componentWillMount() {}
+  componentWillMount() {
+  
+  }
 
   componentDidMount() {
     this.props.fetchEntityDetails();
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps) {    
     const {dispatch} = nextProps;
   }
 
@@ -87,5 +89,8 @@ class TadaContentContainer extends Component {
   }
 }
 
+TadaContentContainer.contextTypes = {
+  router: React.PropTypes.object.isRequired
+}
 
 module.exports = connect(mapStateToProps, mapDispatchToProps)(TadaContentContainer);

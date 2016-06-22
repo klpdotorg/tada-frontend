@@ -5,10 +5,10 @@ require('bootstrap/dist/css/bootstrap.css');
 require('font-awesome/css/font-awesome.css');
 require('../assets/sass/lato.scss');
 require('../assets/sass/style.scss');
-import React, { Component } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import Dashboard from './components/Dashboard';
-import { DefaultRoute, Router, Link, Route, RouteHandler, IndexRoute, browserHistory } from 'react-router';
+import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
 import PrimaryDistrict from './components/PrimaryDistrictScreen';
 import PrimaryBlock from './components/PrimaryBlockScreen';
@@ -18,32 +18,9 @@ import PreschoolCircle from './components/PreschoolCircleScreen';
 import Institution from './components/InstitutionDetailsScreen';
 import LoginContainer from './containers/LoginContainer';
 import Logout from './components/Logout';
-import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
-import { routerMiddleware, syncHistoryWithStore, routerReducer } from 'react-router-redux'
-import thunk from 'redux-thunk';
-import { schoolSelection, entities, login, modal } from './reducers/TadaReducers';
+import { syncHistoryWithStore } from 'react-router-redux';
 import App from './containers/App';
-import fetch from 'isomorphic-fetch'
-
-function createTadaStore() {
-  var reducer = combineReducers({
-    schoolSelection,
-    entities,
-    login,
-    routing: routerReducer,
-    modal
-  });
-
-  var finalCreateStore = compose(
-    applyMiddleware(thunk),
-    applyMiddleware(routerMiddleware(browserHistory)),
-    window.devToolsExtension ? window.devToolsExtension() : f => f
-  )(createStore);
-  var store = finalCreateStore(reducer);
-  return store
-}
-
-const tadastore = createTadaStore();
+import tadastore from './store';
 
 const history = syncHistoryWithStore(browserHistory, tadastore)
 
@@ -54,11 +31,11 @@ var requireAuthentication = function requireAuth(nextState, replace) {
 }
 
 const routes = (
-<Provider store={ tadastore }>
-  <Router history={ history }>
+<Provider store={tadastore}>
+  <Router history={history}>
     <Route path="login" component={ LoginContainer } />
     <Route path="logout" component={ Logout } />
-    <Route path="/" component={ App } onEnter={ requireAuthentication }>
+    <Route path="/" component={App} onEnter={requireAuthentication}>
       <IndexRoute component={ Dashboard } />
       <Route path="dashboard" component={ Dashboard } />
       <Route path="district/:districtId/project/:projectId" component={ PreschoolProject } />
