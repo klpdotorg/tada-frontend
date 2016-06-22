@@ -1,7 +1,8 @@
 import fetch from 'isomorphic-fetch';
 import config from '../config.js';
-import { push } from 'react-router-redux'
+import { push } from 'react-router-redux';
 const serverApiBase = config.PROD_SERVER_API_BASE;
+import store from '../store'
 
 export function showPrimarySchoolHierarchy() {
   return function(dispatch) {
@@ -41,7 +42,7 @@ export function requestLogin(username) {
   }
 }
 
-function loginSuccess(authtoken) {
+export function loginSuccess(authtoken) {
   return {
     type: 'LOGIN_SUCCESS',
     authenticated: true,
@@ -218,7 +219,7 @@ export function fetchUserData() {
       })
       .catch(error => {
         dispatch(requestFailed(error));
-        console.log('request failed', error)
+        console.log(error.response);
       })
   }
 }
@@ -226,11 +227,13 @@ export function fetchUserData() {
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response.json();
-  } else {
-    const error = new Error(response.statusText);
-    error.response = response;
-    throw error;
+  } else if (response.status === 401) {
+    store.dispatch(logoutUser());
+    store.dispatch(push('/login'));
   }
+  const error = new Error(response.statusText);
+  error.response = response;
+  throw error;
 }
 
 export function sendLoginToServer(email, pass) {

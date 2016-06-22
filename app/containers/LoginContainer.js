@@ -13,8 +13,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onLoginSubmit: (email, pass, location) => {
-      console.log('location', location)
+    onLoginSubmit: (email, pass) => {      
       dispatch(sendLoginToServer(email, pass))
     }
   }

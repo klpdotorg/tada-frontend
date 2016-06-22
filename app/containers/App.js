@@ -1,33 +1,33 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchEntitiesFromServer, logoutUser, saveNewDistrict } from '../actions/';
+import { fetchEntitiesFromServer, logoutUser, saveNewDistrict,
+  loginSuccess, fetchUserData } from '../actions/';
+import { push } from 'react-router-redux';
 import NavBar from '../components/MainNavBar';
-import MainHeader from '../components/MainHeader'
+import MainHeader from '../components/MainHeader';
 import SideBar from '../components/SideBar';
 import SecondaryNavBar from '../components/SecondaryNavBar';
 import MainContentArea from '../components/ContentArea';
 import TreeTogglerSpacingDiv from '../components/TreeTogglerSpacingDiv';
 
-var mapStateToProps = function(state) {
-  return {
-    boundaryDetails: state.entities.boundaryDetails,
-    boundariesByParentId: state.entities.boundariesByParentId,
-    routerState: state.routing,
-    username: state.login.username,
-    districtModalIsOpen: state.modal.createDistrictModalIsOpen,
-    primarySelected: state.schoolSelection.primarySchool
-  }
-}
+const mapStateToProps = state => ({
+  boundaryDetails: state.entities.boundaryDetails,
+  boundariesByParentId: state.entities.boundariesByParentId,
+  routerState: state.routing,
+  username: state.login.username,
+  districtModalIsOpen: state.modal.createDistrictModalIsOpen,
+  primarySelected: state.schoolSelection.primarySchool
+});
 
 var mapDispatchToProps = function(dispatch) {
   return {
-    onBoundaryClick: function(boundary) {
+    onBoundaryClick(boundary) {
       dispatch(fetchEntitiesFromServer(boundary.id));
     },
-    onPrimaryClick: function() {
+    onPrimaryClick() {
       dispatch({
-        type: 'PRIMARY_SELECTED'
-      })
+        type: 'PRIMARY_SELECTED',
+      });
     },
     onPreSchoolClick: function() {
       dispatch({
@@ -49,11 +49,24 @@ var mapDispatchToProps = function(dispatch) {
     },
 
     saveNewDistrict: function(name) {
-      dispatch(saveNewDistrict(name))
-    }
+      dispatch(saveNewDistrict(name));
+    },
 
-  }
-}
+    redirectTo(url) {
+      dispatch(push(url));
+    },
+
+    loggedIn(token) {
+      dispatch(loginSuccess(token));
+    },
+
+    fetchUserData() {
+      return dispatch(fetchUserData(sessionStorage.token));
+    },
+
+  };
+};
+
 
 class TadaContentContainer extends Component {
 
@@ -61,14 +74,14 @@ class TadaContentContainer extends Component {
     super(props)
   }
 
-  componentWillMount() {}
-
-  componentDidMount() {
-    this.props.fetchEntityDetails();
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const {dispatch} = nextProps;
+  componentWillMount() {
+    if (!sessionStorage.token) {
+      this.props.redirectTo('/login');
+    } else {
+      this.props.loggedIn(sessionStorage.token);
+      this.props.fetchUserData()
+      .then(this.props.fetchEntityDetails());
+    }
   }
 
   render() {
@@ -80,12 +93,15 @@ class TadaContentContainer extends Component {
         <NavBar onPrimaryClick={ this.props.onPrimaryClick } onPreSchoolClick={ this.props.onPreSchoolClick } primarySelected={ this.props.primarySelected } />
         <SecondaryNavBar toggleDistrictModal={ this.props.toggleDistrictModal } districtModalIsOpen={ this.props.districtModalIsOpen } saveNewDistrict={ saveNewDistrict } />
         <div id="wrapper" className="main__wrapper">
-          <SideBar onBoundaryClick={ onBoundaryClick } boundaryDetails={ boundaryDetails } boundariesByParentId={ boundariesByParentId } />
-          <MainContentArea boundaryDetails={ boundaryDetails } children={ this.props.children } />
-        </div>
+        <SideBar onBoundaryClick={ onBoundaryClick } boundaryDetails={ boundaryDetails } boundariesByParentId={ boundariesByParentId } />
+        <MainContentArea boundaryDetails={ boundaryDetails } children={ this.props.children } />
+      </div>
       </div>);
   }
 }
 
+TadaContentContainer.contextTypes = {
+  router: React.PropTypes.object.isRequired
+}
 
 module.exports = connect(mapStateToProps, mapDispatchToProps)(TadaContentContainer);

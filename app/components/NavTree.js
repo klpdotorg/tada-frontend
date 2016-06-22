@@ -19,8 +19,6 @@ const SchoolsNavTree = React.createClass({
     this.props.onBoundaryClick(boundary);
   },
 
-
-
   /*
   Data is of the format: [
   {
