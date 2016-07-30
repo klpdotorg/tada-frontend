@@ -1,36 +1,24 @@
 import Login from '../components/LoginForm';
 import { connect } from 'react-redux';
-import {sendLoginToServer, fetchUserData} from '../actions/TadaActionCreators';
+import { sendLoginToServer, fetchUserData } from '../actions/';
 
-const mapStateToProps = (state) => {
-  console.log("mapStateToProps called", state);
+const mapStateToProps = (state, ownProps) => {
   return {
     error: state.login.error,
     token: state.login.token,
-    authenticated: state.login.authenticated
+    authenticated: state.login.authenticated,
+    location: ownProps.location
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onLoginSubmit: (email, pass, location, history) => {
-    	
-       
-       dispatch(sendLoginToServer(email, pass)).then(() =>{
-       	fetchUserData(sessionStorage.token)
-       })
-       .then(() => {
-        
-        if (location.state && location.state.nextPathname) {
-          history.replace(location.state.nextPathname);           
-        } else {
-          history.replace('/');           
-        }
-      })
+    onLoginSubmit: (email, pass) => {      
+      dispatch(sendLoginToServer(email, pass))
     }
   }
 }
 
-const LoginContainer =  connect(mapStateToProps,mapDispatchToProps)(Login);
+const LoginContainer = connect(mapStateToProps, mapDispatchToProps)(Login);
 
 export default LoginContainer;

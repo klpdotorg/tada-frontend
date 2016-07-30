@@ -1,6 +1,24 @@
 // VARIABLES
 
 /*-------------------------------------*/
+// GRID: GUTTER
+
+$grid-padding: 20px;
+
+
+/*-------------------------------------*/
+// WIDTHS AND HEIGHT
+
+$header-height: 45px;
+$nav-width: 220px;
+$subheader-height: 35px;
+$map-subheader-height: 53px;
+$form-input-height: 35px;
+$school-map-spacing: 160px;
+$sidebar-map-width: 300px;
+
+
+/*-------------------------------------*/
 // MEDIA QUERY BREAKPOINTS
 
 $mq-lg-x: 1200px;
@@ -36,7 +54,7 @@ $red-mild: #e17e5b;
 $maroon: #a31460;
 $pink-salmon: #f87c84;
 
-$yellow-mild: #FBB117;
+$yellow-mild: #ffeda0;
 $orange-mild: lighten($brand-orange, 20%);
 
 $green-pista: #addd8e;
@@ -55,11 +73,11 @@ $link-hover-color: lighten($brand-blue, 15%);
 // SPACING
 
 $base-spacing: 10px;
-$base-spacing-mid: $base-spacing * 1.5;				//15px
-$base-spacing-lg: $base-spacing * 2;					//20px
-$base-spacing-lg-x: $base-spacing * 2.5;			//25px
-$base-spacing-lg-2x: $base-spacing * 5;				//50px
-$base-spacing-sm: $base-spacing / 2;					//5px
+$base-spacing-mid: $base-spacing * 1.5;       //15px
+$base-spacing-lg: $base-spacing * 2;          //20px
+$base-spacing-lg-x: $base-spacing * 2.5;      //25px
+$base-spacing-lg-2x: $base-spacing * 5;       //50px
+$base-spacing-sm: $base-spacing / 2;          //5px
 
 
 /*-------------------------------------*/
@@ -86,66 +104,3 @@ $border-radius-circle: 50%;
 /*-------------------------------------*/
 // BORDER-BASE-COLOR
 $border-color: $grey-cloud;
-
-
-/*-------------------------------------*/
-/* BORDER */
-.border-base, %border-base {
-  border: 1px solid $border-color;
-}
-
-/*-------------------------------------*/
-/* LOADING */
-.loading-icon-base {
-  color: $grey-steel;
-  padding: $base-spacing-lg;
-  &.fa {
-    @extend %h1;
-  }
-}
-
-
-/*-------------------------------------*/
-/* SPACING */
-
-.base-spacing, %base-spacing {
-  padding: $base-spacing 0;
-}
-
-.base-spacing-sm, %base-spacing-sm {
-  padding: $base-spacing-sm 0;
-}
-
-.base-spacing-mid, %base-spacing-mid {
-  padding: $base-spacing-mid 0;
-}
-
-.base-spacing-lg, %base-spacing-lg {
-  padding: $base-spacing-lg 0;
-}
-
-.base-spacing-lg-x, %base-spacing-lg-x {
-  padding: $base-spacing-lg-x 0;
-}
-
-.base-spacing-lg-2x, %base-spacing-lg-2x {
-  padding: $base-spacing-lg-2x 0;
-}
-
-
-/*-------------------------------------*/
-// BORDER-RADIUS
-
-.border-radius, %border-radius {
-  border-radius: $border-radius;
-}
-
-.border-radius-sm, %border-radius-sm {
-  border-radius: $border-radius-sm;
-}
-
-.border-radius-circle, %border-radius-circle {
-  border-radius: $border-radius-circle;
-}
-
-
