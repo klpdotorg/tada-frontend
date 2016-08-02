@@ -284,6 +284,7 @@ export function saveNewDistrict(name) {
       })
     }).then(response => {
       if (response.status >= 200 && response.status < 300) {
+        dispatch(fetchEntitiesFromServer(1))
         dispatch({
           type: 'TOGGLE_CREATE_DISTRICT_MODAL'
         })
