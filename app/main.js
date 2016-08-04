@@ -21,6 +21,7 @@ import Logout from './components/Logout';
 import { syncHistoryWithStore } from 'react-router-redux';
 import App from './containers/App';
 import tadastore from './store';
+import UserRegContainer from './containers/UserRegContainer';
 
 const history = syncHistoryWithStore(browserHistory, tadastore)
 
@@ -29,6 +30,7 @@ const routes = (
   <Router history={history}>
     <Route path="login" component={ LoginContainer } />
     <Route path="logout" component={ Logout } />
+    <Route path="register" component= {UserRegContainer}/>
     <Route path="/" component={App}>
       <IndexRoute component={ Dashboard } />
       <Route path="dashboard" component={ Dashboard } />

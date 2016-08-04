@@ -58,6 +58,19 @@ function loginError() {
   }
 }
 
+export function userRegistrationSuccess(response) {
+  return {
+    type: 'USER_REGISTERED_SUCCESS',
+    registered: true,
+    error: false,
+    username: response.username,
+    email: response.email,
+    id: response.id
+  }
+}
+
+//Write user registration failure case
+
 function requestLogout() {
   return {
     type: 'LOGOUT'
@@ -214,6 +227,10 @@ export function fetchUserData() {
       },
     }).then(response => (checkStatus(response)))
       .then(data => {
+      /* HACK: Remove this if permissions are implemented */
+      if (data.email == "tadaadmin@klp.org.in") {
+        sessionStorage.setItem('isAdmin', true);
+      }
         dispatch(loginSuccess(token))
         dispatch(userDataFetched(data))
       })
@@ -234,6 +251,39 @@ function checkStatus(response) {
   const error = new Error(response.statusText);
   error.response = response;
   throw error;
+}
+
+export function sendRegisterUser(email, password, username) {
+  return function(dispatch, getState) {
+
+    return fetch('http://tadadev.klp.org.in/auth/register/', {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username: username,
+        password: password,
+        email: email
+      })
+    }).then(response => {
+      if (response.status >= 200 && response.status < 300) {
+        return response.json();
+      } else {
+        const error = new Error(response.statusText);
+        error.response = response;
+        throw error;
+      }
+    }).then(data => {
+      
+      dispatch(userRegistrationSuccess(data))
+      //dispatch(fetchUserData(sessionStorage.token))
+      //dispatch(push('/'))
+    }).catch(error => {
+      //dispatch(loginError(error));
+      console.error('request failed', error)
+    })
+  }
 }
 
 export function sendLoginToServer(email, pass) {
@@ -258,6 +308,7 @@ export function sendLoginToServer(email, pass) {
       }
     }).then(data => {
       sessionStorage.setItem('token', data.auth_token);
+
       dispatch(loginSuccess(data.auth_token))
       dispatch(fetchUserData(sessionStorage.token))
       dispatch(push('/'))
