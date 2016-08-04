@@ -1,7 +1,6 @@
 import React from 'react';
 import TreeView from 'react-treeview';
-import {Link} from 'react-router';
-import TadaStore from '../stores/TadaStore';
+import { Link } from 'react-router';
 
 
 // For the sake of simplicity, we're gonna use `defaultCollapsed`. Usually, a
@@ -9,26 +8,16 @@ import TadaStore from '../stores/TadaStore';
 // is preferred.
 const SchoolsNavTree = React.createClass({
 
- /* Called when a component is reacting to a props change. Invoked before render is called. */
-  componentWillReceiveProps: function(nextProps){
-    console.log('SchoolsNavTree componentWillReceiveProps', nextProps.boundaryDetails);
+  /* Called when a component is reacting to a props change. Invoked before render is called. */
+  componentWillReceiveProps: function(nextProps) {},
+
+  componentDidMount: function() {},
+
+  componentWillUnmount: function() {},
+
+  handleClick: function(boundary) {
+    this.props.onBoundaryClick(boundary);
   },
-
-  componentDidMount: function()
-  {
-    console.log('Treeview componentdidmount..', this.props.boundaryDetails);
-
-  },
-
-  componentWillUnmount: function()
-  {
-  },
-
-  handleClick: function(boundary){
-    this.props.onBoundaryClick({id: boundary.id, type: boundary.boundary_type});
-  },
-
-
 
   /*
   Data is of the format: [
@@ -40,51 +29,41 @@ const SchoolsNavTree = React.createClass({
   }
   ]
   */
-  renderSubTree: function(node, boundaryHierarchy, visitedBoundaries)
-  {
-    if(node && $.inArray(node,visitedBoundaries)<0)
-    {
+  renderSubTree: function(node, boundaryHierarchy, visitedBoundaries) {
+    if (node && $.inArray(node, visitedBoundaries) < 0) {
       var children = boundaryHierarchy[node];
       visitedBoundaries.push(node);
 
       var boundary = this.props.boundaryDetails[node];
-      const label = <Link key={boundary.name} to={boundary.path}><span className="node"> {boundary.name} </span></Link>;
+      const label = <Link key={ boundary.name } to={ boundary.path } onClick={ this.props.onBoundaryClick.bind(null, boundary) }><span className="node"> { boundary.name } </span></Link>;
       return (
 
-                 <TreeView key={node} onClick={this.props.onBoundaryClick.bind(null,{id: boundary.id, type: boundary.boundary_type})} nodeLabel={label} defaultCollapsed={true} >
-                    {
-                      (() => {
-                        console.log("Creating TreeView");
-                        if(children && children.length > 0)
-                        {
-                            return children.map((child,i)=>{
-                            console.log("Processing child " + child);
-                            return this.renderSubTree(child,boundaryHierarchy, visitedBoundaries)
-                        });
-                        }
-                        }
-                      )()
+        <TreeView key={ node } onClick={ this.props.onBoundaryClick.bind(null, boundary) } nodeLabel={ label } defaultCollapsed={ true }>
+          { (() => {
 
-                    }
-                  </TreeView>
-                );
+              if (children && children.length > 0) {
+                return children.map((child, i) => {
+
+                  return this.renderSubTree(child, boundaryHierarchy, visitedBoundaries)
+                });
+              }
+            })() }
+        </TreeView>
+        );
     }
   },
 
-//boundaryDetails={this.state.boundaryDetails} boundaryParentChildMap={this.state.childrenByParentId}
+  //boundaryDetails={this.state.boundaryDetails} boundaryParentChildMap={this.state.childrenByParentId}
   render: function() {
     var copyOfMap = $.extend(true, {}, this.props.boundariesByParentId);
     var firstElement = Object.keys(copyOfMap);
     var visitedBoundaries = [];
-      return (
-        <div>
-            {
-              Object.keys(copyOfMap).map(function(element, i) {
-                return this.renderSubTree(element, copyOfMap, visitedBoundaries)
-              }.bind(this))
-
-            }
-        </div>
+    return (
+      <div>
+        { Object.keys(copyOfMap).map(function(element, i) {
+            return this.renderSubTree(element, copyOfMap, visitedBoundaries)
+          }.bind(this)) }
+      </div>
       );
 
 

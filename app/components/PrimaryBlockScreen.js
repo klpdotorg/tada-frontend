@@ -1,5 +1,4 @@
 import React from 'react';
-import TadaStore from '../stores/TadaStore';
 
 
 let PrimaryBlock = React.createClass({ 
