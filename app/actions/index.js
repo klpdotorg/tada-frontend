@@ -58,6 +58,19 @@ function loginError() {
   }
 }
 
+export function userRegistrationSuccess(response) {
+  return {
+    type: 'USER_REGISTERED_SUCCESS',
+    registered: true,
+    error: false,
+    username: response.username,
+    email: response.email,
+    id: response.id
+  }
+}
+
+//Write user registration failure case
+
 function requestLogout() {
   return {
     type: 'LOGOUT'
@@ -234,6 +247,39 @@ function checkStatus(response) {
   const error = new Error(response.statusText);
   error.response = response;
   throw error;
+}
+
+export function sendRegisterUser(email, password, username) {
+  return function(dispatch, getState) {
+
+    return fetch('http://tadadev.klp.org.in/auth/register/', {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username: username,
+        password: password,
+        email: email
+      })
+    }).then(response => {
+      if (response.status >= 200 && response.status < 300) {
+        return response.json();
+      } else {
+        const error = new Error(response.statusText);
+        error.response = response;
+        throw error;
+      }
+    }).then(data => {
+      
+      dispatch(userRegistrationSuccess(data))
+      //dispatch(fetchUserData(sessionStorage.token))
+      //dispatch(push('/'))
+    }).catch(error => {
+      //dispatch(loginError(error));
+      console.error('request failed', error)
+    })
+  }
 }
 
 export function sendLoginToServer(email, pass) {

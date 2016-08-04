@@ -12,7 +12,7 @@ class Login extends Component {
 
   constructor(props) {
     super(props);
-    this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
 
@@ -45,7 +45,7 @@ class Login extends Component {
             <div id="navbar" className="navbar-collapse collapse">
               <p className="app-name navbar-text pull-left">Data Entry Operations 2015-2016</p>
               <p className="navbar-text pull-right">
-                <Link to="/login" className="btn btn-primary padded-btn">SIGN UP</Link>
+                <Link to="/register" className="btn btn-primary padded-btn">SIGN UP</Link>
               </p>
             </div>
           </div>
