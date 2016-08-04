@@ -227,6 +227,10 @@ export function fetchUserData() {
       },
     }).then(response => (checkStatus(response)))
       .then(data => {
+      /* HACK: Remove this if permissions are implemented */
+      if (data.email == "tadaadmin@klp.org.in") {
+        sessionStorage.setItem('isAdmin', true);
+      }
         dispatch(loginSuccess(token))
         dispatch(userDataFetched(data))
       })
@@ -304,6 +308,7 @@ export function sendLoginToServer(email, pass) {
       }
     }).then(data => {
       sessionStorage.setItem('token', data.auth_token);
+
       dispatch(loginSuccess(data.auth_token))
       dispatch(fetchUserData(sessionStorage.token))
       dispatch(push('/'))
