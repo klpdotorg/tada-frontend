@@ -243,6 +243,18 @@ sub {
 /*-------------------------------------*/
 /* HEADINGS */
 
+.heading-border-left, %heading-border-left {
+  @extend %left-text;
+  &:after {
+  content: '';
+  display: block;
+  text-align: left;
+  margin: $base-spacing auto 0;
+  height: 3px;
+  background-color: currentColor;
+  }
+}
+
 .heading-border, %heading-border {
   @extend %center-text;
 
