@@ -18,7 +18,8 @@ export default class MainContentArea extends React.Component {
       <div id="main-content-wrapper" className="main__content">
         <div className="container-fluid">
           { React.cloneElement(this.props.children, {
-              boundaryDetails: this.props.boundaryDetails
+              boundaryDetails: this.props.boundaryDetails,
+              onModifyDistrict: this.props.modifyDistrict
             }) }
         </div>
       </div>

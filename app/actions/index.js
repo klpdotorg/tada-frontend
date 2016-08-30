@@ -319,6 +319,35 @@ export function sendLoginToServer(email, pass) {
   }
 }
 
+export function modifyDistrict(districtid, name){
+  return function(dispatch, getState) {
+    return fetch('http://tadadev.klp.org.in/api/v1/boundaries/' + districtid +'/', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization' : 'Token ' + sessionStorage.token
+      },
+      body: JSON.stringify({
+          "name": name
+      })
+    }).then(response => {
+     if (response.status >= 200 && response.status < 300) {
+        dispatch(fetchEntitiesFromServer(1))
+        dispatch({
+          type: 'TOGGLE_CREATE_DISTRICT_MODAL'
+        })
+        return response.json();
+      } else {
+        const error = new Error(response.statusText);
+        error.response = response;
+        throw error;
+      }
+    }).catch(error => {
+      console.log('request failed', error)
+    })
+  }
+}
+
 export function saveNewDistrict(name) {
   return function(dispatch, getState) {
     return fetch('http://tadadev.klp.org.in/api/v1/boundaries/', {

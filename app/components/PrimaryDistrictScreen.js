@@ -1,7 +1,19 @@
 import React from 'react';
 
 
-let PrimaryDistrict = React.createClass({ 
+export default class SecondaryNavBar extends React.Component {
+
+  constructor(props)
+  {
+    super(props);
+    this.onClickSaveDistrict = this.onClickSaveDistrict.bind(this);
+
+  }
+  onClickSaveDistrict(districtid,name){
+    console.log("on save district clicked");
+    this.props.onModifyDistrict(districtid,name);
+
+  }
 
   render() {
   	var districtId = this.props.params.districtId;
@@ -15,11 +27,11 @@ let PrimaryDistrict = React.createClass({
                         <div className="form-group">
                           <label className="control-label col-sm-2" for="name">District Name:</label>
                           <div className="col-sm-2">          
-                            <input type="text" className="form-control" id="name" value={boundary.name}/>
+                            <input type="text" className="form-control" id="name" defaultValue={boundary.name}/>
                           </div>
                         </div>
                         </form>
-                        <div className="col-md-2"><button type="submit" className="btn btn-primary">Save</button></div>
+                        <div className="col-md-2"><button type="submit" className="btn btn-primary" onClick={ this.onClickSaveDistrict(districtId,"teset") }>Save</button></div>
                      </div>
     }
     else
@@ -38,6 +50,5 @@ let PrimaryDistrict = React.createClass({
     	</div>
     );
   }
-});
+}
 
-export default PrimaryDistrict;  

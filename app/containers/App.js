@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchEntitiesFromServer, logoutUser, saveNewDistrict,
-  loginSuccess, fetchUserData } from '../actions/';
+  loginSuccess, fetchUserData, modifyDistrict } from '../actions/';
 import { push } from 'react-router-redux';
 import NavBar from '../components/MainNavBar';
 import MainHeader from '../components/MainHeader';
@@ -52,6 +52,11 @@ var mapDispatchToProps = function(dispatch) {
       dispatch(saveNewDistrict(name));
     },
 
+    modifyDistrict: function(districtid,name)
+    {
+        dispatch(modifyDistrict(districtid,name));
+    },
+
     redirectTo(url) {
       dispatch(push(url));
     },
@@ -85,7 +90,7 @@ class TadaContentContainer extends Component {
   }
 
   render() {
-    const {onBoundaryClick, boundaryDetails, boundariesByParentId, saveNewDistrict} = this.props
+    const {onBoundaryClick, boundaryDetails, boundariesByParentId, saveNewDistrict, modifyDistrict} = this.props
     return (
       <div>
         <MainHeader handleLogout={ this.props.handleLogout } />
@@ -94,7 +99,7 @@ class TadaContentContainer extends Component {
         <SecondaryNavBar toggleDistrictModal={ this.props.toggleDistrictModal } districtModalIsOpen={ this.props.districtModalIsOpen } saveNewDistrict={ saveNewDistrict } />
         <div id="wrapper" className="main__wrapper">
         <SideBar onBoundaryClick={ onBoundaryClick } boundaryDetails={ boundaryDetails } boundariesByParentId={ boundariesByParentId } />
-        <MainContentArea boundaryDetails={ boundaryDetails } children={ this.props.children } />
+        <MainContentArea onModifyDistrict = { this.props.modifyDistrict } boundaryDetails={ boundaryDetails } children={ this.props.children } />
       </div>
       </div>);
   }
