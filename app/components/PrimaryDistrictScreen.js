@@ -15,6 +15,7 @@ export default class SecondaryNavBar extends React.Component {
   }
   onClickSaveDistrict(districtid,name){
     console.log("on save district clicked");
+    console.log(this.districtName.value);
     this.props.onModifyDistrict(districtid,name);
 
   }
@@ -36,7 +37,7 @@ export default class SecondaryNavBar extends React.Component {
                         <div className="form-group">
                           <label className="control-label col-sm-2" htmlFor="name">District Name:</label>
                           <div className="col-sm-2">          
-                            <input type="text" className="form-control" id="name" defaultValue={boundary.name} value={this.state.value} onChange={(event)=>{this.handleChange(event)}}/>
+                            <input type="text" ref={(ref) => this.districtName = ref} className="form-control" id="name" defaultValue={boundary.name} onChange={(event)=>{this.handleChange(event)}}/>
                           </div>
                         </div>
                         </form>
