@@ -31,7 +31,12 @@ export default class SecondaryNavBar extends React.Component {
                           </div>
                         </div>
                         </form>
-                        <div className="col-md-2"><button type="submit" className="btn btn-primary" onClick={ this.onClickSaveDistrict(districtId,"teset") }>Save</button></div>
+                        <div className="col-md-2">
+                          <button type="submit" className="btn btn-primary" onClick={ this.onClickSaveDistrict(districtId,"teset") }>Save</button>
+                        </div>
+                        <div className="col-md-2">
+                            <button type="submit" className="btn btn-primary">Delete</button>
+                        </div>
                      </div>
     }
     else
