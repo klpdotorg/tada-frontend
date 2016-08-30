@@ -7,6 +7,10 @@ export default class SecondaryNavBar extends React.Component {
   {
     super(props);
     this.onClickSaveDistrict = this.onClickSaveDistrict.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.state = {
+      value: ''
+    };
 
   }
   onClickSaveDistrict(districtid,name){
@@ -15,28 +19,37 @@ export default class SecondaryNavBar extends React.Component {
 
   }
 
+  handleChange(event) {
+    this.setState({value: event.target.value});
+  }
+
   render() {
   	var districtId = this.props.params.districtId;
   	var boundary = this.props.boundaryDetails[districtId];
   	var districtPath = "#" + boundary.path;
     var displayelement;
+    this.state.value=boundary.name;
     if(sessionStorage.getItem('isAdmin'))
     {
       displayelement = <div><h4 className="brand-blue heading-border-left"> Modify Details</h4>
                        <form className="form-horizontal" role="form">
                         <div className="form-group">
-                          <label className="control-label col-sm-2" for="name">District Name:</label>
+                          <label className="control-label col-sm-2" htmlFor="name">District Name:</label>
                           <div className="col-sm-2">          
-                            <input type="text" className="form-control" id="name" defaultValue={boundary.name}/>
+                            <input type="text" className="form-control" id="name" defaultValue={boundary.name} value={this.state.value} onChange={(event)=>{this.handleChange(event)}}/>
                           </div>
                         </div>
                         </form>
+
                         <div className="col-md-2">
-                          <button type="submit" className="btn btn-primary" onClick={ this.onClickSaveDistrict(districtId,"teset") }>Save</button>
+                          <button type="submit" className="btn btn-primary" onClick={() => {this.onClickSaveDistrict(districtId,"teset") }}>Save</button>
+                          <button type="submit" className="btn btn-primary">Delete</button>
+
                         </div>
-                        <div className="col-md-2">
-                            <button type="submit" className="btn btn-primary">Delete</button>
-                        </div>
+                       
+                       
+
+
                      </div>
     }
     else
