@@ -25,13 +25,13 @@ export default class SecondaryNavBar extends React.Component {
       displayelement = <div><h4 className="brand-blue heading-border-left"> Modify Details</h4>
                        <form className="form-horizontal" role="form">
                         <div className="form-group">
-                          <label className="control-label col-sm-2" for="name">District Name:</label>
+                          <label className="control-label col-sm-2" htmlFor="name">District Name:</label>
                           <div className="col-sm-2">          
                             <input type="text" className="form-control" id="name" defaultValue={boundary.name}/>
                           </div>
                         </div>
                         </form>
-                        <div className="col-md-2"><button type="submit" className="btn btn-primary" onClick={ this.onClickSaveDistrict(districtId,"teset") }>Save</button></div>
+                        <div className="col-md-2"><button type="submit" className="btn btn-primary" onClick={() => {this.onClickSaveDistrict(districtId,"teset") }}>Save</button></div>
                      </div>
     }
     else
