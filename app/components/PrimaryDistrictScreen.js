@@ -3,29 +3,25 @@ import React from 'react';
 
 export default class SecondaryNavBar extends React.Component {
 
-  constructor(props)
-  {
+  constructor(props){
     super(props);
-    this.onClickSaveDistrict = this.onClickSaveDistrict.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.onClickSaveDistrict = this.onClickSaveDistrict.bind(this);    
     this.state = {
       value: ''
     };
-
   }
 
-  onClickSaveDistrict(districtid,name){
-    console.log("on save district clicked");
+  onClickSaveDistrict(districtid, name) {
     console.log(this.districtName.value);
-    this.props.onModifyDistrict(districtid,name);
-
+    this.props.onModifyDistrict(districtid, name);
   }
 
   handleChange(event) {
     this.setState({value: event.target.value});
   }
 
-  render() {    
+  render() {
     var districtId = this.props.params.districtId;
     var boundary = this.props.boundaryDetails[districtId];
     var districtPath = "#" + boundary.path;
@@ -65,7 +61,7 @@ export default class SecondaryNavBar extends React.Component {
         <ol className="breadcrumb">
           <li className="active">{boundary.name}</li>
         </ol>
-        <Displayelement/>
+        <Displayelement {...this.props}/>
       </div>
     );
   }

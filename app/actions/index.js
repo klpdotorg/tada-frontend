@@ -13,15 +13,13 @@ export function showPrimarySchoolHierarchy() {
 
 function requestDataFromServer() {
   return {
-    type: 'REQUEST_SENT',
-    isFetching: true
+    type: 'REQUEST_SENT'
   }
 }
 
 function responseReceivedFromServer(resp) {
   return {
-    type: 'RESPONSE_RECEIVED',
-    isFetching: false,
+    type: 'RESPONSE_RECEIVED',    
     data: resp.results
   }
 }
