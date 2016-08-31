@@ -1,7 +1,8 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import {modifyDistrict} from '../actions'
 
-
-export default class SecondaryNavBar extends React.Component {
+class PrimaryDistrict extends React.Component {
 
   constructor(props){
     super(props);
@@ -13,8 +14,9 @@ export default class SecondaryNavBar extends React.Component {
   }
 
   onClickSaveDistrict(districtid, name) {
+    console.log(this.props)
     console.log(this.districtName.value);
-    this.props.onModifyDistrict(districtid, name);
+    this.props.dispatch(modifyDistrict(districtid, name));
   }
 
   handleChange(event) {
@@ -67,3 +69,10 @@ export default class SecondaryNavBar extends React.Component {
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    boundaryDetails: state.entities.boundaryDetails
+  }
+}
+
+export default connect(mapStateToProps)(PrimaryDistrict);
