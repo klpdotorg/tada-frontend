@@ -118,7 +118,12 @@ export function entities(state = {
         isFetching: true
       }
     case 'RESPONSE_RECEIVED':
-      return Object.assign({}, state, processBoundaryDetails(action.data, state.boundariesByParentId, state.boundaryDetails))
+      const boundaryDetails = processBoundaryDetails(action.data, state.boundariesByParentId, state.boundaryDetails)
+      return {
+       ...state,
+       ...boundaryDetails,
+       isFetching: false
+      }
     case 'REQUEST_FAILED':
       return {
         ...state,

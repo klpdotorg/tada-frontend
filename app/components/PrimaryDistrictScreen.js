@@ -1,31 +1,30 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import {modifyDistrict} from '../actions'
 
+class PrimaryDistrict extends React.Component {
 
-export default class SecondaryNavBar extends React.Component {
-
-  constructor(props)
-  {
+  constructor(props){
     super(props);
-    this.onClickSaveDistrict = this.onClickSaveDistrict.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.onClickSaveDistrict = this.onClickSaveDistrict.bind(this);    
     this.state = {
       value: ''
     };
-
   }
 
-  onClickSaveDistrict(districtid){
-    console.log("on save district clicked");
-    console.log(this.districtName.value);
-    this.props.modifyDistrict(districtid,this.districtName.value);
 
+  onClickSaveDistrict(districtid) {
+    console.log(this.props)
+    console.log(this.districtName.value);
+    this.props.dispatch(modifyDistrict(districtid, this.districtName.value));
   }
 
   handleChange(event) {
     this.setState({value: event.target.value});
   }
 
-  render() {    
+  render() {
     var districtId = this.props.params.districtId;
     var boundary = this.props.boundaryDetails[districtId];
     var districtPath = "#" + boundary.path;
@@ -65,9 +64,16 @@ export default class SecondaryNavBar extends React.Component {
         <ol className="breadcrumb">
           <li className="active">{boundary.name}</li>
         </ol>
-        <Displayelement/>
+        <Displayelement {...this.props}/>
       </div>
     );
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    boundaryDetails: state.entities.boundaryDetails
+  }
+}
+
+export default connect(mapStateToProps)(PrimaryDistrict);

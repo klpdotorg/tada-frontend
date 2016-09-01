@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchEntitiesFromServer, logoutUser, saveNewDistrict,
-  loginSuccess, fetchUserData, modifyDistrict } from '../actions/';
+import { fetchEntitiesFromServer, logoutUser, saveNewDistrict, loginSuccess, fetchUserData} from '../actions/';
 import { push } from 'react-router-redux';
 import NavBar from '../components/MainNavBar';
 import MainHeader from '../components/MainHeader';
@@ -50,12 +49,7 @@ var mapDispatchToProps = function(dispatch) {
 
     saveNewDistrict: function(name) {
       dispatch(saveNewDistrict(name));
-    },
-
-    modifyDistrict: function(districtid,name)
-    {
-        dispatch(modifyDistrict(districtid,name));
-    },
+    },    
 
     redirectTo(url) {
       dispatch(push(url));
@@ -85,7 +79,7 @@ class TadaContentContainer extends Component {
     } else {
       this.props.loggedIn(sessionStorage.token);
       this.props.fetchUserData()
-      .then(this.props.fetchEntityDetails());
+        .then(this.props.fetchEntityDetails());
     }
   }
 
@@ -98,9 +92,11 @@ class TadaContentContainer extends Component {
         <NavBar onPrimaryClick={ this.props.onPrimaryClick } onPreSchoolClick={ this.props.onPreSchoolClick } primarySelected={ this.props.primarySelected } />
         <SecondaryNavBar toggleDistrictModal={ this.props.toggleDistrictModal } districtModalIsOpen={ this.props.districtModalIsOpen } saveNewDistrict={ saveNewDistrict } />
         <div id="wrapper" className="main__wrapper">
-        <SideBar onBoundaryClick={ onBoundaryClick } boundaryDetails={ boundaryDetails } boundariesByParentId={ boundariesByParentId } />
-        <MainContentArea modifyDistrict = { this.props.modifyDistrict } boundaryDetails={ boundaryDetails } children={ this.props.children } />
-      </div>
+
+          <SideBar onBoundaryClick={ onBoundaryClick } boundaryDetails={ boundaryDetails } boundariesByParentId={ boundariesByParentId } />
+          <MainContentArea children={ this.props.children } />
+        </div>
+
       </div>);
   }
 }

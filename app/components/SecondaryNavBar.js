@@ -25,6 +25,7 @@ export default class SecondaryNavBar extends React.Component {
   }
 
   render() {
+  
     return (
       <div className="container-fluid">
         <button type="button" className="btn btn-primary navbar-btn all-padded-btn pull-left"><span className="glyphicon glyphicon-home"></span></button>
@@ -45,6 +46,7 @@ export default class SecondaryNavBar extends React.Component {
           <button type="button" className="btn btn-info navbar-btn all-padded-btn" data-toggle="tooltip" data-placement="bottom" title="Revert Entity State"><span className="fa fa-undo"></span></button>
           <button type="button" className="btn btn-primary navbar-btn all-padded-btn"><span className="glyphicon glyphicon-filter"></span> Filter by Programs</button>
         </p>
+
         <CreateDistrict isOpen={ this.props.districtModalIsOpen } onCloseModal={ this.props.toggleDistrictModal } closeModal={ this.props.toggleDistrictModal } save={ this.props.saveNewDistrict } />
       </div>
       );
