@@ -317,6 +317,12 @@ export function sendLoginToServer(email, pass) {
   }
 }
 
+export function deleteDistrict(districtid){
+  return function(dispatch, getState) {
+    return fetch('http://tadadev.klp.org.')
+  }
+}
+
 export function modifyDistrict(districtid, name){
   return function(dispatch, getState) {
     return fetch('http://tadadev.klp.org.in/api/v1/boundaries/' + districtid +'/', {
@@ -331,9 +337,9 @@ export function modifyDistrict(districtid, name){
     }).then(response => {
      if (response.status >= 200 && response.status < 300) {
         dispatch(fetchEntitiesFromServer(1))
-        dispatch({
-          type: 'TOGGLE_CREATE_DISTRICT_MODAL'
-        })
+        // dispatch({
+        //   type: 'TOGGLE_CREATE_DISTRICT_MODAL'
+        // })
         return response.json();
       } else {
         const error = new Error(response.statusText);

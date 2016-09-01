@@ -18,7 +18,9 @@ class MainContentArea extends React.Component {
     return (
       <div id="main-content-wrapper" className="main__content">
         <div className="container-fluid">
+
           { React.cloneElement(this.props.children, {...this.props}) }
+
         </div>
       </div>
       );

@@ -92,9 +92,11 @@ class TadaContentContainer extends Component {
         <NavBar onPrimaryClick={ this.props.onPrimaryClick } onPreSchoolClick={ this.props.onPreSchoolClick } primarySelected={ this.props.primarySelected } />
         <SecondaryNavBar toggleDistrictModal={ this.props.toggleDistrictModal } districtModalIsOpen={ this.props.districtModalIsOpen } saveNewDistrict={ saveNewDistrict } />
         <div id="wrapper" className="main__wrapper">
+
           <SideBar onBoundaryClick={ onBoundaryClick } boundaryDetails={ boundaryDetails } boundariesByParentId={ boundariesByParentId } />
           <MainContentArea children={ this.props.children } />
         </div>
+
       </div>);
   }
 }

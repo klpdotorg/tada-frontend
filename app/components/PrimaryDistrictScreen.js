@@ -12,10 +12,11 @@ export default class PrimaryDistrict extends React.Component {
     };
   }
 
-  onClickSaveDistrict(districtid, name) {
+
+  onClickSaveDistrict(districtid) {
     console.log(this.props)
     console.log(this.districtName.value);
-    this.props.dispatch(modifyDistrict(districtid, name));
+    this.props.dispatch(modifyDistrict(districtid, this.districtName.value));
   }
 
   handleChange(event) {
@@ -42,7 +43,7 @@ export default class PrimaryDistrict extends React.Component {
               </form>
 
               <div className="col-md-2">
-                <button type="submit" className="btn btn-primary" onClick={() => {this.onClickSaveDistrict(districtId,"teset") }}>Save</button>
+                <button type="submit" className="btn btn-primary" onClick={() => {this.onClickSaveDistrict(districtId) }}>Save</button>
                 <button type="submit" className="btn btn-primary">Delete</button>
               </div>
         </div>
