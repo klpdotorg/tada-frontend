@@ -13,15 +13,13 @@ export function showPrimarySchoolHierarchy() {
 
 function requestDataFromServer() {
   return {
-    type: 'REQUEST_SENT',
-    isFetching: true
+    type: 'REQUEST_SENT'
   }
 }
 
 function responseReceivedFromServer(resp) {
   return {
-    type: 'RESPONSE_RECEIVED',
-    isFetching: false,
+    type: 'RESPONSE_RECEIVED',    
     data: resp.results
   }
 }
@@ -315,6 +313,35 @@ export function sendLoginToServer(email, pass) {
     }).catch(error => {
       dispatch(loginError(error));
       console.error('request failed', error)
+    })
+  }
+}
+
+export function modifyDistrict(districtid, name){
+  return function(dispatch, getState) {
+    return fetch('http://tadadev.klp.org.in/api/v1/boundaries/' + districtid +'/', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization' : 'Token ' + sessionStorage.token
+      },
+      body: JSON.stringify({
+          "name": name
+      })
+    }).then(response => {
+     if (response.status >= 200 && response.status < 300) {
+        dispatch(fetchEntitiesFromServer(1))
+        dispatch({
+          type: 'TOGGLE_CREATE_DISTRICT_MODAL'
+        })
+        return response.json();
+      } else {
+        const error = new Error(response.statusText);
+        error.response = response;
+        throw error;
+      }
+    }).catch(error => {
+      console.log('request failed', error)
     })
   }
 }

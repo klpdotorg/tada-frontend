@@ -397,6 +397,14 @@ img, video {
   text-align: center;
 }
 
+.left-text, %left-text {
+  text-align: left;
+}
+
+@mixin left-text {
+  text-align: left
+}
+
 @mixin center-text {
   text-align: center;
 }
