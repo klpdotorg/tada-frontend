@@ -1,8 +1,7 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import {modifyDistrict} from '../actions'
 
-class PrimaryDistrict extends React.Component {
+export default class PrimaryDistrict extends React.Component {
 
   constructor(props){
     super(props);
@@ -69,11 +68,3 @@ class PrimaryDistrict extends React.Component {
     );
   }
 }
-
-const mapStateToProps = (state) => {
-  return {
-    boundaryDetails: state.entities.boundaryDetails
-  }
-}
-
-export default connect(mapStateToProps)(PrimaryDistrict);
