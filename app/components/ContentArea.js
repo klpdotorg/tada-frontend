@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import {connect} from 'react-redux';
 
-export default class MainContentArea extends React.Component {
+class MainContentArea extends React.Component {
   constructor() {
     super();
   }
@@ -23,3 +24,11 @@ export default class MainContentArea extends React.Component {
       );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    boundaryDetails: state.entities.boundaryDetails
+  }
+}
+
+export default connect(mapStateToProps)(MainContentArea)
