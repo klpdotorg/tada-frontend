@@ -19,7 +19,7 @@ export default class MainContentArea extends React.Component {
         <div className="container-fluid">
           { React.cloneElement(this.props.children, {
               boundaryDetails: this.props.boundaryDetails,
-              onModifyDistrict: this.props.modifyDistrict
+              modifyDistrict: this.props.modifyDistrict
             }) }
         </div>
       </div>

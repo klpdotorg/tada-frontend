@@ -14,10 +14,10 @@ export default class SecondaryNavBar extends React.Component {
 
   }
 
-  onClickSaveDistrict(districtid,name){
+  onClickSaveDistrict(districtid){
     console.log("on save district clicked");
     console.log(this.districtName.value);
-    this.props.onModifyDistrict(districtid,name);
+    this.props.modifyDistrict(districtid,this.districtName.value);
 
   }
 
@@ -45,7 +45,7 @@ export default class SecondaryNavBar extends React.Component {
               </form>
 
               <div className="col-md-2">
-                <button type="submit" className="btn btn-primary" onClick={() => {this.onClickSaveDistrict(districtId,"teset") }}>Save</button>
+                <button type="submit" className="btn btn-primary" onClick={() => {this.onClickSaveDistrict(districtId) }}>Save</button>
                 <button type="submit" className="btn btn-primary">Delete</button>
               </div>
         </div>

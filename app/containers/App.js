@@ -99,7 +99,7 @@ class TadaContentContainer extends Component {
         <SecondaryNavBar toggleDistrictModal={ this.props.toggleDistrictModal } districtModalIsOpen={ this.props.districtModalIsOpen } saveNewDistrict={ saveNewDistrict } />
         <div id="wrapper" className="main__wrapper">
         <SideBar onBoundaryClick={ onBoundaryClick } boundaryDetails={ boundaryDetails } boundariesByParentId={ boundariesByParentId } />
-        <MainContentArea onModifyDistrict = { this.props.modifyDistrict } boundaryDetails={ boundaryDetails } children={ this.props.children } />
+        <MainContentArea modifyDistrict = { this.props.modifyDistrict } boundaryDetails={ boundaryDetails } children={ this.props.children } />
       </div>
       </div>);
   }
