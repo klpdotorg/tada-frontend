@@ -29,7 +29,8 @@ class MainContentArea extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    boundaryDetails: state.entities.boundaryDetails
+    boundaryDetails: state.entities.boundaryDetails,
+    isFetching: state.entities.isFetching
   }
 }
 
