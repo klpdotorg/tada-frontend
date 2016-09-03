@@ -1,5 +1,5 @@
 import React from 'react';
-import {modifyDistrict} from '../actions'
+import {modifyBoundary} from '../actions'
 
 export default class PrimaryDistrict extends React.Component {
 
@@ -14,7 +14,7 @@ export default class PrimaryDistrict extends React.Component {
 
 
   onClickSaveDistrict(districtid) {    
-    this.props.dispatch(modifyDistrict(districtid, this.districtName.value));
+    this.props.dispatch(modifyBoundary(districtid, this.districtName.value));
   }
 
   handleChange(event) {
