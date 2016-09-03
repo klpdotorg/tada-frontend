@@ -105,7 +105,7 @@ export function fetchBoundaryDetails(parentBoundaryId) {
     }
     //Send info about the whole request so we can track failure
     dispatch(requestDataFromServer())
-    return fetch(serverApiBase + 'boundaries/?parent=' + parentBoundaryId + '&boundary_type=' + boundaryType, {
+    return fetch(serverApiBase + 'boundaries/?parent=' + parentBoundaryId + '&boundary_type=' + boundaryType + '&limit=500', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -317,15 +317,32 @@ export function sendLoginToServer(email, pass) {
   }
 }
 
-export function deleteDistrict(districtid){
+export function deleteBoundary(boundaryid){
   return function(dispatch, getState) {
-    return fetch('http://tadadev.klp.org.')
+    return fetch('http://tadadev.klp.org.in/api/v1/boundaries/'+boundaryid+'/', {
+      method: 'DELETE',
+      headers: {
+        'Authorization' : 'Token ' + sessionStorage.token
+      }
+    }).then(response =>{
+       if (response.status >= 200 && response.status < 300) {
+        dispatch(fetchEntitiesFromServer(1))
+        //Route the user to the home dashboard page since the page they were on will be deleted
+        dispatch(push('/'));        
+      } else {
+        const error = new Error(response.statusText);
+        error.response = response;
+        throw error;
+      }
+    }).catch(error => {
+      console.log('request failed', error)
+    })
   }
 }
 
-export function modifyDistrict(districtid, name){
+export function modifyBoundary(boundaryid, name){
   return function(dispatch, getState) {
-    return fetch('http://tadadev.klp.org.in/api/v1/boundaries/' + districtid +'/', {
+    return fetch('http://tadadev.klp.org.in/api/v1/boundaries/' + boundaryid +'/', {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -337,9 +354,7 @@ export function modifyDistrict(districtid, name){
     }).then(response => {
      if (response.status >= 200 && response.status < 300) {
         dispatch(fetchEntitiesFromServer(1))
-        // dispatch({
-        //   type: 'TOGGLE_CREATE_DISTRICT_MODAL'
-        // })
+        dispatch(push('/'));
         return response.json();
       } else {
         const error = new Error(response.statusText);
