@@ -1,17 +1,19 @@
+import _ from 'lodash'
+
 export function schoolSelection(state = {
-    primarySchool: true
-  }, action) {
+  primarySchool: true
+}, action) {
   switch (action.type) {
     case 'PRIMARY_SELECTED':
-      return {
-        primarySchool: true
-      }
+    return {
+      primarySchool: true
+    }
     case 'PRESCHOOL_SELECTED':
-      return {
-        primarySchool: false
-      }
+    return {
+      primarySchool: false
+    }
     default:
-      return state
+    return state
   }
 }
 
@@ -62,8 +64,7 @@ function getParentId(entity) {
   return parent;
 }
 
-function processBoundaryDetails(boundaryData, boundariesByParentId, boundaryDetails) {
-
+function processBoundaryDetails(boundaryData, boundariesByParentId, boundaryDetails) {  
   var boundaryInformation = {}
   //Making an assumption that the entire set will be the children of a parent
 
@@ -108,77 +109,83 @@ function processBoundaryDetails(boundaryData, boundariesByParentId, boundaryDeta
 }
 
 export function entities(state = {
-    boundariesByParentId: {},
-    boundaryDetails: []
-  } , action) {
+  boundariesByParentId: {},
+  boundaryDetails: []
+} , action) {
   switch (action.type) {
     case 'REQUEST_SENT':
-      return {
-        ...state,
-        isFetching: true
-      }
+    return {
+      ...state,
+      isFetching: true
+    }
     case 'RESPONSE_RECEIVED':
-      const boundaryDetails = processBoundaryDetails(action.data, state.boundariesByParentId, state.boundaryDetails)
-      return {
-       ...state,
-       ...boundaryDetails,
-       isFetching: false
-      }
-    case 'REQUEST_FAILED':
-      return {
-        ...state,
-        error: action.error,
-        statusCode: action.statusCode,
-        statusText: action.statusText,
-        isFetching: false
-      }
-    default:
-      return state;
+    const boundaryDetails = processBoundaryDetails(action.data, state.boundariesByParentId, state.boundaryDetails)    
+    return {
+     ...state,
+     ...boundaryDetails,
+     isFetching: false
+   }    
+   case 'REQUEST_FAILED':
+   return {
+    ...state,
+    error: action.error,
+    statusCode: action.statusCode,
+    statusText: action.statusText,
+    isFetching: false
   }
+  case 'REMOVE_BOUNDARY': 
+  const boundariesByParentId =  _.omit(state.boundariesByParentId, action.id)  
+  return {
+    ...state,
+    boundariesByParentId
+  }  
+  default:
+  return state;
+}
 }
 
 export function login(state = {
-    authenticated: false,
-    isLoggingIn: false,
-    error: false,
-    token: ''
-  } , action) {
+  authenticated: false,
+  isLoggingIn: false,
+  error: false,
+  token: ''
+} , action) {
   switch (action.type) {
     case 'REQUEST_LOGIN':
-      return {
-        ...state,
-        authenticated: false,
-        isLoggingIn: true
-      }
+    return {
+      ...state,
+      authenticated: false,
+      isLoggingIn: true
+    }
     case 'LOGIN_FAILED':
-      return {
-        ...state,
-        authenticated: action.authenticated,
-        isLoggingIn: false,
-        error: true
-      }
+    return {
+      ...state,
+      authenticated: action.authenticated,
+      isLoggingIn: false,
+      error: true
+    }
     case 'LOGIN_SUCCESS':
-      return {
-        ...state,
-        authenticated: action.authenticated,
-        token: action.auth_token,
-        isLoggingIn: false,
-        error: false
-      }
+    return {
+      ...state,
+      authenticated: action.authenticated,
+      token: action.auth_token,
+      isLoggingIn: false,
+      error: false
+    }
     case 'USER_DATA_FETCHED':
-      return {
-        ...state,
-        username: action.username
-      }
+    return {
+      ...state,
+      username: action.username
+    }
     case 'LOGOUT':
-      return {
-        authenticated: false,
-        isLoggingIn: false,
-        error: false,
-        token: ''
-      }
+    return {
+      authenticated: false,
+      isLoggingIn: false,
+      error: false,
+      token: ''
+    }
     default:
-      return state;
+    return state;
   }
 }
 
@@ -188,27 +195,27 @@ export function userregistration(state = {
 }, action) {
   switch(action.type) {
     case 'USER_REGISTERED_SUCCESS':
-      return {
-        registered:true,
-        error:false
-      }
+    return {
+      registered:true,
+      error:false
+    }
 
     default:
-      return state;
+    return state;
 
   }
 }
 
 export function modal(state = {
-    createDistrictModalIsOpen: false
-  }, action) {
+  createDistrictModalIsOpen: false
+}, action) {
   switch (action.type) {
     case 'TOGGLE_CREATE_DISTRICT_MODAL':
-      return {
-        createDistrictModalIsOpen: !state.createDistrictModalIsOpen
-      }
+    return {
+      createDistrictModalIsOpen: !state.createDistrictModalIsOpen
+    }
 
     default:
-      return state;
+    return state;
   }
 }

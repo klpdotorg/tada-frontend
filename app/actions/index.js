@@ -48,6 +48,13 @@ export function loginSuccess(authtoken) {
   }
 }
 
+export function removeBoundary(id) {
+  return {
+    type: 'REMOVE_BOUNDARY',
+    id: id
+  }
+}
+
 function loginError() {
   return {
     type: 'LOGIN_FAILED',
@@ -224,18 +231,18 @@ export function fetchUserData() {
         'Content-Type': 'application/json'
       },
     }).then(response => (checkStatus(response)))
-      .then(data => {
+    .then(data => {
       /* HACK: Remove this if permissions are implemented */
       if (data.email == "tadaadmin@klp.org.in") {
         sessionStorage.setItem('isAdmin', true);
       }
-        dispatch(loginSuccess(token))
-        dispatch(userDataFetched(data))
-      })
-      .catch(error => {
-        dispatch(requestFailed(error));
-        console.log(error.response);
-      })
+      dispatch(loginSuccess(token))
+      dispatch(userDataFetched(data))
+    })
+    .catch(error => {
+      dispatch(requestFailed(error));
+      console.log(error.response);
+    })
   }
 }
 
@@ -273,7 +280,7 @@ export function sendRegisterUser(email, password, username) {
         throw error;
       }
     }).then(data => {
-      
+
       dispatch(userRegistrationSuccess(data))
       //dispatch(fetchUserData(sessionStorage.token))
       //dispatch(push('/'))
@@ -325,8 +332,9 @@ export function deleteBoundary(boundaryid){
         'Authorization' : 'Token ' + sessionStorage.token
       }
     }).then(response =>{
-       if (response.status >= 200 && response.status < 300) {
-        dispatch(fetchEntitiesFromServer(1))
+     if (response.status >= 200 && response.status < 300) {
+      dispatch(removeBoundary(boundaryid))
+      dispatch(fetchEntitiesFromServer(1))
         //Route the user to the home dashboard page since the page they were on will be deleted
         dispatch(push('/'));        
       } else {
@@ -349,22 +357,21 @@ export function modifyBoundary(boundaryid, name){
         'Authorization' : 'Token ' + sessionStorage.token
       },
       body: JSON.stringify({
-          "name": name
+        "name": name
       })
     }).then(response => {
      if (response.status >= 200 && response.status < 300) {
-        dispatch(fetchEntitiesFromServer(1))
-        dispatch(push('/'));
-        return response.json();
-      } else {
-        const error = new Error(response.statusText);
-        error.response = response;
-        throw error;
-      }
-    }).catch(error => {
-      console.log('request failed', error)
-    })
-  }
+      dispatch(fetchEntitiesFromServer(1))        
+      return response.json();
+    } else {
+      const error = new Error(response.statusText);
+      error.response = response;
+      throw error;
+    }
+  }).catch(error => {
+    console.log('request failed', error)
+  })
+}
 }
 
 export function saveNewDistrict(name) {
