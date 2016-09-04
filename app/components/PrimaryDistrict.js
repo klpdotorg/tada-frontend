@@ -1,20 +1,26 @@
 import React from 'react';
 import {modifyBoundary} from '../actions'
+import {deleteBoundary} from '../actions'
 
 export default class PrimaryDistrict extends React.Component {
 
   constructor(props){
     super(props);
     this.handleChange = this.handleChange.bind(this);
-    this.onClickSaveDistrict = this.onClickSaveDistrict.bind(this);    
+    this.saveDistrict = this.saveDistrict.bind(this);
+    this.deleteDistrict = this.deleteDistrict.bind(this);
     this.state = {
       value: ''
     };
   }
 
 
-  onClickSaveDistrict(districtid) {    
-    this.props.dispatch(modifyBoundary(districtid, this.districtName.value));
+  saveDistrict(districtId) {    
+    this.props.dispatch(modifyBoundary(districtId, this.districtName.value));
+  }
+
+  deleteDistrict(districtId) {
+    this.props.dispatch(deleteBoundary(districtId))
   }
 
   handleChange(event) {
@@ -41,8 +47,8 @@ export default class PrimaryDistrict extends React.Component {
               </form>
 
               <div className="col-md-2">
-                <button type="submit" className="btn btn-primary" onClick={() => {this.onClickSaveDistrict(districtId) }}>Save</button>
-                <button type="submit" className="btn btn-primary">Delete</button>
+                <button type="submit" className="btn btn-primary" onClick={() => {this.saveDistrict(districtId) }}>Save</button>
+                <button type="submit" className="btn btn-primary" onClick={() => {this.deleteDistrict(districtId) }}>Delete</button>
               </div>
         </div>
     }
