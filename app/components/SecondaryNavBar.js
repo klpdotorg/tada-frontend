@@ -30,7 +30,7 @@ export default class SecondaryNavBar extends React.Component {
 
   handleProgramsClicked(event) {
     console.log("Handle programs clicked");
-    this.props.dispatch(push('/programs'));
+    this.props.redirectTo('/programs');
   }
 
   render() {
