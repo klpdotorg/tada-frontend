@@ -22,6 +22,7 @@ import { syncHistoryWithStore } from 'react-router-redux';
 import App from './containers/App';
 import tadastore from './store';
 import UserRegContainer from './containers/UserRegContainer';
+import Programs from './components/Programs';
 
 const history = syncHistoryWithStore(browserHistory, tadastore)
 
@@ -34,6 +35,7 @@ const routes = (
     <Route path="/" component={App}>
       <IndexRoute component={ Dashboard } />
       <Route path="dashboard" component={ Dashboard } />
+      <Route path="programs" component={ Programs }/>
       <Route path="district/:districtId/project/:projectId" component={ PreschoolProject } />
       <Route path="district/:districtId/project/:projectId/circle/:circleId" component={ PreschoolCircle } />
       <Route path="district/:districtId" component={ PrimaryDistrict } />

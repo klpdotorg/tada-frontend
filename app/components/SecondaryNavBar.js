@@ -2,11 +2,15 @@
 * Secondary navigation bar for filtering/search etc..
 */
 import React, { Component } from 'react';
-import CreateDistrict from './Modals/CreateDistrict'
+import CreateDistrict from './Modals/CreateDistrict';
+import Link from 'react-router';
+import { push } from 'react-router-redux';
+
 
 export default class SecondaryNavBar extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
+    this.handleProgramsClicked = this.handleProgramsClicked.bind(this);
     this.state = {
       districtModalOpen: false
     }
@@ -24,10 +28,16 @@ export default class SecondaryNavBar extends React.Component {
     })
   }
 
+  handleProgramsClicked(event) {
+    console.log("Handle programs clicked");
+    this.props.redirectTo('/programs');
+  }
+
   render() {
-  
-    return (
-      <div className="container-fluid">
+  var Displayelement;
+  if(sessionStorage.getItem('isAdmin')) {
+      Displayelement = (props) => 
+       <div className="container-fluid">
         <button type="button" className="btn btn-primary navbar-btn all-padded-btn pull-left"><span className="glyphicon glyphicon-home"></span></button>
         <form className="navbar-form navbar-left" role="search">
           <div className="form-group">
@@ -36,8 +46,7 @@ export default class SecondaryNavBar extends React.Component {
           <button type="submit" className="btn btn-default padded-btn">Search</button>
         </form>
         <p className="pull-right">
-          <button type="button" className="btn btn-info navbar-btn all-padded-btn" data-toggle="tooltip"><span className="fa fa-pencil-square-o"></span> Make Admin</button>
-          <button type="button" className="btn btn-info navbar-btn all-padded-btn" data-toggle="tooltip"><span className="fa fa-pencil-square-o"></span> Manage Programs</button>
+          <button type="button" className="btn btn-info navbar-btn all-padded-btn" data-toggle="tooltip" onClick={this.handleProgramsClicked }><span className="fa fa-pencil-square-o"></span> Manage Programs</button>
           <button type="button" className="btn btn-info navbar-btn all-padded-btn" onClick={ this.props.toggleDistrictModal } data-toggle="tooltip" data-placement="bottom" title="Create District"><span className="fa fa-globe"></span></button>
           <button type="button" className="btn btn-info navbar-btn all-padded-btn" data-toggle="tooltip" data-placement="bottom" title="Manage Permissions"><span className="fa fa-key"></span></button>
           <button type="button" className="btn btn-info navbar-btn all-padded-btn" data-toggle="tooltip" data-placement="bottom" title="Add User"><span className="fa fa-user-plus"></span></button>
@@ -49,6 +58,13 @@ export default class SecondaryNavBar extends React.Component {
 
         <CreateDistrict isOpen={ this.props.districtModalIsOpen } onCloseModal={ this.props.toggleDistrictModal } closeModal={ this.props.toggleDistrictModal } save={ this.props.saveNewDistrict } />
       </div>
+    }
+   else{
+    Displayelement = (props) => <div></div>
+   }
+
+    return (
+      <Displayelement {...this.props}/>
       );
   }
 }
