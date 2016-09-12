@@ -20,4 +20,5 @@ const mapDispatchToProps = (dispatch) => {
 
 const UserRegContainer = connect(mapStateToProps, mapDispatchToProps)(RegistrationForm);
 
+
 export default UserRegContainer;
