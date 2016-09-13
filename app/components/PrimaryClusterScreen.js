@@ -1,16 +1,33 @@
 import React from 'react';
 import {modifyBoundary, deleteBoundary} from '../actions';
+import CreateInstitution from './Modals/CreateBoundary';
+import Button from './Button'
 
 
 export default class PrimaryCluster extends React.Component {
 
   constructor(props){
     super(props);
+    this.openSchoolModal = this.openSchoolModal.bind(this);
+    this.toggleSchoolModal = this.toggleSchoolModal.bind(this);
     this.onClickSaveCluster = this.onClickSaveCluster.bind(this);    
     this.onClickDeleteCluster = this.onClickDeleteCluster.bind(this);
-   
+    this.state = {      
+      schoolModalIsOpen: false
+    };
   }
 
+  toggleSchoolModal() {
+    this.setState({
+      schoolModalIsOpen: false
+    })
+  }
+
+  openSchoolModal(){
+    this.setState({
+      schoolModalIsOpen: true
+    })
+  }
 
   onClickSaveCluster(districtid) {
     console.log(this.props)
@@ -33,20 +50,22 @@ export default class PrimaryCluster extends React.Component {
     if(sessionStorage.getItem('isAdmin')) {
       Displayelement = (props) => 
         <div>
-          <h4 className="brand-blue heading-border-left"> Modify Details</h4>
-            <form className="form-horizontal" role="form">
-              <div className="form-group">
-                <label className="control-label col-sm-2" htmlFor="name">Cluster :</label>
-                <div className="col-sm-2">          
-                  <input type="text" ref={(ref) => this.clusterName = ref} className="form-control" id="name" defaultValue={cluster.name}/>
-                </div>
+          <div className='heading-border-left'>
+            <h4 className="brand-blue col-md-10">Modify Details</h4>
+            <Button onClick={this.openSchoolModal} title='Add School'/>
+          </div>          
+          <form className="form-horizontal boundary-form" role="form">
+            <div className="form-group">
+              <label className="control-label col-sm-2" htmlFor="name">Cluster :</label>
+              <div className="col-sm-2">          
+                <input type="text" ref={(ref) => this.clusterName = ref} className="form-control" id="name" defaultValue={cluster.name}/>
               </div>
-              </form>
-
-              <div className="col-md-2">
-                <button type="submit" className="btn btn-primary" onClick={() => {this.onClickSaveCluster(cluster.id) }}>Save</button>
-                <button type="submit" className="btn btn-primary" onClick={() => {this.onClickDeleteCluster(cluster.id)}}>Delete</button>
-              </div>
+            </div>
+           </form>
+          <div className="col-md-2">
+            <button type="submit" className="btn btn-primary" onClick={() => {this.onClickSaveCluster(cluster.id) }}>Save</button>
+            <button type="submit" className="btn btn-primary" onClick={() => {this.onClickDeleteCluster(cluster.id)}}>Delete</button>
+          </div>             
         </div>
     }
     else {
@@ -66,6 +85,7 @@ export default class PrimaryCluster extends React.Component {
           <li className="active">{cluster.name}</li>
         </ol>
         <Displayelement {...this.props}/>
+        <CreateInstitution placeHolder='School Name' title='Create New School' isOpen={this.state.schoolModalIsOpen} onCloseModal={this.toggleSchoolModal} closeModal={ this.toggleSchoolModal} save={ this.props.saveSchool } />
       </div>
     );   
   }

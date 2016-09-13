@@ -2,30 +2,10 @@
 * Secondary navigation bar for filtering/search etc..
 */
 import React, { Component } from 'react';
-import CreateDistrict from './Modals/CreateDistrict'
+import CreateDistrict from './Modals/CreateBoundary'
 
 export default class SecondaryNavBar extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      districtModalOpen: false
-    }
-  }
-
-  openModal(modalType) {
-    this.setState({
-      [modalType]: true
-    })
-  }
-
-  closeModal(modalType) {
-    this.setState({
-      [modalType]: false
-    })
-  }
-
-  render() {
-  
+  render() {  
     return (
       <div className="container-fluid">
         <button type="button" className="btn btn-primary navbar-btn all-padded-btn pull-left"><span className="glyphicon glyphicon-home"></span></button>
@@ -47,7 +27,7 @@ export default class SecondaryNavBar extends React.Component {
           <button type="button" className="btn btn-primary navbar-btn all-padded-btn"><span className="glyphicon glyphicon-filter"></span> Filter by Programs</button>
         </p>
 
-        <CreateDistrict isOpen={ this.props.districtModalIsOpen } onCloseModal={ this.props.toggleDistrictModal } closeModal={ this.props.toggleDistrictModal } save={ this.props.saveNewDistrict } />
+        <CreateDistrict placeHolder='District Name' title='Create New District' isOpen={ this.props.districtModalIsOpen } onCloseModal={ this.props.toggleDistrictModal } closeModal={ this.props.toggleDistrictModal } save={ this.props.saveNewDistrict } />
       </div>
       );
   }

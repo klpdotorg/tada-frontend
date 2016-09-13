@@ -5,6 +5,7 @@ require('bootstrap/dist/css/bootstrap.css');
 require('font-awesome/css/font-awesome.css');
 require('../assets/sass/lato.scss');
 require('../assets/sass/style.scss');
+require('../assets/custom.css');
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Dashboard from './components/Dashboard';

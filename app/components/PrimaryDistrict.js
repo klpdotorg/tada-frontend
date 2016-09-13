@@ -1,6 +1,9 @@
 import React from 'react';
+import Button from './Button'
 import {modifyBoundary} from '../actions'
 import {deleteBoundary} from '../actions'
+import CreateBlock from './Modals/CreateBoundary'
+import {Link} from 'react-router'
 
 export default class PrimaryDistrict extends React.Component {
 
@@ -9,13 +12,16 @@ export default class PrimaryDistrict extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.saveDistrict = this.saveDistrict.bind(this);
     this.deleteDistrict = this.deleteDistrict.bind(this);
+    this.addBlockModal = this.addBlockModal.bind(this);
+    this.toggleBlockModal = this.toggleBlockModal.bind(this);
     this.state = {
-      value: ''
+      value: '',
+      blockModalIsOpen: false
     };
   }
 
 
-  saveDistrict(districtId) {    
+  saveDistrict(districtId) {
     this.props.dispatch(modifyBoundary(districtId, this.districtName.value));
   }
 
@@ -27,17 +33,32 @@ export default class PrimaryDistrict extends React.Component {
     this.setState({value: event.target.value});
   }
 
-  render() {
+  toggleBlockModal() {
+    this.setState({
+      blockModalIsOpen: false
+    })
+  }
+
+  addBlockModal() {
+    this.setState({
+      blockModalIsOpen: true
+    })
+  }
+
+  render() {    
     var districtId = this.props.params.districtId;
     var boundary = this.props.boundaryDetails[districtId];
     var districtPath = "#" + boundary.path;
-    var Displayelement;
+    var DistrictSummary;
     this.state.value = boundary.name;
     if(sessionStorage.getItem('isAdmin')) {
-      Displayelement = (props) => 
+      DistrictSummary = (props) => 
         <div>
-          <h4 className="brand-blue heading-border-left"> Modify Details</h4>
-            <form className="form-horizontal" role="form">
+          <div className='heading-border-left'>
+            <h4 className="brand-blue col-md-10">Modify Details</h4>
+            <Button title='Add Block' onClick={this.addBlockModal} />
+          </div>
+            <form className="form-horizontal boundary-form" role="form">
               <div className="form-group">
                 <label className="control-label col-sm-2" htmlFor="name">District Name:</label>
                 <div className="col-sm-2">          
@@ -53,7 +74,7 @@ export default class PrimaryDistrict extends React.Component {
         </div>
     }
     else {
-      Displayelement = (props) => 
+      DistrictSummary = (props) => 
         <div>
           <h4 className="heading-err heading-border-left brand-red"> <i className="fa fa-lock brand-red" aria-hidden="true"></i>  Insufficient Permissions</h4>
           <p>You need administrator privileges to modify Boundary details.</p>
@@ -65,9 +86,10 @@ export default class PrimaryDistrict extends React.Component {
     return(
       <div>
         <ol className="breadcrumb">
-          <li className="active">{boundary.name}</li>
+          <li className="active">{boundary.name}</li>          
         </ol>
-        <Displayelement {...this.props}/>
+        <DistrictSummary {...this.props}/>
+        <CreateBlock placeHolder='Block Name' title='Create New Block' isOpen={this.state.blockModalIsOpen} onCloseModal={this.toggleBlockModal} closeModal={ this.toggleBlockModal} save={ this.props.saveBlock } />
       </div>
     );
   }

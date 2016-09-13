@@ -1,5 +1,7 @@
 import React from 'react';
 import {modifyBoundary, deleteBoundary} from '../actions';
+import Button from './Button'
+import CreateCluster from './Modals/CreateBoundary'
 
 
 
@@ -9,16 +11,29 @@ export default class PrimaryDistrict extends React.Component {
     super(props);
     this.onClickSaveBlock = this.onClickSaveBlock.bind(this);    
     this.onClickDeleteBlock = this.onClickDeleteBlock.bind(this);
+    this.openClusterModal = this.openClusterModal.bind(this);
+    this.toggleClusterModal = this.toggleClusterModal.bind(this);
     this.state = {
-      value: ''
+      value: '',
+      clusterModalIsOpen: false
     };
   }
 
-
-  onClickSaveBlock(districtid) {
-    console.log(this.props)
-    console.log(this.blockName.value);
+  onClickSaveBlock(districtid) {    
     this.props.dispatch(modifyBoundary(districtid, this.blockName.value));
+  }
+
+  toggleClusterModal(){
+    this.setState({
+      clusterModalIsOpen: false
+    })  
+  }  
+
+
+  openClusterModal(){
+    this.setState({
+      clusterModalIsOpen: true
+    })
   }
 
   onClickDeleteBlock(districtid) {
@@ -26,16 +41,20 @@ export default class PrimaryDistrict extends React.Component {
   }
 
   render() {
-  	var block = this.props.boundaryDetails[this.props.params.blockId];
-  	var blockPath = "#" + block.path;
-  	var district = this.props.boundaryDetails[this.props.params.districtId];
-  	var districtPath = "#" + district.path;
+    var block = this.props.boundaryDetails[this.props.params.blockId];
+    var blockPath = "#" + block.path;
+    var district = this.props.boundaryDetails[this.props.params.districtId];
+    var districtPath = "#" + district.path;
     var Displayelement;
     if(sessionStorage.getItem('isAdmin')) {
       Displayelement = (props) => 
         <div>
-          <h4 className="brand-blue heading-border-left"> Modify Details</h4>
-            <form className="form-horizontal" role="form">
+          <div className='heading-border-left'>
+            <h4 className="brand-blue col-md-10">Modify Details</h4>
+            <Button onClick={this.openClusterModal} title='Add Cluster'/>
+          </div>
+          
+            <form className="form-horizontal boundary-form" role="form">
               <div className="form-group">
                 <label className="control-label col-sm-2" htmlFor="name">Block :</label>
                 <div className="col-sm-2">          
@@ -62,11 +81,12 @@ export default class PrimaryDistrict extends React.Component {
 
     return(
       <div>
-       <ol className="breadcrumb">
+        <ol className="breadcrumb">
           <li><a href={districtPath}>{district.name}</a></li>
           <li className="active">{block.name}</li>
         </ol>
         <Displayelement {...this.props}/>
+        <CreateCluster placeHolder='Cluster Name' title='Create New Cluster' isOpen={this.state.clusterModalIsOpen} onCloseModal={this.toggleClusterModal} closeModal={ this.toggleClusterModal} save={ this.props.saveCluster } />
       </div>
     );   
   }
