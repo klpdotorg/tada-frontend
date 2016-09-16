@@ -30,6 +30,7 @@ class MainContentArea extends React.Component {
 const mapStateToProps = (state) => {
   return {
     boundaryDetails: state.entities.boundaryDetails,
+    programsByInstitutionId: state.programs.programsByInstitutionId,
     isFetching: state.entities.isFetching
   }
 }

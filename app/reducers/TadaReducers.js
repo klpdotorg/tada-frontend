@@ -65,7 +65,7 @@ function getParentId(entity) {
 }
 
 function processBoundaryDetails(boundaryData, boundariesByParentId, boundaryDetails) {  
-  var boundaryInformation = {}
+  var newBoundaryDetails = {}
   //Making an assumption that the entire set will be the children of a parent
 
   //because that's how the REST queries are structured
@@ -91,7 +91,7 @@ function processBoundaryDetails(boundaryData, boundariesByParentId, boundaryDeta
         else
           boundariesByParentId[parentId].push(boundary.id);
       }
-      boundaryInformation[id] = boundary;
+      newBoundaryDetails[id] = boundary;
     })
   /*
     results.reduce(function(soFar, currentValue){
@@ -101,7 +101,7 @@ function processBoundaryDetails(boundaryData, boundariesByParentId, boundaryDeta
     */
   }
   var mergedBoundaryDetails = {}
-  Object.assign(mergedBoundaryDetails, boundaryDetails, boundaryInformation);
+  Object.assign(mergedBoundaryDetails, boundaryDetails, newBoundaryDetails);
   return {
     boundaryDetails: mergedBoundaryDetails,
     boundariesByParentId: boundariesByParentId
@@ -142,6 +142,46 @@ export function entities(state = {
   default:
   return state;
 }
+}
+
+function processProgramDetails(programsData, programsByInstitutionId)
+{
+
+  var newProgramsByInstitutionId = {};
+  if(programsData.length > 0 )
+  {
+    programsData.map(program => {
+      newProgramsByInstitutionId[program.id] = program;
+
+    })
+  } 
+  //Merge existing program details with new info from server. This will eliminate dupes.
+  var mergedProgramDetails = {}
+  Object.assign(mergedProgramDetails, programsByInstitutionId, newProgramsByInstitutionId);
+  return {
+    programsByInstitutionId: mergedProgramDetails
+  };
+}
+
+export function programs(state = {
+  programsByInstitutionId: [],
+  programsByStudentId: []
+}, action){
+
+  switch(action.type) {
+    case 'PROGRAMS_INSTITUTION_RESPONSE_RECEIVED':
+      const programs = processProgramDetails(action.data, state.programsByInstitutionId);
+      return {
+        ...state,
+        ...programs
+      }
+
+    case 'PROGRAMS_STUDENT_RESPONSE_RECEIVED':
+
+    default:
+      return state;
+
+  }
 }
 
 export function login(state = {
