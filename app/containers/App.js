@@ -14,7 +14,7 @@ const mapStateToProps = state => ({
   boundariesByParentId: state.entities.boundariesByParentId,
   routerState: state.routing,
   username: state.login.username,
-  districtModalIsOpen: state.modal.createDistrictModalIsOpen,
+  districtModalIsOpen: state.modal.createDistrict,
   primarySelected: state.schoolSelection.primarySchool
 });
 
@@ -32,6 +32,7 @@ var mapDispatchToProps = function(dispatch) {
       dispatch({
         type: 'PRESCHOOL_SELECTED'
       })
+      dispatch(fetchEntitiesFromServer());
     },
     fetchEntityDetails: function() {
       dispatch(fetchEntitiesFromServer(1));
@@ -43,7 +44,8 @@ var mapDispatchToProps = function(dispatch) {
 
     toggleDistrictModal: function() {
       dispatch({
-        type: 'TOGGLE_CREATE_DISTRICT_MODAL'
+        type: 'TOGGLE_MODAL',
+        modal: 'createDistrict'
       })
     },
 

@@ -374,34 +374,42 @@ export function modifyBoundary(boundaryid, name){
 }
 }
 
-export function saveNewDistrict(name) {
-  return function(dispatch, getState) {
-    return fetch('http://tadadev.klp.org.in/api/v1/boundaries/', {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Token ' + sessionStorage.token
-      },
-      body: JSON.stringify({
-        "name": name,
-        "boundary_category": 9,
-        "boundary_type": 1,
-        "parent": 1
-      })
-    }).then(response => {
-      if (response.status >= 200 && response.status < 300) {
-        dispatch(fetchEntitiesFromServer(1))
-        dispatch({
-          type: 'TOGGLE_CREATE_DISTRICT_MODAL'
-        })
-        return response.json();
-      } else {
-        const error = new Error(response.statusText);
-        error.response = response;
-        throw error;
-      }
-    }).catch(error => {
-      console.log('request failed', error)
-    })
-  }
+const newBoundaryFetch = (options) => {
+  return fetch('http://tadadev.klp.org.in/api/v1/boundaries/', {
+    method: "POST",
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Token ' + sessionStorage.token
+    },
+    body: JSON.stringify(options)
+  }).catch(error => {
+    console.log('request failed', error)
+  })
 }
+
+export const saveNewDistrict = name => dispatch => {
+  const options = {
+    name,
+    boundary_category: 9,
+    boundary_type: 1,
+    parent: 1
+  }
+  return newBoundaryFetch(options).then(checkStatus).then(response => {    
+    dispatch(fetchEntitiesFromServer(1))
+    dispatch({
+      type: 'TOGGLE_MODAL',
+      modal: 'createDistrict'
+    })   
+  })
+}
+
+export const saveNewBlock = options => dispatch => {
+  return newBoundaryFetch(options).then(checkStatus).then(response => {    
+    dispatch(fetchEntitiesFromServer(1))
+    dispatch({
+      type: 'TOGGLE_MODAL',
+      modal: 'createBlock'
+    })   
+  })
+}
+

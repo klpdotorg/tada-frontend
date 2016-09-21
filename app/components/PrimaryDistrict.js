@@ -1,19 +1,17 @@
 import React from 'react';
 import Button from './Button'
-import {modifyBoundary} from '../actions'
-import {deleteBoundary} from '../actions'
+import {modifyBoundary, deleteBoundary, saveNewBlock} from '../actions'
 import CreateBlock from './Modals/CreateBoundary'
 import {Link} from 'react-router'
 
 export default class PrimaryDistrict extends React.Component {
 
   constructor(props){
-    super(props);
-    this.handleChange = this.handleChange.bind(this);
+    super(props);    
     this.saveDistrict = this.saveDistrict.bind(this);
-    this.deleteDistrict = this.deleteDistrict.bind(this);
-    this.addBlockModal = this.addBlockModal.bind(this);
+    this.deleteDistrict = this.deleteDistrict.bind(this);    
     this.toggleBlockModal = this.toggleBlockModal.bind(this);
+    this.saveBlock = this.saveBlock.bind(this);
     this.state = {
       value: '',
       blockModalIsOpen: false
@@ -27,21 +25,22 @@ export default class PrimaryDistrict extends React.Component {
 
   deleteDistrict(districtId) {
     this.props.dispatch(deleteBoundary(districtId))
+  } 
+
+  saveBlock(name) {
+    const options = {
+      name,
+      parent: this.props.params.districtId,
+      boundary_type: 1,
+      boundary_category: 10
+    }
+    this.props.dispatch(saveNewBlock(options))
   }
 
-  handleChange(event) {
-    this.setState({value: event.target.value});
-  }
-
-  toggleBlockModal() {
-    this.setState({
-      blockModalIsOpen: false
-    })
-  }
-
-  addBlockModal() {
-    this.setState({
-      blockModalIsOpen: true
+  toggleBlockModal() {    
+    this.props.dispatch({
+      type: 'TOGGLE_MODAL',
+      modal: 'createBlock'
     })
   }
 
@@ -56,7 +55,7 @@ export default class PrimaryDistrict extends React.Component {
         <div>
           <div className='heading-border-left'>
             <h4 className="brand-blue col-md-10">Modify Details</h4>
-            <Button title='Add Block' onClick={this.addBlockModal} />
+            <Button title='Add Block' onClick={this.toggleBlockModal} />
           </div>
             <form className="form-horizontal boundary-form" role="form">
               <div className="form-group">
@@ -89,7 +88,7 @@ export default class PrimaryDistrict extends React.Component {
           <li className="active">{boundary.name}</li>          
         </ol>
         <DistrictSummary {...this.props}/>
-        <CreateBlock placeHolder='Block Name' title='Create New Block' isOpen={this.state.blockModalIsOpen} onCloseModal={this.toggleBlockModal} closeModal={ this.toggleBlockModal} save={ this.props.saveBlock } />
+        <CreateBlock placeHolder='Block Name' title='Create New Block' isOpen={this.props.modal.createBlock} onCloseModal={this.toggleBlockModal} closeModal={ this.toggleBlockModal} save={ this.saveBlock } />
       </div>
     );
   }

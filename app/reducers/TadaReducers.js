@@ -1,5 +1,10 @@
 import _ from 'lodash'
 
+const modalsDefault = {
+  createDistrict: false,
+  createBlock: false
+}
+
 export function schoolSelection(state = {
   primarySchool: true
 }, action) {
@@ -206,15 +211,13 @@ export function userregistration(state = {
   }
 }
 
-export function modal(state = {
-  createDistrictModalIsOpen: false
-}, action) {
+export function modal(state = modalsDefault, action) {
   switch (action.type) {
-    case 'TOGGLE_CREATE_DISTRICT_MODAL':
+    case 'TOGGLE_MODAL':
     return {
-      createDistrictModalIsOpen: !state.createDistrictModalIsOpen
+      ...state,
+      [action.modal]: !state[action.modal]
     }
-
     default:
     return state;
   }
