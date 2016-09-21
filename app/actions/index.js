@@ -191,7 +191,7 @@ export function fetchEntitiesFromServer(parentBoundaryId) {
       parentId = parentBoundaryId;
     }
     //Initialize to the primary's district category (10)
-    var parentBoundaryCat = 10;
+    var parentBoundaryCat = 9;
     if (!state.schoolSelection.primarySchool)
       parentBoundaryCat = 13;
     //If we have boundary details already and this is not the root district, then we retrieve the parent boundary category
@@ -361,7 +361,8 @@ export function modifyBoundary(boundaryid, name){
       })
     }).then(response => {
      if (response.status >= 200 && response.status < 300) {
-      dispatch(fetchEntitiesFromServer(1))        
+      dispatch(fetchEntitiesFromServer(1))
+      dispatch(push('/'));  
       return response.json();
     } else {
       const error = new Error(response.statusText);
@@ -406,9 +407,21 @@ export const saveNewDistrict = name => dispatch => {
 export const saveNewBlock = options => dispatch => {
   return newBoundaryFetch(options).then(checkStatus).then(response => {    
     dispatch(fetchEntitiesFromServer(1))
+    dispatch(push('/'));
     dispatch({
       type: 'TOGGLE_MODAL',
       modal: 'createBlock'
+    })
+  })
+}
+
+export const saveNewCluster = options => dispatch => {
+  return newBoundaryFetch(options).then(checkStatus).then(response => {    
+    dispatch(fetchEntitiesFromServer(1))
+    dispatch(push('/'));
+    dispatch({
+      type: 'TOGGLE_MODAL',
+      modal: 'createCluster'
     })   
   })
 }

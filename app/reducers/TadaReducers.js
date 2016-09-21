@@ -2,7 +2,8 @@ import _ from 'lodash'
 
 const modalsDefault = {
   createDistrict: false,
-  createBlock: false
+  createBlock: false,
+  createCluster: false
 }
 
 export function schoolSelection(state = {
@@ -143,7 +144,7 @@ export function entities(state = {
   return {
     ...state,
     boundariesByParentId
-  }  
+  }
   default:
   return state;
 }
