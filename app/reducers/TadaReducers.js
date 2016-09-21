@@ -3,7 +3,8 @@ import _ from 'lodash'
 const modalsDefault = {
   createDistrict: false,
   createBlock: false,
-  createCluster: false
+  createCluster: false,
+  createProject: false
 }
 
 export function schoolSelection(state = {

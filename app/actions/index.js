@@ -388,11 +388,12 @@ const newBoundaryFetch = (options) => {
   })
 }
 
-export const saveNewDistrict = name => dispatch => {
+export const saveNewDistrict = name => (dispatch, getState) => {
+  const boundaryType = getState().schoolSelection.primarySelected ? 1: 2
   const options = {
     name,
     boundary_category: 9,
-    boundary_type: 1,
+    boundary_type: boundaryType,
     parent: 1
   }
   return newBoundaryFetch(options).then(checkStatus).then(response => {    
@@ -426,3 +427,13 @@ export const saveNewCluster = options => dispatch => {
   })
 }
 
+export const saveNewProject = options => dispatch => {
+  return newBoundaryFetch(options).then(checkStatus).then(response => {    
+    dispatch(fetchEntitiesFromServer(1))
+    dispatch(push('/'));
+    dispatch({
+      type: 'TOGGLE_MODAL',
+      modal: 'createProject'
+    })   
+  })
+}
