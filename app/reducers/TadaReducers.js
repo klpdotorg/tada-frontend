@@ -163,6 +163,25 @@ function processProgramDetails(programsData, programsByInstitutionId)
   };
 }
 
+function processStudentProgramDetails(programsData, programsByStudentId)
+{
+
+  var newProgramsByStudentId = {};
+  if(programsData.length > 0 )
+  {
+    programsData.map(program => {
+      newProgramsByStudentId[program.id] = program;
+
+    })
+  } 
+  //Merge existing program details with new info from server. This will eliminate dupes.
+  var mergedProgramDetails = {}
+  Object.assign(mergedProgramDetails, programsByStudentId, newProgramsByStudentId);
+  return {
+    programsByStudentId: mergedProgramDetails
+  };
+}
+
 export function programs(state = {
   programsByInstitutionId: [],
   programsByStudentId: []
@@ -177,6 +196,12 @@ export function programs(state = {
       }
 
     case 'PROGRAMS_STUDENT_RESPONSE_RECEIVED':
+      const programs2 = processStudentProgramDetails(action.data, state.programsByStudentId);
+      return {
+        ...state,
+        ...programs2
+      }
+
 
     default:
       return state;
