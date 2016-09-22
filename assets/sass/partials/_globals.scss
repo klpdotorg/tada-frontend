@@ -741,6 +741,7 @@ img, video {
 hr {
   display: block;
   height: 1px;
+  background-color: $brand-blue;
   border-top: 1px solid $border-color;
   margin: $base-spacing-lg-x 0;
 }

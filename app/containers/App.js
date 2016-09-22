@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchEntitiesFromServer, logoutUser, saveNewDistrict, loginSuccess, fetchUserData} from '../actions/';
+import { fetchEntitiesFromServer, fetchProgramsInstitution, logoutUser, saveNewDistrict, loginSuccess, fetchUserData} from '../actions/';
 import { push } from 'react-router-redux';
 import NavBar from '../components/MainNavBar';
 import MainHeader from '../components/MainHeader';
@@ -15,7 +15,8 @@ const mapStateToProps = state => ({
   routerState: state.routing,
   username: state.login.username,
   districtModalIsOpen: state.modal.createDistrictModalIsOpen,
-  primarySelected: state.schoolSelection.primarySchool
+  primarySelected: state.schoolSelection.primarySchool,
+  programsByInstitutionId: state.programs.programsByInstitutionId
 });
 
 var mapDispatchToProps = function(dispatch) {
@@ -62,6 +63,10 @@ var mapDispatchToProps = function(dispatch) {
     fetchUserData() {
       return dispatch(fetchUserData(sessionStorage.token));
     },
+
+    fetchProgramsByInstitution() {
+      return dispatch(fetchProgramsInstitution());
+    }
 
   };
 };
