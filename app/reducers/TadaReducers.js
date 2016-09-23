@@ -4,7 +4,8 @@ const modalsDefault = {
   createDistrict: false,
   createBlock: false,
   createCluster: false,
-  createProject: false
+  createProject: false,
+  createCircel: false
 }
 
 export function schoolSelection(state = {
@@ -28,7 +29,7 @@ export function schoolSelection(state = {
 Method computes the router path for an entity and returns it
 */
 function computeRouterPathForEntity(entity, boundaryDetails) {
-  var parentEntityId = getParentId(entity);
+  var parentEntityId = getParentId(entity);  
   var path = '';
   if (parentEntityId == 1) {
     path = "/district/" + entity.id;
@@ -42,6 +43,9 @@ function computeRouterPathForEntity(entity, boundaryDetails) {
     } else if (entity.boundary_category == "11") {
 
       path = parent.path + "/cluster/" + entity.id;
+    } else if (entity.boundary_category == "14") {
+
+      path = parent.path + "/project/" + entity.id;
     } else if (entity.institution_gender) {
       path = parent.path + "/institution/" + entity.id
 

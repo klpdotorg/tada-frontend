@@ -65,8 +65,7 @@ export default class PrimaryDistrict extends React.Component {
   render() {    
     var districtId = this.props.params.districtId;
     var boundary = this.props.boundaryDetails[districtId];
-    var boundaryType = boundary.boundary_type
-    var districtPath = "#" + boundary.path;
+    var boundaryType = boundary.boundary_type    
     var DistrictSummary;
     this.state.value = boundary.name;
     if(sessionStorage.getItem('isAdmin')) {

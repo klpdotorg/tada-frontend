@@ -437,3 +437,14 @@ export const saveNewProject = options => dispatch => {
     })   
   })
 }
+
+export const saveNewCircle = options => dispatch => {
+  return newBoundaryFetch(options).then(checkStatus).then(response => {    
+    dispatch(fetchEntitiesFromServer(1))
+    dispatch(push('/'));
+    dispatch({
+      type: 'TOGGLE_MODAL',
+      modal: 'createCircle'
+    })   
+  })
+}

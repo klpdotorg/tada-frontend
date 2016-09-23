@@ -22,7 +22,7 @@ var SideBar = React.createClass({
     $("#wrapper").toggleClass("toggled");
   },
 
-  render: function() {
+  render: function() {    
     const {onBoundaryClick, boundariesByParentId, boundaryDetails} = this.props;
     var sidebarClass = classNames({
       'toggled': this.state.isExpanded
