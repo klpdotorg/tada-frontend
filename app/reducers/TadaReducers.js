@@ -46,7 +46,11 @@ function computeRouterPathForEntity(entity, boundaryDetails) {
     } else if (entity.boundary_category == "14") {
 
       path = parent.path + "/project/" + entity.id;
-    } else if (entity.institution_gender) {
+    } else if (entity.boundary_category == "15") {
+
+      path = parent.path + "/circle/" + entity.id;
+    }  
+    else if (entity.institution_gender) {
       path = parent.path + "/institution/" + entity.id
 
     } else if (entity.group_type) {
