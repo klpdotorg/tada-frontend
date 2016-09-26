@@ -49,8 +49,7 @@ const SchoolsNavTree = React.createClass({
 
   //boundaryDetails={this.state.boundaryDetails} boundaryParentChildMap={this.state.childrenByParentId}
   render: function() {
-    var copyOfMap = $.extend(true, {}, this.props.boundariesByParentId);
-    var firstElement = Object.keys(copyOfMap);
+    var copyOfMap = $.extend(true, {}, this.props.boundariesByParentId);    
     var visitedBoundaries = [];
     return (
       <div>
