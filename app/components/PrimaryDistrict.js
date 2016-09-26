@@ -1,22 +1,21 @@
 import React from 'react';
 import Button from './Button'
-import {modifyBoundary} from '../actions'
-import {deleteBoundary} from '../actions'
-import CreateBlock from './Modals/CreateBoundary'
+import {modifyBoundary, deleteBoundary, saveNewBlock, saveNewProject} from '../actions'
+import CreateBoundary from './Modals/CreateBoundary'
 import {Link} from 'react-router'
 
 export default class PrimaryDistrict extends React.Component {
 
   constructor(props){
-    super(props);
-    this.handleChange = this.handleChange.bind(this);
+    super(props);    
     this.saveDistrict = this.saveDistrict.bind(this);
-    this.deleteDistrict = this.deleteDistrict.bind(this);
-    this.addBlockModal = this.addBlockModal.bind(this);
+    this.deleteDistrict = this.deleteDistrict.bind(this);    
     this.toggleBlockModal = this.toggleBlockModal.bind(this);
+    this.toggleProjectModal = this.toggleProjectModal.bind(this);
+    this.saveBlock = this.saveBlock.bind(this);
+    this.saveProject = this.saveProject.bind(this);
     this.state = {
       value: '',
-      blockModalIsOpen: false
     };
   }
 
@@ -27,28 +26,46 @@ export default class PrimaryDistrict extends React.Component {
 
   deleteDistrict(districtId) {
     this.props.dispatch(deleteBoundary(districtId))
+  } 
+
+  saveBlock(name) {
+    const options = {
+      name,
+      parent: this.props.params.districtId,
+      boundary_type: 1,
+      boundary_category: 10
+    }
+    this.props.dispatch(saveNewBlock(options))
   }
 
-  handleChange(event) {
-    this.setState({value: event.target.value});
+  saveProject(name) {
+    const options = {
+      name,
+      parent: this.props.params.districtId,
+      boundary_type: 2,
+      boundary_category: 14
+    }
+    this.props.dispatch(saveNewProject(options))
   }
 
-  toggleBlockModal() {
-    this.setState({
-      blockModalIsOpen: false
+  toggleBlockModal() {    
+    this.props.dispatch({
+      type: 'TOGGLE_MODAL',
+      modal: 'createBlock'
     })
   }
 
-  addBlockModal() {
-    this.setState({
-      blockModalIsOpen: true
+  toggleProjectModal() {    
+    this.props.dispatch({
+      type: 'TOGGLE_MODAL',
+      modal: 'createProject'
     })
   }
 
   render() {    
     var districtId = this.props.params.districtId;
     var boundary = this.props.boundaryDetails[districtId];
-    var districtPath = "#" + boundary.path;
+    var boundaryType = boundary.boundary_type    
     var DistrictSummary;
     this.state.value = boundary.name;
     if(sessionStorage.getItem('isAdmin')) {
@@ -56,7 +73,7 @@ export default class PrimaryDistrict extends React.Component {
         <div>
           <div className='heading-border-left'>
             <h4 className="brand-blue col-md-10">Modify Details</h4>
-            <Button title='Add Block' onClick={this.addBlockModal} />
+            {boundaryType == 2 ? <Button title='Add Project' onClick={this.toggleProjectModal} /> : <Button title='Add Block' onClick={this.toggleBlockModal} />}
           </div>
             <form className="form-horizontal boundary-form" role="form">
               <div className="form-group">
@@ -89,7 +106,8 @@ export default class PrimaryDistrict extends React.Component {
           <li className="active">{boundary.name}</li>          
         </ol>
         <DistrictSummary {...this.props}/>
-        <CreateBlock placeHolder='Block Name' title='Create New Block' isOpen={this.state.blockModalIsOpen} onCloseModal={this.toggleBlockModal} closeModal={ this.toggleBlockModal} save={ this.props.saveBlock } />
+        <CreateBoundary placeHolder='Block Name' title='Create New Block' isOpen={this.props.modal.createBlock} onCloseModal={this.toggleBlockModal} closeModal={ this.toggleBlockModal} save={ this.saveBlock } />
+        <CreateBoundary placeHolder='Project Name' title='Create New Project' isOpen={this.props.modal.createProject} onCloseModal={this.toggleProjectModal} closeModal={ this.toggleProjectModal} save={ this.saveProject } />
       </div>
     );
   }

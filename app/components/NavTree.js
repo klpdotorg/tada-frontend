@@ -8,13 +8,6 @@ import { Link } from 'react-router';
 // is preferred.
 const SchoolsNavTree = React.createClass({
 
-  /* Called when a component is reacting to a props change. Invoked before render is called. */
-  componentWillReceiveProps: function(nextProps) {},
-
-  componentDidMount: function() {},
-
-  componentWillUnmount: function() {},
-
   handleClick: function(boundary) {
     this.props.onBoundaryClick(boundary);
   },
@@ -29,6 +22,7 @@ const SchoolsNavTree = React.createClass({
   }
   ]
   */
+
   renderSubTree: function(node, boundaryHierarchy, visitedBoundaries) {
     if (node && $.inArray(node, visitedBoundaries) < 0) {
       var children = boundaryHierarchy[node];
@@ -55,8 +49,7 @@ const SchoolsNavTree = React.createClass({
 
   //boundaryDetails={this.state.boundaryDetails} boundaryParentChildMap={this.state.childrenByParentId}
   render: function() {
-    var copyOfMap = $.extend(true, {}, this.props.boundariesByParentId);
-    var firstElement = Object.keys(copyOfMap);
+    var copyOfMap = $.extend(true, {}, this.props.boundariesByParentId);    
     var visitedBoundaries = [];
     return (
       <div>
@@ -65,8 +58,6 @@ const SchoolsNavTree = React.createClass({
           }.bind(this)) }
       </div>
       );
-
-
   }
 });
 

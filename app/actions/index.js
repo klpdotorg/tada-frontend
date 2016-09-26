@@ -245,7 +245,7 @@ export function fetchEntitiesFromServer(parentBoundaryId) {
       parentId = parentBoundaryId;
     }
     //Initialize to the primary's district category (10)
-    var parentBoundaryCat = 10;
+    var parentBoundaryCat = 9;
     if (!state.schoolSelection.primarySchool)
       parentBoundaryCat = 13;
     //If we have boundary details already and this is not the root district, then we retrieve the parent boundary category
@@ -415,7 +415,8 @@ export function modifyBoundary(boundaryid, name){
       })
     }).then(response => {
      if (response.status >= 200 && response.status < 300) {
-      dispatch(fetchEntitiesFromServer(1))        
+      dispatch(fetchEntitiesFromServer(1))
+      dispatch(push('/'));  
       return response.json();
     } else {
       const error = new Error(response.statusText);
@@ -428,34 +429,76 @@ export function modifyBoundary(boundaryid, name){
 }
 }
 
-export function saveNewDistrict(name) {
-  return function(dispatch, getState) {
-    return fetch('http://tadadev.klp.org.in/api/v1/boundaries/', {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Token ' + sessionStorage.token
-      },
-      body: JSON.stringify({
-        "name": name,
-        "boundary_category": 9,
-        "boundary_type": 1,
-        "parent": 1
-      })
-    }).then(response => {
-      if (response.status >= 200 && response.status < 300) {
-        dispatch(fetchEntitiesFromServer(1))
-        dispatch({
-          type: 'TOGGLE_CREATE_DISTRICT_MODAL'
-        })
-        return response.json();
-      } else {
-        const error = new Error(response.statusText);
-        error.response = response;
-        throw error;
-      }
-    }).catch(error => {
-      console.log('request failed', error)
-    })
+const newBoundaryFetch = (options) => {
+  return fetch('http://tadadev.klp.org.in/api/v1/boundaries/', {
+    method: "POST",
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Token ' + sessionStorage.token
+    },
+    body: JSON.stringify(options)
+  }).catch(error => {
+    console.log('request failed', error)
+  })
+}
+
+export const saveNewDistrict = name => (dispatch, getState) => {
+  const boundaryType = getState().schoolSelection.primarySelected ? 1: 2
+  const options = {
+    name,
+    boundary_category: 9,
+    boundary_type: boundaryType,
+    parent: 1
   }
+  return newBoundaryFetch(options).then(checkStatus).then(response => {    
+    dispatch(fetchEntitiesFromServer(1))
+    dispatch({
+      type: 'TOGGLE_MODAL',
+      modal: 'createDistrict'
+    })   
+  })
+}
+
+export const saveNewBlock = options => dispatch => {
+  return newBoundaryFetch(options).then(checkStatus).then(response => {    
+    dispatch(fetchEntitiesFromServer(1))
+    dispatch(push('/'));
+    dispatch({
+      type: 'TOGGLE_MODAL',
+      modal: 'createBlock'
+    })
+  })
+}
+
+export const saveNewCluster = options => dispatch => {
+  return newBoundaryFetch(options).then(checkStatus).then(response => {    
+    dispatch(fetchEntitiesFromServer(1))
+    dispatch(push('/'));
+    dispatch({
+      type: 'TOGGLE_MODAL',
+      modal: 'createCluster'
+    })   
+  })
+}
+
+export const saveNewProject = options => dispatch => {
+  return newBoundaryFetch(options).then(checkStatus).then(response => {    
+    dispatch(fetchEntitiesFromServer(1))
+    dispatch(push('/'));
+    dispatch({
+      type: 'TOGGLE_MODAL',
+      modal: 'createProject'
+    })   
+  })
+}
+
+export const saveNewCircle = options => dispatch => {
+  return newBoundaryFetch(options).then(checkStatus).then(response => {    
+    dispatch(fetchEntitiesFromServer(1))
+    dispatch(push('/'));
+    dispatch({
+      type: 'TOGGLE_MODAL',
+      modal: 'createCircle'
+    })   
+  })
 }

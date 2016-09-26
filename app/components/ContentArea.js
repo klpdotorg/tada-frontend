@@ -32,6 +32,7 @@ const mapStateToProps = (state) => {
     boundaryDetails: state.entities.boundaryDetails,
     programsByInstitutionId: state.programs.programsByInstitutionId,
     programsByStudentId: state.programs.programsByStudentId,
+    modal: state.modal,
     isFetching: state.entities.isFetching
   }
 }

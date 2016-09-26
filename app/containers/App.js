@@ -29,26 +29,28 @@ var mapDispatchToProps = function(dispatch) {
         type: 'PRIMARY_SELECTED',
       });
     },
-    onPreSchoolClick: function() {
+    onPreSchoolClick() {
       dispatch({
         type: 'PRESCHOOL_SELECTED'
       })
+      dispatch(fetchEntitiesFromServer());
     },
-    fetchEntityDetails: function() {
+    fetchEntityDetails() {
       dispatch(fetchEntitiesFromServer(1));
     },
 
-    handleLogout: function() {
+    handleLogout() {
       dispatch(logoutUser());
     },
 
-    toggleDistrictModal: function() {
+    toggleDistrictModal() {
       dispatch({
-        type: 'TOGGLE_CREATE_DISTRICT_MODAL'
+        type: 'TOGGLE_MODAL',
+        modal: 'createDistrict'
       })
     },
 
-    saveNewDistrict: function(name) {
+    saveNewDistrict(name) {
       dispatch(saveNewDistrict(name));
     },    
 
@@ -89,7 +91,7 @@ class TadaContentContainer extends Component {
   }
 
   render() {
-    const {onBoundaryClick, boundaryDetails, boundariesByParentId, saveNewDistrict, modifyDistrict} = this.props
+    const {onBoundaryClick, boundaryDetails, boundariesByParentId, saveNewDistrict, modifyDistrict, primarySelected} = this.props
     return (
       <div>
         <MainHeader handleLogout={ this.props.handleLogout } />
@@ -98,7 +100,7 @@ class TadaContentContainer extends Component {
         <SecondaryNavBar redirectTo = {this.props.redirectTo} toggleDistrictModal={ this.props.toggleDistrictModal } districtModalIsOpen={ this.props.districtModalIsOpen } saveNewDistrict={ saveNewDistrict } />
         <div id="wrapper" className="main__wrapper">
 
-          <SideBar onBoundaryClick={ onBoundaryClick } boundaryDetails={ boundaryDetails } boundariesByParentId={ boundariesByParentId } />
+          <SideBar primarySelected={primarySelected} onBoundaryClick={ onBoundaryClick } boundaryDetails={ boundaryDetails } boundariesByParentId={ boundariesByParentId } />
           <MainContentArea children={ this.props.children } />
         </div>
 

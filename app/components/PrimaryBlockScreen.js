@@ -1,5 +1,5 @@
 import React from 'react';
-import {modifyBoundary, deleteBoundary} from '../actions';
+import {modifyBoundary, deleteBoundary, saveNewCluster} from '../actions';
 import Button from './Button'
 import CreateCluster from './Modals/CreateBoundary'
 
@@ -10,9 +10,9 @@ export default class PrimaryDistrict extends React.Component {
   constructor(props){
     super(props);
     this.onClickSaveBlock = this.onClickSaveBlock.bind(this);    
-    this.onClickDeleteBlock = this.onClickDeleteBlock.bind(this);
-    this.openClusterModal = this.openClusterModal.bind(this);
+    this.onClickDeleteBlock = this.onClickDeleteBlock.bind(this);    
     this.toggleClusterModal = this.toggleClusterModal.bind(this);
+    this.saveCluster = this.saveCluster.bind(this);
     this.state = {
       value: '',
       clusterModalIsOpen: false
@@ -23,18 +23,22 @@ export default class PrimaryDistrict extends React.Component {
     this.props.dispatch(modifyBoundary(districtid, this.blockName.value));
   }
 
-  toggleClusterModal(){
-    this.setState({
-      clusterModalIsOpen: false
-    })  
-  }  
-
-
-  openClusterModal(){
-    this.setState({
-      clusterModalIsOpen: true
-    })
+  saveCluster(name) {
+    const options = {
+      name,
+      parent: this.props.params.blockId,
+      boundary_type: 1,
+      boundary_category: 11
+    }
+    this.props.dispatch(saveNewCluster(options))    
   }
+
+  toggleClusterModal(){
+    this.props.dispatch({
+      type: 'TOGGLE_MODAL',
+      modal: 'createCluster'
+    })
+  }  
 
   onClickDeleteBlock(districtid) {
     this.props.dispatch(deleteBoundary(districtid));
@@ -51,7 +55,7 @@ export default class PrimaryDistrict extends React.Component {
         <div>
           <div className='heading-border-left'>
             <h4 className="brand-blue col-md-10">Modify Details</h4>
-            <Button onClick={this.openClusterModal} title='Add Cluster'/>
+            <Button onClick={this.toggleClusterModal} title='Add Cluster'/>
           </div>
           
             <form className="form-horizontal boundary-form" role="form">
@@ -85,8 +89,8 @@ export default class PrimaryDistrict extends React.Component {
           <li><a href={districtPath}>{district.name}</a></li>
           <li className="active">{block.name}</li>
         </ol>
-        <Displayelement {...this.props}/>
-        <CreateCluster placeHolder='Cluster Name' title='Create New Cluster' isOpen={this.state.clusterModalIsOpen} onCloseModal={this.toggleClusterModal} closeModal={ this.toggleClusterModal} save={ this.props.saveCluster } />
+        <Displayelement {...this.props} />
+        <CreateCluster placeHolder='Cluster Name' title='Create New Cluster' isOpen={this.props.modal.createCluster} onCloseModal={this.toggleClusterModal} closeModal={ this.toggleClusterModal} save={ this.saveCluster } />
       </div>
     );   
   }
