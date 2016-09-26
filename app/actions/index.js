@@ -24,6 +24,24 @@ function responseReceivedFromServer(resp) {
   }
 }
 
+/* This method handles the responses received from the programs endpoint
+*/
+function handleProgramsInstitutionResponse(resp) {
+  return {
+    type: 'PROGRAMS_INSTITUTION_RESPONSE_RECEIVED',
+    data: resp.results
+  }
+}
+
+/* This method handles the responses received from the programs endpoint
+*/
+function handleProgramsStudentResponse(resp) {
+  return {
+    type: 'PROGRAMS_STUDENT_RESPONSE_RECEIVED',
+    data: resp.results
+  }
+}
+
 function requestFailed(error) {
   return {
     type: 'REQUEST_FAILED',
@@ -142,6 +160,42 @@ function fetchInstitutionDetails(parentBoundaryId) {
       dispatch(requestFailed(error))
     })
   }
+}
+
+export function fetchProgramsInstitution()
+{
+  return function(dispatch, getState) {
+    var url = "http://tadadev.klp.org.in/api/v1/programmes-institution/";
+    return fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Token ' + sessionStorage.token
+      }
+    }).then(checkStatus).then(data => {
+      dispatch(handleProgramsInstitutionResponse(data));
+    }).catch(error => {
+      dispatch(requestFailed(error));
+    });
+}
+}
+
+export function fetchProgramsStudent()
+{
+  return function(dispatch, getState) {
+    var url = "http://tadadev.klp.org.in/api/v1/programmes-student/";
+    return fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Token ' + sessionStorage.token
+      }
+    }).then(checkStatus).then(data => {
+      dispatch(handleProgramsStudentResponse(data));
+    }).catch(error => {
+      dispatch(requestFailed(error));
+    });
+}
 }
 
 function isInstitution(parentEntity) {
