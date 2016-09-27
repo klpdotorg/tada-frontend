@@ -201,12 +201,77 @@ export function programs(state = {
         ...state,
         ...programs2
       }
-
-
     default:
       return state;
 
   }
+}
+
+function processInstitutionAssessments(data, assessmentsInstitutionByProgramId)
+{
+  var newAssessmentsByProgramId = {};
+  if(data.length > 0)
+  {
+    data.map(assessment => {
+      newAssessmentsByProgramId[assessment.programme] = assessment;
+    })
+  }
+
+  var mergedAssessment = {};
+  Object.assign(mergedAssessment, assessmentsInstitutionByProgramId, newAssessmentsByProgramId);
+  return {
+    institutionAssessmentsByProgramId: mergedAssessment
+  };
+}
+
+function processStudentAssessments(data, assessmentsStudentByProgramId)
+{
+  var newAssessmentsByProgramId = {};
+  if(data.length > 0)
+  {
+    data.map(assessment => {
+      newAssessmentsByProgramId[assessment.programme] = assessment;
+    })
+  }
+
+  var mergedAssessment = {}
+  Object.assign(mergedAssessment, assessmentsStudentByProgramId, newAssessmentsByProgramId);
+  return {
+    studentAssessmentsByProgramId: mergedAssessment
+  };
+}
+
+export function assessments(state = {
+  institutionAssessmentsByProgramId: {},
+  studentAssessmentsByProgramId: {}
+}, action){
+  try
+  {
+  switch(action.type)
+  {
+    case 'ASSESSMENTS_INSTITUTION_RESPONSE_RECEIVED':
+      const institutionAsessments = processInstitutionAssessments(action.data, state.institutionAssessmentsByProgramId);
+      console.log("Processed institution asessments", institutionAsessments);
+      return {
+        ...state,
+        ...institutionAsessments
+      }
+    
+    case 'ASSESSMENTS_STUDENT_RESPONSE_RECEIVED':
+      const studentAsessments = processStudentAssessments(action.data, state.studentAssessmentsByProgramId);
+      return {
+        ...state,
+        ...studentAsessments
+      }
+    default:
+      return state;
+  }
+}
+catch(exception)
+{
+  console.log(exception);
+  console.log(state);
+}
 }
 
 export function login(state = {

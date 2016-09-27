@@ -1,5 +1,5 @@
 import React from 'react';
-import { fetchProgramsInstitution, fetchProgramsStudent } from '../actions/';
+import * as actions from '../actions/';
 
 export default class Programs extends React.Component {
 
@@ -7,30 +7,45 @@ export default class Programs extends React.Component {
 	{
 		super(props);
 		this.state = {
-			programTypeSelected:"institution",
+			currentProgramType:"institution",
+			selectedProgram: {},
 		}
-		this.handleOnClick = this.handleOnClick.bind(this);
-		this.handleProgramSel = this.handleProgramTypeSelector.bind(this);
+		this.handleProgramSelection = this.handleProgramSelection.bind(this);
+		this.handleProgramTypeSel = this.handleProgramTypeSelector.bind(this);
 		console.log("State is -- ", this.state);
 	}
 
 	componentWillMount(){
 		console.log("Fetching programs");
-		this.props.dispatch(fetchProgramsInstitution());
+		this.props.dispatch(actions.fetchProgramsInstitution());
 	}
 
 	componentWillReceiveProps(nextProps)
 	{
 		console.log("Component will receive props", nextProps);
-		console.log("State is -- ", this.state);
+		
 		
 		
 	}	
 
-	handleOnClick(e)
+/*
+	This needs to trigger fetching asessments for that program/type combo
+*/
+	handleProgramSelection(e)
 	{
-		console.log("handling on click");
 		console.log("Selected value is: " ,this.selProgram.value);
+		if(this.state.currentProgramType == "institution")
+		{
+			this.props.dispatch(actions.fetchAssessmentsForInstitutionPrograms(this.selProgram.value));
+		}
+		else
+		{
+			this.props.dispatch(actions.fetchAssessmentsForStudentPrograms(this.selProgram.value));
+		}
+		this.setState({
+			selectedProgram: this.selProgram.value
+		});
+
 	}
 
 	handleProgramTypeSelector(e)
@@ -41,56 +56,80 @@ export default class Programs extends React.Component {
 		console.log(e.target.value);
 
 		this.setState({
-			programTypeSelected: e.target.value
+			currentProgramType: e.target.value
 		});
 
+		//Subha: Not sure this is "done" like this. Before the state is finalized, is it okay
+		//to act on it? Else, I get into an infinite loop in componentWillReceiveProps
 		if(e.target.value == "institution")
 		{
-			this.props.dispatch(fetchProgramsInstitution());
+			this.props.dispatch(actions.fetchProgramsInstitution());
 
 		}
 		else
 		{
-			this.props.dispatch(fetchProgramsStudent());
+			this.props.dispatch(actions.fetchProgramsStudent());
 
 		}
 	}
 
 	render() {
-
-		var defaultProgramName = "";
-		var programs;
-		if(this.state.programTypeSelected == "institution")
+		var selectedProgram;
+		var selectedProgramName = "";
+		var programs, assessments;
+		var startDate;
+		var endDate;
+		if(this.state.currentProgramType == "institution")
 		{
 			programs = this.props.programsByInstitutionId;
+			assessments = this.props.institutionAssessmentsByProgramId;
 		}
 		else
 		{
 			programs = this.props.programsByStudentId;
+			assessments = this.props.studentAssessmentsByProgramId;
 		}
 		var programsList= Object.values(programs).map((program,i) => {
-			return (<option key={program.id}>{program.name}</option>);
+			return (<option key={program.id} value={program.id}>{program.name}</option>);
 		});
-		if(Object.keys(programs).length >0)
+
+		var assessmentsList = Object.values(assessments).map((assessment,i) => {
+			return (
+				<tr>
+					<td>assessment.name</td>
+				</tr>
+			);
+		});
+		if(Object.keys(programs).length >0 && jQuery.isEmptyObject(this.state.selectedProgram))
 		{
-			var defaultProgram = Object.values(programs)[0];
-			defaultProgramName=defaultProgram.name;
-			console.log(defaultProgram);
+			selectedProgram = Object.values(programs)[0];
+			
+		}
+		else
+		{
+			selectedProgram = programs[this.state.selectedProgram];
+
+		}
+		if(!jQuery.isEmptyObject(selectedProgram))
+		{
+			selectedProgramName=selectedProgram.name;
+			startDate = selectedProgram.start_date;
+			endDate = selectedProgram.end_date;
 		}
 		return (
 			<div>
 				<div className="row center-block">
-					<div className="col-md-2 form-group">
-						<input type="radio" ref={(ref) => this.institutionSel = ref} checked={this.state.programTypeSelected == "institution"} name="programstypesel" id="institution" value="institution" onChange={this.handleProgramSel}/>
+					<div className="col-md-2 form-inline">
+						<input type="radio" className="form-control" ref={(ref) => this.institutionSel = ref} checked={this.state.currentProgramType == "institution"} name="programstypesel" id="institution" value="institution" onChange={this.handleProgramTypeSel}/>
 						Institution
 					</div>
-					<div className="col-md-2 form-group">
-						<input type="radio" ref={(ref) => this.studentSel = ref} checked={this.state.programTypeSelected == "student"} name="programstypesel" id="institution" value="student" onChange={this.handleProgramSel}/>
+					<div className="col-md-2 form-inline">
+						<input type="radio" className="form-control" ref={(ref) => this.studentSel = ref} checked={this.state.currentProgramType == "student"} name="programstypesel" id="institution" value="student" onChange={this.handleProgramTypeSel}/>
 						Students
 					</div>
 					<div className="col-md-4 form-inline">
 		  				<label htmlFor="sel1">Programs:</label>
-						  <select ref={(ref) => this.selProgram = ref} className="form-control"  id="sel1" onChange={this.handleOnClick}>
+						  <select ref={(ref) => this.selProgram = ref} className="form-control"  id="sel1" onChange={this.handleProgramSelection}>
 						    {programsList}
 						  </select>
 					</div>
@@ -116,17 +155,37 @@ export default class Programs extends React.Component {
 					</div>
 
 					<div className="row">	
-						<label className="col-md-4">Program name: {defaultProgramName} </label>
-						<label className="col-md-4">Start Date: </label>
+						<label className="col-md-4">Program name: {selectedProgramName} </label>
+						<label className="col-md-4">Start Date: {startDate}</label>
 					</div>
 					<div className="row">
 						<label className="col-md-4">Partner name: </label>
-						<label className="col-md-4">End Date: </label>
+						<label className="col-md-4">End Date: {endDate}</label>
 					</div>
 				</div>
 				<br/>
 				<div>
 					<h4 className="brand-blue text-center"> Assessments in this Programme</h4>	
+				</div>
+				<div>
+					<table className="table table-bordered table-striped">
+					<tbody>
+						<tr className="info">
+							<th>Assessment</th>
+							<th>Class</th>
+							<th>Start Date</th>
+							<th>End Date</th>
+							<th>Type</th>
+							<th>Double Entry</th>
+							<th>Flexi-type</th>
+							<th>Status</th>
+							<th>Select</th>
+							<th>Edit</th>
+							<th>Questions</th>
+						</tr>
+						{assessmentsList}
+					</tbody>
+					</table>
 				</div>
 				
 			</div>
