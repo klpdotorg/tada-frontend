@@ -16,7 +16,10 @@ const mapStateToProps = state => ({
   username: state.login.username,
   districtModalIsOpen: state.modal.createDistrictModalIsOpen,
   primarySelected: state.schoolSelection.primarySchool,
-  programsByInstitutionId: state.programs.programsByInstitutionId
+  programsByInstitutionId: state.programs.programsByInstitutionId,
+  programsByStudentId: state.programs.programsByStudentId,
+  institutionAssessmentsByProgramId: state.assessments.institutionAsessmentsByProgramId,
+  studentAssessmentsByProgramId: state.assessments.studentAssessmentsByProgramId,
 });
 
 var mapDispatchToProps = function(dispatch) {

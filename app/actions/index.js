@@ -42,6 +42,20 @@ function handleProgramsStudentResponse(resp) {
   }
 }
 
+function handleAssessmentsInstitutionResponse(resp) {
+  return {
+    type: 'ASSESSMENTS_INSTITUTION_RESPONSE_RECEIVED',
+    data: resp.results
+  }
+}
+
+function handleStudentAssessmentsResponse(resp) {
+  return {
+    type: 'ASSESSMENTS_STUDENT_RESPONSE_RECEIVED',
+    data: resp.results
+  }
+}
+
 function requestFailed(error) {
   return {
     type: 'REQUEST_FAILED',
@@ -192,6 +206,42 @@ export function fetchProgramsStudent()
       }
     }).then(checkStatus).then(data => {
       dispatch(handleProgramsStudentResponse(data));
+    }).catch(error => {
+      dispatch(requestFailed(error));
+    });
+}
+}
+
+export function fetchAssessmentsForInstitutionPrograms(programId)
+{
+  return function(dispatch, getState) {
+    var url = "http://tadadev.klp.org.in/api/v1/programmes-institution/" + programId + "/assessments-institution/";
+    return fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Token ' + sessionStorage.token
+      }
+    }).then(checkStatus).then(data => {
+      dispatch(handleAssessmentsInstitutionResponse(data));
+    }).catch(error => {
+      dispatch(requestFailed(error));
+    });
+}
+}
+
+export function fetchAssessmentsForStudentPrograms(programId)
+{
+  return function(dispatch, getState) {
+    var url = "http://tadadev.klp.org.in/api/v1/programmes-student/" + programId + "/assessments-student/";
+    return fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Token ' + sessionStorage.token
+      }
+    }).then(checkStatus).then(data => {
+      dispatch(handleStudentAssessmentsResponse(data));
     }).catch(error => {
       dispatch(requestFailed(error));
     });
