@@ -5,6 +5,18 @@ import React, { Component } from 'react';
 import CreateDistrict from './Modals/CreateBoundary'
 
 export default class SecondaryNavBar extends React.Component {
+
+  constructor(props)
+  {
+    super(props);
+    this.handleProgramClick = this.handleProgramClick.bind(this);
+  }
+
+  handleProgramClick()
+  {
+    this.props.redirectTo('/programs');
+  }
+
   render() {  
     return (
       <div className="container-fluid">
@@ -16,8 +28,7 @@ export default class SecondaryNavBar extends React.Component {
           <button type="submit" className="btn btn-default padded-btn">Search</button>
         </form>
         <p className="pull-right">
-          <button type="button" className="btn btn-info navbar-btn all-padded-btn" data-toggle="tooltip"><span className="fa fa-pencil-square-o"></span> Make Admin</button>
-          <button type="button" className="btn btn-info navbar-btn all-padded-btn" data-toggle="tooltip"><span className="fa fa-pencil-square-o"></span> Manage Programs</button>
+          <button type="button" className="btn btn-info navbar-btn all-padded-btn" data-toggle="tooltip" onClick={this.handleProgramClick}><span className="fa fa-pencil-square-o"></span> Manage Programs</button>
           <button type="button" className="btn btn-info navbar-btn all-padded-btn" onClick={ this.props.toggleDistrictModal } data-toggle="tooltip" data-placement="bottom" title="Create District"><span className="fa fa-globe"></span></button>
           <button type="button" className="btn btn-info navbar-btn all-padded-btn" data-toggle="tooltip" data-placement="bottom" title="Manage Permissions"><span className="fa fa-key"></span></button>
           <button type="button" className="btn btn-info navbar-btn all-padded-btn" data-toggle="tooltip" data-placement="bottom" title="Add User"><span className="fa fa-user-plus"></span></button>

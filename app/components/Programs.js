@@ -93,13 +93,7 @@ export default class Programs extends React.Component {
 			return (<option key={program.id} value={program.id}>{program.name}</option>);
 		});
 
-		var assessmentsList = Object.values(assessments).map((assessment,i) => {
-			return (
-				<tr>
-					<td>assessment.name</td>
-				</tr>
-			);
-		});
+		
 		if(Object.keys(programs).length >0 && jQuery.isEmptyObject(this.state.selectedProgram))
 		{
 			selectedProgram = Object.values(programs)[0];
@@ -183,7 +177,6 @@ export default class Programs extends React.Component {
 							<th>Edit</th>
 							<th>Questions</th>
 						</tr>
-						{assessmentsList}
 					</tbody>
 					</table>
 				</div>
