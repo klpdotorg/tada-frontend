@@ -34,6 +34,7 @@ const mapStateToProps = (state) => {
     programsByStudentId: state.programs.programsByStudentId,
     institutionAssessmentsByProgramId: state.assessments.institutionAsessmentsByProgramId,
     studentAssessmentsByProgramId: state.assessments.studentAssessmentsByProgramId,
+    modal: state.modal,
     isFetching: state.entities.isFetching
   }
 }

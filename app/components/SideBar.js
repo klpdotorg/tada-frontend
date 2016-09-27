@@ -1,5 +1,6 @@
 import React from 'react';
 import SchoolsNavTree from './NavTree';
+import _ from 'lodash';
 var classNames = require('classnames');
 import $ from 'jquery';
 
@@ -22,8 +23,10 @@ var SideBar = React.createClass({
     $("#wrapper").toggleClass("toggled");
   },
 
-  render: function() {
-    const {onBoundaryClick, boundariesByParentId, boundaryDetails} = this.props;
+  render: function() {    
+    let {onBoundaryClick, boundariesByParentId, boundaryDetails, primarySelected} = this.props;
+    const schoolType = primarySelected ? 1 : 2
+    boundariesByParentId = _.pick(boundariesByParentId, (val, key) => boundaryDetails[key].boundary_type == schoolType)    
     var sidebarClass = classNames({
       'toggled': this.state.isExpanded
     })

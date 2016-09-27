@@ -30,8 +30,8 @@ export default class CreateDistrict extends Component {
   render() {
     return (
       <Modal isOpen={ this.props.isOpen } onRequestClose={ this.props.onCloseModal } style={ customStyles }>
-        <label htmlFor="district" className="control-label">Create new district</label>
-        <input id="district" value={ this.props.value } type="text" className="form-control" placeholder="District Name" onChange={ this.handleChange } />
+        <label htmlFor="district" className="control-label">{this.props.title}</label>
+        <input id="district" value={ this.props.value } type="text" className="form-control" placeholder={this.props.placeHolder} onChange={ this.handleChange } />
         <div className='button' onClick={ () => {
                                             this.props.save(this.state.value)
                                           } }>Save</div>

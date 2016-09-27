@@ -6,8 +6,8 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import klplogo from '../../assets/images/KLP_logo.png';
 
-class HeaderBar extends React.Component {
-
+class HeaderBar extends Component {
+  
   constructor(props) {
     super(props);
   }
