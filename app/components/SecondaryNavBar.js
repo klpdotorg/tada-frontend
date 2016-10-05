@@ -10,6 +10,7 @@ export default class SecondaryNavBar extends React.Component {
   {
     super(props);
     this.handleProgramClick = this.handleProgramClick.bind(this);
+    this.handleHomeButtonClick = this.handleHomeButtonClick.bind(this);
   }
 
   handleProgramClick()
@@ -17,10 +18,15 @@ export default class SecondaryNavBar extends React.Component {
     this.props.redirectTo('/programs');
   }
 
+  handleHomeButtonClick()
+  {
+    this.props.redirectTo('/dashboard');
+  }
+
   render() {  
     return (
       <div className="container-fluid">
-        <button type="button" className="btn btn-primary navbar-btn all-padded-btn pull-left"><span className="glyphicon glyphicon-home"></span></button>
+        <button type="button" className="btn btn-primary navbar-btn all-padded-btn pull-left" onClick={this.handleHomeButtonClick}><span className="glyphicon glyphicon-home"></span></button>
         <form className="navbar-form navbar-left" role="search">
           <div className="form-group">
             <input type="text" className="form-control" placeholder="Enter KLP ID" />

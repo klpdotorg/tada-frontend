@@ -92,7 +92,20 @@ export default class Programs extends React.Component {
 		var programsList= Object.values(programs).map((program,i) => {
 			return (<option key={program.id} value={program.id}>{program.name}</option>);
 		});
-
+		var assessmentsList = Object.values(assessments).map((assessment,i)=>{
+			return(
+				<tr>
+					<td>{assessment.name}</td>
+					<td></td>
+					<td>{assessment.start_date}</td>
+					<td>{assessment.end_date}</td>
+					<td></td>
+					<td>{assessment.double_entry}</td>
+					<td>{assessment.flexi_assessment}</td>
+					<td>{assessment.active}</td>
+				</tr>
+			);
+		});
 		
 		if(Object.keys(programs).length >0 && jQuery.isEmptyObject(this.state.selectedProgram))
 		{
@@ -177,6 +190,7 @@ export default class Programs extends React.Component {
 							<th>Edit</th>
 							<th>Questions</th>
 						</tr>
+						{assessmentsList}
 					</tbody>
 					</table>
 				</div>

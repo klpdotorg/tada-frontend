@@ -18,8 +18,7 @@ const mapStateToProps = state => ({
   primarySelected: state.schoolSelection.primarySchool,
   programsByInstitutionId: state.programs.programsByInstitutionId,
   programsByStudentId: state.programs.programsByStudentId,
-  institutionAssessmentsByProgramId: state.assessments.institutionAsessmentsByProgramId,
-  studentAssessmentsByProgramId: state.assessments.studentAssessmentsByProgramId,
+  
 });
 
 var mapDispatchToProps = function(dispatch) {
