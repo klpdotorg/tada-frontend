@@ -222,7 +222,7 @@ export function programs(state = {
   }
 }
 
-function processInstitutionAssessments(data, assessmentsInstitutionByProgramId)
+function processInstitutionAssessments(data)
 {
   var newAssessmentsByProgramId = {};
   if(data.length > 0)
@@ -232,14 +232,10 @@ function processInstitutionAssessments(data, assessmentsInstitutionByProgramId)
     })
   }
 
-  var mergedAssessment = {};
-  Object.assign(mergedAssessment, assessmentsInstitutionByProgramId, newAssessmentsByProgramId);
-  return {
-    institutionAssessmentsByProgramId: mergedAssessment
-  };
+  return newAssessmentsByProgramId;
 }
 
-function processStudentAssessments(data, assessmentsStudentByProgramId)
+function processStudentAssessments(data)
 {
   var newAssessmentsByProgramId = {};
   if(data.length > 0)
@@ -249,11 +245,8 @@ function processStudentAssessments(data, assessmentsStudentByProgramId)
     })
   }
 
-  var mergedAssessment = {}
-  Object.assign(mergedAssessment, assessmentsStudentByProgramId, newAssessmentsByProgramId);
-  return {
-    studentAssessmentsByProgramId: mergedAssessment
-  };
+    return newAssessmentsByProgramId;
+  
 }
 
 export function assessments(state = {
@@ -265,15 +258,17 @@ export function assessments(state = {
   switch(action.type)
   {
     case 'ASSESSMENTS_INSTITUTION_RESPONSE_RECEIVED':
-      const institutionAsessments = processInstitutionAssessments(action.data, state.institutionAssessmentsByProgramId);
-      console.log("Processed institution asessments", institutionAsessments);
-      return {
-        ...state,
-        ...institutionAsessments
-      }
+          console.log("State before change", state);
+
+      const institutionAssessmentsByProgram = processInstitutionAssessments(action.data);
+      return Object.assign(
+        {},
+        state,
+        {institutionAssessmentsByProgramId: institutionAssessmentsByProgram}
+      );
     
     case 'ASSESSMENTS_STUDENT_RESPONSE_RECEIVED':
-      const studentAsessments = processStudentAssessments(action.data, state.studentAssessmentsByProgramId);
+      const studentAsessments = processStudentAssessments(action.data);
       return {
         ...state,
         ...studentAsessments
