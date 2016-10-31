@@ -2,6 +2,7 @@
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
 require('bootstrap/dist/css/bootstrap.css');
+require('bootstrap/dist/js/bootstrap.js');
 require('font-awesome/css/font-awesome.css');
 require('../assets/sass/lato.scss');
 require('../assets/sass/style.scss');

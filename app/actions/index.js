@@ -187,8 +187,8 @@ export function fetchProgramsInstitution()
         'Authorization': 'Token ' + sessionStorage.token
       }
     }).then(checkStatus).then(data => {
-      dispatch(handleProgramsInstitutionResponse(data));
-    }).catch(error => {
+          dispatch(handleProgramsInstitutionResponse(data));
+        }).catch(error => {
       dispatch(requestFailed(error));
     });
 }
