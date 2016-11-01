@@ -2,6 +2,7 @@ import fetch from 'isomorphic-fetch';
 import config from '../config.js';
 import { push } from 'react-router-redux';
 const serverApiBase = config.PROD_SERVER_API_BASE;
+const authApiBase = config.PROD_SERVER_AUTH_BASE;
 import store from '../store'
 
 export function showPrimarySchoolHierarchy() {
@@ -128,6 +129,49 @@ function userDataFetched(data) {
   }
 }
 
+export function changeUserName(newUserName, password){
+
+  return function(dispatch, getState){
+    return fetch(authApiBase+'auth/username/', {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username: newUserName,
+        current_password: password
+      }).then(checkStatus).then(data => {
+        console.log("Username changed");
+      }).catch(error=>{
+        dispatch(requestFailed(error));
+      })
+    });
+  }
+}
+
+export function changePassword(newPassword, currentPassword){
+
+  return function(dispatch, getState){
+    return fetch(authApiBase+'auth/password/', {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Token ' + sessionStorage.token
+      },
+      body: JSON.stringify({
+        new_password: newPassword,
+        current_password: currentPassword
+      })
+    }).then(checkStatus).then(data => {
+        console.log("Password changed");
+      }).catch(error=>{
+        dispatch(requestFailed(error));
+      })
+    
+  }
+}
+
+
 export function fetchBoundaryDetails(parentBoundaryId) {
   return function(dispatch, getState) {
 
@@ -187,8 +231,8 @@ export function fetchProgramsInstitution()
         'Authorization': 'Token ' + sessionStorage.token
       }
     }).then(checkStatus).then(data => {
-      dispatch(handleProgramsInstitutionResponse(data));
-    }).catch(error => {
+          dispatch(handleProgramsInstitutionResponse(data));
+        }).catch(error => {
       dispatch(requestFailed(error));
     });
 }

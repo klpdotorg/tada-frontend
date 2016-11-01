@@ -18,15 +18,32 @@ export default class Programs extends React.Component {
 	componentWillMount(){
 		console.log("Fetching programs");
 		this.props.dispatch(actions.fetchProgramsInstitution());
+
+
 	}
 
+	/*
+	Setting state here will NOT trigger another render
+	*/
 	componentWillReceiveProps(nextProps)
 	{
-		console.log("Component will receive props", nextProps);
-		
-		
-		
+		const programs = nextProps.programsByInstitutionId;
+		if(!this.programsByInstitutionId && Object.keys(programs).length >0 && jQuery.isEmptyObject(this.state.selectedProgram))
+		{
+			console.log("receiving programs for the first time");
+			const selectProgram = Object.values(programs)[0];	
+			this.setState({
+				selectedProgram: selectProgram.id
+			});
+		}
 	}	
+
+	componentWillUpdate(nextProps, nextState)
+	{
+		console.log("Fetching assessments for program id", nextState.selectedProgram);
+		//this.props.dispatch(actions.fetchAssessmentsForInstitutionPrograms(nextState.selectedProgram));
+
+	}
 
 /*
 	This needs to trigger fetching asessments for that program/type combo
@@ -55,9 +72,7 @@ export default class Programs extends React.Component {
 		console.log("Student selected:", this.studentSel.checked);
 		console.log(e.target.value);
 
-		this.setState({
-			currentProgramType: e.target.value
-		});
+		
 
 		//Subha: Not sure this is "done" like this. Before the state is finalized, is it okay
 		//to act on it? Else, I get into an infinite loop in componentWillReceiveProps
@@ -71,6 +86,10 @@ export default class Programs extends React.Component {
 			this.props.dispatch(actions.fetchProgramsStudent());
 
 		}
+
+		this.setState({
+			currentProgramType: e.target.value
+		});
 	}
 
 	render() {
@@ -93,16 +112,26 @@ export default class Programs extends React.Component {
 			return (<option key={program.id} value={program.id}>{program.name}</option>);
 		});
 		var assessmentsList = Object.values(assessments).map((assessment,i)=>{
+			
+			var flexi_assessment = "ThatsaNo";
+			if(assessment.flexi_assessment && assessment.flexi_assessment == true)
+				flexi_assessment = "ThatsaYes";
+			var active = "No";
+			if(assessment.active && assessment.active == 1)
+				active = "Yes";
+			console.log("Assessment is of flexi type", flexi_assessment);
+			console.log("Assessment is active", active);
 			return(
 				<tr>
 					<td>{assessment.name}</td>
-					<td></td>
 					<td>{assessment.start_date}</td>
 					<td>{assessment.end_date}</td>
-					<td></td>
+					<td>TBD</td>
 					<td>{assessment.double_entry}</td>
-					<td>{assessment.flexi_assessment}</td>
-					<td>{assessment.active}</td>
+					<td>{flexi_assessment}</td>
+					<td>{active}</td>
+					<td><input type="checkbox" className="form-control" checked="true"/></td>
+					<td><span className="fa fa-pencil-square-o"></span></td>
 				</tr>
 			);
 		});
@@ -111,10 +140,13 @@ export default class Programs extends React.Component {
 		{
 			selectedProgram = Object.values(programs)[0];
 			
+		
+			
 		}
 		else
 		{
 			selectedProgram = programs[this.state.selectedProgram];
+			
 
 		}
 		if(!jQuery.isEmptyObject(selectedProgram))
@@ -122,6 +154,7 @@ export default class Programs extends React.Component {
 			selectedProgramName=selectedProgram.name;
 			startDate = selectedProgram.start_date;
 			endDate = selectedProgram.end_date;
+			
 		}
 		return (
 			<div>
@@ -179,7 +212,6 @@ export default class Programs extends React.Component {
 					<tbody>
 						<tr className="info">
 							<th>Assessment</th>
-							<th>Class</th>
 							<th>Start Date</th>
 							<th>End Date</th>
 							<th>Type</th>
