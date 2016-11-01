@@ -28,7 +28,7 @@ class HeaderBar extends Component {
               <button type="button" className="btn btn-primary padded-btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span className="glyphicon glyphicon-user"></span></button>
               <ul className="dropdown-menu">
                 <li><button className="btn btn-default dropdown-item" data-toggle="modal" data-target="#changePasswordModal" >Change Password</button></li>
-                <li><button className="btn btn-default dropdown-item" data-toggle="modal">Update Profile</button></li>
+                <li><button className="btn btn-default dropdown-item" data-toggle="modal" data-target="#changeUserNameModal">Update Profile</button></li>
 
               </ul>
 
@@ -41,6 +41,7 @@ class HeaderBar extends Component {
             </p>
           </div>
         </div>
+        {/*Change password modal. Consider refactoring to a separate class later if needed */}
         <div className="modal fade" data-backdrop="false" id="changePasswordModal" tabIndex="-1" role="dialog" aria-labelledby="changePasswordModal">
                   <div className="modal-dialog" role="document">
                       <div className="modal-content">
@@ -50,14 +51,50 @@ class HeaderBar extends Component {
                           </div>
                           <div className="modal-body">
                               <form>
+                              <div className="form-group">
+                                    <label htmlFor="currentPassword" className="control-label">Current password:</label>
+                                    <input type="text" className="form-control" id="currentPassword"/>
+                                </div>
                                 <div className="form-group">
-                                    <label for="newPassword" className="control-label">New password:</label>
+                                    <label htmlFor="newPassword" className="control-label">New password:</label>
                                     <input type="text" className="form-control" id="newPassword"/>
                                 </div>
                                 <div className="form-group">
-                                    <label for="reenterPassword" className="control-label">Re-enter password:</label>
+                                    <label htmlFor="reenterPassword" className="control-label">Re-enter password:</label>
                                     <input type="text" className="form-control" id="reenterPassword"/>
                                 </div>
+                              </form>
+                          </div>
+                          <div className="modal-footer">
+                              <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+                              <button type="button" className="btn btn-primary"}>Save changes</button>
+                          </div>
+                      </div>
+                  </div>
+        </div>
+
+        {/*Change username modal. Consider refactoring to a separate class later if needed */}
+        <div className="modal fade" data-backdrop="false" id="changeUserNameModal" tabIndex="-1" role="dialog" aria-labelledby="changeUserNameModal">
+                  <div className="modal-dialog" role="document">
+                      <div className="modal-content">
+                          <div className="modal-header">
+                              <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                              <h4 className="modal-title" id="changeUserNameTitle"> Change Username</h4>
+                          </div>
+                          <div className="modal-body">
+                              <form>
+                                <div className="form-group">
+                                  <label>Your username is: {this.props.username}</label>
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="username" className="control-label">New Username:</label>
+                                    <input type="text" className="form-control" id="username"/>
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="password" className="control-label">Password:</label>
+                                    <input type="text" className="form-control" id="password"/>
+                                </div>
+                                
                               </form>
                           </div>
                           <div className="modal-footer">
@@ -66,7 +103,7 @@ class HeaderBar extends Component {
                           </div>
                       </div>
                   </div>
-              </div>
+        </div>
       </nav>
       );
   }

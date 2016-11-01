@@ -128,6 +128,47 @@ function userDataFetched(data) {
   }
 }
 
+export function changeUserName(newUserName, password){
+
+  return function(dispatch, getState){
+    return fetch(serverApiBase+'auth/username/', {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username: newUserName,
+        current_password: password
+      }).then(checkStatus).then(data => {
+        console.log("Username changed");
+      }).catch(error=>{
+        dispatch(requestFailed(error));
+      })
+    });
+  }
+}
+
+export function changePassword(newPassword, currentPassword){
+
+  return function(dispatch, getState){
+    return fetch(serverApiBase+'auth/password/', {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        new_password: newPassword,
+        current_password: currentPassword
+      }).then(checkStatus).then(data => {
+        console.log("Password changed");
+      }).catch(error=>{
+        dispatch(requestFailed(error));
+      })
+    });
+  }
+}
+
+
 export function fetchBoundaryDetails(parentBoundaryId) {
   return function(dispatch, getState) {
 
