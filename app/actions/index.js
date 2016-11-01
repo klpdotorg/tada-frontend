@@ -2,6 +2,7 @@ import fetch from 'isomorphic-fetch';
 import config from '../config.js';
 import { push } from 'react-router-redux';
 const serverApiBase = config.PROD_SERVER_API_BASE;
+const authApiBase = config.PROD_SERVER_AUTH_BASE;
 import store from '../store'
 
 export function showPrimarySchoolHierarchy() {
@@ -131,7 +132,7 @@ function userDataFetched(data) {
 export function changeUserName(newUserName, password){
 
   return function(dispatch, getState){
-    return fetch(serverApiBase+'auth/username/', {
+    return fetch(authApiBase+'auth/username/', {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
@@ -151,20 +152,22 @@ export function changeUserName(newUserName, password){
 export function changePassword(newPassword, currentPassword){
 
   return function(dispatch, getState){
-    return fetch(serverApiBase+'auth/password/', {
+    return fetch(authApiBase+'auth/password/', {
       method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': 'Token ' + sessionStorage.token
       },
       body: JSON.stringify({
         new_password: newPassword,
         current_password: currentPassword
-      }).then(checkStatus).then(data => {
+      })
+    }).then(checkStatus).then(data => {
         console.log("Password changed");
       }).catch(error=>{
         dispatch(requestFailed(error));
       })
-    });
+    
   }
 }
 

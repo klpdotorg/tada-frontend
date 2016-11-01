@@ -10,6 +10,15 @@ class HeaderBar extends Component {
   
   constructor(props) {
     super(props);
+    this.handleChangePassword = this.handleChangePassword.bind(this);
+  }
+
+  handleChangePassword()
+  {
+      var currentPwd = this.currentPassword.value;
+      var newPwd = this.newPassword.value;
+      var verifyPwd = this.reenterNewPassword.value;
+      this.props.handleChangePassword(currentPwd, newPwd);
   }
 
   render() {
@@ -53,21 +62,21 @@ class HeaderBar extends Component {
                               <form>
                               <div className="form-group">
                                     <label htmlFor="currentPassword" className="control-label">Current password:</label>
-                                    <input type="text" className="form-control" id="currentPassword"/>
+                                    <input type="text" className="form-control" id="currentPassword" ref={(ref) => this.currentPassword = ref}/>
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="newPassword" className="control-label">New password:</label>
-                                    <input type="text" className="form-control" id="newPassword"/>
+                                    <input type="text" className="form-control" id="newPassword" ref={(ref) => this.newPassword = ref}/>
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="reenterPassword" className="control-label">Re-enter password:</label>
-                                    <input type="text" className="form-control" id="reenterPassword"/>
+                                    <input type="text" className="form-control" id="reenterPassword" ref={(ref) => this.reenterNewPassword = ref}/>
                                 </div>
                               </form>
                           </div>
                           <div className="modal-footer">
                               <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
-                              <button type="button" className="btn btn-primary"}>Save changes</button>
+                              <button type="button" className="btn btn-primary" onClick={this.handleChangePassword}>Save changes</button>
                           </div>
                       </div>
                   </div>

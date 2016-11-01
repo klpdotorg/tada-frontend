@@ -104,7 +104,7 @@ class TadaContentContainer extends Component {
     const {onBoundaryClick, boundaryDetails, boundariesByParentId, saveNewDistrict, modifyDistrict, primarySelected} = this.props
     return (
       <div>
-        <MainHeader handleLogout={ this.props.handleLogout } username={this.props.username} />
+        <MainHeader handleLogout={ this.props.handleLogout } username={this.props.username} handleChangePassword = {this.props.changePassword} handleChangeUserName = {this.props.changeUserName}/>
         <TreeTogglerSpacingDiv/>
         <NavBar onPrimaryClick={ this.props.onPrimaryClick } onPreSchoolClick={ this.props.onPreSchoolClick } primarySelected={ this.props.primarySelected } />
         <SecondaryNavBar redirectTo = {this.props.redirectTo} toggleDistrictModal={ this.props.toggleDistrictModal } districtModalIsOpen={ this.props.districtModalIsOpen } saveNewDistrict={ saveNewDistrict } />
