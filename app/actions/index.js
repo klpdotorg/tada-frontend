@@ -149,7 +149,7 @@ export function changeUserName(newUserName, password){
   }
 }
 
-export function changePassword(newPassword, currentPassword){
+export function changePassword(currentPassword, newPassword){
 
   return function(dispatch, getState){
     return fetch(authApiBase+'auth/password/', {
@@ -162,9 +162,7 @@ export function changePassword(newPassword, currentPassword){
         new_password: newPassword,
         current_password: currentPassword
       })
-    }).then(checkStatus).then(data => {
-        console.log("Password changed");
-      }).catch(error=>{
+    }).then(checkStatus).catch(error=>{
         dispatch(requestFailed(error));
       })
     
