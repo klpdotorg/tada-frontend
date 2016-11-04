@@ -11,14 +11,25 @@ class HeaderBar extends Component {
   constructor(props) {
     super(props);
     this.handleChangePassword = this.handleChangePassword.bind(this);
+    this.handleChangeUserName = this.handleChangeUserName.bind(this);
   }
 
+//Add validity checking here
   handleChangePassword()
   {
       var currentPwd = this.currentPassword.value;
       var newPwd = this.newPassword.value;
       var verifyPwd = this.reenterNewPassword.value;
       this.props.handleChangePassword(currentPwd, newPwd);
+      $('#changePasswordModal').modal('hide');
+  }
+
+//Add validity checking here
+  handleChangeUserName()
+  {
+    var pwd = this.usernamePassword.value;
+    var newUserName = this.username.value;
+    this.props.handleChangeUserName(newUserName, pwd);
   }
 
   render() {
@@ -62,15 +73,15 @@ class HeaderBar extends Component {
                               <form>
                               <div className="form-group">
                                     <label htmlFor="currentPassword" className="control-label">Current password:</label>
-                                    <input type="text" className="form-control" id="currentPassword" ref={(ref) => this.currentPassword = ref}/>
+                                    <input type="password" className="form-control" id="currentPassword" ref={(ref) => this.currentPassword = ref}/>
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="newPassword" className="control-label">New password:</label>
-                                    <input type="text" className="form-control" id="newPassword" ref={(ref) => this.newPassword = ref}/>
+                                    <input type="password" className="form-control" id="newPassword" ref={(ref) => this.newPassword = ref}/>
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="reenterPassword" className="control-label">Re-enter password:</label>
-                                    <input type="text" className="form-control" id="reenterPassword" ref={(ref) => this.reenterNewPassword = ref}/>
+                                    <input type="password" className="form-control" id="reenterPassword" ref={(ref) => this.reenterNewPassword = ref}/>
                                 </div>
                               </form>
                           </div>
@@ -97,11 +108,11 @@ class HeaderBar extends Component {
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="username" className="control-label">New Username:</label>
-                                    <input type="text" className="form-control" id="username"/>
+                                    <input type="text" className="form-control" id="username" ref={(ref) => this.newUserName = ref}/>
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="password" className="control-label">Password:</label>
-                                    <input type="text" className="form-control" id="password"/>
+                                    <input type="password" className="form-control" id="password" ref={(ref) => this.usernamePassword = ref}/>
                                 </div>
                                 
                               </form>
