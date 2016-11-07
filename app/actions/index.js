@@ -3,6 +3,7 @@ import config from '../config.js';
 import { push } from 'react-router-redux';
 const serverApiBase = config.PROD_SERVER_API_BASE;
 const authApiBase = config.PROD_SERVER_AUTH_BASE;
+import _ from 'lodash'
 import store from '../store'
 
 export function showPrimarySchoolHierarchy() {
@@ -193,6 +194,7 @@ export function fetchBoundaryDetails(parentBoundaryId) {
         'Authorization': 'Token ' + sessionStorage.token
       }
     }).then(checkStatus).then(data => {
+      console.log(data)
       dispatch(responseReceivedFromServer(data))
     }).catch(error => {
       dispatch(requestFailed(error))
@@ -329,17 +331,11 @@ Everything is just one big nav tree in the UI.
 export function fetchEntitiesFromServer(parentBoundaryId) {
   return function(dispatch, getState) {
     const state = getState()
-    var parentId = -1;
-    //Set it to 1 if there's no parent passed in.
-    if (!parentBoundaryId) {
-      parentId = 1;
-    } else {
-      parentId = parentBoundaryId;
-    }
-    //Initialize to the primary's district category (10)
+    var parentId = parentBoundaryId || 1;
     var parentBoundaryCat = 9;
-    if (!state.schoolSelection.primarySchool)
+    if (!state.schoolSelection.primarySchool) {
       parentBoundaryCat = 13;
+    }
     //If we have boundary details already and this is not the root district, then we retrieve the parent boundary category
     // from the boundary itself. We need to identify whether this is an institution or a boundary and call the appropriate endpoint
     if (!jQuery.isEmptyObject(state.entities.boundaryDetails) && parentId != 1) {
@@ -535,7 +531,7 @@ const newBoundaryFetch = (options) => {
 }
 
 export const saveNewDistrict = name => (dispatch, getState) => {
-  const boundaryType = getState().schoolSelection.primarySelected ? 1: 2
+  const boundaryType = getState().schoolSelection.primarySchool ? 1: 2
   const options = {
     name,
     boundary_category: 9,
