@@ -58,6 +58,18 @@ function handleStudentAssessmentsResponse(resp) {
   }
 }
 
+function handlePwdResetReqSent() {
+  return {
+    type: 'RESET_REQUEST_SUCCESSFUL'
+  }
+}
+
+function handlePwdResetReqFailed() {
+  return {
+    type: 'RESET_REQUEST_FAILED'
+  }
+}
+
 function requestFailed(error) {
   return {
     type: 'REQUEST_FAILED',
@@ -170,6 +182,57 @@ export function changePassword(currentPassword, newPassword){
   }
 }
 
+export function resetPassword(email_address){
+
+  return function(dispatch, getState){
+    return fetch(authApiBase+'auth/password/reset/', {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: email_address
+      })
+    }).then(response=>{
+      if (!response.status >= 200 && !response.status < 300) {
+        dispatch(handlePwdResetReqFailed())
+      } 
+      else
+      {
+        dispatch(handlePwdResetReqSent());
+      }
+    }).catch(error=>{
+        dispatch(requestFailed(error));
+      })
+    
+  }
+}
+
+export function confirmResetPassword(userUid, userToken, newpassword){
+  return function(dispatch, getState){
+    return fetch(authApiBase+'auth/password/reset/confirm/', {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        uid: userUid,
+        token: userToken,
+        new_password: newpassword,
+        re_new_password: newpassword
+      })
+    }).then(response=>{
+      if (!response.status >= 200 && !response.status < 300) {
+        const error = new Error(response.statusText);
+        error.response = response;
+        throw error;
+      } 
+    }).catch(error=>{
+        dispatch(requestFailed(error));
+      })
+    
+  }
+}
 
 export function fetchBoundaryDetails(parentBoundaryId) {
   return function(dispatch, getState) {
