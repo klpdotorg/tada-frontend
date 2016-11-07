@@ -2,15 +2,17 @@ import React from 'react';
 import TreeView from 'react-treeview';
 import { Link } from 'react-router';
 
+// Map tree depth to Boundary Category
+const mapDepthCategory = {
+  0: [13,9],
+  1: [14,10],
+  2: [15,11]
+}
 
 // For the sake of simplicity, we're gonna use `defaultCollapsed`. Usually, a
 // [controlled component](http://facebook.github.io/react/docs/forms.html#controlled-components)
 // is preferred.
-const SchoolsNavTree = React.createClass({
-
-  handleClick: function(boundary) {
-    this.props.onBoundaryClick(boundary);
-  },
+const SchoolsNavTree = React.createClass({ 
 
   /*
   Data is of the format: [
@@ -23,28 +25,34 @@ const SchoolsNavTree = React.createClass({
   ]
   */
 
-  renderSubTree: function(node, boundaryHierarchy, visitedBoundaries) {
-    if (node && $.inArray(node, visitedBoundaries) < 0) {
-      var children = boundaryHierarchy[node];
-      visitedBoundaries.push(node);
+  renderSubTree: function(node, boundaryHierarchy, visitedBoundaries, depth) {    
+    if (mapDepthCategory[depth].includes(this.props.boundaryDetails[node].boundary_category)) {
+      if (node && $.inArray(node, visitedBoundaries) < 0) {
+        var children = boundaryHierarchy[node];
+        visitedBoundaries.push(node);
 
-      var boundary = this.props.boundaryDetails[node];
-      const label = <Link key={ boundary.name } to={ boundary.path } onClick={ this.props.onBoundaryClick.bind(null, boundary) }><span className="node"> { boundary.name } </span></Link>;
-      return (
+        var boundary = this.props.boundaryDetails[node];
+        const label = <Link key={ boundary.name } to={ boundary.path } onClick={ this.props.onBoundaryClick.bind(null, boundary) }><span className="node"> { boundary.name } </span></Link>;
+        return (
 
-        <TreeView key={ node } onClick={ this.props.onBoundaryClick.bind(null, boundary) } nodeLabel={ label } defaultCollapsed={ true }>
+          <TreeView key={ node } onClick={ this.props.onBoundaryClick.bind(null, boundary) } nodeLabel={ label } defaultCollapsed={ true }>
           { (() => {
 
-              if (children && children.length > 0) {
-                return children.map((child, i) => {
+            if (children && children.length > 0) {
+              ++depth
+              return children.map((child, i) => {
 
-                  return this.renderSubTree(child, boundaryHierarchy, visitedBoundaries)
-                });
-              }
-            })() }
-        </TreeView>
-        );
-    }
+                return this.renderSubTree(child, boundaryHierarchy, visitedBoundaries, depth)
+              });
+            }
+          })() }
+          </TreeView>
+          );
+      }      
+     } 
+
+     return null
+
   },
 
   //boundaryDetails={this.state.boundaryDetails} boundaryParentChildMap={this.state.childrenByParentId}
@@ -53,9 +61,9 @@ const SchoolsNavTree = React.createClass({
     var visitedBoundaries = [];
     return (
       <div>
-        { Object.keys(copyOfMap).map(function(element, i) {
-            return this.renderSubTree(element, copyOfMap, visitedBoundaries)
-          }.bind(this)) }
+      { Object.keys(copyOfMap).map(function(element, i) {
+        return this.renderSubTree(element, copyOfMap, visitedBoundaries, 0)
+      }.bind(this)) }
       </div>
       );
   }

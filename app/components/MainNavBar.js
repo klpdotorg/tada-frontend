@@ -26,7 +26,7 @@ export default class NavBar extends React.Component {
       'grey-mist-bg': this.props.primarySelected,
       'brand-green-bg': !this.props.primarySelected
     })
-
+    
     return (
       <div id="navbar" className="main__navbar">
         <div className="nav nav-pills">

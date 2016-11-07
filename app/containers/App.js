@@ -14,7 +14,7 @@ const mapStateToProps = state => ({
   boundariesByParentId: state.entities.boundariesByParentId,
   routerState: state.routing,
   username: state.login.username,
-  districtModalIsOpen: state.modal.createDistrictModalIsOpen,
+  districtModalIsOpen: state.modal.createDistrict,
   primarySelected: state.schoolSelection.primarySchool,
   programsByInstitutionId: state.programs.programsByInstitutionId,
   programsByStudentId: state.programs.programsByStudentId,
