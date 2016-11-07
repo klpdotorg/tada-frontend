@@ -2,36 +2,40 @@ import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
 import { Router, Route, Link } from 'react-router';
 import { connect } from 'react-redux';
-import { sendLoginToServer } from '../actions';
+import { resetPassword } from '../actions';
 import { routeActions, push } from 'react-router-redux';
 
 var klplogo = require('../../assets/images/KLP_logo.png');
 
 
-class Login extends Component {
+class ResetPasswordUI extends Component {
 
   constructor(props) {
     super(props);
+    console.log("Props in reset password", props);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
 
   componentWillReceiveProps(nextProps) {
 
-    const {dispatch, authenticated, token, error} = nextProps
+    const {dispatch, authenticated, token, error} = nextProps;
+    console.log("Reset password receiving props", dispatch);
+    if(nextProps.resetRequestSuccess)
+    {
+      this.email.value="";
+    }
   }
 
   handleSubmit(event) {
     event.preventDefault()
 
-    const email = this.refs.email.value
-    const pass = this.refs.pass.value
-
-    this.props.onLoginSubmit(email, pass, this.props.location);
+     const email = this.email.value;
+     this.props.dispatch(resetPassword(email));
+    
   }
 
   render() {
-    const {authenticated, token, error, } = this.props
 
     return (
       <div id="login-page">
@@ -47,30 +51,38 @@ class Login extends Component {
               <p className="navbar-text pull-right">
                 <Link to="/register" className="btn btn-primary padded-btn">SIGN UP</Link>
               </p>
+              <p className="navbar-text pull-right">
+                <Link to="/login" className="btn btn-primary padded-btn">LOGIN</Link>
+              </p>
             </div>
           </div>
         </nav>
         <div className="container-fluid absolute-center is-responsive">
           <div className="row">
+              <div className="col-md-12">
+                  <span>Please enter your e-mail address. </span>
+              </div>
+          </div>
+          <div className="row">
             <div className="col-sm-12 col-md-10 col-md-offset-1">
               <form id="loginForm">
                 <div className="form-group input-group">
-                  <span className="input-group-addon"><i className="glyphicon glyphicon-user"></i></span>
-                  <input ref="email" className="form-control" type="text" name='email' placeholder="email id or username" defaultValue="tada@klp.org.in" />
+                  <span className="input-group-addon"><label htmlFor="email">Email:</label></span>
+                  <input ref={(input) => this.email = input} className="form-control" type="text" name='email' placeholder="email id" id="email"/>
                 </div>
-                <div className="form-group input-group">
-                  <span className="input-group-addon"><i className="glyphicon glyphicon-lock"></i></span>
-                  <input ref="pass" className="form-control" type="password" name='password' placeholder="(HINT: tada)" />
-                </div>
+                
                 <div className="form-group text-center">
                   <button type="submit" className="btn btn-primary" onClick={ this.handleSubmit }>Submit</button>
                 </div>
-                <div className="form-group text-center">
-                  <Link to="/password/reset">Forgot Password</Link>&nbsp;|&nbsp;<a href="#">Support</a>
-                </div>
-                { this.props.error && (
-                  <p>Bad login information. Recheck the username and/or password.</p>
+               
+                { this.props.resetRequestSuccess && (
+                  <p> Your password has been emailed to you. Please follow instructions in email to continue logging in.</p>
                   ) }
+
+                   { this.props.resetRequestFailed && (
+                  <p> Password reset request failed. Please check whether you entered a valid email ID or contact system administrator</p>
+                  ) }
+
               </form>
             </div>
           </div>
@@ -81,10 +93,12 @@ class Login extends Component {
   }
 }
 
-Login.propTypes = {
-  authenticated: PropTypes.bool.isRequired,
-  token: PropTypes.string.isRequired,
-  error: PropTypes.bool.isRequired
-}
+const mapStateToProps = state => ({
+  resetRequestSuccess: state.passwordreset.reset_request_successful,
+  resetRequestFailed: state.passwordreset.reset_request_failed
+  
+});
 
-export default Login;
+//This will just connect it to the store
+const ResetPassword = connect(mapStateToProps)(ResetPasswordUI);
+export default ResetPassword;

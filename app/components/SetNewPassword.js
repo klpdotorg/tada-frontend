@@ -2,36 +2,37 @@ import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
 import { Router, Route, Link } from 'react-router';
 import { connect } from 'react-redux';
-import { sendLoginToServer } from '../actions';
+import { confirmResetPassword } from '../actions';
 import { routeActions, push } from 'react-router-redux';
 
 var klplogo = require('../../assets/images/KLP_logo.png');
 
 
-class Login extends Component {
+class SetNewPasswordUI extends Component {
 
   constructor(props) {
     super(props);
+    console.log("Props in reset password", props);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
 
   componentWillReceiveProps(nextProps) {
 
-    const {dispatch, authenticated, token, error} = nextProps
+    const {dispatch, authenticated, token, error} = nextProps;
+    console.log("Reset password receiving props", dispatch);
   }
 
   handleSubmit(event) {
-    event.preventDefault()
-
-    const email = this.refs.email.value
-    const pass = this.refs.pass.value
-
-    this.props.onLoginSubmit(email, pass, this.props.location);
+    event.preventDefault();
+    const new_password = this.refs.pass.value;
+    this.props.dispatch(confirmResetPassword(this.props.params.uid, this.props.params.token,new_password));
+     // const email = this.refs.email.value;
+     // this.props.dispatch(resetPassword(email));
+    
   }
 
   render() {
-    const {authenticated, token, error, } = this.props
 
     return (
       <div id="login-page">
@@ -52,25 +53,27 @@ class Login extends Component {
         </nav>
         <div className="container-fluid absolute-center is-responsive">
           <div className="row">
+              <div className="col-md-12">
+                  <span>Please enter your new password. </span>
+              </div>
+          </div>
+          <div className="row">
             <div className="col-sm-12 col-md-10 col-md-offset-1">
               <form id="loginForm">
-                <div className="form-group input-group">
-                  <span className="input-group-addon"><i className="glyphicon glyphicon-user"></i></span>
-                  <input ref="email" className="form-control" type="text" name='email' placeholder="email id or username" defaultValue="tada@klp.org.in" />
+                 <div className="form-group input-group">
+                  <span className="input-group-addon"><label htmlFor="pass">Password:</label></span>
+                  <input id="pass" ref="pass" className="form-control" type="password" name='password' placeholder="" />
                 </div>
-                <div className="form-group input-group">
-                  <span className="input-group-addon"><i className="glyphicon glyphicon-lock"></i></span>
-                  <input ref="pass" className="form-control" type="password" name='password' placeholder="(HINT: tada)" />
+                 <div className="form-group input-group">
+                  <span className="input-group-addon"><label htmlFor="pass">Confirm Password:</label></span>
+                  <input id="reenterpass" ref="reenterpass" className="form-control" type="password" name='reenterpassword' placeholder="" />
                 </div>
+                
                 <div className="form-group text-center">
                   <button type="submit" className="btn btn-primary" onClick={ this.handleSubmit }>Submit</button>
                 </div>
-                <div className="form-group text-center">
-                  <Link to="/password/reset">Forgot Password</Link>&nbsp;|&nbsp;<a href="#">Support</a>
-                </div>
-                { this.props.error && (
-                  <p>Bad login information. Recheck the username and/or password.</p>
-                  ) }
+               
+                
               </form>
             </div>
           </div>
@@ -81,10 +84,6 @@ class Login extends Component {
   }
 }
 
-Login.propTypes = {
-  authenticated: PropTypes.bool.isRequired,
-  token: PropTypes.string.isRequired,
-  error: PropTypes.bool.isRequired
-}
-
-export default Login;
+//This will just connect it to the store
+const SetNewPassword = connect()(SetNewPasswordUI);
+export default SetNewPassword;
