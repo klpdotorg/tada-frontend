@@ -3,6 +3,7 @@ import config from '../config.js';
 import { push } from 'react-router-redux';
 const serverApiBase = config.PROD_SERVER_API_BASE;
 const authApiBase = config.PROD_SERVER_AUTH_BASE;
+import _ from 'lodash'
 import store from '../store'
 
 export function showPrimarySchoolHierarchy() {
@@ -54,6 +55,30 @@ function handleStudentAssessmentsResponse(resp) {
   return {
     type: 'ASSESSMENTS_STUDENT_RESPONSE_RECEIVED',
     data: resp.results
+  }
+}
+
+function handlePwdResetReqSent() {
+  return {
+    type: 'RESET_REQUEST_SUCCESSFUL'
+  }
+}
+
+function handlePwdResetReqFailed() {
+  return {
+    type: 'RESET_REQUEST_FAILED'
+  }
+}
+
+function passwordResetConfirmed() {
+  return {
+    type: 'PASSWORD_RESET_CONFIRMED'
+  }
+}
+
+function passwordResetRejected() {
+  return {
+    type: 'PASSWORD_RESET_REJECTED'
   }
 }
 
@@ -149,7 +174,7 @@ export function changeUserName(newUserName, password){
   }
 }
 
-export function changePassword(newPassword, currentPassword){
+export function changePassword(currentPassword, newPassword){
 
   return function(dispatch, getState){
     return fetch(authApiBase+'auth/password/', {
@@ -162,15 +187,64 @@ export function changePassword(newPassword, currentPassword){
         new_password: newPassword,
         current_password: currentPassword
       })
-    }).then(checkStatus).then(data => {
-        console.log("Password changed");
-      }).catch(error=>{
+    }).then(checkStatus).catch(error=>{
         dispatch(requestFailed(error));
       })
     
   }
 }
 
+export function resetPassword(email_address){
+
+  return function(dispatch, getState){
+    return fetch(authApiBase+'auth/password/reset/', {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: email_address
+      })
+    }).then(response=>{
+      if (!response.status >= 200 && !response.status < 300) {
+        dispatch(handlePwdResetReqFailed())
+      } 
+      else
+      {
+        dispatch(handlePwdResetReqSent());
+      }
+    }).catch(error=>{
+        dispatch(requestFailed(error));
+      })
+    
+  }
+}
+
+export function confirmResetPassword(userUid, userToken, newpassword){
+  return function(dispatch, getState){
+    return fetch(authApiBase+'auth/password/reset/confirm/', {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        uid: userUid,
+        token: userToken,
+        new_password: newpassword,
+        re_new_password: newpassword
+      })
+    }).then(response=>{
+      if (!response.status >= 200 && !response.status < 300) {
+        const error = new Error(response.statusText);
+        error.response = response;
+        throw error;
+      } 
+    }).catch(error=>{
+        dispatch(requestFailed(error));
+      })
+    
+  }
+}
 
 export function fetchBoundaryDetails(parentBoundaryId) {
   return function(dispatch, getState) {
@@ -195,6 +269,7 @@ export function fetchBoundaryDetails(parentBoundaryId) {
         'Authorization': 'Token ' + sessionStorage.token
       }
     }).then(checkStatus).then(data => {
+      console.log(data)
       dispatch(responseReceivedFromServer(data))
     }).catch(error => {
       dispatch(requestFailed(error))
@@ -331,17 +406,11 @@ Everything is just one big nav tree in the UI.
 export function fetchEntitiesFromServer(parentBoundaryId) {
   return function(dispatch, getState) {
     const state = getState()
-    var parentId = -1;
-    //Set it to 1 if there's no parent passed in.
-    if (!parentBoundaryId) {
-      parentId = 1;
-    } else {
-      parentId = parentBoundaryId;
-    }
-    //Initialize to the primary's district category (10)
+    var parentId = parentBoundaryId || 1;
     var parentBoundaryCat = 9;
-    if (!state.schoolSelection.primarySchool)
+    if (!state.schoolSelection.primarySchool) {
       parentBoundaryCat = 13;
+    }
     //If we have boundary details already and this is not the root district, then we retrieve the parent boundary category
     // from the boundary itself. We need to identify whether this is an institution or a boundary and call the appropriate endpoint
     if (!jQuery.isEmptyObject(state.entities.boundaryDetails) && parentId != 1) {
@@ -537,7 +606,7 @@ const newBoundaryFetch = (options) => {
 }
 
 export const saveNewDistrict = name => (dispatch, getState) => {
-  const boundaryType = getState().schoolSelection.primarySelected ? 1: 2
+  const boundaryType = getState().schoolSelection.primarySchool ? 1: 2
   const options = {
     name,
     boundary_category: 9,

@@ -11,8 +11,7 @@ class MainContentArea extends React.Component {
   }
 
   /* Called when a component is reacting to a props change. Invoked before render is called. */
-  componentWillReceiveProps(nextProps) {
-    console.log("ContentArea is receiving new props", nextProps);
+  componentWillReceiveProps(nextProps) {    
   }
 
   render() {

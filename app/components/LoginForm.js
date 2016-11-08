@@ -66,7 +66,7 @@ class Login extends Component {
                   <button type="submit" className="btn btn-primary" onClick={ this.handleSubmit }>Submit</button>
                 </div>
                 <div className="form-group text-center">
-                  <a href="#">Forgot Password</a>&nbsp;|&nbsp;<a href="#">Support</a>
+                  <Link to="/password/reset">Forgot Password</Link>&nbsp;|&nbsp;<a href="#">Support</a>
                 </div>
                 { this.props.error && (
                   <p>Bad login information. Recheck the username and/or password.</p>
