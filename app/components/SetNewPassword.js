@@ -21,6 +21,10 @@ class SetNewPasswordUI extends Component {
 
     const {dispatch, authenticated, token, error} = nextProps;
     console.log("Reset password receiving props", dispatch);
+    if(nextProps.pwdResetConfirmed)
+    {
+      $('#pwdResetConfirmedModal').modal('show');
+    }
   }
 
   handleSubmit(event) {
@@ -71,12 +75,27 @@ class SetNewPasswordUI extends Component {
                 
                 <div className="form-group text-center">
                   <button type="submit" className="btn btn-primary" onClick={ this.handleSubmit }>Submit</button>
-                </div>
-               
-                
+                </div>                               
               </form>
             </div>
           </div>
+        </div>
+        {/*Pwd reset modal*/}
+        <div className="modal fade" data-backdrop="false" id="pwdResetConfirmedModal" tabIndex="-1" role="dialog" aria-labelledby="pwdResetConfirmedModal">
+                  <div className="modal-dialog" role="document">
+                      <div className="modal-content">
+                          <div className="modal-header">
+                              <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                              <h4 className="modal-title" id="changeUserNameTitle"> Password Reset</h4>
+                          </div>
+                          <div className="modal-body">
+                              Your password has been reset successfully. Please login with your new password.
+                          </div>
+                          <div className="modal-footer">
+                            <button type="button" className="btn btn-primary" data-dismiss="modal">OK</button>
+                          </div>
+                      </div>
+                  </div>
         </div>
       </div>
 
@@ -84,6 +103,11 @@ class SetNewPasswordUI extends Component {
   }
 }
 
+const mapStateToProps = state => ({
+  pwdResetConfirmed: state.passwordreset.reset_confirmed,
+  pwdResetRejected: state.passwordreset.reset_rejected
+  
+});
 //This will just connect it to the store
 const SetNewPassword = connect()(SetNewPasswordUI);
 export default SetNewPassword;

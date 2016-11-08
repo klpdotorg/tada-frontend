@@ -70,6 +70,18 @@ function handlePwdResetReqFailed() {
   }
 }
 
+function passwordResetConfirmed() {
+  return {
+    type: 'PASSWORD_RESET_CONFIRMED'
+  }
+}
+
+function passwordResetRejected() {
+  return {
+    type: 'PASSWORD_RESET_REJECTED'
+  }
+}
+
 function requestFailed(error) {
   return {
     type: 'REQUEST_FAILED',

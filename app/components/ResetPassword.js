@@ -24,6 +24,13 @@ class ResetPasswordUI extends Component {
     if(nextProps.resetRequestSuccess)
     {
       this.email.value="";
+      $('#pwdResetRequestSuccessModal').modal('show');
+    }
+
+    if(nextProps.resetRequestFailed)
+    {
+      this.email.value="";
+      $('#pwdResetRequestFailedModal').modal('show');
     }
   }
 
@@ -75,9 +82,7 @@ class ResetPasswordUI extends Component {
                   <button type="submit" className="btn btn-primary" onClick={ this.handleSubmit }>Submit</button>
                 </div>
                
-                { this.props.resetRequestSuccess && (
-                  <p> Your password has been emailed to you. Please follow instructions in email to continue logging in.</p>
-                  ) }
+              
 
                    { this.props.resetRequestFailed && (
                   <p> Password reset request failed. Please check whether you entered a valid email ID or contact system administrator</p>
@@ -86,6 +91,42 @@ class ResetPasswordUI extends Component {
               </form>
             </div>
           </div>
+        </div>
+
+        {/*Pwd reset success modal*/}
+        <div className="modal fade" data-backdrop="false" id="pwdResetRequestSuccessModal" tabIndex="-1" role="dialog" aria-labelledby="pwdResetConfirmedModal">
+                  <div className="modal-dialog" role="document">
+                      <div className="modal-content">
+                          <div className="modal-header">
+                              <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                              <h4 className="modal-title" id="changeUserNameTitle"> Password Reset</h4>
+                          </div>
+                          <div className="modal-body">
+                              Your password has been emailed to you. Please follow instructions in the email.
+                          </div>
+                          <div className="modal-footer">
+                            <button type="button" className="btn btn-primary" data-dismiss="modal">OK</button>
+                          </div>
+                      </div>
+                  </div>
+        </div>
+
+      {/*Pwd reset failed modal*/}
+        <div className="modal fade" data-backdrop="false" id="pwdResetRequestFailedModal" tabIndex="-1" role="dialog" aria-labelledby="pwdResetConfirmedModal">
+                  <div className="modal-dialog" role="document">
+                      <div className="modal-content">
+                          <div className="modal-header">
+                              <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                              <h4 className="modal-title" id="changeUserNameTitle"> Password Reset</h4>
+                          </div>
+                          <div className="modal-body">
+                              Your password reset request failed. Please try again or contact support.
+                          </div>
+                          <div className="modal-footer">
+                            <button type="button" className="btn btn-primary" data-dismiss="modal">OK</button>
+                          </div>
+                      </div>
+                  </div>
         </div>
       </div>
 
