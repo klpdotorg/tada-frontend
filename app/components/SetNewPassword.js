@@ -20,7 +20,7 @@ class SetNewPasswordUI extends Component {
   componentWillReceiveProps(nextProps) {
 
     const {dispatch, authenticated, token, error} = nextProps;
-    console.log("Reset password receiving props", dispatch);
+    console.log("Set new password receiving props", dispatch);
     if(nextProps.pwdResetConfirmed)
     {
       $('#pwdResetConfirmedModal').modal('show');
@@ -69,7 +69,7 @@ class SetNewPasswordUI extends Component {
                   <input id="pass" ref="pass" className="form-control" type="password" name='password' placeholder="" />
                 </div>
                  <div className="form-group input-group">
-                  <span className="input-group-addon"><label htmlFor="pass">Confirm Password:</label></span>
+                  <span className="input-group-addon"><label htmlFor="reenterpass">Confirm Password:</label></span>
                   <input id="reenterpass" ref="reenterpass" className="form-control" type="password" name='reenterpassword' placeholder="" />
                 </div>
                 
