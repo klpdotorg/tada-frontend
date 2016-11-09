@@ -2,16 +2,6 @@ import React from 'react';
 import TreeView from 'react-treeview';
 import { Link } from 'react-router';
 
-// Map tree depth to Boundary Category
-const mapDepthCategory = {
-  0: [13,9],
-  1: [14,10],
-  2: [15,11]
-}
-
-// For the sake of simplicity, we're gonna use `defaultCollapsed`. Usually, a
-// [controlled component](http://facebook.github.io/react/docs/forms.html#controlled-components)
-// is preferred.
 const SchoolsNavTree = React.createClass({ 
 
   /*
@@ -26,7 +16,8 @@ const SchoolsNavTree = React.createClass({
   */
 
   renderSubTree: function(node, boundaryHierarchy, visitedBoundaries, depth) {    
-    if (mapDepthCategory[depth].includes(this.props.boundaryDetails[node].boundary_category)) {
+    const boundaryDetails = this.props.boundaryDetails    
+    if (boundaryDetails[node].depth == depth) {
       if (node && $.inArray(node, visitedBoundaries) < 0) {
         var children = boundaryHierarchy[node];
         visitedBoundaries.push(node);
@@ -49,10 +40,9 @@ const SchoolsNavTree = React.createClass({
           </TreeView>
           );
       }      
-     } 
+     }
 
      return null
-
   },
 
   //boundaryDetails={this.state.boundaryDetails} boundaryParentChildMap={this.state.childrenByParentId}

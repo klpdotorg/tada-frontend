@@ -193,10 +193,10 @@ export function fetchBoundaryDetails(parentBoundaryId) {
         'Content-Type': 'application/json',
         'Authorization': 'Token ' + sessionStorage.token
       }
-    }).then(checkStatus).then(data => {
-      console.log(data)
+    }).then(checkStatus).then(data => {      
       dispatch(responseReceivedFromServer(data))
     }).catch(error => {
+      console.log(error)
       dispatch(requestFailed(error))
     })
   }

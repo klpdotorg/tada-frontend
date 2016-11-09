@@ -28,9 +28,10 @@ export function schoolSelection(state = {
 /*
 Method computes the router path for an entity and returns it
 */
-function computeRouterPathForEntity(entity, boundaryDetails) {
+function computeRouterPathForEntity(entity, boundaryDetails) {  
   var parentEntityId = getParentId(entity);  
   var path = '';
+
   if (parentEntityId == 1) {
     path = "/district/" + entity.id;
   } else {
@@ -79,11 +80,53 @@ function getParentId(entity) {
   return parent;
 }
 
+const nodeDepth = (node) => {
+  const category = node.boundary_category
+  const mapDepthCategory = {
+    13: 0,
+    9: 0,
+    14: 1,
+    10: 1, 
+    15: 2,
+    11: 2   
+  }
+
+  if (category) {
+    node.depth = mapDepthCategory[category]
+  } else if (node.institution_gender) {
+    node.depth = 3
+  } else if (node.group_type) {
+    node.depth = 4
+  } else {
+    node.depth = 5
+  }  
+
+  return node
+}
+
 function processBoundaryDetails(boundaryData, boundariesByParentId, boundaryDetails) {  
   var newBoundaryDetails = {}
   //Making an assumption that the entire set will be the children of a parent
 
-  //because that's how the REST queries are structured
+  //because that's how the REST queries are structured  
+
+  //TODO: Refactor
+
+  // const entities = boundaryData.map(nodeDepth).map((node) => {  
+  //   return computeRouterPathForEntity(node, boundaryDetails)
+  // })  
+
+  // let data = entities.reduce((soFar, entity) => {    
+  //   const parentId = getParentId(boundaryData[0])
+  //   const id = entity.id
+  //   parentId == 1 ? soFar.boundariesByParentId[id] = [] : !soFar.boundariesByParentId[parentId] ? soFar.boundariesByParentId[parentId] = [] : soFar.boundariesByParentId[parentId].push(id)
+  //   soFar.boundaryDetails[id] = entity
+  //   return soFar
+
+  // }, {boundariesByParentId, boundaryDetails})
+
+  // return data
+  // // console.log(data, 'data')
 
   if (boundaryData.length > 0) {
     //Get the parent so we can compute router path
@@ -96,6 +139,7 @@ function processBoundaryDetails(boundaryData, boundariesByParentId, boundaryDeta
       //parent is 1, then just enter the results as the keys in the object
 
       boundary = computeRouterPathForEntity(boundary, boundaryDetails)
+      boundary = nodeDepth(boundary)      
 
       if (parentId == 1) {
         boundariesByParentId[id] = [];
@@ -108,15 +152,10 @@ function processBoundaryDetails(boundaryData, boundariesByParentId, boundaryDeta
       }
       newBoundaryDetails[id] = boundary;
     })
-  /*
-    results.reduce(function(soFar, currentValue){
-      soFar[currentValue.parent] = currentValue.id;
-      return soFar;
-    })
-    */
+
   }
-  var mergedBoundaryDetails = {}
-  Object.assign(mergedBoundaryDetails, boundaryDetails, newBoundaryDetails);
+  var mergedBoundaryDetails = Object.assign({}, boundaryDetails, newBoundaryDetails);
+
   return {
     boundaryDetails: mergedBoundaryDetails,
     boundariesByParentId: boundariesByParentId
@@ -125,7 +164,7 @@ function processBoundaryDetails(boundaryData, boundariesByParentId, boundaryDeta
 
 export function entities(state = {
   boundariesByParentId: {},
-  boundaryDetails: []
+  boundaryDetails: {}
 } , action) {
   switch (action.type) {
     case 'REQUEST_SENT':
@@ -204,20 +243,20 @@ export function programs(state = {
 
   switch(action.type) {
     case 'PROGRAMS_INSTITUTION_RESPONSE_RECEIVED':
-      const programs = processProgramDetails(action.data, state.programsByInstitutionId);
-      return {
-        ...state,
-        ...programs
-      }
+    const programs = processProgramDetails(action.data, state.programsByInstitutionId);
+    return {
+      ...state,
+      ...programs
+    }
 
     case 'PROGRAMS_STUDENT_RESPONSE_RECEIVED':
-      const programs2 = processStudentProgramDetails(action.data, state.programsByStudentId);
-      return {
-        ...state,
-        ...programs2
-      }
+    const programs2 = processStudentProgramDetails(action.data, state.programsByStudentId);
+    return {
+      ...state,
+      ...programs2
+    }
     default:
-      return state;
+    return state;
 
   }
 }
@@ -245,7 +284,7 @@ function processStudentAssessments(data)
     })
   }
 
-    return newAssessmentsByProgramId;
+  return newAssessmentsByProgramId;
   
 }
 
@@ -255,33 +294,33 @@ export function assessments(state = {
 }, action){
   try
   {
-  switch(action.type)
-  {
-    case 'ASSESSMENTS_INSTITUTION_RESPONSE_RECEIVED':
-          console.log("State before change", state);
+    switch(action.type)
+    {
+      case 'ASSESSMENTS_INSTITUTION_RESPONSE_RECEIVED':
+      console.log("State before change", state);
 
       const institutionAssessmentsByProgram = processInstitutionAssessments(action.data);
       return Object.assign(
         {},
         state,
         {institutionAssessmentsByProgramId: institutionAssessmentsByProgram}
-      );
-    
-    case 'ASSESSMENTS_STUDENT_RESPONSE_RECEIVED':
+        );
+
+      case 'ASSESSMENTS_STUDENT_RESPONSE_RECEIVED':
       const studentAsessments = processStudentAssessments(action.data);
       return {
         ...state,
         ...studentAsessments
       }
-    default:
+      default:
       return state;
+    }
   }
-}
-catch(exception)
-{
-  console.log(exception);
-  console.log(state);
-}
+  catch(exception)
+  {
+    console.log(exception);
+    console.log(state);
+  }
 }
 
 export function login(state = {
