@@ -368,6 +368,38 @@ export function login(state = {
   }
 }
 
+export function passwordreset(state = {
+  reset_request_successful: false,
+  reset_request_failed: false,
+  reset_confirmed: false,
+  reset_rejected: false
+}, action) {
+
+  switch(action.type) {
+    case 'RESET_REQUEST_SUCCESSFUL':
+      return {
+        ...state,
+        reset_request_successful: true
+      }
+    case 'RESET_REQUEST_FAILED':
+      return {
+        ...state,
+        reset_request_failed: true
+      }
+    case 'PASSWORD_RESET_CONFIRMED':
+      return {
+        ...state,
+        reset_confirmed: true
+      }
+    case 'PASSWORD_RESET_REJECTED':
+      return {
+        ...state,
+        reset_rejected: true
+      }
+    default:
+    return state;
+  }
+}
 export function userregistration(state = {
   error: false, 
   registered: false

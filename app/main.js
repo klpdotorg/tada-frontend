@@ -26,6 +26,8 @@ import App from './containers/App';
 import tadastore from './store';
 import UserRegContainer from './containers/UserRegContainer';
 import Programs from './components/Programs';
+import ResetPassword from './components/ResetPassword';
+import SetNewPassword from './components/SetNewPassword';
 
 const history = syncHistoryWithStore(browserHistory, tadastore)
 
@@ -34,6 +36,8 @@ const routes = (
   <Router history={history}>
     <Route path="login" component={ LoginContainer } />
     <Route path="logout" component={ Logout } />
+    <Route path="password/reset" component={ ResetPassword }/>
+    <Route path="password/reset/confirm/:uid/:token" component={ SetNewPassword }/>
     <Route path="register" component= {UserRegContainer}/>
     <Route path="/" component={App}>
       <IndexRoute component={ Dashboard } />
