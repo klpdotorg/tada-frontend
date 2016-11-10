@@ -3,18 +3,7 @@ import TreeView from 'react-treeview';
 import { Link } from 'react-router';
 
 const SchoolsNavTree = React.createClass({ 
-
-  /*
-  Data is of the format: [
-  {
-    "123": [22,45,67,89]
-    "22" : [1,2,3]
-    "2" : [99]
-    "45" : [66, 77]
-  }
-  ]
-  */
-
+ 
   renderSubTree: function(node, boundaryHierarchy, visitedBoundaries, depth) {    
     const boundaryDetails = this.props.boundaryDetails    
     if (boundaryDetails[node].depth == depth) {
