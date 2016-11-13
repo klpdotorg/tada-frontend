@@ -105,7 +105,7 @@ export default class PrimaryDistrict extends React.Component {
         <ol className="breadcrumb">
           <li className="active">{boundary.name}</li>          
         </ol>
-        <DistrictSummary {...this.props}/>
+        <DistrictSummary />
         <CreateBoundary placeHolder='Block Name' title='Create New Block' isOpen={this.props.modal.createBlock} onCloseModal={this.toggleBlockModal} closeModal={ this.toggleBlockModal} save={ this.saveBlock } />
         <CreateBoundary placeHolder='Project Name' title='Create New Project' isOpen={this.props.modal.createProject} onCloseModal={this.toggleProjectModal} closeModal={ this.toggleProjectModal} save={ this.saveProject } />
       </div>

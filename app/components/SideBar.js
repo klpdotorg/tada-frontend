@@ -26,7 +26,10 @@ var SideBar = React.createClass({
   render: function() {    
     let {onBoundaryClick, boundariesByParentId, boundaryDetails, primarySelected} = this.props;    
     const schoolType = primarySelected ? 1 : 2
-    boundariesByParentId = _.pick(boundariesByParentId, (val, key) => boundaryDetails[key].boundary_type == schoolType)
+    boundariesByParentId = _.pick(boundariesByParentId, (val, key) =>  {
+      const boundaryType = boundaryDetails[key].boundary_type
+      return boundaryType ? boundaryType == schoolType : true
+    })
     var sidebarClass = classNames({
       'toggled': this.state.isExpanded
     })
