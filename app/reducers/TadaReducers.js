@@ -104,7 +104,7 @@ const nodeDepth = (node) => {
   return node
 }
 
-function processBoundaryDetails(boundaryData, boundariesByParentId, boundaryDetails) {  
+function processBoundaryDetails(boundaryData, boundariesByParentId, boundaryDetails) { 
   var newBoundaryDetails = {}
   //Making an assumption that the entire set will be the children of a parent
 
@@ -146,6 +146,7 @@ function processBoundaryDetails(boundaryData, boundariesByParentId, boundaryDeta
       } else {
         if (!boundariesByParentId[parentId]) {
           boundariesByParentId[parentId] = [];
+          boundariesByParentId[parentId].push(boundary.id);
         }
         else
           boundariesByParentId[parentId].push(boundary.id);
@@ -164,7 +165,9 @@ function processBoundaryDetails(boundaryData, boundariesByParentId, boundaryDeta
 
 export function entities(state = {
   boundariesByParentId: {},
-  boundaryDetails: {}
+  boundaryDetails: {1: {
+    depth: 0
+  }}
 } , action) {
   switch (action.type) {
     case 'REQUEST_SENT':

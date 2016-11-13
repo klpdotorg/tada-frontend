@@ -1,23 +1,26 @@
-import React, {Component} from 'react';
+import React from 'react';
 
-export default class Preschool extends Component {
-    render() {
-    var block = this.props.boundaryDetails[this.props.params.blockId];
-    var blockPath = "#" + block.path;
+
+let Institution = React.createClass({ 
+
+  render() {
+    var project = this.props.boundaryDetails[this.props.params.projectId];
+    var projectPath = "#" + project.path;
     var district = this.props.boundaryDetails[this.props.params.districtId];
     var districtPath = "#" + district.path;
-    var cluster = this.props.boundaryDetails[this.props.params.clusterId];
-    var clusterPath = "#" + cluster.path;
+    var circle = this.props.boundaryDetails[this.props.params.circleId];
+    var circlePath = "#" + circle.path;
     var institution = this.props.boundaryDetails[this.props.params.institutionId];
     var institutionPath = "#" + institution.path;
-    return(
+
+    const Insti = () => 
       <div className="container-fluid">
         <div className="row">
           <div className="col-lg-12">
             <ol className="breadcrumb">
               <li><a href={districtPath}>{district.name}</a></li>
-              <li> <a href={blockPath}> {block.name}</a></li>
-              <li> <a href={clusterPath}> {cluster.name}</a></li>
+              <li> <a href={projectPath}> {project.name}</a></li>
+              <li> <a href={circlePath}> {circle.name}</a></li>
               <li className="active"> {institution.name}</li>
             </ol>   
             <div className="row form-container">
@@ -27,29 +30,29 @@ export default class Preschool extends Component {
 
                 <form className="form-horizontal" role="form">
                   <div className="form-group">
-                    <label className="control-label col-sm-2" for="name">Name:</label>
+                    <label className="control-label col-sm-2" htmlFor="name">Name:</label>
                     <div className="col-sm-10">          
-                      <input type="text" className="form-control" id="name" value={institution.name}/>
+                      <input type="text" className="form-control" id="name" defaultValue={institution.name}/>
                     </div>
                   </div>
 
                   <div className="form-group">
-                    <label className="control-label col-sm-2" for="address">Address:</label>
+                    <label className="control-label col-sm-2" htmlFor="address">Address:</label>
                     <div className="col-sm-10">          
-                      <textarea type="password" className="form-control" id="address" rows="3" value={institution.address}>
+                      <textarea type="password" className="form-control" id="address" rows="3" defaultValue={institution.address}>
                       </textarea>
                     </div>
                   </div>
 
                   <div className="form-group">
-                    <label className="control-label col-sm-2" for="pincode">Pincode:</label>
+                    <label className="control-label col-sm-2" htmlFor="pincode">Pincode:</label>
                     <div className="col-sm-10">          
-                      <input type="text" className="form-control" id="pincode" value={institution.pincode}/>
+                      V<input type="text" className="form-control" id="pincode" defaultValue={institution.pincode}/>
                     </div>
                   </div>
 
                   <div className="form-group">
-                    <label className="control-label col-sm-2" for="category">Category:</label>
+                    <label className="control-label col-sm-2" htmlFor="category">Category:</label>
                     <div className="col-sm-10">          
                       <select className="form-control" id="category">
                         <option>Lower Primary School</option>
@@ -60,7 +63,7 @@ export default class Preschool extends Component {
                   </div>
 
                   <div className="form-group">
-                    <label className="control-label col-sm-2" for="medium">Medium:</label>
+                    <label className="control-label col-sm-2" htmlFor="medium">Medium:</label>
                     <div className="col-sm-10">          
                       <select className="form-control" id="medium">
                         <option>Kannada</option>
@@ -71,7 +74,7 @@ export default class Preschool extends Component {
                   </div>
 
                   <div className="form-group">
-                    <label className="control-label col-sm-2" for="mgmt">Management:</label>
+                    <label className="control-label col-sm-2" htmlFor="mgmt">Management:</label>
                     <div className="col-sm-10">          
                       <select className="form-control" id="mgmt">
                         <option>Government - State</option>
@@ -83,9 +86,9 @@ export default class Preschool extends Component {
                   </div>
 
                   <div className="form-group">
-                    <label className="control-label col-sm-2" for="disecode">DISE Code:</label>
+                    <label className="control-label col-sm-2" htmlFor="disecode">DISE Code:</label>
                     <div className="col-sm-10">          
-                      <input type="text" className="form-control" id="disecode" value={institution.dise_code}/>
+                      <input type="text" className="form-control" id="disecode" defaultValue={institution.dise_code}/>
                     </div>
                   </div>
 
@@ -105,15 +108,21 @@ export default class Preschool extends Component {
       <div>
         <ol className="breadcrumb">
           <li><a href={districtPath}>{district.name}</a></li>
-          <li> <a href={blockPath}> {block.name}</a></li>
-          <li> <a href={clusterPath}> {cluster.name}</a></li>
+          <li> <a href={projectPath}> {project.name}</a></li>
+          <li> <a href={circlePath}> {circle.name}</a></li>
           <li className="active"> {institution.name}</li>
         </ol>
         <h4 className="heading-border"> Institution Details</h4>
         
         <p> Name: {institution.name} </p>
 
-      </div></div>);
-    }
+      </div></div>
+    return (
+      <Insti />
+    )
+      
 
   }
+});
+
+export default Institution;  
