@@ -18,6 +18,7 @@ import PrimaryCluster from './components/PrimaryClusterScreen';
 import PreschoolProject from './components/PreschoolProjectScreen';
 import PreschoolCircle from './components/PreschoolCircleScreen';
 import Institution from './components/InstitutionDetailsScreen';
+import Preschool from './components/Preschool';
 import LoginContainer from './containers/LoginContainer';
 import Logout from './components/Logout';
 import { syncHistoryWithStore } from 'react-router-redux';
@@ -44,6 +45,7 @@ const routes = (
       <Route path="programs" component={ Programs }/>
       <Route path="district/:districtId/project/:projectId" component={ PreschoolProject } />
       <Route path="district/:districtId/project/:projectId/circle/:circleId" component={ PreschoolCircle } />
+      <Route path="district/:districtId/project/:projectId/circle/:circleId/institution/:institutionId" component={ Preschool } />
       <Route path="district/:districtId" component={ PrimaryDistrict } />
       <Route path="district/:districtId/block/:blockId" component={ PrimaryBlock } />
       <Route path="district/:districtId/block/:blockId/cluster/:clusterId" component={ PrimaryCluster } />

@@ -1,5 +1,5 @@
 import React from 'react';
-import {modifyBoundary, deleteBoundary} from '../actions';
+import {modifyBoundary, deleteBoundary, newSchool} from '../actions';
 import CreateInstitution from './Modals/CreateBoundary';
 import Button from './Button'
 
@@ -9,6 +9,7 @@ export default class PrimaryCluster extends React.Component {
   constructor(props){
     super(props);
     this.openSchoolModal = this.openSchoolModal.bind(this);
+    this.saveSchool = this.saveSchool.bind(this)
     this.toggleSchoolModal = this.toggleSchoolModal.bind(this);
     this.onClickSaveCluster = this.onClickSaveCluster.bind(this);    
     this.onClickDeleteCluster = this.onClickDeleteCluster.bind(this);
@@ -21,6 +22,14 @@ export default class PrimaryCluster extends React.Component {
     this.setState({
       schoolModalIsOpen: false
     })
+  }
+
+  saveSchool(name) {
+    const options = {
+      name: name,
+      boundary: this.props.params.clusterId
+    }
+    console.log('Save', options)
   }
 
   openSchoolModal(){
@@ -85,7 +94,7 @@ export default class PrimaryCluster extends React.Component {
           <li className="active">{cluster.name}</li>
         </ol>
         <Displayelement {...this.props}/>
-        <CreateInstitution placeHolder='School Name' title='Create New School' isOpen={this.state.schoolModalIsOpen} onCloseModal={this.toggleSchoolModal} closeModal={ this.toggleSchoolModal} save={ this.props.saveSchool } />
+        <CreateInstitution placeHolder='School Name' title='Create New School' isOpen={this.state.schoolModalIsOpen} onCloseModal={this.toggleSchoolModal} closeModal={ this.toggleSchoolModal} save={ this.saveSchool } />
       </div>
     );   
   }

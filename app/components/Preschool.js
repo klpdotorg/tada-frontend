@@ -4,12 +4,12 @@ import React from 'react';
 let Institution = React.createClass({ 
 
   render() {
-  	var block = this.props.boundaryDetails[this.props.params.blockId];
-    var blockPath = "#" + block.path;
+    var project = this.props.boundaryDetails[this.props.params.projectId];
+    var projectPath = "#" + project.path;
     var district = this.props.boundaryDetails[this.props.params.districtId];
     var districtPath = "#" + district.path;
-    var cluster = this.props.boundaryDetails[this.props.params.clusterId];
-    var clusterPath = "#" + cluster.path;
+    var circle = this.props.boundaryDetails[this.props.params.circleId];
+    var circlePath = "#" + circle.path;
     var institution = this.props.boundaryDetails[this.props.params.institutionId];
     var institutionPath = "#" + institution.path;
 
@@ -19,8 +19,8 @@ let Institution = React.createClass({
           <div className="col-lg-12">
             <ol className="breadcrumb">
               <li><a href={districtPath}>{district.name}</a></li>
-              <li> <a href={blockPath}> {block.name}</a></li>
-              <li> <a href={clusterPath}> {cluster.name}</a></li>
+              <li> <a href={projectPath}> {project.name}</a></li>
+              <li> <a href={circlePath}> {circle.name}</a></li>
               <li className="active"> {institution.name}</li>
             </ol>   
             <div className="row form-container">
@@ -108,8 +108,8 @@ let Institution = React.createClass({
       <div>
         <ol className="breadcrumb">
           <li><a href={districtPath}>{district.name}</a></li>
-          <li> <a href={blockPath}> {block.name}</a></li>
-          <li> <a href={clusterPath}> {cluster.name}</a></li>
+          <li> <a href={projectPath}> {project.name}</a></li>
+          <li> <a href={circlePath}> {circle.name}</a></li>
           <li className="active"> {institution.name}</li>
         </ol>
         <h4 className="heading-border"> Institution Details</h4>
