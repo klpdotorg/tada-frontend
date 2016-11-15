@@ -1,12 +1,14 @@
 import fetch from 'isomorphic-fetch';
-import config from '../config.js';
 import { push } from 'react-router-redux';
-const serverApiBase = config.PROD_SERVER_API_BASE;
-const authApiBase = config.PROD_SERVER_AUTH_BASE;
-import _ from 'lodash'
-import store from '../store'
+import {PROD_SERVER_API_BASE as serverApiBase,
+ PROD_SERVER_AUTH_BASE as authApiBase,
+ INSTITUTION } from '../config';
+ import _ from 'lodash'
+ import store from '../store'
+ import {boundaryType, genUrl} from './utils'
 
-export function showPrimarySchoolHierarchy() {
+
+ export function showPrimarySchoolHierarchy() {
   return function(dispatch) {
     dispatch(selectPrimarySchool)
     return dispatch(fetchEntities(1, 1))
@@ -188,8 +190,8 @@ export function changePassword(currentPassword, newPassword){
         current_password: currentPassword
       })
     }).then(checkStatus).catch(error=>{
-        dispatch(requestFailed(error));
-      })
+      dispatch(requestFailed(error));
+    })
     
   }
 }
@@ -214,8 +216,8 @@ export function resetPassword(email_address){
         dispatch(handlePwdResetReqSent());
       }
     }).catch(error=>{
-        dispatch(requestFailed(error));
-      })
+      dispatch(requestFailed(error));
+    })
     
   }
 }
@@ -240,13 +242,13 @@ export function confirmResetPassword(userUid, userToken, newpassword){
         throw error;
       } 
     }).catch(error=>{
-        dispatch(requestFailed(error));
-      })
+      dispatch(requestFailed(error));
+    })
     
   }
 }
 
-export function fetchBoundaryDetails(parentBoundaryId) {
+export function fetchBoundaryDetails(parentBoundaryId = 1) {
   return function(dispatch, getState) {
 
     var requestBody = {}
@@ -268,17 +270,17 @@ export function fetchBoundaryDetails(parentBoundaryId) {
         'Content-Type': 'application/json',
         'Authorization': 'Token ' + sessionStorage.token
       }
-    }).then(checkStatus).then(data => {
-      console.log(data)
+    }).then(checkStatus).then(data => {      
       dispatch(responseReceivedFromServer(data))
     }).catch(error => {
+      console.log(error)
       dispatch(requestFailed(error))
     })
   }
 }
 
 //Method fetches institutions belonging to a particular Id from the institutions endpoint
-function fetchInstitutionDetails(parentBoundaryId) {
+export function fetchInstitutionDetails(parentBoundaryId) {
   return function(dispatch, getState) {
     var institutionsUrl = "http://tadadev.klp.org.in/api/v1/institutions/?";
     return fetch(institutionsUrl + 'boundary=' + parentBoundaryId, {
@@ -306,11 +308,11 @@ export function fetchProgramsInstitution()
         'Authorization': 'Token ' + sessionStorage.token
       }
     }).then(checkStatus).then(data => {
-          dispatch(handleProgramsInstitutionResponse(data));
-        }).catch(error => {
+      dispatch(handleProgramsInstitutionResponse(data));
+    }).catch(error => {
       dispatch(requestFailed(error));
     });
-}
+  }
 }
 
 export function fetchProgramsStudent()
@@ -328,7 +330,7 @@ export function fetchProgramsStudent()
     }).catch(error => {
       dispatch(requestFailed(error));
     });
-}
+  }
 }
 
 export function fetchAssessmentsForInstitutionPrograms(programId)
@@ -346,7 +348,7 @@ export function fetchAssessmentsForInstitutionPrograms(programId)
     }).catch(error => {
       dispatch(requestFailed(error));
     });
-}
+  }
 }
 
 export function fetchAssessmentsForStudentPrograms(programId)
@@ -364,26 +366,10 @@ export function fetchAssessmentsForStudentPrograms(programId)
     }).catch(error => {
       dispatch(requestFailed(error));
     });
-}
-}
-
-function isInstitution(parentEntity) {
-  if (parentEntity.institution_gender)
-    return true
-  return false
-}
-
-function isStudentGroup(parentEntity) {
-}
-
-function isBoundary(parentEntity) {
-  if (parentEntity.boundary_category) {
-    return true
   }
-  return false
 }
 
-function fetchStudentGroupsForInstitution(institutionId) {
+export function fetchStudentGroups(institutionId) {
   return function(dispatch, getState) {
     var url = "http://tadadev.klp.org.in/api/v1/institutions/" + institutionId + "/studentgroups/";
     return fetch(url, {
@@ -399,43 +385,32 @@ function fetchStudentGroupsForInstitution(institutionId) {
     })
   }
 }
+export function fetchStudents(group) {
+  return function(dispatch, getState) {
+    var url = "http://tadadev.klp.org.in:80/api/v1/students/" + group + '/';
+    return fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Token ' + sessionStorage.token
+      }
+    }).then(checkStatus).then(data => {
+      dispatch(responseReceivedFromServer(data))
+    }).catch(error => {
+      dispatch(requestFailed(error))
+    })
+  }
+}
+
 /*
 This function decides whether we need to go to the boundaries endpoint or the institutions endpoint or studentgroup/students endpoint for data.
 Everything is just one big nav tree in the UI.
 */
-export function fetchEntitiesFromServer(parentBoundaryId) {
+export function fetchEntitiesFromServer(parentBoundaryId) {  
   return function(dispatch, getState) {
-    const state = getState()
-    var parentId = parentBoundaryId || 1;
-    var parentBoundaryCat = 9;
-    if (!state.schoolSelection.primarySchool) {
-      parentBoundaryCat = 13;
-    }
-    //If we have boundary details already and this is not the root district, then we retrieve the parent boundary category
-    // from the boundary itself. We need to identify whether this is an institution or a boundary and call the appropriate endpoint
-    if (!jQuery.isEmptyObject(state.entities.boundaryDetails) && parentId != 1) {
-      //If the parent is a boundary, then figure out whether to branch off to the institutions endpoint or boundaries
-      if (isBoundary(state.entities.boundaryDetails[parentId])) {
-        parentBoundaryCat = state.entities.boundaryDetails[parentId].boundary_category;
-        //If boundary category is a circle (preschool, 15) or a cluster (primary, 11), then fetch from the institutions endpoint
-        if (parentBoundaryCat == 11 || parentBoundaryCat == 15) {
-          dispatch(fetchInstitutionDetails(parentId));
-        } else {
-          dispatch(fetchBoundaryDetails(parentId));
-        }
-      }
-      //If the parent is an Institution, go to studentgroups endpoint to fetch student groups data
-      else if (isInstitution(state.entities.boundaryDetails[parentId])) {
-        dispatch(fetchStudentGroupsForInstitution(parentId))
-      }
-      //Fetch students data because this is the only other option
-      else {
-
-      }
-    } else {
-      dispatch(fetchBoundaryDetails(parentId));
-    }
-  }
+   const state = getState()
+   return dispatch(boundaryType(parentBoundaryId, state.entities.boundaryDetails)(parentBoundaryId)) 
+ }
 }
 
 export function fetchUserData() {
@@ -448,9 +423,9 @@ export function fetchUserData() {
         'Content-Type': 'application/json'
       },
     }).then(response => (checkStatus(response)))
-    .then(data => {
+    .then(data => {      
       /* HACK: Remove this if permissions are implemented */
-      if (data.email == "tadaadmin@klp.org.in") {
+      if (data.email == "tadaadmin@klp.org.in" || 'aksanoble@gmail.com') {
         sessionStorage.setItem('isAdmin', true);
       }
       dispatch(loginSuccess(token))
@@ -592,6 +567,19 @@ export function modifyBoundary(boundaryid, name){
 }
 }
 
+const request = (method, options, url) => {
+  return fetch(url, {
+    method: method,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Token ' + sessionStorage.token
+    },
+    body: JSON.stringify(options)
+  }).catch(error => {
+    console.log('request failed', error)
+  })
+}
+
 const newBoundaryFetch = (options) => {
   return fetch('http://tadadev.klp.org.in/api/v1/boundaries/', {
     method: "POST",
@@ -657,6 +645,19 @@ export const saveNewProject = options => dispatch => {
 
 export const saveNewCircle = options => dispatch => {
   return newBoundaryFetch(options).then(checkStatus).then(response => {    
+    dispatch(fetchEntitiesFromServer(1))
+    dispatch(push('/'));
+    dispatch({
+      type: 'TOGGLE_MODAL',
+      modal: 'createCircle'
+    })   
+  })
+}
+
+
+export const newSchool = options => dispatch => {
+  url = genUrl(serverApiBase, INSTITUTION)  
+  return request('POST', options, url).then( response => {
     dispatch(fetchEntitiesFromServer(1))
     dispatch(push('/'));
     dispatch({
