@@ -13,6 +13,7 @@ class RegistrationForm extends Component {
  constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.goToLoginPage = this.goToLoginPage.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -21,12 +22,12 @@ class RegistrationForm extends Component {
     console.log(nextProps);
     if(registered == true)
     {
-    	console.log("Registration successful");
+    	$('#regSuccessfulModal').modal('show');
     }
   }
 
   handleSubmit(event) {
-    event.preventDefault()
+    event.preventDefault();
 
     const email = this.refs.email.value;
     const pass = this.refs.pass.value;
@@ -35,8 +36,15 @@ class RegistrationForm extends Component {
     this.refs.email.value='';
     this.refs.pass.value='';
     this.refs.username.value='';
+    this.refs.confirmpass.value='';
 
     this.props.onRegistrationSubmit(email, pass, username);
+  }
+
+  goToLoginPage()
+  {
+    this.props.redirectTo('/login');
+    $('#regSuccessfulModal').modal('hide');
   }
 
 render() {
@@ -84,13 +92,30 @@ render() {
                   <button type="submit" className="btn btn-primary" onClick={ this.handleSubmit }>Register</button>
                 </div>
                 
-                {this.props.registered && (
-                	<p> Registration successful. Please Login.</p>)}
+                
                 	{this.props.error && (
                 	<p> Registration Failed. Please try again.</p>)}
               </form>
             </div>
           </div>
+        </div>
+      {/* Reg successful modal*/}
+         <div className="modal fade" data-backdrop="false" id="regSuccessfulModal" tabIndex="-1" role="dialog" aria-labelledby="regSuccessfulModal">
+                  <div className="modal-dialog" role="document">
+                      <div className="modal-content">
+                          <div className="modal-header">
+                              <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                              <h4 className="modal-title" id="regSuccessTitle"> Registration Successful</h4>
+                          </div>
+                          <div className="modal-body">
+                              Registration successful! Please click OK to proceed to the Login page.
+                          </div>
+                          <div className="modal-footer">
+                            <button type="button" className="btn btn-primary" onClick={this.goToLoginPage}>OK</button>
+                          </div>
+                      </div>
+                  </div>
+        }
         </div>
       </div>
 
