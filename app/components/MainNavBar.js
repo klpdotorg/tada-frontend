@@ -18,13 +18,13 @@ export default class NavBar extends React.Component {
 
   render() {
     let primarySchool = classNames({
-      'grey-mist-bg': !this.props.primarySelected,
-      'brand-green-bg': this.props.primarySelected
+      'primary-school-tab grey-mist-bg': !this.props.primarySelected,
+      'primary-school-tab-active': this.props.primarySelected,
     })
 
     let preSchool = classNames({
-      'grey-mist-bg': this.props.primarySelected,
-      'brand-green-bg': !this.props.primarySelected
+      'preschool-tab grey-mist-bg': this.props.primarySelected,
+      'preschool-tab-active brand-green-bg': !this.props.primarySelected
     })
     
     return (
