@@ -1,6 +1,6 @@
 import React from 'react';
 import {modifyBoundary, deleteBoundary, newSchool} from '../actions';
-import CreateInstitution from './Modals/CreateBoundary';
+import CreateInstitution from './Modals/CreateInstitution';
 import Button from './Button'
 
 
@@ -49,12 +49,9 @@ export default class PrimaryCluster extends React.Component {
   }
   
   render() {
-  	var block = this.props.boundaryDetails[this.props.params.blockId];
-  	var blockPath = "#" + block.path;
-  	var district = this.props.boundaryDetails[this.props.params.districtId];
-  	var districtPath = "#" + district.path;
-  	var cluster = this.props.boundaryDetails[this.props.params.clusterId];
-  	var clusterPath = "#" + cluster.path;
+  	var block = this.props.boundaryDetails[this.props.params.blockId];  	
+  	var district = this.props.boundaryDetails[this.props.params.districtId];  	
+  	var cluster = this.props.boundaryDetails[this.props.params.clusterId];  	
     var Displayelement;
     if(sessionStorage.getItem('isAdmin')) {
       Displayelement = (props) => 
@@ -89,8 +86,8 @@ export default class PrimaryCluster extends React.Component {
      return(
       <div>
        <ol className="breadcrumb">
-          <li><a href={districtPath}>{district.name}</a></li>
-          <li><a href={blockPath}>{block.name}</a></li>
+          <li><a href={district.path}>{district.name}</a></li>
+          <li><a href={block.path}>{block.name}</a></li>
           <li className="active">{cluster.name}</li>
         </ol>
         <Displayelement {...this.props}/>
