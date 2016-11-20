@@ -45,10 +45,8 @@ export default class PrimaryDistrict extends React.Component {
   }
 
   render() {
-    var block = this.props.boundaryDetails[this.props.params.blockId];
-    var blockPath = "#" + block.path;
-    var district = this.props.boundaryDetails[this.props.params.districtId];
-    var districtPath = "#" + district.path;
+    var block = this.props.boundaryDetails[this.props.params.blockId];    
+    var district = this.props.boundaryDetails[this.props.params.districtId];    
     var Displayelement;
     if(sessionStorage.getItem('isAdmin')) {
       Displayelement = (props) => 
@@ -86,7 +84,7 @@ export default class PrimaryDistrict extends React.Component {
     return(
       <div>
         <ol className="breadcrumb">
-          <li><a href={districtPath}>{district.name}</a></li>
+          <li><a href={district.path}>{district.name}</a></li>
           <li className="active">{block.name}</li>
         </ol>
         <Displayelement {...this.props} />
