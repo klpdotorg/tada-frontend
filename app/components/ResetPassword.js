@@ -14,6 +14,7 @@ class ResetPasswordUI extends Component {
     super(props);
     console.log("Props in reset password", props);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.goToLoginPage = this.goToLoginPage.bind(this);
   }
 
 
@@ -32,6 +33,12 @@ class ResetPasswordUI extends Component {
       this.email.value="";
       $('#pwdResetRequestFailedModal').modal('show');
     }
+  }
+  
+  goToLoginPage()
+  {
+    this.props.dispatch(push('/login'));
+    $('#regSuccessfulModal').modal('hide');
   }
 
   handleSubmit(event) {
@@ -105,7 +112,7 @@ class ResetPasswordUI extends Component {
                               Your password has been emailed to you. Please follow instructions in the email.
                           </div>
                           <div className="modal-footer">
-                            <button type="button" className="btn btn-primary" data-dismiss="modal">OK</button>
+                            <button type="button" className="btn btn-primary" onClick={this.goToLoginPage}>OK</button>
                           </div>
                       </div>
                   </div>

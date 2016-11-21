@@ -78,9 +78,10 @@ function passwordResetConfirmed() {
   }
 }
 
-function passwordResetRejected() {
+function passwordResetRejected(error) {
   return {
-    type: 'PASSWORD_RESET_REJECTED'
+    type: 'PASSWORD_RESET_REJECTED',
+    reason: error
   }
 }
 
@@ -236,13 +237,17 @@ export function confirmResetPassword(userUid, userToken, newpassword){
         re_new_password: newpassword
       })
     }).then(response=>{
-      if (!response.status >= 200 && !response.status < 300) {
+      if (response.status >= 200 && response.status < 300) {
+        dispatch(passwordResetConfirmed());
+      } 
+      else
+      {
         const error = new Error(response.statusText);
         error.response = response;
         throw error;
-      } 
+      }
     }).catch(error=>{
-      dispatch(requestFailed(error));
+      dispatch(passwordResetRejected(error));
     })
     
   }
@@ -416,7 +421,7 @@ export function fetchEntitiesFromServer(parentBoundaryId) {
 export function fetchUserData() {
   const token = sessionStorage.getItem('token')
   return function(dispatch) {
-    return fetch('http://tadadev.klp.org.in/auth/me/', {
+    return fetch(authApiBase + 'auth/me/', {
       method: "GET",
       headers: {
         'Authorization': 'Token ' + token,
@@ -453,7 +458,7 @@ function checkStatus(response) {
 export function sendRegisterUser(email, password, username) {
   return function(dispatch, getState) {
 
-    return fetch('http://tadadev.klp.org.in/auth/register/', {
+    return fetch(authApiBase + 'auth/register/', {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
@@ -486,7 +491,7 @@ export function sendRegisterUser(email, password, username) {
 export function sendLoginToServer(email, pass) {
   return function(dispatch, getState) {
 
-    return fetch('http://tadadev.klp.org.in/auth/login/', {
+    return fetch(authApiBase + 'auth/login/', {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'

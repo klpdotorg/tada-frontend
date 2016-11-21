@@ -44,9 +44,9 @@ class Login extends Component {
             </div>
             <div id="navbar" className="navbar-collapse collapse">
               <p className="app-name navbar-text pull-left">Data Entry Operations 2015-2016</p>
-              <p className="navbar-text pull-right">
+              {/*<p className="navbar-text pull-right">
                 <Link to="/register" className="btn btn-primary padded-btn">SIGN UP</Link>
-              </p>
+              </p>*/}
             </div>
           </div>
         </nav>
@@ -56,7 +56,7 @@ class Login extends Component {
               <form id="loginForm">
                 <div className="form-group input-group">
                   <span className="input-group-addon"><i className="glyphicon glyphicon-user"></i></span>
-                  <input ref="email" className="form-control" type="text" name='email' placeholder="email id or username" defaultValue="tada@klp.org.in" />
+                  <input ref="email" className="form-control" type="text" name='email' placeholder="email id or username" defaultValue="" />
                 </div>
                 <div className="form-group input-group">
                   <span className="input-group-addon"><i className="glyphicon glyphicon-lock"></i></span>
