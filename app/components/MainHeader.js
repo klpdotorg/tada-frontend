@@ -108,7 +108,7 @@ class HeaderBar extends Component {
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="userfirstname" className="control-label">First Name:</label>
-                                    <input type="text" className="form-control" id="userfirstname" ref={(ref) => this.newUserName = ref}/>
+                                    <input type="text" className="form-control" id="userfirstname" ref={(ref) => this.newUserFirstName = ref}/>
                                     <label htmlFor="userlastname" className="control-label">Last Name:</label>
                                     <input type="text" className="form-control" id="userlastname" ref={(ref) => this.newUserLastName = ref}/>
                                     <label htmlFor="userEmail" className="control-label">E-mail: </label>

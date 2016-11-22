@@ -62,9 +62,9 @@ class ResetPasswordUI extends Component {
             </div>
             <div id="navbar" className="navbar-collapse collapse">
               <p className="app-name navbar-text pull-left">Data Entry Operations 2015-2016</p>
-              <p className="navbar-text pull-right">
+              {/*<p className="navbar-text pull-right">
                 <Link to="/register" className="btn btn-primary padded-btn">SIGN UP</Link>
-              </p>
+              </p>*/}
               <p className="navbar-text pull-right">
                 <Link to="/login" className="btn btn-primary padded-btn">LOGIN</Link>
               </p>
