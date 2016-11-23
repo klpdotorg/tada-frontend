@@ -2,6 +2,7 @@ import React from 'react';
 import {modifyBoundary, deleteBoundary, newSchool} from '../actions';
 import CreateInstitution from './Modals/CreateInstitution';
 import Button from './Button'
+import ConfirmModal from './Modals/Confirm'
 
 
 export default class PrimaryCluster extends React.Component {
@@ -11,12 +12,26 @@ export default class PrimaryCluster extends React.Component {
     this.openSchoolModal = this.openSchoolModal.bind(this);
     this.saveSchool = this.saveSchool.bind(this)
     this.toggleSchoolModal = this.toggleSchoolModal.bind(this);
-    this.onClickSaveCluster = this.onClickSaveCluster.bind(this);    
-    this.onClickDeleteCluster = this.onClickDeleteCluster.bind(this);
+    this.saveCluster = this.saveCluster.bind(this);    
+    this.deleteCluster = this.deleteCluster.bind(this);
     this.state = {      
-      schoolModalIsOpen: false
+      schoolModalIsOpen: false,
+      openConfirmModal: false
     };
   }
+
+  closeConfirmation = () => {
+    this.setState({
+      openConfirmModal: false
+    })
+  }
+
+  showConfirmation = () => {
+    this.setState({
+      openConfirmModal: true
+    })
+  }
+
 
   toggleSchoolModal() {
     this.setState({
@@ -38,14 +53,13 @@ export default class PrimaryCluster extends React.Component {
     })
   }
 
-  onClickSaveCluster(districtid) {
-    console.log(this.props)
-    console.log(this.clusterName.value);
-    this.props.dispatch(modifyBoundary(districtid, this.clusterName.value));
+  saveCluster() {
+    this.props.dispatch(modifyBoundary(this.props.params.clusterId, this.clusterName.value));
   }
 
-  onClickDeleteCluster(districtid) {
-    this.props.dispatch(deleteBoundary(districtid));
+  deleteCluster() {
+		let {params} = this.props
+    this.props.dispatch(deleteBoundary(params.clusterId, params.blockId));
   }
   
   render() {
@@ -69,8 +83,9 @@ export default class PrimaryCluster extends React.Component {
             </div>
            </form>
           <div className="col-md-2">
-            <button type="submit" className="btn btn-primary" onClick={() => {this.onClickSaveCluster(cluster.id) }}>Save</button>
-            <button type="submit" className="btn btn-primary" onClick={() => {this.onClickDeleteCluster(cluster.id)}}>Delete</button>
+            <button type="submit" className="btn btn-primary" onClick={this.saveCluster}>Save</button>
+            <button type="submit" className="btn btn-primary" onClick={this.showConfirmation}>Delete</button>
+            <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteCluster} closeModal={this.closeConfirmation} entity={cluster.name}/>
           </div>             
         </div>
     }

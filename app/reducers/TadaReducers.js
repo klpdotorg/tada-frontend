@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import {processStudents, computeRouterPathForEntity, nodeDepth, getParentId} from './utils'
 
 const modalsDefault = {
   createDistrict: false,
@@ -25,84 +26,7 @@ export function schoolSelection(state = {
   }
 }
 
-/*
-Method computes the router path for an entity and returns it
-*/
-function computeRouterPathForEntity(entity, boundaryDetails) {  
-  var parentEntityId = getParentId(entity);  
-  var path = '';
 
-  if (parentEntityId == 1) {
-    path = "/district/" + entity.id;
-  } else {
-    var parent = boundaryDetails[parentEntityId];
-
-    if (entity.boundary_category == "10") {
-      //path is parent's path plus child's
-
-      path = parent.path + "/block/" + entity.id;
-    } else if (entity.boundary_category == "11") {
-
-      path = parent.path + "/cluster/" + entity.id;
-    } else if (entity.boundary_category == "14") {
-
-      path = parent.path + "/project/" + entity.id;
-    } else if (entity.boundary_category == "15") {
-
-      path = parent.path + "/circle/" + entity.id;
-    }  
-    else if (entity.institution_gender) {
-      path = parent.path + "/institution/" + entity.id
-
-    } else if (entity.group_type) {
-      path = parent.path + "/" + entity.id + "/studentgroups/"
-    }
-  }
-  entity.path = path;
-  return entity;
-}
-
-/*
-Function returns the parent of a particular entity given the entity. This is data massaging on the client side
-because for institutions, the parent id is represented as "boundary" in the JSON. Whereas, for boundaries, it is
-represented as parent. We are treating everything as an "entity" and thus the need to abstract this away.
-*/
-function getParentId(entity) {
-  var parent = -1;
-  //Hack to figure out if we're dealing with a school or something else. This won't work. FIX IT!
-  if (entity.institution_gender) {
-    parent = entity.boundary
-  } else if (entity.group_type) {
-    parent = entity.institution
-  } else {
-    parent = entity.parent
-  }
-  return parent;
-}
-
-const nodeDepth = (node) => {
-  const category = node.boundary_category
-  const mapDepthCategory = {
-    13: 0,
-    9: 0,
-    14: 1,
-    10: 1, 
-    15: 2,
-    11: 2   
-  }
-
-  if (category) {
-    node.depth = mapDepthCategory[category]
-  } else if (node.institution_gender) {
-    node.depth = 3
-  } else if (node.group_type) {
-    node.depth = 4
-  } else {
-    node.depth = 5
-  }  
-
-  return node
-}
 
 function processBoundaryDetails(boundaryData, boundariesByParentId, boundaryDetails) { 
   var newBoundaryDetails = {}
@@ -191,10 +115,24 @@ export function entities(state = {
     isFetching: false
   }
   case 'REMOVE_BOUNDARY': 
-  const boundariesByParentId =  _.omit(state.boundariesByParentId, action.id)  
+  
+  let boundariesByParentId =  _.omit(state.boundariesByParentId, action.id)
+	if (action.parentId) {
+		let index = boundariesByParentId[action.parentId].indexOf(action.id)
+		boundariesByParentId[action.parentId].splice(index, 1)
+	}
+
   return {
     ...state,
     boundariesByParentId
+  }
+  case 'STUDENTS_FETCHED': {
+    let merged = processStudents(action.data, action.groupId, state.boundariesByParentId, state.boundaryDetails)    
+    return {
+     ...state,
+     ...merged,
+     isFetching: false
+   }  
   }
   default:
   return state;
@@ -380,25 +318,25 @@ export function passwordreset(state = {
 
   switch(action.type) {
     case 'RESET_REQUEST_SUCCESSFUL':
-      return {
-        ...state,
-        reset_request_successful: true
-      }
+    return {
+      ...state,
+      reset_request_successful: true
+    }
     case 'RESET_REQUEST_FAILED':
-      return {
-        ...state,
-        reset_request_failed: true
-      }
+    return {
+      ...state,
+      reset_request_failed: true
+    }
     case 'PASSWORD_RESET_CONFIRMED':
-      return {
-        ...state,
-        reset_confirmed: true
-      }
+    return {
+      ...state,
+      reset_confirmed: true
+    }
     case 'PASSWORD_RESET_REJECTED':
-      return {
-        ...state,
-        reset_rejected: true
-      }
+    return {
+      ...state,
+      reset_rejected: true
+    }
     default:
     return state;
   }

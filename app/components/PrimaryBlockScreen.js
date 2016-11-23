@@ -2,6 +2,7 @@ import React from 'react';
 import {modifyBoundary, deleteBoundary, saveNewCluster} from '../actions';
 import Button from './Button'
 import CreateCluster from './Modals/CreateBoundary'
+import ConfirmModal from './Modals/Confirm'
 
 
 
@@ -15,12 +16,25 @@ export default class PrimaryDistrict extends React.Component {
     this.saveCluster = this.saveCluster.bind(this);
     this.state = {
       value: '',
-      clusterModalIsOpen: false
+      clusterModalIsOpen: false,
+      openConfirmModal: false
     };
   }
 
-  onClickSaveBlock(districtid) {    
-    this.props.dispatch(modifyBoundary(districtid, this.blockName.value));
+  closeConfirmation = () => {
+    this.setState({
+      openConfirmModal: false
+    })
+  }
+
+  showConfirmation = () => {
+    this.setState({
+      openConfirmModal: true
+    })
+  }
+
+  onClickSaveBlock() {    
+    this.props.dispatch(modifyBoundary(this.props.params.blockId, this.blockName.value));
   }
 
   saveCluster(name) {
@@ -40,8 +54,9 @@ export default class PrimaryDistrict extends React.Component {
     })
   }  
 
-  onClickDeleteBlock(districtid) {
-    this.props.dispatch(deleteBoundary(districtid));
+  onClickDeleteBlock() {
+		let {params} = this.props
+    this.props.dispatch(deleteBoundary(params.blockId, params.districtId));
   }
 
   render() {
@@ -66,8 +81,9 @@ export default class PrimaryDistrict extends React.Component {
               </form>
 
               <div className="col-md-2">
-                <button type="submit" className="btn btn-primary" onClick={() => {this.onClickSaveBlock(block.id) }}>Save</button>
-                <button type="submit" className="btn btn-primary" onClick={() => {this.onClickDeleteBlock(block.id)}}>Delete</button>
+                <button type="submit" className="btn btn-primary" onClick={() => {this.onClickSaveBlock() }}>Save</button>
+                <button type="submit" className="btn btn-primary" onClick={() => {this.showConfirmation()}}>Delete</button>
+                <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.onClickDeleteBlock} closeModal={this.closeConfirmation} entity={block.name}/>
               </div>
         </div>
     }
