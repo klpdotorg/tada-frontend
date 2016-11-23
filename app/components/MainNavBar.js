@@ -17,6 +17,7 @@ export default class NavBar extends React.Component {
   }
 
   render() {
+    
     let primarySchool = classNames({
       'primary-school-tab grey-mist-bg': !this.props.primarySelected,
       'primary-school-tab-active': this.props.primarySelected,

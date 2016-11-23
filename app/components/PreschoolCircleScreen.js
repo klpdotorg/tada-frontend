@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import Button from './Button';
 import {modifyBoundary, deleteBoundary} from '../actions'
-import CreateSchool from './Modals/CreateBoundary'
+import CreateSchool from './Modals/CreateInstitution'
+import ConfirmModal from './Modals/Confirm'
 
 export default class PreschoolProject extends Component{ 
   constructor(props) {
@@ -10,6 +11,9 @@ export default class PreschoolProject extends Component{
     this.saveSchool = this.saveCircle.bind(this);
     this.saveCircle = this.saveCircle.bind(this);
     this.deleteCircle = this.deleteCircle.bind(this);
+    this.state = {
+      openConfirmModal: false
+    }
   }
 
   toggleSchoolModal() {
@@ -29,12 +33,24 @@ export default class PreschoolProject extends Component{
     //this.props.dispatch(saveNewCircle(options))
   }
 
-  saveCircle(circleId) {
-    this.props.dispatch(modifyBoundary(circleId, this.circleName.value));
+  saveCircle() {
+    this.props.dispatch(modifyBoundary(this.props.params.circleId, this.circleName.value));
   }
 
-  deleteCircle(circleId) {
-    this.props.dispatch(deleteBoundary(circleId))
+  deleteCircle() {
+    this.props.dispatch(deleteBoundary(this.props.params.circleId, this.props.params.projectId))
+  }
+
+  closeConfirmModal = () => {
+    this.setState({
+      openConfirmModal: false
+    })
+  }
+
+  showConfirmation = () => {
+    this.setState({
+      openConfirmModal: true
+    })
   }
 
   render() {    
@@ -61,8 +77,9 @@ export default class PreschoolProject extends Component{
               </form>
 
               <div className="col-md-2">
-                <button type="submit" className="btn btn-primary" onClick={() => {this.saveCircle(circle.id)}}>Save</button>
-                <button type="submit" className="btn btn-primary" onClick={() => {this.deleteCircle(circle.id)}}>Delete</button>
+                <button type="submit" className="btn btn-primary" onClick={this.saveCircle}>Save</button>
+                <button type="submit" className="btn btn-primary" onClick={this.showConfirmation}>Delete</button>
+                <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteCircle} closeModal={this.closeConfirmModal} entity={circle.name}/>
               </div>
         </div>
     }

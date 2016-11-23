@@ -12,7 +12,7 @@ const SchoolsNavTree = React.createClass({
         visitedBoundaries.push(node);
 
         var boundary = this.props.boundaryDetails[node];
-        const label = <Link key={ boundary.name } to={ boundary.path } onClick={ this.props.onBoundaryClick.bind(null, boundary) }><span className="node"> { boundary.name } </span></Link>;
+        const label = <Link key={ boundary.name || boundary.id } to={ boundary.path } onClick={ this.props.onBoundaryClick.bind(null, boundary) }><span className="node"> { boundary.name || boundary.first_name} </span></Link>;
         return (
 
           <TreeView key={ node } onClick={ this.props.onBoundaryClick.bind(null, boundary) } nodeLabel={ label } defaultCollapsed={ true }>
