@@ -14,17 +14,28 @@ class SetNewPasswordUI extends Component {
     super(props);
     console.log("Props in reset password", props);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.goToLoginPage = this.goToLoginPage.bind(this);
   }
 
 
   componentWillReceiveProps(nextProps) {
 
     const {dispatch, authenticated, token, error} = nextProps;
-    console.log("Reset password receiving props", dispatch);
+    console.log("Set new password receiving props", dispatch);
     if(nextProps.pwdResetConfirmed)
     {
       $('#pwdResetConfirmedModal').modal('show');
     }
+
+    if(nextProps.pwdResetRejected)
+    {
+      $('#pwdResetFailedModal').modal('show');
+    }
+  }
+
+  goToLoginPage() {
+    this.props.dispatch(push('/login'));
+    $('#pwdResetConfirmedModal').modal('hide');
   }
 
   handleSubmit(event) {
@@ -69,7 +80,7 @@ class SetNewPasswordUI extends Component {
                   <input id="pass" ref="pass" className="form-control" type="password" name='password' placeholder="" />
                 </div>
                  <div className="form-group input-group">
-                  <span className="input-group-addon"><label htmlFor="pass">Confirm Password:</label></span>
+                  <span className="input-group-addon"><label htmlFor="reenterpass">Confirm Password:</label></span>
                   <input id="reenterpass" ref="reenterpass" className="form-control" type="password" name='reenterpassword' placeholder="" />
                 </div>
                 
@@ -90,6 +101,24 @@ class SetNewPasswordUI extends Component {
                           </div>
                           <div className="modal-body">
                               Your password has been reset successfully. Please login with your new password.
+                          </div>
+                          <div className="modal-footer">
+                            <button type="button" className="btn btn-primary" data-dismiss="modal">OK</button>
+                          </div>
+                      </div>
+                  </div>
+        </div>
+
+         {/*Pwd reset failed modal*/}
+        <div className="modal fade" data-backdrop="false" id="pwdResetFailedModal" tabIndex="-1" role="dialog" aria-labelledby="pwdResetConfirmedModal">
+                  <div className="modal-dialog" role="document">
+                      <div className="modal-content">
+                          <div className="modal-header">
+                              <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                              <h4 className="modal-title" id="changeUserNameTitle"> Password Reset</h4>
+                          </div>
+                          <div className="modal-body">
+                              We couldn't set your new password. Please try again or contact support.
                           </div>
                           <div className="modal-footer">
                             <button type="button" className="btn btn-primary" data-dismiss="modal">OK</button>

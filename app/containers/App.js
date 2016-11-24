@@ -14,6 +14,7 @@ const mapStateToProps = state => ({
   boundariesByParentId: state.entities.boundariesByParentId,
   routerState: state.routing,
   username: state.login.username,
+  useremail: state.login.email,
   districtModalIsOpen: state.modal.createDistrict,
   primarySelected: state.schoolSelection.primarySchool,
   programsByInstitutionId: state.programs.programsByInstitutionId,
@@ -105,7 +106,7 @@ class TadaContentContainer extends Component {
     const {onBoundaryClick, boundaryDetails, boundariesByParentId, saveNewDistrict, modifyDistrict, primarySelected} = this.props
     return (
       <div>
-        <MainHeader handleLogout={ this.props.handleLogout } username={this.props.username} handleChangePassword = {this.props.changePassword} handleChangeUserName = {this.props.changeUserName}/>
+        <MainHeader handleLogout={ this.props.handleLogout } email={this.props.useremail} username={this.props.username} handleChangePassword = {this.props.changePassword} handleChangeUserName = {this.props.changeUserName}/>
         <TreeTogglerSpacingDiv/>
         <NavBar onPrimaryClick={ this.props.onPrimaryClick } onPreSchoolClick={ this.props.onPreSchoolClick } primarySelected={ this.props.primarySelected } />
         <SecondaryNavBar redirectTo = {this.props.redirectTo} toggleDistrictModal={ this.props.toggleDistrictModal } districtModalIsOpen={ this.props.districtModalIsOpen } saveNewDistrict={ saveNewDistrict } />

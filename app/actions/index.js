@@ -1,11 +1,12 @@
 import fetch from 'isomorphic-fetch';
 import { push } from 'react-router-redux';
-import {PROD_SERVER_API_BASE as serverApiBase,
- PROD_SERVER_AUTH_BASE as authApiBase,
- INSTITUTION } from '../config';
+
+import {SERVER_API_BASE as serverApiBase,
+ SERVER_AUTH_BASE as authApiBase} from 'config';
  import _ from 'lodash'
  import store from '../store'
  import {boundaryType, genUrl} from './utils'
+
 
 
  export function showPrimarySchoolHierarchy() {
@@ -78,9 +79,10 @@ function passwordResetConfirmed() {
   }
 }
 
-function passwordResetRejected() {
+function passwordResetRejected(error) {
   return {
-    type: 'PASSWORD_RESET_REJECTED'
+    type: 'PASSWORD_RESET_REJECTED',
+    reason: error
   }
 }
 
@@ -153,7 +155,10 @@ export function logoutUser() {
 function userDataFetched(data) {
   return {
     type: 'USER_DATA_FETCHED',
-    username: data.username
+    username: data.username,
+    email: data.email,
+    groups: data.groups,
+    id: data.id
   }
 }
 
@@ -185,6 +190,23 @@ export function changeUserName(newUserName, password){
   }
 }
 
+function changePasswordSuccessful()
+{
+  return {
+    type: 'CHANGE_PASSWORD_SUCCESSFUL'
+  }
+}
+
+function changePasswordFailed(error)
+{
+  return {
+    type: 'CHANGE_PASSWORD_FAILED',
+    statusCode: error.response.status,
+    statusText: error.response.statusText,
+    error: error.response
+  }
+}
+
 export function changePassword(currentPassword, newPassword){
 
   return function(dispatch, getState){
@@ -198,8 +220,10 @@ export function changePassword(currentPassword, newPassword){
         new_password: newPassword,
         current_password: currentPassword
       })
-    }).then(checkStatus).catch(error=>{
-      dispatch(requestFailed(error));
+    }).then(checkStatus).then(()=>{
+      dispatch(changePasswordSuccessful());
+    }).catch(error=>{
+      dispatch(changePasswordFailed(error));
     })
     
   }
@@ -245,13 +269,17 @@ export function confirmResetPassword(userUid, userToken, newpassword){
         re_new_password: newpassword
       })
     }).then(response=>{
-      if (!response.status >= 200 && !response.status < 300) {
+      if (response.status >= 200 && response.status < 300) {
+        dispatch(passwordResetConfirmed());
+      } 
+      else
+      {
         const error = new Error(response.statusText);
         error.response = response;
         throw error;
-      } 
+      }
     }).catch(error=>{
-      dispatch(requestFailed(error));
+      dispatch(passwordResetRejected(error));
     })
     
   }
@@ -291,7 +319,7 @@ export function fetchBoundaryDetails(parentBoundaryId = 1) {
 //Method fetches institutions belonging to a particular Id from the institutions endpoint
 export function fetchInstitutionDetails(parentBoundaryId) {
   return function(dispatch, getState) {
-    var institutionsUrl = "http://tadadev.klp.org.in/api/v1/institutions/?";
+    var institutionsUrl = serverApiBase + "institutions/?";
     return fetch(institutionsUrl + 'boundary=' + parentBoundaryId, {
       method: 'GET',
       headers: {
@@ -380,7 +408,7 @@ export function fetchAssessmentsForStudentPrograms(programId)
 
 export function fetchStudentGroups(institutionId) {
   return function(dispatch, getState) {
-    var url = "http://tadadev.klp.org.in/api/v1/institutions/" + institutionId + "/studentgroups/";
+    var url = serverApiBase + "institutions/" + institutionId + "/studentgroups/";
     return fetch(url, {
       method: 'GET',
       headers: {
@@ -396,9 +424,11 @@ export function fetchStudentGroups(institutionId) {
 }
 export function fetchStudents(groupId) {  
   return function(dispatch, getState) {
+
     const state = getState()
     const institutionId = state.entities.boundaryDetails[groupId].institution
-    var url = `http://tadadev.klp.org.in/api/v1/institutions/${institutionId}/studentgroups/${groupId}/students/`;
+    var url = serverApiBase + `institutions/${institutionId}/studentgroups/${groupId}/students/`;
+
     return fetch(url, {
       method: 'GET',
       headers: {
@@ -428,7 +458,7 @@ export function fetchEntitiesFromServer(parentBoundaryId) {
 export function fetchUserData() {
   const token = sessionStorage.getItem('token')
   return function(dispatch) {
-    return fetch('http://tadadev.klp.org.in/auth/me/', {
+    return fetch(authApiBase + 'auth/me/', {
       method: "GET",
       headers: {
         'Authorization': 'Token ' + token,
@@ -465,7 +495,7 @@ function checkStatus(response) {
 export function sendRegisterUser(email, password, username) {
   return function(dispatch, getState) {
 
-    return fetch('http://tadadev.klp.org.in/auth/register/', {
+    return fetch(authApiBase + 'auth/register/', {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
@@ -498,7 +528,7 @@ export function sendRegisterUser(email, password, username) {
 export function sendLoginToServer(email, pass) {
   return function(dispatch, getState) {
 
-    return fetch('http://tadadev.klp.org.in/auth/login/', {
+    return fetch(authApiBase + 'auth/login/', {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
@@ -530,7 +560,7 @@ export function sendLoginToServer(email, pass) {
 
 export function deleteBoundary(boundaryid, parentId){  
   return function(dispatch, getState) {
-    return fetch('http://tadadev.klp.org.in/api/v1/boundaries/'+boundaryid+'/', {
+    return fetch(serverApiBase + 'boundaries/'+boundaryid+'/', {
       method: 'DELETE',
       headers: {
         'Authorization' : 'Token ' + sessionStorage.token
@@ -554,7 +584,7 @@ export function deleteBoundary(boundaryid, parentId){
 
 export function modifyBoundary(boundaryid, name){
   return function(dispatch, getState) {
-    return fetch('http://tadadev.klp.org.in/api/v1/boundaries/' + boundaryid +'/', {
+    return fetch(serverApiBase + 'boundaries/' + boundaryid +'/', {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -593,7 +623,7 @@ const request = (method, options, url) => {
 }
 
 const newBoundaryFetch = (options) => {
-  return fetch('http://tadadev.klp.org.in/api/v1/boundaries/', {
+  return fetch(serverApiBase + 'boundaries/', {
     method: "POST",
     headers: {
       'Content-Type': 'application/json',

@@ -1,5 +1,6 @@
 var path = require('path');
 var webpack = require('webpack');
+var configFile = require('./settings/config.json');
 
 module.exports = {
     entry: [
@@ -30,5 +31,8 @@ module.exports = {
              "window.jQuery": "jquery"
         }),
         new webpack.IgnorePlugin(/\/iconv-loader$/)
-    ]
+    ],
+    externals: {
+        'config': JSON.stringify(configFile)
+    }
 };
