@@ -21,6 +21,7 @@ import PreschoolCircle from './components/PreschoolCircleScreen';
 import Institution from './components/InstitutionDetailsScreen';
 import Preschool from './components/Preschool';
 import StudentGroup from './components/StudentGroup' 
+import Student from './components/Student'
 import LoginContainer from './containers/LoginContainer';
 import Logout from './components/Logout';
 import { syncHistoryWithStore } from 'react-router-redux';
@@ -30,6 +31,7 @@ import UserRegContainer from './containers/UserRegContainer';
 import Programs from './components/Programs';
 import ResetPassword from './components/ResetPassword';
 import SetNewPassword from './components/SetNewPassword';
+
 
 const history = syncHistoryWithStore(browserHistory, tadastore)
 
@@ -49,11 +51,13 @@ const routes = (
       <Route path="district/:districtId/project/:projectId/circle/:circleId" component={ PreschoolCircle } />
       <Route path="district/:districtId/project/:projectId/circle/:circleId/institution/:institutionId" component={ Preschool } />
       <Route path="district/:districtId/project/:projectId/circle/:circleId/institution/:institutionId/studentgroups/:groupId" component={ StudentGroup } />
+      <Route path="district/:districtId/project/:projectId/circle/:circleId/institution/:institutionId/studentgroups/:groupId/student/:studentId" component={ Student } />
       <Route path="district/:districtId" component={ PrimaryDistrict } />
       <Route path="district/:districtId/block/:blockId" component={ PrimaryBlock } />
       <Route path="district/:districtId/block/:blockId/cluster/:clusterId" component={ PrimaryCluster } />
       <Route path="district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId" component={ Institution } />
-      <Route path="district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId/studentgroups/:groupId" component={ StudentGroup } />      
+      <Route path="district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId/studentgroups/:groupId" component={ StudentGroup } />
+      <Route path="district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId/studentgroups/:groupId/student/:studentId" component={ Student} />
     </Route>
   </Router>
 </Provider>
