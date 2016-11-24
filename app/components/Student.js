@@ -40,10 +40,10 @@ export default class PrimaryCluster extends React.Component {
   }
 
   saveSchool(name) {
-    const options = {
-      name: name,
-      boundary: this.props.params.clusterId
-    }
+    // const options = {
+    //   name: name,
+    //   boundary: this.props.params.clusterId
+    // }
     console.log('Save', options)
   }
 
@@ -58,27 +58,47 @@ export default class PrimaryCluster extends React.Component {
   }
 
   deleteCluster() {
-		let {params} = this.props
+    let {params} = this.props
     this.props.dispatch(deleteBoundary(params.clusterId, params.blockId));
   }
   
   render() {
-  	var block = this.props.boundaryDetails[this.props.params.blockId];  	
-  	var district = this.props.boundaryDetails[this.props.params.districtId];  	
-  	var cluster = this.props.boundaryDetails[this.props.params.clusterId];  	
+    const {boundaryDetails, params} = this.props
+    const block = boundaryDetails[params.blockId] || boundaryDetails[params.projectId];    
+    const district = boundaryDetails[params.districtId];    
+    const cluster = boundaryDetails[params.clusterId] || boundaryDetails[params.circleId]
+    const institution = boundaryDetails[params.institutionId]
+    const group = boundaryDetails[params.groupId]
+    const student = boundaryDetails[params.studentId]
     var Displayelement;
     if(sessionStorage.getItem('isAdmin')) {
       Displayelement = (props) => 
         <div>
           <div className='heading-border-left'>
             <h4 className="brand-blue col-md-10">Modify Details</h4>
-            <Button onClick={this.openSchoolModal} title='Add School'/>
+            <Button onClick={this.openSchoolModal} title='Add Student'/>
           </div>          
           <form className="form-horizontal boundary-form" role="form">
             <div className="form-group">
-              <label className="control-label col-sm-2" htmlFor="name">Cluster :</label>
+              <label className="control-label col-sm-2" htmlFor="name">First Name</label>
               <div className="col-sm-2">          
-                <input type="text" ref={(ref) => this.clusterName = ref} className="form-control" id="name" defaultValue={cluster.name}/>
+                <input type="text" ref={(ref) => this.firstName = ref} className="form-control" id="name" defaultValue={student.first_name}/>
+              </div>
+            </div>
+           </form>
+           <form className="form-horizontal boundary-form" role="form">
+            <div className="form-group">
+              <label className="control-label col-sm-2" htmlFor="name">Middle Name</label>
+              <div className="col-sm-2">          
+                <input type="text" ref={(ref) => this.firstName = ref} className="form-control" id="name" defaultValue={student.middle_name}/>
+              </div>
+            </div>
+           </form>
+           <form className="form-horizontal boundary-form" role="form">
+            <div className="form-group">
+              <label className="control-label col-sm-2" htmlFor="name">Last Name</label>
+              <div className="col-sm-2">          
+                <input type="text" ref={(ref) => this.lastName = ref} className="form-control" id="name" defaultValue={student.last_name}/>
               </div>
             </div>
            </form>
@@ -103,7 +123,8 @@ export default class PrimaryCluster extends React.Component {
        <ol className="breadcrumb">
           <li><a href={district.path}>{district.name}</a></li>
           <li><a href={block.path}>{block.name}</a></li>
-          <li className="active">{cluster.name}</li>
+          <li><a href={cluster.path}>{cluster.name}</a></li>
+          <li><a href={institution.path}>{institution.name}</a></li>          
         </ol>
         <Displayelement {...this.props}/>
         <CreateInstitution placeHolder='School Name' title='Create New School' isOpen={this.state.schoolModalIsOpen} onCloseModal={this.toggleSchoolModal} closeModal={ this.toggleSchoolModal} save={ this.saveSchool } />

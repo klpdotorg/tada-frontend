@@ -1,0 +1,4 @@
+{
+	"SERVER_API_BASE": "http://tadadev.klp.org.in/api/v1/",
+	"SERVER_AUTH_BASE": "http://tadadev.klp.org.in/"
+}

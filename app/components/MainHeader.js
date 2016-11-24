@@ -107,13 +107,15 @@ class HeaderBar extends Component {
                                   <label>Your user ID is: {this.props.username}. This cannot be changed.</label>
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="userfirstname" className="control-label">First Name:</label>
-                                    <input type="text" className="form-control" id="userfirstname" ref={(ref) => this.newUserFirstName = ref}/>
-                                    <label htmlFor="userlastname" className="control-label">Last Name:</label>
-                                    <input type="text" className="form-control" id="userlastname" ref={(ref) => this.newUserLastName = ref}/>
+                                   
                                     <label htmlFor="userEmail" className="control-label">E-mail: </label>
-                                    <input type="text" className="form-control" id="email" ref={(ref) => this.email = ref}/>
-
+                                    <input type="text" className="form-control" id="email" ref={(ref) => this.email = ref} defaultValue={this.props.email}/>
+                                    <label htmlFor="firstName" className="control-label">First Name:</label>
+                                    <input type="text" className="form-control" ref={(ref) => this.firstName = ref } id="firstName"/>
+                                    <label htmlFor="lastName" className="control-label">Last Name:</label>
+                                    <input type="text" className="form-control" ref={(ref) => this.lastName = ref } id="lastName"/>
+                                    <label htmlFor="mobile" className="control-label">Mobile:</label>
+                                    <input type="text" className="form-control" ref={(ref) => this.mobile = ref } id="mobile"/>
                                 </div>
                                 
                                 

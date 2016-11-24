@@ -3,6 +3,9 @@ import Button from './Button'
 import {modifyBoundary, deleteBoundary, saveNewBlock, saveNewProject} from '../actions'
 import CreateBoundary from './Modals/CreateBoundary'
 import {Link} from 'react-router'
+import NotificationSystem from 'react-notification-system';
+import ConfirmModal from './Modals/Confirm'
+
 
 export default class PrimaryDistrict extends React.Component {
 
@@ -16,16 +19,23 @@ export default class PrimaryDistrict extends React.Component {
     this.saveProject = this.saveProject.bind(this);
     this.state = {
       value: '',
+      openConfirmModal: false
     };
   }
 
 
-  saveDistrict(districtId) {
-    this.props.dispatch(modifyBoundary(districtId, this.districtName.value));
+  saveDistrict() {
+    this.props.dispatch(modifyBoundary(this.props.params.districtId, this.districtName.value));
   }
 
-  deleteDistrict(districtId) {
-    this.props.dispatch(deleteBoundary(districtId))
+  showConfirmation = () => {
+    this.setState({
+      openConfirmModal: true
+    })
+  }
+
+  deleteDistrict() {
+    this.props.dispatch(deleteBoundary(this.props.params.districtId))
   } 
 
   saveBlock(name) {
@@ -62,6 +72,12 @@ export default class PrimaryDistrict extends React.Component {
     })
   }
 
+  closeConfirmModal = () => {
+    this.setState({
+      openConfirmModal: false
+    })
+  }
+
   render() {    
     var districtId = this.props.params.districtId;
     var boundary = this.props.boundaryDetails[districtId];
@@ -86,7 +102,8 @@ export default class PrimaryDistrict extends React.Component {
 
               <div className="col-md-2">
                 <button type="submit" className="btn btn-primary" onClick={() => {this.saveDistrict(districtId) }}>Save</button>
-                <button type="submit" className="btn btn-primary" onClick={() => {this.deleteDistrict(districtId) }}>Delete</button>
+                <button type="submit" className="btn btn-primary" onClick={() => {this.showConfirmation() }}>Delete</button>
+                <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteDistrict} closeModal={this.closeConfirmModal} entity={boundary.name}/>
               </div>
         </div>
     }

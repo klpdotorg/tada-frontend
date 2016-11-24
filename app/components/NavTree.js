@@ -5,14 +5,14 @@ import { Link } from 'react-router';
 const SchoolsNavTree = React.createClass({ 
  
   renderSubTree: function(node, boundaryHierarchy, visitedBoundaries, depth) {    
-    const boundaryDetails = this.props.boundaryDetails    
+    const boundaryDetails = this.props.boundaryDetails        
     if (boundaryDetails[node].depth == depth) {
       if (node && $.inArray(node, visitedBoundaries) < 0) {
         var children = boundaryHierarchy[node];
         visitedBoundaries.push(node);
 
         var boundary = this.props.boundaryDetails[node];
-        const label = <Link key={ boundary.name } to={ boundary.path } onClick={ this.props.onBoundaryClick.bind(null, boundary) }><span className="node"> { boundary.name } </span></Link>;
+        const label = <Link key={ boundary.name || boundary.id } to={ boundary.path } onClick={ this.props.onBoundaryClick.bind(null, boundary) }><span className="node"> { boundary.name || boundary.first_name} </span></Link>;
         return (
 
           <TreeView key={ node } onClick={ this.props.onBoundaryClick.bind(null, boundary) } nodeLabel={ label } defaultCollapsed={ true }>
