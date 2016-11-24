@@ -5,7 +5,7 @@ import { Link } from 'react-router';
 const SchoolsNavTree = React.createClass({ 
  
   renderSubTree: function(node, boundaryHierarchy, visitedBoundaries, depth) {    
-    const boundaryDetails = this.props.boundaryDetails    
+    const boundaryDetails = this.props.boundaryDetails        
     if (boundaryDetails[node].depth == depth) {
       if (node && $.inArray(node, visitedBoundaries) < 0) {
         var children = boundaryHierarchy[node];

@@ -5,16 +5,19 @@ Function returns the parent of a particular entity given the entity. This is dat
 because for institutions, the parent id is represented as "bouiiiiindary" in the JSON. Whereas, for boundaries, it is
 represented as parent. We are treating everything as an "entity" and thus the need to abstract this away.
 */
-export const getParentId = (entity) => {
+export const getParentId = (entity, group) => {
   var parent = -1;
   //Hack to figure out if we're dealing with a school or something else. This won't work. FIX IT!
   if (entity.institution_gender) {
     parent = entity.boundary
   } else if (entity.group_type) {
     parent = entity.institution
+  } else if (entity.dob){
+    parent = group
   } else {
-    parent = entity.parent
-  }
+  parent = entity.parent
+ }
+
   return parent;
 }
 
@@ -22,15 +25,14 @@ export const getParentId = (entity) => {
 Method computes the router path for an entity and returns it
 */
 
-export const computeRouterPathForEntity = (entity, boundaryDetails) => {  
-  var parentEntityId = getParentId(entity);  
+export const computeRouterPathForEntity = (entity, boundaryDetails, groupId) => {  
+  var parentEntityId = getParentId(entity, groupId);  
   var path = '';
 
   if (parentEntityId == 1) {
     path = "/district/" + entity.id;
   } else {
-    var parent = boundaryDetails[parentEntityId];
-
+    var parent = boundaryDetails[parentEntityId];    
     if (entity.boundary_category == "10") {
       //path is parent's path plus child's
 
@@ -45,11 +47,13 @@ export const computeRouterPathForEntity = (entity, boundaryDetails) => {
 
       path = parent.path + "/circle/" + entity.id;
     }  
-    else if (entity.institution_gender) {
+      else if (entity.institution_gender) {
       path = parent.path + "/institution/" + entity.id
 
     } else if (entity.group_type) {
       path = parent.path + "/studentgroups/" + entity.id
+    } else if (entity.dob) {
+      path = parent.path + '/student/' + entity.id
     }
   }
   entity.path = path;
@@ -83,16 +87,18 @@ export const nodeDepth = (node) => {
 export const processStudents = (students, groupId, boundariesByParent, boundaryDetails) => {
   const studentIds = students.map(student => student.id)
   let details = students.reduce((soFar, current) =>  {
-    //current = computeRouterPathForEntity(current, boundaryDetails)
+    current = computeRouterPathForEntity(current, boundaryDetails, groupId)
     current = nodeDepth(current)      
     soFar[current.id] = current
     return soFar
   }, {})
 
+  let group = boundariesByParent[groupId] || []  
+
   return {
     boundariesByParentId: {
       ...boundariesByParent,
-      [groupId]: _.compact([...studentIds, boundariesByParent[groupId]])
+      [groupId]: studentIds.concat(group)
     },
     boundaryDetails: {
       ...boundaryDetails,
