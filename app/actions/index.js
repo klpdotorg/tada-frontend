@@ -1,11 +1,12 @@
 import fetch from 'isomorphic-fetch';
 import { push } from 'react-router-redux';
-import {PROD_SERVER_API_BASE as serverApiBase,
- PROD_SERVER_AUTH_BASE as authApiBase,
- INSTITUTION } from '../config';
+
+import {SERVER_API_BASE as serverApiBase,
+ SERVER_AUTH_BASE as authApiBase} from 'config';
  import _ from 'lodash'
  import store from '../store'
  import {boundaryType, genUrl} from './utils'
+
 
 
  export function showPrimarySchoolHierarchy() {
