@@ -357,7 +357,10 @@ export function login(state = {
     case 'USER_DATA_FETCHED':
     return {
       ...state,
-      username: action.username
+      username: action.username,
+      email: action.email,
+      id: action.id,
+      groups: action.groups
     }
     case 'LOGOUT':
     return {
@@ -399,26 +402,16 @@ export function passwordreset(state = {
         ...state,
         reset_rejected: true
       }
+    case 'CHANGE_PASSWORD_SUCCESSFUL':
+      return {
+        ...state,
+        change_password_worked: true
+      }
     default:
     return state;
   }
 }
-export function userregistration(state = {
-  error: false, 
-  registered: false
-}, action) {
-  switch(action.type) {
-    case 'USER_REGISTERED_SUCCESS':
-    return {
-      registered:true,
-      error:false
-    }
 
-    default:
-    return state;
-
-  }
-}
 
 export function modal(state = modalsDefault, action) {
   switch (action.type) {
