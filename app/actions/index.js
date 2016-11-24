@@ -110,10 +110,11 @@ export function loginSuccess(authtoken) {
   }
 }
 
-export function removeBoundary(id) {
+export function removeBoundary(id, parentId) {
   return {
     type: 'REMOVE_BOUNDARY',
-    id: id
+    id: id,
+    parentId
   }
 }
 
@@ -158,6 +159,14 @@ function userDataFetched(data) {
     email: data.email,
     groups: data.groups,
     id: data.id
+  }
+}
+
+function studentsFetched(data, groupId) {
+  return {
+    type: 'STUDENTS_FETCHED',
+    data,
+    groupId
   }
 }
 
@@ -413,18 +422,23 @@ export function fetchStudentGroups(institutionId) {
     })
   }
 }
-export function fetchStudents(group) {
+export function fetchStudents(groupId) {  
   return function(dispatch, getState) {
-    var url = serverApiBase + "students/" + group + '/';
+
+    const state = getState()
+    const institutionId = state.entities.boundaryDetails[groupId].institution
+    var url = serverApiBase + `institutions/${institutionId}/studentgroups/${groupId}/students/`;
+
     return fetch(url, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Token ' + sessionStorage.token
       }
-    }).then(checkStatus).then(data => {
-      dispatch(responseReceivedFromServer(data))
+    }).then(checkStatus).then(data => {      
+      dispatch(studentsFetched(data.results, groupId))
     }).catch(error => {
+      console.log(error)
       dispatch(requestFailed(error))
     })
   }
@@ -460,8 +474,8 @@ export function fetchUserData() {
       dispatch(userDataFetched(data))
     })
     .catch(error => {
-      dispatch(requestFailed(error));
       console.log(error.response);
+      dispatch(requestFailed(error));      
     })
   }
 }
@@ -544,7 +558,7 @@ export function sendLoginToServer(email, pass) {
   }
 }
 
-export function deleteBoundary(boundaryid){
+export function deleteBoundary(boundaryid, parentId){  
   return function(dispatch, getState) {
     return fetch(serverApiBase + 'boundaries/'+boundaryid+'/', {
       method: 'DELETE',
@@ -553,7 +567,7 @@ export function deleteBoundary(boundaryid){
       }
     }).then(response =>{
      if (response.status >= 200 && response.status < 300) {
-      dispatch(removeBoundary(boundaryid))
+      dispatch(removeBoundary(boundaryid, parentId))
       dispatch(fetchEntitiesFromServer(1))
         //Route the user to the home dashboard page since the page they were on will be deleted
         dispatch(push('/'));        
