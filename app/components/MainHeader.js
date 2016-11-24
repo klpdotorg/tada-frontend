@@ -99,21 +99,25 @@ class HeaderBar extends Component {
                       <div className="modal-content">
                           <div className="modal-header">
                               <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                              <h4 className="modal-title" id="changeUserNameTitle"> Change Username</h4>
+                              <h4 className="modal-title" id="changeUserNameTitle"> Change User Information</h4>
                           </div>
                           <div className="modal-body">
                               <form>
                                 <div className="form-group">
-                                  <label>Your username is: {this.props.username}</label>
+                                  <label>Your user ID is: {this.props.username}. This cannot be changed.</label>
                                 </div>
                                 <div className="form-group">
-                                    <label htmlFor="username" className="control-label">New Username:</label>
-                                    <input type="text" className="form-control" id="username" ref={(ref) => this.newUserName = ref}/>
+                                   
+                                    <label htmlFor="userEmail" className="control-label">E-mail: </label>
+                                    <input type="text" className="form-control" id="email" ref={(ref) => this.email = ref} defaultValue={this.props.email}/>
+                                    <label htmlFor="firstName" className="control-label">First Name:</label>
+                                    <input type="text" className="form-control" ref={(ref) => this.firstName = ref } id="firstName"/>
+                                    <label htmlFor="lastName" className="control-label">Last Name:</label>
+                                    <input type="text" className="form-control" ref={(ref) => this.lastName = ref } id="lastName"/>
+                                    <label htmlFor="mobile" className="control-label">Mobile:</label>
+                                    <input type="text" className="form-control" ref={(ref) => this.mobile = ref } id="mobile"/>
                                 </div>
-                                <div className="form-group">
-                                    <label htmlFor="password" className="control-label">Password:</label>
-                                    <input type="password" className="form-control" id="password" ref={(ref) => this.usernamePassword = ref}/>
-                                </div>
+                                
                                 
                               </form>
                           </div>
