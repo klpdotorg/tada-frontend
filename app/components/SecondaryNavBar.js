@@ -11,6 +11,7 @@ export default class SecondaryNavBar extends React.Component {
     super(props);
     this.handleProgramClick = this.handleProgramClick.bind(this);
     this.handleHomeButtonClick = this.handleHomeButtonClick.bind(this);
+    this.handleManageUsersBtnClick = this.handleManageUsersBtnClick.bind(this);
   }
 
   handleProgramClick()
@@ -21,6 +22,11 @@ export default class SecondaryNavBar extends React.Component {
   handleHomeButtonClick()
   {
     this.props.redirectTo('/dashboard');
+  }
+
+  handleManageUsersBtnClick()
+  {
+    this.props.redirectTo('/users');
   }
 
   render() {  
@@ -37,7 +43,7 @@ export default class SecondaryNavBar extends React.Component {
           <button type="button" className="btn btn-info navbar-btn all-padded-btn" data-toggle="tooltip" onClick={this.handleProgramClick}><span className="fa fa-pencil-square-o"></span> Manage Programs</button>
           <button type="button" className="btn btn-info navbar-btn all-padded-btn" onClick={ this.props.toggleDistrictModal } data-toggle="tooltip" data-placement="bottom" title="Create District"><span className="fa fa-globe"></span></button>
           <button type="button" className="btn btn-info navbar-btn all-padded-btn" data-toggle="tooltip" data-placement="bottom" title="Manage Permissions"><span className="fa fa-key"></span></button>
-          <button type="button" className="btn btn-info navbar-btn all-padded-btn" data-toggle="tooltip" data-placement="bottom" title="Add User"><span className="fa fa-user-plus"></span></button>
+          <button type="button" className="btn btn-info navbar-btn all-padded-btn" data-toggle="tooltip" data-placement="bottom" title="Manage Users" onClick={this.handleManageUsersBtnClick}><span className="fa fa-users"></span></button>
           <button type="button" className="btn btn-info navbar-btn all-padded-btn" data-toggle="tooltip" data-placement="bottom" title="Map Assessments"><span className="fa fa-database"></span></button>
           <button type="button" className="btn btn-info navbar-btn all-padded-btn" data-toggle="tooltip" data-placement="bottom" title="View DEO Report"><span className="fa fa-bar-chart"></span></button>
           <button type="button" className="btn btn-info navbar-btn all-padded-btn" data-toggle="tooltip" data-placement="bottom" title="Revert Entity State"><span className="fa fa-undo"></span></button>
