@@ -14,6 +14,9 @@ class HeaderBar extends Component {
     this.handleChangeUserName = this.handleChangeUserName.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    
+  }
 //Add validity checking here
   handleChangePassword()
   {

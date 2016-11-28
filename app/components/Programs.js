@@ -7,19 +7,15 @@ export default class Programs extends React.Component {
 	{
 		super(props);
 		this.state = {
-			currentProgramType:"institution",
 			selectedProgram: {},
 		}
 		this.handleProgramSelection = this.handleProgramSelection.bind(this);
-		this.handleProgramTypeSel = this.handleProgramTypeSelector.bind(this);
 		console.log("State is -- ", this.state);
 	}
 
 	componentWillMount(){
 		console.log("Fetching programs");
-		this.props.dispatch(actions.fetchProgramsInstitution());
-
-
+		this.props.dispatch(actions.fetchAllPrograms());
 	}
 
 	/*
@@ -27,8 +23,8 @@ export default class Programs extends React.Component {
 	*/
 	componentWillReceiveProps(nextProps)
 	{
-		const programs = nextProps.programsByInstitutionId;
-		if(!this.programsByInstitutionId && Object.keys(programs).length >0 && jQuery.isEmptyObject(this.state.selectedProgram))
+		const programs = nextProps.programsById;
+		if(!this.programsById && Object.keys(programs).length >0 && jQuery.isEmptyObject(this.state.selectedProgram))
 		{
 			console.log("receiving programs for the first time");
 			const selectProgram = Object.values(programs)[0];	
@@ -36,13 +32,19 @@ export default class Programs extends React.Component {
 				selectedProgram: selectProgram.id
 			});
 		}
+
+
 	}	
 
-	componentWillUpdate(nextProps, nextState)
+	componentDidUpdate(nextProps, nextState)
 	{
-		console.log("Fetching assessments for program id", nextState.selectedProgram);
-		//this.props.dispatch(actions.fetchAssessmentsForInstitutionPrograms(nextState.selectedProgram));
-
+		console.log("componentDidUpdate -- nextState", nextState);
+		console.log("Current state", this.state);
+		if(!jQuery.isEmptyObject(nextState.selectedProgram) && this.state.selectedProgram != nextState.selectedProgram)
+		{
+			console.log("Fetching assessments for program id", nextState.selectedProgram);
+			this.props.dispatch(actions.fetchAssessmentsForProgram(nextState.selectedProgram));
+		}
 	}
 
 /*
@@ -51,46 +53,14 @@ export default class Programs extends React.Component {
 	handleProgramSelection(e)
 	{
 		console.log("Selected value is: " ,this.selProgram.value);
-		if(this.state.currentProgramType == "institution")
-		{
-			this.props.dispatch(actions.fetchAssessmentsForInstitutionPrograms(this.selProgram.value));
-		}
-		else
-		{
-			this.props.dispatch(actions.fetchAssessmentsForStudentPrograms(this.selProgram.value));
-		}
+		
 		this.setState({
 			selectedProgram: this.selProgram.value
 		});
 
 	}
 
-	handleProgramTypeSelector(e)
-	{
-		console.log("handling program type selector");
-		console.log("Institution selected:", this.institutionSel.checked);
-		console.log("Student selected:", this.studentSel.checked);
-		console.log(e.target.value);
-
-		
-
-		//Subha: Not sure this is "done" like this. Before the state is finalized, is it okay
-		//to act on it? Else, I get into an infinite loop in componentWillReceiveProps
-		if(e.target.value == "institution")
-		{
-			this.props.dispatch(actions.fetchProgramsInstitution());
-
-		}
-		else
-		{
-			this.props.dispatch(actions.fetchProgramsStudent());
-
-		}
-
-		this.setState({
-			currentProgramType: e.target.value
-		});
-	}
+	
 
 	render() {
 		var selectedProgram;
@@ -98,16 +68,10 @@ export default class Programs extends React.Component {
 		var programs, assessments;
 		var startDate;
 		var endDate;
-		if(this.state.currentProgramType == "institution")
-		{
-			programs = this.props.programsByInstitutionId;
-			assessments = this.props.institutionAssessmentsByProgramId;
-		}
-		else
-		{
-			programs = this.props.programsByStudentId;
-			assessments = this.props.studentAssessmentsByProgramId;
-		}
+		
+		programs = this.props.programsById;
+		assessments = this.props.assessmentsById;
+		
 		var programsList= Object.values(programs).map((program,i) => {
 			return (<option key={program.id} value={program.id}>{program.name}</option>);
 		});
@@ -159,14 +123,7 @@ export default class Programs extends React.Component {
 		return (
 			<div>
 				<div className="row center-block">
-					<div className="col-md-2 form-inline">
-						<input type="radio" className="form-control" ref={(ref) => this.institutionSel = ref} checked={this.state.currentProgramType == "institution"} name="programstypesel" id="institution" value="institution" onChange={this.handleProgramTypeSel}/>
-						Institution
-					</div>
-					<div className="col-md-2 form-inline">
-						<input type="radio" className="form-control" ref={(ref) => this.studentSel = ref} checked={this.state.currentProgramType == "student"} name="programstypesel" id="institution" value="student" onChange={this.handleProgramTypeSel}/>
-						Students
-					</div>
+					
 					<div className="col-md-4 form-inline">
 		  				<label htmlFor="sel1">Programs:</label>
 						  <select ref={(ref) => this.selProgram = ref} className="form-control"  id="sel1" onChange={this.handleProgramSelection}>
