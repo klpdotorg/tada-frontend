@@ -77,8 +77,38 @@ export default class PrimaryCluster extends React.Component {
           <div className='heading-border-left'>
             <h4 className="brand-blue col-md-10">Modify Details</h4>
             <Button onClick={this.openSchoolModal} title='Add Student'/>
-          </div>          
-          <form className="form-horizontal boundary-form" role="form">
+          </div>
+          <table className="table table-striped table-bordered">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Username</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">1</th>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+              </tr>
+              <tr>
+                <th scope="row">3</th>
+                <td>Larry</td>
+                <td>the Bird</td>
+                <td>@twitter</td>
+              </tr>
+            </tbody>
+          </table>      
+          {/*<form className="form-horizontal boundary-form" role="form">
             <div className="form-group">
               <label className="control-label col-sm-2" htmlFor="name">First Name</label>
               <div className="col-sm-2">          
@@ -101,7 +131,7 @@ export default class PrimaryCluster extends React.Component {
                 <input type="text" ref={(ref) => this.lastName = ref} className="form-control" id="name" defaultValue={student.last_name}/>
               </div>
             </div>
-           </form>
+           </form>*/}
           <div className="col-md-2">
             <button type="submit" className="btn btn-primary" onClick={this.saveCluster}>Save</button>
             <button type="submit" className="btn btn-primary" onClick={this.showConfirmation}>Delete</button>
