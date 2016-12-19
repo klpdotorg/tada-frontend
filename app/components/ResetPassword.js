@@ -45,7 +45,15 @@ class ResetPasswordUI extends Component {
     event.preventDefault()
 
      const email = this.email.value;
-     this.props.dispatch(resetPassword(email));
+     this.props.dispatch(resetPassword(email)).then(response=>{
+      if (response.status >= 200 && response.status < 300) {
+        $('#pwdResetRequestSuccessModal').modal('show');
+      }
+      else
+      {
+        $('#pwdResetRequestFailedModal').modal('show');
+      }
+    })
     
   }
 

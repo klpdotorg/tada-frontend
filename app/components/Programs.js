@@ -7,7 +7,7 @@ export default class Programs extends React.Component {
 	{
 		super(props);
 		this.state = {
-			selectedProgram: {},
+			selectedProgram: 0,
 		}
 		this.handleProgramSelection = this.handleProgramSelection.bind(this);
 		console.log("State is -- ", this.state);
@@ -36,14 +36,14 @@ export default class Programs extends React.Component {
 
 	}	
 
-	componentDidUpdate(nextProps, nextState)
+	componentDidUpdate(prevProps, prevState)
 	{
-		console.log("componentDidUpdate -- nextState", nextState);
+		console.log("componentDidUpdate -- prevState", prevState);
 		console.log("Current state", this.state);
-		if(!jQuery.isEmptyObject(nextState.selectedProgram) && this.state.selectedProgram != nextState.selectedProgram)
+		if(this.state.selectedProgram!=0 && this.state.selectedProgram != prevState.selectedProgram)
 		{
-			console.log("Fetching assessments for program id", nextState.selectedProgram);
-			this.props.dispatch(actions.fetchAssessmentsForProgram(nextState.selectedProgram));
+			console.log("Fetching assessments for program id", this.state.selectedProgram);
+			this.props.dispatch(actions.fetchAssessmentsForProgram(this.state.selectedProgram));
 		}
 	}
 

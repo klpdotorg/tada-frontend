@@ -19,6 +19,7 @@
     "font-awesome": "^4.5.0",
     "isomorphic-fetch": "^2.2.1",
     "jquery": "^2.2.1",
+    "jquery-validation": "^1.15.1",
     "keymirror": "^0.1.1",
     "lodash": "^3.10.1",
     "merge": "^1.2.0",

@@ -30,6 +30,9 @@ module.exports = {
             jQuery: "jquery",
              "window.jQuery": "jquery"
         }),
+        new webpack.ProvidePlugin({
+            
+        })
         new webpack.IgnorePlugin(/\/iconv-loader$/)
     ],
     externals: {
