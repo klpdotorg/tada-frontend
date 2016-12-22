@@ -39,7 +39,45 @@ function checkStatus(response) {
     return;
   }
   const error = new Error(response.statusText);
-  error.response = response;
+  error.response = response.json();
   throw error;
+}
+
+export function createNewProgram(name, description, startDate, endDate, isActive) {
+  return function(dispatch, getState){
+    var url = serverApiBase + "programmes/";
+    var programInstCat = JSON.stringify({
+      "id":1,
+      "boundary_type":"Primary School"
+    });
+    return fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Token ' + sessionStorage.token
+      },
+      body: JSON.stringify({
+        name: name,
+        description: description,
+        start_date: startDate,
+        end_date: endDate,
+        active: 1,
+        programme_institution_category: 1
+      })
+    }).then(checkStatus);
+  }
+}
+
+export function deleteProgram(id)
+{
+  return function(dispatch, getState){
+    var url = serverApiBase + "programmes/" + id +"/";
+    return fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': 'Token ' + sessionStorage.token
+      }
+    });
+  }
 }
 
