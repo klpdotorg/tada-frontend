@@ -1,5 +1,6 @@
 import React from 'react';
 import * as actions from '../actions/';
+require('bootstrap-datepicker');
 
 export default class Programs extends React.Component {
 
@@ -7,9 +8,11 @@ export default class Programs extends React.Component {
 	{
 		super(props);
 		this.state = {
-			selectedProgram: {},
+			selectedProgram: 0,
 		}
 		this.handleProgramSelection = this.handleProgramSelection.bind(this);
+		this.handleCreateProgram = this.handleCreateProgram.bind(this);
+		this.handleDeleteProgram = this.handleDeleteProgram.bind(this);
 		console.log("State is -- ", this.state);
 	}
 
@@ -36,14 +39,14 @@ export default class Programs extends React.Component {
 
 	}	
 
-	componentDidUpdate(nextProps, nextState)
+	componentDidUpdate(prevProps, prevState)
 	{
-		console.log("componentDidUpdate -- nextState", nextState);
+		console.log("componentDidUpdate -- prevState", prevState);
 		console.log("Current state", this.state);
-		if(!jQuery.isEmptyObject(nextState.selectedProgram) && this.state.selectedProgram != nextState.selectedProgram)
+		if(this.state.selectedProgram!=0 && this.state.selectedProgram != prevState.selectedProgram)
 		{
-			console.log("Fetching assessments for program id", nextState.selectedProgram);
-			this.props.dispatch(actions.fetchAssessmentsForProgram(nextState.selectedProgram));
+			console.log("Fetching assessments for program id", this.state.selectedProgram);
+			this.props.dispatch(actions.fetchAssessmentsForProgram(this.state.selectedProgram));
 		}
 	}
 
@@ -60,7 +63,33 @@ export default class Programs extends React.Component {
 
 	}
 
-	
+	handleCreateProgram()
+	{
+		var programName = this.createProgramName.value;
+		var desc = this.createDescription.value;
+		var start = this.createStartDate.value;
+		var end = this.createEndDate.value;
+		var isActive = "yes";
+		console.log("Creating program..");
+		$('#createProgramModal').modal('hide');
+		this.props.dispatch(actions.createNewProgram(programName, desc, start, end, isActive)).then(response =>{
+			$('#programCreatedName').text(response.name);
+			$('#programCreatedModal').modal('show');
+			this.props.dispatch(actions.fetchAllPrograms());
+
+		}).catch(error => {
+			console.log("ERROR in creating program..", JSON.stringify(error));
+			$('#programCreationError').text(JSON.stringify(error.response));
+			$('#programErrorModal').modal('show');
+			//Show error modal for creating programs
+		});
+	}
+
+	handleDeleteProgram()
+	{
+		console.log("Deleting program -- ", this.state.selectedProgram);
+		this.props.dispatch(actions.deleteProgram(this.state.selectedProgram));
+	}
 
 	render() {
 		var selectedProgram;
@@ -77,9 +106,12 @@ export default class Programs extends React.Component {
 		});
 		var assessmentsList = Object.values(assessments).map((assessment,i)=>{
 			
-			var flexi_assessment = "ThatsaNo";
+			var flexi_assessment = "No";
+			var double_entry = "No";
+			if(assessment.double_entry && assessment.double_entry == true)
+				double_entry="Yes";
 			if(assessment.flexi_assessment && assessment.flexi_assessment == true)
-				flexi_assessment = "ThatsaYes";
+				flexi_assessment = "Yes";
 			var active = "No";
 			if(assessment.active && assessment.active == 1)
 				active = "Yes";
@@ -91,10 +123,10 @@ export default class Programs extends React.Component {
 					<td>{assessment.start_date}</td>
 					<td>{assessment.end_date}</td>
 					<td>TBD</td>
-					<td>{assessment.double_entry}</td>
+					<td>{double_entry}</td>
 					<td>{flexi_assessment}</td>
 					<td>{active}</td>
-					<td><input type="checkbox" className="form-control" checked="true"/></td>
+					<td><input type="checkbox" className="form-control" checked="false"/></td>
 					<td><span className="fa fa-pencil-square-o"></span></td>
 				</tr>
 			);
@@ -131,7 +163,7 @@ export default class Programs extends React.Component {
 						  </select>
 					</div>
 					<div className=" col-md-4 form-group">
-						<button type="button" className="btn brand-orange-bg all-padded-btn">Add Program</button>
+						<button type="button" className="btn brand-orange-bg all-padded-btn" data-toggle="modal" data-target="#createProgramModal">Add Program</button>
 						<button type="button" className="btn brand-orange-bg all-padded-btn">Add Assessments</button>
 					</div>
 					
@@ -146,8 +178,8 @@ export default class Programs extends React.Component {
 							<hr/>
 						</div>
 						<div className="col-md-6 pull-right">
-						<button type="button" className="col-sm-2 btn btn-info navbar-btn brand-blue-bg all-padded-btn"><span className="fa fa-pencil-square-o"></span>Edit</button>
-						<button type="button" className="col-sm-2 btn btn-info navbar-btn brand-blue-bg all-padded-btn"><span className="fa fa-trash-o"></span>Delete</button>
+						<button type="button" className="col-sm-2 btn btn-info navbar-btn brand-blue-bg all-padded-btn" data-toggle="modal" data-target="#editProgramModal"><span className="fa fa-pencil-square-o"></span>Edit</button>
+						<button type="button" className="col-sm-2 btn btn-info navbar-btn brand-blue-bg all-padded-btn" onClick={this.handleDeleteProgram} ><span className="fa fa-trash-o"></span>Delete</button>
 						</div>
 					</div>
 
@@ -183,7 +215,126 @@ export default class Programs extends React.Component {
 					</tbody>
 					</table>
 				</div>
-				
+			{/*Create program modal dialog*/}
+			 <div className="modal fade" data-backdrop="false" id="createProgramModal" tabIndex="-1" role="dialog" aria-labelledby="createProgramModal">
+                  <div className="modal-dialog" role="document">
+                      <div className="modal-content">
+                          <div className="modal-header">
+                              <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                              <h4 className="modal-title" id="createProgramTitle"> Create Program</h4>
+                          </div>
+                          <div className="modal-body">
+                              <form id="createProgram">
+                              
+                                <div className="form-group">
+                                    <label htmlFor="createProgramName" className="control-label">Program:</label>
+                                    <input type="text" className="form-control" required autofocus id="createProgramName" ref={(ref) => this.createProgramName = ref}/>
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="description" className="control-label">Description:</label>
+                                    <input type="text" className="form-control" required autofocus id="description" ref={(ref) => this.createDescription = ref}/>
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="startDate" className="control-label">Start Date</label>
+                                    <input type="date" className="form-control" required autofocus id="startDate" ref={(ref) => this.createStartDate = ref}/>
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="endDate" className="control-label">End Date:</label>
+                                    <input type="date" className="form-control" required autofocus id="endDate" ref={(ref) => this.createEndDate = ref}/>
+                                </div>
+                              </form>
+                          </div>
+                          <div className="modal-footer">
+                              <button type="button" className="btn btn-default" data-dismiss="modal">Discard</button>
+                              <button type="button" className="btn btn-primary" onClick={this.handleCreateProgram}>Save</button>
+                          </div>
+                      </div>
+                  </div>
+       	 	</div>{/*End of modal*/}
+
+       	 {/*Edit program modal dialog*/}
+			 <div className="modal fade" data-backdrop="false" id="editProgramModal" tabIndex="-1" role="dialog" aria-labelledby="createProgramModal">
+                  <div className="modal-dialog" role="document">
+                      <div className="modal-content">
+                          <div className="modal-header">
+                              <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                              <h4 className="modal-title" id="editProgramTitle"> Modify Program</h4>
+                          </div>
+                          <div className="modal-body">
+                              <form id="createProgram">
+                              
+                                <div className="form-group">
+                                    <label htmlFor="programName" className="control-label">Program:</label>
+                                    <input type="text" className="form-control" required autofocus id="programName" ref={(ref) => this.programName = ref}/>
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="description" className="control-label">Description:</label>
+                                    <input type="text" className="form-control" required autofocus id="description" ref={(ref) => this.description = ref}/>
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="startDate" className="control-label">Start Date</label>
+                                    <input type="date" className="form-control" required autofocus id="startDate" ref={(ref) => this.startDate = ref}/>
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="endDate" className="control-label">End Date:</label>
+                                    <input type="date" className="form-control" required autofocus id="endDate" ref={(ref) => this.endDate = ref}/>
+                                </div>
+                              </form>
+                          </div>
+                          <div className="modal-footer">
+                              <button type="button" className="btn btn-default" data-dismiss="modal">Discard</button>
+                              <button type="button" className="btn btn-primary">Save</button>
+                          </div>
+                      </div>
+                  </div>
+       	 	</div>{/*End of edit modal*/}
+       	 {/* Program creation successful dialog */}
+       	 <div className="modal fade" data-backdrop="false" id="programCreatedModal" tabIndex="-1" role="dialog" aria-labelledby="programCreatedModal">
+                  <div className="modal-dialog" role="document">
+                      <div className="modal-content">
+                          <div className="modal-header">
+                              <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                              <h4 className="modal-title" id="programCreatedTitle"> Program Created!</h4>
+                          </div>
+                          <div className="modal-body">
+                              <form id="createProgram">
+                                <div className="form-group">
+                                    <label className="control-label">Program created succcessfully!</label>
+                                    <label id="programCreatedName"></label>
+                                </div>
+                                
+                              </form>
+                          </div>
+                          <div className="modal-footer">
+                              <button type="button" className="btn btn-default" data-dismiss="modal">OK</button>
+                          </div>
+                      </div>
+                  </div>
+       	 	</div>
+
+       	 	 {/* Program creation failed dialog */}
+       	 <div className="modal fade" data-backdrop="false" id="programErrorModal" tabIndex="-1" role="dialog" aria-labelledby="programErrorModal">
+                  <div className="modal-dialog" role="document">
+                      <div className="modal-content">
+                          <div className="modal-header">
+                              <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                              <h4 className="modal-title" id="programErrorTitle"> Program creation failed!</h4>
+                          </div>
+                          <div className="modal-body">
+                              <form id="createProgram">
+                                <div className="form-group">
+                                    <label className="control-label">Program creation failed!</label>
+                                    <label id="programCreationError"></label>
+                                </div>
+                                
+                              </form>
+                          </div>
+                          <div className="modal-footer">
+                              <button type="button" className="btn btn-default" data-dismiss="modal">OK</button>
+                          </div>
+                      </div>
+                  </div>
+       	 	</div>
 			</div>
 		);
 	}

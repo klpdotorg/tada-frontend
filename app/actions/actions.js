@@ -36,30 +36,7 @@ function responseReceivedFromServer(resp) {
 
 
 
-function handlePwdResetReqSent() {
-  return {
-    type: 'RESET_REQUEST_SUCCESSFUL'
-  }
-}
 
-function handlePwdResetReqFailed() {
-  return {
-    type: 'RESET_REQUEST_FAILED'
-  }
-}
-
-function passwordResetConfirmed() {
-  return {
-    type: 'PASSWORD_RESET_CONFIRMED'
-  }
-}
-
-function passwordResetRejected(error) {
-  return {
-    type: 'PASSWORD_RESET_REJECTED',
-    reason: error
-  }
-}
 
 function requestFailed(error) {
   return {
@@ -145,120 +122,15 @@ function studentsFetched(data, groupId) {
   }
 }
 
-export function changeUserName(newUserName, password){
 
-  return function(dispatch, getState){
-    return fetch(authApiBase+'auth/username/', {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        username: newUserName,
-        current_password: password
-      }).then(checkStatus).then(data => {
-        console.log("Username changed");
-      }).catch(error=>{
-        dispatch(requestFailed(error));
-      })
-    });
-  }
-}
 
-function changePasswordSuccessful()
-{
-  return {
-    type: 'CHANGE_PASSWORD_SUCCESSFUL'
-  }
-}
 
-function changePasswordFailed(error)
-{
-  return {
-    type: 'CHANGE_PASSWORD_FAILED',
-    statusCode: error.response.status,
-    statusText: error.response.statusText,
-    error: error.response
-  }
-}
 
-export function changePassword(currentPassword, newPassword){
 
-  return function(dispatch, getState){
-    return fetch(authApiBase+'auth/password/', {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Token ' + sessionStorage.token
-      },
-      body: JSON.stringify({
-        new_password: newPassword,
-        current_password: currentPassword
-      })
-    }).then(checkStatus).then(()=>{
-      dispatch(changePasswordSuccessful());
-    }).catch(error=>{
-      dispatch(changePasswordFailed(error));
-    })
-    
-  }
-}
 
-export function resetPassword(email_address){
 
-  return function(dispatch, getState){
-    return fetch(authApiBase+'auth/password/reset/', {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        email: email_address
-      })
-    }).then(response=>{
-      if (!response.status >= 200 && !response.status < 300) {
-        dispatch(handlePwdResetReqFailed())
-      } 
-      else
-      {
-        dispatch(handlePwdResetReqSent());
-      }
-    }).catch(error=>{
-      dispatch(requestFailed(error));
-    })
-    
-  }
-}
 
-export function confirmResetPassword(userUid, userToken, newpassword){
-  return function(dispatch, getState){
-    return fetch(authApiBase+'auth/password/reset/confirm/', {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        uid: userUid,
-        token: userToken,
-        new_password: newpassword,
-        re_new_password: newpassword
-      })
-    }).then(response=>{
-      if (response.status >= 200 && response.status < 300) {
-        dispatch(passwordResetConfirmed());
-      } 
-      else
-      {
-        const error = new Error(response.statusText);
-        error.response = response;
-        throw error;
-      }
-    }).catch(error=>{
-      dispatch(passwordResetRejected(error));
-    })
-    
-  }
-}
+
 
 export function fetchBoundaryDetails(parentBoundaryId = 1) {
   return function(dispatch, getState) {
