@@ -15,6 +15,7 @@ export function fetchAllPrograms()
         'Authorization': 'Token ' + sessionStorage.token
       },
     }).then(checkStatus).then(data => {
+
       dispatch(handleProgramsResponse(data));
     }).catch(error => {
         throw error;//Let the higher level layers handle this.
@@ -68,6 +69,47 @@ export function createNewProgram(name, description, startDate, endDate, isActive
   }
 }
 
+function deleteProgramSuccessful(id)
+{
+  return {
+    type: 'PROGRAM_DELETED',
+    programId: id
+  }
+}
+
+function editProgramSuccessful(edited)
+{
+  return {
+    type: 'PROGRAM_EDITED',
+    program: edited
+  }
+}
+
+export function editProgram(id, name, description, startDate, endDate, isActive)
+{
+   return function(dispatch, getState){
+    var url = serverApiBase + "programmes/" + id + "/";  
+    return fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Token ' + sessionStorage.token
+      },
+      body: JSON.stringify({
+        name: name,
+        description: description,
+        start_date: startDate,
+        end_date: endDate,
+        active: 1,
+        programme_institution_category: 1
+      })
+    }).then(checkStatus).then(response => {
+        dispatch(editProgramSuccessful(response));
+        return response;
+    });
+  }
+}
+
 export function deleteProgram(id)
 {
   return function(dispatch, getState){
@@ -77,6 +119,19 @@ export function deleteProgram(id)
       headers: {
         'Authorization': 'Token ' + sessionStorage.token
       }
+    }).then(response => {
+       if (response.status >= 200 && response.status < 300) {
+          return response;
+        } else if (response.status === 401) {
+          dispatch(push('/login'));
+          return;
+        }
+        const error = new Error(response.statusText);
+        error.response = response.json();
+        throw error;
+    }).then(response => {
+        dispatch(deleteProgramSuccessful(id));
+        return response;
     });
   }
 }
