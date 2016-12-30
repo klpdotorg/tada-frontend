@@ -30,6 +30,25 @@ export function assessments(state = {
         state,
         {assessmentsById: assessmentsByProgram}
         );
+
+      case 'ASSESSMENT_DELETED':
+        var copyState = _.omit(state.assessmentsById,action.id);
+        return Object.assign({}, {assessmentsById: copyState});
+
+      case 'ASSESSMENT_EDITED':
+        var copy = Object.assign({}, state.assessmentsById);
+        copy[action.assessment.id].name = action.assessment.name;
+        copy[action.assessment.id].start_date=action.assessment.start_date;
+        copy[action.assessment.id].end_date=action.assessment.end_date;
+        copy[action.assessment.id].active=action.assessment.active;
+        copy[action.assessment.id].double_entry=action.assessment.double_entry;
+        return Object.assign({}, {assessmentsById: copy});
+
+      case 'ASSESSMENT_CREATED':
+            var copy = Object.assign({}, state.assessmentsById);
+            copy[action.assessment.id] = action.assessment;
+            return Object.assign({}, {assessmentsById: copy});
+
       default:
       return state;
     }
