@@ -8,6 +8,7 @@ require('font-awesome/css/font-awesome.css');
 require('../assets/sass/lato.scss');
 require('../assets/sass/style.scss');
 require('../assets/custom.css');
+require('jquery-validation');
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Dashboard from './components/Dashboard';
@@ -35,6 +36,8 @@ import Users from './containers/UsersContainer';
 
 
 const history = syncHistoryWithStore(browserHistory, tadastore)
+
+
 
 const routes = (
 <Provider store={tadastore}>

@@ -5,6 +5,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import klplogo from '../../assets/images/KLP_logo.png';
+import jqueryValidation from 'jquery-validation';
 
 class HeaderBar extends Component {
   
@@ -20,11 +21,47 @@ class HeaderBar extends Component {
 //Add validity checking here
   handleChangePassword()
   {
-      var currentPwd = this.currentPassword.value;
       var newPwd = this.newPassword.value;
       var verifyPwd = this.reenterNewPassword.value;
-      this.props.handleChangePassword(currentPwd, newPwd);
-      $('#changePasswordModal').modal('hide');
+      $('#changepassword').validate({
+        rules:{
+          newPassword: {required:true,
+                        minlength: 8,
+                        maxlength: 15
+                      },
+          reenterPassword: {
+            required:true,
+            minlength: 8,
+            maxlength: 15
+          }
+        },
+        highlight: function(element) {
+          $(element).closest('.form-group').addClass('has-error');
+        },
+        unhighlight:function(element){
+                    $(element).closest('.form-group').removeClass('has-error');
+
+        },
+        errorElement: 'span',
+        errorClass: 'help-block',
+        errorPlacement: function(error, element) {
+        // if(element.parent('.modal-body').length) {
+        //     error.insertAfter(element.parent());
+        // } else {
+            error.insertAfter(element);
+        //}
+    }
+        
+      });
+        
+     
+      // this.props.handleChangePassword(currentPwd, newPwd);
+      // $('#changePasswordModal').modal('hide');
+  }
+
+  onClickEnterPassword()
+  {
+    this.props.dispatch
   }
 
 //Add validity checking here
@@ -50,7 +87,7 @@ class HeaderBar extends Component {
             <div className="btn-group navbar-text pull-right">
               <button type="button" className="btn btn-primary padded-btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span className="glyphicon glyphicon-user"></span></button>
               <ul className="dropdown-menu">
-                <li><button className="btn btn-default dropdown-item" data-toggle="modal" data-target="#changePasswordModal" >Change Password</button></li>
+                <li><button className="btn btn-default dropdown-item" data-toggle="modal" data-target="#securityModal" >Change Password</button></li>
                 <li><button className="btn btn-default dropdown-item" data-toggle="modal" data-target="#changeUserNameModal">Update Profile</button></li>
 
               </ul>
@@ -64,6 +101,33 @@ class HeaderBar extends Component {
             </p>
           </div>
         </div>
+
+         {/*Current pwd modal*/}
+        <div className="modal fade" data-backdrop="false" id="securityModal" tabIndex="-1" role="dialog" aria-labelledby="changePasswordModal">
+                  <div className="modal-dialog" role="document">
+                      <div className="modal-content">
+                          <div className="modal-header">
+                              <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                              <h4 className="modal-title" id="securityTitle"> Security</h4>
+                          </div>
+                          <div className="modal-body">
+                              <form id="changepassword">
+                                Please enter your current password to proceed further.
+                                <div className="form-group">
+                                    <label htmlFor="currentPwd" className="control-label">Password:</label>
+                                    <input type="password" className="form-control" required autofocus id="currentPwd" ref={(ref) => this.currentPwd = ref}/>
+                                </div>
+                                
+                              </form>
+                          </div>
+                          <div className="modal-footer">
+                              <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+                              <button type="button" className="btn btn-primary">Confirm</button>
+                          </div>
+                      </div>
+                  </div>
+        </div>
+
         {/*Change password modal. Consider refactoring to a separate class later if needed */}
         <div className="modal fade" data-backdrop="false" id="changePasswordModal" tabIndex="-1" role="dialog" aria-labelledby="changePasswordModal">
                   <div className="modal-dialog" role="document">
@@ -73,18 +137,15 @@ class HeaderBar extends Component {
                               <h4 className="modal-title" id="changePasswordTitle"> Change password</h4>
                           </div>
                           <div className="modal-body">
-                              <form>
-                              <div className="form-group">
-                                    <label htmlFor="currentPassword" className="control-label">Current password:</label>
-                                    <input type="password" className="form-control" id="currentPassword" ref={(ref) => this.currentPassword = ref}/>
-                                </div>
+                              <form id="changepassword">
+                              
                                 <div className="form-group">
                                     <label htmlFor="newPassword" className="control-label">New password:</label>
-                                    <input type="password" className="form-control" id="newPassword" ref={(ref) => this.newPassword = ref}/>
+                                    <input type="password" className="form-control" required autofocus id="newPassword" ref={(ref) => this.newPassword = ref}/>
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="reenterPassword" className="control-label">Re-enter password:</label>
-                                    <input type="password" className="form-control" id="reenterPassword" ref={(ref) => this.reenterNewPassword = ref}/>
+                                    <input type="password" className="form-control" required autofocus id="reenterPassword" ref={(ref) => this.reenterNewPassword = ref}/>
                                 </div>
                               </form>
                           </div>
