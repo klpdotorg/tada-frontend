@@ -1,9 +1,9 @@
 import React from 'react';
+import { push } from 'react-router-redux';
 import {modifyBoundary, deleteBoundary, newSchool} from '../actions';
 import CreateInstitution from './Modals/CreateInstitution';
 import Button from './Button'
 import ConfirmModal from './Modals/Confirm'
-
 
 export default class PrimaryCluster extends React.Component {
 
@@ -61,6 +61,10 @@ export default class PrimaryCluster extends React.Component {
     let {params} = this.props
     this.props.dispatch(deleteBoundary(params.clusterId, params.blockId));
   }
+
+  viewStudent = (path) => {
+    this.props.dispatch(push(`${path}/students`))
+  }
   
   render() {
     const {boundaryDetails, params} = this.props
@@ -76,12 +80,25 @@ export default class PrimaryCluster extends React.Component {
           <div className='heading-border-left'>
             <h4 className="brand-blue col-md-10">Modify Details</h4>
             <Button onClick={this.openSchoolModal} title='Add Student'/>
+            <button className='btn btn-default view-student-btn' onClick={this.viewStudent.bind(null, group.path)}>View Students</button>
           </div>          
           <form className="form-horizontal boundary-form" role="form">
             <div className="form-group">
-              <label className="control-label col-sm-2" htmlFor="name">Student Group</label>
+              <label className="control-label col-sm-2" htmlFor="class">Class</label>
               <div className="col-sm-2">          
-                <input type="text" ref={(ref) => this.clusterName = ref} className="form-control" id="name" defaultValue={group.name}/>
+                <input type="text" ref={(ref) => this.className = ref} className="form-control" id="class" defaultValue={group.name}/>
+              </div>
+            </div>
+            <div className="form-group">
+              <label className="control-label col-sm-2" htmlFor="section">Section</label>
+              <div className="col-sm-2">          
+                <input type="text" ref={(ref) => this.section = ref} className="form-control" id="section" defaultValue={group.section}/>
+              </div>
+            </div>
+            <div className="form-group">
+              <label className="control-label col-sm-2" htmlFor="type">Type</label>
+              <div className="col-sm-2">          
+                <input type="text" ref={(ref) => this.type = ref} className="form-control" id="type" defaultValue={group.group_type}/>
               </div>
             </div>
            </form>
