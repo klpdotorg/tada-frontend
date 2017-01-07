@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Modal from 'react-modal'
+import Modal from 'react-modal';
 
 const customStyles = {
   content: {
@@ -18,7 +18,7 @@ export default class CreateDistrict extends Component {
     this.state = {
       value: ''
     }
-    this.handleChange = this.handleChange.bind(this)
+    this.handleChange = this.handleChange.bind(this);
   }
 
   handleChange(e) {
