@@ -23,6 +23,7 @@ export function fetchAllPrograms()
   }
 }
 
+
 /* This method handles the responses received from the programs endpoint
 */
 function handleProgramsResponse(resp) {
@@ -65,7 +66,18 @@ export function createNewProgram(name, description, startDate, endDate, isActive
         active: 1,
         programme_institution_category: 1
       })
-    }).then(checkStatus);
+    }).then(checkStatus).then(response => {
+      dispatch(createProgramSuccessful(response));
+      return response;
+    });
+  }
+}
+
+function createProgramSuccessful(newProgram)
+{
+  return{
+    type: 'PROGRAM_CREATED',
+    program: newProgram
   }
 }
 
@@ -84,6 +96,8 @@ function editProgramSuccessful(edited)
     program: edited
   }
 }
+
+
 
 export function editProgram(id, name, description, startDate, endDate, isActive)
 {

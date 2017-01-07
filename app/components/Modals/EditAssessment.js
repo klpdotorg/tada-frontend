@@ -29,13 +29,13 @@ export default class EditAssessment extends Component {
   }
 
   handleSave(){
-    console.log(this.startDate.value);
-    console.log(this.endDate.value);
-    console.log(this.doubleEntry.value);
-    this.props.handleEditAssessment(this.props.assessment.id,this.assessmentName.value, this.startDate.value, this.endDate.value, 1, this.doubleEntry.checked);
+    console.log("Saving assessment",this.type.value);
+   
+    this.props.handleEditAssessment(this.props.assessment.id,this.assessmentName.value, this.startDate.value, this.endDate.value, 1, this.doubleEntry.checked, this.type.value);
   }
 
   render() {  
+
     return (
       <Modal isOpen={ this.props.isOpen } onRequestClose={ this.props.onClose}>
         {/* Title of modal window */}
@@ -63,10 +63,10 @@ export default class EditAssessment extends Component {
                       </div>
                       <div className="form-group">
                           <label htmlFor="type" className="control-label">Type:</label>
-                          <select className="form-control" required autofocus id="type" ref={(ref) => this.type = ref}>
-                            <option>Class</option>
-                            <option>Student</option>
-                            <option>Institution</option>
+                          <select className="form-control" required autofocus id="type" ref={(ref) => this.type = ref} defaultValue={this.props.assessment.type}>
+                            <option value="2">Class</option>
+                            <option value="3">Student</option>
+                            <option value="1">Institution</option>
                           </select>
                       </div>
                       <div className="checkbox">

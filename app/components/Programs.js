@@ -1,8 +1,10 @@
 import React from 'react';
 import * as actions from '../actions/';
 require('bootstrap-datepicker');
-import CreateAssessment from './modals/CreateAssessment';
-import EditAssessment from './modals/EditAssessment';
+import CreateAssessment from './Modals/CreateAssessment';
+import EditAssessment from './Modals/EditAssessment';
+import CreateProgram from './Modals/CreateProgram';
+import GenericDialog from './Modals/GenericDialog';
 
 export default class Programs extends React.Component {
 
@@ -13,8 +15,12 @@ export default class Programs extends React.Component {
 			selectedProgram: 0,
 			isCreateAssessmentModalOpen: false,
 			isEditAssessmentModalOpen: false,
+			isCreateProgramModalOpen: false,
 			selAssessment: -1,
-			selectedAssessments: []
+			showSuccessModal: false,
+			selectedAssessments: [],
+			dialogTitle: "",
+			dialogMessage: ""
 		}
 		this.handleProgramSelection = this.handleProgramSelection.bind(this);
 		this.handleCreateProgram = this.handleCreateProgram.bind(this);
@@ -26,11 +32,18 @@ export default class Programs extends React.Component {
 		this.handleCreateAssessment = this.handleCreateAssessment.bind(this);
 		this.openEditAssessmentModal = this.openEditAssessmentModal.bind(this);
 		this.closeEditAssessmentModal = this.closeEditAssessmentModal.bind(this);
+		this.openCreateProgramModal = this.openCreateProgramModal.bind(this);
+		this.closeCreateProgramModal = this.closeCreateProgramModal.bind(this);
 		this.handleEditAssessment = this.handleEditAssessment.bind(this);
 		this.selectAssessment = this.selectAssessment.bind(this);
 		this.deleteAssessments = this.deleteAssessments.bind(this);
 		this.activateAssessments = this.activateAssessments.bind(this);
 		this.deactivateAssessments = this.deactivateAssessments.bind(this);
+		this.openGenericDialog = this.openGenericDialog.bind(this);
+		this.closeGenericDialog = this.closeGenericDialog.bind(this);
+		this.activateAssessments = this.activateAssessments.bind(this);
+		this.deactivateAssessments = this.deactivateAssessments.bind(this);
+
 
 		console.log("State is -- ", this.state);
 	}
@@ -83,20 +96,26 @@ export default class Programs extends React.Component {
 
 	}
 
-	handleCreateProgram()
+	handleCreateProgram(programName, desc, start, end, isActive, instCat)
 	{
-		var programName = this.createProgramName.value;
-		var desc = this.createDescription.value;
-		var start = this.createStartDate.value;
-		var end = this.createEndDate.value;
-		var isActive = this.isActive.value;
-		var instCat = this.instCat.value;
+		this.closeCreateProgramModal();
+		// var programName = this.createProgramName.value;
+		// var desc = this.createDescription.value;
+		// var start = this.createStartDate.value;
+		// var end = this.createEndDate.value;
+		// var isActive = this.isActive.value;
+		// var instCat = this.instCat.value;
 		console.log("Creating program..");
-		$('#createProgramModal').modal('hide');
-		this.props.dispatch(actions.createNewProgram(programName, desc, start, end, isActive)).then(response =>{
+		//$('#createProgramModal').modal('hide');
+		this.props.dispatch(actions.createNewProgram(programName, desc, start, end, isActive, instCat)).then(response =>{
 			
-			$('#programCreatedName').text(response.name);
-			$('#programInfoModal').modal('show');
+			var programName = response.name;
+			var message = "Program created successfully!"
+			this.setState({
+				showSuccessModal: true,
+				dialogTitle: "Program Created!",
+				dialogMessage: message
+			});
 		}).catch(error => {
 			console.log("ERROR in creating program..", JSON.stringify(error));
 			$('#programCreationError').text(JSON.stringify(error.response));
@@ -105,17 +124,50 @@ export default class Programs extends React.Component {
 		});
 	}
 
+	openGenericDialog()
+	{
+		this.setState({
+			showSuccessModal: true
+		});
+	}
+
+	closeGenericDialog()
+	{
+		this.setState({
+			
+				showSuccessModal:false
+			
+		});
+	}
+
 	handleCreateAssessment(name, start_date, end_date, isActive, isDoubleEntry, type)
 	{
 		console.log("Creating assessment");
 		this.closeCreateAssessmentModal();
-		this.props.dispatch(actions.createAssessment(this.state.selectedProgram,name,start_date,end_date,1,isDoubleEntry));
+		this.props.dispatch(actions.createAssessment(this.state.selectedProgram,name,start_date,end_date,1,isDoubleEntry, type));
 	}
 
 	handleEditAssessment(id, name, start_date, end_date, isActive, isDoubleEntry, type)
 	{
 		this.closeEditAssessmentModal();
-		this.props.dispatch(actions.editAssessment(this.state.selectedProgram,id,name,start_date,end_date,1,isDoubleEntry));
+		this.props.dispatch(actions.editAssessment(this.state.selectedProgram,id,name,start_date,end_date,1,isDoubleEntry,type));
+	}
+
+	openCreateProgramModal()
+	{
+		
+			this.setState({
+				isCreateProgramModalOpen: true
+			});
+		
+	}
+
+	closeCreateProgramModal()
+	{
+
+		this.setState({
+			isCreateProgramModalOpen: false
+		});
 	}
 
 	openCreateAssessmentModal()
@@ -243,16 +295,72 @@ export default class Programs extends React.Component {
   		itemsToDelete.map(assessmentId => {
   			this.props.dispatch(actions.deleteAssessment(programId, assessmentId));
   		});
+  		this.setState({
+  			selectedAssessments:[]
+  		})
   	}
 
   	activateAssessments()
   	{
-
+  		for(let i of this.state.selectedAssessments)
+  		{
+  			this.props.dispatch(actions.activateAssessment(this.state.selectedProgram,i));
+  		}
+  		this.setState({
+  			selectedAssessments: []
+  		});
   	}
 
   	deactivateAssessments()
   	{
+  		for(let i of this.state.selectedAssessments)
+  		{
+  			this.props.dispatch(actions.deactivateAssessment(this.state.selectedProgram,i));
+  		}
+  		this.setState({
+  			selectedAssessments: []
+  		});
+  	}
 
+  	/*
+  	This is for react-data-grid. Erase if not using it at some later point.
+  	 */
+  	getColumns()
+  	{
+  		return[
+  			{
+  				key: assessmentname,
+  				name: Assessment
+  			},
+  			{
+  				key: startdate,
+  				name: StartDate
+  			},
+  			{
+  				key: enddate,
+  				name: EndDate
+  			},
+  			{
+  				key: type,
+  				name: Type
+  			},
+  			{
+  				key: doubleentry,
+  				name: DoubleEntry
+  			},
+  			{
+  				key: flexitype,
+  				name: Flexi-type
+  			},
+  			{
+  				key: status,
+  				name: Status
+  			},
+  			{
+  				key: edit,
+  				name: Edit
+  			},
+  		];
   	}
 
 	render() {
@@ -261,6 +369,7 @@ export default class Programs extends React.Component {
 		var programs, assessments;
 		var startDate;
 		var endDate;
+		var instType;
 		
 		programs = this.props.programsById;
 		assessments = this.props.assessmentsById;
@@ -272,19 +381,31 @@ export default class Programs extends React.Component {
 			
 			var flexi_assessment = "No";
 			var double_entry = "No";
+			var type =""
 			if(assessment.double_entry && assessment.double_entry == true)
 				double_entry="Yes";
 			if(assessment.flexi_assessment && assessment.flexi_assessment == true)
 				flexi_assessment = "Yes";
-			var active = "No";
+			var active = "Inactive";
 			if(assessment.active && assessment.active == 1)
-				active = "Yes";
+				active = "Active";
+			if(assessment.type)
+			{
+				if(assessment.type == 1)
+					type="Institution"
+				else if(assessment.type == 2)
+					type="Student Group"
+				else if(assessment.type == 3)
+					type="Student"
+			}
+			else
+				type="Unknown";
 			return(
 				<tr id={assessment.id}>
 					<td>{assessment.name}</td>
 					<td>{assessment.start_date}</td>
 					<td>{assessment.end_date}</td>
-					<td>TBD</td>
+					<td>{type}</td>
 					<td>{double_entry}</td>
 					<td>{flexi_assessment}</td>
 					<td>{active}</td>
@@ -312,7 +433,10 @@ export default class Programs extends React.Component {
 			selectedProgramName=selectedProgram.name;
 			startDate = selectedProgram.start_date;
 			endDate = selectedProgram.end_date;
-			
+			if(selectedProgram.programme_institution_category == 1)
+				instType = "Primary"
+			else
+				instType = "Pre-School"
 		}
 		return (
 			<div>
@@ -325,7 +449,9 @@ export default class Programs extends React.Component {
 						  </select>
 					</div>
 					<div className=" col-md-4 form-group">
-						<button type="button" className="btn brand-orange-bg all-padded-btn" data-toggle="modal" data-target="#createProgramModal">Add Program</button>
+						{/*<button type="button" className="btn brand-orange-bg all-padded-btn" data-toggle="modal" data-target="#createProgramModal">Add Program</button>*/}
+						<button type="button" className="btn brand-orange-bg all-padded-btn" onClick={this.openCreateProgramModal.bind(this)}>Add Program</button>
+
 						<button type="button" className="btn brand-orange-bg all-padded-btn" onClick={this.openCreateAssessmentModal}>Add Assessments</button>
 					</div>
 					
@@ -350,7 +476,7 @@ export default class Programs extends React.Component {
 						<label className="col-md-4">Start Date: {startDate}</label>
 					</div>
 					<div className="row">
-						<label className="col-md-4">Partner name: </label>
+						<label className="col-md-4">Institution: {instType} </label>
 						<label className="col-md-4">End Date: {endDate}</label>
 					</div>
 				</div>
@@ -384,9 +510,10 @@ export default class Programs extends React.Component {
 						<button type="button" className="col-sm-3 btn btn-info navbar-btn brand-blue-bg all-padded-btn" onClick={this.deactivateAssessments}>Deactivate</button>
 
 				</div>
-			<CreateAssessment handleSubmit = {this.handleCreateAssessment} isOpen={this.state.isCreateAssessmentModalOpen} onClose= {this.closeCreateAssessmentModal} onCloseModal={this.closeCreateAssessmentModal}/>
-			<EditAssessment assessment={this.state.selAssessment} handleEditAssessment={this.handleEditAssessment} handleSubmit = {this.handleEditAssessment} isOpen={this.state.isEditAssessmentModalOpen} onClose= {this.closeEditAssessmentModal} onCloseModal={this.closeEditAssessmentModal}/>
-
+			<CreateAssessment handleSubmit = {this.handleCreateAssessment} isOpen={this.state.isCreateAssessmentModalOpen} onCloseModal={this.closeCreateAssessmentModal}/>
+			<EditAssessment assessment={this.state.selAssessment} handleEditAssessment={this.handleEditAssessment} handleSubmit = {this.handleEditAssessment} isOpen={this.state.isEditAssessmentModalOpen} onCloseModal={this.closeEditAssessmentModal}/>
+			<CreateProgram isOpen={this.state.isCreateProgramModalOpen} onCloseModal={this.closeCreateProgramModal} handleSubmit={this.handleCreateProgram}/>
+			<GenericDialog isOpen={this.state.showSuccessModal} onClose={this.closeGenericModal} title={this.state.dialogTitle} message={this.state.dialogMessage}/>
 			{/*DELETE program modal dialog*/}
 			 <div className="modal fade" data-backdrop="false" id="deleteProgramModal" tabIndex="-1" role="dialog" aria-labelledby="deleteProgramModal">
                   <div className="modal-dialog" role="document">

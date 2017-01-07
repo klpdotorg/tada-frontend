@@ -29,10 +29,8 @@ export default class CreateAssessment extends Component {
   }
 
   handleSubmit(){
-    console.log(this.startDate.value);
-    console.log(this.endDate.value);
-    console.log(this.doubleEntry.value);
-    this.props.handleSubmit(this.assessmentName.value, this.startDate.value, this.endDate.value, 1, this.doubleEntry.checked);
+    
+    this.props.handleSubmit(this.assessmentName.value, this.startDate.value, this.endDate.value, 1, this.doubleEntry.checked, this.type.value);
   }
 
   render() {  
@@ -63,10 +61,10 @@ export default class CreateAssessment extends Component {
                       </div>
                       <div className="form-group">
                           <label htmlFor="type" className="control-label">Type:</label>
-                          <select className="form-control" required autofocus id="type" ref={(ref) => this.type = ref}>
-                            <option>Class</option>
-                            <option>Student</option>
-                            <option>Institution</option>
+                          <select className="form-control" required autofocus id="type" ref={(ref) => this.type = ref} defaultValue="1">
+                            <option value="2">Class</option>
+                            <option value="3">Student</option>
+                            <option value="1">Institution</option>
                           </select>
                       </div>
                       <div className="checkbox">
