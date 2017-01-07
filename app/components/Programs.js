@@ -1,8 +1,8 @@
 import React from 'react';
 import * as actions from '../actions/';
 require('bootstrap-datepicker');
-import CreateAssessment from './modals/CreateAssessment';
-import EditAssessment from './modals/EditAssessment';
+import CreateAssessment from './Modals/CreateAssessment';
+import EditAssessment from './Modals/EditAssessment';
 
 export default class Programs extends React.Component {
 
