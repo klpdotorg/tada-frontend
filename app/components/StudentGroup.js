@@ -5,7 +5,6 @@ import CreateInstitution from './Modals/CreateInstitution';
 import Button from './Button'
 import ConfirmModal from './Modals/Confirm'
 
-
 export default class PrimaryCluster extends React.Component {
 
   constructor(props){

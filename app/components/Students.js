@@ -3,6 +3,8 @@ import {modifyBoundary, deleteBoundary, newSchool} from '../actions';
 import CreateInstitution from './Modals/CreateInstitution';
 import Button from './Button'
 import ConfirmModal from './Modals/Confirm'
+import ReactDataGrid from 'react-data-grid'
+
 
 
 export default class PrimaryCluster extends React.Component {
@@ -63,51 +65,134 @@ export default class PrimaryCluster extends React.Component {
   }
   
   render() {
-    const {boundaryDetails, params} = this.props
-    const block = boundaryDetails[params.blockId] || boundaryDetails[params.projectId];    
-    const district = boundaryDetails[params.districtId];    
-    const cluster = boundaryDetails[params.clusterId] || boundaryDetails[params.circleId]
-    const institution = boundaryDetails[params.institutionId]
-    const group = boundaryDetails[params.groupId]
-    const student = boundaryDetails[params.studentId]
-    var Displayelement;
-    if(sessionStorage.getItem('isAdmin')) {
-      Displayelement = (props) => 
-        <div>
-          <div className='heading-border-left'>
-            <h4 className="brand-blue col-md-10">Modify Details</h4>
-            <Button onClick={this.openSchoolModal} title='Add Student'/>
-          </div>
-          <table className="table table-striped table-bordered">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Username</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>@twitter</td>
-              </tr>
-            </tbody>
-          </table>      
+
+
+  //helper to generate a random date
+  function randomDate(start, end) {
+    return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime())).toLocaleDateString();
+  }
+
+//helper to create a fixed number of rows
+function createRows(numberOfRows){
+  var _rows = [];
+  for (var i = 1; i < numberOfRows; i++) {
+    _rows.push({
+      firstName: i,
+      middleName: 'Task ' + i,
+      lastName: Math.min(100, Math.round(Math.random() * 110)),
+      uid : ['Critical', 'High', 'Medium', 'Low'][Math.floor((Math.random() * 3) + 1)],
+      gender : ['Bug', 'Improvement', 'Epic', 'Story'][Math.floor((Math.random() * 3) + 1)],
+      language: randomDate(new Date(2015, 3, 1), new Date()),
+      dob: randomDate(new Date(), new Date(2016, 0, 1))
+    });
+  }
+  return _rows;
+}
+
+//function to retrieve a row for a given index
+var rowGetter = function(i){
+  return _rows[i];
+};
+
+//Columns definition
+var columns = [
+{
+  key: 'firstName',
+  name: 'First Name',
+  editable : true
+},
+{
+  key: 'middleName',
+  name: 'Middle Name',
+  editable : true
+},
+{
+  key: 'lastName',
+  name: 'Last Name',
+  editable : true
+},
+{
+  key: 'uid',
+  name: 'UID',
+  editable : true
+},
+{
+  key: 'gender',
+  name: 'Gender',
+  editable : true
+},
+{
+  key: 'language',
+  name: 'Language',
+  editable : true
+},
+{
+  key: 'dob',
+  name: 'DOB',
+  editable : true
+},
+{
+  key: 'fatherName',
+  name: 'Father Name',
+  editable : true
+},
+{
+  key: 'motherName',
+  name: 'Mother Name',
+  editable : true
+}
+]
+
+
+var Example = React.createClass({
+
+  getInitialState : function(){
+    return {rows : createRows(1000)}
+  },
+
+  rowGetter : function(rowIdx){
+    return this.state.rows[rowIdx]
+  },
+
+  handleRowUpdated : function(e){
+    //merge updated row with current row and rerender by setting state
+    var rows = this.state.rows;
+    Object.assign(rows[e.rowIdx], e.updated);
+    this.setState({rows:rows});
+  },
+
+  render:function(){
+    return(
+      <ReactDataGrid
+      enableCellSelect={true}
+      columns={columns}
+      rowGetter={this.rowGetter}
+      rowsCount={this.state.rows.length}
+      minHeight={500}
+      onRowUpdated={this.handleRowUpdated} />
+      )
+  }
+
+});
+
+const {boundaryDetails, params} = this.props
+const block = boundaryDetails[params.blockId] || boundaryDetails[params.projectId];    
+const district = boundaryDetails[params.districtId];    
+const cluster = boundaryDetails[params.clusterId] || boundaryDetails[params.circleId]
+const institution = boundaryDetails[params.institutionId]
+const group = boundaryDetails[params.groupId]
+const student = boundaryDetails[params.studentId]
+var Displayelement;
+if(sessionStorage.getItem('isAdmin')) {
+  Displayelement = (props) => 
+  <div>
+  <div className='heading-border-left'>
+  <h4 className="brand-blue col-md-10">Modify Details</h4>
+  <Button onClick={this.openSchoolModal} title='Add Student'/>
+  </div>
+  <Example />
+
+
           {/*<form className="form-horizontal boundary-form" role="form">
             <div className="form-group">
               <label className="control-label col-sm-2" htmlFor="name">First Name</label>
@@ -131,35 +216,35 @@ export default class PrimaryCluster extends React.Component {
                 <input type="text" ref={(ref) => this.lastName = ref} className="form-control" id="name" defaultValue={student.last_name}/>
               </div>
             </div>
-           </form>*/}
+          </form>*/}
           <div className="col-md-2">
-            <button type="submit" className="btn btn-primary" onClick={this.saveCluster}>Save</button>
-            <button type="submit" className="btn btn-primary" onClick={this.showConfirmation}>Delete</button>
-            <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteCluster} closeModal={this.closeConfirmation} entity={cluster.name}/>
+          <button type="submit" className="btn btn-primary" onClick={this.saveCluster}>Save</button>
+          <button type="submit" className="btn btn-primary" onClick={this.showConfirmation}>Delete</button>
+          <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteCluster} closeModal={this.closeConfirmation} entity={cluster.name}/>
           </div>             
-        </div>
-    }
-    else {
-      Displayelement = (props) => 
-        <div>
+          </div>
+        }
+        else {
+          Displayelement = (props) => 
+          <div>
           <h4 className="heading-err heading-border-left brand-red"> <i className="fa fa-lock brand-red" aria-hidden="true"></i>  Insufficient Permissions</h4>
           <p>You need administrator privileges to modify Boundary details.</p>
           <h4 className="brand-blue heading-border-left"> Cluster Details</h4>
           <p> Name: {cluster.name}</p>
-        </div>
-    }
-     return(
-      <div>
-       <ol className="breadcrumb">
+          </div>
+        }
+        return(
+          <div>
+          <ol className="breadcrumb">
           <li><a href={district.path}>{district.name}</a></li>
           <li><a href={block.path}>{block.name}</a></li>
           <li><a href={cluster.path}>{cluster.name}</a></li>
           <li><a href={institution.path}>{institution.name}</a></li>          
-        </ol>
-        <Displayelement {...this.props}/>
-        <CreateInstitution placeHolder='School Name' title='Create New School' isOpen={this.state.schoolModalIsOpen} onCloseModal={this.toggleSchoolModal} closeModal={ this.toggleSchoolModal} save={ this.saveSchool } />
-      </div>
-    );   
-  }
-};
+          </ol>
+          <Displayelement {...this.props}/>
+          <CreateInstitution placeHolder='School Name' title='Create New School' isOpen={this.state.schoolModalIsOpen} onCloseModal={this.toggleSchoolModal} closeModal={ this.toggleSchoolModal} save={ this.saveSchool } />
+          </div>
+          );   
+      }
+    };
 

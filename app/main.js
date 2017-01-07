@@ -62,7 +62,7 @@ const routes = (
       <Route path="district/:districtId/block/:blockId/cluster/:clusterId" component={ PrimaryCluster } />
       <Route path="district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId" component={ Institution } />
       <Route path="district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId/studentgroups/:groupId" component={ StudentGroup } />
-      <Route path="district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId/studentgroups/:groupId/student/:studentId" component={ Students} />
+      <Route path="district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId/studentgroups/:groupId/students" component={ Students} />
     </Route>
   </Router>
 </Provider>
