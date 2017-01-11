@@ -32,12 +32,14 @@ var mapDispatchToProps = function(dispatch) {
         type: 'PRIMARY_SELECTED',
       });
       dispatch(fetchEntitiesFromServer())
+      dispatch(push('/'))
     },
     onPreSchoolClick() {      
       dispatch({
         type: 'PRESCHOOL_SELECTED'
       })
       dispatch(fetchEntitiesFromServer())
+      dispatch(push('/'))
     },
     fetchEntityDetails() {
       dispatch(fetchEntitiesFromServer(1));
