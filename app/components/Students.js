@@ -66,29 +66,6 @@ export default class PrimaryCluster extends React.Component {
   
   render() {
 
-
-  //helper to generate a random date
-  function randomDate(start, end) {
-    return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime())).toLocaleDateString();
-  }
-
-//helper to create a fixed number of rows
-function createRows(numberOfRows){
-  var _rows = [];
-  for (var i = 1; i < numberOfRows; i++) {
-    _rows.push({
-      firstName: i,
-      middleName: 'Task ' + i,
-      lastName: Math.min(100, Math.round(Math.random() * 110)),
-      uid : ['Critical', 'High', 'Medium', 'Low'][Math.floor((Math.random() * 3) + 1)],
-      gender : ['Bug', 'Improvement', 'Epic', 'Story'][Math.floor((Math.random() * 3) + 1)],
-      language: randomDate(new Date(2015, 3, 1), new Date()),
-      dob: randomDate(new Date(), new Date(2016, 0, 1))
-    });
-  }
-  return _rows;
-}
-
 //function to retrieve a row for a given index
 var rowGetter = function(i){
   return _rows[i];
@@ -97,17 +74,17 @@ var rowGetter = function(i){
 //Columns definition
 var columns = [
 {
-  key: 'firstName',
+  key: 'first_name',
   name: 'First Name',
   editable : true
 },
 {
-  key: 'middleName',
+  key: 'middle_name',
   name: 'Middle Name',
   editable : true
 },
 {
-  key: 'lastName',
+  key: 'last_name',
   name: 'Last Name',
   editable : true
 },
@@ -132,12 +109,12 @@ var columns = [
   editable : true
 },
 {
-  key: 'fatherName',
+  key: 'father_name',
   name: 'Father Name',
   editable : true
 },
 {
-  key: 'motherName',
+  key: 'mother_name',
   name: 'Mother Name',
   editable : true
 }
@@ -147,7 +124,17 @@ var columns = [
 var Example = React.createClass({
 
   getInitialState : function(){
-    return {rows : createRows(1000)}
+    const students = this.props.boundariesByParentId[params.groupId]
+    const rows = students.map((id) => {
+      return {
+        ...this.props.boundaryDetails[id],
+        mother_name: this.props.boundaryDetails[id].relations[0].first_name,
+        father_name: this.props.boundaryDetails[id].relations[1].first_name
+
+      }     
+
+    })    
+    return {rows : rows}
   },
 
   rowGetter : function(rowIdx){
@@ -167,8 +154,7 @@ var Example = React.createClass({
       enableCellSelect={true}
       columns={columns}
       rowGetter={this.rowGetter}
-      rowsCount={this.state.rows.length}
-      minHeight={500}
+      rowsCount={this.state.rows.length}      
       onRowUpdated={this.handleRowUpdated} />
       )
   }
@@ -182,6 +168,7 @@ const cluster = boundaryDetails[params.clusterId] || boundaryDetails[params.circ
 const institution = boundaryDetails[params.institutionId]
 const group = boundaryDetails[params.groupId]
 const student = boundaryDetails[params.studentId]
+console.log('student', this.props.boundariesByParentId[params.groupId])
 var Displayelement;
 if(sessionStorage.getItem('isAdmin')) {
   Displayelement = (props) => 
@@ -190,7 +177,7 @@ if(sessionStorage.getItem('isAdmin')) {
   <h4 className="brand-blue col-md-10">Modify Details</h4>
   <Button onClick={this.openSchoolModal} title='Add Student'/>
   </div>
-  <Example />
+  <Example {...this.props} />
 
 
           {/*<form className="form-horizontal boundary-form" role="form">
