@@ -275,7 +275,7 @@ export default class Programs extends React.Component {
   	{
   		var assId = $(e.currentTarget).closest('tr').prop('id');
   		var newSelAssessments = this.state.selectedAssessments.slice();
-  		if(e.currentTarget.checked)
+  		if(e.currentTarget.checked && jQuery.inArray(assId,this.state.selectedAssessments) == -1)
   		{
   			newSelAssessments.push(assId);
   		}
@@ -400,6 +400,9 @@ export default class Programs extends React.Component {
 			}
 			else
 				type="Unknown";
+			console.log("Assessment id: ", assessment.id);
+			console.log("State is: ", this.state.selectedAssessments);
+			console.log("Assessment checked is: ", jQuery.inArray(assessment.id.toString(), this.state.selectedAssessments));
 			return(
 				<tr id={assessment.id}>
 					<td>{assessment.name}</td>
@@ -409,7 +412,7 @@ export default class Programs extends React.Component {
 					<td>{double_entry}</td>
 					<td>{flexi_assessment}</td>
 					<td>{active}</td>
-					<td><input type="checkbox" className="form-control" onClick={this.selectAssessment}/></td>
+					<td><input type="checkbox" className="form-control" onChange={this.selectAssessment} checked={jQuery.inArray(assessment.id.toString(),this.state.selectedAssessments)>-1}/></td>
 					<td><button onClick={this.openEditAssessmentModal}><span className="fa fa-pencil-square-o" onClick={this.openEditAssessmentModal}></span></button></td>
 				</tr>
 			);

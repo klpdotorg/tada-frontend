@@ -7,7 +7,7 @@ export function fetchAllPrograms()
 {
   return function(dispatch, getState) 
   {
-    var url = serverApiBase + "programmes/";
+    var url = serverApiBase + "programmes/" + "?active=2";
     return fetch(url, {
       method: 'GET',
       headers: {
@@ -45,7 +45,7 @@ function checkStatus(response) {
   throw error;
 }
 
-export function createNewProgram(name, description, startDate, endDate, isActive) {
+export function createNewProgram(name, description, startDate, endDate, isActive, instCat) {
   return function(dispatch, getState){
     var url = serverApiBase + "programmes/";
     var programInstCat = JSON.stringify({
@@ -63,8 +63,8 @@ export function createNewProgram(name, description, startDate, endDate, isActive
         description: description,
         start_date: startDate,
         end_date: endDate,
-        active: 1,
-        programme_institution_category: 1
+        active: 2,
+        programme_institution_category: instCat
       })
     }).then(checkStatus).then(response => {
       dispatch(createProgramSuccessful(response));

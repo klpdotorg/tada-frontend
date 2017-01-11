@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
 import Modal from 'react-modal';
+import Formsy from 'formsy-react';
+import FRC from 'formsy-react-components';
+
+
+const { Input, RadioGroup } = FRC;
 
 const customStyles = {
   content: {
