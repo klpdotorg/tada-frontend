@@ -57,30 +57,40 @@ export default class EditProgram extends Component {
 	render()
 	{
 		var radioOptions = [
-            {value: '1', label: 'Yes'},
-            {value: '0', label: 'No'}
+            {value: 1, label: 'Yes'},
+            {value: 0, label: 'No'}
            
         ];
         var instType=[
-        	{value: '1', label: 'Primary School'},
-        	{value: '2', label: 'Preschool'}
+        	{value: 1, label: 'Primary School'},
+        	{value: 2, label: 'Preschool'}
         ];
+        var program = this.props.program;
+        var name="", desc="", startdate="", enddate="", instcat="";
+        if(program)
+        {
+        	name=program.name;
+        	desc=program.description;
+        	startdate=program.start_date;
+        	enddate=program.end_date;
+        	instcat=program.programme_institution_category;
+        }
 		return(
 			<Modal isOpen={ this.props.isOpen } onRequestClose={ this.props.onCloseModal}>
 				<div className="modal-dialog" role="document">
             		<div className="modal-content">
                 		<div className="modal-header">
                     		<button type="button" className="close" onClick={this.props.onCloseModal} aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    		<h4 className="modal-title" id="createAssessmentTitle">Create Program</h4>
+                    		<h4 className="modal-title" id="createAssessmentTitle">Edit Program</h4>
                 		</div>
                 		<div className="modal-body">
 						<Formsy.Form onValidSubmit={this.submitForm} onValid={this.enableSubmitButton} onInvalid={this.disableSubmitButton}
 								disabled={this.state.disabled} ref={(ref) => this.myform = ref}>
-							<Input name="programName" id="programName" value="" label="Program" type="text"
-								placeholder="Please enter the program name" help="This is a required field" required validations="minLength:1" defaultValue={this.props.program.name}/>
-							<Input name="description" id="description" value="" label="Description" type="text" placeholder="Please enter the program description (Optional)" defaultValue={this.props.program.description}/>
-							<Input name="startDate" id="startDate" type="date" label="Start Date" placeholder="Please select the start date of the program" required defaultValue={this.props.program.startDate}/>
-							<Input name="endDate" id="endDate" type="date" label="End Date" placeholder="Please select the end date of the program" required defaultValue={this.props.program.endDate}/>
+							<Input name="programName" label="Program" type="text"
+								placeholder="Please enter the program name" help="This is a required field" required validations="minLength:1" defaultValue={name}/>
+							<Input name="description" label="Description" type="text" placeholder="Please enter the program description (Optional)" defaultValue={desc}/>
+							<Input name="startDate" type="date" label="Start Date" placeholder="Please select the start date of the program" required defaultValue={startdate}/>
+							<Input name="endDate" itype="date" label="End Date" placeholder="Please select the end date of the program" required defaultValue={enddate}/>
 							
                         	<RadioGroup
 	                            name="programmeInstCat"
@@ -88,7 +98,7 @@ export default class EditProgram extends Component {
 	                            label="Institution Type"
 	                            help="Select institution type"
 	                            options={instType}
-	                            required defaultValue={this.props.program.programme_institution_category}
+	                            required value={instcat}
                         	/>
 						</Formsy.Form>
 						</div>
