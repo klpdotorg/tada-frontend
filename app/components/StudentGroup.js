@@ -1,31 +1,29 @@
 import React from 'react';
+import { push } from 'react-router-redux';
+import {modifyBoundary, deleteBoundary, newSchool} from '../actions';
+import CreateInstitution from './Modals/CreateInstitution';
 import Button from './Button'
-import {modifyBoundary, deleteBoundary, saveNewBlock, saveNewProject} from '../actions'
-import CreateBoundary from './Modals/CreateBoundary'
-import {Link} from 'react-router'
-import NotificationSystem from 'react-notification-system';
 import ConfirmModal from './Modals/Confirm'
 
-
-export default class PrimaryDistrict extends React.Component {
+export default class PrimaryCluster extends React.Component {
 
   constructor(props){
-    super(props);    
-    this.saveDistrict = this.saveDistrict.bind(this);
-    this.deleteDistrict = this.deleteDistrict.bind(this);    
-    this.toggleBlockModal = this.toggleBlockModal.bind(this);
-    this.toggleProjectModal = this.toggleProjectModal.bind(this);
-    this.saveBlock = this.saveBlock.bind(this);
-    this.saveProject = this.saveProject.bind(this);
-    this.state = {
-      value: '',
+    super(props);
+    this.openSchoolModal = this.openSchoolModal.bind(this);
+    this.saveSchool = this.saveSchool.bind(this)
+    this.toggleSchoolModal = this.toggleSchoolModal.bind(this);
+    this.saveCluster = this.saveCluster.bind(this);    
+    this.deleteCluster = this.deleteCluster.bind(this);
+    this.state = {      
+      schoolModalIsOpen: false,
       openConfirmModal: false
     };
   }
 
-
-  saveDistrict() {
-    this.props.dispatch(modifyBoundary(this.props.params.districtId, this.districtName.value));
+  closeConfirmation = () => {
+    this.setState({
+      openConfirmModal: false
+    })
   }
 
   showConfirmation = () => {
@@ -34,98 +32,104 @@ export default class PrimaryDistrict extends React.Component {
     })
   }
 
-  deleteDistrict() {
-    this.props.dispatch(deleteBoundary(this.props.params.districtId))
-  } 
 
-  saveBlock(name) {
-    const options = {
-      name,
-      parent: this.props.params.districtId,
-      boundary_type: 1,
-      boundary_category: 10
-    }
-    this.props.dispatch(saveNewBlock(options))
-  }
-
-  saveProject(name) {
-    const options = {
-      name,
-      parent: this.props.params.districtId,
-      boundary_type: 2,
-      boundary_category: 14
-    }
-    this.props.dispatch(saveNewProject(options))
-  }
-
-  toggleBlockModal() {    
-    this.props.dispatch({
-      type: 'TOGGLE_MODAL',
-      modal: 'createBlock'
-    })
-  }
-
-  toggleProjectModal() {    
-    this.props.dispatch({
-      type: 'TOGGLE_MODAL',
-      modal: 'createProject'
-    })
-  }
-
-  closeConfirmModal = () => {
+  toggleSchoolModal() {
     this.setState({
-      openConfirmModal: false
+      schoolModalIsOpen: false
     })
   }
 
-  render() {    
-    var districtId = this.props.params.districtId;
-    var boundary = this.props.boundaryDetails[districtId];
-    var boundaryType = boundary.boundary_type    
-    var DistrictSummary;
-    this.state.value = boundary.name;
+  saveSchool(name) {
+    const options = {
+      name: name,
+      boundary: this.props.params.clusterId
+    }
+    console.log('Save', options)
+  }
+
+  openSchoolModal(){
+    this.setState({
+      schoolModalIsOpen: true
+    })
+  }
+
+  saveCluster() {
+    this.props.dispatch(modifyBoundary(this.props.params.clusterId, this.clusterName.value));
+  }
+
+  deleteCluster() {
+    let {params} = this.props
+    this.props.dispatch(deleteBoundary(params.clusterId, params.blockId));
+  }
+
+  viewStudent = (path) => {
+    this.props.dispatch(push(`${path}/students`))
+  }
+  
+  render() {
+    const {boundaryDetails, params} = this.props
+    const block = boundaryDetails[params.blockId] || boundaryDetails[params.projectId];    
+    const district = boundaryDetails[params.districtId];    
+    const cluster = boundaryDetails[params.clusterId] || boundaryDetails[params.circleId]
+    const institution = boundaryDetails[params.institutionId]
+    const group = boundaryDetails[params.groupId]
+    var Displayelement;
     if(sessionStorage.getItem('isAdmin')) {
-      DistrictSummary = (props) => 
+      Displayelement = (props) => 
         <div>
           <div className='heading-border-left'>
             <h4 className="brand-blue col-md-10">Modify Details</h4>
-            {boundaryType == 2 ? <Button title='Add Project' onClick={this.toggleProjectModal} /> : <Button title='Add Block' onClick={this.toggleBlockModal} />}
-          </div>
-            <form className="form-horizontal boundary-form" role="form">
-              <div className="form-group">
-                <label className="control-label col-sm-2" htmlFor="name">District Name:</label>
-                <div className="col-sm-2">          
-                  <input type="text" ref={(ref) => this.districtName = ref} className="form-control" id="name" defaultValue={boundary.name}/>
-                </div>
+            <Button onClick={this.openSchoolModal} title='Add Student'/>
+            <button className='btn btn-default view-student-btn' onClick={this.viewStudent.bind(null, group.path)}>View Students</button>
+          </div>          
+          <form className="form-horizontal boundary-form" role="form">
+            <div className="form-group">
+              <label className="control-label col-sm-2" htmlFor="class">Class</label>
+              <div className="col-sm-2">          
+                <input type="text" ref={(ref) => this.className = ref} className="form-control" id="class" defaultValue={group.name}/>
               </div>
-              </form>
-
-              <div className="col-md-2">
-                <button type="submit" className="btn btn-primary" onClick={() => {this.saveDistrict(districtId) }}>Save</button>
-                <button type="submit" className="btn btn-primary" onClick={() => {this.showConfirmation() }}>Delete</button>
-                <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteDistrict} closeModal={this.closeConfirmModal} entity={boundary.name}/>
+            </div>
+            <div className="form-group">
+              <label className="control-label col-sm-2" htmlFor="section">Section</label>
+              <div className="col-sm-2">          
+                <input type="text" ref={(ref) => this.section = ref} className="form-control" id="section" defaultValue={group.section}/>
               </div>
+            </div>
+            <div className="form-group">
+              <label className="control-label col-sm-2" htmlFor="type">Type</label>
+              <div className="col-sm-2">          
+                <input type="text" ref={(ref) => this.type = ref} className="form-control" id="type" defaultValue={group.group_type}/>
+              </div>
+            </div>
+           </form>
+          <div className="col-md-2">
+            <button type="submit" className="btn btn-primary" onClick={this.saveCluster}>Save</button>
+            <button type="submit" className="btn btn-primary" onClick={this.showConfirmation}>Delete</button>
+            <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteCluster} closeModal={this.closeConfirmation} entity={cluster.name}/>
+          </div>             
         </div>
     }
     else {
-      DistrictSummary = (props) => 
+      Displayelement = (props) => 
         <div>
           <h4 className="heading-err heading-border-left brand-red"> <i className="fa fa-lock brand-red" aria-hidden="true"></i>  Insufficient Permissions</h4>
           <p>You need administrator privileges to modify Boundary details.</p>
-          <h4 className="brand-blue heading-border-left"> District Details</h4>
-          <p> Name: {boundary.name}</p>
+          <h4 className="brand-blue heading-border-left"> Cluster Details</h4>
+          <p> Name: {cluster.name}</p>
         </div>
     }
-
-    return(
+     return(
       <div>
-        <ol className="breadcrumb">
-          <li className="active">{boundary.name}</li>          
+       <ol className="breadcrumb">
+          <li><a href={district.path}>{district.name}</a></li>
+          <li><a href={block.path}>{block.name}</a></li>
+          <li><a href={cluster.path}>{cluster.name}</a></li>
+          <li><a href={institution.path}>{institution.name}</a></li>          
         </ol>
-        <DistrictSummary />
-        <CreateBoundary placeHolder='Block Name' title='Create New Block' isOpen={this.props.modal.createBlock} onCloseModal={this.toggleBlockModal} closeModal={ this.toggleBlockModal} save={ this.saveBlock } />
-        <CreateBoundary placeHolder='Project Name' title='Create New Project' isOpen={this.props.modal.createProject} onCloseModal={this.toggleProjectModal} closeModal={ this.toggleProjectModal} save={ this.saveProject } />
+        <Displayelement {...this.props}/>
+        <CreateInstitution placeHolder='School Name' title='Create New School' isOpen={this.state.schoolModalIsOpen} onCloseModal={this.toggleSchoolModal} closeModal={ this.toggleSchoolModal} save={ this.saveSchool } />
       </div>
-    );
+    );   
   }
-}
+};
+

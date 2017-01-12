@@ -5,8 +5,8 @@ import { Link } from 'react-router';
 const SchoolsNavTree = React.createClass({ 
  
   renderSubTree: function(node, boundaryHierarchy, visitedBoundaries, depth) {    
-    const boundaryDetails = this.props.boundaryDetails    
-    if (boundaryDetails[node].depth == depth) {
+    const boundaryDetails = this.props.boundaryDetails        
+    if (boundaryDetails[node].depth == depth && depth < 5) {
       if (node && $.inArray(node, visitedBoundaries) < 0) {
         var children = boundaryHierarchy[node];
         visitedBoundaries.push(node);
@@ -17,7 +17,6 @@ const SchoolsNavTree = React.createClass({
 
           <TreeView key={ node } onClick={ this.props.onBoundaryClick.bind(null, boundary) } nodeLabel={ label } defaultCollapsed={ true }>
           { (() => {
-
             if (children && children.length > 0) {
               ++depth
               return children.map((child, i) => {

@@ -117,10 +117,10 @@ export function entities(state = {
   case 'REMOVE_BOUNDARY': 
   
   let boundariesByParentId =  _.omit(state.boundariesByParentId, action.id)
-	if (action.parentId) {
-		let index = boundariesByParentId[action.parentId].indexOf(action.id)
-		boundariesByParentId[action.parentId].splice(index, 1)
-	}
+  if (action.parentId) {
+    let index = boundariesByParentId[action.parentId].indexOf(action.id)
+    boundariesByParentId[action.parentId].splice(index, 1)
+  }
 
   return {
     ...state,
@@ -133,9 +133,9 @@ export function entities(state = {
      ...merged,
      isFetching: false
    }  
-  }
-  default:
-  return state;
+ }
+ default:
+ return state;
 }
 }
 

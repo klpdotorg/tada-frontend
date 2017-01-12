@@ -115,7 +115,7 @@ class HeaderBar extends Component {
                                 Please enter your current password to proceed further.
                                 <div className="form-group">
                                     <label htmlFor="currentPwd" className="control-label">Password:</label>
-                                    <input type="password" className="form-control" required autofocus id="currentPwd" ref={(ref) => this.currentPwd = ref}/>
+                                    <input type="password" className="form-control" required autoFocus id="currentPwd" ref={(ref) => this.currentPwd = ref}/>
                                 </div>
                                 
                               </form>
@@ -141,11 +141,11 @@ class HeaderBar extends Component {
                               
                                 <div className="form-group">
                                     <label htmlFor="newPassword" className="control-label">New password:</label>
-                                    <input type="password" className="form-control" required autofocus id="newPassword" ref={(ref) => this.newPassword = ref}/>
+                                    <input type="password" className="form-control" required autoFocus id="newPassword" ref={(ref) => this.newPassword = ref}/>
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="reenterPassword" className="control-label">Re-enter password:</label>
-                                    <input type="password" className="form-control" required autofocus id="reenterPassword" ref={(ref) => this.reenterNewPassword = ref}/>
+                                    <input type="password" className="form-control" required autoFocus id="reenterPassword" ref={(ref) => this.reenterNewPassword = ref}/>
                                 </div>
                               </form>
                           </div>

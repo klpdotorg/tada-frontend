@@ -30,11 +30,12 @@
     "react": "15.1.0",
     "react-bootstrap-multiselect": "^2.3.0",
     "react-dom": "15.1.0",
-    "react-modal": ">1.0.0",
-    "react-notification-system": ">0.2.10",
-    "react-redux": ">4.4.0",
-    "react-router": ">2.0.0",
-    "react-router-redux": ">4.0.0",
+    "react-modal": "^1.0.0",
+    "react-notification-system": "^0.2.10",
+    "react-data-grid": "^1.0.75",
+    "react-redux": "^4.4.0",
+    "react-router": "^2.0.0",
+    "react-router-redux": "^4.0.0",
     "react-select": "^1.0.0-rc.2",
     "react-treeview": ">0.4.3",
     "redux": ">3.5.1",
@@ -63,6 +64,10 @@
     "webpack": "^1.12.2",
     "webpack-dev-server": "^1.12.1"
   },
+   "peerDependencies": {
+    "react": "~0.14.6"
+  },
+
   "author": "KLP Akshara",
   "license": "MIT"
 }

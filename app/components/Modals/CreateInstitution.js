@@ -43,8 +43,7 @@ export default class CreateDistrict extends Component {
     var options = [
     { value: 'one', label: 'One' },
     { value: 'two', label: 'Two' }
-];
-    console.log(this.state.selectedLanguages)
+];    
     return (
       <Modal isOpen={ this.props.isOpen } onRequestClose={ this.props.onCloseModal } style={ customStyles }>
         <label htmlFor="name" className="control-label">{this.props.title}</label>
