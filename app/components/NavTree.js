@@ -1,6 +1,7 @@
 import React from 'react';
 import TreeView from 'react-treeview';
 import { Link } from 'react-router';
+import {alphabeticalOrder} from '../utils'
 
 const SchoolsNavTree = React.createClass({ 
  
@@ -39,7 +40,7 @@ const SchoolsNavTree = React.createClass({
     var visitedBoundaries = [];
     return (
       <div>
-      { Object.keys(copyOfMap).map(function(element, i) {
+      { alphabeticalOrder(copyOfMap, this.props.boundaryDetails).map(function(element, i) {
         return this.renderSubTree(element, copyOfMap, visitedBoundaries, 0)
       }.bind(this)) }
       </div>
