@@ -24,11 +24,13 @@ export default class EditProgram extends Component {
 	constructor(props)
 	{
 		super(props);
+		var instTypeInitVal = 1;
 		this.state = {
 			layout: 'horizontal',
 			validatePristine: false,
 			disabled: false,
-			canSubmit:false
+			canSubmit:true,
+			instType: 1
 		}
 		this.enableSubmitButton = this.enableSubmitButton.bind(this);
 		this.disableSubmitButton = this.disableSubmitButton.bind(this);
@@ -39,7 +41,7 @@ export default class EditProgram extends Component {
 	{
 		var myform = this.myform.getModel();
 
-		this.props.handleEditProgram(myform.programName,myform.description, myform.startDate, myform.endDate, myform.active,myform.programmeInstCat);
+		this.props.handleSubmit(myform.programName,myform.description, myform.startDate, myform.endDate, myform.active,myform.programmeInstCat);
 	}
 
 	enableSubmitButton() {
@@ -51,6 +53,13 @@ export default class EditProgram extends Component {
 	disableSubmitButton(){
 		this.setState({
 			canSubmit: false
+		})
+	}
+
+	changeInstCategory(propName, value){
+		console.log("Changing category ", value);
+		this.setState({
+			instType: value
 		})
 	}
 
@@ -75,6 +84,7 @@ export default class EditProgram extends Component {
         	enddate=program.end_date;
         	instcat=program.programme_institution_category;
         }
+        console.log("Institution type state is: ", this.state.instType);
 		return(
 			<Modal isOpen={ this.props.isOpen } onRequestClose={ this.props.onCloseModal}>
 				<div className="modal-dialog" role="document">
@@ -98,13 +108,14 @@ export default class EditProgram extends Component {
 	                            label="Institution Type"
 	                            help="Select institution type"
 	                            options={instType}
-	                            required value={instcat}
+	                            required value={this.state.instType}
+	                            onChange={this.changeInstCategory.bind(this)}
                         	/>
 						</Formsy.Form>
 						</div>
                		  <div className="modal-footer">
                  		 <button type="button" className="btn btn-default" onClick={this.props.onCloseModal}>Cancel</button>
-                 		 <button type="button" disabled={!this.state.canSubmit} className="btn btn-primary" onClick={this.submitForm}>Save</button>
+                 		 <button type="button" className="btn btn-primary" onClick={this.submitForm}>Save</button>
               		 </div>
               		</div>
               	</div>

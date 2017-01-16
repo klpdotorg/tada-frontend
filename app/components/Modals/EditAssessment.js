@@ -21,22 +21,44 @@ export default class EditAssessment extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      value: ''
+      value: '',
+      type: props.assessment.type,
+      canSubmit: true
     }
-    this.handleChange = this.handleChange.bind(this);
+   
     this.handleSave = this.handleSave.bind(this);
+    this.enableSubmitButton = this.enableSubmitButton.bind(this);
+    this.disableSubmitButton = this.disableSubmitButton.bind(this);
   }
 
-  handleChange(e) {
+  componentDidMount(){
+
+    //console.log("My form refs", this.myform.refs);
+
+  }
+
+enableSubmitButton() {
     this.setState({
-      assessment: e.target.value
+      canSubmit:true
+    })
+  }
+
+  disableSubmitButton(){
+    this.setState({
+      canSubmit: false
+    })
+  }
+
+
+  handleChange(value) {
+    console.log("handle change", this.assessmentType.elements);
+    this.setState({
+      type:this.myform.getModel().type
     });
   }
 
-  handleSave(){
-    console.log("Saving assessment",this.type.value);
-   
-    this.props.handleEditAssessment(this.props.assessment.id,this.assessmentName.value, this.startDate.value, this.endDate.value, 1, this.doubleEntry.checked, this.type.value);
+  handleSave(myform){   
+    this.props.handleEditAssessment(this.props.assessment.id,myform.assessmentName, myform.startDate, myform.endDate, 1, myform.doubleEntry, myform.type);
   }
 
   render() {  
@@ -56,7 +78,7 @@ export default class EditAssessment extends Component {
                     <h4 className="modal-title" id="editAssessmentTitle">Edit Assessment</h4>
                 </div>
                 <div className="modal-body">
-                    <Formsy.Form id="createAssessment" onValidSubmit={this.submitForm} onValid={this.enableSubmitButton} onInvalid={this.disableSubmitButton}
+                    <Formsy.Form id="createAssessment" onValidSubmit={this.handleSave} onValid={this.enableSubmitButton} onInvalid={this.disableSubmitButton}
                 disabled={this.state.disabled} ref={(ref) => this.myform = ref}>
                     
                      
@@ -74,7 +96,8 @@ export default class EditAssessment extends Component {
                               help="Select the type of this assessment"
                               options={type}
                               required
-                              value={this.props.assessment.type}
+                              defaultChecked={this.props.assessment.type}
+                              
                           />
                      
                      
@@ -83,7 +106,7 @@ export default class EditAssessment extends Component {
                 </Formsy.Form>
                 <div className="modal-footer">
                   <button type="button" className="btn btn-default" onClick={this.props.onCloseModal}>Cancel</button>
-                  <button type="button" className="btn btn-primary" onClick={this.handleSave}>Save</button>
+                  <button type="button" className="btn btn-primary"  disabled={!this.state.canSubmit} onClick={this.handleSave}>Save</button>
               </div>
           </div>
           </div>

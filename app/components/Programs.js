@@ -30,7 +30,6 @@ export default class Programs extends React.Component {
 		this.handleCreateProgram = this.handleCreateProgram.bind(this);
 		this.handleDeleteProgram = this.handleDeleteProgram.bind(this);
 		this.handleShowEditDialog = this.handleShowEditDialog.bind(this);
-		this.editProgram = this.editProgram.bind(this);
 		this.openCreateAssessmentModal = this.openCreateAssessmentModal.bind(this);
 		this.closeCreateAssessmentModal = this.closeCreateAssessmentModal.bind(this);
 		this.handleCreateAssessment = this.handleCreateAssessment.bind(this);
@@ -253,22 +252,11 @@ export default class Programs extends React.Component {
 
 	}
 
-	editProgram(id)
+	handleEditProgram(programName, desc, start, end, isActive, instCat)
 	{
-		var programName = this.editProgramName.value;
-		var desc = this.editDescription.value;
-		var start = this.editStartDate.value;
-		var end = this.editEndDate.value;
-		var isActive = "yes";
-		$('#editProgramModal').modal('hide');
-		this.props.dispatch(actions.editProgram(this.state.selectedProgram,programName, desc, start, end, isActive)).then(response =>{
-			
-			$('#infoTitle').text("Edited program!");
-			$('#infoLabel').text("Program edited successfully. Press OK to view!");
-			$('#programInfoModal').modal('show');
-			
-
-		}).catch(error => {
+		this.closeEditProgramModal();
+		this.props.dispatch(actions.editProgram(this.state.selectedProgram,programName, desc, start, end, isActive, instCat))
+		.catch(error => {
 			console.log("ERROR in editing program..", JSON.stringify(error));
 			$('#errorDetails').text(JSON.stringify(error.response));
 			$('#errorTitle').text("Edit failed!")
@@ -276,7 +264,10 @@ export default class Programs extends React.Component {
 			$('#programErrorModal').modal('show');
 			//Show error modal for creating programs
 		});
+
 	}
+
+
 
 	showConfirmation()
 	{
@@ -494,10 +485,10 @@ export default class Programs extends React.Component {
 			<CreateAssessment handleSubmit = {this.handleCreateAssessment} isOpen={this.state.isCreateAssessmentModalOpen} onCloseModal={this.closeCreateAssessmentModal}/>
 			<EditAssessment assessment={this.state.selAssessment} handleEditAssessment={this.handleEditAssessment} handleSubmit = {this.handleEditAssessment} isOpen={this.state.isEditAssessmentModalOpen} onCloseModal={this.closeEditAssessmentModal}/>
 			<CreateProgram isOpen={this.state.isCreateProgramModalOpen} onCloseModal={this.closeCreateProgramModal} handleSubmit={this.handleCreateProgram}/>
-			<EditProgram program={selectedProgram} isOpen={this.state.isEditProgramModalOpen} onCloseModal={this.closeEditProgramModal} handleSubmit={this.handleEditProgram}/>
+			<EditProgram program={selectedProgram} isOpen={this.state.isEditProgramModalOpen} onCloseModal={this.closeEditProgramModal} handleSubmit={this.handleEditProgram.bind(this)}/>
 
 
-			<GenericDialog isOpen={this.state.showSuccessModal} onClose={this.closeGenericModal} onCloseModal={this.closeGenericModal} title={this.state.dialogTitle} message={this.state.dialogMessage}/>
+			<GenericDialog isOpen={this.state.showSuccessModal} onCloseModal={this.closeGenericDialog} title={this.state.dialogTitle} message={this.state.dialogMessage}/>
 			{/*DELETE program modal dialog*/}
 			 <div className="modal fade" data-backdrop="false" id="deleteProgramModal" tabIndex="-1" role="dialog" aria-labelledby="deleteProgramModal">
                   <div className="modal-dialog" role="document">
