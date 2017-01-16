@@ -9,6 +9,10 @@ export function programs(state = {
         ...state,
         ...programs
       }
+    case 'PROGRAM_CREATED':
+      var copy = Object.assign({}, state.programsById);
+      copy[action.program.id] = action.program;
+      return Object.assign({}, {programsById: copy});
     case 'PROGRAM_DELETED':     
       var copyState = _.omit(state.programsById,action.programId);
       console.log("new state", copyState);

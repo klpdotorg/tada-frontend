@@ -7,7 +7,7 @@ import ReactDataGrid from 'react-data-grid'
 
 
 
-export default class PrimaryCluster extends React.Component {
+export default class Students extends React.Component {
 
   constructor(props){
     super(props);
