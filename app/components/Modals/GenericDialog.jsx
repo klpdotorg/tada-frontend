@@ -1,6 +1,17 @@
 import React, { Component } from 'react';
 import Modal from 'react-modal';
 
+const customStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)'
+  }
+};
+
 /*
 Pass in a 'title' and a 'message' via props and it renders a simple dialog box with a "OK" message.
  */
@@ -14,7 +25,7 @@ export default class GenericDialog extends Component{
 	render()
 	{
 			return(
-				<Modal isOpen={ this.props.isOpen } onRequestClose={ this.props.onClose}>
+				<Modal isOpen={ this.props.isOpen } onRequestClose={ this.props.onCloseModal} style={customStyles}>
 				<div className="modal-dialog" role="document">
             		<div className="modal-content">
                 		<div className="modal-header">

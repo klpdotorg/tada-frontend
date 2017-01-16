@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import Modal from 'react-modal';
-import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
+import Formsy from 'formsy-react';
 
+const { Checkbox, Input, RadioGroup } = FRC;
 
-const { Input, RadioGroup, Checkbox } = FRC;
 
 const customStyles = {
   content: {
@@ -21,30 +21,68 @@ export default class EditAssessment extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      value: ''
+      value: '',
+      type: props.assessment.type,
+      canSubmit: true
     }
-    this.handleChange = this.handleChange.bind(this);
+   
     this.handleSave = this.handleSave.bind(this);
+    this.enableSubmitButton = this.enableSubmitButton.bind(this);
+    this.disableSubmitButton = this.disableSubmitButton.bind(this);
   }
 
-  handleChange(e) {
+  componentDidMount(){
+
+   console.info(this.myform);
+
+  }
+
+enableSubmitButton() {
     this.setState({
-      assessment: e.target.value
+      canSubmit:true
+    })
+  }
+
+  disableSubmitButton(){
+    this.setState({
+      canSubmit: false
+    })
+  }
+
+ /* mapInputs(inputs)
+  {
+    return {
+      'name' : inputs.assessmentName,
+      'start_date' : inputs.startDate,
+      'end_date': inputs.endDate,
+      'type' : inputs.type,
+      'double_entry': inputs.doubleEntry
+    }
+  } */
+
+  handleChange(prop,value) {
+    this.setState({
+      type: value
     });
   }
 
-  handleSave(){
-    console.log("Saving assessment",this.type.value);
-   
-    this.props.handleEditAssessment(this.props.assessment.id,this.assessmentName.value, this.startDate.value, this.endDate.value, 1, this.doubleEntry.checked, this.type.value);
+  handleSave(){   
+    var myform = this.myform.getModel();
+    this.props.handleEditAssessment(this.props.assessment.id,myform.assessmentName, myform.startDate, myform.endDate, 1, myform.doubleEntry, myform.type);
   }
 
   render() {  
   var type=[
-      {value: 1, label: 'Institution'},
-      {value: 2, label: 'Class'},
-      {value: 3, label: 'Student'}
+      {value: '1', label: 'Institution'},
+      {value: '2', label: 'Class'},
+      {value: '3', label: 'Student'}
     ];
+
+    var typeStr = '1';
+    if(this.props.assessment != -1)
+    {
+      typeStr = this.props.assessment.type.toString();
+    }
     return (
       <Modal isOpen={ this.props.isOpen } onRequestClose={ this.props.onCloseModal}>
         {/* Title of modal window */}
@@ -56,16 +94,15 @@ export default class EditAssessment extends Component {
                     <h4 className="modal-title" id="editAssessmentTitle">Edit Assessment</h4>
                 </div>
                 <div className="modal-body">
-                    <Formsy.Form id="createAssessment" onValidSubmit={this.submitForm} onValid={this.enableSubmitButton} onInvalid={this.disableSubmitButton}
-                disabled={this.state.disabled} ref={(ref) => this.myform = ref}>
-                    
+                  <Formsy.Form ref={(form) => {this.myform = form}} id="createAssessment" onValidSubmit={this.handleSave} onValid={this.enableSubmitButton} onInvalid={this.disableSubmitButton}>
+                   
                      
                      <Input name="assessmentName" id="assessmentName" label="Name" type="text"
-                placeholder="Please enter the assessment name" help="This is a required field" required validations="minLength:1" defaultValue={this.props.assessment.name}/>
-                      <Input type="date" label="Start Date" name="startDate" help="Please select the start date of the assessment" required id="startDate" defaultValue={this.props.assessment.start_date}/>
+                placeholder="Please enter the assessment name" help="This is a required field" required validations="minLength:1" value={this.props.assessment.name}/>
+                      <Input type="date" label="Start Date" name="startDate" help="Please select the start date of the assessment" required id="startDate" value={this.props.assessment.start_date}/>
                       
                       
-                      <Input type="date" label="End Date"  help="Please select the end date of the assessment" required name="endDate" defaultValue={this.props.assessment.end_date}/>
+                      <Input type="date" label="End Date"  help="Please select the end date of the assessment" required name="endDate" value={this.props.assessment.end_date}/>
                       
                       <RadioGroup
                               name="type"
@@ -73,8 +110,8 @@ export default class EditAssessment extends Component {
                               label="Type"
                               help="Select the type of this assessment"
                               options={type}
+                              value={typeStr}
                               required
-                              value={this.props.assessment.type}
                           />
                      
                      
@@ -83,7 +120,7 @@ export default class EditAssessment extends Component {
                 </Formsy.Form>
                 <div className="modal-footer">
                   <button type="button" className="btn btn-default" onClick={this.props.onCloseModal}>Cancel</button>
-                  <button type="button" className="btn btn-primary" onClick={this.handleSave}>Save</button>
+                  <button type="button" className="btn btn-primary"  disabled={!this.state.canSubmit} onClick={this.handleSave}>Save</button>
               </div>
           </div>
           </div>

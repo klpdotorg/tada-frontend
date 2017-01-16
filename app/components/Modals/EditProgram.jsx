@@ -24,11 +24,13 @@ export default class EditProgram extends Component {
 	constructor(props)
 	{
 		super(props);
+		var instTypeInitVal = 1;
 		this.state = {
 			layout: 'horizontal',
 			validatePristine: false,
 			disabled: false,
-			canSubmit:false
+			canSubmit:true,
+			instType: 1
 		}
 		this.enableSubmitButton = this.enableSubmitButton.bind(this);
 		this.disableSubmitButton = this.disableSubmitButton.bind(this);
@@ -39,7 +41,7 @@ export default class EditProgram extends Component {
 	{
 		var myform = this.myform.getModel();
 
-		this.props.handleEditProgram(myform.programName,myform.description, myform.startDate, myform.endDate, myform.active,myform.programmeInstCat);
+		this.props.handleSubmit(myform.programName,myform.description, myform.startDate, myform.endDate, myform.active,myform.programmeInstCat);
 	}
 
 	enableSubmitButton() {
@@ -54,16 +56,23 @@ export default class EditProgram extends Component {
 		})
 	}
 
+	changeInstCategory(propName, value){
+		("Changing category ", value);
+		this.setState({
+			instType: value
+		})
+	}
+
 	render()
 	{
 		var radioOptions = [
-            {value: 1, label: 'Yes'},
-            {value: 0, label: 'No'}
+            {value: '1', label: 'Yes'},
+            {value: '0', label: 'No'}
            
         ];
         var instType=[
-        	{value: 1, label: 'Primary School'},
-        	{value: 2, label: 'Preschool'}
+        	{value: '1', label: 'Primary School'},
+        	{value: '2', label: 'Preschool'}
         ];
         var program = this.props.program;
         var name="", desc="", startdate="", enddate="", instcat="";
@@ -73,7 +82,7 @@ export default class EditProgram extends Component {
         	desc=program.description;
         	startdate=program.start_date;
         	enddate=program.end_date;
-        	instcat=program.programme_institution_category;
+        	instcat=program.programme_institution_category.toString();
         }
 		return(
 			<Modal isOpen={ this.props.isOpen } onRequestClose={ this.props.onCloseModal}>
@@ -90,7 +99,7 @@ export default class EditProgram extends Component {
 								placeholder="Please enter the program name" help="This is a required field" required validations="minLength:1" defaultValue={name}/>
 							<Input name="description" label="Description" type="text" placeholder="Please enter the program description (Optional)" defaultValue={desc}/>
 							<Input name="startDate" type="date" label="Start Date" placeholder="Please select the start date of the program" required defaultValue={startdate}/>
-							<Input name="endDate" itype="date" label="End Date" placeholder="Please select the end date of the program" required defaultValue={enddate}/>
+							<Input name="endDate" type="date" label="End Date" placeholder="Please select the end date of the program" required defaultValue={enddate}/>
 							
                         	<RadioGroup
 	                            name="programmeInstCat"
@@ -99,12 +108,13 @@ export default class EditProgram extends Component {
 	                            help="Select institution type"
 	                            options={instType}
 	                            required value={instcat}
+	                            
                         	/>
 						</Formsy.Form>
 						</div>
                		  <div className="modal-footer">
                  		 <button type="button" className="btn btn-default" onClick={this.props.onCloseModal}>Cancel</button>
-                 		 <button type="button" disabled={!this.state.canSubmit} className="btn btn-primary" onClick={this.submitForm}>Save</button>
+                 		 <button type="button" className="btn btn-primary" onClick={this.submitForm}>Save</button>
               		 </div>
               		</div>
               	</div>
