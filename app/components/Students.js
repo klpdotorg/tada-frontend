@@ -46,7 +46,7 @@ export default class Students extends React.Component {
     //   name: name,
     //   boundary: this.props.params.clusterId
     // }
-    console.log('Save', options)
+    ('Save', options)
   }
 
   openSchoolModal(){
@@ -168,7 +168,7 @@ const cluster = boundaryDetails[params.clusterId] || boundaryDetails[params.circ
 const institution = boundaryDetails[params.institutionId]
 const group = boundaryDetails[params.groupId]
 const student = boundaryDetails[params.studentId]
-console.log('student', this.props.boundariesByParentId[params.groupId])
+('student', this.props.boundariesByParentId[params.groupId])
 var Displayelement;
 if(sessionStorage.getItem('isAdmin')) {
   Displayelement = (props) => 
