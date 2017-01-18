@@ -6,7 +6,8 @@ const modalsDefault = {
   createBlock: false,
   createCluster: false,
   createProject: false,
-  createCircel: false
+  createCircle: false,
+  createInstitution: false
 }
 
 export function schoolSelection(state = {

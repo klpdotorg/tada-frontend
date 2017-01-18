@@ -1,8 +1,9 @@
 import React from 'react';
-import {modifyBoundary, deleteBoundary, newSchool} from '../actions';
+import {modifyBoundary, deleteBoundary, saveNewInstitution} from '../actions';
 import CreateInstitution from './Modals/CreateInstitution';
 import Button from './Button'
 import ConfirmModal from './Modals/Confirm'
+
 
 
 export default class PrimaryCluster extends React.Component {
@@ -34,17 +35,21 @@ export default class PrimaryCluster extends React.Component {
 
 
   toggleSchoolModal() {
-    this.setState({
-      schoolModalIsOpen: false
+   this.props.dispatch({
+      type: 'TOGGLE_MODAL',
+      modal: 'createInstitution'
     })
   }
 
-  saveSchool(name) {
+  saveSchool(school) {
+    console.log(school)
     const options = {
-      name: name,
-      boundary: this.props.params.clusterId
+      name: school.name,
+      boundary: this.props.params.clusterId,
+      languages: school.languages.map(school => school.value)
     }
     console.log('Save', options)
+    this.props.dispatch(saveNewInstitution(options))
   }
 
   openSchoolModal(){
@@ -72,7 +77,7 @@ export default class PrimaryCluster extends React.Component {
         <div>
           <div className='heading-border-left'>
             <h4 className="brand-blue col-md-10">Modify Details</h4>
-            <Button onClick={this.openSchoolModal} title='Add School'/>
+            <Button onClick={this.toggleSchoolModal} title='Add School'/>
           </div>          
           <form className="form-horizontal boundary-form" role="form">
             <div className="form-group">
@@ -106,7 +111,7 @@ export default class PrimaryCluster extends React.Component {
           <li className="active">{cluster.name}</li>
         </ol>
         <Displayelement {...this.props}/>
-        <CreateInstitution placeHolder='School Name' title='Create New School' isOpen={this.state.schoolModalIsOpen} onCloseModal={this.toggleSchoolModal} closeModal={ this.toggleSchoolModal} save={ this.saveSchool } />
+        <CreateInstitution placeHolder='School Name' title='Create New School' isOpen={this.props.modal.createInstitution} onCloseModal={this.toggleSchoolModal} closeModal={ this.toggleSchoolModal} save={ this.saveSchool } />
       </div>
     );   
   }

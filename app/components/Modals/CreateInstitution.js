@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import Modal from 'react-modal'
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
+import {checkStatus} from '../../actions/utils';
+import {SERVER_API_BASE as serverApiBase} from 'config';
 
 const customStyles = {
   content: {
@@ -18,8 +20,8 @@ export default class CreateDistrict extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      value: '',
-      selectedLanguages: 'one'
+      name: '',
+      languages: []
     }
     this.handleChange = this.handleChange.bind(this)
 
@@ -27,36 +29,50 @@ export default class CreateDistrict extends Component {
 
   handleChange(e) {
     this.setState({
-      value: e.target.value
+      name: e.target.value
     })
   }
 
-  selectLanguage = (value) => {  
-     this.setState({
-       selectedLanguages: value
-     })    
+  getLanguages() {
+    return fetch(serverApiBase + 'languages/', {    
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Token ' + sessionStorage.token
+      }
+    }).then(checkStatus).then((languages) => {
+        const langs = languages.results.map((language) => ({
+          value: language.id, 
+          label: language.name
+        }))
+        return {
+          options: langs, 
+          complete: true
+        }
+      }).catch(error => {
+      console.log('request failed', error)
+    })    
   }
 
+  selectLanguage = (value) => {   
+   this.setState({
+     languages: value
+   })   
+ }
 
-
-  render() {
-    var options = [
-    { value: 'one', label: 'One' },
-    { value: 'two', label: 'Two' }
-];    
-    return (
-      <Modal isOpen={ this.props.isOpen } onRequestClose={ this.props.onCloseModal } style={ customStyles }>
-        <label htmlFor="name" className="control-label">{this.props.title}</label>
-        <input id="name" value={ this.props.value } type="text" className="form-control" placeholder={this.props.placeHolder} onChange={ this.handleChange } />
-        <label htmlFor="languages" className="control-label">Languages</label>
-        <Select multi simpleValue name="form-field-name" value={this.state.selectedLanguages} options={options} onChange={this.selectLanguage}/>
-        <div className='button' onClick={ () => {
-                                            this.props.save(this.state.value)
-                                          } }>Save</div>
-        <div className='button' onClick={ this.props.closeModal }>Discard</div>
-      </Modal>
+ render() {    
+  return (
+    <Modal isOpen={ this.props.isOpen } onRequestClose={ this.props.onCloseModal } style={ customStyles }>
+    <label htmlFor="name" className="control-label">{this.props.title}</label>
+    <input id="name" value={ this.props.value } type="text" className="form-control" placeholder={this.props.placeHolder} onChange={ this.handleChange } />
+    <label htmlFor="languages" className="control-label">Languages</label>
+    <Select.Async multi name="form-field-name" value={this.state.languages} loadOptions={this.getLanguages} onChange={this.selectLanguage}/>
+    <div className='button' onClick={ () => {
+      this.props.save(this.state)
+    } }>Save</div>
+    <div className='button' onClick={ this.props.closeModal }>Discard</div>
+    </Modal>
     )
-  }
+}
 
 }
 
