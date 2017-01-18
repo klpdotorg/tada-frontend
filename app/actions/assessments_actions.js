@@ -24,7 +24,7 @@ export function fetchAssessmentsForProgram(programId)
 }
 
 export function createAssessment(programId, assessmentName, startDate,endDate, 
-  isActive, doubleEntry)
+  isActive, doubleEntry,type)
 {
     return function(dispatch, getState){
       var url= serverApiBase + "programmes/" + programId + "/assessments/";
@@ -40,7 +40,8 @@ export function createAssessment(programId, assessmentName, startDate,endDate,
         start_date: startDate,
         end_date: endDate,
         active: isActive,
-        double_entry: doubleEntry
+        double_entry: doubleEntry,
+        type: type
       })
       }).then(checkStatus).then(data => {
         dispatch(createAssessmentSuccessful(data));
@@ -48,7 +49,7 @@ export function createAssessment(programId, assessmentName, startDate,endDate,
     }
 }
 
-export function editAssessment(programId, assessmentId, assessmentName, startDate, endDate, isActive, doubleEntry)
+export function editAssessment(programId, assessmentId, assessmentName, startDate, endDate, isActive, doubleEntry,type)
 {
 return function(dispatch, getState){
       var url= serverApiBase + "programmes/" + programId + "/assessments/" + assessmentId +"/";
@@ -63,13 +64,58 @@ return function(dispatch, getState){
         start_date: startDate,
         end_date: endDate,
         active: isActive,
-        double_entry: doubleEntry
+        double_entry: doubleEntry,
+        type: type
       })
       }).then(checkStatus).then(data => {
         dispatch(editAssessmentSuccessful(data));
       });
     }
 
+}
+
+export function activateAssessment(parentProgrammeId, assessmentId)
+{
+  return function(dispatch, getState){
+     var url = serverApiBase + "programmes/" + parentProgrammeId +"/assessments/" + assessmentId +"/";
+    return fetch(url, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Token ' + sessionStorage.token
+      },
+      body: JSON.stringify({
+       
+        active: 1,
+        
+      })
+    }).then(checkStatus).then(response => {
+        dispatch(editAssessmentSuccessful(response));
+        return response;
+    });
+  }
+}
+
+export function deactivateAssessment(parentProgrammeId, assessmentId)
+{
+  return function(dispatch, getState){
+     var url = serverApiBase + "programmes/" + parentProgrammeId +"/assessments/" + assessmentId +"/";
+    return fetch(url, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Token ' + sessionStorage.token
+      },
+      body: JSON.stringify({
+       
+        active: 0,
+        
+      })
+    }).then(checkStatus).then(response => {
+        dispatch(editAssessmentSuccessful(response));
+        return response;
+    });
+  }
 }
 
 export function deleteAssessment(parent_programmeid, assessmentId)

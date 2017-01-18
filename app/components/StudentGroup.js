@@ -44,7 +44,7 @@ export default class PrimaryCluster extends React.Component {
       name: name,
       boundary: this.props.params.clusterId
     }
-    console.log('Save', options)
+    ('Save', options)
   }
 
   openSchoolModal(){

@@ -42,6 +42,8 @@ export function assessments(state = {
         copy[action.assessment.id].end_date=action.assessment.end_date;
         copy[action.assessment.id].active=action.assessment.active;
         copy[action.assessment.id].double_entry=action.assessment.double_entry;
+        copy[action.assessment.id].type=action.assessment.type;
+
         return Object.assign({}, {assessmentsById: copy});
 
       case 'ASSESSMENT_CREATED':

@@ -19,7 +19,7 @@ class RegistrationForm extends Component {
   componentWillReceiveProps(nextProps) {
 
     const {dispatch, registered, error} = nextProps;
-    console.log(nextProps);
+    (nextProps);
     if(registered == true)
     {
     	$('#regSuccessfulModal').modal('show');

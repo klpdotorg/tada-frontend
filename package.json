@@ -4,7 +4,7 @@
   "description": "Frontend for TADA built using React.js",
   "main": "webpack.config.js",
   "scripts": {
-    "dev": "mkdir -p dist && cp index.html dist/index.html && webpack-dev-server --devtool source-map --inline --progress --colors --content-base dist --history-api-fallback",
+    "dev": "mkdir -p dist && cp index.html dist/index.html && webpack-dev-server --display-error-details --devtool source-map --inline --progress --colors --content-base dist --history-api-fallback",
     "deploy": "webpack  && cp index.html dist/index.html"
   },
   "dependencies": {
@@ -18,6 +18,8 @@
     "events": "^1.1.0",
     "flux": "^2.1.1",
     "font-awesome": "^4.5.0",
+    "formsy-react": "^0.19.0",
+    "formsy-react-components": "^0.9.0",
     "isomorphic-fetch": "^2.2.1",
     "jquery": "^2.2.1",
     "jquery-validation": "^1.15.1",
@@ -27,17 +29,17 @@
     "object-assign": "^4.0.1",
     "react": "^15.4.0",
     "react-bootstrap-multiselect": "^2.3.0",
-    "react-data-grid": "^1.0.75",
     "react-dom": "^15.4.0",
     "react-modal": "^1.0.0",
     "react-notification-system": "^0.2.10",
+    "react-data-grid": "^1.0.75",
     "react-redux": "^4.4.0",
     "react-router": "^2.0.0",
     "react-router-redux": "^4.0.0",
     "react-select": "^1.0.0-rc.2",
-    "react-treeview": "^0.4.3",
-    "redux": "^3.5.1",
-    "redux-thunk": "^2.0.1",
+    "react-treeview": ">0.4.3",
+    "redux": ">3.5.1",
+    "redux-thunk": ">2.0.1",
     "whatwg-fetch": "^0.11.0"
   },
   "devDependencies": {
@@ -62,6 +64,8 @@
     "webpack": "^1.12.2",
     "webpack-dev-server": "^1.12.1"
   },
+  
+
   "author": "KLP Akshara",
   "license": "MIT"
 }

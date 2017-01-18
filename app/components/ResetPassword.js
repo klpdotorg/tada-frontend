@@ -12,7 +12,7 @@ class ResetPasswordUI extends Component {
 
   constructor(props) {
     super(props);
-    console.log("Props in reset password", props);
+    ("Props in reset password", props);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.goToLoginPage = this.goToLoginPage.bind(this);
   }
@@ -21,7 +21,7 @@ class ResetPasswordUI extends Component {
   componentWillReceiveProps(nextProps) {
 
     const {dispatch, authenticated, token, error} = nextProps;
-    console.log("Reset password receiving props", dispatch);
+    ("Reset password receiving props", dispatch);
     if(nextProps.resetRequestSuccess)
     {
       this.email.value="";

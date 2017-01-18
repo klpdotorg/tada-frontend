@@ -48,7 +48,6 @@ export default class PrimaryCluster extends React.Component {
       boundary: this.props.params.clusterId,
       languages: school.languages.map(school => school.value)
     }
-    console.log('Save', options)
     this.props.dispatch(saveNewInstitution(options))
   }
 

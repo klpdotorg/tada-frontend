@@ -17,12 +17,13 @@ module.exports = {
         {test: /\.json$/, loader: 'file-loader'},
         {test: /\.css$/, loader: "style!css"},
         {test: /\.scss$/, loader: 'style!css!sass'},
-        {test: /\.js$/, exclude: /node_modules/, loader: "babel"}
+        {test: /\.js$/, exclude: /node_modules/, loader: "babel"},
+        {test: /\.jsx$/, exclude: /node_modules/, loader: "babel"}      
 
       ]
     },
     resolve: {
-      extensions: ['', '.js', '.json', '.css']
+      extensions: ['', '.js', '.json', '.css', '.jsx', '.json']
     },
     plugins: [
         new webpack.ProvidePlugin({
