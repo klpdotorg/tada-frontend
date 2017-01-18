@@ -47,7 +47,7 @@ let Institution = React.createClass({
                   <div className="form-group">
                     <label className="control-label col-sm-2" htmlFor="pincode">Pincode:</label>
                     <div className="col-sm-10">          
-                      V<input type="text" className="form-control" id="pincode" defaultValue={institution.pincode}/>
+                      <input type="text" className="form-control" id="pincode" defaultValue={institution.pincode}/>
                     </div>
                   </div>
 
