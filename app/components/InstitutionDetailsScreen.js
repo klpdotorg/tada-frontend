@@ -1,7 +1,38 @@
 import React from 'react';
+import ConfirmModal from './Modals/Confirm'
+import {deleteInstitution} from '../actions'
 
+export default class Institution extends React.Component {
 
-let Institution = React.createClass({ 
+  constructor (props){
+    super(props);    
+    this.state = {      
+      openConfirmModal: false
+    };
+    this.deleteInstitution = this.deleteInstitution.bind(this)
+    this.institution = {}
+  }
+
+  save() {
+    console.log('Save')
+  }
+
+  showConfirmation = () => {    
+    this.setState({
+      openConfirmModal: true
+    })
+  }
+
+  closeConfirmModal = () => {
+    this.setState({
+      openConfirmModal: false
+    })
+  }
+
+  deleteInstitution() {
+    this.props.dispatch(deleteInstitution(Number(this.props.params.clusterId), Number(this.props.params.institutionId)))
+  } 
+
 
   render() {
   	var block = this.props.boundaryDetails[this.props.params.blockId];
@@ -32,7 +63,7 @@ let Institution = React.createClass({
                   <div className="form-group">
                     <label className="control-label col-sm-2" htmlFor="name">Name:</label>
                     <div className="col-sm-10">          
-                      <input type="text" className="form-control" id="name" defaultValue={institution.name}/>
+                      <input type="text" ref={(ref) => this.institution.name} className="form-control" id="name" defaultValue={institution.name}/>
                     </div>
                   </div>
 
@@ -41,6 +72,20 @@ let Institution = React.createClass({
                     <div className="col-sm-10">          
                       <textarea type="password" className="form-control" id="address" rows="3" defaultValue={institution.address}>
                       </textarea>
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <label className="control-label col-sm-2" htmlFor="pincode">Area:</label>
+                    <div className="col-sm-10">          
+                      <input type="text" className="form-control" id="pincode" defaultValue={institution.pincode}/>
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <label className="control-label col-sm-2" htmlFor="pincode">Landmark:</label>
+                    <div className="col-sm-10">          
+                      <input type="text" className="form-control" id="pincode" defaultValue={institution.pincode}/>
                     </div>
                   </div>
 
@@ -74,6 +119,17 @@ let Institution = React.createClass({
                   </div>
 
                   <div className="form-group">
+                    <label className="control-label col-sm-2" htmlFor="medium">Gender:</label>
+                    <div className="col-sm-10">          
+                      <select className="form-control" id="medium">
+                        <option>Co-Ed</option>
+                        <option>Boys</option>
+                        <option>Girls</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="form-group">
                     <label className="control-label col-sm-2" htmlFor="mgmt">Management:</label>
                     <div className="col-sm-10">          
                       <select className="form-control" id="mgmt">
@@ -91,13 +147,14 @@ let Institution = React.createClass({
                       <input type="text" className="form-control" id="disecode" defaultValue={institution.dise_code}/>
                     </div>
                   </div>
+                  </form>
 
-                  <div className="form-group">        
-                    <div className="col-sm-offset-2 col-sm-10">
-                      <button type="submit" className="btn btn-primary">Submit</button>
-                    </div>
+                  <div className="col-sm-offset-2 col-sm-10">                    
+                    <button type="submit" className="btn btn-primary" onClick={this.save} >Submit</button>
+                    <button type="submit" className="btn btn-primary" onClick={this.showConfirmation}>Delete</button>
+                    <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteInstitution} closeModal={this.closeConfirmModal} entity={institution.name}/>
                   </div>
-                </form>
+
               </div>
               <div className="col-md-2"><button type="submit" className="btn btn-primary">Add class</button></div> 
             </div>    
@@ -119,10 +176,8 @@ let Institution = React.createClass({
       </div></div>
     return (
       <Insti />
-    )
-      
+    )  
 
   }
-});
+}
 
-export default Institution;  

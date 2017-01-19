@@ -31,15 +31,6 @@ function responseReceivedFromServer(resp) {
   }
 }
 
-
-
-
-
-
-
-
-
-
 function requestFailed(error) {
   return {
     type: 'REQUEST_FAILED',
@@ -64,10 +55,10 @@ export function loginSuccess(authtoken) {
   }
 }
 
-export function removeBoundary(id, parentId) {
+export function removeBoundary(id, parentId) {  
   return {
     type: 'REMOVE_BOUNDARY',
-    id: id,
+    id,
     parentId
   }
 }
@@ -138,16 +129,6 @@ function studentsFetched(data, groupId) {
     groupId
   }
 }
-
-
-
-
-
-
-
-
-
-
 
 export function fetchBoundaryDetails(parentBoundaryId = 1) {
   return function(dispatch, getState) {

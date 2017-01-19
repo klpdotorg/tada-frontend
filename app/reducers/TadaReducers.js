@@ -116,7 +116,7 @@ export function entities(state = {
     isFetching: false
   }
   case 'REMOVE_BOUNDARY': 
-  
+ 
   let boundariesByParentId =  _.omit(state.boundariesByParentId, action.id)
   if (action.parentId) {
     let index = boundariesByParentId[action.parentId].indexOf(action.id)

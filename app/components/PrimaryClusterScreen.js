@@ -41,8 +41,7 @@ export default class PrimaryCluster extends React.Component {
     })
   }
 
-  saveSchool(school) {
-    console.log(school)
+  saveSchool(school) {    
     const options = {
       name: school.name,
       boundary: this.props.params.clusterId,
