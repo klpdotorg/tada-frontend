@@ -85,7 +85,7 @@ export default class EditProgram extends Component {
         	instcat=program.programme_institution_category.toString();
         }
 		return(
-			<Modal isOpen={ this.props.isOpen } onRequestClose={ this.props.onCloseModal}>
+			<Modal contentLabel="Edit Program" isOpen={ this.props.isOpen } onRequestClose={ this.props.onCloseModal}>
 				<div className="modal-dialog" role="document">
             		<div className="modal-content">
                 		<div className="modal-header">

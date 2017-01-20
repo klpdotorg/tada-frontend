@@ -61,7 +61,7 @@ export default class CreateDistrict extends Component {
 
  render() {    
   return (
-    <Modal isOpen={ this.props.isOpen } onRequestClose={ this.props.onCloseModal } style={ customStyles }>
+    <Modal contentLabel="Create Institution" isOpen={ this.props.isOpen } onRequestClose={ this.props.onCloseModal } style={ customStyles }>
     <label htmlFor="name" className="control-label">{this.props.title}</label>
     <input id="name" value={ this.props.value } type="text" className="form-control" placeholder={this.props.placeHolder} onChange={ this.handleChange } />
     <label htmlFor="languages" className="control-label">Languages</label>

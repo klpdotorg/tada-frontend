@@ -66,7 +66,7 @@ export default class CreateProgram extends Component {
         	{value: '2', label: 'Preschool'}
         ];
 		return(
-			<Modal isOpen={ this.props.isOpen } onRequestClose={ this.props.onCloseModal}>
+			<Modal contentLabel="Create Program" isOpen={ this.props.isOpen } onRequestClose={ this.props.onCloseModal}>
 				<div className="modal-dialog" role="document">
             		<div className="modal-content">
                 		<div className="modal-header">
