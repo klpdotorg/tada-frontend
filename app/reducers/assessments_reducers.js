@@ -7,6 +7,8 @@ function processAssessments(data)
     data.map(assessment => {
      
       newAssessmentsById[assessment.id] = assessment;
+      var questionsRouterUrl = "programs/" + assessment.programme +"/assessments/" + assessment.id + "/questions";
+      newAssessmentsById[assessment.id].questionsUrl = questionsRouterUrl;
     })
   }
 
@@ -14,22 +16,49 @@ function processAssessments(data)
   
 }
 
+function processQuestions(data)
+{
+  var newQuestionsById = {};
+  if(data.length > 0)
+  {
+    data.map(question => {
+        newQuestionsById[question.id] = question;
+    });
+  }
+  return newQuestionsById;
+}
+
 export function assessments(state = {
-  assessmentsById: {}, 
+  assessmentsById: {}, questionsById: {}
 }, action){
   try
   {
     switch(action.type)
     {
-      case 'ASSESSMENTS_RESPONSE_RECEIVED':
-      console.log("State before change", state);
 
-      const assessmentsByProgram = processAssessments(action.data);
-      return Object.assign(
-        {},
-        state,
-        {assessmentsById: assessmentsByProgram}
-        );
+      case 'QUESTIONS_RESPONSE_RECEIVED':
+          const questions = processQuestions(action.data);
+          return Object.assign(
+            {},
+            state,
+            {questionsById: questions}
+            );
+
+      case 'QUESTION_CREATED':
+          var copy = Object.assign({}, state.questionsById);
+          copy[action.question.id] = action.question;
+          return Object.assign({}, {questionsById: copy});
+
+      case 'QUESTION_DELETED':
+          return Object.assign({}, {questionsById: _.omit(state.questionsById, action.questionId)});
+
+      case 'ASSESSMENTS_RESPONSE_RECEIVED':
+          const assessmentsByProgram = processAssessments(action.data);
+          return Object.assign(
+            {},
+            state,
+            {assessmentsById: assessmentsByProgram}
+            );
 
       case 'ASSESSMENT_DELETED':
         var copyState = _.omit(state.assessmentsById,action.id);

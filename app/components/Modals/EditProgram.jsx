@@ -6,6 +6,18 @@ import FRC from 'formsy-react-components';
 
 const { Input, RadioGroup } = FRC;
 
+const customStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)'
+  }
+};
+
+
 // class MyForm extends Component {
 //   constructor(props) {
 //   		super(props);
@@ -40,7 +52,7 @@ export default class EditProgram extends Component {
 	submitForm()
 	{
 		var myform = this.myform.getModel();
-
+		
 		this.props.handleSubmit(myform.programName,myform.description, myform.startDate, myform.endDate, myform.active,myform.programmeInstCat);
 	}
 
@@ -85,7 +97,7 @@ export default class EditProgram extends Component {
         	instcat=program.programme_institution_category.toString();
         }
 		return(
-			<Modal isOpen={ this.props.isOpen } onRequestClose={ this.props.onCloseModal}>
+			<Modal isOpen={ this.props.isOpen } onRequestClose={ this.props.onCloseModal} style={customStyles}>
 				<div className="modal-dialog" role="document">
             		<div className="modal-content">
                 		<div className="modal-header">

@@ -53,7 +53,7 @@ export default class CreateAssessment extends Component {
       {value: '3', label: 'Student'}
     ];
     return (
-      <Modal isOpen={ this.props.isOpen } onRequestClose={ this.props.onClose}>
+      <Modal isOpen={ this.props.isOpen } onRequestClose={ this.props.onClose} style={customStyles}>
         {/* Title of modal window */}
        
         <div className="modal-dialog" role="document">
