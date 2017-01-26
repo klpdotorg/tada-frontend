@@ -29,7 +29,7 @@ export default class CreateDistrict extends Component {
 
   render() {  
     return (
-      <Modal isOpen={ this.props.isOpen } onRequestClose={ this.props.onCloseModal } style={ customStyles }>
+      <Modal contentLabel="Create Boundary" isOpen={ this.props.isOpen } onRequestClose={ this.props.onCloseModal } style={ customStyles }>
         <label htmlFor="district" className="control-label">{this.props.title}</label>
         <input id="district" value={this.state.value} type="text" className="form-control" placeholder={this.props.placeHolder} onChange={ this.handleChange } />
         <div className='button' onClick={ () => {

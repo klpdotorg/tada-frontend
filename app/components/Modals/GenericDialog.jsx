@@ -25,7 +25,7 @@ export default class GenericDialog extends Component{
 	render()
 	{
 			return(
-				<Modal isOpen={ this.props.isOpen } onRequestClose={ this.props.onCloseModal} style={customStyles}>
+				<Modal contentLabel={this.props.title} isOpen={ this.props.isOpen } onRequestClose={ this.props.onCloseModal} style={customStyles}>
 				<div className="modal-dialog" role="document">
             		<div className="modal-content">
                 		<div className="modal-header">

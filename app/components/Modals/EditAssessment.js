@@ -84,7 +84,7 @@ enableSubmitButton() {
       typeStr = this.props.assessment.type.toString();
     }
     return (
-      <Modal isOpen={ this.props.isOpen } onRequestClose={ this.props.onCloseModal} style={customStyles}>
+      <Modal contentLabel="Edit Assessment" isOpen={ this.props.isOpen } onRequestClose={ this.props.onCloseModal} style={customStyles}>
         {/* Title of modal window */}
        
         <div className="modal-dialog" role="document">

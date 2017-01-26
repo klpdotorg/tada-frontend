@@ -1,5 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import { push } from 'react-router-redux';
+import {checkStatus} from './utils'
 
 import {SERVER_API_BASE as serverApiBase,
  SERVER_AUTH_BASE as authApiBase} from 'config';
@@ -277,19 +278,6 @@ export function fetchUserData() {
   }
 }
 
-function checkStatus(response) {
-  if (response.status >= 200 && response.status < 300) {
-    return response.json();
-  } else if (response.status === 401) {
-    store.dispatch(logoutUser());
-    store.dispatch(push('/login'));
-    return;
-  }
-  const error = new Error(response.statusText);
-  error.response = response;
-  throw error;
-}
-
 export function sendRegisterUser(email, password, username) {
   return function(dispatch, getState) {
 
@@ -366,7 +354,7 @@ export function deleteBoundary(boundaryid, parentId){
     }).then(response =>{
      if (response.status >= 200 && response.status < 300) {
       dispatch(removeBoundary(boundaryid, parentId))
-      dispatch(fetchEntitiesFromServer(1))
+      //dispatch(fetchEntitiesFromServer(1))
         //Route the user to the home dashboard page since the page they were on will be deleted
         dispatch(push('/'));        
       } else {
