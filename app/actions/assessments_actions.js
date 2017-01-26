@@ -4,6 +4,110 @@ import { push } from 'react-router-redux';
 import {SERVER_API_BASE as serverApiBase,
  SERVER_AUTH_BASE as authApiBase} from 'config';
 
+/** QUESTIONS RELATED ACTIONS BEGIN */
+
+export function fetchQuestionsForAssessment(programId, assessmentId)
+{
+  return function(dispatch, getState) {
+    var url =  serverApiBase + "programmes/" + programId + "/assessments/" + assessmentId + "/questions/";
+    return fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Token ' + sessionStorage.token
+      }
+    }).then(checkStatus).then(data => {
+      dispatch(handleQuestionsResponse(data));
+    }).catch(error => {
+      console.log(error);
+      //dispatch(requestFailed(error));
+    });
+  }
+}
+
+export function deleteQuestion(programId, assessmentId, questionId)
+{
+  return function(dispatch, getState) {
+    var url =  serverApiBase + "programmes/" + programId + "/assessments/" + assessmentId + "/questions/" + questionId +"/";
+    return fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Token ' + sessionStorage.token
+      }
+    }).then(response => {
+       if (response.status >= 200 && response.status < 300) {
+          return response;
+        } else if (response.status === 401) {
+          dispatch(push('/login'));
+          return;
+        }
+        const error = new Error(response.statusText);
+        error.response = response.json();
+        throw error;
+    }).then(
+      dispatch(questionDeleted(questionId))
+    ).catch(error => {
+      console.log(error); //dispatch(requestFailed(error));
+    });
+  }
+}
+
+export function editQuestion(programId, assessmentId, questionId)
+{
+
+}
+
+export function createQuestion(programId, assessmentId, qnNumber, qnOrder, qnText, type, grade, minScore, maxScore, active)
+{
+  return function(dispatch, getState){
+      var url= serverApiBase + "programmes/" + programId + "/assessments/" + assessmentId + "/questions/";
+      return fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Token ' + sessionStorage.token
+        },
+        body: JSON.stringify({
+        name: qnNumber,
+        order: qnOrder,
+        question_type: type,
+        score_min: minScore,
+        score_max: maxScore,
+        grade: grade,
+        active: 2,
+        assessment: assessmentId
+      })
+      }).then(checkStatus).then( data=> {
+        dispatch(createQuestionSuccessful(data));
+      }
+      );
+    }
+}
+
+function createQuestionSuccessful(response)
+{
+  return {
+    type: 'QUESTION_CREATED',
+    question: response
+  }
+}
+
+function questionDeleted(id)
+{
+  return {
+    type: 'QUESTION_DELETED',
+    questionId: id
+  }
+}
+function handleQuestionsResponse(resp) {
+  return {
+    type: 'QUESTIONS_RESPONSE_RECEIVED',
+    data: resp.results
+  }
+}
+
+/** ASSESSMENT ACTIONS BEGIN */
 export function fetchAssessmentsForProgram(programId)
 {
   return function(dispatch, getState) {

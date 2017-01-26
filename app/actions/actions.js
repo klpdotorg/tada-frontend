@@ -4,6 +4,7 @@ import {checkStatus} from './utils'
 
 import {SERVER_API_BASE as serverApiBase,
  SERVER_AUTH_BASE as authApiBase} from 'config';
+ import { urls as Urls } from '../constants';
  import _ from 'lodash'
  import store from '../store'
  import {boundaryType, genUrl} from './utils'
@@ -100,8 +101,23 @@ function requestLogout() {
 
 export function logoutUser() {
   return function(dispatch, getState) {
-    sessionStorage.removeItem('token');
-    dispatch(requestLogout());
+    return fetch(Urls.LOGOUT, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Token ' + sessionStorage.token
+      },
+    }).then(response => {
+      if(response.status > 200 && response.status < 300)
+      {
+        sessionStorage.removeItem('token');
+        store.dispatch(push('/logout'));
+      }
+    }).catch(error => {
+      console.log(error);
+    });
+    
+    
   }
 }
 
@@ -240,7 +256,7 @@ export function fetchEntitiesFromServer(parentBoundaryId) {
 export function fetchUserData() {
   const token = sessionStorage.getItem('token')
   return function(dispatch) {
-    return fetch(authApiBase + 'auth/me/', {
+    return fetch(Urls.USER_PROFILE, {
       method: "GET",
       headers: {
         'Authorization': 'Token ' + token,
@@ -265,7 +281,7 @@ export function fetchUserData() {
 export function sendRegisterUser(email, password, username) {
   return function(dispatch, getState) {
 
-    return fetch(authApiBase + 'auth/register/', {
+    return fetch(Urls.REGISTER, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
@@ -298,7 +314,7 @@ export function sendRegisterUser(email, password, username) {
 export function sendLoginToServer(email, pass) {
   return function(dispatch, getState) {
 
-    return fetch(authApiBase + 'auth/login/', {
+    return fetch(Urls.LOGIN, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'

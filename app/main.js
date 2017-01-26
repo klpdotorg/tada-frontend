@@ -33,6 +33,7 @@ import Programs from './components/Programs';
 import ResetPassword from './components/ResetPassword';
 import SetNewPassword from './components/SetNewPassword';
 import Users from './containers/UsersContainer';
+import Questions from './components/AssessmentQuestions';
 
 
 const history = syncHistoryWithStore(browserHistory, tadastore)
@@ -51,6 +52,8 @@ const routes = (
       <IndexRoute component={ Dashboard } />
       <Route path="dashboard" component={ Dashboard } />
       <Route path="programs" component={ Programs }/>
+      <Route path="programs/:programId" component={ Programs }/>
+      <Route path="programs/:programId/assessments/:assessmentId/questions" component={ Questions }/>
       <Route path="users" component={ Users }/>
       <Route path="district/:districtId/project/:projectId" component={ PreschoolProject } />
       <Route path="district/:districtId/project/:projectId/circle/:circleId" component={ PreschoolCircle } />

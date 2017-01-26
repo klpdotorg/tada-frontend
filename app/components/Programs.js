@@ -3,7 +3,7 @@ import * as actions from '../actions/';
 require('bootstrap-datepicker');
 import CreateAssessment from './Modals/CreateAssessment';
 import EditAssessment from './Modals/EditAssessment';
-
+import { Link } from 'react-router';
 import CreateProgram from './Modals/CreateProgram';
 import GenericDialog from './Modals/GenericDialog';
 import EditProgram from './Modals/EditProgram';
@@ -50,11 +50,9 @@ export default class Programs extends React.Component {
 		this.closeEditProgramModal = this.closeEditProgramModal.bind(this);
 
 
-		("State is -- ", this.state);
 	}
 
 	componentWillMount(){
-		("Fetching programs");
 		this.props.dispatch(actions.fetchAllPrograms());
 	}
 
@@ -63,11 +61,10 @@ export default class Programs extends React.Component {
 	*/
 	componentWillReceiveProps(nextProps)
 	{
-		("Programs receiving new props");
+		
 		const programs = nextProps.programsById;
-		if(!this.programsById && Object.keys(programs).length >0 && jQuery.isEmptyObject(this.state.selectedProgram))
+		if(Object.keys(programs).length >0 && jQuery.isEmptyObject(this.state.selectedProgram))
 		{
-			("receiving programs for the first time");
 			const selectProgram = Object.values(programs)[0];	
 			this.setState({
 				selectedProgram: selectProgram.id
@@ -79,11 +76,8 @@ export default class Programs extends React.Component {
 
 	componentDidUpdate(prevProps, prevState)
 	{
-		("componentDidUpdate -- prevState", prevState);
-		("Current state", this.state);
 		if(this.state.selectedProgram!=0 && this.state.selectedProgram != prevState.selectedProgram)
 		{
-			("Fetching assessments for program id", this.state.selectedProgram);
 			this.props.dispatch(actions.fetchAssessmentsForProgram(this.state.selectedProgram));
 		}
 	}
@@ -92,9 +86,7 @@ export default class Programs extends React.Component {
 	This needs to trigger fetching asessments for that program/type combo
 */
 	handleProgramSelection(e)
-	{
-		("Selected value is: " ,this.selProgram.value);
-		
+	{		
 		this.setState({
 			selectedProgram: this.selProgram.value
 		});
@@ -369,9 +361,7 @@ export default class Programs extends React.Component {
 			}
 			else
 				type="Unknown";
-			("Assessment id: ", assessment.id);
-			("State is: ", this.state.selectedAssessments);
-			("Assessment checked is: ", jQuery.inArray(assessment.id.toString(), this.state.selectedAssessments));
+
 			return(
 				<tr key={assessment.id} id={assessment.id}>
 					<td>{assessment.name}</td>
@@ -383,22 +373,31 @@ export default class Programs extends React.Component {
 					<td>{active}</td>
 					<td><input type="checkbox" className="form-control" onChange={this.selectAssessment} checked={jQuery.inArray(assessment.id.toString(),this.state.selectedAssessments)>-1}/></td>
 					<td><button onClick={this.openEditAssessmentModal}><span className="fa fa-pencil-square-o" onClick={this.openEditAssessmentModal}></span></button></td>
+					<td><Link className="btn brand-orange-bg fa fa-question" to={assessment.questionsUrl}></Link></td>
+
 				</tr>
 			);
 		});
 		
-		if(Object.keys(programs).length >0 && jQuery.isEmptyObject(this.state.selectedProgram))
+		if(this.props.params)
 		{
-			selectedProgram = Object.values(programs)[0];
-			
-		
-			
+			selectedProgram = programs[this.props.params.programId];
 		}
 		else
 		{
-			selectedProgram = programs[this.state.selectedProgram];
+			if(Object.keys(programs).length >0 && jQuery.isEmptyObject(this.state.selectedProgram))
+			{
+				selectedProgram = Object.values(programs)[0];
+				
 			
+				
+			}
+			else
+			{
+				selectedProgram = programs[this.state.selectedProgram];
+				
 
+			}
 		}
 		if(!jQuery.isEmptyObject(selectedProgram))
 		{
