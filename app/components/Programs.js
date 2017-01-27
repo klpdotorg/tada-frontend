@@ -7,6 +7,7 @@ import { Link } from 'react-router';
 import CreateProgram from './Modals/CreateProgram';
 import GenericDialog from './Modals/GenericDialog';
 import EditProgram from './Modals/EditProgram';
+import ConfirmDialog from './Modals/ConfirmDialog';
 
 
 export default class Programs extends React.Component {
@@ -24,7 +25,8 @@ export default class Programs extends React.Component {
 			showSuccessModal: false,
 			selectedAssessments: [],
 			dialogTitle: "",
-			dialogMessage: ""
+			dialogMessage: "",
+			isConfirmModalOpen: false
 		}
 		this.handleProgramSelection = this.handleProgramSelection.bind(this);
 		this.handleCreateProgram = this.handleCreateProgram.bind(this);
@@ -48,6 +50,7 @@ export default class Programs extends React.Component {
 		this.deactivateAssessments = this.deactivateAssessments.bind(this);
 		this.openEditProgramModal = this.openEditProgramModal.bind(this);
 		this.closeEditProgramModal = this.closeEditProgramModal.bind(this);
+		this.closeConfirmModal = this.closeConfirmModal.bind(this);
 
 
 	}
@@ -134,6 +137,20 @@ export default class Programs extends React.Component {
 			
 				showSuccessModal:false
 			
+		});
+	}
+
+	openConfirmModal()
+	{
+		this.setState({
+			isConfirmModalOpen: true
+		});
+	}
+
+	closeConfirmModal()
+	{
+		this.setState({
+			isConfirmModalOpen: false
 		});
 	}
 
@@ -266,7 +283,7 @@ export default class Programs extends React.Component {
 	    this.setState({openConfirmModal: true});
   	}
 
-	closeConfirmModal() 
+	closeConfirmation() 
 	{
 	    this.setState({openConfirmModal: false});
   	}
@@ -322,7 +339,11 @@ export default class Programs extends React.Component {
   		});
   	}
 
-  
+  	deactivateProgram(id)
+  	{
+  		this.closeConfirmModal();
+  		this.props.dispatch(actions.deactivateProgram(this.state.selectedProgram));
+  	}
 
 	render() {
 		var selectedProgram;
@@ -379,26 +400,13 @@ export default class Programs extends React.Component {
 			);
 		});
 		
-		if(this.props.params)
-		{
-			selectedProgram = programs[this.props.params.programId];
-		}
-		else
-		{
-			if(Object.keys(programs).length >0 && jQuery.isEmptyObject(this.state.selectedProgram))
-			{
-				selectedProgram = Object.values(programs)[0];
-				
-			
-				
-			}
-			else
-			{
-				selectedProgram = programs[this.state.selectedProgram];
-				
 
-			}
+		if (Object.keys(programs).length > 0 && jQuery.isEmptyObject(this.state.selectedProgram)) {
+			selectedProgram = Object.values(programs)[0];
+		} else {
+			selectedProgram = programs[this.state.selectedProgram];
 		}
+		
 		if(!jQuery.isEmptyObject(selectedProgram))
 		{
 			selectedProgramName=selectedProgram.name;
@@ -432,24 +440,29 @@ export default class Programs extends React.Component {
 				</div>
 				<div className="grey-mist-bg">
 					<div className="row center-block">
-						<div className="col-md-6 pull-left">
+						<div className="col-md-8 pull-left">
 							<h4>Program Details</h4>
 							<hr/>
+							<div className="row">	
+								<label className="col-md-4">Program name: {selectedProgramName} </label>
+								<label className="col-md-4">Start Date: {startDate}</label>
+							</div>
+							<div className="row">
+								<label className="col-md-4">Institution: {instType} </label>
+								<label className="col-md-4">End Date: {endDate}</label>
+							</div>
 						</div>
-						<div className="col-md-6 pull-right">
-						<button type="button" className="col-sm-2 btn btn-info navbar-btn brand-blue-bg all-padded-btn" onClick={this.handleShowEditDialog}><span className="fa fa-pencil-square-o"></span>Edit</button>
-						<button type="button" className="col-sm-2 btn btn-info navbar-btn brand-blue-bg all-padded-btn" data-toggle="modal" data-target="#deleteProgramModal"><span className="fa fa-trash-o"></span>Delete</button>
+						
+						<div className="col-md-4 pull-right">
+							<button type="button" className="col-sm-6 btn btn-info navbar-btn brand-blue-bg all-padded-btn" onClick={this.handleShowEditDialog}><span className="fa fa-pencil-square-o"></span>Edit</button>
+							<button type="button" className="col-sm-6 btn btn-info navbar-btn brand-blue-bg all-padded-btn" onClick={this.openConfirmModal.bind(this)}>Deactivate</button>
+							<button type="button" className="col-sm-6 btn btn-info navbar-btn brand-blue-bg all-padded-btn" data-toggle="modal" data-target="#deleteProgramModal"><span className="fa fa-trash-o"></span>Delete</button>
+
 						</div>
+						
 					</div>
 
-					<div className="row">	
-						<label className="col-md-4">Program name: {selectedProgramName} </label>
-						<label className="col-md-4">Start Date: {startDate}</label>
-					</div>
-					<div className="row">
-						<label className="col-md-4">Institution: {instType} </label>
-						<label className="col-md-4">End Date: {endDate}</label>
-					</div>
+					
 				</div>
 				<br/>
 				<div>
@@ -485,7 +498,7 @@ export default class Programs extends React.Component {
 			<EditAssessment assessment={this.state.selAssessment} handleEditAssessment={this.handleEditAssessment} handleSubmit = {this.handleEditAssessment} isOpen={this.state.isEditAssessmentModalOpen} onCloseModal={this.closeEditAssessmentModal}/>
 			<CreateProgram isOpen={this.state.isCreateProgramModalOpen} onCloseModal={this.closeCreateProgramModal} handleSubmit={this.handleCreateProgram}/>
 			<EditProgram program={selectedProgram} isOpen={this.state.isEditProgramModalOpen} onCloseModal={this.closeEditProgramModal} handleSubmit={this.handleEditProgram.bind(this)}/>
-
+			<ConfirmDialog entity={selectedProgram} message="Are you sure you want to deactivate this program?" isOpen={this.state.isConfirmModalOpen} onCloseModal={this.closeConfirmModal.bind(this)} onYes={this.deactivateProgram.bind(this)}/>
 
 			<GenericDialog isOpen={this.state.showSuccessModal} onCloseModal={this.closeGenericDialog} title={this.state.dialogTitle} message={this.state.dialogMessage}/>
 			{/*DELETE program modal dialog*/}
