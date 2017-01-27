@@ -99,6 +99,27 @@ function editProgramSuccessful(edited)
 
 
 
+export function deactivateProgram(id)
+{
+  return function(dispatch, getState){
+    var url = serverApiBase + "programmes/" + id + "/";  
+    return fetch(url, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Token ' + sessionStorage.token
+      },
+      body: JSON.stringify({
+        active: 1,
+      })
+    }).then(checkStatus).then(response => {
+      //Treat this as a local delete because anyway we are only showing/fetching active programs
+        dispatch(deleteProgramSuccessful(response.id));
+        return response;
+    });
+  }
+}
+
 export function editProgram(id, name, description, startDate, endDate, isActive)
 {
    return function(dispatch, getState){
@@ -114,7 +135,7 @@ export function editProgram(id, name, description, startDate, endDate, isActive)
         description: description,
         start_date: startDate,
         end_date: endDate,
-        active: 1,
+        active: 2,
         programme_institution_category: 1
       })
     }).then(checkStatus).then(response => {
