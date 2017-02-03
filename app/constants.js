@@ -6,6 +6,8 @@ export const urls = {
 	LOGIN: authApiBase + "auth/login/",
 	LOGOUT: authApiBase + "auth/logout/",
 	REGISTER: authApiBase + "auth/register/",
-	USER_PROFILE: authApiBase + "auth/me/"
+	USER_PROFILE: authApiBase + "auth/me/",
+	USERS: authApiBase + "auth/users/",
+	USER_REGISTRATION: authApiBase + "auth/register/"
 }
 

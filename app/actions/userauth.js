@@ -2,7 +2,9 @@ import fetch from 'isomorphic-fetch';
 import { push } from 'react-router-redux';
 import {SERVER_API_BASE as serverApiBase,
  SERVER_AUTH_BASE as authApiBase} from 'config';
-import store from '../store'
+import store from '../store';
+import { urls as Urls } from '../constants';
+
 
 
 //Returns a promise. The response handling will be done in the UI component since this is temp
@@ -104,6 +106,62 @@ export function checkUserAuth(email, pass) {
         password: pass
       })
     })
+  }
+}
+
+export function listUsers(){
+  return function(dispatch, getState) {
+    return fetch(Urls.USERS +"?is_active=True", {
+      method: "GET",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Token ' + sessionStorage.token
+      },
+    }).then(checkStatus).then(data=> {
+      dispatch(usersFetched(data));
+      return data;
+    });
+  }
+
+}
+
+export function createUser(firstname,lastname,username,email,password,role) {
+  return function(dispatch, getState){
+    return fetch(Urls.USER_REGISTRATION, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Token ' + sessionStorage.token
+      },
+      body: JSON.stringify({
+        first_name: firstname,
+        last_name: lastname,
+        username: username,
+        password: password,
+        email: email
+
+      })
+    }).then(checkStatus).then(data => {
+        dispatch(userCreated(data));
+        return data;
+      })
+    }
+  }
+
+
+function userCreated(data)
+{
+  return {
+    type: "USER_CREATED",
+    user: data
+  }
+}
+
+function usersFetched(data)
+{
+  return {
+    type: "USERS_FETCHED",
+    users: data.results
   }
 }
 
