@@ -6,7 +6,7 @@ import { push } from 'react-router-redux';
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    
+    usersById: state.users.usersById
   }
 }
 
