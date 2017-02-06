@@ -50,3 +50,23 @@ export const saveNewInstitution = options => dispatch => {
     })
   })
 }
+
+const institutionFetch = (options) => {
+  return fetch(serverApiBase + 'institutions/' + options.id + '/', {
+    method: "PATCH",
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Token ' + sessionStorage.token
+    },
+    body: JSON.stringify(options)
+  }).catch(error => {
+    console.log('request failed', error)
+  })
+}
+
+export const saveInstitution = options => dispatch => {
+  return institutionFetch(options).then(checkStatus).then(response => {    
+    dispatch(fetchEntitiesFromServer(1))
+    dispatch(push('/'));    
+  })
+}

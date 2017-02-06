@@ -32,6 +32,7 @@ function responseReceivedFromServer(resp) {
 }
 
 function requestFailed(error) {
+  console.log('error', error)
   return {
     type: 'REQUEST_FAILED',
     statusCode: error.response.status,
