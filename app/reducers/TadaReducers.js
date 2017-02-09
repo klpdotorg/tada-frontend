@@ -7,7 +7,8 @@ const modalsDefault = {
   createCluster: false,
   createProject: false,
   createCircle: false,
-  createInstitution: false
+  createInstitution: false,
+  createClass: false
 }
 
 export function schoolSelection(state = {
@@ -116,7 +117,7 @@ export function entities(state = {
     isFetching: false
   }
   case 'REMOVE_BOUNDARY': 
-  
+ 
   let boundariesByParentId =  _.omit(state.boundariesByParentId, action.id)
   if (action.parentId) {
     let index = boundariesByParentId[action.parentId].indexOf(action.id)

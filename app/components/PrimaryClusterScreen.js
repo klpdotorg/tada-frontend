@@ -41,14 +41,33 @@ export default class PrimaryCluster extends React.Component {
     })
   }
 
-  saveSchool(school) {
-    console.log(school)
+  saveSchool(school) {    
     const options = {
       name: school.name,
       boundary: this.props.params.clusterId,
       languages: school.languages.map(school => school.value)
     }
     this.props.dispatch(saveNewInstitution(options))
+  }
+
+  getLanguages() {
+    return fetch(serverApiBase + 'languages/', {    
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Token ' + sessionStorage.token
+      }
+    }).then(checkStatus).then((languages) => {
+        const langs = languages.results.map((language) => ({
+          value: language.id, 
+          label: language.name
+        }))
+        return {
+          options: langs, 
+          complete: true
+        }
+      }).catch(error => {
+      console.log('request failed', error)
+    })    
   }
 
   openSchoolModal(){

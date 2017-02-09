@@ -9,12 +9,15 @@ import {SERVER_API_BASE as serverApiBase,
  import store from '../store'
  import {boundaryType, genUrl} from './utils'
 
+export const selectPrimaryTree = () => {
+  return {
+    type: 'PRIMARY_SELECTED'
+  }
+}
 
-
- export function showPrimarySchoolHierarchy() {
-  return function(dispatch) {
-    dispatch(selectPrimarySchool)
-    return dispatch(fetchEntities(1, 1))
+export const selectPreschoolTree = () => {
+  return {
+    type: 'PRESCHOOL_SELECTED'
   }
 }
 
@@ -31,16 +34,8 @@ function responseReceivedFromServer(resp) {
   }
 }
 
-
-
-
-
-
-
-
-
-
 function requestFailed(error) {
+  console.log('error', error)
   return {
     type: 'REQUEST_FAILED',
     statusCode: error.response.status,
@@ -64,10 +59,10 @@ export function loginSuccess(authtoken) {
   }
 }
 
-export function removeBoundary(id, parentId) {
+export function removeBoundary(id, parentId) {  
   return {
     type: 'REMOVE_BOUNDARY',
-    id: id,
+    id,
     parentId
   }
 }
@@ -139,16 +134,6 @@ function studentsFetched(data, groupId) {
   }
 }
 
-
-
-
-
-
-
-
-
-
-
 export function fetchBoundaryDetails(parentBoundaryId = 1) {
   return function(dispatch, getState) {
 
@@ -165,7 +150,7 @@ export function fetchBoundaryDetails(parentBoundaryId = 1) {
     }
     //Send info about the whole request so we can track failure
     dispatch(requestDataFromServer())
-    return fetch(serverApiBase + 'boundaries/?parent=' + parentBoundaryId + '&boundary_type=' + boundaryType + '&limit=500', {
+    return fetch(serverApiBase + 'boundaries/?parent=' + parentBoundaryId + '&limit=500', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

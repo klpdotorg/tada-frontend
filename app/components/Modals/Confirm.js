@@ -27,7 +27,7 @@ export default class Confirm extends Component {
     })
   }
 
-  render() {  
+  render() {
     return (
       <Modal contentLabel="Confirm Delete Modal" isOpen={this.props.isOpen} onRequestClose={this.props.onCloseModal} style={customStyles}>
         <p>Are you sure you want to delete {this.props.entity}</p>
