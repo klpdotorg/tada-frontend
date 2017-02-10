@@ -1,6 +1,6 @@
 import React from 'react';
 import ConfirmModal from './Modals/Confirm'
-import {deleteInstitution, saveInstitution} from '../actions'
+import {deleteInstitution, saveInstitution, saveNewClass} from '../actions'
 import Button from './Button'
 import CreateClass from './Modals/CreateBoundary'
 import {mapValues} from 'lodash'
@@ -99,8 +99,13 @@ export default class Institution extends React.Component {
     })
   }
 
-  saveClass() {
-
+  saveClass(name) {
+   const institution = this.props.params.institutionId
+    const options = {
+      name,
+      institution
+    }
+    this.props.dispatch(saveNewClass(options))
   }
 
   selectEntity(key, val) {

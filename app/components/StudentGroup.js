@@ -1,6 +1,6 @@
 import React from 'react';
 import { push } from 'react-router-redux';
-import {modifyBoundary, deleteBoundary, newSchool} from '../actions';
+import {saveClass, deleteStudentGroup} from '../actions';
 import CreateInstitution from './Modals/CreateInstitution';
 import Button from './Button'
 import ConfirmModal from './Modals/Confirm'
@@ -11,18 +11,27 @@ export default class PrimaryCluster extends React.Component {
   constructor(props){
     super(props);
     this.openSchoolModal = this.openSchoolModal.bind(this);
-    this.saveSchool = this.saveSchool.bind(this)
     this.toggleSchoolModal = this.toggleSchoolModal.bind(this);
-    this.saveCluster = this.saveCluster.bind(this);
-    this.deleteCluster = this.deleteCluster.bind(this);
+    this.saveClass = this.saveClass.bind(this);
+    this.deleteClass = this.deleteClass.bind(this);
     this.hideBulkAdd = this.hideBulkAdd.bind(this);
     this.addStudents = this.addStudents.bind(this);
 
+    const {params, boundaryDetails} = this.props
     this.state = {
       schoolModalIsOpen: false,
       openConfirmModal: false,
-      showBulkAdd: false
+      showBulkAdd: false,
+      class: boundaryDetails[params.groupId]
     };
+  }
+
+  setClass(val, key) {
+    let values = this.state.class
+    values[key] = val
+    this.setState({
+      class: values
+    })
   }
 
   closeConfirmation = () => {
@@ -50,14 +59,6 @@ export default class PrimaryCluster extends React.Component {
     })
   }
 
-  saveSchool(name) {
-    const options = {
-      name: name,
-      boundary: this.props.params.clusterId
-    }
-    ('Save', options)
-  }
-
   openSchoolModal(){
     this.setState({
       schoolModalIsOpen: true
@@ -69,13 +70,12 @@ export default class PrimaryCluster extends React.Component {
 
   }
 
-  saveCluster() {
-    this.props.dispatch(modifyBoundary(this.props.params.clusterId, this.clusterName.value));
+  saveClass() {
+    this.props.dispatch(saveClass(this.state.class));
   }
 
-  deleteCluster() {
-    let {params} = this.props
-    this.props.dispatch(deleteBoundary(params.clusterId, params.blockId));
+  deleteClass() {
+    this.props.dispatch(deleteStudentGroup(this.state.class));
   }
 
   viewStudent = (path) => {
@@ -90,8 +90,14 @@ export default class PrimaryCluster extends React.Component {
     const institution = boundaryDetails[params.institutionId]
     const group = boundaryDetails[params.groupId]
     var Displayelement;
-    if(sessionStorage.getItem('isAdmin')) {
-      Displayelement = (props) =>
+    return(
+      <div>
+       <ol className="breadcrumb">
+          <li><a href={district.path}>{district.name}</a></li>
+          <li><a href={block.path}>{block.name}</a></li>
+          <li><a href={cluster.path}>{cluster.name}</a></li>
+          <li><a href={institution.path}>{institution.name}</a></li>
+        </ol>
         <div>
           <div className='heading-border-left'>
             <h4 className="brand-blue col-md-10">Modify Details</h4>
@@ -102,48 +108,29 @@ export default class PrimaryCluster extends React.Component {
             <div className="form-group">
               <label className="control-label col-sm-2" htmlFor="class">Class</label>
               <div className="col-sm-2">
-                <input type="text" ref={(ref) => this.className = ref} className="form-control" id="class" defaultValue={group.name}/>
+                <input type="text" onChange={(e) => {this.setClass(e.target.value, 'name')}} className="form-control" id="class" value={this.state.class.name}/>
               </div>
             </div>
             <div className="form-group">
               <label className="control-label col-sm-2" htmlFor="section">Section</label>
               <div className="col-sm-2">
-                <input type="text" ref={(ref) => this.section = ref} className="form-control" id="section" defaultValue={group.section}/>
+                <input type="text" onChange={(e) => {this.setClass(e.target.value, 'section')}}  className="form-control" id="section" value={this.state.class.section}/>
               </div>
             </div>
             <div className="form-group">
               <label className="control-label col-sm-2" htmlFor="type">Type</label>
               <div className="col-sm-2">
-                <input type="text" ref={(ref) => this.type = ref} className="form-control" id="type" defaultValue={group.group_type}/>
+                <input type="text" onChange={(e) => {this.setClass(e.target.value, 'group_type')}} className="form-control" id="type" value={this.state.class.group_type}/>
               </div>
             </div>
            </form>
           <div className="col-md-2">
-            <button type="submit" className="btn btn-primary" onClick={this.saveCluster}>Save</button>
+            <button type="submit" className="btn btn-primary" onClick={this.saveClass}>Save</button>
             <button type="submit" className="btn btn-primary" onClick={this.showConfirmation}>Delete</button>
-            <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteCluster} closeModal={this.closeConfirmation} entity={cluster.name}/>
+            <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteClass} closeModal={this.closeConfirmation} entity={group.name}/>
           </div>
         </div>
-    }
-    else {
-      Displayelement = (props) =>
-        <div>
-          <h4 className="heading-err heading-border-left brand-red"> <i className="fa fa-lock brand-red" aria-hidden="true"></i>  Insufficient Permissions</h4>
-          <p>You need administrator privileges to modify Boundary details.</p>
-          <h4 className="brand-blue heading-border-left"> Cluster Details</h4>
-          <p> Name: {cluster.name}</p>
-        </div>
-    }
-
-    return(
-      <div>
-       <ol className="breadcrumb">
-          <li><a href={district.path}>{district.name}</a></li>
-          <li><a href={block.path}>{block.name}</a></li>
-          <li><a href={cluster.path}>{cluster.name}</a></li>
-          <li><a href={institution.path}>{institution.name}</a></li>
-        </ol>
-          {this.state.showBulkAdd ? <BulkAddStudent addStudents={this.addStudents} hide={this.hideBulkAdd}/> : <Displayelement {...this.props}/>}
+          {this.state.showBulkAdd ? <BulkAddStudent addStudents={this.addStudents} hide={this.hideBulkAdd}/> : null}
         {/*<CreateInstitution placeHolder='School Name' title='Create New School' isOpen={this.state.schoolModalIsOpen} onCloseModal={this.toggleSchoolModal} closeModal={ this.toggleSchoolModal} save={ this.saveSchool } /> */}
       </div>
     );
