@@ -4,7 +4,7 @@ import {fetchEntitiesFromServer, removeBoundary} from './actions'
 import {push} from 'react-router-redux'
 
 
-export function deleteInstitution(parentId, instiId){  
+export function deleteInstitution(parentId, instiId){
   return function(dispatch, getState) {
     return fetch(serverApiBase + 'institutions/'+ instiId +'/',{
       method: 'DELETE',
@@ -13,9 +13,9 @@ export function deleteInstitution(parentId, instiId){
       }
     }).then(response => {
      if (response.status >= 200 && response.status < 300) {
-      dispatch(removeBoundary(instiId, parentId))      
+      dispatch(removeBoundary(instiId, parentId))
         //Route the user to the home dashboard page since the page they were on will be deleted
-        dispatch(push('/'));        
+        dispatch(push('/'));
       } else {
         const error = new Error(response.statusText);
         error.response = response;
@@ -41,7 +41,7 @@ const newInstitutionFetch = (options) => {
 }
 
 export const saveNewInstitution = options => dispatch => {
-  return newInstitutionFetch(options).then(checkStatus).then(response => {    
+  return newInstitutionFetch(options).then(checkStatus).then(response => {
     dispatch(fetchEntitiesFromServer(1))
     dispatch(push('/'));
     dispatch({
@@ -65,8 +65,73 @@ const institutionFetch = (options) => {
 }
 
 export const saveInstitution = options => dispatch => {
-  return institutionFetch(options).then(checkStatus).then(response => {    
+  return institutionFetch(options).then(checkStatus).then(response => {
     dispatch(fetchEntitiesFromServer(1))
-    dispatch(push('/'));    
+    dispatch(push('/'));
   })
 }
+
+const classNewFetch = (options) => {
+  return fetch(serverApiBase + 'studentgroups/', {
+    method: "POST",
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Token ' + sessionStorage.token
+    },
+    body: JSON.stringify(options)
+  }).catch(error => {
+    console.log('request failed', error)
+  })
+}
+
+const classFetch = (options) => {
+  return fetch(serverApiBase + 'studentgroups/' + options.id + '/', {
+    method: "PATCH",
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Token ' + sessionStorage.token
+    },
+    body: JSON.stringify(options)
+  }).catch(error => {
+    console.log('request failed', error)
+  })
+}
+
+export const saveNewClass = options => dispatch => {
+  return classNewFetch(options).then(checkStatus).then(response => {
+    dispatch(fetchEntitiesFromServer(1))
+    dispatch(push('/'));
+  })
+}
+
+export const saveClass = options => dispatch => {
+  return classFetch(options).then(checkStatus).then(response => {
+    dispatch(fetchEntitiesFromServer(1))
+    dispatch(push('/'));
+  })
+}
+
+export const deleteStudentGroup = options => {
+  return function(dispatch, getState) {
+    return fetch(serverApiBase + 'studentgroups/' + options.id + '/',{
+      method: 'DELETE',
+      headers: {
+        'Authorization' : 'Token ' + sessionStorage.token
+      }
+    }).then(response => {
+     if (response.status >= 200 && response.status < 300) {
+      dispatch(removeBoundary(options.id, options.institution))
+        //Route the user to the home dashboard page since the page they were on will be deleted
+        dispatch(push('/'));
+      } else {
+        const error = new Error(response.statusText);
+        error.response = response;
+        throw error;
+      }
+    }).catch(error => {
+      console.log('request failed', error)
+    })
+  }
+}
+
+
