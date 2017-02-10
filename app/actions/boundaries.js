@@ -134,4 +134,29 @@ export const deleteStudentGroup = options => {
   }
 }
 
+const addStudentsFetch = (options) => {
+  return fetch(serverApiBase + 'institutions/' + options.institution + '/studentgroups/' + options.class + '/students/', {
+    method: "POST",
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Token ' + sessionStorage.token
+    },
+    body: JSON.stringify(options.students)
+  }).catch(error => {
+    console.log('request failed', error)
+  })
+}
+
+export const saveNewStudents = options => dispatch => {
+  return addStudentsFetch(options).then(checkStatus).then(response => {
+    dispatch(fetchEntitiesFromServer(1))
+    dispatch(push('/'));
+    // dispatch({
+    //   type: 'TOGGLE_MODAL',
+    //   modal: 'createInstitution'
+    // })
+  })
+}
+
+
 

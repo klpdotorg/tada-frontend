@@ -54,9 +54,9 @@ class InputRow extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      firstName: '',
-      middleName: '',
-      lastName: '',
+      first_name: '',
+      middle_name: '',
+      last_name: '',
       dob: '',
       fatherName: '',
       motherName: '',
@@ -77,18 +77,18 @@ class InputRow extends Component {
   render() {
     return (
       <div className="col-md-12">
-          <div className="row">
-            <div className="col-md-2"><input value={this.state.firstName} onChange={(e) => {this.changeVal(e, 'firstName')}} type='text' className='form-control'/></div>
-            <div className="col-md-1"><input value={this.state.middleName} onChange={(e) => {this.changeVal(e, 'middleName')}} type='text' className='form-control'/></div>
-            <div className="col-md-1"><input value={this.state.lastName} onChange={(e) => {this.changeVal(e, 'lastName')}} type='text' className='form-control'/></div>
-            <div className="col-md-1"><input value={this.state.uid} onChange={(e) => {this.changeVal(e, 'uid')}} type='text' className='form-control'/></div>
-            <div className="col-md-1"><input value={this.state.gender} onChange={(e) => {this.changeVal(e, 'gender')}} type='text' className='form-control'/></div>
-            <div className="col-md-1"><input value={this.state.language} onChange={(e) => {this.changeVal(e, 'language')}} type='text' className='form-control'/></div>
-            <div className="col-md-2"><input value={this.state.dob} onChange={(e) => {this.changeVal(e, 'dob')}} type='text' className='form-control'/></div>
-            <div className="col-md-1"><input value={this.state.fatherName} onChange={(e) => {this.changeVal(e, 'fatherName')}} type='text' className='form-control'/></div>
-            <div className="col-md-2"><input value={this.state.motherName} onChange={(e) => {this.changeVal(e, 'motherName')}} type='text' className='form-control'/></div>
-          </div>
+        <div className="row">
+          <div className="col-md-2"><input value={this.state.first_name} onChange={(e) => {this.changeVal(e, 'first_name')}} type='text' className='form-control'/></div>
+          <div className="col-md-1"><input value={this.state.middle_name} onChange={(e) => {this.changeVal(e, 'middle_name')}} type='text' className='form-control'/></div>
+          <div className="col-md-1"><input value={this.state.last_name} onChange={(e) => {this.changeVal(e, 'last_name')}} type='text' className='form-control'/></div>
+          <div className="col-md-1"><input value={this.state.uid} onChange={(e) => {this.changeVal(e, 'uid')}} type='text' className='form-control'/></div>
+          <div className="col-md-1"><input value={this.state.gender} onChange={(e) => {this.changeVal(e, 'gender')}} type='text' className='form-control'/></div>
+          <div className="col-md-1"><input value={this.state.language} onChange={(e) => {this.changeVal(e, 'language')}} type='text' className='form-control'/></div>
+          <div className="col-md-2"><input value={this.state.dob} onChange={(e) => {this.changeVal(e, 'dob')}} type='date' className='form-control'/></div>
+          <div className="col-md-1"><input value={this.state.fatherName} onChange={(e) => {this.changeVal(e, 'fatherName')}} type='text' className='form-control'/></div>
+          <div className="col-md-2"><input value={this.state.motherName} onChange={(e) => {this.changeVal(e, 'motherName')}} type='text' className='form-control'/></div>
         </div>
+      </div>
     )
   }
 }
