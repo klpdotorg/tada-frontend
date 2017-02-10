@@ -3,6 +3,7 @@ import {modifyBoundary, deleteBoundary, newSchool} from '../actions';
 import CreateInstitution from './Modals/CreateInstitution';
 import Button from './Button'
 import ConfirmModal from './Modals/Confirm'
+import ModifyStudent from './Modals/ModifyStudent'
 import ReactDataGrid from 'react-data-grid'
 
 //{"id":493431,"first_name":"priyanka","middle_name":"y","last_name":"hadimani","uid":null,"dob":"2000-09-10","gender":"female","mt":1,"active":2,"relations":[]
@@ -20,9 +21,11 @@ const StudentRow = (props) => {
         <div className="col-md-1"><span>{props.uid}</span></div>
         <div className="col-md-1"><span>{props.gender}</span></div>
         <div className="col-md-1"><span>{props.language}</span></div>
-        <div className="col-md-2"><span>{props.dob}</span></div>
-        <div className="col-md-1"><span></span></div>
-        <div className="col-md-2"><span></span></div>
+        <div className="col-md-1"><span>{props.dob}</span></div>
+        <div className="col-md-1"><span>-</span></div>
+        <div className="col-md-1"><span>-</span></div>
+        <div className="col-md-1"><span className="glyphicon glyphicon-trash">Delete</span></div>
+        <div className="col-md-1"><span className="glyphicon glyphicon-pencil" onClick={() => { props.openModifyStudent({...props}) }}>Edit</span></div>
       </div>
     </div>
   )
@@ -32,14 +35,16 @@ export default class Students extends React.Component {
 
   constructor(props){
     super(props);
-    this.openSchoolModal = this.openSchoolModal.bind(this);
     this.saveSchool = this.saveSchool.bind(this)
     this.toggleSchoolModal = this.toggleSchoolModal.bind(this);
     this.saveCluster = this.saveCluster.bind(this);
     this.deleteCluster = this.deleteCluster.bind(this);
+    this.openModifyStudent = this.openModifyStudent.bind(this);
     this.state = {
       schoolModalIsOpen: false,
-      openConfirmModal: false
+      openConfirmModal: false,
+      modifyStudentIsOpen: false,
+      modifyStudentData: null
     };
   }
 
@@ -70,9 +75,16 @@ export default class Students extends React.Component {
     ('Save', options)
   }
 
-  openSchoolModal(){
+  openModifyStudent(data){
     this.setState({
-      schoolModalIsOpen: true
+      modifyStudentIsOpen: true,
+      modifyStudentData: data
+    })
+  }
+
+  closeModifyStudent() {
+    this.setState({
+      modifyStudentIsOpen: false
     })
   }
 
@@ -95,7 +107,7 @@ export default class Students extends React.Component {
     const group = this.props.boundaryDetails[params.groupId]
     const students = boundariesByParentId[params.groupId]
 
-    const studentRows = students.map((studentId, i) => <StudentRow key={i} { ...boundaryDetails[studentId]} />)
+    const studentRows = students.map((studentId, i) => <StudentRow key={i} { ...boundaryDetails[studentId]} openModifyStudent={this.openModifyStudent} />)
 
     var Displayelement;
     if(sessionStorage.getItem('isAdmin')) {
@@ -111,8 +123,10 @@ export default class Students extends React.Component {
               <div className="col-md-1"><span>Gender</span></div>
               <div className="col-md-1"><span>Language</span></div>
               <div className="col-md-1"><span>DoB</span></div>
-              <div className="col-md-2"><span>Father Name</span></div>
-              <div className="col-md-2"><span>Mother Name</span></div>
+              <div className="col-md-1"><span>Father Name</span></div>
+              <div className="col-md-1"><span>Mother Name</span></div>
+              <div className="col-md-1"><span>Delete</span></div>
+              <div className="col-md-1"><span>Edit</span></div>
             </div>
             { studentRows }
          </div>
@@ -120,6 +134,7 @@ export default class Students extends React.Component {
         </div>
         <div className="col-md-2">
           <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteCluster} closeModal={this.closeConfirmation} entity={cluster.name}/>
+          <ModifyStudent isOpen={this.state.modifyStudentIsOpen} data={this.state.modifyStudentData} closeModal={this.closeConfirmation} entity={cluster.name}/>
         </div>
       </div>
     } else {

@@ -1,12 +1,103 @@
-import React from 'react';
+import React, {Component} from 'react';
 import { push } from 'react-router-redux';
-import {saveClass, deleteStudentGroup} from '../actions';
+import {saveClass, deleteStudentGroup, saveNewStudents} from '../actions';
 import CreateInstitution from './Modals/CreateInstitution';
 import Button from './Button'
 import ConfirmModal from './Modals/Confirm'
 import BulkAddStudent from './BulkAddStudent';
 
-export default class PrimaryCluster extends React.Component {
+export default class StudentGroupScreen extends Component {
+  constructor(props) {
+    super(props)
+    this.showBulkAdd = this.showBulkAdd.bind(this)
+    this.hideBulkAdd = this.hideBulkAdd.bind(this)
+    this.addStudents = this.addStudents.bind(this)
+    this.state = {
+      schoolModalIsOpen: false,
+      openConfirmModal: false,
+      showBulkAdd: false,
+    };
+
+  }
+
+  // {
+  //     "first_name": "SHREYAS",
+  //     "middle_name": "",
+  //     "last_name": "R",
+  //     "uid": "",
+  //     "dob": "2012-01-23",
+  //     "gender": "male",
+  //     "mt": 3,
+  //     "active": 2,
+  //     "relations": [
+  //       {
+  //         "relation_type": "Mother",
+  //         "first_name": "SHASHIKALA",
+  //         "middle_name": "",
+  //         "last_name": ""
+  //       },
+  //       {
+  //         "relation_type": "Father",
+  //         "first_name": "RAMESH",
+  //         "middle_name": "",
+  //         "last_name": ""
+  //       }
+  //     ]
+  //   },
+
+  addStudents(values) {
+    let options = {}
+    let students = Object.values(values)
+    students = students.map((student) => {
+      student.relations = [
+        {
+          "relation_type": "Mother",
+          "first_name": student.motherName,
+          "middle_name": "",
+          "last_name": ""
+        },
+        {
+          "relation_type": "Father",
+          "first_name": student.fatherName,
+          "middle_name": "",
+          "last_name": ""
+        }
+      ]
+
+      return student
+    })
+
+    options.institution = this.props.params.institutionId
+    options.class = this.props.params.groupId
+
+    options.students = students
+
+    this.props.dispatch(saveNewStudents(options))
+  }
+
+  showBulkAdd() {
+    this.setState({
+      showBulkAdd: true
+    })
+  }
+
+  hideBulkAdd() {
+    this.setState({
+      showBulkAdd: false
+    })
+  }
+
+
+  render () {
+    return (
+      <div>
+        {this.state.showBulkAdd ? <BulkAddStudent addStudents={this.addStudents} hide={this.hideBulkAdd}/> : <StudentGroup showBulkAdd={this.showBulkAdd} {...this.props} />}
+      </div>
+    )
+  }
+}
+
+class StudentGroup extends Component {
 
   constructor(props){
     super(props);
@@ -101,7 +192,7 @@ export default class PrimaryCluster extends React.Component {
         <div>
           <div className='heading-border-left'>
             <h4 className="brand-blue col-md-10">Modify Details</h4>
-            <Button onClick={() => {this.setState({showBulkAdd: true})}} title='Add Students'/>
+            <Button onClick={this.props.showBulkAdd} title='Add Students'/>
             <button className='btn btn-default view-student-btn' onClick={this.viewStudent.bind(null, group.path)}>View Students</button>
           </div>
           <form className="form-horizontal boundary-form" role="form">
@@ -130,7 +221,6 @@ export default class PrimaryCluster extends React.Component {
             <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteClass} closeModal={this.closeConfirmation} entity={group.name}/>
           </div>
         </div>
-          {this.state.showBulkAdd ? <BulkAddStudent addStudents={this.addStudents} hide={this.hideBulkAdd}/> : null}
         {/*<CreateInstitution placeHolder='School Name' title='Create New School' isOpen={this.state.schoolModalIsOpen} onCloseModal={this.toggleSchoolModal} closeModal={ this.toggleSchoolModal} save={ this.saveSchool } /> */}
       </div>
     );
