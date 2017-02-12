@@ -158,5 +158,25 @@ export const saveNewStudents = options => dispatch => {
   })
 }
 
+const studentFetch = (options) => {
+  return fetch(serverApiBase + 'students/' + options.id + '/', {
+    method: "PATCH",
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Token ' + sessionStorage.token
+    },
+    body: JSON.stringify(options)
+  }).catch(error => {
+    console.log('request failed', error)
+  })
+}
+
+export const saveStudent = options => dispatch => {
+  return studentFetch(options).then(checkStatus).then(response => {
+    dispatch(fetchEntitiesFromServer(1))
+    dispatch(push('/'));
+  })
+}
+
 
 
