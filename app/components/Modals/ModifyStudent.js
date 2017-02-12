@@ -18,27 +18,33 @@ export default class ConfirmDialog extends Component {
     this.state = {
       ...props.data
     }
+    this.changeVal = this.changeVal.bind(this)
    }
+
+   changeVal(e, key) {
+    var obj = {}
+    obj[key] = e.target.value
+    this.setState(obj);
+  }
 
   render() {
     return (
-      <Modal contentLabel="Confirm Modal" isOpen={this.props.isOpen} onRequestClose={this.props.onCloseModal} style={customStyles}>
-        {this.props.entity && <p>{this.props.message}:{this.props.entity.name}</p>}
+      <Modal contentLabel="Confirm Modal" isOpen={this.props.isOpen} onRequestClose={this.props.closeModal} style={customStyles}>
         <div className="">
-          <div className=""><input value={this.state.first_name} onChange={(e) => {this.changeVal(e, 'first_name')}} type='text' className='form-control'/></div>
-          <div className=""><input value={this.state.middle_name} onChange={(e) => {this.changeVal(e, 'middle_name')}} type='text' className='form-control'/></div>
-          <div className=""><input value={this.state.last_name} onChange={(e) => {this.changeVal(e, 'last_name')}} type='text' className='form-control'/></div>
-          <div className=""><input value={this.state.uid} onChange={(e) => {this.changeVal(e, 'uid')}} type='text' className='form-control'/></div>
-          <div className=""><input value={this.state.gender} onChange={(e) => {this.changeVal(e, 'gender')}} type='text' className='form-control'/></div>
-          <div className=""><input value={this.state.language} onChange={(e) => {this.changeVal(e, 'language')}} type='text' className='form-control'/></div>
-          <div className=""><input value={this.state.dob} onChange={(e) => {this.changeVal(e, 'dob')}} type='date' className='form-control'/></div>
-          <div className=""><input value={this.state.fatherName} onChange={(e) => {this.changeVal(e, 'fatherName')}} type='text' className='form-control'/></div>
-          <div className=""><input value={this.state.motherName} onChange={(e) => {this.changeVal(e, 'motherName')}} type='text' className='form-control'/></div>
+          <div>First Name: <input value={this.state.first_name} onChange={(e) => {this.changeVal(e, 'first_name')}} type='text' className='form-control'/></div>
+          <div>Middle Name: <input value={this.state.middle_name} onChange={(e) => {this.changeVal(e, 'middle_name')}} type='text' className='form-control'/></div>
+          <div>Last Name: <input value={this.state.last_name} onChange={(e) => {this.changeVal(e, 'last_name')}} type='text' className='form-control'/></div>
+          <div>UID: <input value={this.state.uid} onChange={(e) => {this.changeVal(e, 'uid')}} type='text' className='form-control'/></div>
+          <div>Gender: <input value={this.state.gender} onChange={(e) => {this.changeVal(e, 'gender')}} type='text' className='form-control'/></div>
+          <div>Language: <input value={this.state.language} onChange={(e) => {this.changeVal(e, 'language')}} type='text' className='form-control'/></div>
+          <div>DOB: <input value={this.state.dob} onChange={(e) => {this.changeVal(e, 'dob')}} type='date' className='form-control'/></div>
+          <div>Father Name: <input value={this.state.fatherName} onChange={(e) => {this.changeVal(e, 'fatherName')}} type='text' className='form-control'/></div>
+          <div>Mother Name: <input value={this.state.motherName} onChange={(e) => {this.changeVal(e, 'motherName')}} type='text' className='form-control'/></div>
       </div>
       <div className='button' onClick={ () => {
-                                            this.props.onYes(this.props.entity)
+                                            this.props.saveStudent(this.state)
                                           } }>Yes</div>
-        <div className='button' onClick={ this.props.onCloseModal }>No</div>
+        <div className='button' onClick={ this.props.closeModal }>No</div>
       </Modal>
     )
   }
