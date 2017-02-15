@@ -110,19 +110,68 @@ export function checkUserAuth(email, pass) {
 }
 
 export function listUsers(){
+ fetchUsers(1);
+}
+
+export function fetchUsers(pageNumber){
   return function(dispatch, getState) {
-    return fetch(Urls.USERS +"?is_active=True", {
+    //First dispatch a "REQUEST_PAGE" event. Get reducer to handle it. 
+    // Check if we've already fetched and if so, no need to issue a REST call.
+    if(getState().users.pages[pageNumber] && getState().users.pages[pageNumber].ids.length>0)
+    {
+      return;
+    }
+    var offset = pageNumber*20;
+    console.log("Printing page state", getState().users.pages);
+    return fetch(Urls.USERS +"?is_active=True&offset="+offset, {
       method: "GET",
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Token ' + sessionStorage.token
       },
     }).then(checkStatus).then(data=> {
-      dispatch(usersFetched(data));
+      dispatch(usersFetched(data, pageNumber));
       return data;
     });
   }
 
+}
+
+export function addUserToRole(userid, role)
+{
+  return function(dispatch, getState){
+    return fetch(Urls.USERS + userid + "/", {
+        method: "PATCH",
+        headers: {
+           'Content-Type': 'application/json',
+           'Authorization': 'Token ' + sessionStorage.token
+        },
+        body: JSON.stringify({
+          group: role
+        })
+      }
+      )
+    }
+}
+
+export function modifyUser(firstName, lastName,email,role)
+{
+  return function(dispatch, getState){
+    return fetch(Urls.USERS + userid + "/", {
+        method: "PATCH",
+        headers: {
+           'Content-Type': 'application/json',
+           'Authorization': 'Token ' + sessionStorage.token
+        },
+        body: JSON.stringify({
+          first_name: firstName,
+          last_name: lastName,
+          email: email,
+          group: role
+        })
+      }
+      )
+    }
 }
 
 export function createUser(firstname,lastname,username,email,password,role) {
@@ -142,26 +191,31 @@ export function createUser(firstname,lastname,username,email,password,role) {
 
       })
     }).then(checkStatus).then(data => {
-        dispatch(userCreated(data));
+          dispatch(addUserToRole(data.id,role)).then(checkStatus).then(userrole => {
+          dispatch(userCreated(userdata));
+        });
         return data;
       })
     }
   }
 
 
-function userCreated(data)
+function userCreated(userdata)
 {
   return {
     type: "USER_CREATED",
-    user: data
+    user: data,
+    
   }
 }
 
-function usersFetched(data)
+function usersFetched(data, page)
 {
   return {
     type: "USERS_FETCHED",
-    users: data.results
+    users: data.results,
+    count: data.count,
+    page: page
   }
 }
 
