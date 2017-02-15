@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from './Button'
-import {modifyBoundary, deleteBoundary, saveNewBlock, saveNewProject} from '../actions'
+import {modifyBoundary, deleteBoundary, saveNewBlock, saveNewProject, selectPreschoolTree} from '../actions'
 import CreateBoundary from './Modals/CreateBoundary'
 import {Link} from 'react-router'
 import NotificationSystem from 'react-notification-system';
@@ -17,15 +17,23 @@ export default class PrimaryDistrict extends React.Component {
     this.toggleProjectModal = this.toggleProjectModal.bind(this);
     this.saveBlock = this.saveBlock.bind(this);
     this.saveProject = this.saveProject.bind(this);
+    this.districtId = this.props.params.districtId;
+    this.boundary = this.props.boundaryDetails[this.districtId];
+
     this.state = {
       value: '',
       openConfirmModal: false
     };
   }
 
+  componentDidMount() {
+    if (this.boundary.boundary_type == 2) {
+      this.props.dispatch(selectPreschoolTree())
+    }
+  }
 
   saveDistrict() {
-    this.props.dispatch(modifyBoundary(this.props.params.districtId, this.districtName.value));
+    this.props.dispatch(modifyBoundary(this.districtId, this.districtName.value));
   }
 
   showConfirmation = () => {
@@ -35,13 +43,13 @@ export default class PrimaryDistrict extends React.Component {
   }
 
   deleteDistrict() {
-    this.props.dispatch(deleteBoundary(this.props.params.districtId))
+    this.props.dispatch(deleteBoundary(this.districtId))
   } 
 
   saveBlock(name) {
     const options = {
       name,
-      parent: this.props.params.districtId,
+      parent: this.districtId,
       boundary_type: 1,
       boundary_category: 10
     }
@@ -51,7 +59,7 @@ export default class PrimaryDistrict extends React.Component {
   saveProject(name) {
     const options = {
       name,
-      parent: this.props.params.districtId,
+      parent: this.districtId,
       boundary_type: 2,
       boundary_category: 14
     }
@@ -79,9 +87,8 @@ export default class PrimaryDistrict extends React.Component {
   }
 
   render() {    
-    var districtId = this.props.params.districtId;
-    var boundary = this.props.boundaryDetails[districtId];
-    var boundaryType = boundary.boundary_type    
+    var boundary = this.boundary;
+    var boundaryType = boundary.boundary_type;
     var DistrictSummary;
     this.state.value = boundary.name;
     if(sessionStorage.getItem('isAdmin')) {
@@ -101,7 +108,7 @@ export default class PrimaryDistrict extends React.Component {
               </form>
 
               <div className="col-md-2">
-                <button type="submit" className="btn btn-primary" onClick={() => {this.saveDistrict(districtId) }}>Save</button>
+                <button type="submit" className="btn btn-primary" onClick={() => {this.saveDistrict(this.districtId) }}>Save</button>
                 <button type="submit" className="btn btn-primary" onClick={() => {this.showConfirmation() }}>Delete</button>
                 <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteDistrict} closeModal={this.closeConfirmModal} entity={boundary.name}/>
               </div>

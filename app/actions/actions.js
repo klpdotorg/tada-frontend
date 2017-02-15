@@ -9,12 +9,15 @@ import {SERVER_API_BASE as serverApiBase,
  import store from '../store'
  import {boundaryType, genUrl} from './utils'
 
+export const selectPrimaryTree = () => {
+  return {
+    type: 'PRIMARY_SELECTED'
+  }
+}
 
-
- export function showPrimarySchoolHierarchy() {
-  return function(dispatch) {
-    dispatch(selectPrimarySchool)
-    return dispatch(fetchEntities(1, 1))
+export const selectPreschoolTree = () => {
+  return {
+    type: 'PRESCHOOL_SELECTED'
   }
 }
 
@@ -26,21 +29,13 @@ function requestDataFromServer() {
 
 function responseReceivedFromServer(resp) {
   return {
-    type: 'RESPONSE_RECEIVED',    
+    type: 'RESPONSE_RECEIVED',
     data: resp.results
   }
 }
 
-
-
-
-
-
-
-
-
-
 function requestFailed(error) {
+  console.log('error', error)
   return {
     type: 'REQUEST_FAILED',
     statusCode: error.response.status,
@@ -67,7 +62,7 @@ export function loginSuccess(authtoken) {
 export function removeBoundary(id, parentId) {
   return {
     type: 'REMOVE_BOUNDARY',
-    id: id,
+    id,
     parentId
   }
 }
@@ -116,8 +111,8 @@ export function logoutUser() {
     }).catch(error => {
       console.log(error);
     });
-    
-    
+
+
   }
 }
 
@@ -139,16 +134,6 @@ function studentsFetched(data, groupId) {
   }
 }
 
-
-
-
-
-
-
-
-
-
-
 export function fetchBoundaryDetails(parentBoundaryId = 1) {
   return function(dispatch, getState) {
 
@@ -165,13 +150,13 @@ export function fetchBoundaryDetails(parentBoundaryId = 1) {
     }
     //Send info about the whole request so we can track failure
     dispatch(requestDataFromServer())
-    return fetch(serverApiBase + 'boundaries/?parent=' + parentBoundaryId + '&boundary_type=' + boundaryType + '&limit=500', {
+    return fetch(serverApiBase + 'boundaries/?parent=' + parentBoundaryId + '&limit=500', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Token ' + sessionStorage.token
       }
-    }).then(checkStatus).then(data => {      
+    }).then(checkStatus).then(data => {
       dispatch(responseReceivedFromServer(data))
     }).catch(error => {
       console.log(error)
@@ -220,7 +205,7 @@ export function fetchStudentGroups(institutionId) {
     })
   }
 }
-export function fetchStudents(groupId) {  
+export function fetchStudents(groupId) {
   return function(dispatch, getState) {
 
     const state = getState()
@@ -233,7 +218,7 @@ export function fetchStudents(groupId) {
         'Content-Type': 'application/json',
         'Authorization': 'Token ' + sessionStorage.token
       }
-    }).then(checkStatus).then(data => {      
+    }).then(checkStatus).then(data => {
       dispatch(studentsFetched(data.results, groupId))
     }).catch(error => {
       console.log(error)
@@ -246,10 +231,10 @@ export function fetchStudents(groupId) {
 This function decides whether we need to go to the boundaries endpoint or the institutions endpoint or studentgroup/students endpoint for data.
 Everything is just one big nav tree in the UI.
 */
-export function fetchEntitiesFromServer(parentBoundaryId) {  
+export function fetchEntitiesFromServer(parentBoundaryId) {
   return function(dispatch, getState) {
    const state = getState()
-   return dispatch(boundaryType(parentBoundaryId, state.entities.boundaryDetails)(parentBoundaryId)) 
+   return dispatch(boundaryType(parentBoundaryId, state.entities.boundaryDetails)(parentBoundaryId))
  }
 }
 
@@ -263,7 +248,7 @@ export function fetchUserData() {
         'Content-Type': 'application/json'
       },
     }).then(response => (checkStatus(response)))
-    .then(data => {      
+    .then(data => {
       /* HACK: Remove this if permissions are implemented */
       if (data.email == "tadaadmin@klp.org.in" || 'aksanoble@gmail.com') {
         sessionStorage.setItem('isAdmin', true);
@@ -273,7 +258,7 @@ export function fetchUserData() {
     })
     .catch(error => {
       console.log(error.response);
-      dispatch(requestFailed(error));      
+      dispatch(requestFailed(error));
     })
   }
 }
@@ -344,7 +329,7 @@ export function sendLoginToServer(email, pass) {
   }
 }
 
-export function deleteBoundary(boundaryid, parentId){  
+export function deleteBoundary(boundaryid, parentId){
   return function(dispatch, getState) {
     return fetch(serverApiBase + 'boundaries/'+boundaryid+'/', {
       method: 'DELETE',
@@ -356,7 +341,7 @@ export function deleteBoundary(boundaryid, parentId){
       dispatch(removeBoundary(boundaryid, parentId))
       //dispatch(fetchEntitiesFromServer(1))
         //Route the user to the home dashboard page since the page they were on will be deleted
-        dispatch(push('/'));        
+        dispatch(push('/'));
       } else {
         const error = new Error(response.statusText);
         error.response = response;
@@ -382,7 +367,7 @@ export function modifyBoundary(boundaryid, name){
     }).then(response => {
      if (response.status >= 200 && response.status < 300) {
       dispatch(fetchEntitiesFromServer(1))
-      dispatch(push('/'));  
+      dispatch(push('/'));
       return response.json();
     } else {
       const error = new Error(response.statusText);
@@ -429,17 +414,17 @@ export const saveNewDistrict = name => (dispatch, getState) => {
     boundary_type: boundaryType,
     parent: 1
   }
-  return newBoundaryFetch(options).then(checkStatus).then(response => {    
+  return newBoundaryFetch(options).then(checkStatus).then(response => {
     dispatch(fetchEntitiesFromServer(1))
     dispatch({
       type: 'TOGGLE_MODAL',
       modal: 'createDistrict'
-    })   
+    })
   })
 }
 
 export const saveNewBlock = options => dispatch => {
-  return newBoundaryFetch(options).then(checkStatus).then(response => {    
+  return newBoundaryFetch(options).then(checkStatus).then(response => {
     dispatch(fetchEntitiesFromServer(1))
     dispatch(push('/'));
     dispatch({
@@ -450,47 +435,34 @@ export const saveNewBlock = options => dispatch => {
 }
 
 export const saveNewCluster = options => dispatch => {
-  return newBoundaryFetch(options).then(checkStatus).then(response => {    
+  return newBoundaryFetch(options).then(checkStatus).then(response => {
     dispatch(fetchEntitiesFromServer(1))
     dispatch(push('/'));
     dispatch({
       type: 'TOGGLE_MODAL',
       modal: 'createCluster'
-    })   
+    })
   })
 }
 
 export const saveNewProject = options => dispatch => {
-  return newBoundaryFetch(options).then(checkStatus).then(response => {    
+  return newBoundaryFetch(options).then(checkStatus).then(response => {
     dispatch(fetchEntitiesFromServer(1))
     dispatch(push('/'));
     dispatch({
       type: 'TOGGLE_MODAL',
       modal: 'createProject'
-    })   
+    })
   })
 }
 
 export const saveNewCircle = options => dispatch => {
-  return newBoundaryFetch(options).then(checkStatus).then(response => {    
+  return newBoundaryFetch(options).then(checkStatus).then(response => {
     dispatch(fetchEntitiesFromServer(1))
     dispatch(push('/'));
     dispatch({
       type: 'TOGGLE_MODAL',
       modal: 'createCircle'
-    })   
-  })
-}
-
-
-export const newSchool = options => dispatch => {
-  url = genUrl(serverApiBase, INSTITUTION)  
-  return request('POST', options, url).then( response => {
-    dispatch(fetchEntitiesFromServer(1))
-    dispatch(push('/'));
-    dispatch({
-      type: 'TOGGLE_MODAL',
-      modal: 'createCircle'
-    })   
+    })
   })
 }

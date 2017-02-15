@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchEntitiesFromServer, fetchProgramsInstitution, logoutUser, saveNewDistrict, loginSuccess, fetchUserData, changeUserName, changePassword} from '../actions/';
+import { fetchEntitiesFromServer, fetchProgramsInstitution, logoutUser, saveNewDistrict, loginSuccess, fetchUserData, changeUserName, changePassword, selectPreschoolTree, selectPrimaryTree} from '../actions/';
 import { push } from 'react-router-redux';
 import NavBar from '../components/MainNavBar';
 import MainHeader from '../components/MainHeader';
@@ -28,16 +28,12 @@ var mapDispatchToProps = function(dispatch) {
       dispatch(fetchEntitiesFromServer(boundary.id));
     },
     onPrimaryClick() {
-      dispatch({
-        type: 'PRIMARY_SELECTED',
-      });
+      dispatch(selectPrimaryTree());
       dispatch(fetchEntitiesFromServer())
       dispatch(push('/'))
     },
     onPreSchoolClick() {      
-      dispatch({
-        type: 'PRESCHOOL_SELECTED'
-      })
+      dispatch(selectPreschoolTree())
       dispatch(fetchEntitiesFromServer())
       dispatch(push('/'))
     },

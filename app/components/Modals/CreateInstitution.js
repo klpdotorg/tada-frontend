@@ -5,6 +5,26 @@ import 'react-select/dist/react-select.css';
 import {checkStatus} from '../../actions/utils';
 import {SERVER_API_BASE as serverApiBase} from 'config';
 
+export const getLanguages = () => {
+    return fetch(serverApiBase + 'languages/', {    
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Token ' + sessionStorage.token
+      }
+    }).then(checkStatus).then((languages) => {
+        const langs = languages.results.map((language) => ({
+          value: language.id, 
+          label: language.name
+        }))
+        return {
+          options: langs, 
+          complete: true
+        }
+      }).catch(error => {
+      console.log('request failed', error)
+    })    
+  }
+
 const customStyles = {
   content: {
     top: '50%',
@@ -33,26 +53,6 @@ export default class CreateDistrict extends Component {
     })
   }
 
-  getLanguages() {
-    return fetch(serverApiBase + 'languages/', {    
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Token ' + sessionStorage.token
-      }
-    }).then(checkStatus).then((languages) => {
-        const langs = languages.results.map((language) => ({
-          value: language.id, 
-          label: language.name
-        }))
-        return {
-          options: langs, 
-          complete: true
-        }
-      }).catch(error => {
-      console.log('request failed', error)
-    })    
-  }
-
   selectLanguage = (value) => {   
    this.setState({
      languages: value
@@ -65,7 +65,7 @@ export default class CreateDistrict extends Component {
     <label htmlFor="name" className="control-label">{this.props.title}</label>
     <input id="name" value={ this.props.value } type="text" className="form-control" placeholder={this.props.placeHolder} onChange={ this.handleChange } />
     <label htmlFor="languages" className="control-label">Languages</label>
-    <Select.Async multi name="form-field-name" value={this.state.languages} loadOptions={this.getLanguages} onChange={this.selectLanguage}/>
+    <Select.Async multi name="form-field-name" value={this.state.languages} loadOptions={getLanguages} onChange={this.selectLanguage}/>
     <div className='button' onClick={ () => {
       this.props.save(this.state)
     } }>Save</div>
