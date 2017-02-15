@@ -15,20 +15,42 @@ export function userregistration(state = {
   }
 }
 
+function processPage(users, pages, page)
+{
+  var listOfUsers = [];
+  if(users && users.length > 0)
+  {  
+    users.map(user => {
+      listOfUsers.push(user.id);
+    })
+  }
+  return {...pages, [page]: {
+    ids: listOfUsers,
+    fetching: false
+    }
+  }
+}
+
 export function users(state={
-  usersById: []
+  usersById: [],
+  userCount: 0,
+  currentPage: 1,
+  pages: []//pages: { 1: {ids:[23,45,45], fetched: true}}
 }, action) {
   switch(action.type){
     case 'USERS_FETCHED':
       const users = processUsers(action.users, state.usersById);
+      const page = processPage(action.users, state.pages, action.page);
       return {
         ...state,
-        ...users
+        ...users,
+        pages: page,
+        userCount: action.count     
       }
     case 'USER_CREATED':
        var copy = Object.assign({}, state.usersById);
         copy[action.user.id] = action.user;
-        return Object.assign({}, {usersById: copy});
+        return Object.assign({}, {usersById: copy}, {userCount: state.userCount + 1 });
 
     default:
       return state;

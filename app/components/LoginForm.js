@@ -51,6 +51,9 @@ class Login extends Component {
           </div>
         </nav>
         <div className="container-fluid absolute-center is-responsive">
+         { this.props.error && (
+                  <p className="bg-danger text-danger">Bad login information. Recheck the username and/or password.</p>
+                  ) }
           <div className="row">
             <div className="col-sm-12 col-md-10 col-md-offset-1">
               <form id="loginForm">
@@ -68,9 +71,7 @@ class Login extends Component {
                 <div className="form-group text-center">
                   <Link to="/password/reset">Forgot Password</Link>&nbsp;|&nbsp;<a href="#">Support</a>
                 </div>
-                { this.props.error && (
-                  <p>Bad login information. Recheck the username and/or password.</p>
-                  ) }
+               
               </form>
             </div>
           </div>
