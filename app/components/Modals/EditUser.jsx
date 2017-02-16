@@ -17,7 +17,7 @@ const customStyles = {
   }
 };
 
-export default class CreateUser extends Component {
+export default class EditUser extends Component {
 	constructor(props)
 	{
 		super(props);
@@ -56,7 +56,12 @@ export default class CreateUser extends Component {
             {value: 'tada_admin', label: 'Admin'},
             {value: 'tada_dee', label: 'Data Entry Executive'}           
         ];
-       
+        var userRole= "tada_deo";
+        if(this.props.user.groups && this.props.user.groups.length>0)
+        	userRole = this.props.user.groups[0];
+
+        if(!this.props.user)
+        	return null;
 		return(
 			<Modal contentLabel="Create Program" isOpen={ this.props.isOpen } onRequestClose={ this.props.onCloseModal} style = { customStyles }>
 				<div className="modal-dialog" role="document">
@@ -68,24 +73,20 @@ export default class CreateUser extends Component {
                 		<div className="modal-body">
 						<Formsy.Form onValidSubmit={this.submitForm} onValid={this.enableSubmitButton} onInvalid={this.disableSubmitButton}
 								disabled={this.state.disabled} ref={(ref) => this.myform = ref}>
-							<Input name="firstName" id="firstName" value="" label="First Name" type="text"
-								placeholder="Please enter the user's first name" help="This is a required field" required validations="isAlpha,minLength:1"/>
-							<Input name="lastName" id="lastName" value="" label="Last Name" type="text"
-								placeholder="Please enter the user's last name" help="This is a required field" required validations="isAlpha,minLength:1"/>
-							<Input name="email" id="email" placeholder="Please enter a valid email address" label="E-mail" validations="isEmail"/>
-							<Input name="userName" id="userName" value="" label="User ID" type="text" placeholder="Please enter the unique username" required validations="isAlphanumeric,minLength:6,maxLength:15"/>
-							<Input name="password" id="password" type="password" label="Password" required validations="minLength:8"/>
-							<Input name="retypePassword" id="retypePassword" type="password" label="Re-type Password" required validations={{
-									doPasswordsMatch: function(values, value){
-										return values.password == value ? true: "Passwords do not match";
-									}
+							<Input name="userName" id="userName" value="" label="User ID" type="text" help="This field cannot be modified" disabled="true" value={this.props.user.username}/>
 
-							}}/>
-							  <Select
+
+							<Input name="firstName" id="firstName" value="" label="First Name" type="text"
+								placeholder="Please enter the user's first name" help="This is a required field" required validations="isAlpha,minLength:1" defaultValue={this.props.user.first_name}/>
+							<Input name="lastName" id="lastName" value="" label="Last Name" type="text"
+								placeholder="Please enter the user's last name" help="This is a required field" required validations="isAlpha,minLength:1" defaultValue={this.props.user.last_name}/>
+							<Input name="email" id="email" placeholder="Please enter a valid email address" label="E-mail" validations="isEmail" defaultValue={this.props.user.email}/>
+							
+							 <Select
 		                        name="role"
 		                        label="Role"
 		                        options={role}
-		                        value='tada_deo'
+		                        defaultValue={userRole}
 		                        required
 		                    />
                         	
