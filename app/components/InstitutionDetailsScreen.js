@@ -218,10 +218,10 @@ export default class Institution extends React.Component {
               <div className="form-group">
                 <label className="control-label col-sm-2" htmlFor="gender">Gender:</label>
                 <div className="col-sm-10">
-                  <select onChange={(val) => {this.setValue(val, 'institution_gender')}} value={institution.institution_gender} className="form-control" id="gender">
-                    <option>Co-Ed</option>
-                    <option>Boys</option>
-                    <option>Girls</option>
+                  <select onChange={(e) => {this.setValue(e.target.value, 'institution_gender')}} value={institution.institution_gender} className="form-control" id="gender">
+                    <option value='co-ed'>Co-Ed</option>
+                    <option value='boys'>Boys</option>
+                    <option value='girls'>Girls</option>
                   </select>
                 </div>
               </div>
