@@ -61,7 +61,6 @@ export default class Students extends React.Component {
   }
 
   saveStudent(student){
-    console.log(student)
     this.props.dispatch(saveStudent(student))
   }
 
