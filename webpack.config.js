@@ -6,6 +6,7 @@ module.exports = {
     entry: [
       path.resolve(__dirname, 'app/main.js')
     ],
+    devtool: "#cheap-eval-source-map",
     output: {
         path: path.resolve(__dirname, 'dist'),
         publicPath: '/',
