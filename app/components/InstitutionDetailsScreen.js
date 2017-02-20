@@ -5,7 +5,7 @@ import Button from './Button'
 import CreateClass from './Modals/CreateBoundary'
 import {mapValues} from 'lodash'
 import Select from 'react-select';
-import {getManagement, getLanguages, getInstitutionCategories} from './utils'
+import {getManagement, getLanguages, getInstitutionCategories, replaceNull} from './utils'
 
 export default class Institution extends React.Component {
 
@@ -80,6 +80,14 @@ export default class Institution extends React.Component {
       })
     })
 
+  }
+
+  componentWillReceiveProps(props) {
+    let institution =  props.boundaryDetails[props.params.institutionId]
+    institution = replaceNull(props.boundaryDetails[props.params.institutionId])
+    this.setState({
+      institution
+    })
   }
 
   saveInsti() {
