@@ -89,6 +89,31 @@ function processBoundaryDetails(boundaryData, boundariesByParentId, boundaryDeta
   };
 }
 
+function processNewBoundary(boundary, boundariesByParentId, boundaryDetailsById)
+{
+    var newBoundaryDetails = {};
+    var parentId = boundary.parent;
+    boundary = computeRouterPathForEntity(boundary, boundaryDetailsById);
+    boundary = nodeDepth(boundary);
+    if (parentId == 1) {
+        boundariesByParentId[boundary.id] = [];
+    } 
+    else {
+        if (!boundariesByParentId[parentId]) {
+          boundariesByParentId[parentId] = [];
+          boundariesByParentId[parentId].push(boundary.id);
+        }
+        else
+          boundariesByParentId[parentId].push(boundary.id);
+    }
+    newBoundaryDetails[boundary.id] = boundary;
+    var mergedBoundaryDetails = Object.assign({}, boundaryDetailsById, newBoundaryDetails);
+    return {
+      boundaryDetails: mergedBoundaryDetails,
+      boundariesByParentId: boundariesByParentId
+    };
+}
+
 export function entities(state = {
   boundariesByParentId: {},
   boundaryDetails: {1: {
@@ -101,6 +126,13 @@ export function entities(state = {
       ...state,
       isFetching: true
     }
+    case 'BOUNDARY_CREATED':
+      const newBoundary = processNewBoundary(action.boundary, state.boundariesByParentId, state.boundaryDetails);
+      return {
+        ...state, 
+        ...newBoundary,
+        isFetching: false
+      }
     case 'RESPONSE_RECEIVED':
     const boundaryDetails = processBoundaryDetails(action.data, state.boundariesByParentId, state.boundaryDetails)
     return {

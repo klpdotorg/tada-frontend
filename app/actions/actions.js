@@ -406,6 +406,27 @@ const newBoundaryFetch = (options) => {
   })
 }
 
+function dispatchToggleModal(dispatch, modalType)
+{
+  store.dispatch({
+    type: 'TOGGLE_MODAL',
+    modal: 'createDistrict'
+  });
+}
+
+function dispatchBoundaryModified(data)
+{
+
+}
+
+function dispatchBoundaryCreated(dispatch,data)
+{
+  store.dispatch({
+    type: 'BOUNDARY_CREATED',
+    boundary: data
+  });
+}
+
 export const saveNewDistrict = name => (dispatch, getState) => {
   const boundaryType = getState().schoolSelection.primarySchool ? 1: 2
   const options = {
@@ -415,40 +436,33 @@ export const saveNewDistrict = name => (dispatch, getState) => {
     parent: 1
   }
   return newBoundaryFetch(options).then(checkStatus).then(response => {
-    dispatch(fetchEntitiesFromServer(1))
-    dispatch({
-      type: 'TOGGLE_MODAL',
-      modal: 'createDistrict'
-    })
+    dispatchBoundaryCreated(dispatch, response);
+    dispatchToggleModal('createDistrict');
   })
 }
 
 export const saveNewBlock = options => dispatch => {
   return newBoundaryFetch(options).then(checkStatus).then(response => {
-    dispatch(fetchEntitiesFromServer(1))
-    dispatch(push('/'));
-    dispatch({
-      type: 'TOGGLE_MODAL',
-      modal: 'createBlock'
-    })
+    dispatchBoundaryCreated(dispatch, response);
+    dispatchToggleModal('createBlock');
   })
 }
 
 export const saveNewCluster = options => dispatch => {
   return newBoundaryFetch(options).then(checkStatus).then(response => {
-    dispatch(fetchEntitiesFromServer(1))
-    dispatch(push('/'));
-    dispatch({
-      type: 'TOGGLE_MODAL',
-      modal: 'createCluster'
-    })
+    dispatchBoundaryCreated(dispatch, response);
+    dispatchToggleModal('createCluster');
   })
 }
 
 export const saveNewProject = options => dispatch => {
   return newBoundaryFetch(options).then(checkStatus).then(response => {
-    dispatch(fetchEntitiesFromServer(1))
-    dispatch(push('/'));
+    // dispatch(fetchEntitiesFromServer(1))
+    // dispatch(push('/'));
+     dispatch({
+      type: 'BOUNDARY_CREATED',
+      boundary: response
+    });
     dispatch({
       type: 'TOGGLE_MODAL',
       modal: 'createProject'
@@ -458,8 +472,12 @@ export const saveNewProject = options => dispatch => {
 
 export const saveNewCircle = options => dispatch => {
   return newBoundaryFetch(options).then(checkStatus).then(response => {
-    dispatch(fetchEntitiesFromServer(1))
-    dispatch(push('/'));
+    // dispatch(fetchEntitiesFromServer(1))
+    // dispatch(push('/'));
+     dispatch({
+      type: 'BOUNDARY_CREATED',
+      boundary: response
+    });
     dispatch({
       type: 'TOGGLE_MODAL',
       modal: 'createCircle'

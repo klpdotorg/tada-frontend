@@ -203,7 +203,7 @@ class StudentGroup extends Component {
           <div className="col-md-2">
             <button type="submit" className="btn btn-primary" onClick={this.saveClass}>Save</button>
             <button type="submit" className="btn btn-primary" onClick={this.showConfirmation}>Delete</button>
-            <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteClass} closeModal={this.closeConfirmation} entity={group.name}/>
+            <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteClass} onCloseModal={this.closeConfirmation} entity={group.name}/>
           </div>
         </div>
       </div>
