@@ -3,6 +3,7 @@ import {modifyBoundary, deleteBoundary, saveNewCluster} from '../actions';
 import Button from './Button'
 import CreateCluster from './Modals/CreateBoundary'
 import ConfirmModal from './Modals/Confirm'
+import { Link } from 'react-router'
 
 
 
@@ -100,7 +101,7 @@ export default class PrimaryDistrict extends React.Component {
     return(
       <div>
         <ol className="breadcrumb">
-          <li><a href={district.path}>{district.name}</a></li>
+          <li><Link to={district.path}>{district.name}</Link></li>
           <li className="active">{block.name}</li>
         </ol>
         <Displayelement {...this.props} />

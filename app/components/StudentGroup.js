@@ -5,6 +5,7 @@ import CreateInstitution from './Modals/CreateInstitution';
 import Button from './Button'
 import ConfirmModal from './Modals/Confirm'
 import BulkAddStudent from './BulkAddStudent';
+import { Link } from 'react-router'
 
 export default class StudentGroupScreen extends Component {
   constructor(props) {
@@ -18,6 +19,12 @@ export default class StudentGroupScreen extends Component {
       showBulkAdd: false,
     };
 
+  }
+
+  componentWillReceiveProps() {
+    this.setState({
+      showBulkAdd:false
+    })
   }
 
   addStudents(values) {
@@ -166,10 +173,10 @@ class StudentGroup extends Component {
     return(
       <div>
        <ol className="breadcrumb">
-          <li><a href={district.path}>{district.name}</a></li>
-          <li><a href={block.path}>{block.name}</a></li>
-          <li><a href={cluster.path}>{cluster.name}</a></li>
-          <li><a href={institution.path}>{institution.name}</a></li>
+          <li><Link to={district.path}>{district.name}</Link></li>
+          <li><Link to={block.path}>{block.name}</Link></li>
+          <li><Link to={cluster.path}>{cluster.name}</Link></li>
+          <li><Link to={institution.path}>{institution.name}</Link></li>
         </ol>
         <div>
           <div className='heading-border-left'>

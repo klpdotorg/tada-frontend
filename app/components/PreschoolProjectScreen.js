@@ -3,6 +3,7 @@ import Button from './Button';
 import {modifyBoundary, deleteBoundary, saveNewCircle} from '../actions'
 import CreateCircle from './Modals/CreateBoundary'
 import ConfirmModal from './Modals/Confirm'
+import { Link } from 'react-router'
 
 export default class PreschoolProject extends Component{ 
   constructor(props) {
@@ -95,7 +96,7 @@ export default class PreschoolProject extends Component{
     return(
       <div>       
         <ol className="breadcrumb">
-          <li><a href={district.path}>{district.name}</a></li>
+          <li><Link to={district.path}>{district.name}</Link></li>
           <li className="active">{project.name}</li>        
         </ol>      
         <ProjectSummary  {...this.props} />
