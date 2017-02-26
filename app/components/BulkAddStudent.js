@@ -84,8 +84,8 @@ class InputRow extends Component {
       fatherName: '',
       motherName: '',
       uid: '',
-      mt: '',
-      gender: ''
+      mt: 1,
+      gender: 'male'
     }
   }
 

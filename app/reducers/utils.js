@@ -98,7 +98,7 @@ export const processStudents = (students, groupId, boundariesByParent, boundaryD
   return {
     boundariesByParentId: {
       ...boundariesByParent,
-      [groupId]: studentIds.concat(group)
+      [groupId]: _.uniq(studentIds.concat(group))
     },
     boundaryDetails: {
       ...boundaryDetails,
