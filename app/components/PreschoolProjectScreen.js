@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Button from './Button';
-import {modifyBoundary, deleteBoundary, saveNewCircle} from '../actions'
+import {modifyBoundary, deleteBoundary, saveNewCircle, getBoundaries} from '../actions'
 import CreateCircle from './Modals/CreateBoundary'
 import ConfirmModal from './Modals/Confirm'
 import { Link } from 'react-router'
@@ -14,9 +14,29 @@ export default class PreschoolProject extends Component{
     this.saveProject = this.saveProject.bind(this);
     this.deleteProject = this.deleteProject.bind(this);
     this.state = {
-      openConfirmModal: false
+      openConfirmModal: false, 
+      isLoading: true
     }
   }
+
+  componentDidMount() {
+  const {params} = this.props
+  this.props.dispatch({
+    type: 'BOUNDARIES',
+    payload: getBoundaries(1)
+  }).then(() => {
+    this.props.dispatch({
+      type: 'BOUNDARIES',
+      payload: getBoundaries(params.districtId)
+    }).then(() => {
+      this.setState({
+        isLoading:false
+      })
+    })
+  })
+
+  }
+
 
   toggleCircleModal() {
     this.props.dispatch({
@@ -56,8 +76,8 @@ export default class PreschoolProject extends Component{
   }
 
   render() {    
-    var project = this.props.boundaryDetails[this.props.params.projectId];    
-    var district = this.props.boundaryDetails[this.props.params.districtId];    
+    var project = this.props.boundaries.boundaryDetails[this.props.params.projectId];    
+    var district = this.props.boundaries.boundaryDetails[this.props.params.districtId];    
     let ProjectSummary
 
     if(sessionStorage.getItem('isAdmin')) {
@@ -93,7 +113,9 @@ export default class PreschoolProject extends Component{
         </div>
     }
     
-    return(
+    return (
+      this.state.isLoading ? 
+      <div>Loading...</div> : 
       <div>       
         <ol className="breadcrumb">
           <li><Link to={district.path}>{district.name}</Link></li>
@@ -102,6 +124,7 @@ export default class PreschoolProject extends Component{
         <ProjectSummary  {...this.props} />
         <CreateCircle placeHolder='Circle Name' title='Create New Circle' isOpen={this.props.modal.createCircle} onCloseModal={this.toggleCircleModal} closeModal={ this.toggleCircleModal} save={ this.saveCircle } />
       </div>
-      )
+    )
+    
   }
 }

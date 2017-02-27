@@ -39,10 +39,6 @@ export default class PrimaryDistrict extends React.Component {
     
   }
 
-  componentWillReceiveProps(nextProps) {
-    // console.log(nextProps.boundaryDetails, 'next')
-  }
-
   closeConfirmation = () => {
     this.setState({
       openConfirmModal: false
