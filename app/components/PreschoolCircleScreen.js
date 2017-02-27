@@ -1,5 +1,5 @@
 import React from 'react';
-import {modifyBoundary, deleteBoundary, saveNewInstitution} from '../actions';
+import {modifyBoundary, deleteBoundary, saveNewInstitution, selectPreschoolTree, getBoundaries} from '../actions';
 import CreateInstitution from './Modals/CreateInstitution';
 import Button from './Button'
 import ConfirmModal from './Modals/Confirm'
@@ -17,8 +17,34 @@ export default class PreschoolCircle extends React.Component {
     this.deleteCircle = this.deleteCircle.bind(this);
     this.state = {
       schoolModalIsOpen: false,
-      openConfirmModal: false
+      openConfirmModal: false,
+      isLoading: true
     };
+  }
+
+  componentDidMount() {
+  const {params} = this.props
+  this.props.dispatch(selectPreschoolTree())
+  this.props.dispatch({
+    type: 'BOUNDARIES',
+    payload: getBoundaries(1)
+  }).then(() => {
+    this.props.dispatch({
+      type: 'BOUNDARIES',
+      payload: getBoundaries(params.districtId)
+    }).then(() => {
+    this.props.dispatch({
+      type: 'BOUNDARIES',
+      payload: getBoundaries(params.projectId)
+    }).then(() => {
+      this.setState({
+        isLoading:false
+      })
+    })
+  })
+  })
+
+
   }
 
   closeConfirmation = () => {
@@ -86,9 +112,9 @@ export default class PreschoolCircle extends React.Component {
   }
 
   render() {
-    var project = this.props.boundaryDetails[this.props.params.projectId];
-    var district = this.props.boundaryDetails[this.props.params.districtId];
-    var circle = this.props.boundaryDetails[this.props.params.circleId];
+    var project = this.props.boundaries.boundaryDetails[this.props.params.projectId];
+    var district = this.props.boundaries.boundaryDetails[this.props.params.districtId];
+    var circle = this.props.boundaries.boundaryDetails[this.props.params.circleId];
     var Displayelement;
     if(sessionStorage.getItem('isAdmin')) {
       Displayelement = (props) =>
@@ -121,7 +147,10 @@ export default class PreschoolCircle extends React.Component {
           <p> Name: {circle.name}</p>
         </div>
     }
-     return(
+
+    return (
+      this.state.isLoading ? 
+      <div>Loading...</div> : 
       <div>
        <ol className="breadcrumb">
           <li><Link to={district.path}>{district.name}</Link></li>
@@ -131,7 +160,7 @@ export default class PreschoolCircle extends React.Component {
         <Displayelement {...this.props}/>
         <CreateInstitution placeHolder='School Name' title='Create New School' isOpen={this.props.modal.createInstitution} onCloseModal={this.toggleSchoolModal} closeModal={ this.toggleSchoolModal} save={ this.saveSchool } />
       </div>
-    );
+    )
   }
 };
 
