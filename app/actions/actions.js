@@ -370,9 +370,9 @@ export function modifyBoundary(boundaryid, name){
       })
     }).then(response => {
      if (response.status >= 200 && response.status < 300) {
-      dispatch(fetchEntitiesFromServer(1))
-      dispatch(push('/'));
-      return response.json();
+        var json = response.json();
+        dispatchBoundaryModified(json);
+        return json;
     } else {
       const error = new Error(response.statusText);
       error.response = response;
@@ -420,7 +420,10 @@ function dispatchToggleModal(dispatch, modalType)
 
 function dispatchBoundaryModified(data)
 {
-
+  store.dispatch({
+    type: 'BOUNDARY_MODIFIED',
+    boundary: data
+  });
 }
 
 function dispatchBoundaryCreated(dispatch,data)
