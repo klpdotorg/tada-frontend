@@ -127,12 +127,12 @@ export function entities(state = {
       isFetching: true
     }
     case 'BOUNDARY_CREATED':
-      const newBoundary = processNewBoundary(action.boundary, state.boundariesByParentId, state.boundaryDetails);
-      return {
-        ...state, 
-        ...newBoundary,
-        isFetching: false
-      }
+    const newBoundary = processNewBoundary(action.boundary, state.boundariesByParentId, state.boundaryDetails);
+    return {
+      ...state, 
+      ...newBoundary,
+      isFetching: false
+    }
     case 'RESPONSE_RECEIVED':
     const boundaryDetails = processBoundaryDetails(action.data, state.boundariesByParentId, state.boundaryDetails)
     return {
@@ -149,7 +149,7 @@ export function entities(state = {
     isFetching: false
   }
   case 'REMOVE_BOUNDARY': 
- 
+
   let boundariesByParentId =  _.omit(state.boundariesByParentId, action.id)
   if (action.parentId) {
     let index = boundariesByParentId[action.parentId].indexOf(action.id)
@@ -170,6 +170,26 @@ export function entities(state = {
  }
  default:
  return state;
+}
+}
+
+export function boundaries(state = {
+  boundariesByParentId: {},
+  boundaryDetails: {1: {
+    depth: 0
+  }}
+} , action) {
+  switch (action.type) {
+    case 'BOUNDARIES_FULFILLED':
+    const boundaryDetails = processBoundaryDetails(action.payload.results, state.boundariesByParentId, state.boundaryDetails)
+    return {
+     ...state,
+     ...boundaryDetails,
+     isFetching: false
+    }    
+   
+    default:
+    return state;
 }
 }
 

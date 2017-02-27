@@ -1,5 +1,15 @@
 import {fetchBoundaryDetails, fetchInstitutionDetails, fetchStudentGroups, fetchStudents} from './index'
 
+export const get = (url) => {
+  return fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Token ' + sessionStorage.token
+      }
+    }).then(checkStatus)
+}
+
 export const checkStatus = (response) => {
   if (response.status >= 200 && response.status < 300) {
     return response.json();

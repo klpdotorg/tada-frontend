@@ -29,6 +29,7 @@ class MainContentArea extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
+    boundaries: state.boundaries,
     boundaryDetails: state.entities.boundaryDetails,
     boundariesByParentId: state.entities.boundariesByParentId,
     programsById: state.programs.programsById,   
