@@ -18,7 +18,6 @@ export default class PrimaryDistrict extends React.Component {
     this.saveBlock = this.saveBlock.bind(this);
     this.saveProject = this.saveProject.bind(this);
     this.districtId = this.props.params.districtId;
-    this.boundary = this.props.boundaryDetails[this.districtId];
 
     this.state = {
       value: '',
@@ -27,7 +26,7 @@ export default class PrimaryDistrict extends React.Component {
   }
 
   componentDidMount() {
-    if (this.boundary.boundary_type == 2) {
+    if (this.props.boundaryDetails[this.props.params.districtId].boundary_type == 2) {
       this.props.dispatch(selectPreschoolTree())
     }
   }
@@ -87,7 +86,9 @@ export default class PrimaryDistrict extends React.Component {
   }
 
   render() {    
-    var boundary = this.boundary;
+    var boundary = this.props.boundaryDetails[this.props.params.districtId];
+    if(!boundary)
+      return null;
     var boundaryType = boundary.boundary_type;
     var DistrictSummary;
     this.state.value = boundary.name;

@@ -23,6 +23,7 @@ export default class SchoolsNavTree extends React.Component {
     console.log("Inside navtree", this.props.params);
   }
 
+
   renderSubTree(node, boundaryHierarchy, visitedBoundaries, depth) {    
     const boundaryDetails = this.props.boundaryDetails        
     if (boundaryDetails[node].depth == depth && depth < 5) {

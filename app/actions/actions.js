@@ -243,8 +243,8 @@ Everything is just one big nav tree in the UI.
 */
 export function fetchEntitiesFromServer(parentBoundaryId) {
   return function(dispatch, getState) {
-   const state = getState()
-   return dispatch(boundaryType(parentBoundaryId, state.entities.boundaryDetails)(parentBoundaryId))
+   const state = getState();
+   return dispatch(boundaryType(parentBoundaryId, state.entities.boundaryDetails)(parentBoundaryId));
  }
 }
 
@@ -348,7 +348,7 @@ export function deleteBoundary(boundaryid, parentId){
       }
     }).then(response =>{
      if (response.status >= 200 && response.status < 300) {
-      dispatch(removeBoundary(boundaryid, parentId))
+      dispatch(removeBoundary(boundaryid, parentId));
       //dispatch(fetchEntitiesFromServer(1))
         //Route the user to the home dashboard page since the page they were on will be deleted
         dispatch(push('/'));
@@ -437,11 +437,11 @@ const newBoundaryFetch = (options) => {
   })
 }
 
-function dispatchToggleModal(dispatch, modalType)
+function dispatchToggleModal(modalType)
 {
   store.dispatch({
     type: 'TOGGLE_MODAL',
-    modal: 'createDistrict'
+    modal: `${modalType}`
   });
 }
 

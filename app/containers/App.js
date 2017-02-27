@@ -25,6 +25,7 @@ const mapStateToProps = state => ({
 var mapDispatchToProps = function(dispatch) {
   return {
     onBoundaryClick(boundary) {
+      console.log("On boundary click invoked");
       dispatch(fetchEntitiesFromServer(boundary.id));
     },
     onPrimaryClick() {

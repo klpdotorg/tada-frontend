@@ -15,7 +15,6 @@ export function programs(state = {
       return Object.assign({}, {programsById: copy});
     case 'PROGRAM_DELETED':     
       var copyState = _.omit(state.programsById,action.programId);
-      console.log("new state", copyState);
       return Object.assign({}, {programsById: copyState});
     case 'PROGRAM_EDITED':
       var copy = Object.assign({}, state.programsById);

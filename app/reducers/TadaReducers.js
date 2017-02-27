@@ -148,8 +148,7 @@ export function entities(state = {
     case 'BOUNDARY_MODIFIED':
      var modBoundary = processBoundaryModified(action.boundary, state.boundaryDetails);
      var newState = Object.assign({},state, modBoundary);
-      console.log("Boundary Modified, ", newState);
-      return newState;
+    return newState;
   
 
     case 'RESPONSE_RECEIVED':
@@ -169,15 +168,17 @@ export function entities(state = {
   }
   case 'REMOVE_BOUNDARY': 
 
-  let boundariesByParentId =  _.omit(state.boundariesByParentId, action.id)
+  let copyBoundariesByParentId =  _.omit(state.boundariesByParentId, action.id);
   if (action.parentId) {
-    let index = boundariesByParentId[action.parentId].indexOf(action.id)
-    boundariesByParentId[action.parentId].splice(index, 1)
+    let index = copyBoundariesByParentId[action.parentId].indexOf(parseInt(action.id));
+    copyBoundariesByParentId[action.parentId].splice(index, 1)
   }
+  var newBoundaryDetails = Object.assign({}, state.boundaryDetails, _.omit(state.boundaryDetails, parseInt(action.id)));
 
   return {
     ...state,
-    boundariesByParentId
+    boundariesByParentId: copyBoundariesByParentId,
+    newBoundaryDetails: newBoundaryDetails
   }
   case 'STUDENTS_FETCHED': {
     let merged = processStudents(action.data, action.groupId, state.boundariesByParentId, state.boundaryDetails)    
