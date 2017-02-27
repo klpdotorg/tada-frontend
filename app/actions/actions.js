@@ -138,6 +138,7 @@ export const getBoundaries = (parentId) => {
   return get(`${serverApiBase}boundaries/?parent=${parentId}&limit=500`)
 }
 
+
 export function fetchBoundaryDetails(parentBoundaryId = 1) {
   return function(dispatch, getState) {
 
@@ -167,6 +168,11 @@ export function fetchBoundaryDetails(parentBoundaryId = 1) {
       dispatch(requestFailed(error))
     })
   }
+}
+
+
+export const getInstitutions = (parentId) => {
+  return get(`${serverApiBase}institutions/?boundary=${parentId}`)
 }
 
 //Method fetches institutions belonging to a particular Id from the institutions endpoint

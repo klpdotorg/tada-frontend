@@ -1,11 +1,11 @@
 import React from 'react';
 import ConfirmModal from './Modals/Confirm'
-import {deleteInstitution, saveInstitution, saveNewClass} from '../actions'
+import {deleteInstitution, saveInstitution, saveNewClass, getBoundaries, getInstitutions} from '../actions'
 import Button from './Button'
 import CreateClass from './Modals/CreateBoundary'
 import {mapValues} from 'lodash'
 import Select from 'react-select';
-import {getManagement, getLanguages, getInstitutionCategories} from './utils'
+import {getManagement, getLanguages, getInstitutionCategories, replaceNull} from './utils'
 import { Link } from 'react-router'
 
 export default class Institution extends React.Component {
@@ -14,7 +14,7 @@ export default class Institution extends React.Component {
     super(props);
     this.state = {
       openConfirmModal: false,
-      institution: this.props.boundaryDetails[this.props.params.institutionId],
+      institution: this.props.boundaries.boundaryDetails[this.props.params.institutionId],
       languages: {
         isLoading:true,
         list:[]
@@ -26,7 +26,8 @@ export default class Institution extends React.Component {
       institutionCategories: {
         isLoading: true,
         list:[]
-      }
+      },
+      isLoading: true
     };
     this.saveInsti = this.saveInsti.bind(this)
     this.saveClass = this.saveClass.bind(this)
@@ -36,6 +37,7 @@ export default class Institution extends React.Component {
   }
 
   componentDidMount() {
+  const {dispatch, params} = this.props
     getLanguages().then((languages) => {
       const langs = languages.results.map((language) => ({
           value: language.id,
@@ -81,7 +83,35 @@ export default class Institution extends React.Component {
       })
     })
 
+    dispatch({
+      type: 'BOUNDARIES',
+      payload: getBoundaries(1)
+    }).then(() => 
+    dispatch({
+      type: 'BOUNDARIES',
+      payload: getBoundaries(params.districtId)
+    })).then(() => 
+    dispatch({
+      type: 'BOUNDARIES',
+      payload: getBoundaries(params.projectId)
+    })).then(() => 
+    dispatch({
+      type: 'BOUNDARIES',
+      payload: getInstitutions(params.circleId)
+    })).then(() => {
+    this.setState({
+      isLoading:false
+    })})
+
   }
+
+  componentWillReceiveProps(props) {
+      let institution =  props.boundaryDetails[props.params.institutionId]
+      institution = replaceNull(props.boundaryDetails[props.params.institutionId])
+      this.setState({
+        institution
+      })
+    }
 
   saveInsti() {
     const institution = {
@@ -141,23 +171,19 @@ export default class Institution extends React.Component {
 
   render() {
 
-    var project = this.props.boundaryDetails[this.props.params.projectId];
-    var projectPath = project.path;
-    var district = this.props.boundaryDetails[this.props.params.districtId];
-    var districtPath = district.path;
-    var circle = this.props.boundaryDetails[this.props.params.circleId];
-    var circlePath = circle.path;
+    var project = this.props.boundaries.boundaryDetails[this.props.params.projectId];
+    var district = this.props.boundaries.boundaryDetails[this.props.params.districtId];
+    var circle = this.props.boundaries.boundaryDetails[this.props.params.circleId];
     var institution = this.state.institution
-    var institutionPath = institution.path;
     var Displayelement;
 
      if(sessionStorage.getItem('isAdmin')) {
-     return(
+       Displayelement = (props) => 
       <div>
        <ol className="breadcrumb">
-          <li><Link to={districtPath}>{district.name}</Link></li>
-          <li> <Link to={projectPath}> {project.name}</Link></li>
-          <li> <Link to={circlePath}> {circle.name}</Link></li>
+          <li><Link to={district.path}>{district.name}</Link></li>
+          <li> <Link to={project.path}> {project.name}</Link></li>
+          <li> <Link to={circle.path}> {circle.name}</Link></li>
           <li className="active"> {institution.name}</li>
         </ol>
             <div>
@@ -243,15 +269,14 @@ export default class Institution extends React.Component {
         </div>
         <CreateClass placeHolder='Class Name' title='Create New Class' isOpen={this.props.modal.createClass} onCloseModal={this.toggleClassModal} closeModal={ this.toggleClassModal} save={ this.saveClass } />
       </div>
-    );
   }
     else {
-      return(
+      Displayelement = () =>
         <div>
           <ol className="breadcrumb">
-            <li><Link to={districtPath}>{district.name}</Link></li>
-            <li> <Link to={projectPath}> {project.name}</Link></li>
-            <li> <Link to={circlePath}> {circle.name}</Link></li>
+            <li><Link to={district.path}>{district.name}</Link></li>
+            <li> <Link to={project.path}> {project.name}</Link></li>
+            <li> <Link to={circle.path}> {circle.name}</Link></li>
             <li className="active"> {institution.name}</li>
           </ol>
           <h4 className="heading-err heading-border-left brand-red"> <i className="fa fa-lock brand-red" aria-hidden="true"></i>  Insufficient Permissions</h4>
@@ -259,8 +284,13 @@ export default class Institution extends React.Component {
           <h4 className="brand-blue heading-border-left"> Institution Details</h4>
           <p> Name: {institution.name}</p>
         </div>
-      )
     }
+    return (
+      this.state.isLoading ? 
+      <div>Loading...</div> : 
+      <Displayelement {...this.props}/>
+    )
+
   }
 };
 
