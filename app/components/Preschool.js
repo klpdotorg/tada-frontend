@@ -1,6 +1,6 @@
 import React from 'react';
 import ConfirmModal from './Modals/Confirm'
-import {deleteInstitution, saveInstitution, saveNewClass, getBoundaries, getInstitutions} from '../actions'
+import {deleteInstitution, saveInstitution, saveNewClass, getBoundaries, getInstitutions, selectPreschoolTree} from '../actions'
 import Button from './Button'
 import CreateClass from './Modals/CreateBoundary'
 import {mapValues} from 'lodash'
@@ -38,6 +38,7 @@ export default class Institution extends React.Component {
 
   componentDidMount() {
   const {dispatch, params} = this.props
+  this.props.dispatch(selectPreschoolTree())
     getLanguages().then((languages) => {
       const langs = languages.results.map((language) => ({
           value: language.id,
