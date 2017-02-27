@@ -3,7 +3,8 @@ import ConfirmModal from './Modals/Confirm'
 import {deleteInstitution, saveInstitution, saveNewClass} from '../actions'
 import Button from './Button'
 import CreateClass from './Modals/CreateBoundary'
-import {mapValues} from 'lodash'
+import {mapValues} from 'lodash';
+import { Link } from 'react-router';
 import Select from 'react-select';
 import {getManagement, getLanguages, getInstitutionCategories, replaceNull} from './utils'
 
@@ -149,22 +150,23 @@ export default class Institution extends React.Component {
   render() {
 
   	var block = this.props.boundaryDetails[this.props.params.blockId];
-    var blockPath = "#" + block.path;
+    var blockPath = block.path;
     var district = this.props.boundaryDetails[this.props.params.districtId];
-    var districtPath = "#" + district.path;
+    var districtPath = district.path;
     var cluster = this.props.boundaryDetails[this.props.params.clusterId];
-    var clusterPath = "#" + cluster.path;
+    var clusterPath = cluster.path;
     var institution = this.state.institution
-    var institutionPath = "#" + institution.path;
+    var institutionPath = institution.path;
     var Displayelement;
 
      if(sessionStorage.getItem('isAdmin')) {
+      console.log(districtPath, 'district')
      return(
       <div>
        <ol className="breadcrumb">
-          <li><a href={districtPath}>{district.name}</a></li>
-          <li> <a href={blockPath}> {block.name}</a></li>
-          <li> <a href={clusterPath}> {cluster.name}</a></li>
+          <li><Link to={districtPath}>{district.name}</Link></li>
+          <li> <Link to={blockPath}> {block.name}</Link></li>
+          <li> <Link to={clusterPath}> {cluster.name}</Link></li>
           <li className="active"> {institution.name}</li>
         </ol>
             <div>
@@ -263,9 +265,9 @@ export default class Institution extends React.Component {
       return(
         <div>
           <ol className="breadcrumb">
-            <li><a href={districtPath}>{district.name}</a></li>
-            <li> <a href={blockPath}> {block.name}</a></li>
-            <li> <a href={clusterPath}> {cluster.name}</a></li>
+            <li><Link to={districtPath}>{district.name}</Link></li>
+            <li> <Link to={blockPath}> {block.name}</Link></li>
+            <li> <Link to={clusterPath}> {cluster.name}</Link></li>
             <li className="active"> {institution.name}</li>
           </ol>
           <h4 className="heading-err heading-border-left brand-red"> <i className="fa fa-lock brand-red" aria-hidden="true"></i>  Insufficient Permissions</h4>

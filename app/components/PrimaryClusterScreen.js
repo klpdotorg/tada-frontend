@@ -3,6 +3,7 @@ import {modifyBoundary, deleteBoundary, saveNewInstitution} from '../actions';
 import CreateInstitution from './Modals/CreateInstitution';
 import Button from './Button'
 import ConfirmModal from './Modals/Confirm'
+import { Link } from 'react-router'
 
 export default class PrimaryCluster extends React.Component {
 
@@ -122,8 +123,8 @@ export default class PrimaryCluster extends React.Component {
      return(
       <div>
        <ol className="breadcrumb">
-          <li><a href={district.path}>{district.name}</a></li>
-          <li><a href={block.path}>{block.name}</a></li>
+          <li><Link to={district.path}>{district.name}</Link></li>
+          <li><Link to={block.path}>{block.name}</Link></li>
           <li className="active">{cluster.name}</li>
         </ol>
         <Displayelement {...this.props}/>

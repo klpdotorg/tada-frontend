@@ -3,7 +3,7 @@ import {modifyBoundary, deleteBoundary, saveNewInstitution} from '../actions';
 import CreateInstitution from './Modals/CreateInstitution';
 import Button from './Button'
 import ConfirmModal from './Modals/Confirm'
-
+import { Link } from 'react-router'
 
 
 export default class PreschoolCircle extends React.Component {
@@ -124,8 +124,8 @@ export default class PreschoolCircle extends React.Component {
      return(
       <div>
        <ol className="breadcrumb">
-          <li><a href={district.path}>{district.name}</a></li>
-          <li><a href={project.path}>{project.name}</a></li>
+          <li><Link to={district.path}>{district.name}</Link></li>
+          <li><Link to={project.path}>{project.name}</Link></li>
           <li className="active">{circle.name}</li>
         </ol>
         <Displayelement {...this.props}/>

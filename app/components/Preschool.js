@@ -6,6 +6,7 @@ import CreateClass from './Modals/CreateBoundary'
 import {mapValues} from 'lodash'
 import Select from 'react-select';
 import {getManagement, getLanguages, getInstitutionCategories} from './utils'
+import { Link } from 'react-router'
 
 export default class Institution extends React.Component {
 
@@ -141,22 +142,22 @@ export default class Institution extends React.Component {
   render() {
 
     var project = this.props.boundaryDetails[this.props.params.projectId];
-    var projectPath = "#" + project.path;
+    var projectPath = project.path;
     var district = this.props.boundaryDetails[this.props.params.districtId];
-    var districtPath = "#" + district.path;
+    var districtPath = district.path;
     var circle = this.props.boundaryDetails[this.props.params.circleId];
-    var circlePath = "#" + circle.path;
+    var circlePath = circle.path;
     var institution = this.state.institution
-    var institutionPath = "#" + institution.path;
+    var institutionPath = institution.path;
     var Displayelement;
 
      if(sessionStorage.getItem('isAdmin')) {
      return(
       <div>
        <ol className="breadcrumb">
-          <li><a href={districtPath}>{district.name}</a></li>
-          <li> <a href={projectPath}> {project.name}</a></li>
-          <li> <a href={circlePath}> {circle.name}</a></li>
+          <li><Link to={districtPath}>{district.name}</Link></li>
+          <li> <Link to={projectPath}> {project.name}</Link></li>
+          <li> <Link to={circlePath}> {circle.name}</Link></li>
           <li className="active"> {institution.name}</li>
         </ol>
             <div>
@@ -248,9 +249,9 @@ export default class Institution extends React.Component {
       return(
         <div>
           <ol className="breadcrumb">
-            <li><a href={districtPath}>{district.name}</a></li>
-            <li> <a href={projectPath}> {project.name}</a></li>
-            <li> <a href={circlePath}> {circle.name}</a></li>
+            <li><Link to={districtPath}>{district.name}</Link></li>
+            <li> <Link to={projectPath}> {project.name}</Link></li>
+            <li> <Link to={circlePath}> {circle.name}</Link></li>
             <li className="active"> {institution.name}</li>
           </ol>
           <h4 className="heading-err heading-border-left brand-red"> <i className="fa fa-lock brand-red" aria-hidden="true"></i>  Insufficient Permissions</h4>

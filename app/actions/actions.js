@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import { push } from 'react-router-redux';
-import {checkStatus} from './utils'
+import {checkStatus, get} from './utils'
 
 import {SERVER_API_BASE as serverApiBase,
  SERVER_AUTH_BASE as authApiBase} from 'config';
@@ -132,6 +132,10 @@ function studentsFetched(data, groupId) {
     data,
     groupId
   }
+}
+
+export const getBoundaries = (parentId) => {
+  return get(`${serverApiBase}boundaries/?parent=${parentId}&limit=500`)
 }
 
 export function fetchBoundaryDetails(parentBoundaryId = 1) {

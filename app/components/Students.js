@@ -5,6 +5,7 @@ import Button from './Button'
 import ConfirmModal from './Modals/Confirm'
 import ModifyStudent from './Modals/ModifyStudent'
 import ReactDataGrid from 'react-data-grid'
+import { Link } from 'react-router'
 
 //{"id":493431,"first_name":"priyanka","middle_name":"y","last_name":"hadimani","uid":null,"dob":"2000-09-10","gender":"female","mt":1,"active":2,"relations":[]
 
@@ -61,7 +62,6 @@ export default class Students extends React.Component {
   }
 
   saveStudent(student){
-    console.log(student)
     this.props.dispatch(saveStudent(student))
   }
 
@@ -144,10 +144,10 @@ export default class Students extends React.Component {
     return(
       <div>
         <ol className="breadcrumb">
-        <li><a href={district.path}>{district.name}</a></li>
-        <li><a href={block.path}>{block.name}</a></li>
-        <li><a href={cluster.path}>{cluster.name}</a></li>
-        <li><a href={institution.path}>{institution.name}</a></li>
+        <li><Link to={district.path}>{district.name}</Link></li>
+        <li><Link to={block.path}>{block.name}</Link></li>
+        <li><Link to={cluster.path}>{cluster.name}</Link></li>
+        <li><Link to={institution.path}>{institution.name}</Link></li>
         </ol>
         <Displayelement {...this.props}/>
       </div>
