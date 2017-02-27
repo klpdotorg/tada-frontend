@@ -94,8 +94,8 @@ export default class PrimaryDistrict extends React.Component {
     if(sessionStorage.getItem('isAdmin')) {
       DistrictSummary = (props) => 
         <div>
-          <div className='heading-border-left'>
-            <h4 className="brand-blue col-md-10">Modify Details</h4>
+          <div className="heading-border-left brand-blue">
+            <h4 className="brand-blue brand-bg-blue col-md-10">Modify Details</h4>
             {boundaryType == 2 ? <Button title='Add Project' onClick={this.toggleProjectModal} /> : <Button title='Add Block' onClick={this.toggleBlockModal} />}
           </div>
             <form className="form-horizontal boundary-form" role="form">
@@ -107,9 +107,9 @@ export default class PrimaryDistrict extends React.Component {
               </div>
               </form>
 
-              <div className="col-md-2">
-                <button type="submit" className="btn btn-primary" onClick={() => {this.saveDistrict(this.districtId) }}>Save</button>
-                <button type="submit" className="btn btn-primary" onClick={() => {this.showConfirmation() }}>Delete</button>
+              <div className="col-md-8">
+                <button type="submit" className="btn btn-primary padded-btn" onClick={() => {this.saveDistrict(this.districtId) }}>Save</button>
+                <button type="submit" className="btn btn-primary padded-btn" onClick={() => {this.showConfirmation() }}>Delete</button>
                 <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteDistrict} closeModal={this.closeConfirmModal} entity={boundary.name}/>
               </div>
         </div>

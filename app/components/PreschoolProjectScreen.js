@@ -98,9 +98,9 @@ export default class PreschoolProject extends Component{
               </div>
               </form>
 
-              <div className="col-md-2">
-                <button type="submit" className="btn btn-primary" onClick={this.saveProject}>Save</button>
-                <button type="submit" className="btn btn-primary" onClick={this.showConfirmation}>Delete</button>
+              <div className="col-md-8">
+                <button type="submit" className="btn btn-primary padded-btn" onClick={this.saveProject}>Save</button>
+                <button type="submit" className="btn btn-primary padded-btn" onClick={this.showConfirmation}>Delete</button>
                 <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteProject} closeModal={this.closeConfirmModal} entity={project.name}/>
               </div>
         </div>

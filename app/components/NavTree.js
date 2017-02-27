@@ -1,11 +1,29 @@
-import React from 'react';
+import React, { Component } from 'react';
 import TreeView from 'react-treeview';
 import { Link } from 'react-router';
 import {alphabeticalOrder} from '../utils'
 
-const SchoolsNavTree = React.createClass({ 
+export default class SchoolsNavTree extends React.Component {
  
-  renderSubTree: function(node, boundaryHierarchy, visitedBoundaries, depth) {    
+  constructor(props)
+  {
+    super(props);
+    this.state = {
+      selectedEntities: []
+    }
+  }
+
+  componentWillMount()
+  {
+
+  }
+
+  componentDidMount()
+  {
+    console.log("Inside navtree", this.props.params);
+  }
+
+  renderSubTree(node, boundaryHierarchy, visitedBoundaries, depth) {    
     const boundaryDetails = this.props.boundaryDetails        
     if (boundaryDetails[node].depth == depth && depth < 5) {
       if (node && $.inArray(node, visitedBoundaries) < 0) {
@@ -31,11 +49,11 @@ const SchoolsNavTree = React.createClass({
       }      
      }
 
-     return null
-  },
+     return null;
+  }
 
   //boundaryDetails={this.state.boundaryDetails} boundaryParentChildMap={this.state.childrenByParentId}
-  render: function() {
+  render() {
     var copyOfMap = $.extend(true, {}, this.props.boundariesByParentId);    
     var visitedBoundaries = [];
     return (
@@ -46,6 +64,5 @@ const SchoolsNavTree = React.createClass({
       </div>
       );
   }
-});
+}
 
-export default SchoolsNavTree;

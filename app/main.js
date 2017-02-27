@@ -36,7 +36,7 @@ import Users from './containers/UsersContainer';
 import Questions from './components/AssessmentQuestions';
 
 
-const history = syncHistoryWithStore(browserHistory, tadastore)
+const history = syncHistoryWithStore(browserHistory, tadastore);
 
 
 

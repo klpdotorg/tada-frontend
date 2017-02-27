@@ -114,6 +114,18 @@ function processNewBoundary(boundary, boundariesByParentId, boundaryDetailsById)
     };
 }
 
+function processBoundaryModified(boundary, existingBoundaryDetails)
+{
+  var modifiedBoundary={};
+  boundary = computeRouterPathForEntity(boundary,existingBoundaryDetails);
+  boundary = nodeDepth(boundary);
+  modifiedBoundary[boundary.id]=boundary;
+  var mergedBoundaryDetails = Object.assign({},existingBoundaryDetails,modifiedBoundary);
+  return {
+    boundaryDetails:mergedBoundaryDetails
+  }
+}
+
 export function entities(state = {
   boundariesByParentId: {},
   boundaryDetails: {1: {
@@ -133,6 +145,13 @@ export function entities(state = {
       ...newBoundary,
       isFetching: false
     }
+    case 'BOUNDARY_MODIFIED':
+     var modBoundary = processBoundaryModified(action.boundary, state.boundaryDetails);
+     var newState = Object.assign({},state, modBoundary);
+      console.log("Boundary Modified, ", newState);
+      return newState;
+  
+
     case 'RESPONSE_RECEIVED':
     const boundaryDetails = processBoundaryDetails(action.data, state.boundariesByParentId, state.boundaryDetails)
     return {

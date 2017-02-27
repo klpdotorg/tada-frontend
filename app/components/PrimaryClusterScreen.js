@@ -129,9 +129,9 @@ export default class PrimaryCluster extends React.Component {
               </div>
             </div>
            </form>
-          <div className="col-md-2">
-            <button type="submit" className="btn btn-primary" onClick={this.saveCluster}>Save</button>
-            <button type="submit" className="btn btn-primary" onClick={this.showConfirmation}>Delete</button>
+          <div className="col-md-8">
+            <button type="submit" className="btn btn-primary padded-btn" onClick={this.saveCluster}>Save</button>
+            <button type="submit" className="btn btn-primary padded-btn" onClick={this.showConfirmation}>Delete</button>
             <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteCluster} closeModal={this.closeConfirmation} entity={cluster.name}/>
           </div>
         </div>

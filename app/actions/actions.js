@@ -357,6 +357,33 @@ export function deleteBoundary(boundaryid, parentId){
   }
 }
 
+// export function modifyBoundary(boundaryid, name){
+//   return function(dispatch, getState) {
+//     return fetch(serverApiBase + 'boundaries/' + boundaryid +'/', {
+//       method: 'PATCH',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'Authorization' : 'Token ' + sessionStorage.token
+//       },
+//       body: JSON.stringify({
+//         "name": name
+//       })
+//     }).then(response => {
+//      if (response.status >= 200 && response.status < 300) {
+//         var json = response.json();
+//         dispatchBoundaryModified(json);
+//         return json;
+//     } else {
+//       const error = new Error(response.statusText);
+//       error.response = response;
+//       throw error;
+//     }
+//   }).catch(error => {
+//     console.log('request failed', error)
+//   })
+// }
+// }
+
 export function modifyBoundary(boundaryid, name){
   return function(dispatch, getState) {
     return fetch(serverApiBase + 'boundaries/' + boundaryid +'/', {
@@ -368,17 +395,11 @@ export function modifyBoundary(boundaryid, name){
       body: JSON.stringify({
         "name": name
       })
-    }).then(response => {
-     if (response.status >= 200 && response.status < 300) {
-        var json = response.json();
-        dispatchBoundaryModified(json);
-        return json;
-    } else {
-      const error = new Error(response.statusText);
-      error.response = response;
-      throw error;
-    }
-  }).catch(error => {
+    }).then(checkStatus).then(response => {
+   
+        dispatchBoundaryModified(response);
+        return response;
+    }).catch(error => {
     console.log('request failed', error)
   })
 }
