@@ -1,5 +1,5 @@
 import React from 'react';
-import {modifyBoundary, deleteBoundary, saveNewInstitution} from '../actions';
+import {modifyBoundary, deleteBoundary, saveNewInstitution, getBoundaries} from '../actions';
 import CreateInstitution from './Modals/CreateInstitution';
 import Button from './Button'
 import ConfirmModal from './Modals/Confirm'
@@ -16,8 +16,33 @@ export default class PrimaryCluster extends React.Component {
     this.deleteCluster = this.deleteCluster.bind(this);
     this.state = {
       schoolModalIsOpen: false,
-      openConfirmModal: false
+      openConfirmModal: false, 
+      isLoading: true
     };
+  }
+
+  componentDidMount() {
+  const {params} = this.props
+  this.props.dispatch({
+    type: 'BOUNDARIES',
+    payload: getBoundaries(1)
+  }).then(() => {
+    this.props.dispatch({
+      type: 'BOUNDARIES',
+      payload: getBoundaries(params.districtId)
+    }).then(() => {
+    this.props.dispatch({
+      type: 'BOUNDARIES',
+      payload: getBoundaries(params.blockId)
+    }).then(() => {
+      this.setState({
+        isLoading:false
+      })
+    })
+  })
+  })
+
+
   }
 
   closeConfirmation = () => {
@@ -85,9 +110,9 @@ export default class PrimaryCluster extends React.Component {
   }
 
   render() {
-  	var block = this.props.boundaryDetails[this.props.params.blockId];
-  	var district = this.props.boundaryDetails[this.props.params.districtId];
-  	var cluster = this.props.boundaryDetails[this.props.params.clusterId];
+  	var block = this.props.boundaries.boundaryDetails[this.props.params.blockId];
+  	var district = this.props.boundaries.boundaryDetails[this.props.params.districtId];
+  	var cluster = this.props.boundaries.boundaryDetails[this.props.params.clusterId];
     var Displayelement;
     if(sessionStorage.getItem('isAdmin')) {
       Displayelement = (props) =>
@@ -120,7 +145,10 @@ export default class PrimaryCluster extends React.Component {
           <p> Name: {cluster.name}</p>
         </div>
     }
-     return(
+
+    return (
+      this.state.isLoading ? 
+      <div>Loading...</div> : 
       <div>
        <ol className="breadcrumb">
           <li><Link to={district.path}>{district.name}</Link></li>
@@ -130,7 +158,7 @@ export default class PrimaryCluster extends React.Component {
         <Displayelement {...this.props}/>
         <CreateInstitution placeHolder='School Name' title='Create New School' isOpen={this.props.modal.createInstitution} onCloseModal={this.toggleSchoolModal} closeModal={ this.toggleSchoolModal} save={ this.saveSchool } />
       </div>
-    );
+    )
   }
 };
 
