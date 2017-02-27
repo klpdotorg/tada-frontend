@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Button from './Button';
-import {modifyBoundary, deleteBoundary, saveNewCircle, getBoundaries} from '../actions'
+import {modifyBoundary, deleteBoundary, saveNewCircle, getBoundaries, selectPreschoolTree} from '../actions'
 import CreateCircle from './Modals/CreateBoundary'
 import ConfirmModal from './Modals/Confirm'
 import { Link } from 'react-router'
@@ -21,6 +21,7 @@ export default class PreschoolProject extends Component{
 
   componentDidMount() {
   const {params} = this.props
+  this.props.dispatch(selectPreschoolTree())
   this.props.dispatch({
     type: 'BOUNDARIES',
     payload: getBoundaries(1)
