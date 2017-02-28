@@ -193,11 +193,9 @@ export function fetchInstitutionDetails(parentBoundaryId) {
   }
 }
 
-
-
-
-
-
+export const getStudentGroups = (institutionId) => {
+  return get(`${serverApiBase}institutions/${institutionId}/studentgroups/`)
+}
 
 export function fetchStudentGroups(institutionId) {
   return function(dispatch, getState) {
@@ -209,9 +207,9 @@ export function fetchStudentGroups(institutionId) {
         'Authorization': 'Token ' + sessionStorage.token
       }
     }).then(checkStatus).then(data => {
-      dispatch(responseReceivedFromServer(data))
+        dispatch(responseReceivedFromServer(data))
     }).catch(error => {
-      dispatch(requestFailed(error))
+        dispatch(requestFailed(error))
     })
   }
 }

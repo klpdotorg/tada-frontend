@@ -107,8 +107,8 @@ export default class Institution extends React.Component {
   }
 
   componentWillReceiveProps(props) {
-      let institution =  props.boundaryDetails[props.params.institutionId]
-      institution = replaceNull(props.boundaryDetails[props.params.institutionId])
+      let institution =  props.boundaries.boundaryDetails[props.params.institutionId]
+      institution = replaceNull(props.boundaries.boundaryDetails[props.params.institutionId])
       this.setState({
         institution
       })
