@@ -26,7 +26,7 @@ Method computes the router path for an entity and returns it
 */
 
 export const computeRouterPathForEntity = (entity, boundaryDetails, groupId) => {  
-  var parentEntityId = getParentId(entity, groupId);  
+  var parentEntityId = getParentId(entity, groupId);
   var path = '';
 
   if (parentEntityId == 1) {

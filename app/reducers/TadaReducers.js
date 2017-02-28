@@ -32,28 +32,6 @@ export function schoolSelection(state = {
 
 function processBoundaryDetails(boundaryData, boundariesByParentId, boundaryDetails) { 
   var newBoundaryDetails = {}
-  //Making an assumption that the entire set will be the children of a parent
-
-  //because that's how the REST queries are structured  
-
-  //TODO: Refactor
-
-  // const entities = boundaryData.map(nodeDepth).map((node) => {  
-  //   return computeRouterPathForEntity(node, boundaryDetails)
-  // })  
-
-  // let data = entities.reduce((soFar, entity) => {    
-  //   const parentId = getParentId(boundaryData[0])
-  //   const id = entity.id
-  //   parentId == 1 ? soFar.boundariesByParentId[id] = [] : !soFar.boundariesByParentId[parentId] ? soFar.boundariesByParentId[parentId] = [] : soFar.boundariesByParentId[parentId].push(id)
-  //   soFar.boundaryDetails[id] = entity
-  //   return soFar
-
-  // }, {boundariesByParentId, boundaryDetails})
-
-  // return data
-  // // console.log(data, 'data')
-
   if (boundaryData.length > 0) {
     //Get the parent so we can compute router path
     var parentId = getParentId(boundaryData[0]);
