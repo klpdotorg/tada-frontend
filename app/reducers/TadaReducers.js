@@ -32,11 +32,6 @@ export function schoolSelection(state = {
 
 function processBoundaryDetails(boundaryData, boundariesByParentId, boundaryDetails) { 
   var newBoundaryDetails = {}
-  //Making an assumption that the entire set will be the children of a parent
-
-  //because that's how the REST queries are structured  
-
-  
 
   if (boundaryData.length > 0) {
     //Get the parent so we can compute router path

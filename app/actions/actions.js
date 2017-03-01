@@ -111,6 +111,7 @@ function userDataFetched(data) {
 }
 
 
+
 export function fetchUserData() {
   const token = sessionStorage.getItem('token')
   return function(dispatch) {

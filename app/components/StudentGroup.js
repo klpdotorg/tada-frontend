@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { push } from 'react-router-redux';
-import {saveClass, deleteStudentGroup, saveNewStudents} from '../actions';
+import {saveClass, deleteStudentGroup, saveNewStudents, getBoundaries, getInstitutions, getStudentGroups, selectPreschoolTree} from '../actions';
 import CreateInstitution from './Modals/CreateInstitution';
 import Button from './Button'
 import ConfirmModal from './Modals/Confirm'
@@ -17,8 +17,44 @@ export default class StudentGroupScreen extends Component {
       schoolModalIsOpen: false,
       openConfirmModal: false,
       showBulkAdd: false,
+      isLoading: true
     };
 
+  }
+
+  componentDidMount() {
+    const {params, dispatch} = this.props
+
+    //Choose Preschool Hierarchy
+    if (params.circleId) {
+      this.props.dispatch(selectPreschoolTree())
+    }
+
+    const blockId = params.blockId || params.projectId
+    const clusterId = params.clusterId || params.circleId
+    dispatch({
+      type: 'BOUNDARIES',
+      payload: getBoundaries(1)
+    }).then(() => 
+    dispatch({
+      type: 'BOUNDARIES',
+      payload: getBoundaries(params.districtId)
+    })).then(() => 
+    dispatch({
+      type: 'BOUNDARIES',
+      payload: getBoundaries(blockId)
+    })).then(() => 
+    dispatch({
+      type: 'BOUNDARIES',
+      payload: getInstitutions(clusterId)
+    })).then(() =>
+    dispatch({
+      type: 'BOUNDARIES',
+      payload: getStudentGroups(params.institutionId)
+    })).then(() => {
+    this.setState({
+      isLoading:false
+    })})
   }
 
   componentWillReceiveProps() {
@@ -72,6 +108,8 @@ export default class StudentGroupScreen extends Component {
 
   render () {
     return (
+      this.state.isLoading ? 
+      <div>Loading...</div> : 
       <div>
         {this.state.showBulkAdd ? <BulkAddStudent addStudents={this.addStudents} hide={this.hideBulkAdd}/> : <StudentGroup showBulkAdd={this.showBulkAdd} {...this.props} />}
       </div>
@@ -90,12 +128,12 @@ class StudentGroup extends Component {
     this.hideBulkAdd = this.hideBulkAdd.bind(this);
     this.addStudents = this.addStudents.bind(this);
 
-    const {params, boundaryDetails} = this.props
+    const {params, boundaries} = this.props
     this.state = {
       schoolModalIsOpen: false,
       openConfirmModal: false,
       showBulkAdd: false,
-      class: boundaryDetails[params.groupId]
+      class: boundaries.boundaryDetails[params.groupId]
     };
   }
 
@@ -114,9 +152,9 @@ class StudentGroup extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    const {boundaryDetails, params} = nextProps
+    const {boundaries, params} = nextProps
     this.setState({
-      class: boundaryDetails[params.groupId]
+      class: boundaries.boundaryDetails[params.groupId]
     })
   }
 
@@ -163,12 +201,12 @@ class StudentGroup extends Component {
   }
 
   render() {
-    const {boundaryDetails, params} = this.props
-    const block = boundaryDetails[params.blockId] || boundaryDetails[params.projectId];
-    const district = boundaryDetails[params.districtId];
-    const cluster = boundaryDetails[params.clusterId] || boundaryDetails[params.circleId]
-    const institution = boundaryDetails[params.institutionId]
-    const group = boundaryDetails[params.groupId]
+    const {boundaries, params} = this.props
+    const block = boundaries.boundaryDetails[params.blockId] || boundaries.boundaryDetails[params.projectId];
+    const district = boundaries.boundaryDetails[params.districtId];
+    const cluster = boundaries.boundaryDetails[params.clusterId] || boundaries.boundaryDetails[params.circleId]
+    const institution = boundaries.boundaryDetails[params.institutionId]
+    const group = boundaries.boundaryDetails[params.groupId]
     var Displayelement;
     return(
       <div>
