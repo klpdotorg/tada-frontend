@@ -112,9 +112,9 @@ export default class PreschoolCircle extends React.Component {
   }
 
   render() {
-    var project = this.props.boundaries.boundaryDetails[this.props.params.projectId];
-    var district = this.props.boundaries.boundaryDetails[this.props.params.districtId];
-    var circle = this.props.boundaries.boundaryDetails[this.props.params.circleId];
+    var project = this.props.boundaryDetails[this.props.params.projectId];
+    var district = this.props.boundaryDetails[this.props.params.districtId];
+    var circle = this.props.boundaryDetails[this.props.params.circleId];
     var Displayelement;
     if(sessionStorage.getItem('isAdmin')) {
       Displayelement = (props) =>

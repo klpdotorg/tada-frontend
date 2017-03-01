@@ -77,8 +77,8 @@ export default class PreschoolProject extends Component{
   }
 
   render() {    
-    var project = this.props.boundaries.boundaryDetails[this.props.params.projectId];    
-    var district = this.props.boundaries.boundaryDetails[this.props.params.districtId];    
+    var project = this.props.boundaryDetails[this.props.params.projectId];    
+    var district = this.props.boundaryDetails[this.props.params.districtId];    
     let ProjectSummary
 
     if(sessionStorage.getItem('isAdmin')) {

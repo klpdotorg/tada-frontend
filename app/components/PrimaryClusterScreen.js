@@ -110,9 +110,9 @@ export default class PrimaryCluster extends React.Component {
   }
 
   render() {
-  	var block = this.props.boundaries.boundaryDetails[this.props.params.blockId];
-  	var district = this.props.boundaries.boundaryDetails[this.props.params.districtId];
-  	var cluster = this.props.boundaries.boundaryDetails[this.props.params.clusterId];
+  	var block = this.props.boundaryDetails[this.props.params.blockId];
+  	var district = this.props.boundaryDetails[this.props.params.districtId];
+  	var cluster = this.props.boundaryDetails[this.props.params.clusterId];
     var Displayelement;
     if(sessionStorage.getItem('isAdmin')) {
       Displayelement = (props) =>

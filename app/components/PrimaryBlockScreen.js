@@ -21,6 +21,10 @@ export default class PrimaryDistrict extends React.Component {
     };
   }
 
+  componentWillReceiveProps(nextProps)
+  {
+  }
+
   componentDidMount() {
     const {params} = this.props
     this.props.dispatch({
@@ -78,8 +82,8 @@ export default class PrimaryDistrict extends React.Component {
   }
 
   render() {
-    var block = this.props.boundaries.boundaryDetails[this.props.params.blockId];    
-    var district = this.props.boundaries.boundaryDetails[this.props.params.districtId];    
+    var block = this.props.boundaryDetails[this.props.params.blockId];  
+    var district = this.props.boundaryDetails[this.props.params.districtId];    
     var Displayelement;
     if(sessionStorage.getItem('isAdmin')) {
       Displayelement = (props) => 

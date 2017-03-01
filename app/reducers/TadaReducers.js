@@ -36,23 +36,7 @@ function processBoundaryDetails(boundaryData, boundariesByParentId, boundaryDeta
 
   //because that's how the REST queries are structured  
 
-  //TODO: Refactor
-
-  // const entities = boundaryData.map(nodeDepth).map((node) => {  
-  //   return computeRouterPathForEntity(node, boundaryDetails)
-  // })  
-
-  // let data = entities.reduce((soFar, entity) => {    
-  //   const parentId = getParentId(boundaryData[0])
-  //   const id = entity.id
-  //   parentId == 1 ? soFar.boundariesByParentId[id] = [] : !soFar.boundariesByParentId[parentId] ? soFar.boundariesByParentId[parentId] = [] : soFar.boundariesByParentId[parentId].push(id)
-  //   soFar.boundaryDetails[id] = entity
-  //   return soFar
-
-  // }, {boundariesByParentId, boundaryDetails})
-
-  // return data
-  // // console.log(data, 'data')
+  
 
   if (boundaryData.length > 0) {
     //Get the parent so we can compute router path
@@ -92,7 +76,8 @@ function processBoundaryDetails(boundaryData, boundariesByParentId, boundaryDeta
 function processNewBoundary(boundary, boundariesByParentId, boundaryDetailsById)
 {
     var newBoundaryDetails = {};
-    var parentId = boundary.parent;
+    var parentId = getParentId(boundary);
+   
     boundary = computeRouterPathForEntity(boundary, boundaryDetailsById);
     boundary = nodeDepth(boundary);
     if (parentId == 1) {
@@ -173,12 +158,13 @@ export function entities(state = {
     let index = copyBoundariesByParentId[action.parentId].indexOf(parseInt(action.id));
     copyBoundariesByParentId[action.parentId].splice(index, 1)
   }
-  var newBoundaryDetails = Object.assign({}, state.boundaryDetails, _.omit(state.boundaryDetails, parseInt(action.id)));
+  var newBoundaryDetails = Object.assign({}, state.boundaryDetails);
+  newBoundaryDetails = _.omit(newBoundaryDetails, parseInt(action.id));
 
   return {
     ...state,
     boundariesByParentId: copyBoundariesByParentId,
-    newBoundaryDetails: newBoundaryDetails
+    boundaryDetails: newBoundaryDetails
   }
   case 'STUDENTS_FETCHED': {
     let merged = processStudents(action.data, action.groupId, state.boundariesByParentId, state.boundaryDetails)    
