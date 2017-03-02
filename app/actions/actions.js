@@ -213,6 +213,11 @@ export function fetchStudentGroups(institutionId) {
     })
   }
 }
+
+export const getStudents = (institutionId, classId) => {
+  return get(`${serverApiBase}institutions/${institutionId}/studentgroups/${classId}/students/`)
+}
+
 export function fetchStudents(groupId) {
   return function(dispatch, getState) {
 

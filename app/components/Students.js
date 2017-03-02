@@ -1,13 +1,11 @@
-import React from 'react';
-import {modifyBoundary, deleteBoundary, newSchool, saveStudent} from '../actions';
+import React, {Component} from 'react';
+import {modifyBoundary, deleteBoundary, newSchool, saveStudent, getStudents, getBoundaries, getInstitutions, getStudentGroups, selectPreschoolTree} from '../actions';
 import CreateInstitution from './Modals/CreateInstitution';
 import Button from './Button'
 import ConfirmModal from './Modals/Confirm'
 import ModifyStudent from './Modals/ModifyStudent'
 import ReactDataGrid from 'react-data-grid'
 import { Link } from 'react-router'
-
-//{"id":493431,"first_name":"priyanka","middle_name":"y","last_name":"hadimani","uid":null,"dob":"2000-09-10","gender":"female","mt":1,"active":2,"relations":[]
 
 const StudentRow = (props) => {
   // const father = props.relation ?  ||
@@ -31,7 +29,7 @@ const StudentRow = (props) => {
   )
 }
 
-export default class Students extends React.Component {
+class StudentScreen extends Component {
 
   constructor(props){
     super(props);
@@ -94,15 +92,15 @@ export default class Students extends React.Component {
 
   render() {
 
-    const {boundaryDetails, params, boundariesByParentId} = this.props
+    const {boundaryDetails, boundariesByParentId} = this.props.boundaries
+    const {params} = this.props
     const block = boundaryDetails[params.blockId] || boundaryDetails[params.projectId];
     const district = boundaryDetails[params.districtId];
     const cluster = boundaryDetails[params.clusterId] || boundaryDetails[params.circleId]
     const institution = boundaryDetails[params.institutionId]
-    const group = this.props.boundaryDetails[params.groupId]
-    const students = boundariesByParentId[params.groupId]
-
-    const studentRows = students.map((studentId, i) => <StudentRow key={i} { ...boundaryDetails[studentId]} deleteStudent={this.deleteStudent} openModifyStudent={this.openModifyStudent} />)
+    const group = boundaryDetails[params.groupId]
+    const studentList = boundariesByParentId[params.groupId]
+    const studentRows = studentList.map((studentId, i) => <StudentRow key={i} { ...boundaryDetails[studentId]} deleteStudent={this.deleteStudent} openModifyStudent={this.openModifyStudent} />)
 
     var Displayelement;
     if(sessionStorage.getItem('isAdmin')) {
@@ -141,17 +139,93 @@ export default class Students extends React.Component {
           <p> Name: {cluster.name}</p>
         </div>
     }
-    return(
-      <div>
-        <ol className="breadcrumb">
-        <li><Link to={district.path}>{district.name}</Link></li>
-        <li><Link to={block.path}>{block.name}</Link></li>
-        <li><Link to={cluster.path}>{cluster.name}</Link></li>
-        <li><Link to={institution.path}>{institution.name}</Link></li>
-        </ol>
-        <Displayelement {...this.props}/>
-      </div>
-    );
+
+      return (
+            <div>
+              <ol className="breadcrumb">
+              <li><Link to={district.path}>{district.name}</Link></li>
+              <li><Link to={block.path}>{block.name}</Link></li>
+              <li><Link to={cluster.path}>{cluster.name}</Link></li>
+              <li><Link to={institution.path}>{institution.name}</Link></li>
+              </ol>
+              <Displayelement {...this.props}/>
+            </div>
+            
+          )
+    
   }
 };
 
+export default class Students extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      isLoading: true
+    };
+  }
+
+  getStudentPromise(institutionId, groupId) {
+    var promise = new Promise(function(resolve, reject) {
+      getStudents(institutionId, groupId).then((students) => {
+        resolve({
+          students,
+          groupId
+        })
+      }).catch((e) => {
+        reject(e)
+      })
+    })
+
+    return promise
+  }
+
+  componentDidMount() {
+    const {params, dispatch} = this.props
+
+    //Choose Preschool Hierarchy
+    if (params.circleId) {
+      this.props.dispatch(selectPreschoolTree())
+    }
+
+    const blockId = params.blockId || params.projectId
+    const clusterId = params.clusterId || params.circleId
+
+    dispatch({
+      type: 'BOUNDARIES',
+      payload: getBoundaries(1)
+    }).then(() => 
+    dispatch({
+      type: 'BOUNDARIES',
+      payload: getBoundaries(params.districtId)
+    })).then(() => 
+    dispatch({
+      type: 'BOUNDARIES',
+      payload: getBoundaries(blockId)
+    })).then(() => 
+    dispatch({
+      type: 'BOUNDARIES',
+      payload: getInstitutions(clusterId)
+    })).then(() =>
+    dispatch({
+      type: 'BOUNDARIES',
+      payload: getStudentGroups(params.institutionId)
+    })).then(() =>
+    dispatch({
+      type: 'STUDENTS',
+      payload: this.getStudentPromise(params.institutionId, params.groupId)
+    })).then(() => {
+    this.setState({
+      isLoading:false
+    })})
+    
+  }
+
+  render() {
+    return (
+            this.state.isLoading ? 
+            <div>Loading...</div> : 
+            <StudentScreen {...this.props} />
+          )
+  }
+
+}
