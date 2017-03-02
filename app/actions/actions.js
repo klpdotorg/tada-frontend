@@ -29,8 +29,8 @@ function requestDataFromServer() {
 
 function responseReceivedFromServer(resp) {
   return {
-    type: 'RESPONSE_RECEIVED',
-    data: resp.results
+    type: 'BOUNDARIES_FULFILLED',
+    payload: resp
   }
 }
 
@@ -222,7 +222,7 @@ export function fetchStudents(groupId) {
   return function(dispatch, getState) {
 
     const state = getState()
-    const institutionId = state.entities.boundaryDetails[groupId].institution
+    const institutionId = state.boundaries.boundaryDetails[groupId].institution
     var url = serverApiBase + `institutions/${institutionId}/studentgroups/${groupId}/students/`;
 
     return fetch(url, {
@@ -247,7 +247,7 @@ Everything is just one big nav tree in the UI.
 export function fetchEntitiesFromServer(parentBoundaryId) {
   return function(dispatch, getState) {
    const state = getState();
-   return dispatch(boundaryType(parentBoundaryId, state.entities.boundaryDetails)(parentBoundaryId));
+   return dispatch(boundaryType(parentBoundaryId, state.boundaries.boundaryDetails)(parentBoundaryId));
  }
 }
 
@@ -405,7 +405,7 @@ export function modifyBoundary(boundaryid, name){
         "name": name
       })
     }).then(checkStatus).then(response => {
-   
+
         dispatchBoundaryModified(response);
         return response;
     }).catch(error => {
