@@ -25,7 +25,7 @@ export default class SchoolsNavTree extends React.Component {
 
 
   renderSubTree(node, boundaryHierarchy, visitedBoundaries, depth) {    
-    const boundaryDetails = this.props.boundaryDetails        
+    const boundaryDetails = this.props.boundaryDetails;        
     if (boundaryDetails[node].depth == depth && depth < 5) {
       if (node && $.inArray(node, visitedBoundaries) < 0) {
         var children = boundaryHierarchy[node];
