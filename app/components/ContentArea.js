@@ -6,14 +6,6 @@ class MainContentArea extends React.Component {
     super();
   }
 
-  /* Called just before a component is mounted for the first time. Using this to render the default Welcome screen (IndexRoute)*/
-  componentWillMount() {
-  }
-
-  /* Called when a component is reacting to a props change. Invoked before render is called. */
-  componentWillReceiveProps(nextProps) {    
-  }
-
   render() {
     return (
       <div id="main-content-wrapper" className="main__content">
@@ -30,13 +22,12 @@ class MainContentArea extends React.Component {
 const mapStateToProps = (state) => {
   return {
     boundaries: state.boundaries,
-    boundaryDetails: state.entities.boundaryDetails,
-    boundariesByParentId: state.entities.boundariesByParentId,
-    programsById: state.programs.programsById,   
+    boundaryDetails: state.boundaries.boundaryDetails,
+    boundariesByParentId: state.boundaries.boundariesByParentId,
+    programsById: state.programs.programsById,
     assessmentsById: state.assessments.assessmentsById,
     questionsById: state.assessments.questionsById,
-    modal: state.modal,
-    isFetching: state.entities.isFetching
+    modal: state.modal
   }
 }
 
