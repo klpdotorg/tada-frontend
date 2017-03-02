@@ -6,7 +6,7 @@ import {SERVER_API_BASE as serverApiBase,
  SERVER_AUTH_BASE as authApiBase} from 'config';
  import { urls as Urls } from '../constants';
  import _ from 'lodash'
- import store from '../store'
+ import store from '../store';
  import {boundaryType, genUrl} from './utils'
 
 export const selectPrimaryTree = () => {
