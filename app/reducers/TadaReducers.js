@@ -70,20 +70,21 @@ function processBoundaryDetails(boundaryData, boundariesByParentId, boundaryDeta
 
 function processNewBoundary(boundary, boundariesByParentId, boundaryDetailsById)
 {
-  var newBoundaryDetails = {};
-  var parentId = boundary.parent;
-  boundary = computeRouterPathForEntity(boundary, boundaryDetailsById);
-  boundary = nodeDepth(boundary);
-  if (parentId == 1) {
-    boundariesByParentId[boundary.id] = [];
-  }
-  else {
-    if (!boundariesByParentId[parentId]) {
-      boundariesByParentId[parentId] = [];
-      boundariesByParentId[parentId].push(boundary.id);
-    }
-    else
-      boundariesByParentId[parentId].push(boundary.id);
+
+    var newBoundaryDetails = {};
+    var parentId = getParentId(boundary);
+    boundary = computeRouterPathForEntity(boundary, boundaryDetailsById);
+    boundary = nodeDepth(boundary);
+    if (parentId == 1) {
+        boundariesByParentId[boundary.id] = [];
+    } 
+    else {
+        if (!boundariesByParentId[parentId]) {
+          boundariesByParentId[parentId] = [];
+          boundariesByParentId[parentId].push(boundary.id);
+        }
+        else
+          boundariesByParentId[parentId].push(boundary.id);
   }
   newBoundaryDetails[boundary.id] = boundary;
   var mergedBoundaryDetails = Object.assign({}, boundaryDetailsById, newBoundaryDetails);
@@ -228,12 +229,12 @@ export function boundaries(state = {
     let index = copyBoundariesByParentId[action.parentId].indexOf(parseInt(action.id));
     copyBoundariesByParentId[action.parentId].splice(index, 1)
   }
-  var newBoundaryDetails = Object.assign({}, state.boundaryDetails, _.omit(state.boundaryDetails, parseInt(action.id)));
-
+  var newBoundaryDetails = Object.assign({}, state.boundaryDetails);
+  newBoundaryDetails = _.omit(newBoundaryDetails, parseInt(action.id));
   return {
     ...state,
     boundariesByParentId: copyBoundariesByParentId,
-    newBoundaryDetails: newBoundaryDetails
+    boundaryDetails: newBoundaryDetails
   }
 
   default:
