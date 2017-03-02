@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchEntitiesFromServer, fetchProgramsInstitution, logoutUser, saveNewDistrict, loginSuccess, fetchUserData, changeUserName, changePassword, selectPreschoolTree, selectPrimaryTree} from '../actions/';
+import { fetchEntitiesFromServer, fetchProgramsInstitution, logoutUser, saveNewDistrict, loginSuccess, fetchUserData, changeUserName, changePassword, selectPreschoolTree, selectPrimaryTree, getBoundaries} from '../actions/';
 import { push } from 'react-router-redux';
 import NavBar from '../components/MainNavBar';
 import MainHeader from '../components/MainHeader';
@@ -10,8 +10,8 @@ import MainContentArea from '../components/ContentArea';
 import TreeTogglerSpacingDiv from '../components/TreeTogglerSpacingDiv';
 
 const mapStateToProps = state => ({
-  boundaryDetails: state.entities.boundaryDetails,
-  boundariesByParentId: state.entities.boundariesByParentId,
+  boundaryDetails: state.boundaries.boundaryDetails,
+  boundariesByParentId: state.boundaries.boundariesByParentId,
   routerState: state.routing,
   username: state.login.username,
   useremail: state.login.email,
@@ -19,7 +19,7 @@ const mapStateToProps = state => ({
   primarySelected: state.schoolSelection.primarySchool,
   programsByInstitutionId: state.programs.programsByInstitutionId,
   programsByStudentId: state.programs.programsByStudentId,
-  
+
 });
 
 var mapDispatchToProps = function(dispatch) {
@@ -28,12 +28,20 @@ var mapDispatchToProps = function(dispatch) {
       console.log("On boundary click invoked");
       dispatch(fetchEntitiesFromServer(boundary.id));
     },
+
+    getInitData() {
+      return dispatch({
+          type: 'BOUNDARIES',
+          payload: getBoundaries(1)
+       })
+    },
+
     onPrimaryClick() {
       dispatch(selectPrimaryTree());
       dispatch(fetchEntitiesFromServer())
       dispatch(push('/'))
     },
-    onPreSchoolClick() {      
+    onPreSchoolClick() {
       dispatch(selectPreschoolTree())
       dispatch(fetchEntitiesFromServer())
       dispatch(push('/'))
@@ -55,7 +63,7 @@ var mapDispatchToProps = function(dispatch) {
 
     saveNewDistrict(name) {
       dispatch(saveNewDistrict(name));
-    },    
+    },
 
     redirectTo(url) {
       dispatch(push(url));
@@ -89,21 +97,32 @@ class TadaContentContainer extends Component {
 
   constructor(props) {
     super(props)
+    this.state = {
+      isLoading: true
+    }
   }
 
   componentWillMount() {
+    console.log('dispatch', this.props)
+    const {dispatch} = this.props
     if (!sessionStorage.token) {
       this.props.redirectTo('/login');
     } else {
-      this.props.loggedIn(sessionStorage.token);
-      this.props.fetchUserData()
-        .then(this.props.fetchEntityDetails());
+        this.props.loggedIn(sessionStorage.token);
+        this.props.fetchUserData().then(() => {
+          this.props.getInitData().then(() =>  {
+            this.setState({
+              isLoading:false
+            })
+          })
+        })
     }
   }
 
   render() {
     const {onBoundaryClick, boundaryDetails, boundariesByParentId, saveNewDistrict, modifyDistrict, primarySelected, boundaries} = this.props
     return (
+      this.state.isLoading ? <div>Loading... </div> :
       <div>
         <MainHeader handleLogout={ this.props.handleLogout } email={this.props.useremail} username={this.props.username} handleChangePassword = {this.props.changePassword} handleChangeUserName = {this.props.changeUserName}/>
         <TreeTogglerSpacingDiv/>
@@ -114,8 +133,8 @@ class TadaContentContainer extends Component {
           <SideBar primarySelected={primarySelected} onBoundaryClick={ onBoundaryClick } boundaryDetails={ boundaryDetails } boundariesByParentId={ boundariesByParentId } />
           <MainContentArea children={ this.props.children } />
         </div>
-
-      </div>);
+      </div>
+    );
   }
 }
 

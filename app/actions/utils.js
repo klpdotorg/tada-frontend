@@ -23,20 +23,19 @@ export const checkStatus = (response) => {
   throw error;
 }
 
-export const boundaryType = (id = 1, details) => {  
+export const boundaryType = (id = 1, details) => {
   let boundaryCategory, institution;
-
   switch (details[id].depth) {
-    case 2: 
+    case 2:
       return fetchInstitutionDetails
-    case 3: 
+    case 3:
       return fetchStudentGroups
-    case 4: 
+    case 4:
       return fetchStudents
-    default: 
+    default:
       return fetchBoundaryDetails
-  }  
-} 
+  }
+}
 
 export const genUrl = (url, base) => {
   return base + url

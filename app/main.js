@@ -14,14 +14,14 @@ import ReactDOM from 'react-dom';
 import Dashboard from './components/Dashboard';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
-import PrimaryDistrict from './components/PrimaryDistrictScreen';
+import PrimaryDistrict from './components/PrimaryDistrict';
 import PrimaryBlock from './components/PrimaryBlockScreen';
 import PrimaryCluster from './components/PrimaryClusterScreen';
 import PreschoolProject from './components/PreschoolProjectScreen';
 import PreschoolCircle from './components/PreschoolCircleScreen';
 import Institution from './components/InstitutionDetailsScreen';
 import Preschool from './components/Preschool';
-import StudentGroup from './components/StudentGroup' 
+import StudentGroup from './components/StudentGroup'
 import Students from './components/Students'
 import LoginContainer from './containers/LoginContainer';
 import Logout from './components/Logout';
