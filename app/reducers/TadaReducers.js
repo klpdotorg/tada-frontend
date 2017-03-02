@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import {processStudents, computeRouterPathForEntity, nodeDepth, getParentId} from './utils'
+import store from '../store'
 
 const modalsDefault = {
   createDistrict: false,
@@ -185,7 +186,15 @@ export function boundaries(state = {
      ...boundaryDetails,
      isFetching: false
     }    
-   
+    
+    case 'STUDENTS_FULFILLED':
+    let merged = processStudents(action.payload.students.results, action.payload.groupId, state.boundariesByParentId, state.boundaryDetails)    
+    return {
+     ...state,
+     ...merged,
+     isFetching: false
+   }   
+
     default:
     return state;
 }
