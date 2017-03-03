@@ -2,7 +2,7 @@ import React from 'react';
 import ConfirmModal from './Modals/Confirm'
 import {deleteInstitution, saveInstitution, saveNewClass, getBoundaries, getInstitutions} from '../actions'
 import Button from './Button'
-import CreateClass from './Modals/CreateBoundary'
+import CreateClass from './Modals/CreateClass'
 import {mapValues} from 'lodash';
 import { Link } from 'react-router';
 import Select from 'react-select';
@@ -129,11 +129,13 @@ export default class Institution extends React.Component {
     })
    }
 
-   saveClass(name) {
+   saveClass(name,section,type) {
      const institution = this.props.params.institutionId
      const options = {
       name,
-      institution
+      institution,
+      section,
+      type
     }
     this.props.dispatch(saveNewClass(options))
   }
