@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import {processStudents, computeRouterPathForEntity, nodeDepth, getParentId} from './utils'
+import { processStudents, computeRouterPathForEntity, nodeDepth, getParentId, getEntityType , CLASS, INSTITUTION, STUDENT, BOUNDARY } from './utils'
 import store from '../store'
 
 const modalsDefault = {
@@ -29,7 +29,20 @@ export function schoolSelection(state = {
   }
 }
 
-
+/**
+ * Classes need to have a label that's a combination of name and section. This method
+ * combines the name and section and adds a label field to the boundary. NavTree will look for this
+ * field when rendering.
+ * @param {*} entity 
+ */
+function createLabelForClass(entity)
+{
+  var entityType = getEntityType(entity);
+  if(entityType == CLASS) {
+    entity.label = entity.name + entity.section;
+  }
+  return entity;
+}
 
 function processBoundaryDetails(boundaryData, boundariesByParentId, boundaryDetails) {
   var newBoundaryDetails = {}
@@ -38,14 +51,14 @@ function processBoundaryDetails(boundaryData, boundariesByParentId, boundaryDeta
     var parentId = getParentId(boundaryData[0]);
     boundaryData.map(boundary => {
       var id = boundary.id;
-
+     
       //Special case the districts because they are top level entities and they have no parents. If
 
       //parent is 1, then just enter the results as the keys in the object
 
       boundary = computeRouterPathForEntity(boundary, boundaryDetails)
       boundary = nodeDepth(boundary)
-
+      boundary = createLabelForClass(boundary);
       if (parentId == 1) {
         boundariesByParentId[id] = [];
       } else {
@@ -75,6 +88,7 @@ function processNewBoundary(boundary, boundariesByParentId, boundaryDetailsById)
     var parentId = getParentId(boundary);
     boundary = computeRouterPathForEntity(boundary, boundaryDetailsById);
     boundary = nodeDepth(boundary);
+    boundary = createLabelForClass(boundary);
     if (parentId == 1) {
         boundariesByParentId[boundary.id] = [];
     } 
@@ -99,6 +113,7 @@ function processBoundaryModified(boundary, existingBoundaryDetails)
   var modifiedBoundary={};
   boundary = computeRouterPathForEntity(boundary,existingBoundaryDetails);
   boundary = nodeDepth(boundary);
+  boundary = createLabelForClass(boundary);
   modifiedBoundary[boundary.id]=boundary;
   var mergedBoundaryDetails = Object.assign({},existingBoundaryDetails,modifiedBoundary);
   return {

@@ -1,5 +1,9 @@
 import _ from 'lodash'
 
+export const CLASS = "class";
+export const BOUNDARY = "boundary";
+export const INSTITUTION = "institution";
+export const STUDENT = "student";
 /*
 Function returns the parent of a particular entity given the entity. This is data massaging on the client side
 because for institutions, the parent id is represented as "bouiiiiindary" in the JSON. Whereas, for boundaries, it is
@@ -19,6 +23,20 @@ export const getParentId = (entity, group) => {
  }
 
   return parent;
+}
+
+export const getEntityType = (entity) => {
+  var type = "";
+   if (entity.institution_gender) {
+    type = INSTITUTION;
+  } else if (entity.group_type) {
+    type=CLASS;
+  } else if (entity.dob){
+    type=STUDENT
+  } else {
+    type=BOUNDARY;
+ }
+ return type;
 }
 
 /*
