@@ -33,7 +33,7 @@ export function schoolSelection(state = {
  * Classes need to have a label that's a combination of name and section. This method
  * combines the name and section and adds a label field to the boundary. NavTree will look for this
  * field when rendering.
- * @param {*} entity 
+ * @param {*} entity
  */
 function createLabelForClass(entity)
 {
@@ -51,24 +51,15 @@ function processBoundaryDetails(boundaryData, boundariesByParentId, boundaryDeta
     var parentId = getParentId(boundaryData[0]);
     boundaryData.map(boundary => {
       var id = boundary.id;
-     
-      //Special case the districts because they are top level entities and they have no parents. If
-
-      //parent is 1, then just enter the results as the keys in the object
-
       boundary = computeRouterPathForEntity(boundary, boundaryDetails)
       boundary = nodeDepth(boundary)
-      boundary = createLabelForClass(boundary);
-      if (parentId == 1) {
-        boundariesByParentId[id] = [];
-      } else {
         if (!boundariesByParentId[parentId]) {
           boundariesByParentId[parentId] = [];
           boundariesByParentId[parentId].push(boundary.id);
         }
-        else
+        else {
           boundariesByParentId[parentId].push(boundary.id);
-      }
+        }
       newBoundaryDetails[id] = boundary;
     })
 
@@ -91,7 +82,7 @@ function processNewBoundary(boundary, boundariesByParentId, boundaryDetailsById)
     boundary = createLabelForClass(boundary);
     if (parentId == 1) {
         boundariesByParentId[boundary.id] = [];
-    } 
+    }
     else {
         if (!boundariesByParentId[parentId]) {
           boundariesByParentId[parentId] = [];
@@ -121,73 +112,6 @@ function processBoundaryModified(boundary, existingBoundaryDetails)
   }
 }
 
-// export function entities(state = {
-//   boundariesByParentId: {},
-//   boundaryDetails: {1: {
-//     depth: 0
-//   }}
-// } , action) {
-//   switch (action.type) {
-//     case 'REQUEST_SENT':
-//     return {
-//       ...state,
-//       isFetching: true
-//     }
-//     case 'BOUNDARY_CREATED':
-//     const newBoundary = processNewBoundary(action.boundary, state.boundariesByParentId, state.boundaryDetails);
-//     return {
-//       ...state,
-//       ...newBoundary,
-//       isFetching: false
-//     }
-//     case 'BOUNDARY_MODIFIED':
-//      var modBoundary = processBoundaryModified(action.boundary, state.boundaryDetails);
-//      var newState = Object.assign({},state, modBoundary);
-//     return newState;
-
-
-//     case 'RESPONSE_RECEIVED':
-//     const boundaryDetails = processBoundaryDetails(action.data, state.boundariesByParentId, state.boundaryDetails)
-//     return {
-//      ...state,
-//      ...boundaryDetails,
-//      isFetching: false
-//    }
-//    case 'REQUEST_FAILED':
-//    return {
-//     ...state,
-//     error: action.error,
-//     statusCode: action.statusCode,
-//     statusText: action.statusText,
-//     isFetching: false
-//   }
-//   case 'REMOVE_BOUNDARY':
-
-//   let copyBoundariesByParentId =  _.omit(state.boundariesByParentId, action.id);
-//   if (action.parentId) {
-//     let index = copyBoundariesByParentId[action.parentId].indexOf(parseInt(action.id));
-//     copyBoundariesByParentId[action.parentId].splice(index, 1)
-//   }
-//   var newBoundaryDetails = Object.assign({}, state.boundaryDetails, _.omit(state.boundaryDetails, parseInt(action.id)));
-
-//   return {
-//     ...state,
-//     boundariesByParentId: copyBoundariesByParentId,
-//     newBoundaryDetails: newBoundaryDetails
-//   }
-//   case 'STUDENTS_FETCHED': {
-//     let merged = processStudents(action.data, action.groupId, state.boundariesByParentId, state.boundaryDetails)
-//     return {
-//      ...state,
-//      ...merged,
-//      isFetching: false
-//    }
-//  }
-//  default:
-//  return state;
-// }
-// }
-
 export function boundaries(state = {
   boundariesByParentId: {},
   boundaryDetails: {1: {
@@ -197,11 +121,7 @@ export function boundaries(state = {
   switch (action.type) {
     case 'BOUNDARIES_FULFILLED':
     const boundaryDetails = processBoundaryDetails(action.payload.results, state.boundariesByParentId, state.boundaryDetails)
-    return {
-     ...state,
-     ...boundaryDetails,
-     isFetching: false
-   }
+    return boundaryDetails
 
    case 'STUDENTS_FULFILLED':
    let merged = processStudents(action.payload.students.results, action.payload.groupId, state.boundariesByParentId, state.boundaryDetails)
