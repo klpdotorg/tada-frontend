@@ -29,47 +29,29 @@ export function schoolSelection(state = {
   }
 }
 
-/**
- * Classes need to have a label that's a combination of name and section. This method
- * combines the name and section and adds a label field to the boundary. NavTree will look for this
- * field when rendering.
- * @param {*} entity
- */
-function createLabelForClass(entity)
-{
-  var entityType = getEntityType(entity);
-  if(entityType == CLASS) {
-    entity.label = entity.name + entity.section;
+function processBoundaryDetails(data, boundariesByParentId, boundaryDetails) {
+  let init = {
+    parents : _.clone(boundariesByParentId),
+    details : _.clone(boundaryDetails)
   }
-  return entity;
-}
 
-function processBoundaryDetails(boundaryData, boundariesByParentId, boundaryDetails) {
-  var newBoundaryDetails = {}
-  if (boundaryData.length > 0) {
-    //Get the parent so we can compute router path
-    var parentId = getParentId(boundaryData[0]);
-    boundaryData.map(boundary => {
-      var id = boundary.id;
-      boundary = computeRouterPathForEntity(boundary, boundaryDetails)
-      boundary = nodeDepth(boundary)
-        if (!boundariesByParentId[parentId]) {
-          boundariesByParentId[parentId] = [];
-          boundariesByParentId[parentId].push(boundary.id);
-        }
-        else {
-          boundariesByParentId[parentId].push(boundary.id);
-        }
-      newBoundaryDetails[id] = boundary;
-    })
+  const parentId = getParentId(data[0]);
 
-  }
-  var mergedBoundaryDetails = Object.assign({}, boundaryDetails, newBoundaryDetails);
+  const processed = data.reduce((soFar, boundary) => {
+    soFar.parents[parentId] = _.union([boundary.id], soFar.parents[parentId])
+    if (soFar.details[boundary.id] == undefined) {
+      boundary.collapsed = true
+    }
+    boundary = computeRouterPathForEntity(boundary, boundaryDetails)
+    boundary = nodeDepth(boundary)
+    soFar.details[boundary.id] = {...soFar.details[boundary.id], ...boundary}
+    return soFar
+  }, init)
 
   return {
-    boundaryDetails: mergedBoundaryDetails,
-    boundariesByParentId: boundariesByParentId
-  };
+    boundariesByParentId : processed.parents,
+    boundaryDetails: processed.details
+  }
 }
 
 function processNewBoundary(boundary, boundariesByParentId, boundaryDetailsById)
@@ -176,10 +158,6 @@ export function boundaries(state = {
   return state;
 }
 }
-
-
-
-
 
 export function login(state = {
   authenticated: false,
