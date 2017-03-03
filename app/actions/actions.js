@@ -15,6 +15,13 @@ export const selectPrimaryTree = () => {
   }
 }
 
+export const toggleNode = (id) => {
+  return {
+    type: 'TOGGLE_NODE',
+    id
+  }
+}
+
 export const selectPreschoolTree = () => {
   return {
     type: 'PRESCHOOL_SELECTED'

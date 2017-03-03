@@ -126,6 +126,19 @@ export function boundaries(state = {
     isFetching: false
   }
 
+  case 'TOGGLE_NODE':
+    const boundary = _.clone(state.boundaryDetails[action.id])
+    boundary.collapsed = !boundary.collapsed
+    const details = {
+      ...state.boundaryDetails,
+      ...{[action.id]: boundary}
+    }
+    const val = {
+      ...state,
+      ...{boundaryDetails: details}
+    }
+    return val
+
   case 'BOUNDARY_MODIFIED':
   var modBoundary = processBoundaryModified(action.boundary, state.boundaryDetails);
   var newState = Object.assign({},state, modBoundary);
