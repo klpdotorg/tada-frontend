@@ -4,10 +4,9 @@ import {checkStatus, get} from './utils'
 
 import {SERVER_API_BASE as serverApiBase,
  SERVER_AUTH_BASE as authApiBase} from 'config';
- import { urls as Urls } from '../constants';
- import _ from 'lodash'
- import store from '../store';
- import {boundaryType, genUrl} from './utils'
+import { urls as Urls } from '../constants';
+import _ from 'lodash'
+import {boundaryType, genUrl} from './utils'
 
 export const selectPrimaryTree = () => {
   return {
@@ -34,7 +33,7 @@ function requestDataFromServer() {
   }
 }
 
-function responseReceivedFromServer(resp) {
+export function responseReceivedFromServer(resp) {
   return {
     type: 'BOUNDARIES_FULFILLED',
     payload: resp
@@ -113,7 +112,7 @@ export function logoutUser() {
       if(response.status > 200 && response.status < 300)
       {
         sessionStorage.removeItem('token');
-        store.dispatch(push('/logout'));
+        dispatch(push('/logout'));
       }
     }).catch(error => {
       console.log(error);
@@ -316,6 +315,13 @@ export function sendRegisterUser(email, password, username) {
   }
 }
 
+function toggleModal(modalType) {
+  return {
+    type: 'TOGGLE_MODAL',
+    modal: `${modalType}`
+  }
+}
+
 export function sendLoginToServer(email, pass) {
   return function(dispatch, getState) {
 
@@ -358,10 +364,8 @@ export function deleteBoundary(boundaryid, parentId){
       }
     }).then(response =>{
      if (response.status >= 200 && response.status < 300) {
+      dispatch(push('/'));
       dispatch(removeBoundary(boundaryid, parentId));
-      //dispatch(fetchEntitiesFromServer(1))
-        //Route the user to the home dashboard page since the page they were on will be deleted
-        dispatch(push('/'));
       } else {
         const error = new Error(response.statusText);
         error.response = response;
@@ -372,33 +376,6 @@ export function deleteBoundary(boundaryid, parentId){
     })
   }
 }
-
-// export function modifyBoundary(boundaryid, name){
-//   return function(dispatch, getState) {
-//     return fetch(serverApiBase + 'boundaries/' + boundaryid +'/', {
-//       method: 'PATCH',
-//       headers: {
-//         'Content-Type': 'application/json',
-//         'Authorization' : 'Token ' + sessionStorage.token
-//       },
-//       body: JSON.stringify({
-//         "name": name
-//       })
-//     }).then(response => {
-//      if (response.status >= 200 && response.status < 300) {
-//         var json = response.json();
-//         dispatchBoundaryModified(json);
-//         return json;
-//     } else {
-//       const error = new Error(response.statusText);
-//       error.response = response;
-//       throw error;
-//     }
-//   }).catch(error => {
-//     console.log('request failed', error)
-//   })
-// }
-// }
 
 export function modifyBoundary(boundaryid, name){
   return function(dispatch, getState) {
@@ -412,26 +389,12 @@ export function modifyBoundary(boundaryid, name){
         "name": name
       })
     }).then(checkStatus).then(response => {
-
-        dispatchBoundaryModified(response);
+        dispatch(responseReceivedFromServer({results: [response]}))
         return response;
     }).catch(error => {
     console.log('request failed', error)
   })
 }
-}
-
-const request = (method, options, url) => {
-  return fetch(url, {
-    method: method,
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Token ' + sessionStorage.token
-    },
-    body: JSON.stringify(options)
-  }).catch(error => {
-    console.log('request failed', error)
-  })
 }
 
 const newBoundaryFetch = (options) => {
@@ -447,29 +410,6 @@ const newBoundaryFetch = (options) => {
   })
 }
 
-function dispatchToggleModal(modalType)
-{
-  store.dispatch({
-    type: 'TOGGLE_MODAL',
-    modal: `${modalType}`
-  });
-}
-
-function dispatchBoundaryModified(data)
-{
-  store.dispatch({
-    type: 'BOUNDARY_MODIFIED',
-    boundary: data
-  });
-}
-
-function dispatchBoundaryCreated(dispatch,data)
-{
-  store.dispatch({
-    type: 'BOUNDARY_CREATED',
-    boundary: data
-  });
-}
 
 export const saveNewDistrict = name => (dispatch, getState) => {
   const boundaryType = getState().schoolSelection.primarySchool ? 1: 2
@@ -480,51 +420,35 @@ export const saveNewDistrict = name => (dispatch, getState) => {
     parent: 1
   }
   return newBoundaryFetch(options).then(checkStatus).then(response => {
-    dispatchBoundaryCreated(dispatch, response);
-    dispatchToggleModal('createDistrict');
+    dispatch(responseReceivedFromServer({results: [response]}))
+    dispatch(toggleModal('createDistrict'));
   })
 }
 
 export const saveNewBlock = options => dispatch => {
   return newBoundaryFetch(options).then(checkStatus).then(response => {
-    dispatchBoundaryCreated(dispatch, response);
-    dispatchToggleModal('createBlock');
+    dispatch(responseReceivedFromServer({results: [response]}))
+    dispatch(toggleModal('createBlock'));
   })
 }
 
 export const saveNewCluster = options => dispatch => {
   return newBoundaryFetch(options).then(checkStatus).then(response => {
-    dispatchBoundaryCreated(dispatch, response);
-    dispatchToggleModal('createCluster');
+    dispatch(responseReceivedFromServer({results: [response]}))
+    dispatch(toggleModal('createCluster'));
   })
 }
 
 export const saveNewProject = options => dispatch => {
   return newBoundaryFetch(options).then(checkStatus).then(response => {
-    // dispatch(fetchEntitiesFromServer(1))
-    // dispatch(push('/'));
-     dispatch({
-      type: 'BOUNDARY_CREATED',
-      boundary: response
-    });
-    dispatch({
-      type: 'TOGGLE_MODAL',
-      modal: 'createProject'
-    })
+    dispatch(responseReceivedFromServer({results: [response]}))
+    dispatch(toggleModal('createProject'));
   })
 }
 
 export const saveNewCircle = options => dispatch => {
   return newBoundaryFetch(options).then(checkStatus).then(response => {
-    // dispatch(fetchEntitiesFromServer(1))
-    // dispatch(push('/'));
-     dispatch({
-      type: 'BOUNDARY_CREATED',
-      boundary: response
-    });
-    dispatch({
-      type: 'TOGGLE_MODAL',
-      modal: 'createCircle'
-    })
+    dispatch(responseReceivedFromServer({results: [response]}))
+    dispatch(toggleModal('createCircle'));
   })
 }
