@@ -4,7 +4,7 @@ import {checkStatus, get} from './utils'
 
 import {SERVER_API_BASE as serverApiBase,
  SERVER_AUTH_BASE as authApiBase} from 'config';
-import { urls as Urls } from '../constants';
+import { urls as Urls, roles as ROLES } from '../constants';
 import _ from 'lodash'
 import {boundaryType, genUrl} from './utils'
 
@@ -266,20 +266,30 @@ export function fetchUserData() {
         'Authorization': 'Token ' + token,
         'Content-Type': 'application/json'
       },
-    }).then(response => (checkStatus(response)))
+    }).then(checkStatus)
     .then(data => {
-      /* HACK: Remove this if permissions are implemented */
-      if (data.email == "tadaadmin@klp.org.in" || 'aksanoble@gmail.com') {
-        sessionStorage.setItem('isAdmin', true);
-      }
-      dispatch(loginSuccess(token))
-      dispatch(userDataFetched(data))
+      fetch(Urls.USERS + data.id + "/", {
+        method: "GET",
+        headers: {
+          'Authorization': 'Token ' + token,
+          'Content-Type': 'application/json'
+        },
+      }).then(checkStatus).then(data => {
+        data.groups.map((item, index) => {
+          console.log(item);
+          if(item.name == ROLES.ADMIN)
+            sessionStorage.setItem('isAdmin', true);
+        });
+       
+        dispatch(userDataFetched(data));
+        dispatch(loginSuccess(token));
+      });
     })
     .catch(error => {
       console.log(error.response);
       dispatch(requestFailed(error));
-    })
-  }
+    });
+  };
 }
 
 export function sendRegisterUser(email, password, username) {
