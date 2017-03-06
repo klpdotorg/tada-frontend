@@ -24,7 +24,7 @@ $RECYCLE.BIN/
 *.msi
 *.msm
 *.msp
-
+*.vscode
 
 # OSX
 
