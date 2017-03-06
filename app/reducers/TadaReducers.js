@@ -29,6 +29,21 @@ export function schoolSelection(state = {
   }
 }
 
+/**
+ + * Classes need to have a label that's a combination of name and section. This method
+ + * combines the name and section and adds a label field to the boundary. NavTree will look for this
+ + * field when rendering.
+ + * @param {*} entity 
+ + */
+ function createLabelForClass(entity)
+ {
+   var entityType = getEntityType(entity);
+   if(entityType == CLASS) {
+     entity.label = entity.name + entity.section;
+   }
+   return entity;
+ }
+
 function processBoundaryDetails(data, boundariesByParentId, boundaryDetails) {
   let init = {
     parents : _.clone(boundariesByParentId),
@@ -44,6 +59,8 @@ function processBoundaryDetails(data, boundariesByParentId, boundaryDetails) {
     }
     boundary = computeRouterPathForEntity(boundary, boundaryDetails)
     boundary = nodeDepth(boundary)
+    boundary = createLabelForClass(boundary);
+    
     soFar.details[boundary.id] = {...soFar.details[boundary.id], ...boundary}
     return soFar
   }, init)
