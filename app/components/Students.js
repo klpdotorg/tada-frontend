@@ -13,6 +13,7 @@ const StudentRow = (props) => {
   return (
     <div className="col-md-12">
       <div className="row">
+        <div className="col-md-1"><input checked={!!props.selectedStudents[props.id]} onChange={props.selectStudent} type="checkbox" /></div>
         <div className="col-md-2"><span>{props.first_name}</span></div>
         <div className="col-md-1"><span>{props.middle_name}</span></div>
         <div className="col-md-1"><span>{props.last_name}</span></div>
@@ -38,12 +39,16 @@ class StudentScreen extends Component {
     this.openModifyStudent = this.openModifyStudent.bind(this);
     this.closeModifyStudent  =this.closeModifyStudent.bind(this);
     this.saveStudent = this.saveStudent.bind(this);
+    this.selectStudent = this.selectStudent.bind(this);
+    this.mapToCentre = this.mapToCentre.bind(this);
     this.state = {
       schoolModalIsOpen: false,
       openConfirmModal: false,
       modifyStudentIsOpen: false,
       currentStudent: '',
-      modifyStudentData: null
+      modifyStudentData: null,
+      selectedStudents: {},
+      mapToCentre: props.boundariesByParentId[props.params.institutionId][0]
     };
   }
 
@@ -51,6 +56,22 @@ class StudentScreen extends Component {
     this.setState({
       openConfirmModal: false
     })
+  }
+
+  mapToCentre() {
+    console.log(this.state.selectedStudents, this.state.mapToCentre)
+  }
+
+  selectStudent(id) {
+    let selectedStudents = {
+      ...this.state.selectedStudents,
+      ...{[id]: !this.state.selectedStudents[id]}
+    }
+
+    this.setState({
+      selectedStudents
+    })
+
   }
 
   showConfirmation = () => {
@@ -100,7 +121,11 @@ class StudentScreen extends Component {
     const institution = boundaryDetails[params.institutionId]
     const group = boundaryDetails[params.groupId]
     const studentList = boundariesByParentId[params.groupId]
-    const studentRows = studentList.map((studentId, i) => <StudentRow key={i} { ...boundaryDetails[studentId]} deleteStudent={this.deleteStudent} openModifyStudent={this.openModifyStudent} />)
+    const studentRows = studentList.map((studentId, i) => <StudentRow key={i} { ...boundaryDetails[studentId]} deleteStudent={this.deleteStudent} selectedStudents={this.state.selectedStudents} selectStudent={() => {this.selectStudent(studentId)}} openModifyStudent={this.openModifyStudent} />)
+    const studentGroups = boundariesByParentId[params.institutionId].map((id) => {
+      let group = boundaryDetails[id]
+      return <option key={id} value={group.id}>{group.label}</option>
+    })
 
     var Displayelement;
     if(sessionStorage.getItem('isAdmin')) {
@@ -123,6 +148,13 @@ class StudentScreen extends Component {
             </div>
             { studentRows }
          </div>
+
+        </div>
+        <div className="col-sm-2">
+          <select className="col-sm-2" onChange={(e) => {this.setState({mapToCentre : e.target.value})}} value={this.state.mapToCentre} className="form-control" id="gender">
+                  {studentGroups}
+          </select>
+          <button type="submit" className="btn btn-primary" onClick={this.mapToCentre}>Map to Center</button>
 
         </div>
         <div className="col-md-2">
@@ -150,9 +182,9 @@ class StudentScreen extends Component {
               </ol>
               <Displayelement {...this.props}/>
             </div>
-            
+
           )
-    
+
   }
 };
 
@@ -193,15 +225,15 @@ export default class Students extends Component {
     dispatch({
       type: 'BOUNDARIES',
       payload: getBoundaries(1)
-    }).then(() => 
+    }).then(() =>
     dispatch({
       type: 'BOUNDARIES',
       payload: getBoundaries(params.districtId)
-    })).then(() => 
+    })).then(() =>
     dispatch({
       type: 'BOUNDARIES',
       payload: getBoundaries(blockId)
-    })).then(() => 
+    })).then(() =>
     dispatch({
       type: 'BOUNDARIES',
       payload: getInstitutions(clusterId)
@@ -217,13 +249,13 @@ export default class Students extends Component {
     this.setState({
       isLoading:false
     })})
-    
+
   }
 
   render() {
     return (
-            this.state.isLoading ? 
-            <div>Loading...</div> : 
+            this.state.isLoading ?
+            <div>Loading...</div> :
             <StudentScreen {...this.props} />
           )
   }
