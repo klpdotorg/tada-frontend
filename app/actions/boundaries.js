@@ -1,6 +1,6 @@
 import { SERVER_API_BASE as serverApiBase } from 'config';
 import { checkStatus } from './utils';
-import { fetchEntitiesFromServer, removeBoundary } from './actions';
+import { fetchEntitiesFromServer, removeBoundary, responseReceivedFromServer } from './actions';
 import { push } from 'react-router-redux';
 import store from '../store';
 
@@ -9,20 +9,6 @@ function dispatchToggleModal(modalType) {
   store.dispatch({
     type: 'TOGGLE_MODAL',
     modal: `${modalType}`,
-  });
-}
-
-function dispatchBoundaryModified(data) {
-  store.dispatch({
-    type: 'BOUNDARY_MODIFIED',
-    boundary: data,
-  });
-}
-
-function dispatchBoundaryCreated(data) {
-  store.dispatch({
-    type: 'BOUNDARY_CREATED',
-    boundary: data,
   });
 }
 
@@ -64,7 +50,7 @@ const newInstitutionFetch = (options) => {
 
 export const saveNewInstitution = options => dispatch => {
   return newInstitutionFetch(options).then(checkStatus).then(response => {
-    dispatchBoundaryCreated(response);
+    dispatch(responseReceivedFromServer({results: [response]}))
     dispatchToggleModal('createInstitution');
   });
 };
@@ -84,7 +70,7 @@ const institutionFetch = (options) => {
 
 export const saveInstitution = options => dispatch => {
   return institutionFetch(options).then(checkStatus).then(response => {
-    dispatchBoundaryModified(response);
+    dispatch(responseReceivedFromServer({results: [response]}))
   });
 };
 
@@ -116,14 +102,14 @@ const classFetch = (options) => {
 
 export const saveNewClass = options => dispatch => {
   return classNewFetch(options).then(checkStatus).then(response => {
-    dispatchBoundaryCreated(response);
+    dispatch(responseReceivedFromServer({results: [response]}))
     dispatchToggleModal('createClass');
   });
 };
 
 export const saveClass = options => dispatch => {
   return classFetch(options).then(checkStatus).then(response => {
-    dispatchBoundaryModified(response);
+    dispatch(responseReceivedFromServer({results: [response]}))
   });
 };
 
@@ -165,7 +151,7 @@ const addStudentsFetch = (options) => {
 
 export const saveNewStudents = options => dispatch => {
   return addStudentsFetch(options).then(checkStatus).then(response => {
-    dispatchBoundaryCreated(response);
+    dispatch(responseReceivedFromServer({results: [response]}))
   });
 };
 
@@ -184,7 +170,7 @@ const studentFetch = (options) => {
 
 export const saveStudent = options => dispatch => {
   return studentFetch(options).then(checkStatus).then(response => {
-    dispatchBoundaryModified(response);
+    dispatch(responseReceivedFromServer({results: [response]}))
   });
 };
 

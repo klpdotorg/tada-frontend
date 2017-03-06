@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchEntitiesFromServer, fetchProgramsInstitution, logoutUser, saveNewDistrict, loginSuccess, fetchUserData, changeUserName, changePassword, selectPreschoolTree, selectPrimaryTree, getBoundaries} from '../actions/';
+import { fetchEntitiesFromServer, fetchProgramsInstitution, logoutUser, saveNewDistrict, loginSuccess, fetchUserData, changeUserName, changePassword, selectPreschoolTree, selectPrimaryTree, getBoundaries, toggleNode} from '../actions/';
 import { push } from 'react-router-redux';
 import NavBar from '../components/MainNavBar';
 import MainHeader from '../components/MainHeader';
@@ -26,7 +26,9 @@ var mapDispatchToProps = function(dispatch) {
   return {
     onBoundaryClick(boundary) {
       console.log("On boundary click invoked");
+      dispatch(toggleNode(boundary.id))
       dispatch(fetchEntitiesFromServer(boundary.id));
+
     },
 
     getInitData() {

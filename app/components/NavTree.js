@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import {alphabeticalOrder} from '../utils'
 
 export default class SchoolsNavTree extends React.Component {
- 
+
   constructor(props)
   {
     super(props);
@@ -24,18 +24,18 @@ export default class SchoolsNavTree extends React.Component {
   }
 
 
-  renderSubTree(node, boundaryHierarchy, visitedBoundaries, depth) {    
-    const boundaryDetails = this.props.boundaryDetails;        
+  renderSubTree(node, boundaryHierarchy, visitedBoundaries, depth) {
+    const boundaryDetails = this.props.boundaryDetails;
     if (boundaryDetails[node].depth == depth && depth < 5) {
       if (node && $.inArray(node, visitedBoundaries) < 0) {
         var children = boundaryHierarchy[node];
         visitedBoundaries.push(node);
 
         var boundary = this.props.boundaryDetails[node];
-        const label = <Link key={ boundary.name || boundary.id } to={ boundary.path } onClick={ this.props.onBoundaryClick.bind(null, boundary) }><span className="node"> { boundary.label || boundary.name || boundary.first_name} </span></Link>;
+        const label = <Link key={ boundary.name || boundary.id } to={ boundary.path }><span className="node"> { boundary.name || boundary.first_name} </span></Link>;
         return (
 
-          <TreeView key={ node } onClick={ this.props.onBoundaryClick.bind(null, boundary) } nodeLabel={ label } defaultCollapsed={ true }>
+          <TreeView key={ node } onClick={ this.props.onBoundaryClick.bind(null, boundary) } nodeLabel={ label } collapsed={ boundary.collapsed }>
           { (() => {
             if (children && children.length > 0) {
               ++depth
@@ -47,20 +47,20 @@ export default class SchoolsNavTree extends React.Component {
           })() }
           </TreeView>
           );
-      }      
-     }
+      }
+      }
 
      return null;
   }
 
   //boundaryDetails={this.state.boundaryDetails} boundaryParentChildMap={this.state.childrenByParentId}
   render() {
-    var copyOfMap = $.extend(true, {}, this.props.boundariesByParentId);    
     var visitedBoundaries = [];
+    const {boundariesByParentId, boundaryDetails} = this.props
     return (
       <div>
-      { alphabeticalOrder(copyOfMap, this.props.boundaryDetails).map(function(element, i) {
-        return this.renderSubTree(element, copyOfMap, visitedBoundaries, 0)
+      { alphabeticalOrder(boundariesByParentId, boundaryDetails).map(function(element, i) {
+        return this.renderSubTree(element, boundariesByParentId, visitedBoundaries, 0)
       }.bind(this)) }
       </div>
       );
