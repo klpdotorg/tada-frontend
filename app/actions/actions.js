@@ -276,7 +276,7 @@ export function fetchUserData() {
         },
       }).then(checkStatus).then(data => {
         data.groups.map((item, index) => {
-          console.log(item);
+          //console.log(item);
           if(item.name == ROLES.ADMIN)
             sessionStorage.setItem('isAdmin', true);
         });

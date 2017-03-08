@@ -21,6 +21,7 @@ export default class ConfirmDialog extends Component {
     return (
       <Modal contentLabel="Confirm Modal" isOpen={this.props.isOpen} onRequestClose={this.props.onCloseModal} style={customStyles}>
         {this.props.entity && <p>{this.props.message}:{this.props.entity.name}</p>}
+        {!this.props.entity && <p>{this.props.message}</p>}
         <div className='button' onClick={ () => {
                                             this.props.onYes(this.props.entity)
                                           } }>Yes</div>
