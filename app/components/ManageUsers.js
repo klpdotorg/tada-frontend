@@ -88,6 +88,9 @@ deleteUsers()
 	{
 		this.props.dispatch(actions.deleteUser(this.state.selectedUserIds[i]));
 	}
+	this.setState({
+		selectedUserIds: []
+	});
 }
 
 createUser(firstname, lastname, username, email,password, role){
