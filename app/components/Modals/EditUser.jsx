@@ -34,7 +34,7 @@ export default class EditUser extends Component {
 	{
 		var myform = this.myform.getModel();
 
-		this.props.handleSubmit(myform.firstName,myform.lastName,myform.userName, myform.email, myform.password, myform.role);
+		this.props.handleSubmit(this.props.user.id,myform.firstName,myform.lastName, myform.email, myform.role);
 	}
 
 	enableSubmitButton() {
@@ -57,9 +57,13 @@ export default class EditUser extends Component {
             {value: 'tada_dee', label: 'Data Entry Executive'}           
         ];
         var userRole= "tada_deo";
-        if(this.props.user.groups && this.props.user.groups.length>0)
-        	userRole = this.props.user.groups[0];
-
+		//This code assumes that a user will have only ONE role. If ever that changes,
+		//this code has to be revisited so he/she is assigned the highest possible permission.
+        if(this.props.user.groups && this.props.user.groups.length>0) {
+        	this.props.user.groups.map((item, index) => {
+	          userRole=item.name;
+        	});
+		}
         if(!this.props.user)
         	return null;
 		return(
@@ -77,9 +81,9 @@ export default class EditUser extends Component {
 
 
 							<Input name="firstName" id="firstName" value="" label="First Name" type="text"
-								placeholder="Please enter the user's first name" help="This is a required field" required validations="isAlpha,minLength:1" defaultValue={this.props.user.first_name}/>
+								placeholder="Please enter the user's first name" help="This is a required field" validations="isAlpha,minLength:1" defaultValue={this.props.user.first_name}/>
 							<Input name="lastName" id="lastName" value="" label="Last Name" type="text"
-								placeholder="Please enter the user's last name" help="This is a required field" required validations="isAlpha,minLength:1" defaultValue={this.props.user.last_name}/>
+								placeholder="Please enter the user's last name" help="This is a required field" validations="isAlpha,minLength:1" defaultValue={this.props.user.last_name}/>
 							<Input name="email" id="email" placeholder="Please enter a valid email address" label="E-mail" validations="isEmail" defaultValue={this.props.user.email}/>
 							
 							 <Select

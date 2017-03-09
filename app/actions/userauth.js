@@ -4,6 +4,7 @@ import {SERVER_API_BASE as serverApiBase,
  SERVER_AUTH_BASE as authApiBase} from 'config';
 import store from '../store';
 import { urls as Urls } from '../constants';
+import { checkStatusNoJSON } from './utils';
 
 
 
@@ -43,6 +44,21 @@ export function changePassword(currentPassword, newPassword){
   }
 }
 
+export function deleteUser(userid)
+{
+  return function(dispatch, getState){
+    console.log("Inside deleteUser", userid);
+    return fetch(Urls.USERS + userid + "/", {
+      method: "DELETE",
+      headers: {
+         'Content-Type': 'application/json',
+         'Authorization': 'Token ' + sessionStorage.token
+      },
+    }).then(checkStatusNoJSON).then(response => {
+      dispatch(userDeleted(userid));
+    });
+  };
+}
 
 
 export function confirmResetPassword(userUid, userToken, newpassword){
@@ -121,8 +137,7 @@ export function fetchUsers(pageNumber){
     {
       return;
     }
-    var offset = pageNumber*20;
-    console.log("Printing page state", getState().users.pages);
+    var offset = (pageNumber-1)*20;
     return fetch(Urls.USERS +"?is_active=True&offset="+offset, {
       method: "GET",
       headers: {
@@ -154,10 +169,10 @@ export function addUserToRole(userid, role)
     }
 }
 
-export function modifyUser(firstName, lastName,email,role)
+export function modifyUser(id,firstName, lastName,email,role)
 {
   return function(dispatch, getState){
-    return fetch(Urls.USERS + userid + "/", {
+    return fetch(Urls.USERS + id + "/", {
         method: "PATCH",
         headers: {
            'Content-Type': 'application/json',
@@ -167,11 +182,17 @@ export function modifyUser(firstName, lastName,email,role)
           first_name: firstName,
           last_name: lastName,
           email: email,
-          group: role
+          
         })
       }
-      )
-    }
+      ).then(checkStatus).then(() => {
+        dispatch(addUserToRole(id,role))
+          .then(checkStatus)
+          .then(data => {
+            dispatch(userModified(data));
+          });
+    });
+  }
 }
 
 export function createUser(firstname,lastname,username,email,password,role) {
@@ -192,7 +213,7 @@ export function createUser(firstname,lastname,username,email,password,role) {
       })
     }).then(checkStatus).then(data => {
           dispatch(addUserToRole(data.id,role)).then(checkStatus).then(userrole => {
-          dispatch(userCreated(userdata));
+          dispatch(userCreated(userrole));
         });
         return data;
       })
@@ -204,8 +225,15 @@ function userCreated(userdata)
 {
   return {
     type: "USER_CREATED",
-    user: data,
-    
+    user: userdata,
+  }
+}
+
+function userModified(userdata)
+{
+  return {
+    type: "USER_MODIFIED",
+    user: userdata
   }
 }
 
@@ -216,6 +244,22 @@ function usersFetched(data, page)
     users: data.results,
     count: data.count,
     page: page
+  }
+}
+
+export function setCurrentPage(page)
+{
+  return {
+    type: "SET_CURRENT_PAGE",
+    page: page
+  }
+}
+
+function userDeleted(id)
+{
+  return {
+    type: "USER_DELETED",
+    id: id,
   }
 }
 

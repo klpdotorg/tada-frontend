@@ -23,6 +23,19 @@ export const checkStatus = (response) => {
   throw error;
 }
 
+export const checkStatusNoJSON = (response) => {
+  if(response.status >=200 && response.status <300){
+    return response;
+  } else if(response.status === 401) {
+     store.dispatch(logoutUser());
+     store.dispatch(push('/login'));
+     return;
+  }
+  const error = new Error(response.statusText);
+  error.response = response;
+  throw error;
+}
+
 export const boundaryType = (id = 1, details) => {
   let boundaryCategory, institution;
   switch (details[id].depth) {

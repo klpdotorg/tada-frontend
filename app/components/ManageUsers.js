@@ -3,7 +3,8 @@ import * as actions from '../actions/';
 import CreateUser from './Modals/CreateUser';
 import EditUser from './Modals/EditUser';
 import GenericDialog from './Modals/GenericDialog';
-
+import ConfirmDialog from './Modals/ConfirmDialog';
+import { roles as ROLES } from '../constants';
 export default class ManageUsers extends React.Component {
 
 constructor(props){
@@ -16,16 +17,21 @@ constructor(props){
 		showDialog: false,
 		dialogTitle: "",
 		dialogMessage: "",
-		selectedPage: 1
+		selectedPage: 1,
+		isConfirmDlgOpen: false
 	}
 	this.getPageNumbers = this.getPageNumbers.bind(this);
 	this.handlePageClick = this.handlePageClick.bind(this);
+	this.mapRoleToDisplayLabel = this.mapRoleToDisplayLabel.bind(this);
 }
 
 componentDidMount(){
 	this.props.dispatch(actions.fetchUsers(1));
 }
 
+componentWillReceiveProps(nextProps){
+	console.log("Received update in ManageUsers");
+}
 openEditUserModal(e) {
 
 	var trId = $(e.currentTarget).closest('tr').prop('id');
@@ -48,6 +54,19 @@ closeCreateUserModal() {
 	});
 }
 
+openConfirmDlg() {
+	this.setState({
+		isConfirmDlgOpen: true,
+		dialogTitle: "Delete?",
+		dialogMessage: "Are you sure you want to delete the(se) user(s)?"
+	});
+}
+
+closeConfirmModal() {
+	this.setState({
+		isConfirmDlgOpen: false
+	});
+}
 openCreateUserModal() {
 	this.setState({
 		isCreateUserModalOpen: true
@@ -60,6 +79,18 @@ closeGenericDialog() {
 		dialogTitle: "",
 		dialogMessage: ""
 	})
+}
+
+deleteUsers()
+{
+	this.closeConfirmModal();
+	for(let i=0; i<this.state.selectedUserIds.length; i++)
+	{
+		this.props.dispatch(actions.deleteUser(this.state.selectedUserIds[i]));
+	}
+	this.setState({
+		selectedUserIds: []
+	});
 }
 
 createUser(firstname, lastname, username, email,password, role){
@@ -75,17 +106,17 @@ createUser(firstname, lastname, username, email,password, role){
 		});
 }
 
-editUser(firstname, lastname, email, role)
+editUser(id,firstname, lastname, email, role)
 {
 	this.closeEditUserModal();
-	this.props.dispatch(actions.modifyUser(firstname, lastname, email, role));
+	this.props.dispatch(actions.modifyUser(id,firstname, lastname, email, role));
 }
 
 selectUser(e)
 {
 	var userId = $(e.currentTarget).closest('tr').prop('id');
 	var newSelectedUsers = this.state.selectedUserIds.slice();
-	if(e.currentTarget.checked && jQuery.inArray(assId,this.state.selectedUserIds) == -1)
+	if(e.currentTarget.checked && jQuery.inArray(userId,this.state.selectedUserIds) == -1)
 	{
 		newSelectedUsers.push(userId);
 	}
@@ -100,10 +131,10 @@ selectUser(e)
 
 getPageNumbers(usercount)
 {
-	var numPages = Math.ceil(usercount/20);
-	var pageArray=[];
-	var i=1;
-	for(i=1; i<= numPages; i++)
+	var numPages = Math.ceil(usercount / 20);
+	var pageArray = [];
+	var i = 1;
+	for(i = 1; i <= numPages; i++)
 		{
 			pageArray.push(i);
 		}
@@ -113,11 +144,26 @@ getPageNumbers(usercount)
 
 handlePageClick(pageNum)
 {
+	this.props.dispatch(actions.setCurrentPage(pageNum));
 	this.props.dispatch(actions.fetchUsers(pageNum));
 	this.setState({
 		selectedPage: pageNum
 	});
 	
+}
+
+mapRoleToDisplayLabel(role)
+{
+	var displayLabel;
+	if(role == ROLES.ADMIN)
+		displayLabel = "Administrator";
+	else if(role == ROLES.DEE)
+		displayLabel = "DEE";
+	else if(role == ROLES.DEO)
+		displayLabel = "DEO";
+	else
+		displayLabel = "N/A";
+	return displayLabel;
 }
 
 render()
@@ -138,13 +184,19 @@ render()
 	usersList =	Object.values(usersByPage.ids).map((id,i)=>{
 			var user = this.props.usersById[id];
 			var fullName = user.first_name + user.last_name;
+			var userRole = "N/A";
+			if(user.groups && user.groups.length > 0) {
+        		user.groups.map((item, index) => {
+	          		userRole = this.mapRoleToDisplayLabel(item.name);
+        	});
+			}
 			return(
 				<tr id={user.id} key={user.id}>
 					<td>{fullName}</td>
 					<td>{user.username}</td>
-					<td>TBD</td>
+					<td>{userRole}</td>
 					<td>Active</td>
-					<td><input type="checkbox" className="btn"/></td>
+					<td><input type="checkbox" className="btn" onClick={this.selectUser.bind(this)}/></td>
 					<td><button className="btn btn-primary brand-blue-bg fa fa-pencil-square-o" onClick={this.openEditUserModal.bind(this)}></button></td>
 					<td><button className="btn btn-primary brand-blue-bg fa fa-unlock-alt"></button></td>
 				</tr>
@@ -178,7 +230,7 @@ render()
 					</tbody>
 					</table>
 					<div className="col-md-8 pull-right">
-						<button type="button" className="col-sm-2 btn btn-info navbar-btn brand-blue-bg all-padded-btn">Delete</button>
+						<button type="button" className="col-sm-2 btn btn-info navbar-btn brand-blue-bg all-padded-btn" onClick={this.openConfirmDlg.bind(this)}>Delete</button>
 						<button type="button" className="col-sm-2 btn btn-info navbar-btn brand-blue-bg all-padded-btn">Activate</button>
 						<button type="button" className="col-sm-3 btn btn-info navbar-btn brand-blue-bg all-padded-btn">Deactivate</button>
 					</div>
@@ -202,7 +254,7 @@ render()
 					<CreateUser isOpen={this.state.isCreateUserModalOpen} onCloseModal={this.closeCreateUserModal.bind(this)} handleSubmit={this.createUser.bind(this)}></CreateUser>
 					<EditUser user={this.state.selectedUser} isOpen={this.state.isEditUserModalOpen} onCloseModal={this.closeEditUserModal.bind(this)} handleSubmit={this.editUser.bind(this)}/>
 					<GenericDialog isOpen={this.state.showDialog} onCloseModal={this.closeGenericDialog.bind(this)} title={this.state.dialogTitle} message={this.state.dialogMessage}/>
-
+					<ConfirmDialog isOpen={this.state.isConfirmDlgOpen} onCloseModal={this.closeConfirmModal.bind(this)} title={this.state.dialogTitle} message={this.state.dialogMessage} onYes={this.deleteUsers.bind(this)}/>
 				</div> );
 }
 }
