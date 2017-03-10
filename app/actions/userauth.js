@@ -10,7 +10,7 @@ import { checkStatusNoJSON } from './utils';
 
 //Returns a promise. The response handling will be done in the UI component since this is temp
 //state and we don't want to persist in the Redux store.
-export function resetPassword(email_address){
+export function resetPasswordEmail(email_address){
 
   return function(dispatch, getState){
     return fetch(authApiBase+'auth/password/reset/', {
@@ -24,6 +24,21 @@ export function resetPassword(email_address){
     });
     
   }
+}
+
+export function resetPasswordForce(id, newPassword) {
+  return function(dispatch, getState) {
+    return fetch(Urls.USERS + id + "/", {
+      method: "PATCH",
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Token ' + sessionStorage.token
+        },
+      body: JSON.stringify({
+        password: newPassword
+      })
+    }).then(checkStatusNoJSON);
+}
 }
 
 export function changePassword(currentPassword, newPassword){

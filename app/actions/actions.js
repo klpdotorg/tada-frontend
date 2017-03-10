@@ -275,7 +275,7 @@ export function fetchUserData() {
           'Content-Type': 'application/json'
         },
       }).then(checkStatus).then(data => {
-        data.groups.map((item, index) => {
+        data.groups.map((item, index) => {  
           //console.log(item);
           if(item.name == ROLES.ADMIN)
             sessionStorage.setItem('isAdmin', true);
