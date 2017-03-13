@@ -79,6 +79,14 @@ openConfirmDlg() {
 	});
 }
 
+openConfirmDeactivateDlg() {
+	this.setState({
+		isConfirmDlgOpen: true,
+		dialogTitle: "Deactivate?",
+		dialogMessage: "Are you sure you want to deactivate the(se) user(s)?"
+	});
+}
+
 closeConfirmModal() {
 	this.setState({
 		isConfirmDlgOpen: false
@@ -96,6 +104,17 @@ closeGenericDialog() {
 		dialogTitle: "",
 		dialogMessage: ""
 	})
+}
+
+deactivateUsers()
+{
+	for(let i=0; i<this.state.selectedUserIds.length; i++)
+	{
+		this.props.dispatch(actions.deactivateUser(this.state.selectedUserIds[i]));
+	}
+	this.setState({
+		selectedUserIds: []
+	});
 }
 
 deleteUsers()
@@ -186,9 +205,20 @@ mapRoleToDisplayLabel(role)
 resetPassword(id,password)
 {
 	this.closeResetPasswordModal();
+	let user = this.props.usersById[id];
 	this.props.dispatch(actions.resetPasswordForce(id, password)).then(()=>
 	{
-		
+		this.setState({
+			showDialog: true,
+			dialogTitle: "Password reset successful",
+			dialogMessage: "Password has been reset successfully for user " + user.username,
+		});
+	}).catch(error=>{
+			this.setState({
+			showDialog: true,
+			dialogTitle: "Password reset failed",
+			dialogMessage: "Password could not be reset for user " + user.username + ". Please try again later!",
+		});
 	});
 }
 
@@ -221,7 +251,6 @@ render()
 					<td>{fullName}</td>
 					<td>{user.username}</td>
 					<td>{userRole}</td>
-					<td>Active</td>
 					<td><input type="checkbox" className="btn" onClick={this.selectUser.bind(this)}/></td>
 					<td><button className="btn btn-primary brand-blue-bg fa fa-pencil-square-o" onClick={this.openEditUserModal.bind(this)}></button></td>
 					<td><button className="btn btn-primary brand-blue-bg fa fa-unlock-alt" onClick={this.openResetPasswordModal.bind(this)}></button></td>
@@ -246,7 +275,6 @@ render()
 							<th>Full Name</th>
 							<th>User ID</th>
 							<th>Role</th>
-							<th>Status</th>
 							<th>Select</th>
 							<th>Edit</th>
 							<th>Reset Password</th>
@@ -257,8 +285,7 @@ render()
 					</table>
 					<div className="col-md-8 pull-right">
 						<button type="button" className="col-sm-2 btn btn-info navbar-btn brand-blue-bg all-padded-btn" onClick={this.openConfirmDlg.bind(this)}>Delete</button>
-						<button type="button" className="col-sm-2 btn btn-info navbar-btn brand-blue-bg all-padded-btn">Activate</button>
-						<button type="button" className="col-sm-3 btn btn-info navbar-btn brand-blue-bg all-padded-btn">Deactivate</button>
+						<button type="button" className="col-sm-3 btn btn-info navbar-btn brand-blue-bg all-padded-btn" onClick={this.deactivateUsers.bind(this)}>Deactivate</button>
 					</div>
 					<div className="center-block row">
 						<nav aria-label="Page navigation">

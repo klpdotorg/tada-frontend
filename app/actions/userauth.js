@@ -184,6 +184,25 @@ export function addUserToRole(userid, role)
     }
 }
 
+export function deactivateUser(id)
+{
+  return function(dispatch, getState){
+    return fetch(Urls.USERS + id + "/", {
+        method: "PATCH",
+        headers: {
+           'Content-Type': 'application/json',
+           'Authorization': 'Token ' + sessionStorage.token
+        },
+        body: JSON.stringify({isActive: "False"})
+      }
+      ).then(checkStatus).then(data => {
+            dispatch(userModified(data));
+      });
+  }
+}
+
+
+
 export function modifyUser(id,firstName, lastName,email,role)
 {
   return function(dispatch, getState){
