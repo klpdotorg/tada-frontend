@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import TreeView from 'react-treeview';
 import { Link } from 'react-router';
 import {alphabeticalOrder} from '../utils'
+import _ from 'lodash';
 
 export default class SchoolsNavTree extends React.Component {
 
@@ -32,7 +33,7 @@ export default class SchoolsNavTree extends React.Component {
         visitedBoundaries.push(node);
 
         var boundary = this.props.boundaryDetails[node];
-        const label = <Link key={ boundary.name || boundary.id } to={ boundary.path }><span className="node"> { boundary.label || boundary.name || boundary.first_name} </span></Link>;
+        const label = <Link key={ boundary.name || boundary.id } to={ boundary.path }><span className="node"> { _.capitalize(boundary.label) || _.capitalize(boundary.name) || _.capitalize(boundary.first_name)} </span></Link>;
         return (
 
           <TreeView key={ node } onClick={ this.props.onBoundaryClick.bind(null, boundary) } nodeLabel={ label } collapsed={ boundary.collapsed }>
