@@ -2,6 +2,7 @@ import React from 'react';
 import * as actions from '../actions/';
 import CreateUser from './Modals/CreateUser';
 import EditUser from './Modals/EditUser';
+import ResetPassword from './Modals/ResetPassword';
 import GenericDialog from './Modals/GenericDialog';
 import ConfirmDialog from './Modals/ConfirmDialog';
 import { roles as ROLES } from '../constants';
@@ -18,7 +19,8 @@ constructor(props){
 		dialogTitle: "",
 		dialogMessage: "",
 		selectedPage: 1,
-		isConfirmDlgOpen: false
+		isConfirmDlgOpen: false,
+		isResetPasswordModalOpen: false
 	}
 	this.getPageNumbers = this.getPageNumbers.bind(this);
 	this.handlePageClick = this.handlePageClick.bind(this);
@@ -48,6 +50,21 @@ closeEditUserModal() {
 	})
 }
 
+openResetPasswordModal(e) {
+
+	var trId = $(e.currentTarget).closest('tr').prop('id');
+	var selectedUser = this.props.usersById[trId];
+	this.setState({
+		isResetPasswordModalOpen: true,
+		selectedUser: selectedUser
+	});
+}
+
+closeResetPasswordModal() {
+	this.setState({
+		isResetPasswordModalOpen: false,
+	})
+}
 closeCreateUserModal() {
 	this.setState({
 		isCreateUserModalOpen: false
@@ -80,6 +97,19 @@ closeGenericDialog() {
 		dialogMessage: ""
 	})
 }
+
+
+deactivateUsers()
+{
+	for(let i=0; i<this.state.selectedUserIds.length; i++)
+	{
+		this.props.dispatch(actions.deactivateUser(this.state.selectedUserIds[i]));
+	}
+	this.setState({
+		selectedUserIds: []
+	});
+}
+
 
 deleteUsers()
 {
@@ -166,6 +196,28 @@ mapRoleToDisplayLabel(role)
 	return displayLabel;
 }
 
+
+resetPassword(id,password)
+{
+	this.closeResetPasswordModal();
+	let user = this.props.usersById[id];
+	this.props.dispatch(actions.resetPasswordForce(id, password)).then(()=>
+	{
+		this.setState({
+			showDialog: true,
+			dialogTitle: "Password reset successful",
+			dialogMessage: "Password has been reset successfully for user " + user.username,
+		});
+	}).catch(error=>{
+			this.setState({
+			showDialog: true,
+			dialogTitle: "Password reset failed",
+			dialogMessage: "Password could not be reset for user " + user.username + ". Please try again later!",
+		});
+	});
+}
+
+
 render()
  {
 	var users = this.props.usersById;
@@ -195,10 +247,9 @@ render()
 					<td>{fullName}</td>
 					<td>{user.username}</td>
 					<td>{userRole}</td>
-					<td>Active</td>
 					<td><input type="checkbox" className="btn" onClick={this.selectUser.bind(this)}/></td>
 					<td><button className="btn btn-primary brand-blue-bg fa fa-pencil-square-o" onClick={this.openEditUserModal.bind(this)}></button></td>
-					<td><button className="btn btn-primary brand-blue-bg fa fa-unlock-alt"></button></td>
+					<td><button className="btn btn-primary brand-blue-bg fa fa-unlock-alt" onClick={this.openResetPasswordModal.bind(this)}></button></td>
 				</tr>
 				);
 	});
@@ -220,7 +271,6 @@ render()
 							<th>Full Name</th>
 							<th>User ID</th>
 							<th>Role</th>
-							<th>Status</th>
 							<th>Select</th>
 							<th>Edit</th>
 							<th>Reset Password</th>
@@ -231,8 +281,7 @@ render()
 					</table>
 					<div className="col-md-8 pull-right">
 						<button type="button" className="col-sm-2 btn btn-info navbar-btn brand-blue-bg all-padded-btn" onClick={this.openConfirmDlg.bind(this)}>Delete</button>
-						<button type="button" className="col-sm-2 btn btn-info navbar-btn brand-blue-bg all-padded-btn">Activate</button>
-						<button type="button" className="col-sm-3 btn btn-info navbar-btn brand-blue-bg all-padded-btn">Deactivate</button>
+						<button type="button" className="col-sm-3 btn btn-info navbar-btn brand-blue-bg all-padded-btn" onClick={this.deactivateUsers.bind(this)}>Deactivate</button>
 					</div>
 					<div className="center-block row">
 						<nav aria-label="Page navigation">
@@ -255,6 +304,7 @@ render()
 					<EditUser user={this.state.selectedUser} isOpen={this.state.isEditUserModalOpen} onCloseModal={this.closeEditUserModal.bind(this)} handleSubmit={this.editUser.bind(this)}/>
 					<GenericDialog isOpen={this.state.showDialog} onCloseModal={this.closeGenericDialog.bind(this)} title={this.state.dialogTitle} message={this.state.dialogMessage}/>
 					<ConfirmDialog isOpen={this.state.isConfirmDlgOpen} onCloseModal={this.closeConfirmModal.bind(this)} title={this.state.dialogTitle} message={this.state.dialogMessage} onYes={this.deleteUsers.bind(this)}/>
+					<ResetPassword user={this.state.selectedUser} isOpen={this.state.isResetPasswordModalOpen} onCloseModal={this.closeResetPasswordModal.bind(this)} handleSubmit={this.resetPassword.bind(this)}/>
 				</div> );
 }
 }
