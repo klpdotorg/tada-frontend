@@ -79,14 +79,6 @@ openConfirmDlg() {
 	});
 }
 
-openConfirmDeactivateDlg() {
-	this.setState({
-		isConfirmDlgOpen: true,
-		dialogTitle: "Deactivate?",
-		dialogMessage: "Are you sure you want to deactivate the(se) user(s)?"
-	});
-}
-
 closeConfirmModal() {
 	this.setState({
 		isConfirmDlgOpen: false
@@ -106,6 +98,7 @@ closeGenericDialog() {
 	})
 }
 
+
 deactivateUsers()
 {
 	for(let i=0; i<this.state.selectedUserIds.length; i++)
@@ -116,6 +109,7 @@ deactivateUsers()
 		selectedUserIds: []
 	});
 }
+
 
 deleteUsers()
 {
@@ -202,6 +196,7 @@ mapRoleToDisplayLabel(role)
 	return displayLabel;
 }
 
+
 resetPassword(id,password)
 {
 	this.closeResetPasswordModal();
@@ -221,6 +216,7 @@ resetPassword(id,password)
 		});
 	});
 }
+
 
 render()
  {
