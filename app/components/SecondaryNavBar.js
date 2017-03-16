@@ -29,6 +29,11 @@ export default class SecondaryNavBar extends React.Component {
     this.props.redirectTo('/users');
   }
 
+  handleManagePermissionsBtnClick()
+  {
+    this.props.redirectTo('/permissions');
+  }
+
   render() {  
     var Displayelement;
     if(sessionStorage.getItem('isAdmin')) {
@@ -36,7 +41,7 @@ export default class SecondaryNavBar extends React.Component {
          return (<div className="pull-right">
           <button type="button" className="btn btn-info navbar-btn all-padded-btn" data-toggle="tooltip" onClick={this.handleProgramClick}><span className="fa fa-pencil-square-o"></span> Manage Programs</button>
           <button type="button" className="btn btn-info navbar-btn all-padded-btn" onClick={ this.props.toggleDistrictModal } data-toggle="tooltip" data-placement="bottom" title="Create District"><span className="fa fa-globe"></span></button>
-          <button type="button" className="btn btn-info navbar-btn all-padded-btn" data-toggle="tooltip" data-placement="bottom" title="Manage Permissions"><span className="fa fa-key"></span></button>
+          <button type="button" className="btn btn-info navbar-btn all-padded-btn" data-toggle="tooltip" data-placement="bottom" title="Manage Permissions" onClick={this.handleManagePermissionsBtnClick.bind(this)}><span className="fa fa-key"></span></button>
           <button type="button" className="btn btn-info navbar-btn all-padded-btn" data-toggle="tooltip" data-placement="bottom" title="Manage Users" onClick={this.handleManageUsersBtnClick}><span className="fa fa-users"></span></button>
           <button type="button" className="btn btn-info navbar-btn all-padded-btn" data-toggle="tooltip" data-placement="bottom" title="Map Assessments"><span className="fa fa-database"></span></button>
           <button type="button" className="btn btn-info navbar-btn all-padded-btn" data-toggle="tooltip" data-placement="bottom" title="View DEO Report"><span className="fa fa-bar-chart"></span></button>
