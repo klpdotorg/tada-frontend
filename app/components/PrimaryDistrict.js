@@ -3,16 +3,16 @@ import Button from './Button'
 import {modifyBoundary, deleteBoundary, saveNewBlock, saveNewProject, selectPreschoolTree} from '../actions'
 import CreateBoundary from './Modals/CreateBoundary'
 import {Link} from 'react-router'
-import NotificationSystem from 'react-notification-system';
 import ConfirmModal from './Modals/Confirm'
+import Notifications from 'react-notification-system-redux'
 
 
 export default class PrimaryDistrict extends React.Component {
 
   constructor(props){
-    super(props);    
+    super(props);
     this.saveDistrict = this.saveDistrict.bind(this);
-    this.deleteDistrict = this.deleteDistrict.bind(this);    
+    this.deleteDistrict = this.deleteDistrict.bind(this);
     this.toggleBlockModal = this.toggleBlockModal.bind(this);
     this.toggleProjectModal = this.toggleProjectModal.bind(this);
     this.saveBlock = this.saveBlock.bind(this);

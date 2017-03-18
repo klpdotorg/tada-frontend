@@ -4,7 +4,6 @@ import CreateInstitution from './Modals/CreateInstitution';
 import Button from './Button'
 import ConfirmModal from './Modals/Confirm'
 import ModifyStudent from './Modals/ModifyStudent'
-import ReactDataGrid from 'react-data-grid'
 import { Link } from 'react-router'
 
 const StudentRow = (props) => {
