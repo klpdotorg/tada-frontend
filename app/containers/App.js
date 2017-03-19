@@ -4,12 +4,14 @@ import { fetchEntitiesFromServer, fetchProgramsInstitution, logoutUser, saveNewD
 import { push } from 'react-router-redux';
 import NavBar from '../components/MainNavBar';
 import MainHeader from '../components/MainHeader';
-import SideBar from '../components/SideBar';
+import SideBarContainer from '../components/SideBar';
 import SecondaryNavBar from '../components/SecondaryNavBar';
 import MainContentArea from '../components/ContentArea';
 import TreeTogglerSpacingDiv from '../components/TreeTogglerSpacingDiv';
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, ownProps) => {
+  console.log("Own props inside App.js", ownProps);
+  return ({
   boundaryDetails: state.boundaries.boundaryDetails,
   boundariesByParentId: state.boundaries.boundariesByParentId,
   routerState: state.routing,
@@ -19,15 +21,14 @@ const mapStateToProps = state => ({
   primarySelected: state.schoolSelection.primarySchool,
   programsByInstitutionId: state.programs.programsByInstitutionId,
   programsByStudentId: state.programs.programsByStudentId,
-
 });
+};
 
 var mapDispatchToProps = function(dispatch) {
   return {
     onBoundaryClick(boundary) {
       console.log("On boundary click invoked");
-      dispatch(toggleNode(boundary.id))
-      dispatch(fetchEntitiesFromServer(boundary.id));
+      
 
     },
 
@@ -131,8 +132,8 @@ class TadaContentContainer extends Component {
         <NavBar onPrimaryClick={ this.props.onPrimaryClick } onPreSchoolClick={ this.props.onPreSchoolClick } primarySelected={ this.props.primarySelected } />
         <SecondaryNavBar redirectTo = {this.props.redirectTo} toggleDistrictModal={ this.props.toggleDistrictModal } districtModalIsOpen={ this.props.districtModalIsOpen } saveNewDistrict={ saveNewDistrict } />
         <div id="wrapper" className="main__wrapper">
-
-          <SideBar primarySelected={primarySelected} onBoundaryClick={ onBoundaryClick } boundaryDetails={ boundaryDetails } boundariesByParentId={ boundariesByParentId } />
+          {/** <SideBar child={<SchoolsNavTree/>}**/}
+          <SideBarContainer location = {this.props.location}/>
           <MainContentArea children={ this.props.children } />
         </div>
       </div>

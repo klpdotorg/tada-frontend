@@ -8,7 +8,7 @@ export default class Permissions extends React.Component {
 
     componentWillMount() {
         //Reset the nav tree to a pristine state
-        this.props.dispatch(actions.collapseAllNodes());
+       // this.props.dispatch(actions.collapseAllNodes());
     }
 
     render() {
