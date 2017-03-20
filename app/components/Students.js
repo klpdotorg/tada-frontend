@@ -7,6 +7,8 @@ import ConfirmModal from './Modals/Confirm'
 import ModifyStudent from './Modals/ModifyStudent'
 import { Link } from 'react-router'
 import { mapStudentsAPI } from '../actions/utils'
+import Notifications from 'react-notification-system-redux';
+import {studentStudentGroupMap} from '../actions/notifications'
 
 const StudentRow = (props) => {
   // const father = props.relation ?  ||
@@ -60,21 +62,18 @@ class StudentScreen extends Component {
   }
 
   mapToCentre() {
-    // dispatch({
-    //   type: 'BOUNDARIES',
-    //   payload: getBoundaries(1)
-    // })
-    this.state.selectedStudents.forEach((val) => {
+
+    const studentsPromise = [...this.state.selectedStudents].map((val) => {
       const studentRequestBody = {
         student: val,
         student_group: this.state.mapToCentre
       }
-       console.log(studentRequestBody)
-      mapStudentsAPI(studentRequestBody).then(r => {
-        console.log(r)
-      })
+      return mapStudentsAPI(studentRequestBody)
     })
-    // console.log(this.state.selectedStudents, this.state.mapToCentre)
+
+    Promise.all(studentsPromise).then((a, b) => {
+      this.props.dispatch(Notifications.success(studentStudentGroupMap))
+    })
   }
 
   selectStudent(id) {

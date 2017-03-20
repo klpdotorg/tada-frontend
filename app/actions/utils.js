@@ -1,5 +1,7 @@
 import {fetchBoundaryDetails, fetchInstitutionDetails, fetchStudentGroups, fetchStudents} from './index'
 import { SERVER_API_BASE} from 'config';
+import Notifications from 'react-notification-system-redux';
+import {syncError} from './notifications'
 
 export const get = (url) => {
   return fetch(url, {
@@ -18,7 +20,9 @@ export const post = (url, body) => {
         'Authorization': 'Token ' + sessionStorage.token
       },
       body: JSON.stringify(body)
-    }).then(checkStatus)
+    }).then(checkStatus).catch(e => {
+      Notifications.error(syncError(e))
+    })
 }
 
 export const mapStudentsAPI = (body) => {

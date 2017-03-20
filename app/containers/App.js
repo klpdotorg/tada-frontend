@@ -27,7 +27,6 @@ const mapStateToProps = state => ({
 var mapDispatchToProps = function(dispatch) {
   return {
     onBoundaryClick(boundary) {
-      console.log("On boundary click invoked");
       dispatch(toggleNode(boundary.id))
       dispatch(fetchEntitiesFromServer(boundary.id));
 
@@ -107,7 +106,6 @@ class TadaContentContainer extends Component {
   }
 
   componentWillMount() {
-    console.log('dispatch', this.props)
     const {dispatch} = this.props
     if (!sessionStorage.token) {
       this.props.redirectTo('/login');
