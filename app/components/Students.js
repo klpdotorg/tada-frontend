@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
 import {modifyBoundary, deleteBoundary, newSchool, saveStudent, getStudents, getBoundaries, getInstitutions, getStudentGroups, selectPreschoolTree} from '../actions';
 import CreateInstitution from './Modals/CreateInstitution';
+import {toggleSet} from '../utils'
 import Button from './Button'
 import ConfirmModal from './Modals/Confirm'
 import ModifyStudent from './Modals/ModifyStudent'
 import { Link } from 'react-router'
+import { mapStudentsAPI } from '../actions/utils'
 
 const StudentRow = (props) => {
   // const father = props.relation ?  ||
@@ -12,7 +14,7 @@ const StudentRow = (props) => {
   return (
     <div className="col-md-12">
       <div className="row">
-        <div className="col-md-1"><input checked={!!props.selectedStudents[props.id]} onChange={props.selectStudent} type="checkbox" /></div>
+        <div className="col-md-1"><input checked={props.selectedStudents.has(props.id)} onChange={props.selectStudent} type="checkbox" /></div>
         <div className="col-md-2"><span>{props.first_name}</span></div>
         <div className="col-md-1"><span>{props.middle_name}</span></div>
         <div className="col-md-1"><span>{props.last_name}</span></div>
@@ -46,7 +48,7 @@ class StudentScreen extends Component {
       modifyStudentIsOpen: false,
       currentStudent: '',
       modifyStudentData: null,
-      selectedStudents: {},
+      selectedStudents: new Set(),
       mapToCentre: props.boundariesByParentId[props.params.institutionId][0]
     };
   }
@@ -58,14 +60,25 @@ class StudentScreen extends Component {
   }
 
   mapToCentre() {
-    console.log(this.state.selectedStudents, this.state.mapToCentre)
+    // dispatch({
+    //   type: 'BOUNDARIES',
+    //   payload: getBoundaries(1)
+    // })
+    this.state.selectedStudents.forEach((val) => {
+      const studentRequestBody = {
+        student: val,
+        student_group: this.state.mapToCentre
+      }
+       console.log(studentRequestBody)
+      mapStudentsAPI(studentRequestBody).then(r => {
+        console.log(r)
+      })
+    })
+    // console.log(this.state.selectedStudents, this.state.mapToCentre)
   }
 
   selectStudent(id) {
-    let selectedStudents = {
-      ...this.state.selectedStudents,
-      ...{[id]: !this.state.selectedStudents[id]}
-    }
+   const selectedStudents = toggleSet(this.state.selectedStudents, id)
 
     this.setState({
       selectedStudents

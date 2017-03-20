@@ -1,4 +1,5 @@
 import {fetchBoundaryDetails, fetchInstitutionDetails, fetchStudentGroups, fetchStudents} from './index'
+import { SERVER_API_BASE} from 'config';
 
 export const get = (url) => {
   return fetch(url, {
@@ -8,6 +9,20 @@ export const get = (url) => {
         'Authorization': 'Token ' + sessionStorage.token
       }
     }).then(checkStatus)
+}
+export const post = (url, body) => {
+  return fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Token ' + sessionStorage.token
+      },
+      body: JSON.stringify(body)
+    }).then(checkStatus)
+}
+
+export const mapStudentsAPI = (body) => {
+  return post(`${SERVER_API_BASE}studentgroups/${body.student_group}/students/${body.student}/enrollment/`, body)
 }
 
 export const checkStatus = (response) => {
