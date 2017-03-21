@@ -12,6 +12,18 @@ export const get = (url) => {
       }
     }).then(checkStatus)
 }
+
+export const deleteRequest = (url) => {
+  return fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Token ' + sessionStorage.token
+      }
+    }).then(checkStatusNoJSON)
+}
+
+
 export const post = (url, body) => {
   return fetch(url, {
       method: 'POST',
@@ -27,6 +39,10 @@ export const post = (url, body) => {
 
 export const mapStudentsAPI = (body) => {
   return post(`${SERVER_API_BASE}studentgroups/${body.student_group}/students/${body.student}/enrollment/`, body)
+}
+
+export const deleteStudentAPI = (id) => {
+  return deleteRequest(`${SERVER_API_BASE}students/${id}/`)
 }
 
 export const checkStatus = (response) => {

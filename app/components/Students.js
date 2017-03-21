@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {modifyBoundary, deleteBoundary, newSchool, saveStudent, getStudents, getBoundaries, getInstitutions, getStudentGroups, selectPreschoolTree} from '../actions';
+import {modifyBoundary, deleteBoundary, newSchool, saveStudent, getStudents, getBoundaries, getInstitutions, getStudentGroups, selectPreschoolTree, removeBoundary } from '../actions';
 import CreateInstitution from './Modals/CreateInstitution';
 import {toggleSet} from '../utils'
 import Button from './Button'
@@ -118,7 +118,12 @@ class StudentScreen extends Component {
   }
 
   deleteStudent() {
-    deleteStudentAPI(this.state.currentStudent.id)
+    deleteStudentAPI(this.state.currentStudent.id).then(() => {
+      this.setState({
+        openConfirmModal: false
+      })
+      this.props.dispatch(removeBoundary(this.state.currentStudent.id, this.props.params.groupId))
+    })
   }
 
   render() {
@@ -168,7 +173,7 @@ class StudentScreen extends Component {
 
         </div>
         <div className="col-md-2">
-          <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteStudent} closeModal={this.closeConfirmation} entity={this.state.currentStudent.first_name}/>
+          <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteStudent} onCloseModal={this.closeConfirmation} entity={this.state.currentStudent.first_name}/>
           <ModifyStudent saveStudent={this.saveStudent} isOpen={this.state.modifyStudentIsOpen} data={this.state.modifyStudentData} closeModal={this.closeModifyStudent} entity={cluster.name}/>
         </div>
       </div>
