@@ -6,7 +6,7 @@ import Button from './Button'
 import ConfirmModal from './Modals/Confirm'
 import ModifyStudent from './Modals/ModifyStudent'
 import { Link } from 'react-router'
-import { mapStudentsAPI } from '../actions/utils'
+import { mapStudentsAPI, deleteStudentAPI } from '../actions/utils'
 import Notifications from 'react-notification-system-redux';
 import {studentStudentGroupMap} from '../actions/notifications'
 
@@ -38,6 +38,7 @@ class StudentScreen extends Component {
   constructor(props){
     super(props);
     this.toggleSchoolModal = this.toggleSchoolModal.bind(this);
+    this.deleteStudentConfirm = this.deleteStudentConfirm.bind(this);
     this.deleteStudent = this.deleteStudent.bind(this);
     this.openModifyStudent = this.openModifyStudent.bind(this);
     this.closeModifyStudent  =this.closeModifyStudent.bind(this);
@@ -85,12 +86,6 @@ class StudentScreen extends Component {
 
   }
 
-  showConfirmation = () => {
-    this.setState({
-      openConfirmModal: true
-    })
-  }
-
   saveStudent(student){
     this.props.dispatch(saveStudent(student))
   }
@@ -115,11 +110,15 @@ class StudentScreen extends Component {
     })
   }
 
-  deleteStudent(student) {
+  deleteStudentConfirm(student) {
     this.setState({
       currentStudent: student,
       openConfirmModal: true
     })
+  }
+
+  deleteStudent() {
+    deleteStudentAPI(this.state.currentStudent.id)
   }
 
   render() {
@@ -132,7 +131,7 @@ class StudentScreen extends Component {
     const institution = boundaryDetails[params.institutionId]
     const group = boundaryDetails[params.groupId]
     const studentList = boundariesByParentId[params.groupId]
-    const studentRows = studentList.map((studentId, i) => <StudentRow key={i} { ...boundaryDetails[studentId]} deleteStudent={this.deleteStudent} selectedStudents={this.state.selectedStudents} selectStudent={() => {this.selectStudent(studentId)}} openModifyStudent={this.openModifyStudent} />)
+    const studentRows = studentList.map((studentId, i) => <StudentRow key={i} { ...boundaryDetails[studentId]} deleteStudent={this.deleteStudentConfirm} selectedStudents={this.state.selectedStudents} selectStudent={() => {this.selectStudent(studentId)}} openModifyStudent={this.openModifyStudent} />)
     const studentGroups = boundariesByParentId[params.institutionId].map((id) => {
       let group = boundaryDetails[id]
       return <option key={id} value={group.id}>{group.label}</option>
@@ -169,7 +168,7 @@ class StudentScreen extends Component {
 
         </div>
         <div className="col-md-2">
-          <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.closeConfirmation} closeModal={this.closeConfirmation} entity={this.state.currentStudent.first_name}/>
+          <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteStudent} closeModal={this.closeConfirmation} entity={this.state.currentStudent.first_name}/>
           <ModifyStudent saveStudent={this.saveStudent} isOpen={this.state.modifyStudentIsOpen} data={this.state.modifyStudentData} closeModal={this.closeModifyStudent} entity={cluster.name}/>
         </div>
       </div>
