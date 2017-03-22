@@ -137,9 +137,11 @@ class StudentScreen extends Component {
     const group = boundaryDetails[params.groupId]
     const studentList = boundariesByParentId[params.groupId]
     const studentRows = studentList.map((studentId, i) => <StudentRow key={i} { ...boundaryDetails[studentId]} deleteStudent={this.deleteStudentConfirm} selectedStudents={this.state.selectedStudents} selectStudent={() => {this.selectStudent(studentId)}} openModifyStudent={this.openModifyStudent} />)
-    const studentGroups = boundariesByParentId[params.institutionId].map((id) => {
-      let group = boundaryDetails[id]
-      return <option key={id} value={group.id}>{group.label}</option>
+    const studentGroups = boundariesByParentId[params.institutionId]
+      .filter((id) => id !== group.id)
+      .map((id) => {
+        let group = boundaryDetails[id]
+        return <option key={id} value={group.id}>{group.label}</option>
     })
 
     var Displayelement;
@@ -194,6 +196,7 @@ class StudentScreen extends Component {
               <li><Link to={block.path}>{block.name}</Link></li>
               <li><Link to={cluster.path}>{cluster.name}</Link></li>
               <li><Link to={institution.path}>{institution.name}</Link></li>
+              <li>{group.label}</li>
               </ol>
               <Displayelement {...this.props}/>
             </div>
