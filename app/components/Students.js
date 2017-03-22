@@ -72,7 +72,8 @@ class StudentScreen extends Component {
       return mapStudentsAPI(studentRequestBody)
     })
 
-    Promise.all(studentsPromise).then((a, b) => {
+    Promise.all(studentsPromise)
+    .then(() => {
       this.props.dispatch(Notifications.success(studentStudentGroupMap))
     })
   }

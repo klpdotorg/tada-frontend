@@ -39,6 +39,7 @@ export const post = (url, body) => {
       body: JSON.stringify(body)
     }).then(checkStatus).catch((e) => {
       store.dispatch(Notifications.error(syncError(e)))
+      throw e
     })
 }
 
