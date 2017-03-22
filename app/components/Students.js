@@ -8,7 +8,7 @@ import ModifyStudent from './Modals/ModifyStudent'
 import { Link } from 'react-router'
 import { mapStudentsAPI, deleteStudentAPI } from '../actions/utils'
 import Notifications from 'react-notification-system-redux';
-import {studentStudentGroupMap} from '../actions/notifications'
+import {studentStudentGroupMap, syncError} from '../actions/notifications'
 
 const StudentRow = (props) => {
   // const father = props.relation ?  ||

@@ -13,7 +13,7 @@ export const syncError = (error) => {
   return {
     ...baseNotification,
     title: 'Sync failed!',
-    message: error,
+    message: error.toString(),
   }
 }
 

@@ -1,7 +1,8 @@
 import {fetchBoundaryDetails, fetchInstitutionDetails, fetchStudentGroups, fetchStudents} from './index'
 import { SERVER_API_BASE} from 'config';
 import Notifications from 'react-notification-system-redux';
-import {syncError} from './notifications'
+import {syncError} from './notifications';
+import store from '../store'
 
 export const get = (url) => {
   return fetch(url, {
@@ -10,7 +11,9 @@ export const get = (url) => {
         'Content-Type': 'application/json',
         'Authorization': 'Token ' + sessionStorage.token
       }
-    }).then(checkStatus)
+    }).then(checkStatus).catch((e) => {
+      store.dispatch(Notifications.error(syncError(e)))
+    })
 }
 
 export const deleteRequest = (url) => {
@@ -20,7 +23,9 @@ export const deleteRequest = (url) => {
         'Content-Type': 'application/json',
         'Authorization': 'Token ' + sessionStorage.token
       }
-    }).then(checkStatusNoJSON)
+    }).then(checkStatusNoJSON).catch((e) => {
+      store.dispatch(Notifications.error(syncError(e)))
+    })
 }
 
 
@@ -32,8 +37,8 @@ export const post = (url, body) => {
         'Authorization': 'Token ' + sessionStorage.token
       },
       body: JSON.stringify(body)
-    }).then(checkStatus).catch(e => {
-      Notifications.error(syncError(e))
+    }).then(checkStatus).catch((e) => {
+      store.dispatch(Notifications.error(syncError(e)))
     })
 }
 
