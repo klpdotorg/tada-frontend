@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Modal from 'react-modal'
+import {groupBy} from 'lodash'
 
 const customStyles = {
   content: {
@@ -28,6 +29,7 @@ export default class ConfirmDialog extends Component {
   }
 
   render() {
+    const relations = groupBy(this.state.relations, 'relation_type')
     return (
       <Modal contentLabel="Confirm Modal" isOpen={this.props.isOpen} onRequestClose={this.props.closeModal} style={customStyles}>
         <div className="">
@@ -38,8 +40,12 @@ export default class ConfirmDialog extends Component {
           <div>Gender: <input value={this.state.gender} onChange={(e) => {this.changeVal(e, 'gender')}} type='text' className='form-control'/></div>
           <div>Language: <input value={this.state.language || 1} onChange={(e) => {this.changeVal(e, 'language')}} type='text' className='form-control'/></div>
           <div>DOB: <input value={this.state.dob} onChange={(e) => {this.changeVal(e, 'dob')}} type='date' className='form-control'/></div>
-          <div>Father Name: <input value={this.state.fatherName || ''} onChange={(e) => {this.changeVal(e, 'fatherName')}} type='text' className='form-control'/></div>
-          <div>Mother Name: <input value={this.state.motherName || ''} onChange={(e) => {this.changeVal(e, 'motherName')}} type='text' className='form-control'/></div>
+          <div>Father First Name: <input value={relations.Father ?  relations.Father[0].first_name || '' : ''} onChange={(e) => {this.changeVal(e, 'fatherName')}} type='text' className='form-control'/></div>
+          <div>Father Middle Name: <input value={relations.Father ?  relations.Father[0].middle_name || '' : ''} onChange={(e) => {this.changeVal(e, 'fatherName')}} type='text' className='form-control'/></div>
+          <div>Father Last Name: <input value={relations.Father ?  relations.Father[0].last_name || '' : ''} onChange={(e) => {this.changeVal(e, 'fatherName')}} type='text' className='form-control'/></div>
+          <div>Mother First Name: <input value={relations.Mother ?  relations.Mother[0].first_name || '' : ''} onChange={(e) => {this.changeVal(e, 'motherName')}} type='text' className='form-control'/></div>
+          <div>Mother Middle Name: <input value={relations.Mother ?  relations.Mother[0].middle_name || '' : ''} onChange={(e) => {this.changeVal(e, 'motherName')}} type='text' className='form-control'/></div>
+          <div>Mother Last Name: <input value={relations.Mother ?  relations.Mother[0].last_name || '' : ''} onChange={(e) => {this.changeVal(e, 'motherName')}} type='text' className='form-control'/></div>
       </div>
       <div className='button' onClick={ () => {
                                             this.props.saveStudent(this.state)
