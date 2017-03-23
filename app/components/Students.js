@@ -7,24 +7,23 @@ import ConfirmModal from './Modals/Confirm'
 import ModifyStudent from './Modals/ModifyStudent'
 import { Link } from 'react-router'
 import { mapStudentsAPI, deleteStudentAPI } from '../actions/utils'
+import { displayFullName } from './utils'
 import Notifications from 'react-notification-system-redux';
 import {studentStudentGroupMap, syncError} from '../actions/notifications'
+import {groupBy} from 'lodash'
 
 const StudentRow = (props) => {
-  // const father = props.relation ?  ||
-  // const mother = props.relation[1]
+  const relations = groupBy(props.relations, 'relation_type')
   return (
     <div className="row">
       <div className="col-md-1"><input checked={props.selectedStudents.has(props.id)} onChange={props.selectStudent} type="checkbox" /></div>
-      <div className="col-md-2"><span>{props.first_name}</span></div>
-      <div className="col-md-1"><span>{props.middle_name}</span></div>
-      <div className="col-md-1"><span>{props.last_name}</span></div>
+      <div className="col-md-2"><span>{displayFullName(props)}</span></div>
       <div className="col-md-1"><span>{props.uid}</span></div>
       <div className="col-md-1"><span>{props.gender}</span></div>
       <div className="col-md-1"><span>{props.language}</span></div>
       <div className="col-md-1"><span>{props.dob}</span></div>
-      <div className="col-md-1"><span>-</span></div>
-      <div className="col-md-1"><span>-</span></div>
+      <div className="col-md-2"><span>{displayFullName(relations.Father[0])}</span></div>
+      <div className="col-md-2"><span>{displayFullName(relations.Mother[0])}</span></div>
       <div className="col-md-1"><span onClick={() => { props.deleteStudent({...props}) }} className="glyphicon glyphicon-trash">Delete</span></div>
       <div className="col-md-1"><span className="glyphicon glyphicon-pencil" onClick={() => { props.openModifyStudent({...props}) }}>Edit</span></div>
     </div>
@@ -151,14 +150,12 @@ class StudentScreen extends Component {
           <div className="row grid-header">
             <div className="col-md-1"><span>Select</span></div>
             <div className="col-md-2"><span>First Name</span></div>
-            <div className="col-md-1"><span>Middle Name</span></div>
-            <div className="col-md-1"><span>Last Name</span></div>
             <div className="col-md-1"><span>UID</span></div>
             <div className="col-md-1"><span>Gender</span></div>
             <div className="col-md-1"><span>Language</span></div>
             <div className="col-md-1"><span>DoB</span></div>
-            <div className="col-md-1"><span>Father Name</span></div>
-            <div className="col-md-1"><span>Mother Name</span></div>
+            <div className="col-md-2"><span>Father Name</span></div>
+            <div className="col-md-2"><span>Mother Name</span></div>
             <div className="col-md-1"><span>Delete</span></div>
             <div className="col-md-1"><span>Edit</span></div>
           </div>
