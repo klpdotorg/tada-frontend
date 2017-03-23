@@ -14,21 +14,19 @@ const StudentRow = (props) => {
   // const father = props.relation ?  ||
   // const mother = props.relation[1]
   return (
-    <div className="col-md-12">
-      <div className="row">
-        <div className="col-md-1"><input checked={props.selectedStudents.has(props.id)} onChange={props.selectStudent} type="checkbox" /></div>
-        <div className="col-md-2"><span>{props.first_name}</span></div>
-        <div className="col-md-1"><span>{props.middle_name}</span></div>
-        <div className="col-md-1"><span>{props.last_name}</span></div>
-        <div className="col-md-1"><span>{props.uid}</span></div>
-        <div className="col-md-1"><span>{props.gender}</span></div>
-        <div className="col-md-1"><span>{props.language}</span></div>
-        <div className="col-md-1"><span>{props.dob}</span></div>
-        <div className="col-md-1"><span>-</span></div>
-        <div className="col-md-1"><span>-</span></div>
-        <div className="col-md-1"><span onClick={() => { props.deleteStudent({...props}) }} className="glyphicon glyphicon-trash">Delete</span></div>
-        <div className="col-md-1"><span className="glyphicon glyphicon-pencil" onClick={() => { props.openModifyStudent({...props}) }}>Edit</span></div>
-      </div>
+    <div className="row">
+      <div className="col-md-1"><input checked={props.selectedStudents.has(props.id)} onChange={props.selectStudent} type="checkbox" /></div>
+      <div className="col-md-2"><span>{props.first_name}</span></div>
+      <div className="col-md-1"><span>{props.middle_name}</span></div>
+      <div className="col-md-1"><span>{props.last_name}</span></div>
+      <div className="col-md-1"><span>{props.uid}</span></div>
+      <div className="col-md-1"><span>{props.gender}</span></div>
+      <div className="col-md-1"><span>{props.language}</span></div>
+      <div className="col-md-1"><span>{props.dob}</span></div>
+      <div className="col-md-1"><span>-</span></div>
+      <div className="col-md-1"><span>-</span></div>
+      <div className="col-md-1"><span onClick={() => { props.deleteStudent({...props}) }} className="glyphicon glyphicon-trash">Delete</span></div>
+      <div className="col-md-1"><span className="glyphicon glyphicon-pencil" onClick={() => { props.openModifyStudent({...props}) }}>Edit</span></div>
     </div>
   )
 }
@@ -149,24 +147,22 @@ class StudentScreen extends Component {
     if(sessionStorage.getItem('isAdmin')) {
       Displayelement = (props) =>
       <div>
-        <div className='heading-border-left'>
-          <div className="col-md-12">
-            <div className="row">
-              <div className="col-md-2"><span>First Name</span></div>
-              <div className="col-md-1"><span>Middle Name</span></div>
-              <div className="col-md-1"><span>Last Name</span></div>
-              <div className="col-md-1"><span>UID</span></div>
-              <div className="col-md-1"><span>Gender</span></div>
-              <div className="col-md-1"><span>Language</span></div>
-              <div className="col-md-1"><span>DoB</span></div>
-              <div className="col-md-1"><span>Father Name</span></div>
-              <div className="col-md-1"><span>Mother Name</span></div>
-              <div className="col-md-1"><span>Delete</span></div>
-              <div className="col-md-1"><span>Edit</span></div>
-            </div>
-            { studentRows }
-         </div>
-
+        <div className="students-grid">
+          <div className="row grid-header">
+            <div className="col-md-1"><span>Select</span></div>
+            <div className="col-md-2"><span>First Name</span></div>
+            <div className="col-md-1"><span>Middle Name</span></div>
+            <div className="col-md-1"><span>Last Name</span></div>
+            <div className="col-md-1"><span>UID</span></div>
+            <div className="col-md-1"><span>Gender</span></div>
+            <div className="col-md-1"><span>Language</span></div>
+            <div className="col-md-1"><span>DoB</span></div>
+            <div className="col-md-1"><span>Father Name</span></div>
+            <div className="col-md-1"><span>Mother Name</span></div>
+            <div className="col-md-1"><span>Delete</span></div>
+            <div className="col-md-1"><span>Edit</span></div>
+          </div>
+          { studentRows }
         </div>
         <div className="col-sm-2">
           <select className="col-sm-2" onChange={(e) => {this.setState({mapToCentre : e.target.value})}} value={this.state.mapToCentre} className="form-control" id="gender">

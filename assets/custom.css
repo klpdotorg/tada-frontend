@@ -3,5 +3,24 @@
 }
 .view-student-btn {
   margin-top: 10px;
-  background-color: #ec6608; 
+  background-color: #ec6608;
+}
+
+.students-grid {
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 10px 0;
+  margin: 10px 0;
+}
+
+.students-grid > .row > div {
+  display: inline-block;
+  float: none;
+}
+
+.grid-header {
+  margin-bottom: 10px;
+  border: solid black;
+  border-width: 2px 0;
+  font-weight: 500;
 }
