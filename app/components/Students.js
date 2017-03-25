@@ -24,8 +24,7 @@ const StudentRow = (props) => {
       <div className="col-md-1"><span>{props.dob}</span></div>
       <div className="col-md-2"><span>{displayFullName(relations.Father[0])}</span></div>
       <div className="col-md-2"><span>{displayFullName(relations.Mother[0])}</span></div>
-      <div className="col-md-1"><span onClick={() => { props.deleteStudent({...props}) }} className="glyphicon glyphicon-trash">Delete</span></div>
-      <div className="col-md-1"><span className="glyphicon glyphicon-pencil" onClick={() => { props.openModifyStudent({...props}) }}>Edit</span></div>
+      <div className="col-md-1"><span onClick={() => { props.deleteStudent({...props}) }} className="glyphicon glyphicon-trash">Delete</span><span className="glyphicon glyphicon-pencil" onClick={() => { props.openModifyStudent({...props}) }}>Edit</span></div>
     </div>
   )
 }
@@ -149,15 +148,14 @@ class StudentScreen extends Component {
         <div className="students-grid">
           <div className="row grid-header">
             <div className="col-md-1"><span>Select</span></div>
-            <div className="col-md-2"><span>First Name</span></div>
+            <div className="col-md-2"><span>Name</span></div>
             <div className="col-md-1"><span>UID</span></div>
             <div className="col-md-1"><span>Gender</span></div>
             <div className="col-md-1"><span>Language</span></div>
             <div className="col-md-1"><span>DoB</span></div>
             <div className="col-md-2"><span>Father Name</span></div>
             <div className="col-md-2"><span>Mother Name</span></div>
-            <div className="col-md-1"><span>Delete</span></div>
-            <div className="col-md-1"><span>Edit</span></div>
+            <div className="col-md-1"><span>Actions</span></div>
           </div>
           { studentRows }
         </div>
