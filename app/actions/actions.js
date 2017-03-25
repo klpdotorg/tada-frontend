@@ -132,12 +132,10 @@ function userDataFetched(data) {
   }
 }
 
-function studentsFetched(data, groupId) {
-  return {
-    type: 'STUDENTS_FETCHED',
-    data,
-    groupId
-  }
+export const studentsFetched = (data, groupId) => {
+  type: 'STUDENTS_FETCHED',
+  data,
+  groupId
 }
 
 export const getBoundaries = (parentId) => {
@@ -281,7 +279,7 @@ export function fetchUserData() {
           if(item.name == ROLES.ADMIN)
             sessionStorage.setItem('isAdmin', true);
         });
-       
+
         dispatch(userDataFetched(data));
         dispatch(loginSuccess(token));
       });

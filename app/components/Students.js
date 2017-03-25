@@ -6,7 +6,7 @@ import Button from './Button'
 import ConfirmModal from './Modals/Confirm'
 import ModifyStudent from './Modals/ModifyStudent'
 import { Link } from 'react-router'
-import { mapStudentsAPI, deleteStudentAPI } from '../actions/utils'
+import { mapStudentsAPI, deleteStudentAPI, patchStudentAPI } from '../actions/utils'
 import { displayFullName } from './utils'
 import Notifications from 'react-notification-system-redux';
 import {studentStudentGroupMap, syncError} from '../actions/notifications'
@@ -34,7 +34,6 @@ class StudentScreen extends Component {
 
   constructor(props){
     super(props);
-    this.toggleSchoolModal = this.toggleSchoolModal.bind(this);
     this.deleteStudentConfirm = this.deleteStudentConfirm.bind(this);
     this.deleteStudent = this.deleteStudent.bind(this);
     this.openModifyStudent = this.openModifyStudent.bind(this);
@@ -85,13 +84,15 @@ class StudentScreen extends Component {
   }
 
   saveStudent(student){
-    this.props.dispatch(saveStudent(student))
-  }
-
-
-  toggleSchoolModal() {
-    this.setState({
-      schoolModalIsOpen: false
+    let relations = []
+    relations.push(student.Father, student.Mother)
+    student.relations = relations
+    this.props.dispatch({
+      type: 'STUDENTS',
+      payload: patchStudentAPI(student, this.props.params.groupId)
+    }).then(() => {
+      this.closeModifyStudent()
+      this.props.dispatch(Notifications.success(studentStudentGroupMap))
     })
   }
 
@@ -125,7 +126,6 @@ class StudentScreen extends Component {
   }
 
   render() {
-
     const {boundaryDetails, boundariesByParentId} = this.props.boundaries
     const {params} = this.props
     const block = boundaryDetails[params.blockId] || boundaryDetails[params.projectId];

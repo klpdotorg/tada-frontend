@@ -6,41 +6,68 @@ import store from '../store'
 
 export const get = (url) => {
   return fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Token ' + sessionStorage.token
-      }
-    }).then(checkStatus).catch((e) => {
-      store.dispatch(Notifications.error(syncError(e)))
-    })
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Token ' + sessionStorage.token
+    }
+  }).then(checkStatus).catch((e) => {
+    store.dispatch(Notifications.error(syncError(e)))
+  })
 }
 
 export const deleteRequest = (url) => {
   return fetch(url, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Token ' + sessionStorage.token
-      }
-    }).then(checkStatusNoJSON).catch((e) => {
-      store.dispatch(Notifications.error(syncError(e)))
-    })
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Token ' + sessionStorage.token
+    }
+  }).then(checkStatusNoJSON).catch((e) => {
+    store.dispatch(Notifications.error(syncError(e)))
+  })
 }
 
 
 export const post = (url, body) => {
   return fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Token ' + sessionStorage.token
-      },
-      body: JSON.stringify(body)
-    }).then(checkStatus).catch((e) => {
-      store.dispatch(Notifications.error(syncError(e)))
-      throw e
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Token ' + sessionStorage.token
+    },
+    body: JSON.stringify(body)
+  }).then(checkStatus).catch((e) => {
+    store.dispatch(Notifications.error(syncError(e)))
+    throw e
+  })
+}
+
+export const patch = (url, body) => {
+  return fetch(url, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Token ' + sessionStorage.token
+    },
+    body: JSON.stringify(body)
+  }).then(checkStatus).catch((e) => {
+    store.dispatch(Notifications.error(syncError(e)))
+    throw e
+  })
+}
+
+export const patchStudentAPI = (body, groupId) => {
+  return patch(`${SERVER_API_BASE}students/${body.id}/`, body).then((data) => {
+    return new Promise((resolve, reject) => {
+      resolve({
+        students: {
+          results: [data],
+        },
+        groupId
+      })
     })
+  })
 }
 
 export const mapStudentsAPI = (body) => {
@@ -68,26 +95,26 @@ export const checkStatusNoJSON = (response) => {
   if(response.status >=200 && response.status <300){
     return response;
   } else if(response.status === 401) {
-     store.dispatch(logoutUser());
-     store.dispatch(push('/login'));
-     return;
-  }
-  const error = new Error(response.statusText);
-  error.response = response;
-  throw error;
+   store.dispatch(logoutUser());
+   store.dispatch(push('/login'));
+   return;
+ }
+ const error = new Error(response.statusText);
+ error.response = response;
+ throw error;
 }
 
 export const boundaryType = (id = 1, details) => {
   let boundaryCategory, institution;
   switch (details[id].depth) {
     case 2:
-      return fetchInstitutionDetails
+    return fetchInstitutionDetails
     case 3:
-      return fetchStudentGroups
+    return fetchStudentGroups
     case 4:
-      return fetchStudents
+    return fetchStudents
     default:
-      return fetchBoundaryDetails
+    return fetchBoundaryDetails
   }
 }
 
