@@ -3,7 +3,30 @@ import fetch from 'isomorphic-fetch';
 import { push } from 'react-router-redux';
 import {SERVER_API_BASE as serverApiBase,
  SERVER_AUTH_BASE as authApiBase} from 'config';
+ import { urls as URLs } from '../constants';
 
+export const getAssessmentsForBoundary = (boundaryid) => {
+  return function(dispatch, getState) {
+    dispatch({
+      type: 'FETCHING_ASSESSMENTS_PER_BOUNDARY',
+      boundary: boundaryid
+    });
+    var url =  URLs.ASSESSMENTS + "?boundary=" + boundaryid;
+    return fetch(url, {
+      method: 'GET',
+      headers: {
+         'Content-Type': 'application/json',
+        'Authorization': 'Token ' + sessionStorage.token
+      }
+    }).then(checkStatus).then(data => {
+      dispatch({
+        type: 'FETCHED_ASSESSMENTS_PER_BOUNDARY',
+        boundary: boundaryid,
+        results: data.results
+      })
+    })
+  }
+}
 /** QUESTIONS RELATED ACTIONS BEGIN */
 
 export function fetchQuestionsForAssessment(programId, assessmentId)

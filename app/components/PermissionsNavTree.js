@@ -3,6 +3,8 @@ import TreeView from 'react-treeview';
 import { Link } from 'react-router';
 import {alphabeticalOrder} from '../utils'
 import _ from 'lodash';
+import { fetchBoundaryDetails, boundaryClicked } from '../actions/';
+import { getEntityType, getBoundaryType, CLUSTER } from '../reducers/utils';
 
 export default class PermissionsNavTree extends React.Component {
 
@@ -12,6 +14,7 @@ export default class PermissionsNavTree extends React.Component {
     this.state = {
       selectedEntities: []
     }
+    this.onBoundarySelection = this.onBoundarySelection.bind(this);
   }
 
   componentWillMount()
@@ -23,16 +26,34 @@ export default class PermissionsNavTree extends React.Component {
   {
   }
 
+  onBoundarySelection(boundary)
+  {
+    
+    this.props.dispatch(fetchBoundaryDetails(boundary.id)).then(() => {
+      //If it is a cluster, you don't want to wait till they expand the node to fetch children.
+      if(getBoundaryType(boundary) == CLUSTER) {
+        this.props.onBoundaryClick(boundary);
+      }
+      this.props.dispatch(boundaryClicked(boundary));
+    });
+  }
 
   renderSubTree(node, boundaryHierarchy, visitedBoundaries, depth) {
     const boundaryDetails = this.props.boundaryDetails;
+      //if boundary details not defined for node, most likely we don't want it rendered in this filtered tree..
+       if(!boundaryDetails[node])
+       {
+          console.log("Boundary details undefined for node", node);
+          return null;
+       }
     if (boundaryDetails[node].depth == depth && depth < 5) {
       if (node && $.inArray(node, visitedBoundaries) < 0) {
         var children = boundaryHierarchy[node];
         visitedBoundaries.push(node);
 
         var boundary = this.props.boundaryDetails[node];
-        const label = <a href="">><span className="node"> { _.capitalize(boundary.label) || _.capitalize(boundary.name) || _.capitalize(boundary.first_name)} </span></a>;
+     
+        const label = <a onClick={ this.onBoundarySelection.bind(null,boundary)}><span className="node" onClick={ this.onBoundarySelection.bind(this)}> { _.capitalize(boundary.label) || _.capitalize(boundary.name) || _.capitalize(boundary.first_name)} </span></a>;
         return (
 
           <TreeView key={ node } onClick={ this.props.onBoundaryClick.bind(null, boundary) } nodeLabel={ label } collapsed={ boundary.collapsed }>
@@ -57,7 +78,7 @@ export default class PermissionsNavTree extends React.Component {
   render() {
     var visitedBoundaries = [];
     const {boundariesByParentId, boundaryDetails} = this.props
-    
+   
     return (
       <div className="brand-orange">
       { alphabeticalOrder(boundariesByParentId, boundaryDetails).map(function(element, i) {

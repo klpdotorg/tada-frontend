@@ -19,7 +19,7 @@ import Programs from './components/Programs';
 import ResetPassword from './components/ResetPassword';
 import SetNewPassword from './components/SetNewPassword';
 import Users from './containers/UsersContainer';
-import Permissions from './components/Permissions';
+import PermissionsContainer from './containers/PermissionsContainer';
 import Questions from './components/AssessmentQuestions';
 import tadastore from './store';
 import { syncHistoryWithStore } from 'react-router-redux';
@@ -41,7 +41,7 @@ export const routes = (
                 <Route path="programs/:programId" component={Programs} />
                 <Route path="programs/:programId/assessments/:assessmentId/questions" component={Questions} />
                 <Route path="users" component={Users} />
-                <Route path="permissions" component={Permissions}/>
+                <Route path="permissions" component={PermissionsContainer}/>
                 <Route path="district/:districtId/project/:projectId" component={PreschoolProject} />
                 <Route path="district/:districtId/project/:projectId/circle/:circleId" component={PreschoolCircle} />
                 <Route path="district/:districtId/project/:projectId/circle/:circleId/institution/:institutionId" component={Preschool} />

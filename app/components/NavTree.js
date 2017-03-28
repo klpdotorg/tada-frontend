@@ -21,7 +21,7 @@ export default class SchoolsNavTree extends React.Component {
 
   componentDidMount()
   {
-    console.log("Inside navtree", this.props.params);
+    //console.log("Inside navtree", this.props.params);
   }
 
 

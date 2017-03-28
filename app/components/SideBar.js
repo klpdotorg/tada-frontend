@@ -22,7 +22,7 @@ class SideBar extends Component {
 
   /* Called when a component is reacting to a props change. Invoked before render is called. */
   componentWillReceiveProps(nextProps) {
-    console.log("In sidebar", nextProps.location);
+   // console.log("In sidebar", nextProps.location);
   }
 
   onBoundaryClick(boundary) {
@@ -49,7 +49,9 @@ class SideBar extends Component {
     if(location.pathname.includes("permissions"))
     {
       let {filteredBoundaryDetails, filteredBoundaryHierarchy } = this.props;
-      DisplayElement = <PermissionsNavTree onBoundaryClick={this.onBoundaryClick.bind(this)} boundaryDetails={filteredBoundaryDetails} boundariesByParentId={filteredBoundaryHierarchy}/>
+       console.log("Boundary details in permissions nav tree", filteredBoundaryDetails);
+       console.log("Boundary hierarchy is ..", filteredBoundaryHierarchy);
+      DisplayElement = <PermissionsNavTree dispatch = {this.props.dispatch} onBoundaryClick={this.onBoundaryClick.bind(this)} boundaryDetails={filteredBoundaryDetails} boundariesByParentId={filteredBoundaryHierarchy}/>
     }
     else {
       DisplayElement =  <SchoolsNavTree onBoundaryClick={this.onBoundaryClick.bind(this)} boundaryDetails={boundaryDetails} boundariesByParentId={boundariesByParentId} />
@@ -80,7 +82,7 @@ const mapStateToProps = (state, ownProps) => {
   location: ownProps.location,
   primarySelected: state.schoolSelection.primarySchool,
   filteredBoundaryDetails: Selectors.getVisibleEntities(state),
-  filteredBoundaryHierarchy: Selectors.getFilteredBoundaryHierarchy(state)
+  filteredBoundaryHierarchy: Selectors.getFilteredBoundaryHierarchy(state),
   }
 )};
 

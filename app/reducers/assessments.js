@@ -28,14 +28,37 @@ function processQuestions(data)
   return newQuestionsById;
 }
 
+export const processAssessmentsByBoundary = (boundaryid,assessments) => {
+  var perBoundary = {};
+  var boundArray =  [];
+  assessments.map((assessment) => {
+    boundArray.push(assessment.id);
+  });
+  perBoundary[boundaryid] = boundArray;
+  return perBoundary;
+}
 export function assessments(state = {
-  assessmentsById: {}, questionsById: {}
+  assessmentsById: {}, questionsById: {}, isFetching: {},
+  assessmentsByBoundary: {}
 }, action){
   try
   {
     switch(action.type)
     {
-
+      case 'FETCHING_ASSESSMENTS_PER_BOUNDARY':
+        return {
+          ...state,
+          isFetching: _.merge(state.isFetching,{[action.boundary]: true})
+        }
+      case 'FETCHED_ASSESSMENTS_PER_BOUNDARY':
+        const assessments = processAssessments(action.results);
+        const mergedAssess = Object.assign({},state.assessmentsById, assessments);
+        const mergedBoundAssess = Object.assign({},state.assessmentsByBoundary,processAssessmentsByBoundary(action.boundary,action.results));
+        return {
+          ...state,
+          assessmentsById: mergedAssess,
+          assessmentsByBoundary: mergedBoundAssess,
+        }
       case 'QUESTIONS_RESPONSE_RECEIVED':
           const questions = processQuestions(action.data);
           return Object.assign(

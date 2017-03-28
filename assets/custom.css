@@ -5,3 +5,9 @@
   margin-top: 10px;
   background-color: #ec6608; 
 }
+
+.no-border {
+  border: 0;
+  box-shadow: none; 
+  outline: none;
+}

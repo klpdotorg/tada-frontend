@@ -4,6 +4,14 @@ export const CLASS = "class";
 export const BOUNDARY = "boundary";
 export const INSTITUTION = "institution";
 export const STUDENT = "student";
+
+//Boundary categories
+export const PRESCHOOL_DISTRICT = "preschool_district";
+export const PROJECT = "project";
+export const CIRCLE = "circle";
+export const PRIMARY_DISTRICT = "primary_district";
+export const BLOCK = "block";
+export const CLUSTER = "cluster";
 /*
 Function returns the parent of a particular entity given the entity. This is data massaging on the client side
 because for institutions, the parent id is represented as "bouiiiiindary" in the JSON. Whereas, for boundaries, it is
@@ -39,6 +47,29 @@ export const getEntityType = (entity) => {
  return type;
 }
 
+export const getBoundaryType = (boundary) => {
+  var type;
+  var boundCat = boundary.boundary_category;
+  if(boundCat == 13) {
+    type = PRESCHOOL_DISTRICT;
+  }
+  else if(boundCat == 14){
+    type = PROJECT
+  }
+  else if(boundCat == 15){
+    type = CIRCLE
+  }
+  else if(boundCat == 9) {
+    type= PRIMARY_DISTRICT
+  }
+  else if(boundCat == 10){
+    type= BLOCK
+  }
+  else if(boundCat == 11) {
+    type = CLUSTER
+  }
+  return type;
+}
 /*
 Method computes the router path for an entity and returns it
 */

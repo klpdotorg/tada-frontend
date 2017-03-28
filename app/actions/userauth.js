@@ -144,6 +144,22 @@ export function listUsers(){
  fetchUsers(1);
 }
 
+export function fetchAllUsers(){
+  return function(dispatch, getState) {
+      dispatch(requestAllUsers());
+      return fetch(Urls.USERS +"?is_active=True&limit=1000", {
+        method: "GET",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Token ' + sessionStorage.token
+        },
+      }).then(checkStatus).then(data=> {
+        dispatch(allUsersFetched(data));
+        return data;
+      });
+    }
+}
+
 export function fetchUsers(pageNumber){
   return function(dispatch, getState) {
     //First dispatch a "REQUEST_PAGE" event. Get reducer to handle it. 
@@ -254,6 +270,9 @@ export function createUser(firstname,lastname,username,email,password,role) {
     }
   }
 
+export const requestAllUsers = () => ({
+  type: 'REQUEST_ALL_USERS',
+})
 
 function userCreated(userdata)
 {
@@ -268,6 +287,15 @@ function userModified(userdata)
   return {
     type: "USER_MODIFIED",
     user: userdata
+  }
+}
+
+function allUsersFetched(data)
+{
+  return {
+    type: "ALL_USERS_FETCHED",
+    users: data.results,
+    count: data.count
   }
 }
 

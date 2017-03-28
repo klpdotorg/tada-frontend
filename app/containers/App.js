@@ -10,7 +10,7 @@ import MainContentArea from '../components/ContentArea';
 import TreeTogglerSpacingDiv from '../components/TreeTogglerSpacingDiv';
 
 const mapStateToProps = (state, ownProps) => {
-  console.log("Own props inside App.js", ownProps);
+  //console.log("Own props inside App.js", ownProps);
   return ({
   boundaryDetails: state.boundaries.boundaryDetails,
   boundariesByParentId: state.boundaries.boundariesByParentId,
@@ -27,7 +27,7 @@ const mapStateToProps = (state, ownProps) => {
 var mapDispatchToProps = function(dispatch) {
   return {
     onBoundaryClick(boundary) {
-      console.log("On boundary click invoked");
+      //console.log("On boundary click invoked");
       
 
     },
@@ -106,7 +106,7 @@ class TadaContentContainer extends Component {
   }
 
   componentWillMount() {
-    console.log('dispatch', this.props)
+   // console.log('dispatch', this.props)
     const {dispatch} = this.props
     if (!sessionStorage.token) {
       this.props.redirectTo('/login');
