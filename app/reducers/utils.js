@@ -43,14 +43,14 @@ export const getEntityType = (entity) => {
 Method computes the router path for an entity and returns it
 */
 
-export const computeRouterPathForEntity = (entity, boundaryDetails, groupId) => {  
+export const computeRouterPathForEntity = (entity, boundaryDetails, groupId) => {
   var parentEntityId = getParentId(entity, groupId);
   var path = '';
 
   if (parentEntityId == 1) {
     path = "/district/" + entity.id;
   } else {
-    var parent = boundaryDetails[parentEntityId];    
+    var parent = boundaryDetails[parentEntityId];
     if (entity.boundary_category == "10") {
       //path is parent's path plus child's
 
@@ -64,7 +64,7 @@ export const computeRouterPathForEntity = (entity, boundaryDetails, groupId) => 
     } else if (entity.boundary_category == "15") {
 
       path = parent.path + "/circle/" + entity.id;
-    }  
+    }
       else if (entity.institution_gender) {
       path = parent.path + "/institution/" + entity.id
 
@@ -84,9 +84,9 @@ export const nodeDepth = (node) => {
     13: 0,
     9: 0,
     14: 1,
-    10: 1, 
+    10: 1,
     15: 2,
-    11: 2   
+    11: 2
   }
 
   if (category) {
@@ -97,7 +97,7 @@ export const nodeDepth = (node) => {
     node.depth = 4
   } else {
     node.depth = 5
-  }  
+  }
 
   return node
 }
@@ -106,12 +106,12 @@ export const processStudents = (students, groupId, boundariesByParent, boundaryD
   const studentIds = students.map(student => student.id)
   let details = students.reduce((soFar, current) =>  {
     current = computeRouterPathForEntity(current, boundaryDetails, groupId)
-    current = nodeDepth(current)      
+    current = nodeDepth(current)
     soFar[current.id] = current
     return soFar
   }, {})
 
-  let group = boundariesByParent[groupId] || []  
+  let group = boundariesByParent[groupId] || []
 
   return {
     boundariesByParentId: {
@@ -122,6 +122,6 @@ export const processStudents = (students, groupId, boundariesByParent, boundaryD
       ...boundaryDetails,
       ...details
     }
-  }  
-  
+  }
+
 }

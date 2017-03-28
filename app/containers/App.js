@@ -8,6 +8,7 @@ import SideBar from '../components/SideBar';
 import SecondaryNavBar from '../components/SecondaryNavBar';
 import MainContentArea from '../components/ContentArea';
 import TreeTogglerSpacingDiv from '../components/TreeTogglerSpacingDiv';
+import Notifications from 'react-notification-system-redux';
 
 const mapStateToProps = state => ({
   boundaryDetails: state.boundaries.boundaryDetails,
@@ -19,13 +20,13 @@ const mapStateToProps = state => ({
   primarySelected: state.schoolSelection.primarySchool,
   programsByInstitutionId: state.programs.programsByInstitutionId,
   programsByStudentId: state.programs.programsByStudentId,
+  notifications: state.notifications
 
 });
 
 var mapDispatchToProps = function(dispatch) {
   return {
     onBoundaryClick(boundary) {
-      console.log("On boundary click invoked");
       dispatch(toggleNode(boundary.id))
       dispatch(fetchEntitiesFromServer(boundary.id));
 
@@ -105,7 +106,6 @@ class TadaContentContainer extends Component {
   }
 
   componentWillMount() {
-    console.log('dispatch', this.props)
     const {dispatch} = this.props
     if (!sessionStorage.token) {
       this.props.redirectTo('/login');
@@ -122,7 +122,7 @@ class TadaContentContainer extends Component {
   }
 
   render() {
-    const {onBoundaryClick, boundaryDetails, boundariesByParentId, saveNewDistrict, modifyDistrict, primarySelected, boundaries} = this.props
+    const {onBoundaryClick, boundaryDetails, boundariesByParentId, saveNewDistrict, modifyDistrict, primarySelected, boundaries, notifications} = this.props
     return (
       this.state.isLoading ? <div>Loading... </div> :
       <div>
@@ -135,6 +135,9 @@ class TadaContentContainer extends Component {
           <SideBar primarySelected={primarySelected} onBoundaryClick={ onBoundaryClick } boundaryDetails={ boundaryDetails } boundariesByParentId={ boundariesByParentId } />
           <MainContentArea children={ this.props.children } />
         </div>
+        <Notifications
+        notifications={notifications}
+      />
       </div>
     );
   }

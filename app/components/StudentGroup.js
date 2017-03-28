@@ -35,15 +35,15 @@ export default class StudentGroupScreen extends Component {
     dispatch({
       type: 'BOUNDARIES',
       payload: getBoundaries(1)
-    }).then(() => 
+    }).then(() =>
     dispatch({
       type: 'BOUNDARIES',
       payload: getBoundaries(params.districtId)
-    })).then(() => 
+    })).then(() =>
     dispatch({
       type: 'BOUNDARIES',
       payload: getBoundaries(blockId)
-    })).then(() => 
+    })).then(() =>
     dispatch({
       type: 'BOUNDARIES',
       payload: getInstitutions(clusterId)
@@ -70,15 +70,15 @@ export default class StudentGroupScreen extends Component {
       student.relations = [
         {
           "relation_type": "Mother",
-          "first_name": student.motherName,
-          "middle_name": "",
-          "last_name": ""
+          "first_name": student.motherFirstName,
+          "middle_name": student.motherMiddleName,
+          "last_name": student.motherLastName
         },
         {
           "relation_type": "Father",
-          "first_name": student.fatherName,
-          "middle_name": "",
-          "last_name": ""
+          "first_name": student.fatherFirstName,
+          "middle_name": student.fatherMiddleName,
+          "last_name": student.fatherLastName
         }
       ]
 
@@ -108,8 +108,8 @@ export default class StudentGroupScreen extends Component {
 
   render () {
     return (
-      this.state.isLoading ? 
-      <div>Loading...</div> : 
+      this.state.isLoading ?
+      <div>Loading...</div> :
       <div>
         {this.state.showBulkAdd ? <BulkAddStudent addStudents={this.addStudents} hide={this.hideBulkAdd}/> : <StudentGroup showBulkAdd={this.showBulkAdd} {...this.props} />}
       </div>
