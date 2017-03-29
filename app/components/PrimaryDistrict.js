@@ -111,7 +111,7 @@ export default class PrimaryDistrict extends React.Component {
               <div className="col-md-8">
                 <button type="submit" className="btn btn-primary padded-btn" onClick={() => {this.saveDistrict(this.districtId) }}>Save</button>
                 <button type="submit" className="btn btn-primary padded-btn" onClick={() => {this.showConfirmation() }}>Delete</button>
-                <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteDistrict} closeModal={this.closeConfirmModal} entity={boundary.name}/>
+                <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteDistrict} onCloseModal={this.closeConfirmModal} entity={boundary.name}/>
               </div>
         </div>
     }
@@ -131,8 +131,8 @@ export default class PrimaryDistrict extends React.Component {
           <li className="active">{boundary.name}</li>
         </ol>
         <DistrictSummary />
-        <CreateBoundary placeHolder='Block Name' title='Create New Block' isOpen={this.props.modal.createBlock} onCloseModal={this.toggleBlockModal} closeModal={ this.toggleBlockModal} save={ this.saveBlock } />
-        <CreateBoundary placeHolder='Project Name' title='Create New Project' isOpen={this.props.modal.createProject} onCloseModal={this.toggleProjectModal} closeModal={ this.toggleProjectModal} save={ this.saveProject } />
+        <CreateBoundary placeHolder='Block Name' title='Create New Block' isOpen={this.props.modal.createBlock} onCloseModal={this.toggleBlockModal} save={ this.saveBlock } />
+        <CreateBoundary placeHolder='Project Name' title='Create New Project' isOpen={this.props.modal.createProject} onCloseModal={this.toggleProjectModal} save={ this.saveProject } />
       </div>
     );
   }

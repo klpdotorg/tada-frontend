@@ -54,7 +54,7 @@ export default class ConfirmDialog extends Component {
 
   render() {
     return (
-      <Modal contentLabel="Confirm Modal" isOpen={this.props.isOpen} onRequestClose={this.props.closeModal} style={customStyles}>
+      <Modal contentLabel="Confirm Modal" isOpen={this.props.isOpen} onRequestClose={this.props.onCloseModal} style={customStyles}>
         <div className="">
           <div>First Name: <input value={this.state.first_name || ''} onChange={(e) => {this.changeVal(e, 'first_name')}} type='text' className='form-control'/></div>
           <div>Middle Name: <input value={this.state.middle_name || ''} onChange={(e) => {this.changeVal(e, 'middle_name')}} type='text' className='form-control'/></div>
@@ -73,7 +73,7 @@ export default class ConfirmDialog extends Component {
       <div className='button' onClick={ () => {
                                             this.props.saveStudent(this.state)
                                           } }>Yes</div>
-        <div className='button' onClick={ this.props.closeModal }>No</div>
+        <div className='button' onClick={ this.props.onCloseModal }>No</div>
       </Modal>
     )
   }

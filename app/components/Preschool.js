@@ -87,15 +87,15 @@ export default class Institution extends React.Component {
     dispatch({
       type: 'BOUNDARIES',
       payload: getBoundaries(1)
-    }).then(() => 
+    }).then(() =>
     dispatch({
       type: 'BOUNDARIES',
       payload: getBoundaries(params.districtId)
-    })).then(() => 
+    })).then(() =>
     dispatch({
       type: 'BOUNDARIES',
       payload: getBoundaries(params.projectId)
-    })).then(() => 
+    })).then(() =>
     dispatch({
       type: 'BOUNDARIES',
       payload: getInstitutions(params.circleId)
@@ -179,7 +179,7 @@ export default class Institution extends React.Component {
     var Displayelement;
 
      if(sessionStorage.getItem('isAdmin')) {
-       Displayelement = (props) => 
+       Displayelement = (props) =>
       <div>
        <ol className="breadcrumb">
           <li><Link to={district.path}>{district.name}</Link></li>
@@ -265,10 +265,10 @@ export default class Institution extends React.Component {
           <div className="col-md-2">
             <button type="submit" className="btn btn-primary" onClick={this.saveInsti}>Save</button>
             <button type="submit" className="btn btn-primary" onClick={this.showConfirmation}>Delete</button>
-            <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteInstitution} closeModal={this.closeConfirmation} entity={institution.name}/>
+            <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteInstitution} onCloseModal={this.closeConfirmModal} entity={institution.name}/>
           </div>
         </div>
-        <CreateClass placeHolder='Class Name' title='Create New Class' isOpen={this.props.modal.createClass} onCloseModal={this.toggleClassModal} closeModal={ this.toggleClassModal} save={ this.saveClass } />
+        <CreateClass placeHolder='Class Name' title='Create New Class' isOpen={this.props.modal.createClass} onCloseModal={this.toggleClassModal} save={ this.saveClass } />
       </div>
   }
     else {
@@ -287,8 +287,8 @@ export default class Institution extends React.Component {
         </div>
     }
     return (
-      this.state.isLoading ? 
-      <div>Loading...</div> : 
+      this.state.isLoading ?
+      <div>Loading...</div> :
       <Displayelement {...this.props}/>
     )
 
