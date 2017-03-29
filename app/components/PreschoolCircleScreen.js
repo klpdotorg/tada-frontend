@@ -134,7 +134,7 @@ export default class PreschoolCircle extends React.Component {
           <div className="col-md-8">
             <button type="submit" className="btn btn-primary padded-btn" onClick={this.saveCircle}>Save</button>
             <button type="submit" className="btn btn-primary padded-btn" onClick={this.showConfirmation}>Delete</button>
-            <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteCircle} closeModal={this.closeConfirmation} entity={circle.name}/>
+            <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteCircle} onCloseModal={this.closeConfirmation} entity={circle.name}/>
           </div>
         </div>
     }
@@ -149,8 +149,8 @@ export default class PreschoolCircle extends React.Component {
     }
 
     return (
-      this.state.isLoading ? 
-      <div>Loading...</div> : 
+      this.state.isLoading ?
+      <div>Loading...</div> :
       <div>
        <ol className="breadcrumb">
           <li><Link to={district.path}>{district.name}</Link></li>
@@ -158,7 +158,7 @@ export default class PreschoolCircle extends React.Component {
           <li className="active">{circle.name}</li>
         </ol>
         <Displayelement {...this.props}/>
-        <CreateInstitution placeHolder='School Name' title='Create New School' isOpen={this.props.modal.createInstitution} onCloseModal={this.toggleSchoolModal} closeModal={ this.toggleSchoolModal} save={ this.saveSchool } />
+        <CreateInstitution placeHolder='School Name' title='Create New School' isOpen={this.props.modal.createInstitution} onCloseModal={this.toggleSchoolModal} save={ this.saveSchool } />
       </div>
     )
   }

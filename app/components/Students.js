@@ -168,7 +168,7 @@ class StudentScreen extends Component {
         </div>
         <div className="col-md-2">
           <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteStudent} onCloseModal={this.closeConfirmation} entity={this.state.currentStudent.first_name}/>
-          <ModifyStudent saveStudent={this.saveStudent} isOpen={this.state.modifyStudentIsOpen} data={this.state.modifyStudentData} closeModal={this.closeModifyStudent} entity={cluster.name}/>
+          <ModifyStudent saveStudent={this.saveStudent} isOpen={this.state.modifyStudentIsOpen} data={this.state.modifyStudentData} onCloseModal={this.closeModifyStudent} entity={cluster.name}/>
         </div>
       </div>
     } else {

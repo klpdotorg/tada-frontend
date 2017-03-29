@@ -9,8 +9,8 @@ export default class PrimaryDistrict extends React.Component {
 
   constructor(props){
     super(props);
-    this.onClickSaveBlock = this.onClickSaveBlock.bind(this);    
-    this.onClickDeleteBlock = this.onClickDeleteBlock.bind(this);    
+    this.onClickSaveBlock = this.onClickSaveBlock.bind(this);
+    this.onClickDeleteBlock = this.onClickDeleteBlock.bind(this);
     this.toggleClusterModal = this.toggleClusterModal.bind(this);
     this.saveCluster = this.saveCluster.bind(this);
     this.state = {
@@ -36,7 +36,7 @@ export default class PrimaryDistrict extends React.Component {
         })
       })
     })
-    
+
   }
 
   closeConfirmation = () => {
@@ -51,7 +51,7 @@ export default class PrimaryDistrict extends React.Component {
     })
   }
 
-  onClickSaveBlock() {    
+  onClickSaveBlock() {
     this.props.dispatch(modifyBoundary(this.props.params.blockId, this.blockName.value));
   }
 
@@ -62,7 +62,7 @@ export default class PrimaryDistrict extends React.Component {
       boundary_type: 1,
       boundary_category: 11
     }
-    this.props.dispatch(saveNewCluster(options))    
+    this.props.dispatch(saveNewCluster(options))
   }
 
   toggleClusterModal(){
@@ -70,7 +70,7 @@ export default class PrimaryDistrict extends React.Component {
       type: 'TOGGLE_MODAL',
       modal: 'createCluster'
     })
-  }  
+  }
 
   onClickDeleteBlock() {
     let {params} = this.props
@@ -78,21 +78,21 @@ export default class PrimaryDistrict extends React.Component {
   }
 
   render() {
-    var block = this.props.boundaries.boundaryDetails[this.props.params.blockId];    
-    var district = this.props.boundaries.boundaryDetails[this.props.params.districtId];    
+    var block = this.props.boundaries.boundaryDetails[this.props.params.blockId];
+    var district = this.props.boundaries.boundaryDetails[this.props.params.districtId];
     var Displayelement;
     if(sessionStorage.getItem('isAdmin')) {
-      Displayelement = (props) => 
+      Displayelement = (props) =>
       <div>
       <div className='heading-border-left'>
       <h4 className="brand-blue col-md-10">Modify Details</h4>
       <Button onClick={this.toggleClusterModal} title='Add Cluster'/>
       </div>
-      
+
       <form className="form-horizontal boundary-form" role="form">
       <div className="form-group">
       <label className="control-label col-sm-2" htmlFor="name">Block :</label>
-      <div className="col-sm-2">          
+      <div className="col-sm-2">
       <input type="text" ref={(ref) => this.blockName = ref} className="form-control" id="name" defaultValue={block.name}/>
       </div>
       </div>
@@ -101,12 +101,12 @@ export default class PrimaryDistrict extends React.Component {
       <div className="col-md-8">
       <button type="submit" className="btn btn-primary padded-btn" onClick={() => {this.onClickSaveBlock() }}>Save</button>
       <button type="submit" className="btn btn-primary padded-btn" onClick={() => {this.showConfirmation()}}>Delete</button>
-      <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.onClickDeleteBlock} closeModal={this.closeConfirmation} entity={block.name}/>
+      <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.onClickDeleteBlock} onCloseModal={this.closeConfirmation} entity={block.name}/>
       </div>
       </div>
     }
     else {
-      Displayelement = (props) => 
+      Displayelement = (props) =>
       <div>
       <h4 className="heading-err heading-border-left brand-red"> <i className="fa fa-lock brand-red" aria-hidden="true"></i>  Insufficient Permissions</h4>
       <p>You need administrator privileges to modify Boundary details.</p>
@@ -116,16 +116,16 @@ export default class PrimaryDistrict extends React.Component {
     }
 
     return (
-      this.state.isLoading ? 
-      <div>Loading...</div> : 
+      this.state.isLoading ?
+      <div>Loading...</div> :
       <div>
       <ol className="breadcrumb">
       <li><Link to={district.path}>{district.name}</Link></li>
       <li className="active">{block.name}</li>
       </ol>
       <Displayelement {...this.props} />
-      <CreateCluster placeHolder='Cluster Name' title='Create New Cluster' isOpen={this.props.modal.createCluster} onCloseModal={this.toggleClusterModal} closeModal={ this.toggleClusterModal} save={ this.saveCluster } />
+      <CreateCluster placeHolder='Cluster Name' title='Create New Cluster' isOpen={this.props.modal.createCluster} onCloseModal={this.toggleClusterModal} save={ this.saveCluster } />
       </div>
-      );   
+      );
   };
 }

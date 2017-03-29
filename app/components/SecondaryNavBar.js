@@ -29,7 +29,7 @@ export default class SecondaryNavBar extends React.Component {
     this.props.redirectTo('/users');
   }
 
-  render() {  
+  render() {
     var Displayelement;
     if(sessionStorage.getItem('isAdmin')) {
       Displayelement = (props) => {
@@ -70,7 +70,7 @@ export default class SecondaryNavBar extends React.Component {
           <button type="button" className="btn btn-primary navbar-btn all-padded-btn"><span className="glyphicon glyphicon-filter"></span> Filter by Programs</button>
         </p>*/}
         <Displayelement {...this.props}/>
-        <CreateDistrict placeHolder='District Name' title='Create New District' isOpen={ this.props.districtModalIsOpen } onCloseModal={ this.props.toggleDistrictModal } closeModal={ this.props.toggleDistrictModal } save={ this.props.saveNewDistrict } />
+        <CreateDistrict placeHolder='District Name' title='Create New District' isOpen={ this.props.districtModalIsOpen } onCloseModal={ this.props.toggleDistrictModal } save={ this.props.saveNewDistrict } />
       </div>
       );
   }

@@ -16,7 +16,7 @@ export default class PrimaryCluster extends React.Component {
     this.deleteCluster = this.deleteCluster.bind(this);
     this.state = {
       schoolModalIsOpen: false,
-      openConfirmModal: false, 
+      openConfirmModal: false,
       isLoading: true
     };
   }
@@ -132,7 +132,7 @@ export default class PrimaryCluster extends React.Component {
           <div className="col-md-8">
             <button type="submit" className="btn btn-primary padded-btn" onClick={this.saveCluster}>Save</button>
             <button type="submit" className="btn btn-primary padded-btn" onClick={this.showConfirmation}>Delete</button>
-            <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteCluster} closeModal={this.closeConfirmation} entity={cluster.name}/>
+            <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteCluster} onCloseModal={this.closeConfirmation} entity={cluster.name}/>
           </div>
         </div>
     }
@@ -147,8 +147,8 @@ export default class PrimaryCluster extends React.Component {
     }
 
     return (
-      this.state.isLoading ? 
-      <div>Loading...</div> : 
+      this.state.isLoading ?
+      <div>Loading...</div> :
       <div>
        <ol className="breadcrumb">
           <li><Link to={district.path}>{district.name}</Link></li>
@@ -156,7 +156,7 @@ export default class PrimaryCluster extends React.Component {
           <li className="active">{cluster.name}</li>
         </ol>
         <Displayelement {...this.props}/>
-        <CreateInstitution placeHolder='School Name' title='Create New School' isOpen={this.props.modal.createInstitution} onCloseModal={this.toggleSchoolModal} closeModal={ this.toggleSchoolModal} save={ this.saveSchool } />
+        <CreateInstitution placeHolder='School Name' title='Create New School' isOpen={this.props.modal.createInstitution} onCloseModal={this.toggleSchoolModal} save={ this.saveSchool } />
       </div>
     )
   }
