@@ -1,30 +1,30 @@
 import React, {Component} from 'react';
-import {modifyBoundary, deleteBoundary, newSchool, saveStudent, getStudents, getBoundaries, getInstitutions, getStudentGroups, selectPreschoolTree} from '../actions';
+import {modifyBoundary, deleteBoundary, newSchool, saveStudent, getStudents, getBoundaries, getInstitutions, getStudentGroups, selectPreschoolTree, removeBoundary } from '../actions';
 import CreateInstitution from './Modals/CreateInstitution';
+import {toggleSet} from '../utils'
 import Button from './Button'
 import ConfirmModal from './Modals/Confirm'
 import ModifyStudent from './Modals/ModifyStudent'
-import ReactDataGrid from 'react-data-grid'
 import { Link } from 'react-router'
+import { mapStudentsAPI, deleteStudentAPI, patchStudentAPI } from '../actions/utils'
+import { displayFullName } from './utils'
+import Notifications from 'react-notification-system-redux';
+import {studentStudentGroupMap, syncError} from '../actions/notifications'
+import {groupBy} from 'lodash'
 
 const StudentRow = (props) => {
-  // const father = props.relation ?  ||
-  // const mother = props.relation[1]
+  const relations = groupBy(props.relations, 'relation_type')
   return (
-    <div className="col-md-12">
-      <div className="row">
-        <div className="col-md-2"><span>{props.first_name}</span></div>
-        <div className="col-md-1"><span>{props.middle_name}</span></div>
-        <div className="col-md-1"><span>{props.last_name}</span></div>
-        <div className="col-md-1"><span>{props.uid}</span></div>
-        <div className="col-md-1"><span>{props.gender}</span></div>
-        <div className="col-md-1"><span>{props.language}</span></div>
-        <div className="col-md-1"><span>{props.dob}</span></div>
-        <div className="col-md-1"><span>-</span></div>
-        <div className="col-md-1"><span>-</span></div>
-        <div className="col-md-1"><span onClick={() => { props.deleteStudent({...props}) }} className="glyphicon glyphicon-trash">Delete</span></div>
-        <div className="col-md-1"><span className="glyphicon glyphicon-pencil" onClick={() => { props.openModifyStudent({...props}) }}>Edit</span></div>
-      </div>
+    <div className="row">
+      <div className="col-md-1"><input checked={props.selectedStudents.has(props.id)} onChange={props.selectStudent} type="checkbox" /></div>
+      <div className="col-md-2"><span>{displayFullName(props)}</span></div>
+      <div className="col-md-1"><span>{props.uid}</span></div>
+      <div className="col-md-1"><span>{props.gender}</span></div>
+      <div className="col-md-1"><span>{props.language}</span></div>
+      <div className="col-md-1"><span>{props.dob}</span></div>
+      <div className="col-md-2"><span>{displayFullName(relations.Father[0])}</span></div>
+      <div className="col-md-2"><span>{displayFullName(relations.Mother[0])}</span></div>
+      <div className="col-md-1"><span onClick={() => { props.deleteStudent({...props}) }} className="glyphicon glyphicon-trash">Delete</span><span className="glyphicon glyphicon-pencil" onClick={() => { props.openModifyStudent({...props}) }}>Edit</span></div>
     </div>
   )
 }
@@ -33,17 +33,21 @@ class StudentScreen extends Component {
 
   constructor(props){
     super(props);
-    this.toggleSchoolModal = this.toggleSchoolModal.bind(this);
+    this.deleteStudentConfirm = this.deleteStudentConfirm.bind(this);
     this.deleteStudent = this.deleteStudent.bind(this);
     this.openModifyStudent = this.openModifyStudent.bind(this);
     this.closeModifyStudent  =this.closeModifyStudent.bind(this);
     this.saveStudent = this.saveStudent.bind(this);
+    this.selectStudent = this.selectStudent.bind(this);
+    this.mapToCentre = this.mapToCentre.bind(this);
     this.state = {
       schoolModalIsOpen: false,
       openConfirmModal: false,
       modifyStudentIsOpen: false,
       currentStudent: '',
-      modifyStudentData: null
+      modifyStudentData: null,
+      selectedStudents: new Set(),
+      mapToCentre: props.boundariesByParentId[props.params.institutionId][0]
     };
   }
 
@@ -53,20 +57,41 @@ class StudentScreen extends Component {
     })
   }
 
-  showConfirmation = () => {
-    this.setState({
-      openConfirmModal: true
+  mapToCentre() {
+
+    const studentsPromise = [...this.state.selectedStudents].map((val) => {
+      const studentRequestBody = {
+        student: val,
+        student_group: this.state.mapToCentre
+      }
+      return mapStudentsAPI(studentRequestBody)
+    })
+
+    Promise.all(studentsPromise)
+    .then(() => {
+      this.props.dispatch(Notifications.success(studentStudentGroupMap))
     })
   }
 
-  saveStudent(student){
-    this.props.dispatch(saveStudent(student))
+  selectStudent(id) {
+   const selectedStudents = toggleSet(this.state.selectedStudents, id)
+
+    this.setState({
+      selectedStudents
+    })
+
   }
 
-
-  toggleSchoolModal() {
-    this.setState({
-      schoolModalIsOpen: false
+  saveStudent(student){
+    let relations = []
+    relations.push(student.Father, student.Mother)
+    student.relations = relations
+    this.props.dispatch({
+      type: 'STUDENTS',
+      payload: patchStudentAPI(student, this.props.params.groupId)
+    }).then(() => {
+      this.closeModifyStudent()
+      this.props.dispatch(Notifications.success(studentStudentGroupMap))
     })
   }
 
@@ -83,15 +108,23 @@ class StudentScreen extends Component {
     })
   }
 
-  deleteStudent(student) {
+  deleteStudentConfirm(student) {
     this.setState({
       currentStudent: student,
       openConfirmModal: true
     })
   }
 
-  render() {
+  deleteStudent() {
+    deleteStudentAPI(this.state.currentStudent.id).then(() => {
+      this.setState({
+        openConfirmModal: false
+      })
+      this.props.dispatch(removeBoundary(this.state.currentStudent.id, this.props.params.groupId))
+    })
+  }
 
+  render() {
     const {boundaryDetails, boundariesByParentId} = this.props.boundaries
     const {params} = this.props
     const block = boundaryDetails[params.blockId] || boundaryDetails[params.projectId];
@@ -100,33 +133,41 @@ class StudentScreen extends Component {
     const institution = boundaryDetails[params.institutionId]
     const group = boundaryDetails[params.groupId]
     const studentList = boundariesByParentId[params.groupId]
-    const studentRows = studentList.map((studentId, i) => <StudentRow key={i} { ...boundaryDetails[studentId]} deleteStudent={this.deleteStudent} openModifyStudent={this.openModifyStudent} />)
+    const studentRows = studentList.map((studentId, i) => <StudentRow key={i} { ...boundaryDetails[studentId]} deleteStudent={this.deleteStudentConfirm} selectedStudents={this.state.selectedStudents} selectStudent={() => {this.selectStudent(studentId)}} openModifyStudent={this.openModifyStudent} />)
+    const studentGroups = boundariesByParentId[params.institutionId]
+      .filter((id) => id !== group.id)
+      .map((id) => {
+        let group = boundaryDetails[id]
+        return <option key={id} value={group.id}>{group.label}</option>
+    })
 
     var Displayelement;
     if(sessionStorage.getItem('isAdmin')) {
       Displayelement = (props) =>
       <div>
-        <div className='heading-border-left'>
-          <div className="col-md-12">
-            <div className="row">
-              <div className="col-md-2"><span>First Name</span></div>
-              <div className="col-md-1"><span>Middle Name</span></div>
-              <div className="col-md-1"><span>Last Name</span></div>
-              <div className="col-md-1"><span>UID</span></div>
-              <div className="col-md-1"><span>Gender</span></div>
-              <div className="col-md-1"><span>Language</span></div>
-              <div className="col-md-1"><span>DoB</span></div>
-              <div className="col-md-1"><span>Father Name</span></div>
-              <div className="col-md-1"><span>Mother Name</span></div>
-              <div className="col-md-1"><span>Delete</span></div>
-              <div className="col-md-1"><span>Edit</span></div>
-            </div>
-            { studentRows }
-         </div>
+        <div className="students-grid">
+          <div className="row grid-header">
+            <div className="col-md-1"><span>Select</span></div>
+            <div className="col-md-2"><span>Name</span></div>
+            <div className="col-md-1"><span>UID</span></div>
+            <div className="col-md-1"><span>Gender</span></div>
+            <div className="col-md-1"><span>Language</span></div>
+            <div className="col-md-1"><span>DoB</span></div>
+            <div className="col-md-2"><span>Father Name</span></div>
+            <div className="col-md-2"><span>Mother Name</span></div>
+            <div className="col-md-1"><span>Actions</span></div>
+          </div>
+          { studentRows }
+        </div>
+        <div className="col-sm-2">
+          <select className="col-sm-2" onChange={(e) => {this.setState({mapToCentre : e.target.value})}} value={this.state.mapToCentre} className="form-control" id="gender">
+                  {studentGroups}
+          </select>
+          <button type="submit" className="btn btn-primary" onClick={this.mapToCentre}>Map to Center</button>
 
         </div>
         <div className="col-md-2">
-          <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.closeConfirmation} closeModal={this.closeConfirmation} entity={this.state.currentStudent.first_name}/>
+          <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteStudent} onCloseModal={this.closeConfirmation} entity={this.state.currentStudent.first_name}/>
           <ModifyStudent saveStudent={this.saveStudent} isOpen={this.state.modifyStudentIsOpen} data={this.state.modifyStudentData} closeModal={this.closeModifyStudent} entity={cluster.name}/>
         </div>
       </div>
@@ -147,12 +188,13 @@ class StudentScreen extends Component {
               <li><Link to={block.path}>{block.name}</Link></li>
               <li><Link to={cluster.path}>{cluster.name}</Link></li>
               <li><Link to={institution.path}>{institution.name}</Link></li>
+              <li>{group.label}</li>
               </ol>
               <Displayelement {...this.props}/>
             </div>
-            
+
           )
-    
+
   }
 };
 
@@ -193,15 +235,15 @@ export default class Students extends Component {
     dispatch({
       type: 'BOUNDARIES',
       payload: getBoundaries(1)
-    }).then(() => 
+    }).then(() =>
     dispatch({
       type: 'BOUNDARIES',
       payload: getBoundaries(params.districtId)
-    })).then(() => 
+    })).then(() =>
     dispatch({
       type: 'BOUNDARIES',
       payload: getBoundaries(blockId)
-    })).then(() => 
+    })).then(() =>
     dispatch({
       type: 'BOUNDARIES',
       payload: getInstitutions(clusterId)
@@ -217,13 +259,13 @@ export default class Students extends Component {
     this.setState({
       isLoading:false
     })})
-    
+
   }
 
   render() {
     return (
-            this.state.isLoading ? 
-            <div>Loading...</div> : 
+            this.state.isLoading ?
+            <div>Loading...</div> :
             <StudentScreen {...this.props} />
           )
   }

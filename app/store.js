@@ -4,11 +4,13 @@ import { browserHistory } from 'react-router';
 import { routerMiddleware, routerReducer } from 'react-router-redux';
 import { schoolSelection, login, modal, userregistration, programs, assessments, passwordreset, users, boundaries, appstate} from './reducers';
 import promiseMiddleware from 'redux-promise-middleware';
+import {reducer as notifications} from 'react-notification-system-redux';
 
 const reducer = combineReducers({
   schoolSelection,
   login,
   routing: routerReducer,
+  notifications,
   modal,
   userregistration,
   users,

@@ -3,16 +3,16 @@ import Button from './Button'
 import {modifyBoundary, deleteBoundary, saveNewBlock, saveNewProject, selectPreschoolTree} from '../actions'
 import CreateBoundary from './Modals/CreateBoundary'
 import {Link} from 'react-router'
-import NotificationSystem from 'react-notification-system';
 import ConfirmModal from './Modals/Confirm'
+import Notifications from 'react-notification-system-redux'
 
 
 export default class PrimaryDistrict extends React.Component {
 
   constructor(props){
-    super(props);    
+    super(props);
     this.saveDistrict = this.saveDistrict.bind(this);
-    this.deleteDistrict = this.deleteDistrict.bind(this);    
+    this.deleteDistrict = this.deleteDistrict.bind(this);
     this.toggleBlockModal = this.toggleBlockModal.bind(this);
     this.toggleProjectModal = this.toggleProjectModal.bind(this);
     this.saveBlock = this.saveBlock.bind(this);
@@ -43,7 +43,7 @@ export default class PrimaryDistrict extends React.Component {
 
   deleteDistrict() {
     this.props.dispatch(deleteBoundary(this.districtId))
-  } 
+  }
 
   saveBlock(name) {
     const options = {
@@ -65,14 +65,14 @@ export default class PrimaryDistrict extends React.Component {
     this.props.dispatch(saveNewProject(options))
   }
 
-  toggleBlockModal() {    
+  toggleBlockModal() {
     this.props.dispatch({
       type: 'TOGGLE_MODAL',
       modal: 'createBlock'
     })
   }
 
-  toggleProjectModal() {    
+  toggleProjectModal() {
     this.props.dispatch({
       type: 'TOGGLE_MODAL',
       modal: 'createProject'
@@ -85,7 +85,7 @@ export default class PrimaryDistrict extends React.Component {
     })
   }
 
-  render() {    
+  render() {
     var boundary = this.props.boundaryDetails[this.props.params.districtId];
     if(!boundary)
       return null;
@@ -93,7 +93,7 @@ export default class PrimaryDistrict extends React.Component {
     var DistrictSummary;
     this.state.value = boundary.name;
     if(sessionStorage.getItem('isAdmin')) {
-      DistrictSummary = (props) => 
+      DistrictSummary = (props) =>
         <div>
           <div className="heading-border-left brand-blue">
             <h4 className="brand-blue brand-bg-blue col-md-10">Modify Details</h4>
@@ -102,7 +102,7 @@ export default class PrimaryDistrict extends React.Component {
             <form className="form-horizontal boundary-form" role="form">
               <div className="form-group">
                 <label className="control-label col-sm-2" htmlFor="name">District Name:</label>
-                <div className="col-sm-2">          
+                <div className="col-sm-2">
                   <input type="text" ref={(ref) => this.districtName = ref} className="form-control" id="name" defaultValue={boundary.name}/>
                 </div>
               </div>
@@ -116,7 +116,7 @@ export default class PrimaryDistrict extends React.Component {
         </div>
     }
     else {
-      DistrictSummary = (props) => 
+      DistrictSummary = (props) =>
         <div>
           <h4 className="heading-err heading-border-left brand-red"> <i className="fa fa-lock brand-red" aria-hidden="true"></i>  Insufficient Permissions</h4>
           <p>You need administrator privileges to modify Boundary details.</p>
@@ -128,7 +128,7 @@ export default class PrimaryDistrict extends React.Component {
     return(
       <div>
         <ol className="breadcrumb">
-          <li className="active">{boundary.name}</li>          
+          <li className="active">{boundary.name}</li>
         </ol>
         <DistrictSummary />
         <CreateBoundary placeHolder='Block Name' title='Create New Block' isOpen={this.props.modal.createBlock} onCloseModal={this.toggleBlockModal} closeModal={ this.toggleBlockModal} save={ this.saveBlock } />

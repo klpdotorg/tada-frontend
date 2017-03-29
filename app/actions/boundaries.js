@@ -1,6 +1,6 @@
 import { SERVER_API_BASE as serverApiBase } from 'config';
-import { checkStatus } from './utils';
-import { fetchEntitiesFromServer, removeBoundary, responseReceivedFromServer } from './actions';
+import { checkStatus, mapStudentsAPI } from './utils';
+import { fetchEntitiesFromServer, removeBoundary, responseReceivedFromServer, studentsFetched } from './actions';
 import { push } from 'react-router-redux';
 import store from '../store';
 
@@ -168,9 +168,17 @@ const studentFetch = (options) => {
   });
 };
 
-export const saveStudent = options => dispatch => {
+export const saveStudent = (options, groupId) => dispatch => {
   return studentFetch(options).then(checkStatus).then(response => {
-    dispatch(responseReceivedFromServer({results: [response]}))
+    const data = {
+      payload : {
+        students: {
+          results: [response]
+        },
+        groupId
+      }
+    }
+    dispatch(studentsFetched(data))
   });
 };
 
