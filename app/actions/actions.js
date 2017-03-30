@@ -21,6 +21,14 @@ export const toggleNode = (id) => {
   }
 }
 
+export const openNode = (id) => {
+  return {
+    type: 'TOGGLE_NODE',
+    id,
+    open:true,
+  }
+}
+
 export const selectPreschoolTree = () => {
   return {
     type: 'PRESCHOOL_SELECTED'

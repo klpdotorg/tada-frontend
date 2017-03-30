@@ -1,5 +1,5 @@
 import React from 'react';
-import {modifyBoundary, deleteBoundary, saveNewCluster, fetchEntitiesFromServer, getBoundaries} from '../actions';
+import {modifyBoundary, deleteBoundary, saveNewCluster, fetchEntitiesFromServer, getBoundaries,openNode} from '../actions';
 import Button from './Button'
 import CreateCluster from './Modals/CreateBoundary'
 import ConfirmModal from './Modals/Confirm'
@@ -22,18 +22,22 @@ export default class PrimaryDistrict extends React.Component {
   }
 
   componentDidMount() {
-    const {params} = this.props
-    this.props.dispatch({
+    const {params,dispatch} = this.props
+    dispatch(openNode(params.districtId))
+    dispatch(fetchEntitiesFromServer(params.districtId));
+    dispatch({
       type: 'BOUNDARIES',
       payload: getBoundaries(1)
     }).then(() => {
-      this.props.dispatch({
+      dispatch({
         type: 'BOUNDARIES',
         payload: getBoundaries(params.districtId)
       }).then(() => {
         this.setState({
           isLoading:false
         })
+        dispatch(openNode(params.blockId))
+        dispatch(fetchEntitiesFromServer(params.blockId));
       })
     })
 

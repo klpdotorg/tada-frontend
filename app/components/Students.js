@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {modifyBoundary, deleteBoundary, newSchool, saveStudent, getStudents, getBoundaries, getInstitutions, getStudentGroups, selectPreschoolTree, removeBoundary } from '../actions';
+import {modifyBoundary, deleteBoundary, newSchool, saveStudent, getStudents, getBoundaries, getInstitutions, getStudentGroups, selectPreschoolTree, removeBoundary ,openNode,fetchEntitiesFromServer} from '../actions';
 import CreateInstitution from './Modals/CreateInstitution';
 import {toggleSet} from '../utils'
 import Button from './Button'
@@ -228,37 +228,52 @@ export default class Students extends Component {
     if (params.circleId) {
       this.props.dispatch(selectPreschoolTree())
     }
-
+  
     const blockId = params.blockId || params.projectId
     const clusterId = params.clusterId || params.circleId
-
+    dispatch(openNode(params.districtId))
+    dispatch(fetchEntitiesFromServer(params.districtId));
     dispatch({
       type: 'BOUNDARIES',
       payload: getBoundaries(1)
-    }).then(() =>
-    dispatch({
-      type: 'BOUNDARIES',
-      payload: getBoundaries(params.districtId)
-    })).then(() =>
-    dispatch({
-      type: 'BOUNDARIES',
-      payload: getBoundaries(blockId)
-    })).then(() =>
-    dispatch({
-      type: 'BOUNDARIES',
-      payload: getInstitutions(clusterId)
-    })).then(() =>
-    dispatch({
-      type: 'BOUNDARIES',
-      payload: getStudentGroups(params.institutionId)
-    })).then(() =>
-    dispatch({
-      type: 'STUDENTS',
-      payload: this.getStudentPromise(params.institutionId, params.groupId)
-    })).then(() => {
-    this.setState({
-      isLoading:false
-    })})
+    }).then(() =>{
+      dispatch({
+        type: 'BOUNDARIES',
+        payload: getBoundaries(params.districtId)
+      }).then(() =>{
+        dispatch(openNode(blockId))
+        dispatch(fetchEntitiesFromServer(blockId));
+        dispatch({
+          type: 'BOUNDARIES',
+          payload: getBoundaries(blockId)
+        }).then(() =>{
+          dispatch(openNode(clusterId))
+          dispatch(fetchEntitiesFromServer(clusterId));
+          dispatch({
+            type: 'BOUNDARIES',
+            payload: getInstitutions(clusterId)
+          }).then(() =>{
+            dispatch(openNode(params.institutionId))
+            dispatch(fetchEntitiesFromServer(params.institutionId));
+            dispatch({
+              type: 'BOUNDARIES',
+              payload: getStudentGroups(params.institutionId)
+            }).then(() =>{
+                dispatch({
+                  type: 'STUDENTS',
+                  payload: this.getStudentPromise(params.institutionId, params.groupId)
+                }).then(() => {
+                this.setState({
+                  isLoading:false
+              })
+              dispatch(openNode(params.groupId))
+              // dispatch(fetchEntitiesFromServer(params.groupId));
+            })
+            })
+          })
+        })
+      })
+    })
 
   }
 

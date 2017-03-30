@@ -29,7 +29,6 @@ var mapDispatchToProps = function(dispatch) {
     onBoundaryClick(boundary) {
       dispatch(toggleNode(boundary.id))
       dispatch(fetchEntitiesFromServer(boundary.id));
-
     },
 
     getInitData() {
