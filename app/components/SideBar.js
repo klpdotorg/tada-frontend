@@ -1,51 +1,91 @@
-import React from 'react';
+import React, { Component } from 'react';
 import SchoolsNavTree from './NavTree';
 import _ from 'lodash';
 var classNames = require('classnames');
 import $ from 'jquery';
+import { connect } from 'react-redux';
+import { fetchEntitiesFromServer, toggleNode} from '../actions/';
+import PermissionsNavTree from './PermissionsNavTree';
+import * as Selectors from '../selectors/';
 
-
-var SideBar = React.createClass({
-  getInitialState() {
-    return {
+class SideBar extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
       isExpanded: false,
-      results: []
+      results: [],
     };
-  },
-  componentDidMount() {
-  },
-  /* Called when a component is reacting to a props change. Invoked before render is called. */
-  componentWillReceiveProps(nextProps) {
-  },
+  }
 
-  toggleTree: function(e) {
+  componentDidMount() {
+  }
+
+  onBoundaryClick(boundary) {
+    this.props.dispatch(toggleNode(boundary.id));
+    this.props.dispatch(fetchEntitiesFromServer(boundary.id));
+  }
+
+  toggleTree(e) {
     e.preventDefault();
     $("#wrapper").toggleClass("toggled");
-  },
+  }
 
-  render: function() {
-    let {onBoundaryClick, boundariesByParentId, boundaryDetails, primarySelected} = this.props;
-    const schoolType = primarySelected ? 1 : 2
-    boundariesByParentId[1] = _.filter(boundariesByParentId[1], (key) =>  {
-      const boundaryType = boundaryDetails[key].boundary_type
-      return boundaryType ? boundaryType == schoolType : true
-    })
+  render() {
+    let { boundariesByParentId, boundaryDetails, primarySelected, location } = this.props;
+    var DisplayElement;
+    const schoolType = primarySelected ? 1 : 2;
+    boundariesByParentId[1] = _.filter(boundariesByParentId[1], (key) => {
+      const boundaryType = boundaryDetails[key].boundary_type;
+      return boundaryType ? boundaryType == schoolType : true;
+    });
     var sidebarClass = classNames({
       'toggled': this.state.isExpanded
-    })
+    });
+    if (location.pathname.includes("permissions")) {
+      let {filteredBoundaryDetails, filteredBoundaryHierarchy } = this.props;
+      DisplayElement = <PermissionsNavTree dispatch = {this.props.dispatch} onBoundaryClick={this.onBoundaryClick.bind(this)} boundaryDetails={filteredBoundaryDetails} boundariesByParentId={filteredBoundaryHierarchy}/>;
+    }
+    else {
+      DisplayElement =  <SchoolsNavTree onBoundaryClick={this.onBoundaryClick.bind(this)} boundaryDetails={boundaryDetails} boundariesByParentId={boundariesByParentId} />;
+
+    }
+    
     return (
       <div id="sidebar-wrapper">
         <div id="treetoggler">
-          <a href="#menu-toggle" className="btn btn-primary btn-xs" id="menu-toggle" onClick={ this.toggleTree }>
+          <a href="#menu-toggle" className="btn btn-primary btn-xs" id="menu-toggle" onClick={this.toggleTree}>
             <span id="toggler-icon" className="glyphicon glyphicon-resize-horizontal"></span>
           </a>
         </div>
         <div id="treeview_side" className="treeview">
-          <SchoolsNavTree onBoundaryClick={ onBoundaryClick } boundaryDetails={ boundaryDetails } boundariesByParentId={ boundariesByParentId } />
+          {DisplayElement}
         </div>
       </div>
-      );
+    );
   }
-});
+}
 
-module.exports = SideBar;
+SideBar.propTypes = {
+  dispatch: React.PropTypes.func,
+  boundariesByParentId: React.PropTypes.object,
+  boundaryDetails: React.PropTypes.object, 
+  primarySelected: React.PropTypes.bool,
+  location: React.PropTypes.object,
+  filteredBoundaryDetails: React.PropTypes.object,
+  filteredBoundaryHierarchy: React.PropTypes.object,
+};
+
+const mapStateToProps = (state, ownProps) => {
+  return ({
+    boundaryDetails: state.boundaries.boundaryDetails,
+    boundariesByParentId: state.boundaries.boundariesByParentId,
+    routerState: state.routing,
+    location: ownProps.location,
+    primarySelected: state.schoolSelection.primarySchool,
+    filteredBoundaryDetails: Selectors.getBoundaryDetailsOnly(state),
+    filteredBoundaryHierarchy: Selectors.getBoundariesOnly(state),
+  }
+); };
+
+const SideBarContainer = connect(mapStateToProps)(SideBar);
+export default SideBarContainer;
