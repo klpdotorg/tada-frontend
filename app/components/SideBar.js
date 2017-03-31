@@ -13,24 +13,19 @@ class SideBar extends Component {
     super(props);
     this.state = {
       isExpanded: false,
-      results: []
+      results: [],
     };
   }
 
   componentDidMount() {
   }
 
-  /* Called when a component is reacting to a props change. Invoked before render is called. */
-  componentWillReceiveProps(nextProps) {
-   // console.log("In sidebar", nextProps.location);
-  }
-
   onBoundaryClick(boundary) {
-    this.props.dispatch(toggleNode(boundary.id))
+    this.props.dispatch(toggleNode(boundary.id));
     this.props.dispatch(fetchEntitiesFromServer(boundary.id));
   }
 
-  toggleTree() {
+  toggleTree(e) {
     e.preventDefault();
     $("#wrapper").toggleClass("toggled");
   }
@@ -38,23 +33,20 @@ class SideBar extends Component {
   render() {
     let { boundariesByParentId, boundaryDetails, primarySelected, location } = this.props;
     var DisplayElement;
-    const schoolType = primarySelected ? 1 : 2
+    const schoolType = primarySelected ? 1 : 2;
     boundariesByParentId[1] = _.filter(boundariesByParentId[1], (key) => {
-      const boundaryType = boundaryDetails[key].boundary_type
-      return boundaryType ? boundaryType == schoolType : true
-    })
+      const boundaryType = boundaryDetails[key].boundary_type;
+      return boundaryType ? boundaryType == schoolType : true;
+    });
     var sidebarClass = classNames({
       'toggled': this.state.isExpanded
-    })
-    if(location.pathname.includes("permissions"))
-    {
+    });
+    if (location.pathname.includes("permissions")) {
       let {filteredBoundaryDetails, filteredBoundaryHierarchy } = this.props;
-       console.log("Boundary details in permissions nav tree", filteredBoundaryDetails);
-       console.log("Boundary hierarchy is ..", filteredBoundaryHierarchy);
-      DisplayElement = <PermissionsNavTree dispatch = {this.props.dispatch} onBoundaryClick={this.onBoundaryClick.bind(this)} boundaryDetails={filteredBoundaryDetails} boundariesByParentId={filteredBoundaryHierarchy}/>
+      DisplayElement = <PermissionsNavTree dispatch = {this.props.dispatch} onBoundaryClick={this.onBoundaryClick.bind(this)} boundaryDetails={filteredBoundaryDetails} boundariesByParentId={filteredBoundaryHierarchy}/>;
     }
     else {
-      DisplayElement =  <SchoolsNavTree onBoundaryClick={this.onBoundaryClick.bind(this)} boundaryDetails={boundaryDetails} boundariesByParentId={boundariesByParentId} />
+      DisplayElement =  <SchoolsNavTree onBoundaryClick={this.onBoundaryClick.bind(this)} boundaryDetails={boundaryDetails} boundariesByParentId={boundariesByParentId} />;
 
     }
     
@@ -73,18 +65,27 @@ class SideBar extends Component {
   }
 }
 
+SideBar.propTypes = {
+  dispatch: React.PropTypes.func,
+  boundariesByParentId: React.PropTypes.object,
+  boundaryDetails: React.PropTypes.object, 
+  primarySelected: React.PropTypes.bool,
+  location: React.PropTypes.object,
+  filteredBoundaryDetails: React.PropTypes.object,
+  filteredBoundaryHierarchy: React.PropTypes.object,
+};
+
 const mapStateToProps = (state, ownProps) => {
-  console.log(ownProps);
   return ({
-  boundaryDetails: state.boundaries.boundaryDetails,
-  boundariesByParentId: state.boundaries.boundariesByParentId,
-  routerState: state.routing,
-  location: ownProps.location,
-  primarySelected: state.schoolSelection.primarySchool,
-  filteredBoundaryDetails: Selectors.getVisibleEntities(state),
-  filteredBoundaryHierarchy: Selectors.getFilteredBoundaryHierarchy(state),
+    boundaryDetails: state.boundaries.boundaryDetails,
+    boundariesByParentId: state.boundaries.boundariesByParentId,
+    routerState: state.routing,
+    location: ownProps.location,
+    primarySelected: state.schoolSelection.primarySchool,
+    filteredBoundaryDetails: Selectors.getBoundaryDetailsOnly(state),
+    filteredBoundaryHierarchy: Selectors.getBoundariesOnly(state),
   }
-)};
+); };
 
 const SideBarContainer = connect(mapStateToProps)(SideBar);
 export default SideBarContainer;
