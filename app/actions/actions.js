@@ -263,18 +263,9 @@ export function fetchEntitiesFromServer(parentBoundaryId) {
  }
 }
 
-export function fetchUserData() {
-  const token = sessionStorage.getItem('token')
-  return function(dispatch) {
-    return fetch(Urls.USER_PROFILE, {
-      method: "GET",
-      headers: {
-        'Authorization': 'Token ' + token,
-        'Content-Type': 'application/json'
-      },
-    }).then(checkStatus)
-    .then(data => {
-      fetch(Urls.USERS + data.id + "/", {
+export function fetchUserData(token) {
+  return function(dispatch, getState) {
+    return fetch(Urls.USERS + sessionStorage.userid + "/", {
         method: "GET",
         headers: {
           'Authorization': 'Token ' + token,
@@ -287,12 +278,9 @@ export function fetchUserData() {
           if(item.name == ROLES.ADMIN)
             sessionStorage.setItem('isAdmin', true);
         });
-
         dispatch(userDataFetched(data));
         dispatch(loginSuccess(token));
-      });
-    })
-    .catch(error => {
+      }).catch(error => {
       console.log(error.response);
       dispatch(requestFailed(error));
     });
@@ -361,9 +349,9 @@ export function sendLoginToServer(email, pass) {
       }
     }).then(data => {
       sessionStorage.setItem('token', data.auth_token);
-
-      dispatch(loginSuccess(data.auth_token))
-      dispatch(fetchUserData(sessionStorage.token))
+      sessionStorage.setItem('userid', data.user_id);
+      dispatch(loginSuccess(data.auth_token));
+      dispatch(fetchUserData(sessionStorage.token));
       dispatch(push('/'))
     }).catch(error => {
       dispatch(loginError(error));

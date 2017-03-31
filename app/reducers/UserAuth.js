@@ -62,9 +62,15 @@ export function users(state={
   usersById: [],
   userCount: 0,
   currentPage: 1,
-  pages: []//pages: { 1: {ids:[23,45,45], fetched: true}}
+  pages: [],//pages: { 1: {ids:[23,45,45], fetched: true}},
+  fetchingUsers: false
 }, action) {
   switch(action.type){
+    case 'REQUEST_ALL_USERS':
+      return {
+        ...state,
+        fetchingUsers: true
+      }
     case 'SET_CURRENT_PAGE':
       return {
         ...state,
@@ -77,7 +83,16 @@ export function users(state={
         ...state,
         ...users,
         pages: page,
-        userCount: action.count     
+        userCount: action.count,
+        fetchingUsers: false    
+      }
+    case 'ALL_USERS_FETCHED':
+      const allUsers = processUsers(action.users, state.usersById);
+      return {
+        ...state,
+        ...allUsers,
+        userCount: action.count,
+        fetchingUsers: false     
       }
     case 'USER_CREATED':
        var copy = Object.assign({}, state.usersById);
@@ -87,7 +102,7 @@ export function users(state={
                           {usersById: copy,
                           pages: pagination,
                           userCount: state.userCount + 1 });
-        console.log("user created", newState);
+       // console.log("user created", newState);
         return newState;
   case 'USER_DELETED':
         var copyState = _.omit(state.usersById,action.id);

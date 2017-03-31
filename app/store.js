@@ -2,7 +2,7 @@ import { applyMiddleware, compose, combineReducers, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import { browserHistory } from 'react-router';
 import { routerMiddleware, routerReducer } from 'react-router-redux';
-import { schoolSelection, login, modal, userregistration, programs, assessments, passwordreset, users, boundaries} from './reducers';
+import { schoolSelection, login, modal, userregistration, programs, assessments, passwordreset, users, boundaries, appstate} from './reducers';
 import promiseMiddleware from 'redux-promise-middleware';
 import {reducer as notifications} from 'react-notification-system-redux';
 
@@ -17,7 +17,8 @@ const reducer = combineReducers({
   programs,
   assessments,
   passwordreset,
-  boundaries
+  boundaries,
+  appstate
 });
 
 const middleware = compose(

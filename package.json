@@ -40,6 +40,7 @@
     "redux": ">3.5.1",
     "redux-promise-middleware": "^4.2.0",
     "redux-thunk": ">2.0.1",
+    "reselect": "^2.5.4",
     "whatwg-fetch": "^0.11.0"
   },
   "devDependencies": {
