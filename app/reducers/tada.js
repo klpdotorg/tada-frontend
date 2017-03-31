@@ -143,7 +143,8 @@ export function login(state = {
   authenticated: false,
   isLoggingIn: false,
   error: false,
-  token: ''
+  token: '',
+  id: ''
 } , action) {
   switch (action.type) {
     case 'REQUEST_LOGIN':
@@ -165,7 +166,8 @@ export function login(state = {
       authenticated: action.authenticated,
       token: action.auth_token,
       isLoggingIn: false,
-      error: false
+      error: false,
+      id:action.id
     }
     case 'USER_DATA_FETCHED':
     return {
@@ -180,7 +182,8 @@ export function login(state = {
       authenticated: false,
       isLoggingIn: false,
       error: false,
-      token: ''
+      token: '',
+      id: ''
     }
     default:
     return state;

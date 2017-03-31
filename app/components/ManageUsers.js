@@ -32,7 +32,7 @@ componentDidMount(){
 }
 
 componentWillReceiveProps(nextProps){
-	console.log("Received update in ManageUsers");
+	//console.log("Received update in ManageUsers");
 }
 openEditUserModal(e) {
 

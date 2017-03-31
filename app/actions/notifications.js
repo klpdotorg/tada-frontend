@@ -17,4 +17,16 @@ export const syncError = (error) => {
   }
 }
 
+export const permissionsAssignedToBound = {
+  ...baseNotification,
+  title: 'Permissions assigned',
+  message: 'Permissions assigned to user(s) successfully'
+}
+
+export const permissionsFailed = {
+  ...baseNotification,
+  title: "Permissions error",
+  message: 'Errow while assigning permissions! Please check console.log for more details!'
+}
+
 
