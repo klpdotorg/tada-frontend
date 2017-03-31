@@ -81,7 +81,7 @@ export default class CreateDistrict extends Component {
             </div>
 
             <div className="modal-footer">
-              <button type="button" className="btn btn-default" onClick={this.props.closeModal}>Cancel</button>
+              <button type="button" className="btn btn-default" onClick={this.props.onCloseModal}>Cancel</button>
               <button
                 type="button" disabled={!this.state.canSubmit} className="btn btn-primary" onClick={this.submitForm}
               >Create</button>

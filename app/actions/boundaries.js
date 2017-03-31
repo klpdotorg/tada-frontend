@@ -122,9 +122,9 @@ export const deleteStudentGroup = options => {
       },
     }).then(response => {
       if (response.status >= 200 && response.status < 300) {
+        const {boundaryDetails} = getState().boundaries
+        dispatch(push(boundaryDetails[options.institution].path));
         dispatch(removeBoundary(options.id, options.institution));
-        // Route the user to the home dashboard page since the page they were on will be deleted
-        dispatch(push('/'));
       } else {
         const error = new Error(response.statusText);
         error.response = response;

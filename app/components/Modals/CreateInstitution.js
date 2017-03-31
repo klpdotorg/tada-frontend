@@ -9,23 +9,23 @@ import FRC from 'formsy-react-components';
 const { Input } = FRC;
 
 export const getLanguages = () => {
-    return fetch(serverApiBase + 'languages/', {    
+    return fetch(serverApiBase + 'languages/', {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Token ' + sessionStorage.token
       }
     }).then(checkStatus).then((languages) => {
         const langs = languages.results.map((language) => ({
-          value: language.id, 
+          value: language.id,
           label: language.name
         }))
         return {
-          options: langs, 
+          options: langs,
           complete: true
         }
       }).catch(error => {
       console.log('request failed', error)
-    })    
+    })
   }
 
 const customStyles = {
@@ -76,10 +76,10 @@ export default class CreateDistrict extends Component {
     })
   }
 
-  selectLanguage = (value) => {   
+  selectLanguage = (value) => {
    this.setState({
      languages: value
-   })   
+   })
  }
 
  submitForm()
@@ -88,7 +88,7 @@ export default class CreateDistrict extends Component {
    this.props.save({name: myform.name, languages: this.state.languages});
  }
 
- render() {    
+ render() {
   return (
     <Modal contentLabel="Create Institution" isOpen={ this.props.isOpen } onRequestClose={ this.props.onCloseModal } style={ customStyles }>
 
@@ -116,7 +116,7 @@ export default class CreateDistrict extends Component {
               </Formsy.Form>
             </div>
            <div className="modal-footer">
-              <button type="button" className="btn btn-default" onClick={this.props.closeModal}>Discard</button>
+              <button type="button" className="btn btn-default" onClick={this.props.onCloseModal}>Discard</button>
               <button type="button" disabled={!this.state.canSubmit} className="btn btn-primary" onClick={this.submitForm}>Save</button>
          </div>
         </div>

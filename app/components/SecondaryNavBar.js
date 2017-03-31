@@ -62,7 +62,7 @@ export default class SecondaryNavBar extends React.Component {
           <button type="submit" className="btn btn-default padded-btn">Search</button>
         </form>
         <Displayelement {...this.props}/>
-        <CreateDistrict placeHolder='District Name' title='Create New District' isOpen={ this.props.districtModalIsOpen } onCloseModal={ this.props.toggleDistrictModal } closeModal={ this.props.toggleDistrictModal } save={ this.props.saveNewDistrict } />
+        <CreateDistrict placeHolder='District Name' title='Create New District' isOpen={ this.props.districtModalIsOpen } onCloseModal={ this.props.toggleDistrictModal } save={ this.props.saveNewDistrict } />
       </div>
       );
   }
