@@ -66,7 +66,7 @@ export default class Programs extends React.Component {
 	{
 		
 		const programs = nextProps.programsById;
-		if(Object.keys(programs).length >0 && jQuery.isEmptyObject(this.state.selectedProgram))
+		if(Object.keys(programs).length >0 && this.state.selectedProgram == 0)
 		{
 			const selectProgram = Object.values(programs)[0];	
 			this.setState({
@@ -90,8 +90,9 @@ export default class Programs extends React.Component {
 */
 	handleProgramSelection(e)
 	{		
+		console.log("Handle program selection,", this.selProgram.value);
 		this.setState({
-			selectedProgram: this.selProgram.value
+			selectedProgram: this.selProgram.value,
 		});
 
 	}
@@ -105,7 +106,6 @@ export default class Programs extends React.Component {
 		// var end = this.createEndDate.value;
 		// var isActive = this.isActive.value;
 		// var instCat = this.instCat.value;
-		("Creating program..");
 		//$('#createProgramModal').modal('hide');
 		this.props.dispatch(actions.createNewProgram(programName, desc, start, end, isActive, instCat)).then(response =>{
 			
@@ -114,7 +114,8 @@ export default class Programs extends React.Component {
 			this.setState({
 				showSuccessModal: true,
 				dialogTitle: "Program Created!",
-				dialogMessage: message
+				dialogMessage: message,
+				selectedProgram: response.id,
 			});
 		}).catch(error => {
 			("ERROR in creating program..", JSON.stringify(error));
@@ -219,7 +220,6 @@ export default class Programs extends React.Component {
 	{
 		var trId = $(e.currentTarget).closest('tr').prop('id');
 		var selectedAssessment = this.props.assessmentsById[trId];
-		("Selected assessment", selectedAssessment);
 		this.setState({
 			isEditAssessmentModalOpen: true,
 			selAssessment: selectedAssessment
@@ -238,7 +238,6 @@ export default class Programs extends React.Component {
 	handleDeleteProgram()
 	{
 		$('#deleteProgramModal').modal('hide');
-		("Deleting program -- ", this.state.selectedProgram);
 		var deleteId = this.state.selectedProgram;
 		this.props.dispatch(actions.deleteProgram(deleteId)).then(response =>{
 			
@@ -356,8 +355,8 @@ export default class Programs extends React.Component {
 		programs = this.props.programsById;
 		assessments = this.props.assessmentsById;
 		
-		var programsList= Object.values(programs).map((program,i) => {
-			return (<option key={program.id} value={program.id}>{program.name}</option>);
+		var programsList= Object.values(programs).map((program,i) => {	
+				return <option key={program.id} value={program.id}>{program.name}</option>;
 		});
 		var assessmentsList = Object.values(assessments).map((assessment,i)=>{
 			
@@ -401,12 +400,12 @@ export default class Programs extends React.Component {
 		});
 		
 
-		if (Object.keys(programs).length > 0 && jQuery.isEmptyObject(this.state.selectedProgram)) {
-			selectedProgram = Object.values(programs)[0];
-		} else {
+		// if (Object.keys(programs).length > 0 && this.state.selectedProgram == 0 ) {
+		// 	selectedProgram = Object.values(programs)[0];
+		// } else {
 			selectedProgram = programs[this.state.selectedProgram];
-		}
-		
+		// }
+		console.log("State is.. ", this.state);
 		if(!jQuery.isEmptyObject(selectedProgram))
 		{
 			selectedProgramName=selectedProgram.name;
@@ -416,6 +415,8 @@ export default class Programs extends React.Component {
 				instType = "Primary"
 			else
 				instType = "Pre-School"
+			console.log("RENDER Current selected program is: ", selectedProgram.id);
+
 		}
 		return (
 			<div>
@@ -423,7 +424,7 @@ export default class Programs extends React.Component {
 					
 					<div className="col-md-4 form-inline">
 		  				<label htmlFor="sel1">Programs:</label>
-						  <select ref={(ref) => this.selProgram = ref} className="form-control"  id="sel1" onChange={this.handleProgramSelection}>
+						  <select ref={(ref) => this.selProgram = ref} className="form-control"  id="sel1" onChange={this.handleProgramSelection} value={this.state.selectedProgram}>
 						    {programsList}
 						  </select>
 					</div>
