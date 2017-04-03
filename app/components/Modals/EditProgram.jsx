@@ -108,10 +108,10 @@ export default class EditProgram extends Component {
 						<Formsy.Form onValidSubmit={this.submitForm} onValid={this.enableSubmitButton} onInvalid={this.disableSubmitButton}
 								disabled={this.state.disabled} ref={(ref) => this.myform = ref}>
 							<Input name="programName" label="Program" type="text"
-								placeholder="Please enter the program name" help="This is a required field" required validations="minLength:1" defaultValue={name}/>
-							<Input name="description" label="Description" type="text" placeholder="Please enter the program description (Optional)" defaultValue={desc}/>
-							<Input name="startDate" type="date" label="Start Date" placeholder="Please select the start date of the program" required defaultValue={startdate}/>
-							<Input name="endDate" type="date" label="End Date" placeholder="Please select the end date of the program" required defaultValue={enddate}/>
+								placeholder="Please enter the program name" help="This is a required field" required validations="minLength:1" value={name}/>
+							<Input name="description" label="Description" type="text" placeholder="Please enter the program description (Optional)" value={desc}/>
+							<Input name="startDate" type="date" label="Start Date" placeholder="Please select the start date of the program" required value={startdate}/>
+							<Input name="endDate" type="date" label="End Date" placeholder="Please select the end date of the program" required value={enddate}/>
 							
                         	<RadioGroup
 	                            name="programmeInstCat"

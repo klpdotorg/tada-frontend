@@ -120,7 +120,7 @@ export function deactivateProgram(id)
   }
 }
 
-export function editProgram(id, name, description, startDate, endDate, isActive)
+export function editProgram(id, name, description, startDate, endDate, isActive, instCat)
 {
    return function(dispatch, getState){
     var url = serverApiBase + "programmes/" + id + "/";  
@@ -136,7 +136,7 @@ export function editProgram(id, name, description, startDate, endDate, isActive)
         start_date: startDate,
         end_date: endDate,
         active: 2,
-        programme_institution_category: 1
+        programme_institution_category: instCat
       })
     }).then(checkStatus).then(response => {
         dispatch(editProgramSuccessful(response));
