@@ -41,4 +41,3 @@ export const assessCreateFailed = {
   message: 'Something went wrong and we couldn not create a copy of the assessments. Please check logs.'
 }
 
-
