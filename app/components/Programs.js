@@ -8,7 +8,8 @@ import CreateProgram from './Modals/CreateProgram';
 import GenericDialog from './Modals/GenericDialog';
 import EditProgram from './Modals/EditProgram';
 import ConfirmDialog from './Modals/ConfirmDialog';
-
+import { assessmentCreated, assessCreateFailed } from '../actions/notifications';
+import Notifications from 'react-notification-system-redux';
 
 export default class Programs extends React.Component {
 
@@ -90,7 +91,6 @@ export default class Programs extends React.Component {
 */
 	handleProgramSelection(e)
 	{		
-		console.log("Handle program selection,", this.selProgram.value);
 		this.setState({
 			selectedProgram: this.selProgram.value,
 		});
@@ -245,8 +245,6 @@ export default class Programs extends React.Component {
 				selectedProgram: this.selProgram.selectedIndex + 1
 			});
 			this.selProgram.remove(deleteId);
-			// ("Fetching all programs");
-			// this.props.dispatch(actions.fetchAllPrograms());
 		}).catch(error => {
 			
 		});
@@ -341,8 +339,33 @@ export default class Programs extends React.Component {
   	deactivateProgram(id)
   	{
   		this.closeConfirmModal();
-  		this.props.dispatch(actions.deactivateProgram(this.state.selectedProgram));
+  		this.props.dispatch(actions.deactivateProgram(this.state.selectedProgram)).then(() => {
+			this.selProgram.remove(this.state.selectedProgram);
+			this.setState({
+				selectedProgram: this.selProgram.selectedIndex + 1
+			});
+			
+		  });
   	}
+
+	createCopyAssess()
+	{
+		var itemsToCopy = this.state.selectedAssessments;
+		var programId = this.state.selectedProgram;
+		const makeACopy = itemsToCopy.map(assessmentId => {
+			var a = this.props.assessmentsById[assessmentId];
+			var copyName = a.name + " COPY";
+			return this.props.dispatch(actions.createAssessment(this.state.selectedProgram,copyName,a.start_date,a.end_date,1,a.isDoubleEntry, a.type));
+		});
+		Promise.all(makeACopy).then(()=> {
+			this.props.dispatch(Notifications.success(assessmentCreated));
+			this.setState({
+				selectedAssessments: [],
+			})
+		}).catch(reason => {
+        	this.props.dispatch(Notifications.error(assessCreateFailed));
+    });
+	}
 
 	render() {
 		var selectedProgram;
@@ -367,9 +390,7 @@ export default class Programs extends React.Component {
 				double_entry="Yes";
 			if(assessment.flexi_assessment && assessment.flexi_assessment == true)
 				flexi_assessment = "Yes";
-			var active = "Inactive";
-			if(assessment.active && assessment.active == 1)
-				active = "Active";
+		
 			if(assessment.type)
 			{
 				if(assessment.type == 1)
@@ -390,7 +411,6 @@ export default class Programs extends React.Component {
 					<td>{type}</td>
 					<td>{double_entry}</td>
 					<td>{flexi_assessment}</td>
-					<td>{active}</td>
 					<td><input type="checkbox" className="form-control" onChange={this.selectAssessment} checked={jQuery.inArray(assessment.id.toString(),this.state.selectedAssessments)>-1}/></td>
 					<td><button onClick={this.openEditAssessmentModal}><span className="fa fa-pencil-square-o" onClick={this.openEditAssessmentModal}></span></button></td>
 					<td><Link className="btn brand-orange-bg fa fa-question" to={assessment.questionsUrl}></Link></td>
@@ -405,7 +425,6 @@ export default class Programs extends React.Component {
 		// } else {
 			selectedProgram = programs[this.state.selectedProgram];
 		// }
-		console.log("State is.. ", this.state);
 		if(!jQuery.isEmptyObject(selectedProgram))
 		{
 			selectedProgramName=selectedProgram.name;
@@ -415,7 +434,6 @@ export default class Programs extends React.Component {
 				instType = "Primary"
 			else
 				instType = "Pre-School"
-			console.log("RENDER Current selected program is: ", selectedProgram.id);
 
 		}
 		return (
@@ -479,7 +497,6 @@ export default class Programs extends React.Component {
 							<th>Type</th>
 							<th>Double Entry</th>
 							<th>Flexi-type</th>
-							<th>Status</th>
 							<th>Select</th>
 							<th>Edit</th>
 							<th>Questions</th>
@@ -489,10 +506,9 @@ export default class Programs extends React.Component {
 					</table>
 				</div>
 				<div className="col-md-8 pull-right">
-						<button type="button" className="col-sm-3 btn btn-info navbar-btn brand-blue-bg all-padded-btn">Make a Copy</button>
-						<button type="button" className="col-sm-2 btn btn-info navbar-btn brand-blue-bg all-padded-btn" onClick={this.deleteAssessments}>Delete</button>
-						<button type="button" className="col-sm-2 btn btn-info navbar-btn brand-blue-bg all-padded-btn" onClick={this.activateAssessments}>Activate</button>
-						<button type="button" className="col-sm-3 btn btn-info navbar-btn brand-blue-bg all-padded-btn" onClick={this.deactivateAssessments}>Deactivate</button>
+						<button type="button" className="col-sm-3 btn btn-info navbar-btn brand-blue-bg all-padded-btn" onClick={this.createCopyAssess.bind(this)} disabled={this.state.selectedAssessments.length == 0}>Make a Copy</button>
+						<button type="button" className="col-sm-2 btn btn-info navbar-btn brand-blue-bg all-padded-btn" onClick={this.deleteAssessments} disabled={this.state.selectedAssessments.length == 0}>Delete</button>
+						<button type="button" className="col-sm-3 btn btn-info navbar-btn brand-blue-bg all-padded-btn" onClick={this.deactivateAssessments} disabled={this.state.selectedAssessments.length == 0}>Deactivate</button>
 
 				</div>
 			<CreateAssessment handleSubmit = {this.handleCreateAssessment} isOpen={this.state.isCreateAssessmentModalOpen} onCloseModal={this.closeCreateAssessmentModal}/>
