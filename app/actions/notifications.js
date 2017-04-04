@@ -29,4 +29,15 @@ export const permissionsFailed = {
   message: 'Errow while assigning permissions! Please check console.log for more details!'
 }
 
+export const assessmentCreated = {
+  ...baseNotification,
+  title: "Assessments created",
+  message: 'Copy of selected assessments has been created!'
+}
+
+export const assessCreateFailed = {
+  ...baseNotification,
+  title: "Failed to create assessments",
+  message: 'Something went wrong and we couldn not create a copy of the assessments. Please check logs.'
+}
 

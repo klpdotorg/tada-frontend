@@ -8,7 +8,8 @@ import CreateProgram from './Modals/CreateProgram';
 import GenericDialog from './Modals/GenericDialog';
 import EditProgram from './Modals/EditProgram';
 import ConfirmDialog from './Modals/ConfirmDialog';
-
+import { assessmentCreated, assessCreateFailed } from '../actions/notifications';
+import Notifications from 'react-notification-system-redux';
 
 export default class Programs extends React.Component {
 
@@ -66,7 +67,7 @@ export default class Programs extends React.Component {
 	{
 		
 		const programs = nextProps.programsById;
-		if(Object.keys(programs).length >0 && jQuery.isEmptyObject(this.state.selectedProgram))
+		if(Object.keys(programs).length >0 && this.state.selectedProgram == 0)
 		{
 			const selectProgram = Object.values(programs)[0];	
 			this.setState({
@@ -91,7 +92,7 @@ export default class Programs extends React.Component {
 	handleProgramSelection(e)
 	{		
 		this.setState({
-			selectedProgram: this.selProgram.value
+			selectedProgram: this.selProgram.value,
 		});
 
 	}
@@ -105,7 +106,6 @@ export default class Programs extends React.Component {
 		// var end = this.createEndDate.value;
 		// var isActive = this.isActive.value;
 		// var instCat = this.instCat.value;
-		("Creating program..");
 		//$('#createProgramModal').modal('hide');
 		this.props.dispatch(actions.createNewProgram(programName, desc, start, end, isActive, instCat)).then(response =>{
 			
@@ -114,7 +114,8 @@ export default class Programs extends React.Component {
 			this.setState({
 				showSuccessModal: true,
 				dialogTitle: "Program Created!",
-				dialogMessage: message
+				dialogMessage: message,
+				selectedProgram: response.id,
 			});
 		}).catch(error => {
 			("ERROR in creating program..", JSON.stringify(error));
@@ -219,7 +220,6 @@ export default class Programs extends React.Component {
 	{
 		var trId = $(e.currentTarget).closest('tr').prop('id');
 		var selectedAssessment = this.props.assessmentsById[trId];
-		("Selected assessment", selectedAssessment);
 		this.setState({
 			isEditAssessmentModalOpen: true,
 			selAssessment: selectedAssessment
@@ -238,7 +238,6 @@ export default class Programs extends React.Component {
 	handleDeleteProgram()
 	{
 		$('#deleteProgramModal').modal('hide');
-		("Deleting program -- ", this.state.selectedProgram);
 		var deleteId = this.state.selectedProgram;
 		this.props.dispatch(actions.deleteProgram(deleteId)).then(response =>{
 			
@@ -246,8 +245,6 @@ export default class Programs extends React.Component {
 				selectedProgram: this.selProgram.selectedIndex + 1
 			});
 			this.selProgram.remove(deleteId);
-			// ("Fetching all programs");
-			// this.props.dispatch(actions.fetchAllPrograms());
 		}).catch(error => {
 			
 		});
@@ -342,8 +339,33 @@ export default class Programs extends React.Component {
   	deactivateProgram(id)
   	{
   		this.closeConfirmModal();
-  		this.props.dispatch(actions.deactivateProgram(this.state.selectedProgram));
+  		this.props.dispatch(actions.deactivateProgram(this.state.selectedProgram)).then(() => {
+			this.selProgram.remove(this.state.selectedProgram);
+			this.setState({
+				selectedProgram: this.selProgram.selectedIndex + 1
+			});
+			
+		  });
   	}
+
+	createCopyAssess()
+	{
+		var itemsToCopy = this.state.selectedAssessments;
+		var programId = this.state.selectedProgram;
+		const makeACopy = itemsToCopy.map(assessmentId => {
+			var a = this.props.assessmentsById[assessmentId];
+			var copyName = a.name + " COPY";
+			return this.props.dispatch(actions.createAssessment(this.state.selectedProgram,copyName,a.start_date,a.end_date,1,a.isDoubleEntry, a.type));
+		});
+		Promise.all(makeACopy).then(()=> {
+			this.props.dispatch(Notifications.success(assessmentCreated));
+			this.setState({
+				selectedAssessments: [],
+			})
+		}).catch(reason => {
+        	this.props.dispatch(Notifications.error(assessCreateFailed));
+    });
+	}
 
 	render() {
 		var selectedProgram;
@@ -356,8 +378,8 @@ export default class Programs extends React.Component {
 		programs = this.props.programsById;
 		assessments = this.props.assessmentsById;
 		
-		var programsList= Object.values(programs).map((program,i) => {
-			return (<option key={program.id} value={program.id}>{program.name}</option>);
+		var programsList= Object.values(programs).map((program,i) => {	
+				return <option key={program.id} value={program.id}>{program.name}</option>;
 		});
 		var assessmentsList = Object.values(assessments).map((assessment,i)=>{
 			
@@ -368,9 +390,7 @@ export default class Programs extends React.Component {
 				double_entry="Yes";
 			if(assessment.flexi_assessment && assessment.flexi_assessment == true)
 				flexi_assessment = "Yes";
-			var active = "Inactive";
-			if(assessment.active && assessment.active == 1)
-				active = "Active";
+		
 			if(assessment.type)
 			{
 				if(assessment.type == 1)
@@ -391,7 +411,6 @@ export default class Programs extends React.Component {
 					<td>{type}</td>
 					<td>{double_entry}</td>
 					<td>{flexi_assessment}</td>
-					<td>{active}</td>
 					<td><input type="checkbox" className="form-control" onChange={this.selectAssessment} checked={jQuery.inArray(assessment.id.toString(),this.state.selectedAssessments)>-1}/></td>
 					<td><button onClick={this.openEditAssessmentModal}><span className="fa fa-pencil-square-o" onClick={this.openEditAssessmentModal}></span></button></td>
 					<td><Link className="btn brand-orange-bg fa fa-question" to={assessment.questionsUrl}></Link></td>
@@ -401,12 +420,11 @@ export default class Programs extends React.Component {
 		});
 		
 
-		if (Object.keys(programs).length > 0 && jQuery.isEmptyObject(this.state.selectedProgram)) {
-			selectedProgram = Object.values(programs)[0];
-		} else {
+		// if (Object.keys(programs).length > 0 && this.state.selectedProgram == 0 ) {
+		// 	selectedProgram = Object.values(programs)[0];
+		// } else {
 			selectedProgram = programs[this.state.selectedProgram];
-		}
-		
+		// }
 		if(!jQuery.isEmptyObject(selectedProgram))
 		{
 			selectedProgramName=selectedProgram.name;
@@ -416,6 +434,7 @@ export default class Programs extends React.Component {
 				instType = "Primary"
 			else
 				instType = "Pre-School"
+
 		}
 		return (
 			<div>
@@ -423,7 +442,7 @@ export default class Programs extends React.Component {
 					
 					<div className="col-md-4 form-inline">
 		  				<label htmlFor="sel1">Programs:</label>
-						  <select ref={(ref) => this.selProgram = ref} className="form-control"  id="sel1" onChange={this.handleProgramSelection}>
+						  <select ref={(ref) => this.selProgram = ref} className="form-control"  id="sel1" onChange={this.handleProgramSelection} value={this.state.selectedProgram}>
 						    {programsList}
 						  </select>
 					</div>
@@ -478,7 +497,6 @@ export default class Programs extends React.Component {
 							<th>Type</th>
 							<th>Double Entry</th>
 							<th>Flexi-type</th>
-							<th>Status</th>
 							<th>Select</th>
 							<th>Edit</th>
 							<th>Questions</th>
@@ -488,10 +506,9 @@ export default class Programs extends React.Component {
 					</table>
 				</div>
 				<div className="col-md-8 pull-right">
-						<button type="button" className="col-sm-3 btn btn-info navbar-btn brand-blue-bg all-padded-btn">Make a Copy</button>
-						<button type="button" className="col-sm-2 btn btn-info navbar-btn brand-blue-bg all-padded-btn" onClick={this.deleteAssessments}>Delete</button>
-						<button type="button" className="col-sm-2 btn btn-info navbar-btn brand-blue-bg all-padded-btn" onClick={this.activateAssessments}>Activate</button>
-						<button type="button" className="col-sm-3 btn btn-info navbar-btn brand-blue-bg all-padded-btn" onClick={this.deactivateAssessments}>Deactivate</button>
+						<button type="button" className="col-sm-3 btn btn-info navbar-btn brand-blue-bg all-padded-btn" onClick={this.createCopyAssess.bind(this)} disabled={this.state.selectedAssessments.length == 0}>Make a Copy</button>
+						<button type="button" className="col-sm-2 btn btn-info navbar-btn brand-blue-bg all-padded-btn" onClick={this.deleteAssessments} disabled={this.state.selectedAssessments.length == 0}>Delete</button>
+						<button type="button" className="col-sm-3 btn btn-info navbar-btn brand-blue-bg all-padded-btn" onClick={this.deactivateAssessments} disabled={this.state.selectedAssessments.length == 0}>Deactivate</button>
 
 				</div>
 			<CreateAssessment handleSubmit = {this.handleCreateAssessment} isOpen={this.state.isCreateAssessmentModalOpen} onCloseModal={this.closeCreateAssessmentModal}/>

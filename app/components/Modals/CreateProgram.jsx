@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Modal from 'react-modal';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
-
+import moment from 'moment';
 
 const { Input, RadioGroup } = FRC;
 
@@ -44,6 +44,9 @@ export default class CreateProgram extends Component {
 		this.enableSubmitButton = this.enableSubmitButton.bind(this);
 		this.disableSubmitButton = this.disableSubmitButton.bind(this);
 		this.submitForm = this.submitForm.bind(this);
+		this.setStartDate = this.setStartDate.bind(this);
+		this.setEndDate = this.setEndDate.bind(this);
+		
 	}
 
 	submitForm()
@@ -63,6 +66,15 @@ export default class CreateProgram extends Component {
 		this.setState({
 			canSubmit: false
 		})
+	}
+
+	setStartDate() {
+		var formatteddate = moment().format('YYYY-MM-DD');
+		return formatteddate;
+	}
+
+	setEndDate() {
+		return moment().add('years', 1).format('YYYY-MM-DD');
 	}
 
 	render()
@@ -90,16 +102,9 @@ export default class CreateProgram extends Component {
 							<Input name="programName" id="programName" value="" label="Program" type="text"
 								placeholder="Please enter the program name" help="This is a required field" required validations="minLength:1"/>
 							<Input name="description" id="description" value="" label="Description" type="text" placeholder="Please enter the program description (Optional)"/>
-							<Input name="startDate" id="startDate" type="date" label="Start Date" placeholder="Please select the start date of the program" required/>
-							<Input name="endDate" id="endDate" type="date" label="End Date" placeholder="Please select the end date of the program" required/>
-							<RadioGroup
-	                            name="active"
-	                            type="inline"
-	                            label="Active"
-	                            help="Select whether the program is active or not"
-	                            options={radioOptions}
-	                            required
-                        	/>
+							<Input name="startDate" id="startDate" type="date" label="Start Date" value={this.setStartDate()} placeholder="Please select the start date of the program" required/>
+							<Input name="endDate" id="endDate" type="date" label="End Date" value={this.setEndDate()} placeholder="Please select the end date of the program" required/>
+						
                         	<RadioGroup
 	                            name="programmeInstCat"
 	                            type="inline"
