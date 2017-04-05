@@ -9,6 +9,32 @@ import FRC from 'formsy-react-components';
 import Formsy from 'formsy-react';
 const { Input} = FRC;
 
+
+const MyInput = React.createClass({
+  mixins: [Formsy.Mixin],
+  changeValue(event) {
+    this.setValue(event.currentTarget[this.props.type === 'checkbox' ? 'checked' : 'value']);
+  },
+  render() {
+    const className = 'form-group' + (this.props.className || ' ') + (this.showRequired() ? 'required' : this.showError() ? 'error' : null);
+    const errorMessage = this.getErrorMessage();
+    return (
+      <div className={className}>
+        <label htmlFor={this.props.name}>{this.props.title}</label>
+        <input
+          type={this.props.type || 'text'}
+          name={this.props.name}
+          onChange={this.changeValue}
+          value={this.getValue()}
+          checked={this.props.type === 'checkbox' && this.getValue() ? 'checked' : null}
+        />
+        <span className='validation-error'>{errorMessage}</span>
+      </div>
+    );
+  }
+});
+
+
 export default class PrimaryDistrict extends React.Component {
 
   constructor(props){
@@ -36,7 +62,7 @@ export default class PrimaryDistrict extends React.Component {
   }
 
   saveDistrict() {
-    console.log(this.districtName.value);
+    // console.log(this.districtName.value);
     this.props.dispatch(modifyBoundary(this.districtId, this.districtName.value));
   }
 
@@ -91,12 +117,14 @@ export default class PrimaryDistrict extends React.Component {
   }
 
   enableSubmitButton=()=> {
+    console.log("enableSubmitButton");
     this.setState({
       canSubmit: true,
     });
   }
 
   disableSubmitButton=()=> {
+    console.log("disableSubmitButton");
     this.setState({
       canSubmit: false,
     });
@@ -117,16 +145,11 @@ export default class PrimaryDistrict extends React.Component {
             {boundaryType == 2 ? <Button title='Add Project' onClick={this.toggleProjectModal} /> : <Button title='Add Block' onClick={this.toggleBlockModal} />}
           </div>
            <Formsy.Form
-            onValidSubmit={this.saveDistrict}
-            onValid={this.enableSubmitButton}
-            onInvalid={this.disableSubmitButton}
-            disabled={this.state.disabled}
-          >
-          <Input name="districtName" ref={(ref) => this.districtName = ref} id="districtName" value={boundary.name} label="District Name:" type="text"
-             required validations="minLength:1"
-          />
-
-        </Formsy.Form>
+             onSubmit={this.saveDistrict}
+            onValid={this.enableButton}
+            onInvalid={this.disableButton}>
+            <MyInput name="districtName" title="District Name" validations="minLength:1" value={boundary.name} required />
+          </Formsy.Form>
             {/*<form className="form-horizontal boundary-form" role="form">
               <div className="form-group">
                 <label className="control-label col-sm-2" htmlFor="name">District Name:</label>
@@ -137,7 +160,7 @@ export default class PrimaryDistrict extends React.Component {
             </form>*/}
 
               <div className="col-md-8">
-                <button type="button" disabled={!this.state.canSubmit} className="btn btn-primary" onClick={() => {this.saveDistrict }}>Save</button>
+                <button type="button" disabled={!this.state.canSubmit} className="btn btn-primary" onClick={this.saveDistrict}>Save</button>
                 <button type="submit" className="btn btn-primary padded-btn" onClick={() => {this.showConfirmation() }}>Delete</button>
                 <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteDistrict} onCloseModal={this.closeConfirmModal} entity={boundary.name}/>
               </div>
