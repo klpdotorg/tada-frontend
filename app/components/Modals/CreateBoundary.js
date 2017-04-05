@@ -93,4 +93,3 @@ export default class CreateDistrict extends Component {
   }
 
 }
-

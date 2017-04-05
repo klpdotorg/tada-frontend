@@ -5,7 +5,9 @@ import CreateBoundary from './Modals/CreateBoundary'
 import {Link} from 'react-router'
 import ConfirmModal from './Modals/Confirm'
 import Notifications from 'react-notification-system-redux'
-
+import FRC from 'formsy-react-components';
+import Formsy from 'formsy-react';
+const { Input} = FRC;
 
 export default class PrimaryDistrict extends React.Component {
 
@@ -21,6 +23,8 @@ export default class PrimaryDistrict extends React.Component {
 
     this.state = {
       value: '',
+      disabled: false,
+      canSubmit: false,
       openConfirmModal: false
     };
   }
@@ -32,6 +36,7 @@ export default class PrimaryDistrict extends React.Component {
   }
 
   saveDistrict() {
+    console.log(this.districtName.value);
     this.props.dispatch(modifyBoundary(this.districtId, this.districtName.value));
   }
 
@@ -85,6 +90,18 @@ export default class PrimaryDistrict extends React.Component {
     })
   }
 
+  enableSubmitButton=()=> {
+    this.setState({
+      canSubmit: true,
+    });
+  }
+
+  disableSubmitButton=()=> {
+    this.setState({
+      canSubmit: false,
+    });
+  }
+
   render() {
     var boundary = this.props.boundaryDetails[this.props.params.districtId];
     if(!boundary)
@@ -99,17 +116,28 @@ export default class PrimaryDistrict extends React.Component {
             <h4 className="brand-blue brand-bg-blue col-md-10">Modify Details</h4>
             {boundaryType == 2 ? <Button title='Add Project' onClick={this.toggleProjectModal} /> : <Button title='Add Block' onClick={this.toggleBlockModal} />}
           </div>
-            <form className="form-horizontal boundary-form" role="form">
+           <Formsy.Form
+            onValidSubmit={this.saveDistrict}
+            onValid={this.enableSubmitButton}
+            onInvalid={this.disableSubmitButton}
+            disabled={this.state.disabled}
+          >
+          <Input name="districtName" ref={(ref) => this.districtName = ref} id="districtName" value={boundary.name} label="District Name:" type="text"
+             required validations="minLength:1"
+          />
+
+        </Formsy.Form>
+            {/*<form className="form-horizontal boundary-form" role="form">
               <div className="form-group">
                 <label className="control-label col-sm-2" htmlFor="name">District Name:</label>
                 <div className="col-sm-2">
                   <input type="text" ref={(ref) => this.districtName = ref} className="form-control" id="name" defaultValue={boundary.name}/>
                 </div>
               </div>
-              </form>
+            </form>*/}
 
               <div className="col-md-8">
-                <button type="submit" className="btn btn-primary padded-btn" onClick={() => {this.saveDistrict(this.districtId) }}>Save</button>
+                <button type="button" disabled={!this.state.canSubmit} className="btn btn-primary" onClick={() => {this.saveDistrict }}>Save</button>
                 <button type="submit" className="btn btn-primary padded-btn" onClick={() => {this.showConfirmation() }}>Delete</button>
                 <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteDistrict} onCloseModal={this.closeConfirmModal} entity={boundary.name}/>
               </div>
