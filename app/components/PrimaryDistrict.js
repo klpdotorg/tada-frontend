@@ -7,33 +7,8 @@ import ConfirmModal from './Modals/Confirm'
 import Notifications from 'react-notification-system-redux'
 import FRC from 'formsy-react-components';
 import Formsy from 'formsy-react';
+import MyInput from '../widgets/MyInput'
 const { Input} = FRC;
-
-
-const MyInput = React.createClass({
-  mixins: [Formsy.Mixin],
-  changeValue(event) {
-    this.setValue(event.currentTarget[this.props.type === 'checkbox' ? 'checked' : 'value']);
-  },
-  render() {
-    const className = 'form-group' + (this.props.className || ' ') + (this.showRequired() ? 'required' : this.showError() ? 'error' : null);
-    const errorMessage = this.getErrorMessage();
-    return (
-      <div className={className}>
-        <label htmlFor={this.props.name}>{this.props.title}</label>
-        <input
-          type={this.props.type || 'text'}
-          name={this.props.name}
-          onChange={this.changeValue}
-          value={this.getValue()}
-          checked={this.props.type === 'checkbox' && this.getValue() ? 'checked' : null}
-        />
-        <span className='validation-error'>{errorMessage}</span>
-      </div>
-    );
-  }
-});
-
 
 export default class PrimaryDistrict extends React.Component {
 
@@ -62,7 +37,7 @@ export default class PrimaryDistrict extends React.Component {
   }
 
   saveDistrict() {
-    // console.log(this.districtName.value);
+    
     this.props.dispatch(modifyBoundary(this.districtId, this.districtName.value));
   }
 
@@ -144,23 +119,26 @@ export default class PrimaryDistrict extends React.Component {
             <h4 className="brand-blue brand-bg-blue col-md-10">Modify Details</h4>
             {boundaryType == 2 ? <Button title='Add Project' onClick={this.toggleProjectModal} /> : <Button title='Add Block' onClick={this.toggleBlockModal} />}
           </div>
-           <Formsy.Form
-             onSubmit={this.saveDistrict}
-            onValid={this.enableButton}
-            onInvalid={this.disableButton}>
-            <MyInput name="districtName" title="District Name" validations="minLength:1" value={boundary.name} required />
-          </Formsy.Form>
-            {/*<form className="form-horizontal boundary-form" role="form">
+           {/*<Formsy.Form
+             onValidSubmit={this.saveDistrict}
+            onValid={this.enableSubmitButton}
+            onInvalid={this.disableSubmitButton}
+            disabled={this.state.disabled}
+            ref={(ref) => this.myform = ref}>
+            <Input name="DistrictName" id="DistrictName" value={boundary.name} label="Program" type="text"
+              placeholder="Please enter the district name" help="This is a required field" required validations="minLength:1"/>
+          </Formsy.Form>*/}
+            <form className="form-horizontal boundary-form" role="form">
               <div className="form-group">
                 <label className="control-label col-sm-2" htmlFor="name">District Name:</label>
                 <div className="col-sm-2">
                   <input type="text" ref={(ref) => this.districtName = ref} className="form-control" id="name" defaultValue={boundary.name}/>
                 </div>
               </div>
-            </form>*/}
+            </form>
 
               <div className="col-md-8">
-                <button type="button" disabled={!this.state.canSubmit} className="btn btn-primary" onClick={this.saveDistrict}>Save</button>
+                <button type="button" className="btn btn-primary" onClick={this.saveDistrict}>Save</button>
                 <button type="submit" className="btn btn-primary padded-btn" onClick={() => {this.showConfirmation() }}>Delete</button>
                 <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteDistrict} onCloseModal={this.closeConfirmModal} entity={boundary.name}/>
               </div>
