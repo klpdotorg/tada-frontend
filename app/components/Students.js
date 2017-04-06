@@ -29,6 +29,17 @@ const StudentRow = (props) => {
   )
 }
 
+const NoStudentMsg = () => {
+
+  return (
+    <div className="row text-center">
+      <div className="col-md-3"></div>
+      {"No Student is present"}
+    </div>
+  )
+}
+
+
 class StudentScreen extends Component {
 
   constructor(props){
@@ -134,6 +145,7 @@ class StudentScreen extends Component {
     const group = boundaryDetails[params.groupId]
     const studentList = boundariesByParentId[params.groupId]
     const studentRows = studentList.map((studentId, i) => <StudentRow key={i} { ...boundaryDetails[studentId]} deleteStudent={this.deleteStudentConfirm} selectedStudents={this.state.selectedStudents} selectStudent={() => {this.selectStudent(studentId)}} openModifyStudent={this.openModifyStudent} />)
+    const checkStudents = studentList.length>0? studentRows:<NoStudentMsg/>
     const studentGroups = boundariesByParentId[params.institutionId]
       .filter((id) => id !== group.id)
       .map((id) => {
@@ -157,7 +169,7 @@ class StudentScreen extends Component {
             <div className="col-md-2"><span>Mother Name</span></div>
             <div className="col-md-1"><span>Actions</span></div>
           </div>
-          { studentRows }
+          {checkStudents}
         </div>
         <div className="col-sm-2">
           <select className="col-sm-2" onChange={(e) => {this.setState({mapToCentre : e.target.value})}} value={this.state.mapToCentre} className="form-control" id="gender">

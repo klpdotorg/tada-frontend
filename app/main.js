@@ -9,7 +9,7 @@ require('../assets/sass/lato.scss');
 require('../assets/sass/style.scss');
 require('../assets/custom.css');
 require('jquery-validation');
-retuire('moment');
+require('moment');
 
 import React from 'react';
 import ReactDOM from 'react-dom';
