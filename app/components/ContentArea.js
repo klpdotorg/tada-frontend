@@ -27,7 +27,8 @@ const mapStateToProps = (state) => {
     programsById: state.programs.programsById,
     assessmentsById: state.assessments.assessmentsById,
     questionsById: state.assessments.questionsById,
-    modal: state.modal
+    modal: state.modal,
+    permissions: state.login.permissions,
   }
 }
 

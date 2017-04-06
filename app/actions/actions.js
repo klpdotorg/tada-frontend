@@ -128,7 +128,8 @@ function userDataFetched(data) {
     username: data.username,
     email: data.email,
     groups: data.groups,
-    id: data.id
+    id: data.id,
+    permissions: data.permissions,
   }
 }
 

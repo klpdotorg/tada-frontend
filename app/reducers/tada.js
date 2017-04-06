@@ -144,7 +144,9 @@ export function login(state = {
   isLoggingIn: false,
   error: false,
   token: '',
-  id: ''
+  id: '',
+  groups:[],
+  permissions:{},
 } , action) {
   switch (action.type) {
     case 'REQUEST_LOGIN':
@@ -175,7 +177,8 @@ export function login(state = {
       username: action.username,
       email: action.email,
       id: action.id,
-      groups: action.groups
+      groups: action.groups,
+      permissions: action.permissions
     }
     case 'LOGOUT':
     return {

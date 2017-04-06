@@ -6,13 +6,16 @@ import Button from './Button'
 import ConfirmModal from './Modals/Confirm'
 import BulkAddStudent from './BulkAddStudent';
 import { Link } from 'react-router'
+import { userHasPermissions } from './utils'
+
 
 export default class StudentGroupScreen extends Component {
   constructor(props) {
     super(props)
-    this.showBulkAdd = this.showBulkAdd.bind(this)
-    this.hideBulkAdd = this.hideBulkAdd.bind(this)
-    this.addStudents = this.addStudents.bind(this)
+    this.showBulkAdd = this.showBulkAdd.bind(this);
+    this.hideBulkAdd = this.hideBulkAdd.bind(this);
+    this.addStudents = this.addStudents.bind(this);
+
     this.state = {
       schoolModalIsOpen: false,
       openConfirmModal: false,
@@ -127,6 +130,7 @@ class StudentGroup extends Component {
     this.deleteClass = this.deleteClass.bind(this);
     this.hideBulkAdd = this.hideBulkAdd.bind(this);
     this.addStudents = this.addStudents.bind(this);
+    this.hasPermissions = this.hasPermissions.bind(this);
 
     const {params, boundaries} = this.props
     this.state = {
@@ -200,6 +204,10 @@ class StudentGroup extends Component {
     this.props.dispatch(push(`${path}/students`))
   }
 
+  hasPermissions() {
+   return userHasPermissions(this.props.permissions,this.props.params.institutionId);
+  }
+
   render() {
     const {boundaries, params} = this.props
     const block = boundaries.boundaryDetails[params.blockId] || boundaries.boundaryDetails[params.projectId];
@@ -208,7 +216,8 @@ class StudentGroup extends Component {
     const institution = boundaries.boundaryDetails[params.institutionId]
     const group = boundaries.boundaryDetails[params.groupId]
     var Displayelement;
-    return(
+    let canModify = sessionStorage.getItem('isAdmin') || this.hasPermissions();
+   return(
       <div>
        <ol className="breadcrumb">
           <li><Link to={district.path}>{district.name}</Link></li>
@@ -217,42 +226,47 @@ class StudentGroup extends Component {
           <li><Link to={institution.path}>{institution.name}</Link></li>
         </ol>
         <div>
-          <div className='heading-border-left'>
-            <h4 className="brand-blue col-md-10">Modify Details</h4>
-            <Button onClick={this.props.showBulkAdd} title='Add Students'/>
+          {!canModify?<div>
+            <span className="fa-stack fa-lg"> <i className="fa fa-circle fa-stack-2x yellow-mild"></i>
+            <i className="fa fa-lock fa-stack-1x grey-steel"></i></span><span>Limited Permissions</span>
+          </div>:<div></div>}
+          <div>
+            <h4 className="brand-blue col-md-10 heading-border-left">{canModify? "Modify Details": "View Details"}</h4>
+            <Button onClick={this.props.showBulkAdd} title='Add Students' disabled={!canModify}/>
             <button className='btn btn-default view-student-btn' onClick={this.viewStudent.bind(null, group.path)}>View Students</button>
           </div>
           <form className="form-horizontal boundary-form" role="form">
             <div className="form-group">
               <label className="control-label col-sm-2" htmlFor="class">Class</label>
               <div className="col-sm-2">
-                <input type="text" onChange={(e) => {this.setClass(e.target.value, 'name')}} className="form-control" id="class" value={this.state.class.name}/>
+                <input type="text" onChange={(e) => {this.setClass(e.target.value, 'name')}} className="form-control" id="class" value={this.state.class.name} disabled={!canModify}/>
               </div>
             </div>
             <div className="form-group">
               <label className="control-label col-sm-2" htmlFor="section">Section</label>
               <div className="col-sm-2">
-                <input type="text" onChange={(e) => {this.setClass(e.target.value, 'section')}}  className="form-control" id="section" value={this.state.class.section}/>
+                <input type="text" onChange={(e) => {this.setClass(e.target.value, 'section')}}  className="form-control" id="section" value={this.state.class.section} disabled={!canModify}/>
               </div>
             </div>
             <div className="form-group">
               <label className="control-label col-sm-2" htmlFor="section">Type</label>
               <div className='col-sm-2'>
-                <select className="col-sm-2" onChange={(e) => {this.setClass(e.target.value, 'group_type')}} value={this.state.class.group_type} className="form-control" id="gender">
+                <select className="col-sm-2" onChange={(e) => {this.setClass(e.target.value, 'group_type')}} value={this.state.class.group_type} className="form-control" id="gender" disabled={!canModify}>
                   <option value='Class'>Class</option>
                   <option value='Center'>Center</option>
                 </select>
               </div>
             </div>
            </form>
-          <div className="col-md-2">
-            <button type="submit" className="btn btn-primary" onClick={this.saveClass}>Save</button>
-            <button type="submit" className="btn btn-primary" onClick={this.showConfirmation}>Delete</button>
+          <div className="col-md-6">
+            <button type="submit" className="btn btn-primary" onClick={this.saveClass} disabled={!canModify}>Save</button>
+            <button type="submit" className="btn btn-primary" onClick={this.showConfirmation} disabled={!canModify}>Delete</button>
             <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteClass} onCloseModal={this.closeConfirmation} entity={group.label}/>
           </div>
         </div>
       </div>
-    );
+);
+  
   }
 };
 

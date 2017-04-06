@@ -6,7 +6,7 @@ import CreateClass from './Modals/CreateClass'
 import {mapValues} from 'lodash';
 import { Link } from 'react-router';
 import Select from 'react-select';
-import {getManagement, getLanguages, getInstitutionCategories, replaceNull} from './utils'
+import {getManagement, getLanguages, getInstitutionCategories, replaceNull, userHasPermissions} from './utils'
 
 export default class Institution extends React.Component {
 
@@ -32,7 +32,8 @@ export default class Institution extends React.Component {
     this.saveInsti = this.saveInsti.bind(this)
     this.saveClass = this.saveClass.bind(this)
     this.toggleClassModal = this.toggleClassModal.bind(this)
-    this.deleteInstitution = this.deleteInstitution.bind(this)
+    this.deleteInstitution = this.deleteInstitution.bind(this);
+    this.hasPermissions = this.hasPermissions.bind(this);
 
   }
 
@@ -170,6 +171,11 @@ export default class Institution extends React.Component {
     this.props.dispatch(deleteInstitution(Number(this.props.params.clusterId), Number(this.props.params.institutionId)))
   }
 
+  hasPermissions() {
+   
+    return userHasPermissions(this.props.permissions,this.props.params.institutionId);
+  }
+
   render() {
 
   	var block = this.props.boundaries.boundaryDetails[this.props.params.blockId];
@@ -178,7 +184,7 @@ export default class Institution extends React.Component {
     var institution = this.state.institution
     var Displayelement;
 
-    if(sessionStorage.getItem('isAdmin')) {
+    if(sessionStorage.getItem('isAdmin') || this.hasPermissions()) {
       Displayelement = (props) =>
         <div>
         <ol className="breadcrumb">
@@ -288,7 +294,7 @@ else {
     <li className="active"> {institution.name}</li>
     </ol>
     <h4 className="heading-err heading-border-left brand-red"> <i className="fa fa-lock brand-red" aria-hidden="true"></i>  Insufficient Permissions</h4>
-    <p>You need administrator privileges to modify Boundary details.</p>
+    <p>You need to be an administrator or have permissions to modify institution details.</p>
     <h4 className="brand-blue heading-border-left"> Institution Details</h4>
     <p> Name: {institution.name}</p>
   </div>

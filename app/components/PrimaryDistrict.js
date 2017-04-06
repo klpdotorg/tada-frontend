@@ -85,7 +85,7 @@ export default class PrimaryDistrict extends React.Component {
     })
   }
 
-  render() {
+ render() {
     var boundary = this.props.boundaryDetails[this.props.params.districtId];
     if(!boundary)
       return null;
