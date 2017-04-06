@@ -67,4 +67,3 @@ export default class SchoolsNavTree extends React.Component {
       );
   }
 }
-

@@ -1,8 +1,7 @@
-import {fetchBoundaryDetails, fetchInstitutionDetails, fetchStudentGroups, fetchStudents, logoutUser} from './index'
+import {fetchBoundaryDetails, fetchInstitutionDetails, fetchStudentGroups, fetchStudents} from './index'
 import { SERVER_API_BASE} from 'config';
 import Notifications from 'react-notification-system-redux';
 import {syncError} from './notifications';
-import { push } from 'react-router-redux';
 import store from '../store'
 
 export const get = (url) => {
@@ -107,6 +106,9 @@ export const checkStatusNoJSON = (response) => {
 
 export const boundaryType = (id = 1, details) => {
   let boundaryCategory, institution;
+  // console.log(id)
+  
+  // console.log(details[id])
   switch (details[id].depth) {
     case 2:
     return fetchInstitutionDetails

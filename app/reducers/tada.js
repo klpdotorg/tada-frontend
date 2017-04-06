@@ -100,7 +100,15 @@ export function boundaries(state = {
 
   case 'TOGGLE_NODE':
     const boundary = _.clone(state.boundaryDetails[action.id])
-    boundary.collapsed = !boundary.collapsed
+    //console.log(boundary.collapsed);
+    if(action.open){
+    
+      boundary.collapsed = !action.open  
+    }
+    else{
+        boundary.collapsed = !boundary.collapsed
+    }
+    
     const details = {
       ...state.boundaryDetails,
       ...{[action.id]: boundary}
@@ -110,7 +118,7 @@ export function boundaries(state = {
       ...{boundaryDetails: details}
     }
     return val
-
+  
   case 'REQUEST_FAILED':
   return {
     ...state,

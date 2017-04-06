@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Button from './Button';
-import {modifyBoundary, deleteBoundary, saveNewCircle, getBoundaries, selectPreschoolTree} from '../actions'
+import {modifyBoundary, deleteBoundary, saveNewCircle, getBoundaries, selectPreschoolTree,openNode,fetchEntitiesFromServer} from '../actions'
 import CreateCircle from './Modals/CreateBoundary'
 import ConfirmModal from './Modals/Confirm'
 import { Link } from 'react-router'
@@ -20,7 +20,10 @@ export default class PreschoolProject extends Component{
   }
 
   componentDidMount() {
+    //
   const {params} = this.props
+  this.props.dispatch(openNode(params.districtId))
+  this.props.dispatch(fetchEntitiesFromServer(params.districtId))  
   this.props.dispatch(selectPreschoolTree())
   this.props.dispatch({
     type: 'BOUNDARIES',
@@ -30,9 +33,11 @@ export default class PreschoolProject extends Component{
       type: 'BOUNDARIES',
       payload: getBoundaries(params.districtId)
     }).then(() => {
+      this.props.dispatch(openNode(params.projectId))
       this.setState({
         isLoading:false
       })
+      this.props.dispatch(fetchEntitiesFromServer(params.projectId))
     })
   })
 
@@ -79,6 +84,8 @@ export default class PreschoolProject extends Component{
   render() {
     var project = this.props.boundaries.boundaryDetails[this.props.params.projectId];
     var district = this.props.boundaries.boundaryDetails[this.props.params.districtId];
+    // console.log(project)
+    // console.log(district)
     let ProjectSummary
 
     if(sessionStorage.getItem('isAdmin')) {

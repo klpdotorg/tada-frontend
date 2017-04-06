@@ -1,6 +1,6 @@
 import React from 'react';
 import ConfirmModal from './Modals/Confirm'
-import {deleteInstitution, saveInstitution, saveNewClass, getBoundaries, getInstitutions} from '../actions'
+import {deleteInstitution, saveInstitution, saveNewClass, getBoundaries, getInstitutions,openNode,fetchEntitiesFromServer} from '../actions'
 import Button from './Button'
 import CreateClass from './Modals/CreateClass'
 import {mapValues} from 'lodash';
@@ -82,26 +82,38 @@ export default class Institution extends React.Component {
         }
       })
     })
-
+  
+    dispatch(openNode(params.districtId));
+    dispatch(fetchEntitiesFromServer(params.districtId));
     dispatch({
       type: 'BOUNDARIES',
       payload: getBoundaries(1)
-    }).then(() =>
-    dispatch({
+    }).then(() =>{
+      dispatch({
       type: 'BOUNDARIES',
       payload: getBoundaries(params.districtId)
-    })).then(() =>
-    dispatch({
-      type: 'BOUNDARIES',
-      payload: getBoundaries(params.blockId)
-    })).then(() =>
-    dispatch({
-      type: 'BOUNDARIES',
-      payload: getInstitutions(params.clusterId)
-    })).then(() => {
-    this.setState({
-      isLoading:false
-    })})
+    }).then(() =>{
+      dispatch(openNode(params.blockId));
+      dispatch(fetchEntitiesFromServer(params.blockId));
+      dispatch({
+        type: 'BOUNDARIES',
+        payload: getBoundaries(params.blockId)
+      }).then(() =>{
+        dispatch(openNode(params.clusterId));
+        dispatch(fetchEntitiesFromServer(params.clusterId));
+          dispatch({
+          type: 'BOUNDARIES',
+          payload: getInstitutions(params.clusterId)
+        }).then(() => {
+          this.setState({
+            isLoading:false
+          })
+          dispatch(openNode(params.institutionId));
+          dispatch(fetchEntitiesFromServer(params.institutionId));
+        })     
+      })
+    })
+    })
   }
 
     componentWillReceiveProps(props) {

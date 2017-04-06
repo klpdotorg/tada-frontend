@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { push } from 'react-router-redux';
-import {saveClass, deleteStudentGroup, saveNewStudents, getBoundaries, getInstitutions, getStudentGroups, selectPreschoolTree} from '../actions';
+import {saveClass, deleteStudentGroup, saveNewStudents, getBoundaries, getInstitutions, getStudentGroups, selectPreschoolTree,openNode,fetchEntitiesFromServer} from '../actions';
 import CreateInstitution from './Modals/CreateInstitution';
 import Button from './Button'
 import ConfirmModal from './Modals/Confirm'
@@ -29,32 +29,47 @@ export default class StudentGroupScreen extends Component {
     if (params.circleId) {
       this.props.dispatch(selectPreschoolTree())
     }
-
+    
     const blockId = params.blockId || params.projectId
     const clusterId = params.clusterId || params.circleId
+    dispatch(openNode(params.districtId))
+    dispatch(fetchEntitiesFromServer(params.districtId));
     dispatch({
       type: 'BOUNDARIES',
       payload: getBoundaries(1)
-    }).then(() =>
-    dispatch({
-      type: 'BOUNDARIES',
-      payload: getBoundaries(params.districtId)
-    })).then(() =>
-    dispatch({
-      type: 'BOUNDARIES',
-      payload: getBoundaries(blockId)
-    })).then(() =>
-    dispatch({
-      type: 'BOUNDARIES',
-      payload: getInstitutions(clusterId)
-    })).then(() =>
-    dispatch({
-      type: 'BOUNDARIES',
-      payload: getStudentGroups(params.institutionId)
-    })).then(() => {
-    this.setState({
-      isLoading:false
-    })})
+    }).then(() =>{
+        dispatch({
+        type: 'BOUNDARIES',
+        payload: getBoundaries(params.districtId)
+      }).then(() =>{
+          dispatch(openNode(blockId))
+          dispatch(fetchEntitiesFromServer(blockId));
+          dispatch({
+          type: 'BOUNDARIES',
+          payload: getBoundaries(blockId)
+        }).then(() =>{
+          dispatch(openNode(clusterId))
+          dispatch(fetchEntitiesFromServer(clusterId));
+          dispatch({
+            type: 'BOUNDARIES',
+            payload: getInstitutions(clusterId)
+          }).then(() =>{
+            dispatch(openNode(params.institutionId))
+            dispatch(fetchEntitiesFromServer(params.institutionId));
+              dispatch({
+              type: 'BOUNDARIES',
+              payload: getStudentGroups(params.institutionId)
+            }).then(() => {
+              this.setState({
+                isLoading:false
+              })
+              dispatch(openNode(params.groupId))
+              // dispatch(fetchEntitiesFromServer(params.groupId));
+            })
+          })
+        })
+      })  
+    })
   }
 
   componentWillReceiveProps() {
@@ -215,6 +230,7 @@ class StudentGroup extends Component {
           <li><Link to={block.path}>{block.name}</Link></li>
           <li><Link to={cluster.path}>{cluster.name}</Link></li>
           <li><Link to={institution.path}>{institution.name}</Link></li>
+          <li><Link className="active">{group.name}</Link></li>
         </ol>
         <div>
           <div className='heading-border-left'>

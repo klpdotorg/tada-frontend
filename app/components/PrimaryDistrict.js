@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from './Button'
-import {modifyBoundary, deleteBoundary, saveNewBlock, saveNewProject, selectPreschoolTree} from '../actions'
+import {modifyBoundary, deleteBoundary, saveNewBlock, saveNewProject, selectPreschoolTree,openNode,fetchEntitiesFromServer} from '../actions'
 import CreateBoundary from './Modals/CreateBoundary'
 import {Link} from 'react-router'
 import ConfirmModal from './Modals/Confirm'
@@ -31,8 +31,11 @@ export default class PrimaryDistrict extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.boundaryDetails[this.props.params.districtId].boundary_type == 2) {
-      this.props.dispatch(selectPreschoolTree())
+    const {params,dispatch} = this.props;
+    dispatch(openNode(params.districtId))
+    dispatch(fetchEntitiesFromServer(params.districtId));
+    if (this.props.boundaryDetails[this.props.params.districtId].boundary_type === 2) {
+      dispatch(selectPreschoolTree())
     }
   }
 

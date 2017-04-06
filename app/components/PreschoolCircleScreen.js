@@ -1,5 +1,5 @@
 import React from 'react';
-import {modifyBoundary, deleteBoundary, saveNewInstitution, selectPreschoolTree, getBoundaries} from '../actions';
+import {modifyBoundary, deleteBoundary, saveNewInstitution, selectPreschoolTree, getBoundaries,openNode,fetchEntitiesFromServer} from '../actions';
 import CreateInstitution from './Modals/CreateInstitution';
 import Button from './Button'
 import ConfirmModal from './Modals/Confirm'
@@ -24,6 +24,8 @@ export default class PreschoolCircle extends React.Component {
 
   componentDidMount() {
   const {params} = this.props
+  this.props.dispatch(openNode(params.districtId))
+  this.props.dispatch(fetchEntitiesFromServer(params.districtId));
   this.props.dispatch(selectPreschoolTree())
   this.props.dispatch({
     type: 'BOUNDARIES',
@@ -33,6 +35,8 @@ export default class PreschoolCircle extends React.Component {
       type: 'BOUNDARIES',
       payload: getBoundaries(params.districtId)
     }).then(() => {
+      this.props.dispatch(openNode(params.projectId))
+      this.props.dispatch(fetchEntitiesFromServer(params.projectId))
     this.props.dispatch({
       type: 'BOUNDARIES',
       payload: getBoundaries(params.projectId)
@@ -40,6 +44,8 @@ export default class PreschoolCircle extends React.Component {
       this.setState({
         isLoading:false
       })
+      this.props.dispatch(openNode(params.circleId))
+      this.props.dispatch(fetchEntitiesFromServer(params.circleId))
     })
   })
   })

@@ -1,6 +1,6 @@
 import React from 'react';
 import ConfirmModal from './Modals/Confirm'
-import {deleteInstitution, saveInstitution, saveNewClass, getBoundaries, getInstitutions, selectPreschoolTree} from '../actions'
+import {deleteInstitution, saveInstitution, saveNewClass, getBoundaries, getInstitutions, selectPreschoolTree,openNode,fetchEntitiesFromServer} from '../actions'
 import Button from './Button'
 import CreateClass from './Modals/CreateBoundary'
 import {mapValues} from 'lodash'
@@ -38,6 +38,8 @@ export default class Institution extends React.Component {
 
   componentDidMount() {
   const {dispatch, params} = this.props
+  dispatch(openNode(params.districtId))
+  dispatch(fetchEntitiesFromServer(params.districtId));
   this.props.dispatch(selectPreschoolTree())
     getLanguages().then((languages) => {
       const langs = languages.results.map((language) => ({
@@ -83,26 +85,35 @@ export default class Institution extends React.Component {
         }
       })
     })
-
     dispatch({
       type: 'BOUNDARIES',
       payload: getBoundaries(1)
-    }).then(() =>
-    dispatch({
+    }).then(() =>{
+      dispatch({
       type: 'BOUNDARIES',
       payload: getBoundaries(params.districtId)
-    })).then(() =>
-    dispatch({
-      type: 'BOUNDARIES',
-      payload: getBoundaries(params.projectId)
-    })).then(() =>
-    dispatch({
-      type: 'BOUNDARIES',
-      payload: getInstitutions(params.circleId)
-    })).then(() => {
-    this.setState({
-      isLoading:false
-    })})
+    }).then(() =>{
+        dispatch(openNode(params.projectId))
+        dispatch(fetchEntitiesFromServer(params.projectId))
+        dispatch({
+          type: 'BOUNDARIES',
+          payload: getBoundaries(params.projectId)
+        }).then(() =>{
+            dispatch(openNode(params.circleId))
+            dispatch(fetchEntitiesFromServer(params.circleId))
+            dispatch({
+              type: 'BOUNDARIES',
+              payload: getInstitutions(params.circleId)
+            }).then(() => {
+                this.setState({
+                  isLoading:false
+                })
+                dispatch(openNode(params.institutionId))
+                dispatch(fetchEntitiesFromServer(params.institutionId))
+              })      
+            })
+      })  
+    })
 
   }
 
@@ -294,5 +305,4 @@ export default class Institution extends React.Component {
 
   }
 };
-
 
