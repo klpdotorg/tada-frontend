@@ -122,16 +122,6 @@ Displayelement=(props)=>{
            className="form-control"
            required validations="minLength:1"/>
        </Formsy.Form>
-
-        {/*<form className="form-horizontal boundary-form" role="form">
-        <div className="form-group">
-        <label className="control-label col-sm-2" htmlFor="name">Block :</label>
-        <div className="col-sm-2">
-        <input type="text" ref={(ref) => this.blockName = ref} className="form-control" id="name" defaultValue={block.name}/>
-        </div>
-        </div>
-      </form>*/}
-
         <div className="col-md-8">
         <button type="submit" disabled={!this.state.canSubmit} className="btn btn-primary padded-btn" onClick={this.onClickSaveBlock}>Save</button>
         <button type="submit" className="btn btn-primary padded-btn" onClick={() => {this.showConfirmation()}}>Delete</button>
@@ -154,40 +144,6 @@ Displayelement=(props)=>{
   render() {
     var block = this.props.boundaries.boundaryDetails[this.props.params.blockId];
     var district = this.props.boundaries.boundaryDetails[this.props.params.districtId];
-    // var Displayelement;
-    // if(sessionStorage.getItem('isAdmin')) {
-    //   Displayelement = (props) =>
-    //   <div>
-    //   <div className='heading-border-left'>
-    //   <h4 className="brand-blue col-md-10">Modify Details</h4>
-    //   <Button onClick={this.toggleClusterModal} title='Add Cluster'/>
-    //   </div>
-    //
-    //   <form className="form-horizontal boundary-form" role="form">
-    //   <div className="form-group">
-    //   <label className="control-label col-sm-2" htmlFor="name">Block :</label>
-    //   <div className="col-sm-2">
-    //   <input type="text" ref={(ref) => this.blockName = ref} className="form-control" id="name" defaultValue={block.name}/>
-    //   </div>
-    //   </div>
-    //   </form>
-    //
-    //   <div className="col-md-8">
-    //   <button type="submit" className="btn btn-primary padded-btn" onClick={() => {this.onClickSaveBlock() }}>Save</button>
-    //   <button type="submit" className="btn btn-primary padded-btn" onClick={() => {this.showConfirmation()}}>Delete</button>
-    //   <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.onClickDeleteBlock} onCloseModal={this.closeConfirmation} entity={block.name}/>
-    //   </div>
-    //   </div>
-    // }
-    // else {
-    //   Displayelement = (props) =>
-    //   <div>
-    //   <h4 className="heading-err heading-border-left brand-red"> <i className="fa fa-lock brand-red" aria-hidden="true"></i>  Insufficient Permissions</h4>
-    //   <p>You need administrator privileges to modify Boundary details.</p>
-    //   <h4 className="brand-blue heading-border-left"> Block Details</h4>
-    //   <p> Name: {block.name}</p>
-    //   </div>
-    // }
 
     return (
       this.state.isLoading ?
