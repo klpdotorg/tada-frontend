@@ -7,7 +7,7 @@ import ConfirmModal from './Modals/Confirm'
 import Notifications from 'react-notification-system-redux'
 import FRC from 'formsy-react-components';
 import Formsy from 'formsy-react';
-import MyInput from '../widgets/MyInput'
+
 const { Input} = FRC;
 
 export default class PrimaryDistrict extends React.Component {
