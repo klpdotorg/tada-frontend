@@ -4,6 +4,9 @@ import CreateInstitution from './Modals/CreateInstitution';
 import Button from './Button'
 import ConfirmModal from './Modals/Confirm'
 import { Link } from 'react-router'
+import FRC from 'formsy-react-components';
+import Formsy from 'formsy-react';
+const { Input} = FRC;
 
 export default class PrimaryCluster extends React.Component {
 
@@ -17,6 +20,7 @@ export default class PrimaryCluster extends React.Component {
     this.state = {
       schoolModalIsOpen: false,
       openConfirmModal: false,
+      canSubmit: false,
       isLoading: true
     };
   }
@@ -107,7 +111,8 @@ export default class PrimaryCluster extends React.Component {
   }
 
   saveCluster() {
-    this.props.dispatch(modifyBoundary(this.props.params.clusterId, this.clusterName.value));
+    var myform = this.myform.getModel();
+    this.props.dispatch(modifyBoundary(this.props.params.clusterId, myform.ClusterName));
   }
 
   deleteCluster() {
@@ -115,42 +120,67 @@ export default class PrimaryCluster extends React.Component {
     this.props.dispatch(deleteBoundary(params.clusterId, params.blockId));
   }
 
-  render() {
-  	var block = this.props.boundaries.boundaryDetails[this.props.params.blockId];
+  enableSubmitButton=()=> {
+    this.setState({
+      canSubmit: true,
+    });
+  }
+
+  disableSubmitButton=()=> {
+    this.setState({
+      canSubmit: false,
+    });
+  }
+
+  Displayelement=(props)=>{
+    var block = this.props.boundaries.boundaryDetails[this.props.params.blockId];
   	var district = this.props.boundaries.boundaryDetails[this.props.params.districtId];
   	var cluster = this.props.boundaries.boundaryDetails[this.props.params.clusterId];
-    var Displayelement;
     if(sessionStorage.getItem('isAdmin')) {
-      Displayelement = (props) =>
+      return(
         <div>
           <div className='heading-border-left'>
             <h4 className="brand-blue col-md-10">Modify Details</h4>
             <Button onClick={this.toggleSchoolModal} title='Add School'/>
           </div>
-          <form className="form-horizontal boundary-form" role="form">
-            <div className="form-group">
-              <label className="control-label col-sm-2" htmlFor="name">Cluster :</label>
-              <div className="col-sm-2">
-                <input type="text" ref={(ref) => this.clusterName = ref} className="form-control" id="name" defaultValue={cluster.name}/>
-              </div>
-            </div>
-           </form>
+          <Formsy.Form
+           onValidSubmit={this.saveCluster}
+           onValid={this.enableSubmitButton}
+           onInvalid={this.disableSubmitButton}
+           ref={(ref) => this.myform = ref}
+           >
+           <Input name="ClusterName"
+            id="ClusterName"
+            value={cluster.name}
+            label="Cluster :" type="text"
+             className="form-control"
+             required validations="minLength:1"/>
+         </Formsy.Form>
           <div className="col-md-8">
-            <button type="submit" className="btn btn-primary padded-btn" onClick={this.saveCluster}>Save</button>
+            <button type="submit" disabled={!this.state.canSubmit} className="btn btn-primary padded-btn" onClick={this.saveCluster}>Save</button>
             <button type="submit" className="btn btn-primary padded-btn" onClick={this.showConfirmation}>Delete</button>
             <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteCluster} onCloseModal={this.closeConfirmation} entity={cluster.name}/>
           </div>
         </div>
+      )
+
     }
     else {
-      Displayelement = (props) =>
+      return(
         <div>
           <h4 className="heading-err heading-border-left brand-red"> <i className="fa fa-lock brand-red" aria-hidden="true"></i>  Insufficient Permissions</h4>
           <p>You need administrator privileges to modify Boundary details.</p>
           <h4 className="brand-blue heading-border-left"> Cluster Details</h4>
           <p> Name: {cluster.name}</p>
         </div>
+      )
     }
+  }
+
+  render() {
+  	var block = this.props.boundaries.boundaryDetails[this.props.params.blockId];
+  	var district = this.props.boundaries.boundaryDetails[this.props.params.districtId];
+  	var cluster = this.props.boundaries.boundaryDetails[this.props.params.clusterId];
 
     return (
       this.state.isLoading ?
@@ -161,10 +191,10 @@ export default class PrimaryCluster extends React.Component {
           <li><Link to={block.path}>{block.name}</Link></li>
           <li className="active">{cluster.name}</li>
         </ol>
-        <Displayelement {...this.props}/>
+        {this.Displayelement(...this.props)}
+
         <CreateInstitution placeHolder='School Name' title='Create New School' isOpen={this.props.modal.createInstitution} onCloseModal={this.toggleSchoolModal} save={ this.saveSchool } />
       </div>
     )
   }
 };
-
