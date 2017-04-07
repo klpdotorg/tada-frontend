@@ -6,7 +6,10 @@ import CreateClass from './Modals/CreateClass'
 import {mapValues} from 'lodash';
 import { Link } from 'react-router';
 import Select from 'react-select';
+import Formsy from 'formsy-react';
+import FRC from 'formsy-react-components';
 import {getManagement, getLanguages, getInstitutionCategories, replaceNull} from './utils'
+const { Input } = FRC;
 
 export default class Institution extends React.Component {
 
@@ -14,6 +17,7 @@ export default class Institution extends React.Component {
     super(props);
     this.state = {
       openConfirmModal: false,
+      canSubmit: false,
       institution: this.props.boundaries.boundaryDetails[this.props.params.institutionId],
       languages: {
         isLoading:true,
@@ -182,6 +186,20 @@ export default class Institution extends React.Component {
     this.props.dispatch(deleteInstitution(Number(this.props.params.clusterId), Number(this.props.params.institutionId)))
   }
 
+    enableSubmitButton=()=> {
+      console.log("enableSubmitButton");
+      this.setState({
+        canSubmit: true,
+      });
+    }
+
+    disableSubmitButton=()=> {
+      console.log("disableSubmitButton");
+      this.setState({
+        canSubmit: false,
+      });
+    }
+
   Displayelement=(props)=>{
     var block = this.props.boundaries.boundaryDetails[this.props.params.blockId];
     var district = this.props.boundaries.boundaryDetails[this.props.params.districtId];
@@ -202,82 +220,88 @@ export default class Institution extends React.Component {
             <h4 className="brand-blue col-md-10">Modify Details</h4>
             <Button onClick={this.toggleClassModal} title='Add Class'/>
             </div>
-            <form className="form-horizontal" role="form">
-            <div className="form-group">
-            <label className="control-label col-sm-2" htmlFor="name">Name:</label>
-            <div className="col-sm-10">
-            <input type="text" onChange={(e) => {this.setValue(e.target.value, 'name')}} className="form-control" id="name" value={institution.name}/>
-            </div>
-            </div>
+              <Formsy.Form
+                onValidSubmit={this.saveInsti}
+               onValid={this.enableSubmitButton}
+               onInvalid={this.disableSubmitButton}
+               >
 
-            <div className="form-group">
-            <label className="control-label col-sm-2" htmlFor="address">Address:</label>
-            <div className="col-sm-10">
-            <textarea onChange={(e) => {this.setValue(e.target.value, 'address')}} className="form-control" id="address" rows="3" value={institution.address}>
-            </textarea>
-            </div>
-            </div>
+                  <div className="form-group">
+                  <label className="control-label col-sm-2" htmlFor="name">Name:</label>
+                  <div className="col-sm-10">
+                  <input type="text" onChange={(e) => {this.setValue(e.target.value, 'name')}} className="form-control" id="name" value={institution.name}/>
+                  </div>
+                  </div>
 
-            <div className="form-group">
-            <label className="control-label col-sm-2" htmlFor="area">Area:</label>
-            <div className="col-sm-10">
-            <input id="area" onChange={(e) => {this.setValue(e.target.value, 'area')}} type="text" className="form-control" value={institution.area}/>
-            </div>
-            </div>
+                  <div className="form-group">
+                  <label className="control-label col-sm-2" htmlFor="address">Address:</label>
+                  <div className="col-sm-10">
+                  <textarea onChange={(e) => {this.setValue(e.target.value, 'address')}} className="form-control" id="address" rows="3" value={institution.address}>
+                  </textarea>
+                  </div>
+                  </div>
 
-            <div className="form-group">
-            <label className="control-label col-sm-2" htmlFor="landmark">Landmark:</label>
-            <div className="col-sm-10">
-            <input onChange={(e) => {this.setValue(e.target.value, 'landmark')}} type="text" className="form-control" id="landmark" value={institution.landmark}/>
-            </div>
-            </div>
+                  <div className="form-group">
+                  <label className="control-label col-sm-2" htmlFor="area">Area:</label>
+                  <div className="col-sm-10">
+                  <input id="area" onChange={(e) => {this.setValue(e.target.value, 'area')}} type="text" className="form-control" value={institution.area}/>
+                  </div>
+                  </div>
 
-            <div className="form-group">
-            <label className="control-label col-sm-2" htmlFor="pincode">Pincode:</label>
-            <div className="col-sm-10">
-            <input onChange={(e) => {this.setValue(e.target.value, 'pincode')}} type="text" className="form-control" id="pincode" value={institution.pincode}/>
-            </div>
-            </div>
+                  <div className="form-group">
+                  <label className="control-label col-sm-2" htmlFor="landmark">Landmark:</label>
+                  <div className="col-sm-10">
+                  <input onChange={(e) => {this.setValue(e.target.value, 'landmark')}} type="text" className="form-control" id="landmark" value={institution.landmark}/>
+                  </div>
+                  </div>
 
-            <div className="form-group">
-            <label className="control-label col-sm-2" htmlFor="category">Category:</label>
-            <div className="col-sm-10">
-            <Select name="form-field-name" value={institution.cat} options={this.state.institutionCategories.list} onChange={(val) => {this.setValue(val.value, 'cat')}} />
-            </div>
-            </div>
+                  <div className="form-group">
+                  <label className="control-label col-sm-2" htmlFor="pincode">Pincode:</label>
+                  <div className="col-sm-10">
+                  <input onChange={(e) => {this.setValue(e.target.value, 'pincode')}} type="text" className="form-control" id="pincode" value={institution.pincode}/>
+                  </div>
+                  </div>
 
-            <div className="form-group">
-            <label className="control-label col-sm-2" htmlFor="medium">Medium:</label>
-            <div className="col-sm-10">
-            <Select multi name="languages" value={institution.languages} options={this.state.languages.list} onChange={(val) => {this.setValue(val.map(v => v.value), 'languages')}}/>
-            </div>
-            </div>
+                  <div className="form-group">
+                  <label className="control-label col-sm-2" htmlFor="category">Category:</label>
+                  <div className="col-sm-10">
+                  <Select name="form-field-name" value={institution.cat} options={this.state.institutionCategories.list} onChange={(val) => {this.setValue(val.value, 'cat')}} />
+                  </div>
+                  </div>
 
-            <div className="form-group">
-            <label className="control-label col-sm-2" htmlFor="gender">Gender:</label>
-            <div className="col-sm-10">
-            <select onChange={(e) => {this.setValue(e.target.value, 'institution_gender')}} value={institution.institution_gender} className="form-control" id="gender">
-            <option value='co-ed'>Co-Ed</option>
-            <option value='boys'>Boys</option>
-            <option value='girls'>Girls</option>
-            </select>
-            </div>
-            </div>
+                  <div className="form-group">
+                  <label className="control-label col-sm-2" htmlFor="medium">Medium:</label>
+                  <div className="col-sm-10">
+                  <Select multi name="languages" value={institution.languages} options={this.state.languages.list} onChange={(val) => {this.setValue(val.map(v => v.value), 'languages')}}/>
+                  </div>
+                  </div>
 
-            <div className="form-group">
-            <label className="control-label col-sm-2" htmlFor="mgmt">Management:</label>
-            <div className="col-sm-10">
-            <Select name="form-field-name" value={institution.mgmt} options={this.state.mgmt.list} onChange={(val) => {this.setValue(val.value, 'mgmt')}} />
-            </div>
-            </div>
+                  <div className="form-group">
+                  <label className="control-label col-sm-2" htmlFor="gender">Gender:</label>
+                  <div className="col-sm-10">
+                  <select onChange={(e) => {this.setValue(e.target.value, 'institution_gender')}} value={institution.institution_gender} className="form-control" id="gender">
+                  <option value='co-ed'>Co-Ed</option>
+                  <option value='boys'>Boys</option>
+                  <option value='girls'>Girls</option>
+                  </select>
+                  </div>
+                  </div>
 
-            <div className="form-group">
-            <label className="control-label col-sm-2" htmlFor="disecode">DISE Code:</label>
-            <div className="col-sm-10">
-            <input onChange={(e) => {this.setValue(e.target.value, 'dise_code')}} type="text" className="form-control" id="disecode" value={institution.dise_code}/>
-            </div>
-            </div>
-            </form>
+                  <div className="form-group">
+                  <label className="control-label col-sm-2" htmlFor="mgmt">Management:</label>
+                  <div className="col-sm-10">
+                  <Select name="form-field-name" value={institution.mgmt} options={this.state.mgmt.list} onChange={(val) => {this.setValue(val.value, 'mgmt')}} />
+                  </div>
+                  </div>
+
+                  <div className="form-group">
+                  <label className="control-label col-sm-2" htmlFor="disecode">DISE Code:</label>
+                  <div className="col-sm-10">
+                  <input onChange={(e) => {this.setValue(e.target.value, 'dise_code')}} type="text" className="form-control" id="disecode" value={institution.dise_code}/>
+                  </div>
+                  </div>
+            </Formsy.Form>
+
 
             <div className="col-md-2">
             <button type="submit" className="btn btn-primary" onClick={this.saveInsti}>Save</button>
