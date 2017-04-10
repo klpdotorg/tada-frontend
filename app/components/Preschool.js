@@ -185,7 +185,7 @@ export default class Institution extends React.Component {
 
   handleChange=()=>{
     var myform = this.myform.getModel();
-    console.log(myform);
+
     let copy = this.state.institution;
     copy.dise_code = myform.institutionDise_code;
     copy.mgmt = myform.institutionMgmt;
@@ -197,7 +197,6 @@ export default class Institution extends React.Component {
     copy.landmark = myform.institutionLandmark;
     copy.pincode = myform.institutionPincode;
     copy.cat = myform.institutionCat;
-    console.log(copy);
     this.setState({
       institution:copy
     })
