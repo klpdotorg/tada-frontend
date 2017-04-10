@@ -5,11 +5,11 @@ import Button from './Button'
 import CreateClass from './Modals/CreateClass'
 import {mapValues} from 'lodash';
 import { Link } from 'react-router';
-import Select from 'react-select';
 import Formsy from 'formsy-react';
+// import Select from 'react-select';
 import FRC from 'formsy-react-components';
 import {getManagement, getLanguages, getInstitutionCategories, replaceNull} from './utils'
-const { Input } = FRC;
+const { Input ,Textarea,Select} = FRC;
 
 export default class Institution extends React.Component {
 
@@ -187,20 +187,50 @@ export default class Institution extends React.Component {
   }
 
     enableSubmitButton=()=> {
-      console.log("enableSubmitButton");
       this.setState({
         canSubmit: true,
       });
     }
 
     disableSubmitButton=()=> {
-      console.log("disableSubmitButton");
-      this.setState({
+    this.setState({
         canSubmit: false,
       });
     }
 
+    handleChange=()=>{
+      var myform = this.myform.getModel();
+      console.log(myform)
+
+      let copy = this.state.institution;
+      institutionDise_code
+      copy.dise_code = myform.institutionDise_code;
+      copy.mgmt = myform.institutionMgmt;
+      copy.institution_gender = myform.institutionGender;
+      copy.languages = myform.institutionLang;
+      copy.name = myform.institutionName;
+      copy.address = myform.institutionAddress;
+      copy.area = myform.institutionArea;
+      copy.landmark = myform.institutionLandmark;
+      copy.pincode = myform.institutionPincode;
+      copy.cat = myform.institutionCat;
+      console.log(copy);
+      this.setState({
+        institution:copy
+      })
+
+    }
   Displayelement=(props)=>{
+    const selectOptions = [
+            {value: 'co-ed', label: 'Co-Ed'},
+            {value: 'boys', label: 'Boys'},
+            {value: 'girls', label: 'Girls'},
+        ];
+
+    const singleSelectOptions = [
+        {value: '', label: 'Please select…'},
+        ...selectOptions
+    ];
     var block = this.props.boundaries.boundaryDetails[this.props.params.blockId];
     var district = this.props.boundaries.boundaryDetails[this.props.params.districtId];
     var cluster = this.props.boundaries.boundaryDetails[this.props.params.clusterId];
@@ -224,90 +254,153 @@ export default class Institution extends React.Component {
                 onValidSubmit={this.saveInsti}
                onValid={this.enableSubmitButton}
                onInvalid={this.disableSubmitButton}
+               onChange={this.handleChange}
+               ref={(ref) => this.myform = ref}
                >
 
                   <div className="form-group">
-                  <label className="control-label col-sm-2" htmlFor="name">Name:</label>
-                  <div className="col-sm-10">
-                  <input type="text" onChange={(e) => {this.setValue(e.target.value, 'name')}} className="form-control" id="name" value={institution.name}/>
+                  <div className="col-sm-12">
+                    <Input name="institutionName"
+                     id="institutionName"
+                     value={institution.name}
+                     label="Institution :" type="text"
+                     className="form-control"
+                     required
+                     validations="minLength:1"/>
                   </div>
                   </div>
 
                   <div className="form-group">
-                  <label className="control-label col-sm-2" htmlFor="address">Address:</label>
-                  <div className="col-sm-10">
-                  <textarea onChange={(e) => {this.setValue(e.target.value, 'address')}} className="form-control" id="address" rows="3" value={institution.address}>
-                  </textarea>
+
+                  <div className="col-sm-12">
+                    <Textarea
+                    rows={3}
+                    cols={40}
+                    name="institutionAddress"
+                    label="Address :"
+                    value={institution.address}
+                    required
+                    validations="minLength:1"
+
+                />
+
                   </div>
                   </div>
 
                   <div className="form-group">
-                  <label className="control-label col-sm-2" htmlFor="area">Area:</label>
-                  <div className="col-sm-10">
-                  <input id="area" onChange={(e) => {this.setValue(e.target.value, 'area')}} type="text" className="form-control" value={institution.area}/>
+                  <div className="col-sm-12">
+                    <Input name="institutionArea"
+                     id="institutionArea"
+                     value={institution.area}
+                     label="Area:" type="text"
+                     className="form-control"
+                     />
+
                   </div>
                   </div>
 
                   <div className="form-group">
-                  <label className="control-label col-sm-2" htmlFor="landmark">Landmark:</label>
-                  <div className="col-sm-10">
-                  <input onChange={(e) => {this.setValue(e.target.value, 'landmark')}} type="text" className="form-control" id="landmark" value={institution.landmark}/>
+
+                  <div className="col-sm-12">
+                    <Input name="institutionLandmark"
+                     id="institutionLandmark"
+                     value={institution.landmark}
+                     label="Landmark:" type="text"
+                     className="form-control"
+                     />
+
                   </div>
                   </div>
 
                   <div className="form-group">
-                  <label className="control-label col-sm-2" htmlFor="pincode">Pincode:</label>
-                  <div className="col-sm-10">
-                  <input onChange={(e) => {this.setValue(e.target.value, 'pincode')}} type="text" className="form-control" id="pincode" value={institution.pincode}/>
+
+                  <div className="col-sm-12">
+                    <Input name="institutionPincode"
+                     id="institutionPincode"
+                     value={institution.pincode}
+                     label="Pincode:" type="text"
+                     className="form-control"
+                     />
+
                   </div>
                   </div>
 
                   <div className="form-group">
-                  <label className="control-label col-sm-2" htmlFor="category">Category:</label>
-                  <div className="col-sm-10">
-                  <Select name="form-field-name" value={institution.cat} options={this.state.institutionCategories.list} onChange={(val) => {this.setValue(val.value, 'cat')}} />
+
+                  <div className="col-sm-12">
+                    <Select
+                    name="institutionCat"
+                    label="Category:"
+                    value={institution.cat}
+
+                    options={this.state.institutionCategories.list}
+
+                    />
+
                   </div>
                   </div>
 
                   <div className="form-group">
-                  <label className="control-label col-sm-2" htmlFor="medium">Medium:</label>
-                  <div className="col-sm-10">
-                  <Select multi name="languages" value={institution.languages} options={this.state.languages.list} onChange={(val) => {this.setValue(val.map(v => v.value), 'languages')}}/>
+
+                  <div className="col-sm-12">
+                    <Select
+                      multiple
+                      name="institutionLang"
+                      label="Medium:"
+                      value={institution.languages}
+                      options={this.state.languages.list}
+                      required
+                    />
+
                   </div>
                   </div>
 
                   <div className="form-group">
-                  <label className="control-label col-sm-2" htmlFor="gender">Gender:</label>
-                  <div className="col-sm-10">
-                  <select onChange={(e) => {this.setValue(e.target.value, 'institution_gender')}} value={institution.institution_gender} className="form-control" id="gender">
-                  <option value='co-ed'>Co-Ed</option>
-                  <option value='boys'>Boys</option>
-                  <option value='girls'>Girls</option>
-                  </select>
+
+                  <div className="col-sm-12">
+                    <Select
+                      name="institutionGender"
+                      label="Gender:"
+                      value={institution.institution_gender}
+                      options={singleSelectOptions}
+                      required
+                    />
+
                   </div>
                   </div>
 
                   <div className="form-group">
-                  <label className="control-label col-sm-2" htmlFor="mgmt">Management:</label>
-                  <div className="col-sm-10">
-                  <Select name="form-field-name" value={institution.mgmt} options={this.state.mgmt.list} onChange={(val) => {this.setValue(val.value, 'mgmt')}} />
+
+                  <div className="col-sm-12">
+                    <Select
+                      name="institutionMgmt"
+                      label="Management:"
+                      value={institution.mgmt}
+                      options={this.state.mgmt.list}
+                      required
+                    />
+
                   </div>
                   </div>
 
                   <div className="form-group">
-                  <label className="control-label col-sm-2" htmlFor="disecode">DISE Code:</label>
-                  <div className="col-sm-10">
-                  <input onChange={(e) => {this.setValue(e.target.value, 'dise_code')}} type="text" className="form-control" id="disecode" value={institution.dise_code}/>
+
+                  <div className="col-sm-12">
+                    <Input name="institutionDise_code"
+                       id="institutionDise_code"
+                       value={institution.dise_code}
+                       label="DISE Code:" type="text"
+                       className="form-control"
+                     />
+
                   </div>
+                  </div>
+                  <div className="col-md-2">
+                  <button type="submit" className="btn btn-primary" >Save</button>
+                  <button type="submit" className="btn btn-primary" onClick={this.showConfirmation}>Delete</button>
+                  <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteInstitution} onCloseModal={this.closeConfirmModal} entity={institution.name}/>
                   </div>
             </Formsy.Form>
-
-
-            <div className="col-md-2">
-            <button type="submit" className="btn btn-primary" onClick={this.saveInsti}>Save</button>
-            <button type="submit" className="btn btn-primary" onClick={this.showConfirmation}>Delete</button>
-            <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteInstitution} onCloseModal={this.closeConfirmModal} entity={institution.name}/>
-            </div>
             </div>
             <CreateClass placeHolder='Class Name' title='Create New Class' isOpen={this.props.modal.createClass} onCloseModal={this.toggleClassModal} save={ this.saveClass } />
             </div>
