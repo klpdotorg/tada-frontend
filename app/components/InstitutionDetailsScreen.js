@@ -283,8 +283,7 @@ export default class Institution extends React.Component {
                     validations="minLength:1"
 
                 />
-                {/*<textarea onChange={(e) => {this.setValue(e.target.value, 'address')}} className="form-control" id="address" rows="3" value={institution.address}>
-                  </textarea>*/}
+
                   </div>
                   </div>
 
@@ -296,13 +295,12 @@ export default class Institution extends React.Component {
                      label="Area:" type="text"
                      className="form-control"
                      />
-                    {/*
-                  <input id="area" onChange={(e) => {this.setValue(e.target.value, 'area')}} type="text" className="form-control" value={institution.area}/>*/}
+
                   </div>
                   </div>
 
                   <div className="form-group">
-                  {/*<label className="control-label col-sm-2" htmlFor="landmark">Landmark:</label>*/}
+
                   <div className="col-sm-12">
                     <Input name="institutionLandmark"
                      id="institutionLandmark"
@@ -310,12 +308,12 @@ export default class Institution extends React.Component {
                      label="Landmark:" type="text"
                      className="form-control"
                      />
-                  {/*<input onChange={(e) => {this.setValue(e.target.value, 'landmark')}} type="text" className="form-control" id="landmark" value={institution.landmark}/>*/}
+
                   </div>
                   </div>
 
                   <div className="form-group">
-                  {/*<label className="control-label col-sm-2" htmlFor="pincode">Pincode:</label>*/}
+
                   <div className="col-sm-12">
                     <Input name="institutionPincode"
                      id="institutionPincode"
@@ -323,12 +321,12 @@ export default class Institution extends React.Component {
                      label="Pincode:" type="text"
                      className="form-control"
                      />
-                  {/*<input onChange={(e) => {this.setValue(e.target.value, 'pincode')}} type="text" className="form-control" id="pincode" value={institution.pincode}/>*/}
+
                   </div>
                   </div>
 
                   <div className="form-group">
-                  {/*<label className="control-label col-sm-3" htmlFor="category">Category:</label>*/}
+
                   <div className="col-sm-12">
                     <Select
                     name="institutionCat"
@@ -338,12 +336,12 @@ export default class Institution extends React.Component {
                     options={this.state.institutionCategories.list}
 
                     />
-                  {/*<Select name="form-field-name" value={institution.cat} options={this.state.institutionCategories.list} onChange={(val) => {this.setValue(val.value, 'cat')}} />*/}
+
                   </div>
                   </div>
 
                   <div className="form-group">
-                  {/*<label className="control-label col-sm-2" htmlFor="medium">Medium:</label>*/}
+
                   <div className="col-sm-12">
                     <Select
                       multiple
@@ -353,12 +351,12 @@ export default class Institution extends React.Component {
                       options={this.state.languages.list}
                       required
                     />
-                  {/*<Select multi name="languages" value={institution.languages} options={this.state.languages.list} onChange={(val) => {this.setValue(val.map(v => v.value), 'languages')}}/>*/}
+
                   </div>
                   </div>
 
                   <div className="form-group">
-                  {/*<label className="control-label col-sm-2" htmlFor="gender">Gender:</label>*/}
+
                   <div className="col-sm-12">
                     <Select
                       name="institutionGender"
@@ -372,7 +370,7 @@ export default class Institution extends React.Component {
                   </div>
 
                   <div className="form-group">
-                  {/*<label className="control-label col-sm-2" htmlFor="mgmt">Management:</label>*/}
+
                   <div className="col-sm-12">
                     <Select
                       name="institutionMgmt"
@@ -381,12 +379,12 @@ export default class Institution extends React.Component {
                       options={this.state.mgmt.list}
                       required
                     />
-                  {/*<Select name="form-field-name" value={institution.mgmt} options={this.state.mgmt.list} onChange={(val) => {this.setValue(val.value, 'mgmt')}} />*/}
+
                   </div>
                   </div>
 
                   <div className="form-group">
-                  {/*<label className="control-label col-sm-2" htmlFor="disecode">DISE Code:</label>*/}
+
                   <div className="col-sm-12">
                     <Input name="institutionDise_code"
                        id="institutionDise_code"
@@ -394,7 +392,7 @@ export default class Institution extends React.Component {
                        label="DISE Code:" type="text"
                        className="form-control"
                      />
-                   {/*<input onChange={(e) => {this.setValue(e.target.value, 'dise_code')}} type="text" className="form-control" id="disecode" value={institution.dise_code}/>*/}
+
                   </div>
                   </div>
                   <div className="col-md-2">
