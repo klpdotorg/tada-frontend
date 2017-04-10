@@ -97,6 +97,7 @@ class StudentScreen extends Component {
     let relations = []
     relations.push(student.Father, student.Mother)
     student.relations = relations
+    console.log(student);
     this.props.dispatch({
       type: 'STUDENTS',
       payload: patchStudentAPI(student, this.props.params.groupId)
@@ -240,7 +241,7 @@ export default class Students extends Component {
     if (params.circleId) {
       this.props.dispatch(selectPreschoolTree())
     }
-  
+
     const blockId = params.blockId || params.projectId
     const clusterId = params.clusterId || params.circleId
     dispatch(openNode(params.districtId))
