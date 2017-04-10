@@ -71,11 +71,15 @@ export default class ConfirmDialog extends Component {
 handleChange=()=>{
   var myform = this.myform.getModel();
   let father={
+    id:this.state.Father.id,
+    relation_type: "Father",
     first_name:myform.fatherFirstName,
     middle_name:myform.fatherMiddleName,
     last_name:myform.fatherLastName,
   };
   let mother={
+    id:this.state.Mother.id,
+    relation_type: "Mother",
     first_name:myform.motherFirstName,
     middle_name:myform.motherMiddleName,
     last_name:myform.motherLastName,
