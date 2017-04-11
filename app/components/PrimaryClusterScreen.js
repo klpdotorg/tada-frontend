@@ -6,6 +6,8 @@ import ConfirmModal from './Modals/Confirm'
 import { Link } from 'react-router'
 import FRC from 'formsy-react-components';
 import Formsy from 'formsy-react';
+import {getManagement, getLanguages, getInstitutionCategories, replaceNull} from './utils'
+
 const { Input} = FRC;
 
 export default class PrimaryCluster extends React.Component {
@@ -21,12 +23,68 @@ export default class PrimaryCluster extends React.Component {
       schoolModalIsOpen: false,
       openConfirmModal: false,
       canSubmit: false,
+      languages: {
+        isLoading:true,
+        list:[]
+      },
+      mgmt: {
+        isLoading: true,
+        list:[]
+      },
+      institutionCategories: {
+        isLoading: true,
+        list:[]
+      },
       isLoading: true
     };
   }
 
   componentDidMount() {
-  const {params,dispatch} = this.props
+  const {params,dispatch} = this.props;
+  getLanguages().then((languages) => {
+    const langs = languages.results.map((language) => ({
+        value: language.id,
+        label: language.name
+      }))
+    this.setState({
+      languages: {
+        isLoading: false,
+        list: langs
+      }
+    })
+  })
+
+  getManagement().then((managements) => {
+    const mgmt = managements.results.map((management) => ({
+      value: management.id,
+      label: management.name
+    }))
+
+    this.setState({
+      mgmt: {
+        isLoading: false,
+        list: mgmt
+      }
+    })
+  })
+
+  getInstitutionCategories().then((categories) => {
+
+    const cat = categories.results.filter((cat => {
+      return cat.category_type == 2
+    })).map((category) => ({
+      value: category.id,
+      label: category.name
+    }))
+
+
+    this.setState({
+      institutionCategories: {
+        isLoading: false,
+        list: cat
+      }
+    })
+  })
   dispatch(openNode(params.districtId))
   dispatch(fetchEntitiesFromServer(params.districtId));
   dispatch({
@@ -79,7 +137,15 @@ export default class PrimaryCluster extends React.Component {
     const options = {
       name: school.name,
       boundary: this.props.params.clusterId,
-      languages: school.languages.map(school => school.value)
+      languages: school.languages,
+      institution_gender:school.institution_gender,
+      address:school.address,
+      area:school.area,
+      landmark:school.landmark,
+      pincode:school.pincode,
+      cat:school.cat,
+      dise_code:school.dise_code,
+
     }
     this.props.dispatch(saveNewInstitution(options))
   }
@@ -193,7 +259,7 @@ export default class PrimaryCluster extends React.Component {
         </ol>
         {this.Displayelement(...this.props)}
 
-        <CreateInstitution placeHolder='School Name' title='Create New School' isOpen={this.props.modal.createInstitution} onCloseModal={this.toggleSchoolModal} save={ this.saveSchool } />
+        <CreateInstitution languages={this.state.languages} mgmt={this.state.mgmt} institutionCategories={this.state.institutionCategories} placeHolder='School Name' title='Create New School' isOpen={this.props.modal.createInstitution} onCloseModal={this.toggleSchoolModal} save={ this.saveSchool } />
       </div>
     )
   }

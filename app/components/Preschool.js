@@ -188,7 +188,7 @@ export default class Institution extends React.Component {
 
     let copy = this.state.institution;
     copy.dise_code = myform.institutionDise_code;
-    copy.mgmt = myform.institutionMgmt;
+    // copy.mgmt = myform.institutionMgmt;
     copy.institution_gender = myform.institutionGender;
     copy.languages = myform.institutionLang;
     copy.name = myform.institutionName;
