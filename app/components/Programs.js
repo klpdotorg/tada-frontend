@@ -65,18 +65,18 @@ export default class Programs extends React.Component {
 	*/
 	componentWillReceiveProps(nextProps)
 	{
-		
+
 		const programs = nextProps.programsById;
 		if(Object.keys(programs).length >0 && this.state.selectedProgram == 0)
 		{
-			const selectProgram = Object.values(programs)[0];	
+			const selectProgram = Object.values(programs)[0];
 			this.setState({
 				selectedProgram: selectProgram.id
 			});
 		}
 
 
-	}	
+	}
 
 	componentDidUpdate(prevProps, prevState)
 	{
@@ -90,7 +90,7 @@ export default class Programs extends React.Component {
 	This needs to trigger fetching asessments for that program/type combo
 */
 	handleProgramSelection(e)
-	{		
+	{
 		this.setState({
 			selectedProgram: this.selProgram.value,
 		});
@@ -108,7 +108,7 @@ export default class Programs extends React.Component {
 		// var instCat = this.instCat.value;
 		//$('#createProgramModal').modal('hide');
 		this.props.dispatch(actions.createNewProgram(programName, desc, start, end, isActive, instCat)).then(response =>{
-			
+
 			var programName = response.name;
 			var message = "Program created successfully!"
 			this.setState({
@@ -135,9 +135,9 @@ export default class Programs extends React.Component {
 	closeGenericDialog()
 	{
 		this.setState({
-			
+
 				showSuccessModal:false
-			
+
 		});
 	}
 
@@ -184,11 +184,11 @@ export default class Programs extends React.Component {
 
 	openCreateProgramModal()
 	{
-		
+
 			this.setState({
 				isCreateProgramModalOpen: true
 			});
-		
+
 	}
 
 	closeCreateProgramModal()
@@ -201,11 +201,11 @@ export default class Programs extends React.Component {
 
 	openCreateAssessmentModal()
 	{
-		
+
 			this.setState({
 				isCreateAssessmentModalOpen: true
 			});
-		
+
 	}
 
 	closeCreateAssessmentModal()
@@ -233,20 +233,20 @@ export default class Programs extends React.Component {
 			selAssessment: -1
 		});
 	}
-	
+
 
 	handleDeleteProgram()
 	{
 		$('#deleteProgramModal').modal('hide');
 		var deleteId = this.state.selectedProgram;
 		this.props.dispatch(actions.deleteProgram(deleteId)).then(response =>{
-			
+
 			this.setState({
 				selectedProgram: this.selProgram.selectedIndex + 1
 			});
 			this.selProgram.remove(deleteId);
 		}).catch(error => {
-			
+
 		});
 	}
 
@@ -280,7 +280,7 @@ export default class Programs extends React.Component {
 	    this.setState({openConfirmModal: true});
   	}
 
-	closeConfirmation() 
+	closeConfirmation()
 	{
 	    this.setState({openConfirmModal: false});
   	}
@@ -344,7 +344,7 @@ export default class Programs extends React.Component {
 			this.setState({
 				selectedProgram: this.selProgram.selectedIndex + 1
 			});
-			
+
 		  });
   	}
 
@@ -374,15 +374,17 @@ export default class Programs extends React.Component {
 		var startDate;
 		var endDate;
 		var instType;
-		
+
+
 		programs = this.props.programsById;
+		console.log(programs)
 		assessments = this.props.assessmentsById;
-		
-		var programsList= Object.values(programs).map((program,i) => {	
+
+		var programsList= Object.values(programs).map((program,i) => {
 				return <option key={program.id} value={program.id}>{program.name}</option>;
 		});
 		var assessmentsList = Object.values(assessments).map((assessment,i)=>{
-			
+
 			var flexi_assessment = "No";
 			var double_entry = "No";
 			var type =""
@@ -390,7 +392,7 @@ export default class Programs extends React.Component {
 				double_entry="Yes";
 			if(assessment.flexi_assessment && assessment.flexi_assessment == true)
 				flexi_assessment = "Yes";
-		
+
 			if(assessment.type)
 			{
 				if(assessment.type == 1)
@@ -418,7 +420,7 @@ export default class Programs extends React.Component {
 				</tr>
 			);
 		});
-		
+
 
 		// if (Object.keys(programs).length > 0 && this.state.selectedProgram == 0 ) {
 		// 	selectedProgram = Object.values(programs)[0];
@@ -439,7 +441,7 @@ export default class Programs extends React.Component {
 		return (
 			<div>
 				<div className="row center-block">
-					
+
 					<div className="col-md-4 form-inline">
 		  				<label htmlFor="sel1">Programs:</label>
 						  <select ref={(ref) => this.selProgram = ref} className="form-control"  id="sel1" onChange={this.handleProgramSelection} value={this.state.selectedProgram}>
@@ -452,17 +454,17 @@ export default class Programs extends React.Component {
 
 						<button type="button" className="btn brand-orange-bg all-padded-btn" onClick={this.openCreateAssessmentModal}>Add Assessments</button>
 					</div>
-					
-						
-					
-					
+
+
+
+
 				</div>
 				<div className="grey-mist-bg">
 					<div className="row center-block">
 						<div className="col-md-8 pull-left">
 							<h4>Program Details</h4>
 							<hr/>
-							<div className="row">	
+							<div className="row">
 								<label className="col-md-4">Program name: {selectedProgramName} </label>
 								<label className="col-md-4">Start Date: {startDate}</label>
 							</div>
@@ -471,21 +473,21 @@ export default class Programs extends React.Component {
 								<label className="col-md-4">End Date: {endDate}</label>
 							</div>
 						</div>
-						
+
 						<div className="col-md-4 pull-right">
 							<button type="button" className="col-sm-6 btn btn-info navbar-btn brand-blue-bg all-padded-btn" onClick={this.handleShowEditDialog}><span className="fa fa-pencil-square-o"></span>Edit</button>
 							<button type="button" className="col-sm-6 btn btn-info navbar-btn brand-blue-bg all-padded-btn" onClick={this.openConfirmModal.bind(this)}>Deactivate</button>
 							<button type="button" className="col-sm-6 btn btn-info navbar-btn brand-blue-bg all-padded-btn" data-toggle="modal" data-target="#deleteProgramModal"><span className="fa fa-trash-o"></span>Delete</button>
 
 						</div>
-						
+
 					</div>
 
-					
+
 				</div>
 				<br/>
 				<div>
-					<h4 className="brand-blue text-center"> Assessments in this Programme</h4>	
+					<h4 className="brand-blue text-center"> Assessments in this Programme</h4>
 				</div>
 				<div>
 					<table className="table table-bordered table-striped">
@@ -528,11 +530,11 @@ export default class Programs extends React.Component {
                           </div>
                           <div className="modal-body">
                               <form id="deleteProgram">
-                              
+
                                 <div className="form-group">
                                     <label>Do you really want to delete this program?</label>
                                 </div>
-                                
+
                               </form>
                           </div>
                           <div className="modal-footer">
@@ -542,8 +544,8 @@ export default class Programs extends React.Component {
                       </div>
                   </div>
        	 	</div>{/*End of modal*/}
-			
-       	
+
+
        	 	 {/* Error dialog */}
        	 <div className="modal fade" data-backdrop="false" id="programErrorModal" tabIndex="-1" role="dialog" aria-labelledby="programErrorModal">
                   <div className="modal-dialog" role="document">
@@ -558,7 +560,7 @@ export default class Programs extends React.Component {
                                     <label id="errorLabel" className="control-label">Program creation failed!</label>
                                     <label id="errorDetails"></label>
                                 </div>
-                                
+
                               </form>
                           </div>
                           <div className="modal-footer">
