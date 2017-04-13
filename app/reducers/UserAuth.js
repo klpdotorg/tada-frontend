@@ -58,6 +58,14 @@ function processNewUser(newUser, users, pages)
 
 }
 
+export function permissions(state = {
+  permsById: []
+}, action) {
+  switch(action.type) {
+    
+  }
+}
+
 export function users(state={
   usersById: [],
   userCount: 0,

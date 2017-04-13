@@ -41,3 +41,11 @@ export const replaceNull = (obj) => {
 export const displayFullName = (person) => {
   return `${person.first_name || ''} ${person.middle_name || ''} ${person.last_name || ''}`
 }
+
+export const userHasPermissions = (permissions,institutionId) => {
+    let hasPermissions = false;
+    let institutions = permissions.institutions;
+    if(institutions.indexOf(parseInt(institutionId,10)) > -1 ) 
+      hasPermissions = true;
+    return hasPermissions;
+  }
