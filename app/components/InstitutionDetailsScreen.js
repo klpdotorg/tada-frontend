@@ -8,7 +8,8 @@ import { Link } from 'react-router';
 import Formsy from 'formsy-react';
 // import Select from 'react-select';
 import FRC from 'formsy-react-components';
-import {getManagement, getLanguages, getInstitutionCategories, replaceNull} from './utils'
+import {getManagement, getLanguages, getInstitutionCategories, replaceNull, userHasPermissions} from './utils'
+
 const { Input ,Textarea,Select} = FRC;
 
 export default class Institution extends React.Component {
@@ -233,9 +234,11 @@ export default class Institution extends React.Component {
     var block = this.props.boundaries.boundaryDetails[this.props.params.blockId];
     var district = this.props.boundaries.boundaryDetails[this.props.params.districtId];
     var cluster = this.props.boundaries.boundaryDetails[this.props.params.clusterId];
+    let canModify = sessionStorage.getItem('isAdmin') || this.hasPermissions();
     var institution = this.state.institution
     var Displayelement;
-    if(sessionStorage.getItem('isAdmin')){
+    // console.log(canModify);
+    // if(canModify){
         return(
             <div>
             <ol className="breadcrumb">
@@ -245,15 +248,23 @@ export default class Institution extends React.Component {
             <li className="active"> {institution.name}</li>
             </ol>
             <div>
-            <div className='heading-border-left'>
-            <h4 className="brand-blue col-md-10">Modify Details</h4>
-            <Button onClick={this.toggleClassModal} title='Add Class'/>
-            </div>
+              {!canModify?<div>
+            <span className="fa-stack fa-lg"> <i className="fa fa-circle fa-stack-2x brand-red"></i>
+            <i className="fa fa-lock fa-stack-1x fa-inverse"></i></span><h4 className="heading-border-left brand-red">Limited Permissions</h4>
+            <div className="col-md-12">You need administrator privileges or permissions to modify this institution</div>
+
+          </div>:<div></div>}
+          <h4 className="heading-border-left brand-blue col-md-10">{canModify? "Modify Details": "View Details"}</h4>
+            {!canModify?null:<Button onClick={this.toggleClassModal} title='Add Class'disabled={!canModify}/>}
+
+
+
               <Formsy.Form
                 onValidSubmit={this.saveInsti}
                onValid={this.enableSubmitButton}
                onInvalid={this.disableSubmitButton}
                onChange={this.handleChange}
+               disabled={!canModify}
                ref={(ref) => this.myform = ref}
                >
 
@@ -394,36 +405,42 @@ export default class Institution extends React.Component {
 
                   </div>
                   </div>
-                  <div className="col-md-2">
-                  <button type="submit" className="btn btn-primary" >Save</button>
-                  <button type="submit" className="btn btn-primary" onClick={this.showConfirmation}>Delete</button>
-                  <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteInstitution} onCloseModal={this.closeConfirmModal} entity={institution.name}/>
-                  </div>
+
+                    {!canModify?<div></div>:
+                      <div className="col-md-2">
+                      <button type="submit" className="btn btn-primary" onClick={this.saveInsti}>Save</button>
+                      <button type="submit" className="btn btn-primary" onClick={this.showConfirmation}>Delete</button>
+                      <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteInstitution} onCloseModal={this.closeConfirmModal} entity={institution.name}/>
+                      </div>}
+
             </Formsy.Form>
             </div>
             <CreateClass placeHolder='Class Name' title='Create New Class' isOpen={this.props.modal.createClass} onCloseModal={this.toggleClassModal} save={ this.saveClass } />
             </div>
 
         )
-    }
-    else{
-      return(
-        <div>
-          <ol className="breadcrumb">
-          <li><Link to={district.path}>{district.name}</Link></li>
-          <li> <Link to={block.path}> {block.name}</Link></li>
-          <li> <Link to={cluster.path}> {cluster.name}</Link></li>
-          <li className="active"> {institution.name}</li>
-          </ol>
-          <h4 className="heading-err heading-border-left brand-red"> <i className="fa fa-lock brand-red" aria-hidden="true"></i>  Insufficient Permissions</h4>
-          <p>You need administrator privileges to modify Boundary details.</p>
-          <h4 className="brand-blue heading-border-left"> Institution Details</h4>
-          <p> Name: {institution.name}</p>
-        </div>
-      )
-    }
+    // }
+    // else{
+    //   return(
+    //     <div>
+    //       <ol className="breadcrumb">
+    //       <li><Link to={district.path}>{district.name}</Link></li>
+    //       <li> <Link to={block.path}> {block.name}</Link></li>
+    //       <li> <Link to={cluster.path}> {cluster.name}</Link></li>
+    //       <li className="active"> {institution.name}</li>
+    //       </ol>
+    //       <h4 className="heading-err heading-border-left brand-red"> <i className="fa fa-lock brand-red" aria-hidden="true"></i>  Insufficient Permissions</h4>
+    //       <p>You need administrator privileges to modify Boundary details.</p>
+    //       <h4 className="brand-blue heading-border-left"> Institution Details</h4>
+    //       <p> Name: {institution.name}</p>
+    //     </div>
+    //   )
+    // }
   }
+  hasPermissions=()=> {
 
+    return userHasPermissions(this.props.permissions,this.props.params.institutionId);
+  }
 
   render() {
 
