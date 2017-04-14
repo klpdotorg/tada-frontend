@@ -6,7 +6,21 @@ import store from '../store';
 import { urls as Urls } from '../constants';
 import { checkStatusNoJSON } from './utils';
 
+export function checkUserPassword(pass) {
+  return function(dispatch, getState) {
 
+    return fetch(Urls.LOGIN, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username: getState().login.username,
+        password: pass
+      })
+    });
+  }
+}
 
 //Returns a promise. The response handling will be done in the UI component since this is temp
 //state and we don't want to persist in the Redux store.
@@ -54,7 +68,7 @@ export function changePassword(currentPassword, newPassword){
         new_password: newPassword,
         current_password: currentPassword
       })
-    });
+    }).then(checkStatusNoJSON);
     
   }
 }

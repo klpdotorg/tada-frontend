@@ -91,7 +91,8 @@ var mapDispatchToProps = function(dispatch) {
 
     changePassword(oldPassword, newPassword) {
       return dispatch(changePassword(oldPassword, newPassword));
-    }
+    },
+    dispatch,
 
   };
 };
@@ -127,7 +128,7 @@ class TadaContentContainer extends Component {
     return (
       this.state.isLoading ? <div>Loading... </div> :
       <div>
-        <MainHeader handleLogout={ this.props.handleLogout } email={this.props.useremail} username={this.props.username} handleChangePassword = {this.props.changePassword} handleChangeUserName = {this.props.changeUserName}/>
+        <MainHeader handleLogout={ this.props.handleLogout } email={this.props.useremail} username={this.props.username} dispatch = {this.props.dispatch} handleChangeUserName = {this.props.changeUserName}/>
         <TreeTogglerSpacingDiv/>
         <NavBar onPrimaryClick={ this.props.onPrimaryClick } onPreSchoolClick={ this.props.onPreSchoolClick } primarySelected={ this.props.primarySelected } />
         <SecondaryNavBar redirectTo = {this.props.redirectTo} toggleDistrictModal={ this.props.toggleDistrictModal } districtModalIsOpen={ this.props.districtModalIsOpen } saveNewDistrict={ saveNewDistrict } />
