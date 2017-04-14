@@ -1,21 +1,18 @@
 import React from 'react';
 import Button from './Button'
-import {modifyBoundary, deleteBoundary, saveNewBlock, saveNewProject, selectPreschoolTree,openNode,fetchEntitiesFromServer} from '../actions'
+import {modifyBoundary, deleteBoundary, saveNewBlock, saveNewProject, selectPreschoolTree} from '../actions'
 import CreateBoundary from './Modals/CreateBoundary'
 import {Link} from 'react-router'
+import NotificationSystem from 'react-notification-system';
 import ConfirmModal from './Modals/Confirm'
-import Notifications from 'react-notification-system-redux'
-import FRC from 'formsy-react-components';
-import Formsy from 'formsy-react';
 
-const { Input} = FRC;
 
 export default class PrimaryDistrict extends React.Component {
 
   constructor(props){
-    super(props);
+    super(props);    
     this.saveDistrict = this.saveDistrict.bind(this);
-    this.deleteDistrict = this.deleteDistrict.bind(this);
+    this.deleteDistrict = this.deleteDistrict.bind(this);    
     this.toggleBlockModal = this.toggleBlockModal.bind(this);
     this.toggleProjectModal = this.toggleProjectModal.bind(this);
     this.saveBlock = this.saveBlock.bind(this);
@@ -24,24 +21,18 @@ export default class PrimaryDistrict extends React.Component {
 
     this.state = {
       value: '',
-      disabled: false,
-      canSubmit: false,
       openConfirmModal: false
     };
   }
 
   componentDidMount() {
-    const {params,dispatch} = this.props;
-    dispatch(openNode(params.districtId))
-    dispatch(fetchEntitiesFromServer(params.districtId));
-    if (this.props.boundaryDetails[this.props.params.districtId].boundary_type === 2) {
-      dispatch(selectPreschoolTree())
+    if (this.props.boundaryDetails[this.props.params.districtId].boundary_type == 2) {
+      this.props.dispatch(selectPreschoolTree())
     }
   }
 
   saveDistrict() {
-    var myform = this.myform.getModel();
-    this.props.dispatch(modifyBoundary(this.districtId, myform.DistrictName));
+    this.props.dispatch(modifyBoundary(this.districtId, this.districtName.value));
   }
 
   showConfirmation = () => {
@@ -52,7 +43,7 @@ export default class PrimaryDistrict extends React.Component {
 
   deleteDistrict() {
     this.props.dispatch(deleteBoundary(this.districtId))
-  }
+  } 
 
   saveBlock(name) {
     const options = {
@@ -74,14 +65,14 @@ export default class PrimaryDistrict extends React.Component {
     this.props.dispatch(saveNewProject(options))
   }
 
-  toggleBlockModal() {
+  toggleBlockModal() {    
     this.props.dispatch({
       type: 'TOGGLE_MODAL',
       modal: 'createBlock'
     })
   }
 
-  toggleProjectModal() {
+  toggleProjectModal() {    
     this.props.dispatch({
       type: 'TOGGLE_MODAL',
       modal: 'createProject'
@@ -94,78 +85,54 @@ export default class PrimaryDistrict extends React.Component {
     })
   }
 
-
-  enableSubmitButton=()=> {
-    this.setState({
-      canSubmit: true,
-    });
-  }
-
-  disableSubmitButton=()=> {
-    this.setState({
-      canSubmit: false,
-    });
-  }
-
-DistrictSummary=(props)=>{
-  var boundary = this.props.boundaryDetails[this.props.params.districtId];
-  if(!boundary)
-    return null;
-  var boundaryType = boundary.boundary_type;
-  var DistrictSummary;
-  this.state.value = boundary.name;
-  if(sessionStorage.getItem('isAdmin')) {
-    return(
-        <div>
-          <div className="heading-border-left brand-blue">
-            <h4 className="brand-blue brand-bg-blue col-md-10">Modify Details</h4>
-            {boundaryType == 2 ? <Button title='Add Project' onClick={this.toggleProjectModal} /> : <Button title='Add Block' onClick={this.toggleBlockModal} />}
-          </div>
-           <Formsy.Form
-            onValidSubmit={this.saveDistrict}
-            onValid={this.enableSubmitButton}
-            onInvalid={this.disableSubmitButton}
-            ref={(ref) => this.myform = ref}
-            >
-            <Input name="DistrictName" id="DistrictName" value={boundary.name} label="District Name:" type="text"
-              placeholder="Please enter the district name"
-              className="form-control"
-              required validations="minLength:1"/>
-          </Formsy.Form>
-              <div className="col-md-8">
-                <button type="button" disabled={!this.state.canSubmit} className="btn btn-primary" onClick={this.saveDistrict}>Save</button>
-                <button type="submit" className="btn btn-primary padded-btn" onClick={() => {this.showConfirmation() }}>Delete</button>
-                <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteDistrict} onCloseModal={this.closeConfirmModal} entity={boundary.name}/>
-              </div>
-        </div>
-    )
-  }else{
-      return(
-        <div>
-        <h4 className="heading-err heading-border-left brand-red"> <i className="fa fa-lock brand-red" aria-hidden="true"></i>  Insufficient Permissions</h4>
-        <p>You need administrator privileges to modify Boundary details.</p>
-        <h4 className="brand-blue heading-border-left"> District Details</h4>
-        <p> Name: {boundary.name}</p>
-      </div>
-    )
-  }
-}
-  render() {
+  render() {    
     var boundary = this.props.boundaryDetails[this.props.params.districtId];
     if(!boundary)
       return null;
     var boundaryType = boundary.boundary_type;
     var DistrictSummary;
     this.state.value = boundary.name;
+    if(sessionStorage.getItem('isAdmin')) {
+      DistrictSummary = (props) => 
+        <div>
+          <div className="heading-border-left brand-blue">
+            <h4 className="brand-blue brand-bg-blue col-md-10">Modify Details</h4>
+            {boundaryType == 2 ? <Button title='Add Project' onClick={this.toggleProjectModal} /> : <Button title='Add Block' onClick={this.toggleBlockModal} />}
+          </div>
+            <form className="form-horizontal boundary-form" role="form">
+              <div className="form-group">
+                <label className="control-label col-sm-2" htmlFor="name">District Name:</label>
+                <div className="col-sm-2">          
+                  <input type="text" ref={(ref) => this.districtName = ref} className="form-control" id="name" defaultValue={boundary.name}/>
+                </div>
+              </div>
+              </form>
+
+              <div className="col-md-8">
+                <button type="submit" className="btn btn-primary padded-btn" onClick={() => {this.saveDistrict(this.districtId) }}>Save</button>
+                <button type="submit" className="btn btn-primary padded-btn" onClick={() => {this.showConfirmation() }}>Delete</button>
+                <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteDistrict} closeModal={this.closeConfirmModal} entity={boundary.name}/>
+              </div>
+        </div>
+    }
+    else {
+      DistrictSummary = (props) => 
+        <div>
+          <h4 className="heading-err heading-border-left brand-red"> <i className="fa fa-lock brand-red" aria-hidden="true"></i>  Insufficient Permissions</h4>
+          <p>You need administrator privileges to modify Boundary details.</p>
+          <h4 className="brand-blue heading-border-left"> District Details</h4>
+          <p> Name: {boundary.name}</p>
+        </div>
+    }
 
     return(
       <div>
         <ol className="breadcrumb">
-          <li className="active">{boundary.name}</li>
+          <li className="active">{boundary.name}</li>          
         </ol>
-        {this.DistrictSummary()}
-        <CreateBoundary placeHolder='Block Name' title='Create New Block' isOpen={this.props.modal.createBlock} onCloseModal={this.toggleBlockModal} save={ this.saveBlock } />
-        <CreateBoundary placeHolder='Project Name' title='Create New Project' isOpen={this.props.modal.createProject} onCloseModal={this.toggleProjectModal} save={ this.saveProject } />
+        <DistrictSummary />
+        <CreateBoundary placeHolder='Block Name' title='Create New Block' isOpen={this.props.modal.createBlock} onCloseModal={this.toggleBlockModal} closeModal={ this.toggleBlockModal} save={ this.saveBlock } />
+        <CreateBoundary placeHolder='Project Name' title='Create New Project' isOpen={this.props.modal.createProject} onCloseModal={this.toggleProjectModal} closeModal={ this.toggleProjectModal} save={ this.saveProject } />
       </div>
     );
   }
