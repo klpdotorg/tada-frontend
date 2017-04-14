@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {modifyBoundary, deleteBoundary, newSchool, saveStudent, getStudents, getBoundaries, getInstitutions, getStudentGroups, selectPreschoolTree, removeBoundary } from '../actions';
+import {modifyBoundary, deleteBoundary, newSchool, saveStudent, getStudents, getBoundaries, getInstitutions, getStudentGroups, selectPreschoolTree, removeBoundary ,openNode,fetchEntitiesFromServer} from '../actions';
 import CreateInstitution from './Modals/CreateInstitution';
 import {toggleSet} from '../utils'
 import Button from './Button'
@@ -28,6 +28,17 @@ const StudentRow = (props) => {
     </div>
   )
 }
+
+const NoStudentMsg = () => {
+
+  return (
+    <div className="row text-center">
+      <div className="col-md-3"></div>
+      {"No Student is present"}
+    </div>
+  )
+}
+
 
 class StudentScreen extends Component {
 
@@ -86,6 +97,7 @@ class StudentScreen extends Component {
     let relations = []
     relations.push(student.Father, student.Mother)
     student.relations = relations
+    console.log(student);
     this.props.dispatch({
       type: 'STUDENTS',
       payload: patchStudentAPI(student, this.props.params.groupId)
@@ -134,6 +146,7 @@ class StudentScreen extends Component {
     const group = boundaryDetails[params.groupId]
     const studentList = boundariesByParentId[params.groupId]
     const studentRows = studentList.map((studentId, i) => <StudentRow key={i} { ...boundaryDetails[studentId]} deleteStudent={this.deleteStudentConfirm} selectedStudents={this.state.selectedStudents} selectStudent={() => {this.selectStudent(studentId)}} openModifyStudent={this.openModifyStudent} />)
+    const checkStudents = studentList.length>0? studentRows:<NoStudentMsg/>
     const studentGroups = boundariesByParentId[params.institutionId]
       .filter((id) => id !== group.id)
       .map((id) => {
@@ -157,7 +170,7 @@ class StudentScreen extends Component {
             <div className="col-md-2"><span>Mother Name</span></div>
             <div className="col-md-1"><span>Actions</span></div>
           </div>
-          { studentRows }
+          {checkStudents}
         </div>
         <div className="col-sm-2">
           <select className="col-sm-2" onChange={(e) => {this.setState({mapToCentre : e.target.value})}} value={this.state.mapToCentre} className="form-control" id="gender">
@@ -231,34 +244,49 @@ export default class Students extends Component {
 
     const blockId = params.blockId || params.projectId
     const clusterId = params.clusterId || params.circleId
-
+    dispatch(openNode(params.districtId))
+    dispatch(fetchEntitiesFromServer(params.districtId));
     dispatch({
       type: 'BOUNDARIES',
       payload: getBoundaries(1)
-    }).then(() =>
-    dispatch({
-      type: 'BOUNDARIES',
-      payload: getBoundaries(params.districtId)
-    })).then(() =>
-    dispatch({
-      type: 'BOUNDARIES',
-      payload: getBoundaries(blockId)
-    })).then(() =>
-    dispatch({
-      type: 'BOUNDARIES',
-      payload: getInstitutions(clusterId)
-    })).then(() =>
-    dispatch({
-      type: 'BOUNDARIES',
-      payload: getStudentGroups(params.institutionId)
-    })).then(() =>
-    dispatch({
-      type: 'STUDENTS',
-      payload: this.getStudentPromise(params.institutionId, params.groupId)
-    })).then(() => {
-    this.setState({
-      isLoading:false
-    })})
+    }).then(() =>{
+      dispatch({
+        type: 'BOUNDARIES',
+        payload: getBoundaries(params.districtId)
+      }).then(() =>{
+        dispatch(openNode(blockId))
+        dispatch(fetchEntitiesFromServer(blockId));
+        dispatch({
+          type: 'BOUNDARIES',
+          payload: getBoundaries(blockId)
+        }).then(() =>{
+          dispatch(openNode(clusterId))
+          dispatch(fetchEntitiesFromServer(clusterId));
+          dispatch({
+            type: 'BOUNDARIES',
+            payload: getInstitutions(clusterId)
+          }).then(() =>{
+            dispatch(openNode(params.institutionId))
+            dispatch(fetchEntitiesFromServer(params.institutionId));
+            dispatch({
+              type: 'BOUNDARIES',
+              payload: getStudentGroups(params.institutionId)
+            }).then(() =>{
+                dispatch({
+                  type: 'STUDENTS',
+                  payload: this.getStudentPromise(params.institutionId, params.groupId)
+                }).then(() => {
+                this.setState({
+                  isLoading:false
+              })
+              dispatch(openNode(params.groupId))
+              // dispatch(fetchEntitiesFromServer(params.groupId));
+            })
+            })
+          })
+        })
+      })
+    })
 
   }
 

@@ -87,8 +87,9 @@ class HeaderBar extends Component {
             <div className="btn-group navbar-text pull-right">
               <button type="button" className="btn btn-primary padded-btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span className="glyphicon glyphicon-user"></span></button>
               <ul className="dropdown-menu">
-                <li><button className="btn btn-default dropdown-item" data-toggle="modal" data-target="#securityModal" >Change Password</button></li>
-                <li><button className="btn btn-default dropdown-item" data-toggle="modal" data-target="#changeUserNameModal">Update Profile</button></li>
+                <li><button className="dropdown-item" data-toggle="modal" data-target="#securityModal" >Change Password</button></li>
+                <li role="separator" className="divider"></li>
+                <li><button className="dropdown-item" data-toggle="modal" data-target="#changeUserNameModal">Update Profile</button></li>
 
               </ul>
 

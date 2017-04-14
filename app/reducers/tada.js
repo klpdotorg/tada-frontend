@@ -33,7 +33,7 @@ export function schoolSelection(state = {
  + * Classes need to have a label that's a combination of name and section. This method
  + * combines the name and section and adds a label field to the boundary. NavTree will look for this
  + * field when rendering.
- + * @param {*} entity 
+ + * @param {*} entity
  + */
  function createLabelForClass(entity)
  {
@@ -60,7 +60,7 @@ function processBoundaryDetails(data, boundariesByParentId, boundaryDetails) {
     boundary = computeRouterPathForEntity(boundary, boundaryDetails)
     boundary = nodeDepth(boundary)
     boundary = createLabelForClass(boundary);
-    
+
     soFar.details[boundary.id] = {...soFar.details[boundary.id], ...boundary}
     return soFar
   }, init)
@@ -85,6 +85,7 @@ export function boundaries(state = {
     } return state
 
    case 'STUDENTS_FULFILLED':
+   //console.log(action.payload)
    let merged = processStudents(action.payload.students.results, action.payload.groupId, state.boundariesByParentId, state.boundaryDetails)
    return {
      ...state,
@@ -100,7 +101,15 @@ export function boundaries(state = {
 
   case 'TOGGLE_NODE':
     const boundary = _.clone(state.boundaryDetails[action.id])
-    boundary.collapsed = !boundary.collapsed
+    //console.log(boundary.collapsed);
+    if(action.open){
+
+      boundary.collapsed = !action.open
+    }
+    else{
+        boundary.collapsed = !boundary.collapsed
+    }
+
     const details = {
       ...state.boundaryDetails,
       ...{[action.id]: boundary}

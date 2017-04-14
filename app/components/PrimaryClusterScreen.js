@@ -1,9 +1,14 @@
 import React from 'react';
-import {modifyBoundary, deleteBoundary, saveNewInstitution, getBoundaries} from '../actions';
+import {modifyBoundary, deleteBoundary, saveNewInstitution, getBoundaries,openNode,fetchEntitiesFromServer} from '../actions';
 import CreateInstitution from './Modals/CreateInstitution';
 import Button from './Button'
 import ConfirmModal from './Modals/Confirm'
 import { Link } from 'react-router'
+import FRC from 'formsy-react-components';
+import Formsy from 'formsy-react';
+import {getManagement, getLanguages, getInstitutionCategories, replaceNull} from './utils'
+
+const { Input} = FRC;
 
 export default class PrimaryCluster extends React.Component {
 
@@ -17,27 +22,90 @@ export default class PrimaryCluster extends React.Component {
     this.state = {
       schoolModalIsOpen: false,
       openConfirmModal: false,
+      canSubmit: false,
+      languages: {
+        isLoading:true,
+        list:[]
+      },
+      mgmt: {
+        isLoading: true,
+        list:[]
+      },
+      institutionCategories: {
+        isLoading: true,
+        list:[]
+      },
       isLoading: true
     };
   }
 
   componentDidMount() {
-  const {params} = this.props
-  this.props.dispatch({
+  const {params,dispatch} = this.props;
+  getLanguages().then((languages) => {
+    const langs = languages.results.map((language) => ({
+        value: language.id,
+        label: language.name
+      }))
+    this.setState({
+      languages: {
+        isLoading: false,
+        list: langs
+      }
+    })
+  })
+
+  getManagement().then((managements) => {
+    const mgmt = managements.results.map((management) => ({
+      value: management.id,
+      label: management.name
+    }))
+
+    this.setState({
+      mgmt: {
+        isLoading: false,
+        list: mgmt
+      }
+    })
+  })
+
+  getInstitutionCategories().then((categories) => {
+
+    const cat = categories.results.filter((cat => {
+      return cat.category_type == 2
+    })).map((category) => ({
+      value: category.id,
+      label: category.name
+    }))
+
+
+    this.setState({
+      institutionCategories: {
+        isLoading: false,
+        list: cat
+      }
+    })
+  })
+  dispatch(openNode(params.districtId))
+  dispatch(fetchEntitiesFromServer(params.districtId));
+  dispatch({
     type: 'BOUNDARIES',
     payload: getBoundaries(1)
   }).then(() => {
-    this.props.dispatch({
+    dispatch({
       type: 'BOUNDARIES',
       payload: getBoundaries(params.districtId)
     }).then(() => {
-    this.props.dispatch({
+    dispatch(openNode(params.blockId))
+    dispatch(fetchEntitiesFromServer(params.blockId));
+    dispatch({
       type: 'BOUNDARIES',
       payload: getBoundaries(params.blockId)
     }).then(() => {
       this.setState({
         isLoading:false
       })
+      dispatch(openNode(params.clusterId))
+      dispatch(fetchEntitiesFromServer(params.clusterId));
     })
   })
   })
@@ -69,7 +137,15 @@ export default class PrimaryCluster extends React.Component {
     const options = {
       name: school.name,
       boundary: this.props.params.clusterId,
-      languages: school.languages.map(school => school.value)
+      languages: school.languages,
+      institution_gender:school.institution_gender,
+      address:school.address,
+      area:school.area,
+      landmark:school.landmark,
+      pincode:school.pincode,
+      cat:school.cat,
+      dise_code:school.dise_code,
+
     }
     this.props.dispatch(saveNewInstitution(options))
   }
@@ -101,7 +177,8 @@ export default class PrimaryCluster extends React.Component {
   }
 
   saveCluster() {
-    this.props.dispatch(modifyBoundary(this.props.params.clusterId, this.clusterName.value));
+    var myform = this.myform.getModel();
+    this.props.dispatch(modifyBoundary(this.props.params.clusterId, myform.ClusterName));
   }
 
   deleteCluster() {
@@ -109,42 +186,67 @@ export default class PrimaryCluster extends React.Component {
     this.props.dispatch(deleteBoundary(params.clusterId, params.blockId));
   }
 
-  render() {
-  	var block = this.props.boundaries.boundaryDetails[this.props.params.blockId];
+  enableSubmitButton=()=> {
+    this.setState({
+      canSubmit: true,
+    });
+  }
+
+  disableSubmitButton=()=> {
+    this.setState({
+      canSubmit: false,
+    });
+  }
+
+  Displayelement=(props)=>{
+    var block = this.props.boundaries.boundaryDetails[this.props.params.blockId];
   	var district = this.props.boundaries.boundaryDetails[this.props.params.districtId];
   	var cluster = this.props.boundaries.boundaryDetails[this.props.params.clusterId];
-    var Displayelement;
     if(sessionStorage.getItem('isAdmin')) {
-      Displayelement = (props) =>
+      return(
         <div>
           <div className='heading-border-left'>
             <h4 className="brand-blue col-md-10">Modify Details</h4>
             <Button onClick={this.toggleSchoolModal} title='Add School'/>
           </div>
-          <form className="form-horizontal boundary-form" role="form">
-            <div className="form-group">
-              <label className="control-label col-sm-2" htmlFor="name">Cluster :</label>
-              <div className="col-sm-2">
-                <input type="text" ref={(ref) => this.clusterName = ref} className="form-control" id="name" defaultValue={cluster.name}/>
-              </div>
-            </div>
-           </form>
+          <Formsy.Form
+           onValidSubmit={this.saveCluster}
+           onValid={this.enableSubmitButton}
+           onInvalid={this.disableSubmitButton}
+           ref={(ref) => this.myform = ref}
+           >
+           <Input name="ClusterName"
+            id="ClusterName"
+            value={cluster.name}
+            label="Cluster :" type="text"
+             className="form-control"
+             required validations="minLength:1"/>
+         </Formsy.Form>
           <div className="col-md-8">
-            <button type="submit" className="btn btn-primary padded-btn" onClick={this.saveCluster}>Save</button>
+            <button type="submit" disabled={!this.state.canSubmit} className="btn btn-primary padded-btn" onClick={this.saveCluster}>Save</button>
             <button type="submit" className="btn btn-primary padded-btn" onClick={this.showConfirmation}>Delete</button>
             <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteCluster} onCloseModal={this.closeConfirmation} entity={cluster.name}/>
           </div>
         </div>
+      )
+
     }
     else {
-      Displayelement = (props) =>
+      return(
         <div>
           <h4 className="heading-err heading-border-left brand-red"> <i className="fa fa-lock brand-red" aria-hidden="true"></i>  Insufficient Permissions</h4>
           <p>You need administrator privileges to modify Boundary details.</p>
           <h4 className="brand-blue heading-border-left"> Cluster Details</h4>
           <p> Name: {cluster.name}</p>
         </div>
+      )
     }
+  }
+
+  render() {
+  	var block = this.props.boundaries.boundaryDetails[this.props.params.blockId];
+  	var district = this.props.boundaries.boundaryDetails[this.props.params.districtId];
+  	var cluster = this.props.boundaries.boundaryDetails[this.props.params.clusterId];
 
     return (
       this.state.isLoading ?
@@ -155,10 +257,10 @@ export default class PrimaryCluster extends React.Component {
           <li><Link to={block.path}>{block.name}</Link></li>
           <li className="active">{cluster.name}</li>
         </ol>
-        <Displayelement {...this.props}/>
-        <CreateInstitution placeHolder='School Name' title='Create New School' isOpen={this.props.modal.createInstitution} onCloseModal={this.toggleSchoolModal} save={ this.saveSchool } />
+        {this.Displayelement(...this.props)}
+
+        <CreateInstitution languages={this.state.languages} mgmt={this.state.mgmt} institutionCategories={this.state.institutionCategories} placeHolder='School Name' title='Create New School' isOpen={this.props.modal.createInstitution} onCloseModal={this.toggleSchoolModal} save={ this.saveSchool } />
       </div>
     )
   }
 };
-

@@ -5,7 +5,9 @@ class MainContentArea extends React.Component {
   constructor() {
     super();
   }
-
+  componentDidMount() {
+    // console.log(this.props);
+  }
   render() {
     return (
       <div id="main-content-wrapper" className="main__content">
