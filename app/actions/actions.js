@@ -117,9 +117,11 @@ export function logoutUser() {
         'Authorization': 'Token ' + sessionStorage.token
       },
     }).then(response => {
-      if(response.status > 200 && response.status < 300)
+      if(response.status >= 200 && response.status < 300)
       {
         sessionStorage.removeItem('token');
+        sessionStorage.removeItem('isAdmin');
+        sessionStorage.removeItem('userid');
         dispatch(push('/logout'));
       }
     }).catch(error => {
