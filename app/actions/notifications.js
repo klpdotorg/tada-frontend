@@ -1,5 +1,5 @@
 export const baseNotification = {
-  position: 'tr',
+  position: 'tc',
   autoDismiss: 5,
 
 };

@@ -45,7 +45,8 @@ export const displayFullName = (person) => {
 export const userHasPermissions = (permissions,institutionId) => {
     let hasPermissions = false;
     let institutions = permissions.institutions;
-    if(institutions.indexOf(parseInt(institutionId,10)) > -1 ) 
+    let boundaries = permissions.boundaries;
+    if(institutions.indexOf(parseInt(institutionId,10)) > -1 || boundaries.indexOf(parseInt(institutionId,10)) > -1) 
       hasPermissions = true;
     return hasPermissions;
   }

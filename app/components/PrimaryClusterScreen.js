@@ -6,7 +6,7 @@ import ConfirmModal from './Modals/Confirm'
 import { Link } from 'react-router'
 import FRC from 'formsy-react-components';
 import Formsy from 'formsy-react';
-import {getManagement, getLanguages, getInstitutionCategories, replaceNull} from './utils'
+import {getManagement, getLanguages, getInstitutionCategories, replaceNull,userHasPermissions} from './utils'
 
 const { Input} = FRC;
 
@@ -198,10 +198,17 @@ export default class PrimaryCluster extends React.Component {
     });
   }
 
+  hasPermissions=()=> {
+
+    return userHasPermissions(this.props.permissions,this.props.params.clusterId);
+  }
+
   Displayelement=(props)=>{
     var block = this.props.boundaries.boundaryDetails[this.props.params.blockId];
   	var district = this.props.boundaries.boundaryDetails[this.props.params.districtId];
   	var cluster = this.props.boundaries.boundaryDetails[this.props.params.clusterId];
+    let canModify = this.hasPermissions();
+
     if(sessionStorage.getItem('isAdmin')) {
       return(
         <div>
@@ -231,15 +238,29 @@ export default class PrimaryCluster extends React.Component {
       )
 
     }
-    else {
+    else if (canModify) {
       return(
+        <div>
+          <div className='pull-right'>
+            <button className='btn btn-default brand-orange-bg' onClick={this.toggleSchoolModal}><i className="fa fa-university"/>Add School</button>
+          </div>
+          <h4 className="heading-err heading-border-left yellow-mild"> <span className="fa-stack fa-lg"> <i className="fa fa-circle fa-stack-2x yellow-mild"></i>
+            <i className="fa fa-lock fa-stack-1x grey-steel"></i></span>  Limited Permissions</h4>
+          <p>You need administrator privileges to modify Boundary details but you can add institutions here.</p>
+          <h4 className="brand-blue heading-border-left"> Cluster Details</h4>
+          <p> Name: {cluster.name}</p>
+        </div>
+      )
+    }
+    else {
+       return(
         <div>
           <h4 className="heading-err heading-border-left brand-red"> <i className="fa fa-lock brand-red" aria-hidden="true"></i>  Insufficient Permissions</h4>
           <p>You need administrator privileges to modify Boundary details.</p>
           <h4 className="brand-blue heading-border-left"> Cluster Details</h4>
           <p> Name: {cluster.name}</p>
         </div>
-      )
+      );
     }
   }
 
