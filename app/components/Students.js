@@ -169,6 +169,7 @@ class StudentScreen extends Component {
             <div className="col-md-2"><span>Father Name</span></div>
             <div className="col-md-2"><span>Mother Name</span></div>
             <div className="col-md-1"><span>Actions</span></div>
+            
           </div>
           {checkStudents}
         </div>
