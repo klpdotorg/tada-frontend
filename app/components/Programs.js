@@ -379,7 +379,6 @@ export default class Programs extends React.Component {
 		var instType;
 		
 		programs = this.props.programsById;
-		console.log(programs)
 		assessments = this.props.assessmentsById;
 
 		var programsList= Object.values(programs).map((program,i) => {
