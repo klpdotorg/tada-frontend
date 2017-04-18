@@ -13,10 +13,11 @@ import {studentStudentGroupMap, syncError} from '../actions/notifications'
 import {groupBy} from 'lodash'
 
 const StudentRow = (props) => {
-  const relations = groupBy(props.relations, 'relation_type')
+  const relations = groupBy(props.relations, 'relation_type');
   return (
     <div className="row">
       <div className="col-md-1"><input checked={props.selectedStudents.has(props.id)} onChange={props.selectStudent} type="checkbox" /></div>
+      <div className="col-md-1"><span>{props.id}</span></div>
       <div className="col-md-2"><span>{displayFullName(props)}</span></div>
       <div className="col-md-1"><span>{props.uid}</span></div>
       <div className="col-md-1"><span>{props.gender}</span></div>
@@ -161,6 +162,7 @@ class StudentScreen extends Component {
         <div className="students-grid">
           <div className="row grid-header">
             <div className="col-md-1"><span>Select</span></div>
+            <div className="col-md-1"><span>Student ID</span></div>
             <div className="col-md-2"><span>Name</span></div>
             <div className="col-md-1"><span>UID</span></div>
             <div className="col-md-1"><span>Gender</span></div>
