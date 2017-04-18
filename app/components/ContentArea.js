@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
+import { getProgramsBySchoolType } from '../selectors';
 
 class MainContentArea extends React.Component {
   constructor() {
@@ -26,11 +27,12 @@ const mapStateToProps = (state) => {
     boundaries: state.boundaries,
     boundaryDetails: state.boundaries.boundaryDetails,
     boundariesByParentId: state.boundaries.boundariesByParentId,
-    programsById: state.programs.programsById,
+    programsById: getProgramsBySchoolType(state),
     assessmentsById: state.assessments.assessmentsById,
     questionsById: state.assessments.questionsById,
     modal: state.modal,
     permissions: state.login.permissions,
+    primarySelected: state.schoolSelection.primarySchool,
   }
 }
 

@@ -133,7 +133,8 @@ Displayelement=(props)=>{
   else{
     return(
           <div>
-          <h4 className="heading-err heading-border-left brand-red"> <i className="fa fa-lock brand-red" aria-hidden="true"></i>  Insufficient Permissions</h4>
+          <h4 className="heading-err heading-border-left brand-red"> <span className="fa-stack fa-lg"> <i className="fa fa-circle fa-stack-2x brand-red"></i>
+            <i className="fa fa-lock fa-stack-1x fa-inverse"></i></span>  Insufficient Permissions</h4>
           <p>You need administrator privileges to modify Boundary details.</p>
           <h4 className="brand-blue heading-border-left"> Block Details</h4>
           <p> Name: {block.name}</p>

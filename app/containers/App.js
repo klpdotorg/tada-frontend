@@ -42,13 +42,13 @@ var mapDispatchToProps = function(dispatch) {
 
     onPrimaryClick() {
       dispatch(selectPrimaryTree());
-      dispatch(fetchEntitiesFromServer())
-      dispatch(push('/'))
+      dispatch(fetchEntitiesFromServer());
+      //dispatch(push('/'))
     },
     onPreSchoolClick() {
-      dispatch(selectPreschoolTree())
-      dispatch(fetchEntitiesFromServer())
-      dispatch(push('/'))
+      dispatch(selectPreschoolTree());
+      dispatch(fetchEntitiesFromServer());
+      //dispatch(push('/'))
     },
     fetchEntityDetails() {
       dispatch(fetchEntitiesFromServer(1));

@@ -250,7 +250,7 @@ export default class Institution extends React.Component {
             <div>
               {!canModify?<div>
             <span className="fa-stack fa-lg"> <i className="fa fa-circle fa-stack-2x brand-red"></i>
-            <i className="fa fa-lock fa-stack-1x fa-inverse"></i></span><h4 className="heading-border-left brand-red">Limited Permissions</h4>
+            <i className="fa fa-lock fa-stack-1x fa-inverse"></i></span><h4 className="heading-border-left brand-red">Insufficient Permissions</h4>
             <div className="col-md-12">You need administrator privileges or permissions to modify this institution</div>
 
           </div>:<div></div>}
