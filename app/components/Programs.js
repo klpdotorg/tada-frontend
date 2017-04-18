@@ -10,7 +10,6 @@ import EditProgram from './Modals/EditProgram';
 import ConfirmDialog from './Modals/ConfirmDialog';
 import { assessmentCreated, assessCreateFailed } from '../actions/notifications';
 import Notifications from 'react-notification-system-redux';
-
 export default class Programs extends React.Component {
 
 	constructor(props)
@@ -27,7 +26,7 @@ export default class Programs extends React.Component {
 			selectedAssessments: [],
 			dialogTitle: "",
 			dialogMessage: "",
-			isConfirmModalOpen: false
+			isConfirmModalOpen: false,
 		}
 		this.handleProgramSelection = this.handleProgramSelection.bind(this);
 		this.handleCreateProgram = this.handleCreateProgram.bind(this);
@@ -65,9 +64,13 @@ export default class Programs extends React.Component {
 	*/
 	componentWillReceiveProps(nextProps)
 	{
-
+	
 		const programs = nextProps.programsById;
-		if(Object.keys(programs).length >0 && this.state.selectedProgram == 0)
+		var selectedProgram = this.state.selectedProgram;
+		if(this.props.primarySelected != nextProps.primarySelected) {
+			selectedProgram = 0;
+		}
+		if(Object.keys(programs).length >0 && selectedProgram == 0)
 		{
 			const selectProgram = Object.values(programs)[0];
 			this.setState({
@@ -374,8 +377,7 @@ export default class Programs extends React.Component {
 		var startDate;
 		var endDate;
 		var instType;
-
-
+		
 		programs = this.props.programsById;
 		console.log(programs)
 		assessments = this.props.assessmentsById;
@@ -383,6 +385,7 @@ export default class Programs extends React.Component {
 		var programsList= Object.values(programs).map((program,i) => {
 				return <option key={program.id} value={program.id}>{program.name}</option>;
 		});
+
 		var assessmentsList = Object.values(assessments).map((assessment,i)=>{
 
 			var flexi_assessment = "No";
@@ -476,8 +479,8 @@ export default class Programs extends React.Component {
 
 						<div className="col-md-4 pull-right">
 							<button type="button" className="col-sm-6 btn btn-info navbar-btn brand-blue-bg all-padded-btn" onClick={this.handleShowEditDialog}><span className="fa fa-pencil-square-o"></span>Edit</button>
-							<button type="button" className="col-sm-6 btn btn-info navbar-btn brand-blue-bg all-padded-btn" onClick={this.openConfirmModal.bind(this)}>Deactivate</button>
-							<button type="button" className="col-sm-6 btn btn-info navbar-btn brand-blue-bg all-padded-btn" data-toggle="modal" data-target="#deleteProgramModal"><span className="fa fa-trash-o"></span>Delete</button>
+							<button type="button" className="col-sm-6 btn btn-info navbar-btn brand-blue-bg all-padded-btn" onClick={this.openConfirmModal.bind(this)} disabled={assessments.length > 0}>Deactivate</button>
+							<button type="button" className="col-sm-6 btn btn-info navbar-btn brand-blue-bg all-padded-btn" data-toggle="modal" data-target="#deleteProgramModal" disabled={assessments.length > 0}><span className="fa fa-trash-o"></span>Delete</button>
 
 						</div>
 

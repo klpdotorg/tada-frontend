@@ -7,6 +7,7 @@ export function fetchAllPrograms()
 {
   return function(dispatch, getState) 
   {
+
     var url = serverApiBase + "programmes/" + "?active=2";
     return fetch(url, {
       method: 'GET',
