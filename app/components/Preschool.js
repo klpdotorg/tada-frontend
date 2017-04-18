@@ -2,7 +2,7 @@ import React from 'react';
 import ConfirmModal from './Modals/Confirm'
 import {deleteInstitution, saveInstitution, saveNewClass, getBoundaries, getInstitutions, selectPreschoolTree,openNode,fetchEntitiesFromServer} from '../actions'
 import Button from './Button'
-import CreateClass from './Modals/CreateBoundary'
+import CreateClass from './Modals/CreateClass'
 import {mapValues} from 'lodash'
 import Formsy from 'formsy-react';
 // import Select from 'react-select';
@@ -144,11 +144,13 @@ export default class Institution extends React.Component {
     })
   }
 
-  saveClass(name) {
+  saveClass(name,section,group_type) {
     const institution = this.props.params.institutionId
     const options = {
       name,
-      institution
+      institution,
+      section,
+      group_type
     }
     this.props.dispatch(saveNewClass(options))
   }
