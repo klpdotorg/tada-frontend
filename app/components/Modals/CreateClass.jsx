@@ -31,8 +31,7 @@ export default class CreateClass extends Component {
 
 	      submitForm() {
 		      var myform = this.myform.getModel();
-
-		      this.props.save(myform.class, myform.section, myform.type);
+		      this.props.save(myform.class, myform.section, myform.group_type);
 	}
 
 	      enableSubmitButton() {
@@ -50,6 +49,7 @@ export default class CreateClass extends Component {
 	      render() {
 		      var role = [
 			{ value: 'Class', label: 'Class' },
+			{ value: 'Center', label: 'Center' },
 		];
 
 		      return (
@@ -58,7 +58,7 @@ export default class CreateClass extends Component {
 					<div className="modal-content">
 						<div className="modal-header">
 							<button type="button" className="close" onClick={this.props.onCloseModal} aria-label="Close"><span aria-hidden="true">&times;</span></button>
-							<h4 className="modal-title" id="createAssessmentTitle">Create User</h4>
+							<h4 className="modal-title" id="createAssessmentTitle">Create Class</h4>
 						</div>
 						<div className="modal-body">
 							<Formsy.Form onValidSubmit={this.submitForm} onValid={this.enableSubmitButton} onInvalid={this.disableSubmitButton}
@@ -71,11 +71,11 @@ export default class CreateClass extends Component {
   placeholder="Please enter the section" help="This is a required field" required validations="isAlphanumeric,minLength:1"
 								/>
 
-								<Select name="type"
-  label="Type"
-  options={role}
-  value="Class"
-  required
+								<Select name="group_type"
+								  label="Type"
+								  options={role}
+								  value="Class"
+								  required
 								/>
 
 							</Formsy.Form>

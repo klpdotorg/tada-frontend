@@ -114,7 +114,9 @@ export const saveClass = options => dispatch => {
 };
 
 export const deleteStudentGroup = options => {
+  console.log(options);
   return function (dispatch, getState) {
+
     return fetch(serverApiBase + 'studentgroups/' + options.id + '/', {
       method: 'DELETE',
       headers: {
@@ -181,4 +183,3 @@ export const saveStudent = (options, groupId) => dispatch => {
     dispatch(studentsFetched(data))
   });
 };
-
