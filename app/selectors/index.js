@@ -38,7 +38,10 @@ export const getBoundariesOnly = createSelector(
          */
       const schoolType = primarySelected ? 1 : 2;
       hierarchy[1] = _.filter(hierarchy[1], (key) => {
-           const boundaryType = details[key].boundary_type;
+           let boundaryType;
+           if(details[key]){
+                boundaryType = details[key].boundary_type;
+           } 
            return boundaryType ? boundaryType == schoolType : true;
          });
       let results = _.mapKeys(hierarchy, (value, key) => {

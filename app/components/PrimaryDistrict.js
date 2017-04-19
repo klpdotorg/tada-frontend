@@ -21,7 +21,7 @@ export default class PrimaryDistrict extends React.Component {
     this.saveBlock = this.saveBlock.bind(this);
     this.saveProject = this.saveProject.bind(this);
     this.districtId = this.props.params.districtId;
-
+    this.hasChildren = this.hasChildren.bind(this);
     this.state = {
       value: '',
       disabled: false,
@@ -107,20 +107,33 @@ export default class PrimaryDistrict extends React.Component {
     });
   }
 
+   hasChildren() {
+    if(this.props.boundariesByParentId[this.props.params.districtId]) {
+      return this.props.boundariesByParentId[this.props.params.districtId].length > 0;
+    }
+    else
+      return false;
+}
+
 DistrictSummary=(props)=>{
   var boundary = this.props.boundaryDetails[this.props.params.districtId];
+ 
   if(!boundary)
     return null;
   var boundaryType = boundary.boundary_type;
   var DistrictSummary;
   this.state.value = boundary.name;
+  let hasBlocks = this.hasChildren();
   if(sessionStorage.getItem('isAdmin')) {
     return(
         <div>
+          {hasBlocks?<p className="col-md-12 bg-info"><h5><i className="fa fa-2x fa-info-circle" aria-hidden="true"></i>You cannot <small>delete this boundary until its children are deleted</small></h5></p>:<div></div>}
+
           <div className="heading-border-left brand-blue">
             <h4 className="brand-blue brand-bg-blue col-md-10">Modify Details</h4>
             {boundaryType == 2 ? <Button title='Add Project' onClick={this.toggleProjectModal} /> : <Button title='Add Block' onClick={this.toggleBlockModal} />}
           </div>
+
            <Formsy.Form
             onValidSubmit={this.saveDistrict}
             onValid={this.enableSubmitButton}
@@ -134,7 +147,7 @@ DistrictSummary=(props)=>{
           </Formsy.Form>
               <div className="col-md-8">
                 <button type="button" disabled={!this.state.canSubmit} className="btn btn-primary" onClick={this.saveDistrict}>Save</button>
-                <button type="submit" className="btn btn-primary padded-btn" onClick={() => {this.showConfirmation() }}>Delete</button>
+                <button type="submit" className="btn btn-primary padded-btn" onClick={() => {this.showConfirmation() }} disabled={hasBlocks}>Delete</button>
                 <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteDistrict} onCloseModal={this.closeConfirmModal} entity={boundary.name}/>
               </div>
         </div>
