@@ -3,19 +3,9 @@ import Modal from 'react-modal';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
 import moment from 'moment';
-
+import { modalStyle } from '../../styles.js';
 const { Input, RadioGroup } = FRC;
 
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)'
-  }
-};
 
 // class MyForm extends Component {
 //   constructor(props) {
@@ -89,8 +79,8 @@ export default class CreateProgram extends Component {
         	{value: '2', label: 'Preschool'}
         ];
 		return(
-			<Modal contentLabel="Create Program" isOpen={ this.props.isOpen } onRequestClose={ this.props.onCloseModal} style = { customStyles }>
-				<div className="modal-dialog" role="document">
+			<Modal contentLabel="Create Program" isOpen={ this.props.isOpen } onRequestClose={ this.props.onCloseModal} style = { modalStyle }>
+				<div className="" role="document">
             		<div className="modal-content">
                 		<div className="modal-header">
                     		<button type="button" className="close" onClick={this.props.onCloseModal} aria-label="Close"><span aria-hidden="true">&times;</span></button>

@@ -4,18 +4,8 @@ import FRC from 'formsy-react-components';
 import Formsy from 'formsy-react';
 
 const { Checkbox, Input, RadioGroup } = FRC;
+import { modalStyle as customStyles } from '../../styles.js';
 
-
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)'
-  }
-};
 
 export default class EditAssessment extends Component {
   constructor(props) {
@@ -87,7 +77,7 @@ enableSubmitButton() {
       <Modal contentLabel="Edit Assessment" isOpen={ this.props.isOpen } onRequestClose={ this.props.onCloseModal} style={customStyles}>
         {/* Title of modal window */}
        
-        <div className="modal-dialog" role="document">
+        <div className="" role="document">
             <div className="modal-content">
                 <div className="modal-header">
                     <button type="button" className="close" onClick={this.props.onCloseModal} aria-label="Close"><span aria-hidden="true">&times;</span></button>

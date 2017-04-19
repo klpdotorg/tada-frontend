@@ -1,16 +1,7 @@
 import React, { Component } from 'react';
 import Modal from 'react-modal'
+import { modalStyle as customStyles } from '../../styles.js';
 
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)'
-  }
-};
 
 export default class Confirm extends Component {
   constructor(props) {

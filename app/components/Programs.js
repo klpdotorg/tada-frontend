@@ -243,9 +243,9 @@ export default class Programs extends React.Component {
 		$('#deleteProgramModal').modal('hide');
 		var deleteId = this.state.selectedProgram;
 		this.props.dispatch(actions.deleteProgram(deleteId)).then(response =>{
-
+			console.log("Selected index is, ", this.selProgram.selectedIndex);
 			this.setState({
-				selectedProgram: this.selProgram.selectedIndex + 1
+				selectedProgram: this.selProgram.value
 			});
 			this.selProgram.remove(deleteId);
 		}).catch(error => {
@@ -377,7 +377,7 @@ export default class Programs extends React.Component {
 		var startDate;
 		var endDate;
 		var instType;
-		
+		console.log("Selected program is, ", this.state.selectedProgram);
 		programs = this.props.programsById;
 		assessments = this.props.assessmentsById;
 
@@ -440,6 +440,7 @@ export default class Programs extends React.Component {
 				instType = "Pre-School"
 
 		}
+		var disabledstate = Object.keys(assessments).length > 0;
 		return (
 			<div>
 				<div className="row center-block">
@@ -478,8 +479,8 @@ export default class Programs extends React.Component {
 
 						<div className="col-md-4 pull-right">
 							<button type="button" className="col-sm-6 btn btn-info navbar-btn brand-blue-bg all-padded-btn" onClick={this.handleShowEditDialog}><span className="fa fa-pencil-square-o"></span>Edit</button>
-							<button type="button" className="col-sm-6 btn btn-info navbar-btn brand-blue-bg all-padded-btn" onClick={this.openConfirmModal.bind(this)} disabled={assessments.length > 0}>Deactivate</button>
-							<button type="button" className="col-sm-6 btn btn-info navbar-btn brand-blue-bg all-padded-btn" data-toggle="modal" data-target="#deleteProgramModal" disabled={assessments.length > 0}><span className="fa fa-trash-o"></span>Delete</button>
+							<button type="button" className="col-sm-6 btn btn-info navbar-btn brand-blue-bg all-padded-btn" onClick={this.openConfirmModal.bind(this)} disabled={disabledstate}>Deactivate</button>
+							<button type="button" className="col-sm-6 btn btn-info navbar-btn brand-blue-bg all-padded-btn" data-toggle="modal" data-target="#deleteProgramModal" disabled={disabledstate}><span className="fa fa-trash-o"></span>Delete</button>
 
 						</div>
 

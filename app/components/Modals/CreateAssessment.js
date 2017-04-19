@@ -2,20 +2,11 @@ import React, { Component } from 'react';
 import Modal from 'react-modal';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
+import { modalStyle } from '../../styles.js';
 
 
 const { Input, RadioGroup , Checkbox} = FRC;
 
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)'
-  }
-};
 
 export default class CreateAssessment extends Component {
   constructor(props) {
@@ -54,10 +45,10 @@ export default class CreateAssessment extends Component {
     ];
     return (
 
-      <Modal contentLabel="Create Assessment" isOpen={ this.props.isOpen } onRequestClose={ this.props.onClose} style = {customStyles}>
+      <Modal contentLabel="Create Assessment" isOpen={ this.props.isOpen } onRequestClose={ this.props.onClose} style = {modalStyle}>
         {/* Title of modal window */}
        
-        <div className="modal-dialog" role="document">
+        <div className="" role="document">
             <div className="modal-content">
                 <div className="modal-header">
                     <button type="button" className="close" onClick={this.props.onCloseModal} aria-label="Close"><span aria-hidden="true">&times;</span></button>

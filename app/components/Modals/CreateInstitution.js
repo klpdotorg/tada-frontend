@@ -7,6 +7,7 @@ import {SERVER_API_BASE as serverApiBase} from 'config';
 import FRC from 'formsy-react-components';
 
 const { Input ,Textarea,Select} = FRC;
+import { modalStyle as customStyles } from '../../styles.js';
 
 export const getLanguages = () => {
     return fetch(serverApiBase + 'languages/', {
@@ -28,18 +29,6 @@ export const getLanguages = () => {
     })
   }
 
-const customStyles = {
-  content: {
-    height:'80%',
-    width:'50%',
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)'
-  }
-};
 
 export default class CreateDistrict extends Component {
   constructor(props) {
@@ -135,7 +124,7 @@ export default class CreateDistrict extends Component {
   return (
     <Modal contentLabel="Create Institution" isOpen={ this.props.isOpen } onRequestClose={ this.props.onCloseModal } style={ customStyles }>
 
-        <div className="modal-dialog" role="document" >
+        <div className="" role="document" >
           <div className="modal-content">
             <div className="modal-header">
               <button type="button" className="close" onClick={this.props.onCloseModal} aria-label="Close">
