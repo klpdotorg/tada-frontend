@@ -2,19 +2,10 @@ import React, { Component } from 'react';
 import Modal from 'react-modal';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
+import { modalStyle as customStyles } from '../../styles.js';
 
 const { Input } = FRC;
 
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-  },
-};
 
 export default class CreateDistrict extends Component {
   constructor(props) {
@@ -57,7 +48,7 @@ export default class CreateDistrict extends Component {
   render() {
     return (
       <Modal contentLabel="Create Boundary" isOpen={this.props.isOpen} onRequestClose={this.props.onCloseModal} style={customStyles}>
-        <div className="modal-dialog" role="document">
+        <div className="" role="document">
           <div className="modal-content">
             <div className="modal-header">
               <button type="button" className="close" onClick={this.props.onCloseModal} aria-label="Close">

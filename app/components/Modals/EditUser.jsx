@@ -6,16 +6,8 @@ import FRC from 'formsy-react-components';
 
 const { Input, Select } = FRC;
 
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)'
-  }
-};
+import { modalStyle as customStyles } from '../../styles.js';
+
 
 export default class EditUser extends Component {
 	constructor(props)
@@ -68,7 +60,7 @@ export default class EditUser extends Component {
         	return null;
 		return(
 			<Modal contentLabel="Create Program" isOpen={ this.props.isOpen } onRequestClose={ this.props.onCloseModal} style = { customStyles }>
-				<div className="modal-dialog" role="document">
+				<div className="" role="document">
             		<div className="modal-content">
                 		<div className="modal-header">
                     		<button type="button" className="close" onClick={this.props.onCloseModal} aria-label="Close"><span aria-hidden="true">&times;</span></button>

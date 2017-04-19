@@ -4,18 +4,8 @@ import {clone, groupBy} from 'lodash'
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
 const { Input ,Textarea,Select} = FRC;
-const customStyles = {
-  content: {
-    height:'80%',
-    width:'50%',
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)'
-  }
-};
+import { modalStyle as customStyles } from '../../styles.js';
+
 
 export default class ConfirmDialog extends Component {
   constructor(props) {

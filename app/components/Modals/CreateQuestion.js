@@ -2,22 +2,12 @@ import React, { Component } from 'react';
 import Modal from 'react-modal';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
+import { modalStyle as customStyles } from '../../styles.js';
 
 
 const { Input, Textarea, Select, Row} = FRC;
 
-const customStyles = {
-  content: {
-    top: '60%',
-    left: '60%',
-    right: 'auto',
-    bottom: 'auto',
-    height: '400px',
-    overflow: 'scroll',
-    transform: 'translate(-60%, -60%)',
-    padding: '0px'
-  }
-};
+
 
 export default class CreateQuestion extends Component {
   constructor(props) {
@@ -75,7 +65,7 @@ export default class CreateQuestion extends Component {
       <Modal isOpen={ this.props.isOpen } onRequestClose={ this.props.onClose} style={customStyles}>
         {/* Title of modal window */}
        
-        <div className="modal-dialog" role="document">
+        <div className="" role="document">
             <div className="modal-content">
                 <div className="modal-header">
                     <button type="button" className="close" onClick={this.props.onCloseModal} aria-label="Close"><span aria-hidden="true">&times;</span></button>
