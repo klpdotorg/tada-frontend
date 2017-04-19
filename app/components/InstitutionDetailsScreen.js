@@ -146,14 +146,15 @@ export default class Institution extends React.Component {
     })
    }
 
-   saveClass(name,section,type) {
+   saveClass(name,section,group_type) {
      const institution = this.props.params.institutionId
      const options = {
       name,
       institution,
       section,
-      type
+      group_type
     }
+    // console.log()
     this.props.dispatch(saveNewClass(options))
   }
 

@@ -32,7 +32,7 @@ export default class StudentGroupScreen extends Component {
     if (params.circleId) {
       this.props.dispatch(selectPreschoolTree())
     }
-    
+
     const blockId = params.blockId || params.projectId
     const clusterId = params.clusterId || params.circleId
     dispatch(openNode(params.districtId))
@@ -71,7 +71,7 @@ export default class StudentGroupScreen extends Component {
             })
           })
         })
-      })  
+      })
     })
   }
 
@@ -212,6 +212,7 @@ class StudentGroup extends Component {
   }
 
   deleteClass() {
+    // console.log(this.state)
     this.props.dispatch(deleteStudentGroup(this.state.class));
   }
 
@@ -282,7 +283,6 @@ class StudentGroup extends Component {
         </div>
       </div>
 );
-  
+
   }
 };
-
