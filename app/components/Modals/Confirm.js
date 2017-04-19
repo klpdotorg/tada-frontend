@@ -21,13 +21,25 @@ export default class Confirm extends Component {
   render() {
     return (
       <Modal contentLabel="Confirm Delete Modal" isOpen={this.props.isOpen} onRequestClose={this.props.onCloseModal} style={customStyles}>
-        <p>Are you sure you want to delete:<b> {this.props.entity}</b>?</p>
-        <div className='button' onClick={ () => {
-                                            this.props.onAgree(this.state.value)
-                                          } }>Yes</div>
-        <div className='button' onClick={ this.props.onCloseModal }>No</div>
+        <div className="" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <button type="button" className="close" onClick={this.props.onCloseModal} aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 className="modal-title" id="resetPasswordTitle">Delete?</h4>
+            </div>
+            <div className="modal-body">
+              <p>Are you sure you want to delete: <b> {this.props.entity}</b>?</p>
+            </div>
+            <div className="modal-footer">
+              <div className='button' onClick={() => {
+                this.props.onAgree(this.state.value)
+              }}>Yes</div>
+              <div className='button' onClick={this.props.onCloseModal}>No</div>
+            </div>
+        </div>{/* End of modal-content */}
+        </div>{/*End of outer wrapping div */}
       </Modal>
-    )
+          )
   }
 
 }

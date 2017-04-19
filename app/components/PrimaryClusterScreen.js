@@ -19,6 +19,8 @@ export default class PrimaryCluster extends React.Component {
     this.toggleSchoolModal = this.toggleSchoolModal.bind(this);
     this.saveCluster = this.saveCluster.bind(this);
     this.deleteCluster = this.deleteCluster.bind(this);
+    this.hasChildren = this.hasChildren.bind(this);
+
     this.state = {
       schoolModalIsOpen: false,
       openConfirmModal: false,
@@ -203,15 +205,25 @@ export default class PrimaryCluster extends React.Component {
     return userHasPermissions(this.props.permissions,this.props.params.clusterId);
   }
 
+   hasChildren() {
+    if(this.props.boundariesByParentId[this.props.params.clusterId]) {
+      return this.props.boundariesByParentId[this.props.params.clusterId].length > 0;
+    }
+    else
+      return false;
+}
+
   Displayelement=(props)=>{
     var block = this.props.boundaries.boundaryDetails[this.props.params.blockId];
   	var district = this.props.boundaries.boundaryDetails[this.props.params.districtId];
   	var cluster = this.props.boundaries.boundaryDetails[this.props.params.clusterId];
     let canModify = this.hasPermissions();
-
+    let hasSchools = this.hasChildren();
     if(sessionStorage.getItem('isAdmin')) {
       return(
         <div>
+          {hasSchools?<p className="col-md-12 bg-info"><h5><i className="fa fa-2x fa-info-circle" aria-hidden="true"></i>You cannot <small>delete this cluster until the institutions under it are deleted</small></h5></p>:<div></div>}
+
           <div className='heading-border-left'>
             <h4 className="brand-blue col-md-10">Modify Details</h4>
             <Button onClick={this.toggleSchoolModal} title='Add School'/>
@@ -231,7 +243,7 @@ export default class PrimaryCluster extends React.Component {
          </Formsy.Form>
           <div className="col-md-8">
             <button type="submit" disabled={!this.state.canSubmit} className="btn btn-primary padded-btn" onClick={this.saveCluster}>Save</button>
-            <button type="submit" className="btn btn-primary padded-btn" onClick={this.showConfirmation}>Delete</button>
+            <button type="submit" className="btn btn-primary padded-btn" disabled={hasSchools} onClick={this.showConfirmation}>Delete</button>
             <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteCluster} onCloseModal={this.closeConfirmation} entity={cluster.name}/>
           </div>
         </div>
@@ -241,6 +253,7 @@ export default class PrimaryCluster extends React.Component {
     else if (canModify) {
       return(
         <div>
+
           <div className='pull-right'>
             <button className='btn btn-default brand-orange-bg' onClick={this.toggleSchoolModal}><i className="fa fa-university"/>Add School</button>
           </div>

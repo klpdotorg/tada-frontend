@@ -16,6 +16,8 @@ export default class PrimaryDistrict extends React.Component {
     this.onClickDeleteBlock = this.onClickDeleteBlock.bind(this);
     this.toggleClusterModal = this.toggleClusterModal.bind(this);
     this.saveCluster = this.saveCluster.bind(this);
+    this.hasChildren = this.hasChildren.bind(this);
+
     this.state = {
       value: '',
       clusterModalIsOpen: false,
@@ -98,12 +100,23 @@ export default class PrimaryDistrict extends React.Component {
     });
   }
 
+   hasChildren() {
+    if(this.props.boundariesByParentId[this.props.params.blockId]) {
+      return this.props.boundariesByParentId[this.props.params.blockId].length > 0;
+    }
+    else
+      return false;
+}
+
 Displayelement=(props)=>{
   var block = this.props.boundaries.boundaryDetails[this.props.params.blockId];
   var district = this.props.boundaries.boundaryDetails[this.props.params.districtId];
+   let hasClusters = this.hasChildren();
   if(sessionStorage.getItem('isAdmin')) {
     return(
         <div>
+        {hasClusters?<p className="col-md-12 bg-info"><h5><i className="fa fa-2x fa-info-circle" aria-hidden="true"></i>You cannot <small>delete this block until the clusters below it are deleted</small></h5></p>:<div></div>}
+
         <div className='heading-border-left'>
         <h4 className="brand-blue col-md-10">Modify Details</h4>
         <Button onClick={this.toggleClusterModal} title='Add Cluster'/>
@@ -124,7 +137,7 @@ Displayelement=(props)=>{
        </Formsy.Form>
         <div className="col-md-8">
         <button type="submit" disabled={!this.state.canSubmit} className="btn btn-primary padded-btn" onClick={this.onClickSaveBlock}>Save</button>
-        <button type="submit" className="btn btn-primary padded-btn" onClick={() => {this.showConfirmation()}}>Delete</button>
+        <button type="submit" className="btn btn-primary padded-btn" disabled={hasClusters} onClick={() => {this.showConfirmation()}}>Delete</button>
         <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.onClickDeleteBlock} onCloseModal={this.closeConfirmation} entity={block.name}/>
         </div>
         </div>
