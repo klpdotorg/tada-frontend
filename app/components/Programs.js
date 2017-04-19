@@ -478,14 +478,11 @@ export default class Programs extends React.Component {
 
 						<div className="col-md-4 pull-right">
 							<button type="button" className="col-sm-6 btn btn-info navbar-btn brand-blue-bg all-padded-btn" onClick={this.handleShowEditDialog}><span className="fa fa-pencil-square-o"></span>Edit</button>
-<<<<<<< HEAD
+
 							<button type="button" className="col-sm-6 btn btn-info navbar-btn brand-blue-bg all-padded-btn" onClick={this.openConfirmModal.bind(this)} disabled={disabledstate}>Deactivate</button>
 							<button type="button" className="col-sm-6 btn btn-info navbar-btn brand-blue-bg all-padded-btn" data-toggle="modal" data-target="#deleteProgramModal" disabled={disabledstate}><span className="fa fa-trash-o"></span>Delete</button>
-=======
-							<button type="button" className="col-sm-6 btn btn-info navbar-btn brand-blue-bg all-padded-btn" onClick={this.openConfirmModal.bind(this)} disabled={assessments.length > 0}>Deactivate</button>
-							<button type="button" className="col-sm-6 btn btn-info navbar-btn brand-blue-bg all-padded-btn" data-toggle="modal" data-target="#deleteProgramModal" disabled={assessments.length > 0}><span className="fa fa-trash-o"></span>Delete</button>
->>>>>>> 884212b761946e93d0cb6892e17bfed35e7383d0
 
+	
 						</div>
 
 					</div>
