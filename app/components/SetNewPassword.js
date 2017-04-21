@@ -44,7 +44,7 @@ class SetNewPasswordUI extends Component {
     this.props.dispatch(confirmResetPassword(this.props.params.uid, this.props.params.token,new_password));
      // const email = this.refs.email.value;
      // this.props.dispatch(resetPassword(email));
-    
+
   }
 
   render() {
@@ -54,7 +54,7 @@ class SetNewPasswordUI extends Component {
         <nav className="main__header navbar navbar-white navbar-fixed-top">
           <div id="header" className="container-fluid">
             <div className="navbar-header">
-              <a className="navbar-brand" href="#">
+              <a className="navbar-brand" href="/">
                 <img src={ klplogo } />
               </a>
             </div>
@@ -83,10 +83,10 @@ class SetNewPasswordUI extends Component {
                   <span className="input-group-addon"><label htmlFor="reenterpass">Confirm Password:</label></span>
                   <input id="reenterpass" ref="reenterpass" className="form-control" type="password" name='reenterpassword' placeholder="" />
                 </div>
-                
+
                 <div className="form-group text-center">
                   <button type="submit" className="btn btn-primary" onClick={ this.handleSubmit }>Submit</button>
-                </div>                               
+                </div>
               </form>
             </div>
           </div>
@@ -135,7 +135,7 @@ class SetNewPasswordUI extends Component {
 const mapStateToProps = state => ({
   pwdResetConfirmed: state.passwordreset.reset_confirmed,
   pwdResetRejected: state.passwordreset.reset_rejected
-  
+
 });
 //This will just connect it to the store
 const SetNewPassword = connect()(SetNewPasswordUI);

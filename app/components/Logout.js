@@ -13,7 +13,7 @@ class Logout extends React.Component {
 			<nav className="main__header navbar navbar-white navbar-fixed-top">
 				<div id="header" className="container-fluid">
 					<div className="navbar-header">
-						<a className="navbar-brand" href="#">
+						<a className="navbar-brand" href="/">
 							<img src={klplogo}/>
 						</a>
 					</div>

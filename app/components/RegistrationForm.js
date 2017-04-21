@@ -54,7 +54,7 @@ render() {
         <nav className="main__header navbar navbar-white navbar-fixed-top">
           <div id="header" className="container-fluid">
             <div className="navbar-header">
-              <a className="navbar-brand" href="#">
+              <a className="navbar-brand" href="/">
                 <img src={ klplogo } />
               </a>
             </div>
@@ -75,7 +75,7 @@ render() {
                   <span className="input-group-addon"><i className="glyphicon glyphicon-user"></i></span>
                   <input ref="email" className="form-control" type="text" name='email' placeholder="email id or username" defaultValue="example@somewhere.com" />
                 </div>
-               
+
                 <div className="form-group input-group">
                   <span className="input-group-addon"><i className="glyphicon glyphicon-user"></i></span>
                   <input ref="username" className="form-control" type="text" name='username' placeholder="Preferred user name" />
@@ -91,8 +91,8 @@ render() {
                 <div className="form-group text-center">
                   <button type="submit" className="btn btn-primary" onClick={ this.handleSubmit }>Register</button>
                 </div>
-                
-                
+
+
                 	{this.props.error && (
                 	<p> Registration Failed. Please try again.</p>)}
               </form>
