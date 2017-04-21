@@ -13,7 +13,7 @@ import { checkUserPassword, changePassword } from '../actions/';
 import Notifications from 'react-notification-system-redux';
 import { baseNotification } from '../actions/';
 class HeaderBar extends Component {
-  
+
   constructor(props) {
     super(props);
     this.handleChangeUserName = this.handleChangeUserName.bind(this);
@@ -25,7 +25,7 @@ class HeaderBar extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    
+
   }
 
   openChangeUser() {
@@ -119,13 +119,13 @@ class HeaderBar extends Component {
       <nav className="main__header navbar navbar-white navbar-fixed-top">
         <div id="header" className="container-fluid">
           <div className="navbar-header">
-            <a className="navbar-brand" href="#">
+            <a className="navbar-brand" href="/">
               <img src={ klplogo } />
             </a>
           </div>
           <div id="navbar" className="navbar-collapse collapse">
             <p className="app-name navbar-text pull-left">Data Entry Operations 2015-2016</p>
-            
+
             <div className="btn-group navbar-text pull-right">
               <button type="button" className="btn btn-primary padded-btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span className="glyphicon glyphicon-user"></span><span className="caret"></span></button>
               <ul className="dropdown-menu">
@@ -138,7 +138,7 @@ class HeaderBar extends Component {
               <Link to="/logout" onClick={ this.props.handleLogout } className="btn btn-primary padded-btn"><span className="glyphicon glyphicon-off"></span></Link>
 
             </div>
-            
+
             <p className="login-msg navbar-text pull-right">Hello there <span className="fa fa-smile-o"></span>
               { this.props.username }!
             </p>
@@ -148,7 +148,7 @@ class HeaderBar extends Component {
        <ChangePassword isOpen={ this.state.changePasswordOpen } onCloseModal={ this.closeChangePwd.bind(this)} handleSubmit={this.changePwd.bind(this)}/>
        <ChangeUserInfo isOpen = { this.state.changeUserOpen} onCloseModal={this.closeChangeUser.bind(this)} handleSubmit={this.changeUserInfo.bind(this)}/>
 
-      
+
       </nav>
       );
   }

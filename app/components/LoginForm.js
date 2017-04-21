@@ -38,7 +38,7 @@ class Login extends Component {
         <nav className="main__header navbar navbar-white navbar-fixed-top">
           <div id="header" className="container-fluid">
             <div className="navbar-header">
-              <a className="navbar-brand" href="#">
+              <a className="navbar-brand" href="/">
                 <img src={ klplogo } />
               </a>
             </div>
@@ -71,7 +71,7 @@ class Login extends Component {
                 <div className="form-group text-center">
                   <Link to="/password/reset">Forgot Password</Link>&nbsp;|&nbsp;<a href="#">Support</a>
                 </div>
-               
+
               </form>
             </div>
           </div>
