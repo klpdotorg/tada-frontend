@@ -51,7 +51,7 @@ export default class ChangeUserInfo extends Component {
 
 	render()
 	{
-		
+
 		return(
 			<Modal contentLabel="Change Password" isOpen={ this.props.isOpen } onRequestClose={ this.props.onCloseModal} style = { customStyles }>
 				<div className="modal-dialog" role="document">
@@ -61,14 +61,14 @@ export default class ChangeUserInfo extends Component {
                     		<h4 className="modal-title" id="resetPasswordTitle">Change Password</h4>
                 		</div>
                 		<div className="modal-body">
-						<Formsy.Form onValidSubmit={this.submitForm} onValid={this.enableSubmitButton} onInvalid={this.disableSubmitButton}
+					{/*	<Formsy.Form onValidSubmit={this.submitForm} onValid={this.enableSubmitButton} onInvalid={this.disableSubmitButton}
 								disabled={this.state.disabled} ref={(ref) => this.myform = ref}>
 							<Input name="email" id="email" type="text" label="E-mail"  validations="isEmail, minLength:1"/>
 							<Input name="firstName" id="firstName" type="text" label="First Name" validations="isAlpha"/>
 							<Input name="lastName" id="lastName" type="text" label="Last Name"  validations="isAlpha"/>
 							<Input name="phone" id="phone" type="text" label="Mobile" validations="isNumeric"/>
 
-						</Formsy.Form>
+						</Formsy.Form>*/}
 						</div>
                		  <div className="modal-footer">
                  		 <button type="button" className="btn btn-default" onClick={this.props.onCloseModal}>Cancel</button>

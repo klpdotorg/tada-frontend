@@ -16,23 +16,10 @@ export default class Students extends React.Component{
     console.log("deleteStudent called");
   }
   render() {
-    // console.log(faker)
-    // return (
-    //   <ReactDataGrid
-    //     ref={ node => this.grid = node }
-    //     enableCellSelect={true}
-    //     columns={this.getColumns()}
-    //     rowGetter={this.getRowAt}
-    //     rowsCount={this.getSize()}
-    //     onGridRowsUpdated={this.handleGridRowsUpdated}
-    //     enableRowSelect={true}
-    //     rowHeight={50}
-    //     minHeight={600}
-    //     rowScrollTimeout={200} />);
 
     return (
         <div className="students-grid">
-          <div className="row grid-header">
+          <div className="row " style={{paddingBottom:"15px"}}>
             <div className="col-md-1"><span>UID</span></div>
             <div className="col-md-2"><span>Name</span></div>
             <div className="col-md-1"><span>1</span></div>
@@ -67,49 +54,58 @@ export default class Students extends React.Component{
             <div className="col-md-1"><span>30</span></div>
             <div className="col-md-1"><span>Actions</span></div>
           </div>
-          <div className="row">
-            <div className="col-md-1"><span>ID_1</span></div>
-            <div className="col-md-2"><span>Rohit</span></div>
 
-            <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
-            <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
-            <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
-            <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
-            <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
-            <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
-            <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
-            <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
-            <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
-            <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
-            <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
-            <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
-            <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
-            <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
-            <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
-            <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
-            <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
-            <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
-            <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
-            <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
-            <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
-            <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
-            <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
-            <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
-            <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
-            <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
-            <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
-            <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
-            <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
-            <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
-            <div className="col-md-1">
-              <span onClick={this.deleteStudent} className="glyphicon glyphicon-trash">Delete</span>
-              <span className="glyphicon glyphicon-pencil" onClick={() => {console.log("Edit Button Clicked"); }}>Edit</span>
-            </div>
-          </div>
+          <InputRow/>
       </div>
     )
   }
 }
+
+class InputRow extends React.Component{
+  render() {
+    return (
+      <div className="row">
+        <div className="col-md-1"><span>ID_1</span></div>
+        <div className="col-md-2"><span>Rohit</span></div>
+        <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
+        <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
+        <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
+        <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
+        <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
+        <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
+        <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
+        <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
+        <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
+        <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
+        <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
+        <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
+        <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
+        <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
+        <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
+        <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
+        <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
+        <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
+        <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
+        <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
+        <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
+        <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
+        <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
+        <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
+        <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
+        <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
+        <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
+        <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
+        <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
+        <div className="col-md-1"><input type="text" value='1' className='form-control' readOnly/></div>
+        <div className="col-md-1">
+          <span onClick={this.deleteStudent} className="glyphicon glyphicon-trash">Delete</span>
+          <span className="glyphicon glyphicon-pencil" onClick={() => {console.log("Edit Button Clicked"); }}>Edit</span>
+        </div>
+      </div>
+    )
+  }
+}
+
 // });
 
 // export default Example;
