@@ -3,6 +3,7 @@ import { checkStatus, mapStudentsAPI } from './utils';
 import { fetchEntitiesFromServer, removeBoundary, responseReceivedFromServer, studentsFetched } from './actions';
 import { push } from 'react-router-redux';
 import store from '../store';
+import { computeRouterPathForEntity } from '../reducers/utils';
 
 
 function dispatchToggleModal(modalType) {
@@ -48,10 +49,13 @@ const newInstitutionFetch = (options) => {
   });
 };
 
-export const saveNewInstitution = options => dispatch => {
+export const saveNewInstitution = options => (dispatch, getState) => {
   return newInstitutionFetch(options).then(checkStatus).then(response => {
     dispatch(responseReceivedFromServer({results: [response]}))
     dispatchToggleModal('createInstitution');
+    dispatch(openNode(response.id));
+    var boundary = computeRouterPathForEntity(response, getState().boundaries.boundaryDetails);
+    dispatch(push(boundary.path));
   });
 };
 
@@ -68,7 +72,7 @@ const institutionFetch = (options) => {
   });
 };
 
-export const saveInstitution = options => dispatch => {
+export const saveInstitution = options => (dispatch, getState) => {
   return institutionFetch(options).then(checkStatus).then(response => {
     dispatch(responseReceivedFromServer({results: [response]}))
   });
@@ -100,10 +104,13 @@ const classFetch = (options) => {
   });
 };
 
-export const saveNewClass = options => dispatch => {
+export const saveNewClass = options => (dispatch, getState) => {
   return classNewFetch(options).then(checkStatus).then(response => {
     dispatch(responseReceivedFromServer({results: [response]}))
     dispatchToggleModal('createClass');
+    dispatch(openNode(response.id));
+    var boundary = computeRouterPathForEntity(response, getState().boundaries.boundaryDetails);
+    dispatch(push(boundary.path));
   });
 };
 
