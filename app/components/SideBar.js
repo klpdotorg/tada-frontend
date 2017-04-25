@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import SchoolsNavTree from './NavTree';
 import _ from 'lodash';
-var classNames = require('classnames');
+import classNames from 'classnames';
 import $ from 'jquery';
 import { connect } from 'react-redux';
-import { fetchEntitiesFromServer, toggleNode} from '../actions/';
+import { fetchEntitiesFromServer, toggleNode } from '../actions/';
 import PermissionsNavTree from './PermissionsNavTree';
+import ProgramNavTree from './ProgramNavTree';
 import * as Selectors from '../selectors/';
 
 class SideBar extends Component {
@@ -45,11 +46,15 @@ class SideBar extends Component {
       let {filteredBoundaryDetails, filteredBoundaryHierarchy } = this.props;
       DisplayElement = <PermissionsNavTree dispatch = {this.props.dispatch} onBoundaryClick={this.onBoundaryClick.bind(this)} boundaryDetails={filteredBoundaryDetails} boundariesByParentId={filteredBoundaryHierarchy}/>;
     }
+    else if (location.pathname.includes('FilterByProgram')) {
+      let {filteredBoundaryDetails, filteredBoundaryHierarchy } = this.props;
+      DisplayElement = <ProgramNavTree dispatch = {this.props.dispatch} onBoundaryClick={this.onBoundaryClick.bind(this)} programsById={this.props.programsById} boundaryDetails={filteredBoundaryDetails} boundariesByParentId={filteredBoundaryHierarchy}/>
+    }
     else {
       DisplayElement =  <SchoolsNavTree onBoundaryClick={this.onBoundaryClick.bind(this)} boundaryDetails={boundaryDetails} boundariesByParentId={boundariesByParentId} />;
 
     }
-    
+
     return (
       <div id="sidebar-wrapper">
         <div id="treetoggler">
@@ -68,24 +73,23 @@ class SideBar extends Component {
 SideBar.propTypes = {
   dispatch: React.PropTypes.func,
   boundariesByParentId: React.PropTypes.object,
-  boundaryDetails: React.PropTypes.object, 
+  boundaryDetails: React.PropTypes.object,
   primarySelected: React.PropTypes.bool,
   location: React.PropTypes.object,
   filteredBoundaryDetails: React.PropTypes.object,
   filteredBoundaryHierarchy: React.PropTypes.object,
 };
 
-const mapStateToProps = (state, ownProps) => {
-  return ({
-    boundaryDetails: state.boundaries.boundaryDetails,
-    boundariesByParentId: state.boundaries.boundariesByParentId,
-    routerState: state.routing,
-    location: ownProps.location,
-    primarySelected: state.schoolSelection.primarySchool,
-    filteredBoundaryDetails: Selectors.getBoundaryDetailsOnly(state),
-    filteredBoundaryHierarchy: Selectors.getBoundariesOnly(state),
-  }
-); };
+const mapStateToProps = (state, ownProps) => ({
+  boundaryDetails: state.boundaries.boundaryDetails,
+  boundariesByParentId: state.boundaries.boundariesByParentId,
+  programsById: Selectors.getProgramsBySchoolType(state),
+  routerState: state.routing,
+  location: ownProps.location,
+  primarySelected: state.schoolSelection.primarySchool,
+  filteredBoundaryDetails: Selectors.getBoundaryDetailsOnly(state),
+  filteredBoundaryHierarchy: Selectors.getBoundariesOnly(state),
+})
 
 const SideBarContainer = connect(mapStateToProps)(SideBar);
 export default SideBarContainer;
