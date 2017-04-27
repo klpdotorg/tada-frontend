@@ -389,7 +389,7 @@ export default class Programs extends React.Component {
 		if(sessionStorage.getItem('isAdmin')==null){
 			//this.props.redirectTo('/');
 			return(<div>
-				You dont have permissions to access this page
+				You dont have permissions to access this page<br/>
 				  <Link to="/" className="btn btn-primary padded-btn">GO TO MAIN PAGE</Link>
 			</div>);
 		}
