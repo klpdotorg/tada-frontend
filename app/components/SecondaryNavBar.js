@@ -35,6 +35,7 @@ export default class SecondaryNavBar extends React.Component {
     this.props.redirectTo('/permissions');
   }
 
+ 
   render() {
     var Displayelement;
     if(sessionStorage.getItem('isAdmin')) {
@@ -45,7 +46,9 @@ export default class SecondaryNavBar extends React.Component {
           <button type="button" className="btn btn-info navbar-btn all-padded-btn" data-toggle="tooltip" data-placement="bottom" title="Manage Permissions" onClick={this.managePermissions.bind(this)}><span className="fa fa-key"></span></button>
           <button type="button" className="btn btn-info navbar-btn all-padded-btn" data-toggle="tooltip" data-placement="bottom" title="Manage Users" onClick={this.manageUsers.bind(this)}><span className="fa fa-users"></span></button>
           <button type="button" className="btn btn-info navbar-btn all-padded-btn" data-toggle="tooltip" data-placement="bottom" title="Map Assessments"><span className="fa fa-database"></span></button>
-          <button type="button" className="btn btn-info navbar-btn all-padded-btn" data-toggle="tooltip" data-placement="bottom" title="View DEO Report"><span className="fa fa-bar-chart"></span></button>
+          <button type="button" className="btn btn-info navbar-btn all-padded-btn" data-toggle="tooltip" data-placement="bottom" title="View DEO Report" onClick={()=> {
+                this.props.redirectTo('/reports');
+}}><span className="fa fa-bar-chart"></span></button>
           <button type="button" className="btn btn-info navbar-btn all-padded-btn" data-toggle="tooltip" data-placement="bottom" title="Revert Entity State"><span className="fa fa-undo"></span></button>
           <button type="button" className="btn btn-primary navbar-btn all-padded-btn" onClick={this.manageProgramFilter}><span className="glyphicon glyphicon-filter"></span> Filter by Programs</button>
         </div>);

@@ -22,6 +22,7 @@ import SetNewPassword from './components/SetNewPassword';
 import Users from './containers/UsersContainer';
 import PermissionsContainer from './containers/PermissionsContainer';
 import Questions from './components/AssessmentQuestions';
+import Reports from './components/Reports';
 import tadastore from './store';
 import { syncHistoryWithStore } from 'react-router-redux';
 
@@ -41,7 +42,7 @@ export const routes = (
                 <Route path="programs" component={Programs} />
                 <Route path="FilterByProgram" component={FilterByProgram} />
                 FilterByProgram
-
+                <Route path="reports" component={Reports}/>
                 <Route path="programs/:programId" component={Programs} />
                 <Route path="programs/:programId/assessments/:assessmentId/questions" component={Questions} />
                 <Route path="users" component={Users} />
