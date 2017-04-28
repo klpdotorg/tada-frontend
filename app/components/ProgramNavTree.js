@@ -1,112 +1,225 @@
-import React, { Component } from 'react';
-import TreeView from 'react-treeview';
-import { Link } from 'react-router';
-import {alphabeticalOrder} from '../utils'
-import _ from 'lodash';
-import { fetchBoundaryDetails, boundaryClicked, fetchAllPrograms, getProgramDetails } from '../actions/';
-import { getEntityType, getBoundaryType, CLUSTER } from '../reducers/utils';
+import React, { Component } from "react";
+import TreeView from "react-treeview";
+import { Link } from "react-router";
+import { alphabeticalOrder } from "../utils";
+import _ from "lodash";
+import {
+  fetchBoundaryDetails,
+  boundaryClicked,
+  fetchAllPrograms,
+  getProgramDetails,
+  fetchEntitiesFromServer
+} from "../actions/";
+import { getEntityType, getBoundaryType, CLUSTER } from "../reducers/utils";
 
 export default class PermissionsNavTree extends React.Component {
-
-  constructor(props)
-  {
+  constructor(props) {
     super(props);
+    const boundariesByParentId = {
+      ...props.boundariesByParentId,
+      ...props.boundaries.assessments
+    };
+
+    const boundaryDetails = {
+      ...props.boundaryDetails,
+      ...props.boundaries.assessmentsDetails
+    };
     this.state = {
       selectedEntities: [],
+      boundariesByParentId,
+      boundaryDetails,
+      programsById: {},
+      programs: [],
       isLoading: true
-    }
+    };
+
     this.onBoundarySelection = this.onBoundarySelection.bind(this);
     this.handleProgramSelection = this.handleProgramSelection.bind(this);
   }
 
   componentDidMount() {
-    this.props.dispatch(fetchAllPrograms()).then(() => {
-      this.setState({
-        isLoading:false
+    this.props
+      .dispatch(fetchAllPrograms())
+      .then(() => {
+        const programs = Object.values(this.props.programsById).map(
+          program => program.id
+        );
+
+        this.setState({
+          isLoading: false,
+          treeLoading: true,
+          programsById: this.props.programsById,
+          programs,
+          selectedProgram: programs[0]
+        });
       })
-    })
-
-    console.log(this.props, 'props')
+      .then(() => {
+        return this.props.dispatch(
+          getProgramDetails(this.state.selectedProgram)
+        );
+      })
+      .then(() => {
+        this.setState({
+          treeLoading: false
+        });
+      });
   }
 
-  handleProgramSelection() {
-    const id = this.selProgram.value
-    this.props.dispatch(getProgramDetails(id))
-  }
+  componentWillReceiveProps(nextProps) {
+    const boundariesByParentId = {
+      ...nextProps.boundariesByParentId,
+      ...nextProps.boundaries.assessments,
+      ...this.state.boundariesByParentId
+    };
 
-  onBoundarySelection(boundary)
-  {
+    const boundaryDetails = {
+      ...nextProps.boundaryDetails,
+      ...nextProps.boundaries.assessmentsDetails,
+      ...this.state.boundaryDetails
+    };
 
-    this.props.dispatch(fetchBoundaryDetails(boundary.id)).then(() => {
-      //If it is a cluster, you don't want to wait till they expand the node to fetch children.
-      if(getBoundaryType(boundary) == CLUSTER) {
-        this.props.onBoundaryClick(boundary);
-      }
-      this.props.dispatch(boundaryClicked(boundary));
+    this.setState({
+      boundariesByParentId,
+      boundaryDetails
     });
   }
 
+  toggleNode(boundary) {
+    if (boundary.depth !== 4 && boundary.depth !== 3) {
+      this.props.dispatch(fetchEntitiesFromServer(boundary.id));
+    }
+    boundary.collapsed = !boundary.collapsed;
+    let { boundaryDetails } = this.state;
+    boundaryDetails[boundary.id] = boundary;
+    this.setState({
+      boundaryDetails
+    });
+  }
 
+  handleProgramSelection(e) {
+    const id = e.target.value;
+    this.setState({
+      selectedProgram: id,
+      treeLoading: true
+    });
+    this.props.dispatch(getProgramDetails(id)).then(() => {
+      this.setState({
+        treeLoading: false
+      });
+    });
+  }
 
-  renderSubTree(node, boundaryHierarchy, visitedBoundaries, depth) {
-    const boundaryDetails = this.props.boundaryDetails;
-      //if boundary details not defined for node, most likely we don't want it rendered in this filtered tree..
-       if(!boundaryDetails[node])
-       {
-          console.log("Boundary details undefined for node", node);
-          return null;
-       }
-    if (boundaryDetails[node].depth == depth && depth < 5) {
-      if (node && $.inArray(node, visitedBoundaries) < 0) {
+  onBoundarySelection(boundary) {}
+
+  renderSubTree(
+    node,
+    boundaryHierarchy,
+    visitedBoundaries,
+    depth,
+    boundaryDetails
+  ) {
+    // const boundaryDetails = this.props.boundaryDetails;
+    //if boundary details not defined for node, most likely we don't want it rendered in this filtered tree..
+    if (!boundaryDetails[node]) {
+      console.log("Boundary details undefined for node", node);
+      return null;
+    }
+    if (boundaryDetails[node].depth == depth && depth < 6) {
+      if (node) {
         var children = boundaryHierarchy[node];
         visitedBoundaries.push(node);
 
-        var boundary = this.props.boundaryDetails[node];
+        var boundary = boundaryDetails[node];
 
-        const label = <a onClick={ this.onBoundarySelection.bind(null,boundary)}><span className="node" onClick={ this.onBoundarySelection.bind(this)}> { _.capitalize(boundary.label) || _.capitalize(boundary.name) || _.capitalize(boundary.first_name)} </span></a>;
+        const label = (
+          <a onClick={this.onBoundarySelection.bind(null, boundary)}>
+            <span
+              className="node"
+              onClick={this.onBoundarySelection.bind(this)}
+            >
+              {" "}
+              {_.capitalize(boundary.label) ||
+                _.capitalize(boundary.name) ||
+                _.capitalize(boundary.first_name)}
+              {" "}
+            </span>
+          </a>
+        );
         return (
-
-          <TreeView key={ node } onClick={ this.props.onBoundaryClick.bind(null, boundary) } nodeLabel={ label } collapsed={ boundary.collapsed }>
-          { (() => {
-            if (children && children.length > 0) {
-              ++depth
-              return children.map((child, i) => {
-
-                return this.renderSubTree(child, boundaryHierarchy, visitedBoundaries, depth)
-              });
-            }
-          })() }
+          <TreeView
+            key={Math.random()}
+            onClick={() => this.toggleNode(boundary)}
+            nodeLabel={label}
+            collapsed={boundary.collapsed}
+          >
+            {(() => {
+              if (children && children.length > 0) {
+                ++depth;
+                return children.map((child, i) => {
+                  return this.renderSubTree(
+                    child,
+                    boundaryHierarchy,
+                    visitedBoundaries,
+                    depth,
+                    boundaryDetails
+                  );
+                });
+              }
+            })()}
           </TreeView>
-          );
+        );
       }
-      }
-
-     return null;
+    }
+    return null;
   }
 
   //boundaryDetails={this.state.boundaryDetails} boundaryParentChildMap={this.state.childrenByParentId}
   render() {
     let visitedBoundaries = [];
-    const programs = this.props.programsById;
-    const {boundaries} = this.props
-    const programsList= Object.values(programs).map((program,i) => {
-        return <option key={program.id} value={program.id}>{program.name}</option>;
+    const programs = this.state.programsById;
+    const { boundaries } = this.props;
+    const programsList = this.state.programs.map(id => {
+      return <option key={id} value={id}>{programs[id].name}</option>;
     });
-    const {boundariesByParentId, boundaryDetails} = this.props
+    let { boundariesByParentId, boundaryDetails } = this.state;
 
-    return (
-      this.state.isLoading ? <div>Loading...</div> :
-      <div className="brand-orange">
-      <select ref={(ref) => this.selProgram = ref} className="form-control" onChange={this.handleProgramSelection} value={this.state.selectedProgram}>
-                {programsList}
-              </select>
-      { alphabeticalOrder(boundariesByParentId, boundaryDetails).filter((node) => {
-        return _.includes(boundaries, node)
-      }).map(function(element, i) {
-        return this.renderSubTree(element, boundariesByParentId, visitedBoundaries, 0)
-      }.bind(this)) }
-      </div>
+    // boundariesByParentId = {
+    //   ...boundariesByParentId,
+    //   ...boundaries.assessments
+    // }
 
-      );
+    // boundaryDetails = {
+    //   ...boundaryDetails,
+    //   ...boundaries.assessmentsDetails
+    // }
+
+    return this.state.isLoading
+      ? <div>Loading...</div>
+      : <div className="brand-orange">
+          <select
+            className="form-control"
+            onChange={this.handleProgramSelection}
+            value={this.state.selectedProgram}
+          >
+            {programsList}
+          </select>
+          {this.state.treeLoading
+            ? <div>Loading...</div>
+            : alphabeticalOrder(boundariesByParentId, boundaryDetails)
+                .filter(node => {
+                  return _.includes(boundaries.boundaries, node);
+                })
+                .map(
+                  function(element, i) {
+                    return this.renderSubTree(
+                      element,
+                      boundariesByParentId,
+                      visitedBoundaries,
+                      0,
+                      boundaryDetails
+                    );
+                  }.bind(this)
+                )}
+        </div>;
   }
 }
