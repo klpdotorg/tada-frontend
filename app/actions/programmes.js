@@ -46,8 +46,8 @@ export const programDetailsAPI = id => get(`${serverApiBase}programmes/${id}/?de
 
 
 export const getProgramDetails = (id) => (dispatch) => {
-  programDetailsAPI(id).then((details) => {
-    dispatch(programDetails(details))
+  return programDetailsAPI(id).then((details) => {
+    return dispatch(programDetails(details))
   })
 }
 

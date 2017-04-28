@@ -48,7 +48,7 @@ class SideBar extends Component {
     }
     else if (location.pathname.includes('FilterByProgram')) {
       let {filteredBoundaryDetails, filteredBoundaryHierarchy } = this.props;
-      DisplayElement = <ProgramNavTree dispatch = {this.props.dispatch} onBoundaryClick={this.onBoundaryClick.bind(this)} programsById={this.props.programsById} boundaries={this.props.programBoundaries} boundaryDetails={filteredBoundaryDetails} boundariesByParentId={filteredBoundaryHierarchy}/>
+      DisplayElement = <ProgramNavTree dispatch = {this.props.dispatch} onBoundaryClick={this.onBoundaryClick.bind(this)} programsById={this.props.programsById} boundaries={this.props.programBoundaries} boundaryDetails={this.props.boundaryDetails} boundariesByParentId={this.props.boundariesByParentId}/>
     }
     else {
       DisplayElement =  <SchoolsNavTree onBoundaryClick={this.onBoundaryClick.bind(this)} boundaryDetails={boundaryDetails} boundariesByParentId={boundariesByParentId} />;

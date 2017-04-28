@@ -13,6 +13,8 @@ export default class PermissionsNavTree extends React.Component {
     super(props);
     this.state = {
       selectedEntities: [],
+      programsById: {},
+      programs: [],
       isLoading: true
     }
     this.onBoundarySelection = this.onBoundarySelection.bind(this);
@@ -21,22 +23,43 @@ export default class PermissionsNavTree extends React.Component {
 
   componentDidMount() {
     this.props.dispatch(fetchAllPrograms()).then(() => {
+
+      const programs = Object.values(this.props.programsById).map(program => program.id)
+
       this.setState({
-        isLoading:false
+        isLoading:false,
+        treeLoading: true,
+        programsById: this.props.programsById,
+        programs,
+        selectedProgram: programs[0]
+      })
+
+    }).then(() => {
+      return this.props.dispatch(getProgramDetails(this.state.selectedProgram))
+    }).then(() => {
+      this.setState({
+        treeLoading: false
       })
     })
 
-    console.log(this.props, 'props')
   }
 
-  handleProgramSelection() {
-    const id = this.selProgram.value
-    this.props.dispatch(getProgramDetails(id))
+
+  handleProgramSelection(e) {
+    const id = e.target.value
+    this.setState({
+      selectedProgram: id,
+      treeLoading: true
+    })
+    this.props.dispatch(getProgramDetails(id)).then(() => {
+      this.setState({
+        treeLoading: false
+      })
+    })
   }
 
   onBoundarySelection(boundary)
   {
-
     this.props.dispatch(fetchBoundaryDetails(boundary.id)).then(() => {
       //If it is a cluster, you don't want to wait till they expand the node to fetch children.
       if(getBoundaryType(boundary) == CLUSTER) {
@@ -87,20 +110,20 @@ export default class PermissionsNavTree extends React.Component {
   //boundaryDetails={this.state.boundaryDetails} boundaryParentChildMap={this.state.childrenByParentId}
   render() {
     let visitedBoundaries = [];
-    const programs = this.props.programsById;
+    const programs = this.state.programsById;
     const {boundaries} = this.props
-    const programsList= Object.values(programs).map((program,i) => {
-        return <option key={program.id} value={program.id}>{program.name}</option>;
+    const programsList= this.state.programs.map((id) => {
+        return <option key={id} value={id}>{programs[id].name}</option>;
     });
     const {boundariesByParentId, boundaryDetails} = this.props
 
     return (
       this.state.isLoading ? <div>Loading...</div> :
       <div className="brand-orange">
-      <select ref={(ref) => this.selProgram = ref} className="form-control" onChange={this.handleProgramSelection} value={this.state.selectedProgram}>
+      <select className="form-control" onChange={this.handleProgramSelection} value={this.state.selectedProgram}>
                 {programsList}
               </select>
-      { alphabeticalOrder(boundariesByParentId, boundaryDetails).filter((node) => {
+      {this.state.treeLoading ? <div>Loading...</div> : alphabeticalOrder(boundariesByParentId, boundaryDetails).filter((node) => {
         return _.includes(boundaries, node)
       }).map(function(element, i) {
         return this.renderSubTree(element, boundariesByParentId, visitedBoundaries, 0)

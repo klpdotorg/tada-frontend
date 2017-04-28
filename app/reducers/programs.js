@@ -45,7 +45,7 @@ export function programs(state = {
 const serializeProgramBoundaries = (program) => {
   let boundaries = {}
 
-  function traverse(o ) {
+  function traverse(o) {
     for (var i in o) {
         if (!!o[i] && typeof(o[i])=="object") {
             boundaries[i] = o[i]
