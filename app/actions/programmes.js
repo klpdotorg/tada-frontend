@@ -3,9 +3,16 @@ import { push } from 'react-router-redux';
 import {SERVER_API_BASE as serverApiBase,
  SERVER_AUTH_BASE as authApiBase} from 'config';
 
+import {get} from './utils'
+
+const programDetails = (program) => ({
+  type: 'PROGRAM_DETAILS',
+  program
+})
+
 export function fetchAllPrograms()
 {
-  return function(dispatch, getState) 
+  return function(dispatch, getState)
   {
 
     var url = serverApiBase + "programmes/" + "?active=2";
@@ -32,6 +39,16 @@ function handleProgramsResponse(resp) {
     type: 'PROGRAMS_RESPONSE_RECEIVED',
     data: resp.results
   }
+}
+
+
+export const programDetailsAPI = id => get(`${serverApiBase}programmes/${id}/?details=True`)
+
+
+export const getProgramDetails = (id) => (dispatch) => {
+  programDetailsAPI(id).then((details) => {
+    dispatch(programDetails(details))
+  })
 }
 
 function checkStatus(response) {
@@ -103,7 +120,7 @@ function editProgramSuccessful(edited)
 export function deactivateProgram(id)
 {
   return function(dispatch, getState){
-    var url = serverApiBase + "programmes/" + id + "/";  
+    var url = serverApiBase + "programmes/" + id + "/";
     return fetch(url, {
       method: 'PATCH',
       headers: {
@@ -124,7 +141,7 @@ export function deactivateProgram(id)
 export function editProgram(id, name, description, startDate, endDate, isActive, instCat)
 {
    return function(dispatch, getState){
-    var url = serverApiBase + "programmes/" + id + "/";  
+    var url = serverApiBase + "programmes/" + id + "/";
     return fetch(url, {
       method: 'PUT',
       headers: {

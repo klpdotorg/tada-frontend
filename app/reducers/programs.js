@@ -1,5 +1,7 @@
+import _ from 'lodash'
+
 export function programs(state = {
-  programsById: []
+  programsById: [], boundaries: []
 }, action){
 
   switch(action.type) {
@@ -13,7 +15,7 @@ export function programs(state = {
       var copy = Object.assign({}, state.programsById);
       copy[action.program.id] = action.program;
       return Object.assign({}, {programsById: copy});
-    case 'PROGRAM_DELETED':     
+    case 'PROGRAM_DELETED':
       var copyState = _.omit(state.programsById,action.programId);
       return Object.assign({}, {programsById: copyState});
     case 'PROGRAM_EDITED':
@@ -25,12 +27,38 @@ export function programs(state = {
       copy[action.program.id].active=action.program.active;
       copy[action.program.id].programme_institution_category=action.program.programme_institution_category;
       return Object.assign({}, {programsById: copy});
+    case 'PROGRAM_DETAILS':
+      const boundaries = serializeProgramBoundaries(action.program)
+      return {
+        ...state,
+        boundaries
+      }
     default:
     return state;
 
   }
 }
 
+
+
+
+const serializeProgramBoundaries = (program) => {
+  let boundaries = {}
+
+  function traverse(o ) {
+    for (var i in o) {
+        if (!!o[i] && typeof(o[i])=="object") {
+            boundaries[i] = o[i]
+            traverse(o[i] );
+        }
+    }
+  }
+
+  traverse(program)
+
+  boundaries = Object.keys(boundaries).map(a => parseInt(a)).filter(Boolean)
+  return boundaries
+}
 
 function processProgramDetails(programsData, programsById)
 {
@@ -41,7 +69,7 @@ function processProgramDetails(programsData, programsById)
     programsData.map(program => {
       newProgramsById[program.id] = program;
     })
-  } 
+  }
   //Merge existing program details with new info from server. This will eliminate dupes.
   var mergedProgramDetails = {}
   Object.assign(mergedProgramDetails, programsById, newProgramsById);
@@ -49,6 +77,5 @@ function processProgramDetails(programsData, programsById)
     programsById: mergedProgramDetails
   };
 }
-
 
 

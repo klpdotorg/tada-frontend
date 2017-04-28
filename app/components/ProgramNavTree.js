@@ -3,7 +3,7 @@ import TreeView from 'react-treeview';
 import { Link } from 'react-router';
 import {alphabeticalOrder} from '../utils'
 import _ from 'lodash';
-import { fetchBoundaryDetails, boundaryClicked, fetchAllPrograms } from '../actions/';
+import { fetchBoundaryDetails, boundaryClicked, fetchAllPrograms, getProgramDetails } from '../actions/';
 import { getEntityType, getBoundaryType, CLUSTER } from '../reducers/utils';
 
 export default class PermissionsNavTree extends React.Component {
@@ -16,6 +16,7 @@ export default class PermissionsNavTree extends React.Component {
       isLoading: true
     }
     this.onBoundarySelection = this.onBoundarySelection.bind(this);
+    this.handleProgramSelection = this.handleProgramSelection.bind(this);
   }
 
   componentDidMount() {
@@ -24,6 +25,13 @@ export default class PermissionsNavTree extends React.Component {
         isLoading:false
       })
     })
+
+    console.log(this.props, 'props')
+  }
+
+  handleProgramSelection() {
+    const id = this.selProgram.value
+    this.props.dispatch(getProgramDetails(id))
   }
 
   onBoundarySelection(boundary)
@@ -37,6 +45,8 @@ export default class PermissionsNavTree extends React.Component {
       this.props.dispatch(boundaryClicked(boundary));
     });
   }
+
+
 
   renderSubTree(node, boundaryHierarchy, visitedBoundaries, depth) {
     const boundaryDetails = this.props.boundaryDetails;
@@ -78,6 +88,7 @@ export default class PermissionsNavTree extends React.Component {
   render() {
     let visitedBoundaries = [];
     const programs = this.props.programsById;
+    const {boundaries} = this.props
     const programsList= Object.values(programs).map((program,i) => {
         return <option key={program.id} value={program.id}>{program.name}</option>;
     });
@@ -89,7 +100,9 @@ export default class PermissionsNavTree extends React.Component {
       <select ref={(ref) => this.selProgram = ref} className="form-control" onChange={this.handleProgramSelection} value={this.state.selectedProgram}>
                 {programsList}
               </select>
-      { alphabeticalOrder(boundariesByParentId, boundaryDetails).map(function(element, i) {
+      { alphabeticalOrder(boundariesByParentId, boundaryDetails).filter((node) => {
+        return _.includes(boundaries, node)
+      }).map(function(element, i) {
         return this.renderSubTree(element, boundariesByParentId, visitedBoundaries, 0)
       }.bind(this)) }
       </div>
