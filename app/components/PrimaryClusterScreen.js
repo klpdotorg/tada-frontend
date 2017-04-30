@@ -147,8 +147,8 @@ export default class PrimaryCluster extends React.Component {
       pincode:school.pincode,
       cat:school.cat,
       dise_code:school.dise_code,
-
     }
+    console.log(options);
     this.props.dispatch(saveNewInstitution(options))
   }
 
