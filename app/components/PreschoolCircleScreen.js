@@ -1,6 +1,6 @@
 import React from 'react';
 import {modifyBoundary, deleteBoundary, saveNewInstitution, selectPreschoolTree, getBoundaries,openNode,fetchEntitiesFromServer} from '../actions';
-import CreateInstitution from './Modals/CreateInstitution';
+import CreateInstitution from './Modals/CreatePreSchool';
 import Button from './Button'
 import ConfirmModal from './Modals/Confirm'
 import { Link } from 'react-router'
