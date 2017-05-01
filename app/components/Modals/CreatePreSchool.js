@@ -111,11 +111,12 @@ export default class CreateDistrict extends Component {
  }
 
  render() {
-   const schoolCategory = [
-           {value: 'lower', label: 'Lower'},
-           {value: 'upper', label: 'Upper'},
-           {value: 'middle', label: 'Middle'},
+   const PreschoolCategory = [
+           {value: 'anganwadi', label: 'Anganwadi'},
+           {value: 'balwadi', label: 'Balwadi'},
+           {value: 'independent balwadi', label: 'Independent Balwadi'},
        ];
+
    const selectOptions = [
            {value: 'co-ed', label: 'Co-Ed'},
            {value: 'boys', label: 'Boys'},
@@ -180,8 +181,8 @@ export default class CreateDistrict extends Component {
                  <Select
                  name="institutionCat"
                  label="Category:"
-                 value = {schoolCategory[0]}
-                 options={schoolCategory}
+                 value = {PreschoolCategory[0]}
+                 options={PreschoolCategory}
                  />
                  <Select
                    multiple

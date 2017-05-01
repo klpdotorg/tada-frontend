@@ -127,6 +127,7 @@ createUser(firstname, lastname, username, email,password, role){
 	this.closeCreateUserModal();
 	this.props.dispatch(actions.createUser(firstname,lastname,username, email, password, role)).then( () => {
 		//show generic dialog that confirms user creation success.
+
 		var message = "User <b>" + username + "</b> created successfully";
 		this.setState({
 			showDialog: true,
@@ -179,7 +180,7 @@ handlePageClick(pageNum)
 	this.setState({
 		selectedPage: pageNum
 	});
-	
+
 }
 
 mapRoleToDisplayLabel(role)
@@ -224,7 +225,7 @@ render()
 	var usersByPage = this.props.usersByPage[this.state.selectedPage];
 	var userCount = this.props.userCount;
 	var pages =  this.getPageNumbers(userCount);
-	
+
 	var paginationList = pages.map((page) => {
 		return (
 			<li><a href="#" key={page} onClick={this.handlePageClick.bind(null,page)}>{page}</a></li>
@@ -254,15 +255,15 @@ render()
 				);
 	});
 }
-	
+
 	return(		<div>
 					<div className="row">
 						<div className="col-md-12">
 							<button className="btn btn-primary brand-orange-bg pull-right" onClick={this.openCreateUserModal.bind(this)}>Add User</button>
 						</div>
-						
+
 					</div>
-					<div className="row center-block"> 
+					<div className="row center-block">
 						<h4>Manage Users </h4>
 					</div>
 					<table className="table table-bordered table-striped">
@@ -274,7 +275,7 @@ render()
 							<th>Select</th>
 							<th>Edit</th>
 							<th>Reset Password</th>
-							
+
 						</tr>
 						{usersList}
 					</tbody>

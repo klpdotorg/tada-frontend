@@ -34,7 +34,7 @@ class ResetPasswordUI extends Component {
       $('#pwdResetRequestFailedModal').modal('show');
     }
   }
-  
+
   goToLoginPage()
   {
     this.props.dispatch(push('/login'));
@@ -54,7 +54,7 @@ class ResetPasswordUI extends Component {
         $('#pwdResetRequestFailedModal').modal('show');
       }
     })
-    
+
   }
 
   render() {
@@ -64,7 +64,7 @@ class ResetPasswordUI extends Component {
         <nav className="main__header navbar navbar-white navbar-fixed-top">
           <div id="header" className="container-fluid">
             <div className="navbar-header">
-              <a className="navbar-brand" href="#">
+              <a className="navbar-brand" href="/">
                 <img src={ klplogo } />
               </a>
             </div>
@@ -92,12 +92,12 @@ class ResetPasswordUI extends Component {
                   <span className="input-group-addon"><label htmlFor="email">Email:</label></span>
                   <input ref={(input) => this.email = input} className="form-control" type="text" name='email' placeholder="email id" id="email"/>
                 </div>
-                
+
                 <div className="form-group text-center">
                   <button type="submit" className="btn btn-primary" onClick={ this.handleSubmit }>Submit</button>
                 </div>
-               
-              
+
+
 
                    { this.props.resetRequestFailed && (
                   <p> Password reset request failed. Please check whether you entered a valid email ID or contact system administrator</p>
@@ -152,7 +152,7 @@ class ResetPasswordUI extends Component {
 const mapStateToProps = state => ({
   resetRequestSuccess: state.passwordreset.reset_request_successful,
   resetRequestFailed: state.passwordreset.reset_request_failed
-  
+
 });
 
 //This will just connect it to the store

@@ -59,12 +59,18 @@ export default class Programs extends React.Component {
 		this.props.dispatch(actions.fetchAllPrograms());
 	}
 
+	// componentDidMount(){
+	// 	console.log(sessionStorage.getItem('isAdmin'));
+	// 	if(sessionStorage.getItem('isAdmin')){
+	//
+	// 	}
+	// }
 	/*
 	Setting state here will NOT trigger another render
 	*/
 	componentWillReceiveProps(nextProps)
 	{
-	
+
 		const programs = nextProps.programsById;
 		var selectedProgram = this.state.selectedProgram;
 		if(this.props.primarySelected != nextProps.primarySelected) {
@@ -379,7 +385,14 @@ export default class Programs extends React.Component {
 		var instType;
 		programs = this.props.programsById;
 		assessments = this.props.assessmentsById;
-
+		// console.log(sessionStorage.getItem('isAdmin'));
+		if(sessionStorage.getItem('isAdmin')==null){
+			//this.props.redirectTo('/');
+			return(<div>
+				You dont have permissions to access this page<br/>
+				  <Link to="/" className="btn btn-primary padded-btn">GO TO MAIN PAGE</Link>
+			</div>);
+		}
 		var programsList= Object.values(programs).map((program,i) => {
 				return <option key={program.id} value={program.id}>{program.name}</option>;
 		});

@@ -130,10 +130,15 @@ export function boundaries(state = {
   }
   case 'REMOVE_BOUNDARY':
 
-  let copyBoundariesByParentId =  _.omit(state.boundariesByParentId, action.id);
+  let copyBoundariesByParentId =  _.omit(state.boundariesByParentId, parseInt(action.id));
   if (action.parentId) {
     let index = copyBoundariesByParentId[action.parentId].indexOf(parseInt(action.id));
     copyBoundariesByParentId[action.parentId].splice(index, 1)
+  } else {
+    //This is a district. Therefore remove it from the parent "1"
+    let index = copyBoundariesByParentId[1].indexOf(parseInt(action.id));
+    copyBoundariesByParentId[1].splice(index, 1);
+
   }
   var newBoundaryDetails = Object.assign({}, state.boundaryDetails);
   newBoundaryDetails = _.omit(newBoundaryDetails, parseInt(action.id));
