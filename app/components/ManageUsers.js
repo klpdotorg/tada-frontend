@@ -255,6 +255,9 @@ render()
 				);
 	});
 }
+else {
+	usersList = <tr colSpan="6">Loading Users...</tr>
+}
 
 	return(		<div>
 					<div className="row">
