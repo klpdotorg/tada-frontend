@@ -94,6 +94,7 @@ handleChange=()=>{
   })
 }
   render() {
+    console.log(this.props);
     const selectGender = [
             {value: 'male', label: 'Male'},
             {value: 'female', label: 'Female'},
