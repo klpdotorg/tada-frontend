@@ -371,7 +371,7 @@ export default class Programs extends React.Component {
 	}
 
 	render() {
-		var selectedProgram;
+		  var selectedProgram;
 		var selectedProgramName = "";
 		var programs, assessments;
 		var startDate;

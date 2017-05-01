@@ -74,7 +74,7 @@ export function loginSuccess(authtoken) {
   }
 }
 
-export function removeBoundary(id, parentId) {
+export function  removeBoundary(id, parentId) {
   return {
     type: 'REMOVE_BOUNDARY',
     id,
@@ -373,8 +373,14 @@ export function deleteBoundary(boundaryid, parentId){
       }
     }).then(response =>{
      if (response.status >= 200 && response.status < 300) {
-      dispatch(push('/'));
+      if(parentId == 1)
+        dispatch(push('/'));
+      else {
+        let parent = getState().boundaries.boundaryDetails[parentId];
+        dispatch(push(parent.path));
+      }
       dispatch(removeBoundary(boundaryid, parentId));
+
       } else {
         const error = new Error(response.statusText);
         error.response = response;

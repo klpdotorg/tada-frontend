@@ -134,7 +134,7 @@ function handleQuestionsResponse(resp) {
 export function fetchAssessmentsForProgram(programId)
 {
   return function(dispatch, getState) {
-    var url =  serverApiBase + "programmes/" + programId + "/assessments/";
+    var url =  serverApiBase + "programmes/" + programId + "/assessments/?active=2";
     return fetch(url, {
       method: 'GET',
       headers: {
@@ -239,7 +239,8 @@ export function deactivateAssessment(parentProgrammeId, assessmentId)
         
       })
     }).then(checkStatus).then(response => {
-        dispatch(editAssessmentSuccessful(response));
+        //Treat this as a local delete..
+        dispatch(deleteAssessmentSuccessful(response.id));
         return response;
     });
   }
