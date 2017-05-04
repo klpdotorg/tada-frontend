@@ -228,7 +228,7 @@ export function deactivateUser(id)
         body: JSON.stringify({isActive: "False"})
       }
       ).then(checkStatus).then(data => {
-            dispatch(userModified(data));
+            dispatch(userDeleted(data.id));
       });
   }
 }
