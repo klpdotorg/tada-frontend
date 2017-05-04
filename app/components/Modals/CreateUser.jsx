@@ -61,9 +61,9 @@ export default class CreateUser extends Component {
 						<Formsy.Form onValidSubmit={this.submitForm} onValid={this.enableSubmitButton} onInvalid={this.disableSubmitButton}
 								disabled={this.state.disabled} ref={(ref) => this.myform = ref}>
 							<Input name="firstName" id="firstName" value="" label="First Name" type="text"
-								placeholder="Please enter the user's first name" help="This is a required field" required validations="isAlpha,minLength:1"/>
+								placeholder="Please enter the user's first name" help="This is a required field"/>
 							<Input name="lastName" id="lastName" value="" label="Last Name" type="text"
-								placeholder="Please enter the user's last name" help="This is a required field" required validations="isAlpha,minLength:1"/>
+								placeholder="Please enter the user's last name" help="This is a required field"/>
 							<Input name="email" id="email" placeholder="Please enter a valid email address" label="E-mail" validations="isEmail"/>
 							<Input name="userName" id="userName" value="" label="User ID" type="text" placeholder="Please enter the unique username" required validations="isAlphanumeric,minLength:6,maxLength:15"/>
 							<Input name="password" id="password" type="password" label="Password"

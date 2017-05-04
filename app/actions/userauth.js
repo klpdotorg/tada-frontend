@@ -197,7 +197,7 @@ export function fetchUsers(pageNumber){
 
 }
 
-export function addUserToRole(userid, role)
+export function addUserToRole(userid, firstname, lastname, role)
 {
   return function(dispatch, getState){
     return fetch(Urls.USERS + userid + "/", {
@@ -207,7 +207,9 @@ export function addUserToRole(userid, role)
            'Authorization': 'Token ' + sessionStorage.token
         },
         body: JSON.stringify({
-          group: role
+          group: role,
+          first_name: firstname,
+          last_name: lastname,
         })
       }
       )
@@ -276,7 +278,7 @@ export function createUser(firstname,lastname,username,email,password,role) {
 
       })
     }).then(checkStatus).then(data => {
-          dispatch(addUserToRole(data.id,role)).then(checkStatus).then(userrole => {
+          dispatch(addUserToRole(data.id,firstname,lastname,role)).then(checkStatus).then(userrole => {
           dispatch(userCreated(userrole));
         });
         return data;
