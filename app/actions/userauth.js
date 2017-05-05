@@ -197,6 +197,22 @@ export function fetchUsers(pageNumber){
 
 }
 
+function addUserToRoleOnly(userid, role) {
+  return function(dispatch, getState){
+      return fetch(Urls.USERS + userid + "/", {
+          method: "PATCH",
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Token ' + sessionStorage.token
+          },
+          body: JSON.stringify({
+            group: role,
+          })
+        }
+        )
+      }
+}
+
 export function addUserToRole(userid, firstname, lastname, role)
 {
   return function(dispatch, getState){
@@ -252,7 +268,7 @@ export function modifyUser(id,firstName, lastName,email,role)
         })
       }
       ).then(checkStatus).then(() => {
-        dispatch(addUserToRole(id,role))
+        dispatch(addUserToRoleOnly(id,role))
           .then(checkStatus)
           .then(data => {
             dispatch(userModified(data));
