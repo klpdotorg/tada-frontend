@@ -3,6 +3,7 @@ import Modal from 'react-modal';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
 import { modalStyle } from '../../styles.js';
+import moment from 'moment';
 
 
 const { Input, RadioGroup , Checkbox} = FRC;
@@ -17,6 +18,8 @@ export default class CreateAssessment extends Component {
     this.submitForm = this.submitForm.bind(this);
     this.enableSubmitButton = this.enableSubmitButton.bind(this);
     this.disableSubmitButton = this.disableSubmitButton.bind(this);
+    this.setStartDate = this.setStartDate.bind(this);
+    this.setEndDate = this.setEndDate.bind(this);
   }
 
   submitForm(){
@@ -35,6 +38,16 @@ export default class CreateAssessment extends Component {
       canSubmit: false
     });
   }
+
+  setStartDate() {
+		var formatteddate = moment().format('YYYY-MM-DD');
+		return formatteddate;
+	}
+
+	setEndDate() {
+		return moment().add(1 ,'years').format('YYYY-MM-DD');
+	}
+
 
   render() {  
 
@@ -61,10 +74,10 @@ export default class CreateAssessment extends Component {
                      
                      <Input name="assessmentName" id="assessmentName" value="" label="Name" type="text"
                 placeholder="Please enter the assessment name" help="This is a required field" required validations="minLength:1"/>
-                      <Input type="date" label="Start Date" name="startDate" help="Please select the start date of the assessment" required id="startDate"/>
+                      <Input type="date" label="Start Date" value={this.setStartDate()} name="startDate" help="Please select the start date of the assessment" required id="startDate"/>
                       
                       
-                      <Input type="date" label="End Date"  help="Please select the end date of the assessment" required name="endDate"/>
+                      <Input type="date" label="End Date"  value={this.setEndDate()} help="Please select the end date of the assessment" required name="endDate"/>
                       
                       <RadioGroup
                               name="type"

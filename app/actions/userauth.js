@@ -197,7 +197,23 @@ export function fetchUsers(pageNumber){
 
 }
 
-export function addUserToRole(userid, role)
+function addUserToRoleOnly(userid, role) {
+  return function(dispatch, getState){
+      return fetch(Urls.USERS + userid + "/", {
+          method: "PATCH",
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Token ' + sessionStorage.token
+          },
+          body: JSON.stringify({
+            group: role,
+          })
+        }
+        )
+      }
+}
+
+export function addUserToRole(userid, firstname, lastname, role)
 {
   return function(dispatch, getState){
     return fetch(Urls.USERS + userid + "/", {
@@ -207,7 +223,9 @@ export function addUserToRole(userid, role)
            'Authorization': 'Token ' + sessionStorage.token
         },
         body: JSON.stringify({
-          group: role
+          group: role,
+          first_name: firstname,
+          last_name: lastname,
         })
       }
       )
@@ -226,7 +244,7 @@ export function deactivateUser(id)
         body: JSON.stringify({isActive: "False"})
       }
       ).then(checkStatus).then(data => {
-            dispatch(userModified(data));
+            dispatch(userDeleted(data.id));
       });
   }
 }
@@ -250,7 +268,7 @@ export function modifyUser(id,firstName, lastName,email,role)
         })
       }
       ).then(checkStatus).then(() => {
-        dispatch(addUserToRole(id,role))
+        dispatch(addUserToRoleOnly(id,role))
           .then(checkStatus)
           .then(data => {
             dispatch(userModified(data));
@@ -276,7 +294,7 @@ export function createUser(firstname,lastname,username,email,password,role) {
 
       })
     }).then(checkStatus).then(data => {
-          dispatch(addUserToRole(data.id,role)).then(checkStatus).then(userrole => {
+          dispatch(addUserToRole(data.id,firstname,lastname,role)).then(checkStatus).then(userrole => {
           dispatch(userCreated(userrole));
         });
         return data;

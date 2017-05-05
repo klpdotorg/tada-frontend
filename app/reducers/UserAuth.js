@@ -112,6 +112,14 @@ export function users(state={
                           userCount: state.userCount + 1 });
        // console.log("user created", newState);
         return newState;
+  case 'USER_MODIFIED':
+       var copy = Object.assign({}, state.usersById);
+       copy[action.user.id] = action.user;
+      var newState = {
+        ...state,
+        usersById: copy
+      }
+      return newState;
   case 'USER_DELETED':
         var copyState = _.omit(state.usersById,action.id);
         let userPages = processDeletedUser(action.id, state.pages, state.currentPage);
