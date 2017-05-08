@@ -245,14 +245,22 @@ export const getStudents = (institutionId, classId) => {
   );
 };
 
-export function fetchStudents(groupId) {
+export function fetchStudents(groupId,InstitutionId) {
   return function(dispatch, getState) {
     const state = getState();
-    const institutionId = state.boundaries.boundaryDetails[groupId].institution;
+    let institutionId = ""
+    // console.log(InstitutionId)
+    if(state.boundaries.boundaryDetails[groupId]!=undefined){
+      institutionId = state.boundaries.boundaryDetails[groupId].institution;
+    }
+    else{
+      institutionId = InstitutionId;
+    }
+    // const institutionId = state.boundaries.boundaryDetails[groupId].institution;
+    // console.log(institutionId+"<=========================");
     var url =
       serverApiBase +
       `institutions/${institutionId}/studentgroups/${groupId}/students/`;
-
     return fetch(url, {
       method: "GET",
       headers: {
@@ -262,6 +270,7 @@ export function fetchStudents(groupId) {
     })
       .then(checkStatus)
       .then(data => {
+        console.log(data.results);
         //dispatch(studentsFetched(data.results, groupId))
       })
       .catch(error => {
