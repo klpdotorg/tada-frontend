@@ -161,6 +161,8 @@ export function login(state = {
   id: '',
   groups:[],
   permissions:{},
+  first_name:'',
+  last_name: '',
 } , action) {
   switch (action.type) {
     case 'REQUEST_LOGIN':
@@ -183,17 +185,27 @@ export function login(state = {
       token: action.auth_token,
       isLoggingIn: false,
       error: false,
-      id:action.id
+      id: action.id
     }
     case 'USER_DATA_FETCHED':
     return {
       ...state,
       username: action.username,
       email: action.email,
+      first_name: action.first_name,
+      last_name: action.last_name,
       id: action.id,
       groups: action.groups,
       permissions: action.permissions
     }
+
+    case 'SELF_MODIFIED':
+      return {
+        ...state,
+        email: action.email,
+        first_name: action.first_name,
+        last_name: action.last_name,
+      }
     case 'LOGOUT':
     return {
       authenticated: false,
