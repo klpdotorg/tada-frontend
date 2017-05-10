@@ -277,6 +277,36 @@ export function modifyUser(id,firstName, lastName,email,role)
   }
 }
 
+function selfModified(data) {
+  return {
+    type: "SELF_MODIFIED",
+    first_name: data.first_name,
+    last_name: data.last_name,
+    email: data.email,
+  }
+}
+
+export function modifySelf(email, firstName, lastName) {
+  return function(dispatch, getState){
+    let id = getState().login.id;
+    return fetch(Urls.USERS + id + "/", {
+        method: "PATCH",
+        headers: {
+           'Content-Type': 'application/json',
+           'Authorization': 'Token ' + sessionStorage.token
+        },
+        body: JSON.stringify({
+          first_name: firstName,
+          last_name: lastName,
+          email: email,
+        })
+      }).then(checkStatus).then(data=>{
+        dispatch(selfModified(data));
+        return data;
+      });
+  }
+}
+
 export function createUser(firstname,lastname,username,email,password,role) {
   return function(dispatch, getState){
     return fetch(Urls.USER_REGISTRATION, {

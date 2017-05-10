@@ -18,6 +18,8 @@ const mapStateToProps = (state, ownProps) => {
   routerState: state.routing,
   username: state.login.username,
   useremail: state.login.email,
+  userfirstname: state.login.first_name,
+  userlastname: state.login.last_name,
   districtModalIsOpen: state.modal.createDistrict,
   primarySelected: state.schoolSelection.primarySchool,
   programsByInstitutionId: state.programs.programsByInstitutionId,
@@ -73,8 +75,12 @@ var mapDispatchToProps = function(dispatch) {
       dispatch(push(url));
     },
 
-    loggedIn(token) {
-      dispatch(loginSuccess(token));
+    loggedIn(token, userid) {
+      let authData = {
+        auth_token: token,
+        user_id: userid,
+      }
+      dispatch(loginSuccess(authData));
     },
 
     fetchUserData() {
@@ -112,14 +118,14 @@ class TadaContentContainer extends Component {
     if (!sessionStorage.token) {
       this.props.redirectTo('/login');
     } else {
-        this.props.loggedIn(sessionStorage.token);
-        this.props.fetchUserData().then(() => {
+        //this.props.loggedIn(sessionStorage.token, sessionStorage.userid);
+          this.props.fetchUserData();
           this.props.getInitData().then(() =>  {
             this.setState({
               isLoading:false
             })
-          })
-        })
+          });
+        
     }
   }
 
@@ -128,7 +134,7 @@ class TadaContentContainer extends Component {
     return (
       this.state.isLoading ? <div>Loading... </div> :
       <div>
-        <MainHeader handleLogout={ this.props.handleLogout } email={this.props.useremail} username={this.props.username} dispatch = {this.props.dispatch} handleChangeUserName = {this.props.changeUserName}/>
+        <MainHeader handleLogout={ this.props.handleLogout } firstname= {this.props.userfirstname} lastname={this.props.userlastname} email={this.props.useremail} username={this.props.username} dispatch = {this.props.dispatch} handleChangeUserName = {this.props.changeUserName}/>
         <TreeTogglerSpacingDiv/>
         <NavBar onPrimaryClick={ this.props.onPrimaryClick } onPreSchoolClick={ this.props.onPreSchoolClick } primarySelected={ this.props.primarySelected } />
         <SecondaryNavBar redirectTo = {this.props.redirectTo} toggleDistrictModal={ this.props.toggleDistrictModal } districtModalIsOpen={ this.props.districtModalIsOpen } saveNewDistrict={ saveNewDistrict } />
