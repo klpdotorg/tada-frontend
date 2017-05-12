@@ -4,8 +4,8 @@
   "description": "Frontend for TADA built using React.js",
   "main": "webpack.config.js",
   "scripts": {
-    "dev": "mkdir -p dist && cp index.html dist/index.html && webpack-dev-server --display-error-details --devtool source-map --inline --progress --colors --content-base dist --history-api-fallback",
-    "deploy": "webpack -p && cp index.html dist/index.html"
+    "dev": "mkdir -p dist && cp index.html dist/index.html && node_modules/.bin/webpack-dev-server --display-error-details --devtool source-map --inline --progress --colors --content-base dist --history-api-fallback",
+    "deploy": "node_modules/.bin/webpack -p && cp index.html dist/index.html"
   },
   "dependencies": {
     "babel-preset-es2015": "^6.18.0",
