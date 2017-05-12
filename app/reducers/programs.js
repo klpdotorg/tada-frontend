@@ -1,4 +1,4 @@
-import _ from "lodash";
+import _ from 'lodash';
 
 export function programs(
   state = {
@@ -6,26 +6,27 @@ export function programs(
     boundaries: {
       boundaries: {},
       assessments: {},
-      assessmentsDetails: {}
-    }
+      assessmentsDetails: {},
+    },
+    selected: '',
   },
-  action
+  action,
 ) {
   switch (action.type) {
-    case "PROGRAMS_RESPONSE_RECEIVED":
+    case 'PROGRAMS_RESPONSE_RECEIVED':
       const programs = processProgramDetails(action.data, state.programsById);
       return {
         ...state,
-        ...programs
+        ...programs,
       };
-    case "PROGRAM_CREATED":
+    case 'PROGRAM_CREATED':
       var copy = Object.assign({}, state.programsById);
       copy[action.program.id] = action.program;
       return Object.assign({}, { programsById: copy });
-    case "PROGRAM_DELETED":
+    case 'PROGRAM_DELETED':
       var copyState = _.omit(state.programsById, action.programId);
       return Object.assign({}, { programsById: copyState });
-    case "PROGRAM_EDITED":
+    case 'PROGRAM_EDITED':
       var copy = Object.assign({}, state.programsById);
       copy[action.program.id].name = action.program.name;
       copy[action.program.id].description = action.program.description;
@@ -35,73 +36,51 @@ export function programs(
       copy[action.program.id].programme_institution_category =
         action.program.programme_institution_category;
       return Object.assign({}, { programsById: copy });
-    case "PROGRAM_DETAILS":
+    case 'PROGRAM_DETAILS':
       const boundaries = serializeProgramBoundaries(action.program);
       return {
         ...state,
-        boundaries
+        boundaries,
+      };
+    case 'TOGGLE_PROGRAM_NODE':
+      let st = _.cloneDeep(state);
+      st.boundaries.details[action.id].collapsed = !st.boundaries.details[action.id].collapsed;
+      return st;
+    case 'SELECT_PROGRAM_BOUNDARY':
+      return {
+        ...state,
+        selected: action.id,
       };
     default:
       return state;
   }
 }
 
-function sortAssessments(data, key, obj) {
-  if (_.includes(_.keys(obj[key]), "assessments")) {
-    const assessments = _.keys(obj[key].assessments);
-    data.assessments[key] = assessments;
-    assessments.forEach(assessment => {
-      data.assessmentsDetails[assessment] = {
-        ...obj[key].assessments[assessment],
-        depth: 5,
-        collapsed: true
-      };
-    });
-  } else if (_.includes(_.keys(obj[key]), "classes")) {
-    const classes = _.keys(obj[key].classes);
-    data.assessments[key] = classes;
-    classes.forEach(cl => {
-      data.assessmentsDetails[cl] = {
-        ...obj[key].classes[cl],
-        collapsed: true,
-        depth: 4
-      };
-    });
-  } else if (_.includes(_.keys(obj[key]), "institutions")) {
-    const classes = _.keys(obj[key].institutions);
-    data.assessments[key] = classes;
-    classes.forEach(cl => {
-      data.assessmentsDetails[cl] = {
-        ...obj[key].institutions[cl],
-        collapsed: true,
-        depth: 3
-      };
-    });
-  } else {
-    data.boundaries[key] = obj[key];
-  }
-
-  return data;
-}
-
 const serializeProgramBoundaries = program => {
-  let boundaries = { assessments: {}, boundaries: {}, assessmentsDetails: {} };
+  let programs = { parent: {}, details: {}, assessments: {} };
 
-  function traverse(o) {
+  function traverse(o, key, depth) {
+    if (Number(key)) {
+      programs.parent[key] = Object.keys(
+        o.boundaries || o.assessments || o.classes || o.institutions || o.details || {},
+      );
+      if (key != 1) {
+        o.depth = depth;
+        o.collapsed = true;
+        programs.details[key] = _.omit(o, 'boundaries', 'assessments', 'classes', 'institutions');
+        ++depth;
+      }
+    }
     for (var i in o) {
-      if (!!o[i] && typeof o[i] == "object") {
-        boundaries = sortAssessments(boundaries, i, o);
-        traverse(o[i]);
+      if (!!o[i] && typeof o[i] == 'object') {
+        traverse(o[i], i, depth);
       }
     }
   }
 
-  traverse(program);
+  traverse(program, '1', 0);
 
-  boundaries.boundaries = Object.keys(boundaries.boundaries)
-    .map(a => parseInt(a))
-    .filter(Boolean);
-  return boundaries;
+  return programs;
 };
 
 function processProgramDetails(programsData, programsById) {
@@ -115,6 +94,6 @@ function processProgramDetails(programsData, programsById) {
   var mergedProgramDetails = {};
   Object.assign(mergedProgramDetails, programsById, newProgramsById);
   return {
-    programsById: mergedProgramDetails
+    programsById: mergedProgramDetails,
   };
 }
