@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react';
 import TreeView from 'react-treeview';
 import { Link } from 'react-router';
@@ -7,11 +8,13 @@ import {
   fetchBoundaryDetails,
   boundaryClicked,
   fetchAllPrograms,
+  fetchStudents,
   getProgramDetails,
-  selectProgramBoundary,
-  fetchEntitiesFromServer,
-} from '../actions/';
-import { getEntityType, getBoundaryType, CLUSTER } from '../reducers/utils';
+} from "../actions/";
+import { getEntityType, getBoundaryType, CLUSTER } from "../reducers/utils";
+let programId='';
+let assessmentId='';
+let InstitutionId = "";
 
 export default class PermissionsNavTree extends React.Component {
   constructor(props) {
@@ -79,13 +82,32 @@ export default class PermissionsNavTree extends React.Component {
       console.log('Boundary details undefined for node', node);
       return null;
     }
+
+      if(boundaryDetails[node].collapsed==false && boundaryDetails[node].depth>=3){
+        let assessmentId= boundaryDetails[node].assessment_id;
+        console.log(boundaryDetails[node])
+        if(boundaryDetails[node].depth==3){
+          InstitutionId = boundaryDetails[node].id;
+          console.log("InstitutionId====================>"+InstitutionId);
+        }
+        if(boundaryDetails[node].depth==4){
+          console.log("Class Id =========="+boundaryDetails[node].id)
+          return this.props.dispatch(
+            fetchStudents(boundaryDetails[node].id,InstitutionId)
+          );
+
+        }
+
+      }
+
+
     if (boundaryDetails[node].depth == depth && depth < 6) {
       if (node) {
+
         var children = boundaryHierarchy[node];
         visitedBoundaries.push(node);
 
         var boundary = boundaryDetails[node];
-
         const label = (
           <span
             className="node"
@@ -132,11 +154,13 @@ export default class PermissionsNavTree extends React.Component {
     let visitedBoundaries = [];
     const programs = this.state.programsById;
     const { boundaries } = this.props;
+    // console.log(this.state.selectedProgram);
+    programId = this.state.selectedProgram;
     const programsList = this.state.programs.map(id => {
       return <option key={id} value={id}>{programs[id].name}</option>;
     });
     const { parent, details } = this.props.boundaries;
-
+    let { boundariesByParentId, boundaryDetails } = this.state;
     return this.state.isLoading
       ? <div>Loading...</div>
       : <div className="brand-orange">

@@ -41,8 +41,7 @@ export default class SchoolsNavTree extends React.Component {
             if (children && children.length > 0) {
               ++depth
               return children.map((child, i) => {
-
-                return this.renderSubTree(child, boundaryHierarchy, visitedBoundaries, depth)
+                return this.renderSubTree(child, boundaryHierarchy, visitedBoundaries, depth);
               });
             }
           })() }

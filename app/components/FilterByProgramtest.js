@@ -1,6 +1,5 @@
 const faker = require('faker');
 const ReactDataGrid = require('react-data-grid');
-// const exampleWrapper = require('../components/exampleWrapper');
 const React = require('react');
 const { Editors, Toolbar, Formatters } = require('react-data-grid-addons');
 const { AutoComplete: AutoCompleteEditor, DropDownEditor } = Editors;
@@ -16,7 +15,7 @@ export default class Students extends React.Component{
     console.log("deleteStudent called");
   }
   render() {
-
+    console.log(this.props)
     return (
         <div className="students-grid">
           <div className="row " style={{paddingBottom:"15px"}}>
@@ -62,6 +61,7 @@ export default class Students extends React.Component{
 }
 
 class InputRow extends React.Component{
+
   render() {
     return (
       <div className="row">
