@@ -37,7 +37,7 @@ export default class EditUser extends Component {
 
 	disableSubmitButton(){
 		this.setState({
-			canSubmit: false
+			canSubmit:false
 		})
 	}
 
@@ -64,25 +64,25 @@ export default class EditUser extends Component {
             		<div className="modal-content">
                 		<div className="modal-header">
                     		<button type="button" className="close" onClick={this.props.onCloseModal} aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    		<h4 className="modal-title" id="createAssessmentTitle">Create User</h4>
+                    		<h4 className="modal-title" id="createAssessmentTitle">Edit User</h4>
                 		</div>
                 		<div className="modal-body">
 						<Formsy.Form onValidSubmit={this.submitForm} onValid={this.enableSubmitButton} onInvalid={this.disableSubmitButton}
-								disabled={this.state.disabled} ref={(ref) => this.myform = ref}>
+								ref={(ref) => this.myform = ref}>
 							<Input name="userName" id="userName" value="" label="User ID" type="text" help="This field cannot be modified" disabled="true" value={this.props.user.username}/>
 
 
 							<Input name="firstName" id="firstName" value="" label="First Name" type="text"
-								placeholder="Please enter the user's first name" help="This is a required field" validations="isAlpha,minLength:1" defaultValue={this.props.user.first_name}/>
+								placeholder="Please enter the user's first name" validations="isSpecialWords" validationError="A name can only consist of letters and spaces" value={this.props.user.first_name}/>
 							<Input name="lastName" id="lastName" value="" label="Last Name" type="text"
-								placeholder="Please enter the user's last name" help="This is a required field" validations="isAlpha,minLength:1" defaultValue={this.props.user.last_name}/>
-							<Input name="email" id="email" placeholder="Please enter a valid email address" label="E-mail" validations="isEmail" defaultValue={this.props.user.email}/>
+								placeholder="Please enter the user's last name" validations="isSpecialWords" validationError="A name can only consist of letters and spaces" value={this.props.user.last_name}/>
+							<Input name="email" id="email" placeholder="Please enter a valid email address" validationError="This is not a valid email address" label="E-mail" validations="isEmail" value={this.props.user.email}/>
 							
 							 <Select
 		                        name="role"
 		                        label="Role"
 		                        options={role}
-		                        defaultValue={userRole}
+		                        value={userRole}
 		                        required
 		                    />
                         	

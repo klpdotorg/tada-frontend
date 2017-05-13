@@ -64,15 +64,16 @@ function requestFailed(error) {
 export function requestLogin(username) {
   return {
     type: "LOGIN_REQUESTED",
-    username
+    username,
   };
 }
 
-export function loginSuccess(authtoken) {
+export function loginSuccess(data) {
   return {
     type: "LOGIN_SUCCESS",
     authenticated: true,
-    auth_token: authtoken
+    auth_token: data.auth_token,
+    id: data.user_id,
   };
 }
 
@@ -80,7 +81,7 @@ export function removeBoundary(id, parentId) {
   return {
     type: "REMOVE_BOUNDARY",
     id,
-    parentId
+    parentId,
   };
 }
 
@@ -88,7 +89,7 @@ function loginError() {
   return {
     type: "LOGIN_FAILED",
     error: true,
-    authenticated: false
+    authenticated: false,
   };
 }
 
@@ -141,7 +142,9 @@ function userDataFetched(data) {
     email: data.email,
     groups: data.groups,
     id: data.id,
-    permissions: data.permissions
+    permissions: data.permissions,
+    first_name: data.first_name,
+    last_name: data.last_name,
   };
 }
 
@@ -311,7 +314,6 @@ export function fetchUserData(token) {
           if (item.name == ROLES.ADMIN) sessionStorage.setItem("isAdmin", true);
         });
         dispatch(userDataFetched(data));
-        dispatch(loginSuccess(token));
       })
       .catch(error => {
         console.log(error.response);
@@ -385,7 +387,7 @@ export function sendLoginToServer(email, pass) {
       .then(data => {
         sessionStorage.setItem("token", data.auth_token);
         sessionStorage.setItem("userid", data.user_id);
-        dispatch(loginSuccess(data.auth_token));
+        dispatch(loginSuccess(data));
         dispatch(fetchUserData(sessionStorage.token));
         dispatch(push("/"));
       })

@@ -236,7 +236,7 @@ render()
 	{
 	usersList =	Object.values(usersByPage.ids).map((id,i)=>{
 			var user = this.props.usersById[id];
-			var fullName = user.first_name + user.last_name;
+			var fullName = user.first_name + " " + user.last_name;
 			var userRole = "N/A";
 			if(user.groups && user.groups.length > 0) {
         		user.groups.map((item, index) => {
@@ -256,7 +256,8 @@ render()
 	});
 }
 else {
-	usersList = <tr colSpan="6">Loading Users...</tr>
+	usersList = <tr colSpan="6"><td colSpan="6" style={{"text-align": "center"}}>
+<i className="fa fa-cog fa-spin fa-3x fa-fw"></i>Loading...</td></tr>
 }
 
 	return(		<div>

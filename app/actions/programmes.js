@@ -1,26 +1,28 @@
-import fetch from "isomorphic-fetch";
-import { push } from "react-router-redux";
-import {
-  SERVER_API_BASE as serverApiBase,
-  SERVER_AUTH_BASE as authApiBase
-} from "config";
+import fetch from 'isomorphic-fetch';
+import { push } from 'react-router-redux';
+import { SERVER_API_BASE as serverApiBase, SERVER_AUTH_BASE as authApiBase } from 'config';
 
-import { get } from "./utils";
+import { get } from './utils';
 
 const programDetails = program => ({
-  type: "PROGRAM_DETAILS",
-  program
+  type: 'PROGRAM_DETAILS',
+  program,
+});
+
+export const selectProgramBoundary = id => ({
+  type: 'SELECT_PROGRAM_BOUNDARY',
+  id,
 });
 
 export function fetchAllPrograms() {
-  return function(dispatch, getState) {
-    var url = serverApiBase + "programmes/" + "?active=2";
+  return function (dispatch, getState) {
+    var url = serverApiBase + 'programmes/' + '?active=2';
     return fetch(url, {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
-        Authorization: "Token " + sessionStorage.token
-      }
+        'Content-Type': 'application/json',
+        Authorization: 'Token ' + sessionStorage.token,
+      },
     })
       .then(checkStatus)
       .then(data => {
@@ -36,13 +38,12 @@ export function fetchAllPrograms() {
 */
 function handleProgramsResponse(resp) {
   return {
-    type: "PROGRAMS_RESPONSE_RECEIVED",
-    data: resp.results
+    type: 'PROGRAMS_RESPONSE_RECEIVED',
+    data: resp.results,
   };
 }
 
-export const programDetailsAPI = id =>
-  get(`${serverApiBase}programmes/${id}/?details=True`);
+export const programDetailsAPI = id => get(`${serverApiBase}programmes/${id}/?details=True`);
 
 export const getProgramDetails = id => dispatch => {
   return programDetailsAPI(id).then(details => {
@@ -54,7 +55,7 @@ function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response.json();
   } else if (response.status === 401) {
-    dispatch(push("/login"));
+    dispatch(push('/login'));
     return;
   }
   const error = new Error(response.statusText);
@@ -62,25 +63,18 @@ function checkStatus(response) {
   throw error;
 }
 
-export function createNewProgram(
-  name,
-  description,
-  startDate,
-  endDate,
-  isActive,
-  instCat
-) {
-  return function(dispatch, getState) {
-    var url = serverApiBase + "programmes/";
+export function createNewProgram(name, description, startDate, endDate, isActive, instCat) {
+  return function (dispatch, getState) {
+    var url = serverApiBase + 'programmes/';
     var programInstCat = JSON.stringify({
       id: 1,
-      boundary_type: "Primary School"
+      boundary_type: 'Primary School',
     });
     return fetch(url, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
-        Authorization: "Token " + sessionStorage.token
+        'Content-Type': 'application/json',
+        Authorization: 'Token ' + sessionStorage.token,
       },
       body: JSON.stringify({
         name,
@@ -88,8 +82,8 @@ export function createNewProgram(
         start_date: startDate,
         end_date: endDate,
         active: 2,
-        programme_institution_category: instCat
-      })
+        programme_institution_category: instCat,
+      }),
     })
       .then(checkStatus)
       .then(response => {
@@ -101,37 +95,37 @@ export function createNewProgram(
 
 function createProgramSuccessful(newProgram) {
   return {
-    type: "PROGRAM_CREATED",
-    program: newProgram
+    type: 'PROGRAM_CREATED',
+    program: newProgram,
   };
 }
 
 function deleteProgramSuccessful(id) {
   return {
-    type: "PROGRAM_DELETED",
-    programId: id
+    type: 'PROGRAM_DELETED',
+    programId: id,
   };
 }
 
 function editProgramSuccessful(edited) {
   return {
-    type: "PROGRAM_EDITED",
-    program: edited
+    type: 'PROGRAM_EDITED',
+    program: edited,
   };
 }
 
 export function deactivateProgram(id) {
-  return function(dispatch, getState) {
-    var url = serverApiBase + "programmes/" + id + "/";
+  return function (dispatch, getState) {
+    var url = serverApiBase + 'programmes/' + id + '/';
     return fetch(url, {
-      method: "PATCH",
+      method: 'PATCH',
       headers: {
-        "Content-Type": "application/json",
-        Authorization: "Token " + sessionStorage.token
+        'Content-Type': 'application/json',
+        Authorization: 'Token ' + sessionStorage.token,
       },
       body: JSON.stringify({
-        active: 1
-      })
+        active: 1,
+      }),
     })
       .then(checkStatus)
       .then(response => {
@@ -142,22 +136,14 @@ export function deactivateProgram(id) {
   };
 }
 
-export function editProgram(
-  id,
-  name,
-  description,
-  startDate,
-  endDate,
-  isActive,
-  instCat
-) {
-  return function(dispatch, getState) {
-    var url = serverApiBase + "programmes/" + id + "/";
+export function editProgram(id, name, description, startDate, endDate, isActive, instCat) {
+  return function (dispatch, getState) {
+    var url = serverApiBase + 'programmes/' + id + '/';
     return fetch(url, {
-      method: "PUT",
+      method: 'PUT',
       headers: {
-        "Content-Type": "application/json",
-        Authorization: "Token " + sessionStorage.token
+        'Content-Type': 'application/json',
+        Authorization: 'Token ' + sessionStorage.token,
       },
       body: JSON.stringify({
         name,
@@ -165,8 +151,8 @@ export function editProgram(
         start_date: startDate,
         end_date: endDate,
         active: 2,
-        programme_institution_category: instCat
-      })
+        programme_institution_category: instCat,
+      }),
     })
       .then(checkStatus)
       .then(response => {
@@ -177,19 +163,19 @@ export function editProgram(
 }
 
 export function deleteProgram(id) {
-  return function(dispatch, getState) {
-    var url = serverApiBase + "programmes/" + id + "/";
+  return function (dispatch, getState) {
+    var url = serverApiBase + 'programmes/' + id + '/';
     return fetch(url, {
-      method: "DELETE",
+      method: 'DELETE',
       headers: {
-        Authorization: "Token " + sessionStorage.token
-      }
+        Authorization: 'Token ' + sessionStorage.token,
+      },
     })
       .then(response => {
         if (response.status >= 200 && response.status < 300) {
           return response;
         } else if (response.status === 401) {
-          dispatch(push("/login"));
+          dispatch(push('/login'));
           return;
         }
         const error = new Error(response.statusText);

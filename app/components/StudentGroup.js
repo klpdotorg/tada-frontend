@@ -15,7 +15,6 @@ export default class StudentGroupScreen extends Component {
     this.showBulkAdd = this.showBulkAdd.bind(this);
     this.hideBulkAdd = this.hideBulkAdd.bind(this);
     this.addStudents = this.addStudents.bind(this);
-
     this.state = {
       schoolModalIsOpen: false,
       openConfirmModal: false,
@@ -146,6 +145,7 @@ class StudentGroup extends Component {
     this.hideBulkAdd = this.hideBulkAdd.bind(this);
     this.addStudents = this.addStudents.bind(this);
     this.hasPermissions = this.hasPermissions.bind(this);
+    this.hasChildren = this.hasChildren.bind(this);
 
     const {params, boundaries} = this.props
     this.state = {
@@ -224,6 +224,14 @@ class StudentGroup extends Component {
    return userHasPermissions(this.props.permissions,this.props.params.institutionId);
   }
 
+  hasChildren() {
+    if(this.props.boundariesByParentId[this.props.params.districtId]) {
+      return this.props.boundariesByParentId[this.props.params.districtId].length > 0;
+    }
+    else
+      return false;
+  }
+
   render() {
     const {boundaries, params} = this.props
     const block = boundaries.boundaryDetails[params.blockId] || boundaries.boundaryDetails[params.projectId];
@@ -233,6 +241,7 @@ class StudentGroup extends Component {
     const group = boundaries.boundaryDetails[params.groupId]
     var Displayelement;
     let canModify = sessionStorage.getItem('isAdmin') || this.hasPermissions();
+    let disableDeleteBtn = canModify && this.hasChildren();
    return(
       <div>
        <ol className="breadcrumb">
@@ -277,7 +286,7 @@ class StudentGroup extends Component {
            </form>
           <div className="col-md-6">
             <button type="submit" className="btn btn-primary" onClick={this.saveClass} disabled={!canModify}>Save</button>
-            <button type="submit" className="btn btn-primary" onClick={this.showConfirmation} disabled={!canModify}>Delete</button>
+            <button type="submit" className="btn btn-primary" onClick={this.showConfirmation} disabled={disableDeleteBtn}>Delete</button>
             <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteClass} onCloseModal={this.closeConfirmation} entity={group.label}/>
           </div>
         </div>
