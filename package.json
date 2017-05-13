@@ -11,7 +11,7 @@
   "lint-staged": {
     "linters": {
       "app/**/*.js": [
-        "node_modules/.bin/prettier-standar --write",
+        "node_modules/.bin/prettier-standard --write",
         "git add"
       ]
     }
