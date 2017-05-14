@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import TreeView from 'react-treeview';
 import { Link } from 'react-router';
@@ -10,11 +9,11 @@ import {
   fetchAllPrograms,
   fetchStudents,
   getProgramDetails,
-} from "../actions/";
-import { getEntityType, getBoundaryType, CLUSTER } from "../reducers/utils";
-let programId='';
-let assessmentId='';
-let InstitutionId = "";
+} from '../actions/';
+import { getEntityType, getBoundaryType, CLUSTER } from '../reducers/utils';
+let programId = '';
+let assessmentId = '';
+let InstitutionId = '';
 
 export default class PermissionsNavTree extends React.Component {
   constructor(props) {
@@ -83,27 +82,22 @@ export default class PermissionsNavTree extends React.Component {
       return null;
     }
 
-      if(boundaryDetails[node].collapsed==false && boundaryDetails[node].depth>=3){
-        let assessmentId= boundaryDetails[node].assessment_id;
-        console.log(boundaryDetails[node])
-        if(boundaryDetails[node].depth==3){
-          InstitutionId = boundaryDetails[node].id;
-          console.log("InstitutionId====================>"+InstitutionId);
-        }
-        if(boundaryDetails[node].depth==4){
-          console.log("Class Id =========="+boundaryDetails[node].id)
-          return this.props.dispatch(
-            fetchStudents(boundaryDetails[node].id,InstitutionId)
-          );
-
-        }
-
+    if (boundaryDetails[node].collapsed == false && boundaryDetails[node].depth >= 2) {
+      // console.log(this.props);
+      let assessmentId = boundaryDetails[node].assessment_id;
+      // console.log(boundaryDetails[node])
+      if (boundaryDetails[node].depth == 3) {
+        InstitutionId = boundaryDetails[node].id;
+        // console.log("InstitutionId====================>"+InstitutionId);
       }
-
+      if (boundaryDetails[node].depth == 4) {
+        console.log('Class Id ==========' + boundaryDetails[node].id);
+        return this.props.dispatch(fetchStudents(boundaryDetails[node].id, InstitutionId));
+      }
+    }
 
     if (boundaryDetails[node].depth == depth && depth < 6) {
       if (node) {
-
         var children = boundaryHierarchy[node];
         visitedBoundaries.push(node);
 
