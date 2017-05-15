@@ -1,4 +1,5 @@
 {
 	"SERVER_API_BASE": "http://tadadev.klp.org.in/api/v1/",
-	"SERVER_AUTH_BASE": "http://tadadev.klp.org.in/"
+	"SERVER_AUTH_BASE": "http://tadadev.klp.org.in/",
+	"REPORTS_EMAIL": "subha@klp.org.in"
 }

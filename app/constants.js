@@ -20,5 +20,6 @@ export const urls = {
 	USERS: authApiBase + "auth/users/",
 	USER_REGISTRATION: authApiBase + "auth/register/",
 	ASSESSMENTS: serverApiBase + "assessments/",
+	REPORTS: authApiBase + "auth/users/reports/",
 }
 

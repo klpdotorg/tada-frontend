@@ -1,15 +1,14 @@
-import fetch from "isomorphic-fetch";
-import { push } from "react-router-redux";
-import { checkStatus, get } from "./utils";
+import fetch from 'isomorphic-fetch';
+import { push } from 'react-router-redux';
+import {checkStatus, get} from './utils'
 
-import {
-  SERVER_API_BASE as serverApiBase,
-  SERVER_AUTH_BASE as authApiBase
-} from "config";
-import { urls as Urls, roles as ROLES } from "../constants";
-import _ from "lodash";
-import { boundaryType, genUrl } from "./utils";
-import { computeRouterPathForEntity } from "../reducers/utils";
+import {SERVER_API_BASE as serverApiBase,
+ SERVER_AUTH_BASE as authApiBase, REPORTS_EMAIL as reportsEmail} from 'config';
+import { urls as Urls, roles as ROLES } from '../constants';
+import _ from 'lodash'
+import {boundaryType, genUrl} from './utils';
+import { computeRouterPathForEntity } from '../reducers/utils';
+
 
 export const selectPrimaryTree = () => {
   return {
@@ -134,6 +133,8 @@ export function logoutUser() {
       });
   };
 }
+
+
 
 function userDataFetched(data) {
   return {
@@ -464,65 +465,51 @@ export const saveNewDistrict = name => (dispatch, getState) => {
     parent: 1
   };
   return newBoundaryFetch(options).then(checkStatus).then(response => {
-    dispatch(responseReceivedFromServer({ results: [response] }));
+    dispatch(responseReceivedFromServer({results: [response]}));
     dispatch(openNode(response.id));
-    dispatch(toggleModal("createDistrict"));
-    var boundary = computeRouterPathForEntity(
-      response,
-      getState().boundaries.boundaryDetails
-    );
+    dispatch(toggleModal('createDistrict'));
+    var boundary = computeRouterPathForEntity(response,getState().boundaries.boundaryDetails);
     dispatch(push(boundary.path));
-  });
-};
+  })
+}
 
 export const saveNewBlock = options => (dispatch, getState) => {
   return newBoundaryFetch(options).then(checkStatus).then(response => {
-    dispatch(responseReceivedFromServer({ results: [response] }));
-    dispatch(toggleModal("createBlock"));
+    dispatch(responseReceivedFromServer({results: [response]}))
+    dispatch(toggleModal('createBlock'));
     dispatch(openNode(response.id));
-    var boundary = computeRouterPathForEntity(
-      response,
-      getState().boundaries.boundaryDetails
-    );
+    var boundary = computeRouterPathForEntity(response,getState().boundaries.boundaryDetails);
     dispatch(push(boundary.path));
-  });
-};
+  })
+}
 
 export const saveNewCluster = options => (dispatch, getState) => {
   return newBoundaryFetch(options).then(checkStatus).then(response => {
-    dispatch(responseReceivedFromServer({ results: [response] }));
-    dispatch(toggleModal("createCluster"));
+    dispatch(responseReceivedFromServer({results: [response]}))
+    dispatch(toggleModal('createCluster'));
     dispatch(openNode(response.id));
-    var boundary = computeRouterPathForEntity(
-      response,
-      getState().boundaries.boundaryDetails
-    );
+    var boundary = computeRouterPathForEntity(response,getState().boundaries.boundaryDetails);
     dispatch(push(boundary.path));
-  });
-};
+  })
+}
 
 export const saveNewProject = options => (dispatch, getState) => {
   return newBoundaryFetch(options).then(checkStatus).then(response => {
-    dispatch(responseReceivedFromServer({ results: [response] }));
-    dispatch(toggleModal("createProject"));
+    dispatch(responseReceivedFromServer({results: [response]}))
+    dispatch(toggleModal('createProject'));
     dispatch(openNode(response.id));
-    var boundary = computeRouterPathForEntity(
-      response,
-      getState().boundaries.boundaryDetails
-    );
+    var boundary = computeRouterPathForEntity(response,getState().boundaries.boundaryDetails);
     dispatch(push(boundary.path));
-  });
-};
+  })
+}
 
 export const saveNewCircle = options => (dispatch, getState) => {
   return newBoundaryFetch(options).then(checkStatus).then(response => {
-    dispatch(responseReceivedFromServer({ results: [response] }));
-    dispatch(toggleModal("createCircle"));
+    dispatch(responseReceivedFromServer({results: [response]}))
+    dispatch(toggleModal('createCircle'));
     dispatch(openNode(response.id));
-    var boundary = computeRouterPathForEntity(
-      response,
-      getState().boundaries.boundaryDetails
-    );
+    var boundary = computeRouterPathForEntity(response,getState().boundaries.boundaryDetails);
     dispatch(push(boundary.path));
-  });
-};
+  })
+}
+
