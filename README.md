@@ -68,4 +68,4 @@ catch (e) {
   require('os').networkInterfaces = () => ({});
 }
 ```
-You could sublime / IDE on Windows with your git repo and use the ubuntu bash only to run thr server with code updates. 
+You could sublime / IDE on Windows with your git repo and use the ubuntu bash only to run the server with code updates. 
