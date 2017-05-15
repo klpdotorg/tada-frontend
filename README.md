@@ -40,3 +40,32 @@ npm run deploy
 ### Jenkins integration
 
 Note that any push to DEVELOP will be deployed to tadadev.klp.org.in:3000 automatically by Jenkins. Only push tested changes to develop.
+
+### Installation on Windows
+
+Set up the ubuntu bash on Windows
+https://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/
+
+Run the bash as Administrator
+Get the latest nodejs and npm and not the default versions
+
+```
+curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
+sudo apt-get install nodejs
+```
+DO NOT ACCESS THE UBUNTU FILE SYSTEM FROM A WINDOWS EXPLORER
+So, install git and set up ssh keys as needed
+
+During npm run dev, you may get an error: Node: invalid argument, uv_interface_addresses
+Ref: https://github.com/Microsoft/BashOnWindows/issues/1343
+Fix by adding this piece of code right on top of the webpack.config.js
+```
+// hack for Ubuntu on Windows
+try {
+  require('os').networkInterfaces();
+}
+catch (e) {
+  require('os').networkInterfaces = () => ({});
+}
+```
+You could sublime / IDE on Windows with your git repo and use the ubuntu bash only to run thr server with code updates. 
