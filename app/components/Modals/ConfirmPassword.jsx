@@ -54,7 +54,7 @@ export default class ConfirmPassword extends Component {
                 		<div className="modal-body">
 						<Formsy.Form onValidSubmit={this.submitForm} onValid={this.enableSubmitButton} onInvalid={this.disableSubmitButton}
 								disabled={this.state.disabled} ref={(ref) => this.myform = ref}>		
-							<Input name="password" id="password" help="Please enter your current password and press continue" type="password" label="Password" required validations="minLength:8"/>							
+							<Input name="password" id="password" help="Please enter your current password and press continue" type="password" label="Password" required/>							
 							
                         	
 						</Formsy.Form>

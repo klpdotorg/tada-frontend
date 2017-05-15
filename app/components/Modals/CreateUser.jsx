@@ -46,9 +46,9 @@ export default class CreateUser extends Component {
 		var role = [
             {value: 'tada_deo', label: 'Data Entry Operator'},
             {value: 'tada_admin', label: 'Admin'},
-            {value: 'tada_dee', label: 'Data Entry Executive'}           
+            {value: 'tada_dee', label: 'Data Entry Executive'}
         ];
-       
+
 		return(
 			<Modal contentLabel="Create Program" isOpen={ this.props.isOpen } onRequestClose={ this.props.onCloseModal} style = { customStyles }>
 				<div className="" role="document">
@@ -61,12 +61,14 @@ export default class CreateUser extends Component {
 						<Formsy.Form onValidSubmit={this.submitForm} onValid={this.enableSubmitButton} onInvalid={this.disableSubmitButton}
 								disabled={this.state.disabled} ref={(ref) => this.myform = ref}>
 							<Input name="firstName" id="firstName" value="" label="First Name" type="text"
-								placeholder="Please enter the user's first name" help="This is a required field" required validations="isAlpha,minLength:1"/>
+								placeholder="Please enter the user's first name" help="This is a required field"/>
 							<Input name="lastName" id="lastName" value="" label="Last Name" type="text"
-								placeholder="Please enter the user's last name" help="This is a required field" required validations="isAlpha,minLength:1"/>
+								placeholder="Please enter the user's last name" help="This is a required field"/>
 							<Input name="email" id="email" placeholder="Please enter a valid email address" label="E-mail" validations="isEmail"/>
 							<Input name="userName" id="userName" value="" label="User ID" type="text" placeholder="Please enter the unique username" required validations="isAlphanumeric,minLength:6,maxLength:15"/>
-							<Input name="password" id="password" type="password" label="Password" required validations="minLength:8"/>
+							<Input name="password" id="password" type="password" label="Password"
+								validationError="password should be minimum of 8 chars."
+								 required validations="minLength:8"/>
 							<Input name="retypePassword" id="retypePassword" type="password" label="Re-type Password" required validations={{
 									doPasswordsMatch: function(values, value){
 										return values.password == value ? true: "Passwords do not match";
@@ -80,7 +82,7 @@ export default class CreateUser extends Component {
 		                        value='tada_deo'
 		                        required
 		                    />
-                        	
+
 						</Formsy.Form>
 						</div>
                		  <div className="modal-footer">

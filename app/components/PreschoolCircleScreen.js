@@ -1,6 +1,6 @@
 import React from 'react';
 import {modifyBoundary, deleteBoundary, saveNewInstitution, selectPreschoolTree, getBoundaries,openNode,fetchEntitiesFromServer} from '../actions';
-import CreateInstitution from './Modals/CreateInstitution';
+import CreateInstitution from './Modals/CreatePreSchool';
 import Button from './Button'
 import ConfirmModal from './Modals/Confirm'
 import { Link } from 'react-router'
@@ -135,9 +135,10 @@ export default class PreschoolCircle extends React.Component {
   }
 
   saveSchool(school) {
+    // console.log(this.props.params)
     const options = {
       name: school.name,
-      boundary: this.props.params.clusterId,
+      boundary: this.props.params.circleId,
       languages: school.languages,
       institution_gender:school.institution_gender,
       address:school.address,

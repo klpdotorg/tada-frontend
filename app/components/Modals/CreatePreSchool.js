@@ -111,11 +111,7 @@ export default class CreateDistrict extends Component {
  }
 
  render() {
-   const schoolCategory = [
-           {value: 'lower', label: 'Lower'},
-           {value: 'upper', label: 'Upper'},
-           {value: 'middle', label: 'Middle'},
-       ];
+
    const selectOptions = [
            {value: 'co-ed', label: 'Co-Ed'},
            {value: 'boys', label: 'Boys'},
@@ -126,6 +122,7 @@ export default class CreateDistrict extends Component {
        ...selectOptions
    ];
   //  console.log(this.props);
+  //  console.log(this.props.institutionCategories.list);
   return (
     <Modal contentLabel="Create Institution" isOpen={ this.props.isOpen } onRequestClose={ this.props.onCloseModal } style={ customStyles }>
 
@@ -180,8 +177,8 @@ export default class CreateDistrict extends Component {
                  <Select
                  name="institutionCat"
                  label="Category:"
-                 value = {schoolCategory[0]}
-                 options={schoolCategory}
+                 value = {this.props.institutionCategories.list[0]}
+                 options={this.props.institutionCategories.list}
                  />
                  <Select
                    multiple

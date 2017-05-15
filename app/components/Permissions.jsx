@@ -4,17 +4,11 @@ import { getEntityType, INSTITUTION, BOUNDARY } from '../reducers/utils';
 import { permissionsAssignedToBound, permissionsFailed } from '../actions/notifications';
 import Notifications from 'react-notification-system-redux';
 
-const tableStyle = {
-    tableLayout: 'fixed',
-    width: '310px',
-    height: '250px',
-    overflow: 'scroll',
+const theadStyle = {
+    "background-color":"#D9EDF7",
 }
 
-const tableCellStyle = {
-    width: '80%',
-    wordWrap: 'break-word',
-}
+
 export default class Permissions extends React.Component {
     constructor(props) {
         super(props);
@@ -165,15 +159,15 @@ render() {
     let selBoundary = this.props.selectedBoundary;
     var children, childrenHTML;
     if (selBoundary) {
-        console.log("Selected boundary is: ", selBoundary);
+        //console.log("Selected boundary is: ", selBoundary);
         children = this.props.boundariesByParentId[selBoundary.id];
         if (children) {
             //console.log("Boundary has children ", children);
             childrenHTML = children.map(id => {
                 var details = this.props.boundaryDetails[id];
                 return (<tr colSpan="2" id={details.id}>
-                    <td style={tableCellStyle}>{details.name}</td>
-                    <td><input type="checkbox" className="form-control no-border" onChange={this.selectBoundary} checked={jQuery.inArray(details.id.toString(),this.state.boundaries)>-1} /></td>
+                    <td width="70%">{details.name}</td>
+                    <td width="30%"><input type="checkbox" className="no-border" onChange={this.selectBoundary} checked={jQuery.inArray(details.id.toString(),this.state.boundaries)>-1} /></td>
                 </tr>);
             });
         }
@@ -188,8 +182,8 @@ render() {
             if (user) {
                 return (
                     <tr id={user.id}>
-                        <td>{user.username}</td>
-                        <td><input type="checkbox" className="form-control no-border" onChange={this.selectUser} checked={jQuery.inArray(user.id.toString(),this.state.users)>-1}/></td>
+                        <td width="70%">{user.username}</td>
+                        <td width="30%"><input type="checkbox" className=" no-border" onChange={this.selectUser} checked={jQuery.inArray(user.id.toString(),this.state.users)>-1}/></td>
 
                     </tr>
                 );
@@ -206,8 +200,8 @@ render() {
                 if(assess) {
                     return (
                         <tr id={assess.id}>
-                            <td>{assess.name}</td>
-                            <td><input type="checkbox" className="form-control no-border" onChange={this.selectAssessment} checked={jQuery.inArray(assess.id.toString(),this.state.assessments)>-1}/></td>
+                            <td width="70%">{assess.name}</td>
+                            <td width="30%"><input type="checkbox" className="no-border" onChange={this.selectAssessment} checked={jQuery.inArray(assess.id.toString(),this.state.assessments)>-1}/></td>
                         </tr>
                     );
                 }
@@ -223,7 +217,8 @@ render() {
         selectionState =2;
         boundaryHelpMessage = "No boundaries or institutions under selected boundary";
     }
-    console.log("Selection state: ", selectionState);
+    else
+        selectionState=3;
     return (
         <div>
 
@@ -233,35 +228,41 @@ render() {
             </div>
             <div className="col-md-12">
                 <div className="col-md-4">
-                    <table className="table table-bordered table-striped table-responsive table-hover">
-                        <tbody>
+                    <table className="table table-fixedheader table-striped table-responsive table-hover">
+                        <thead style={theadStyle}>
                             <tr colSpan="2" className="info">
-                                <th colSpan="2">Boundary</th>
+                                <th colSpan="2" width="100%">Boundary</th>
                             </tr>
-                            {selectionState == 1 ? <tr><td><div className="bg-danger">{boundaryHelpMessage}</div></td></tr> : childrenHTML}
-                            {selectionState == 2 ? <tr><td><div className="bg-danger">{boundaryHelpMessage}</div></td></tr> : childrenHTML}
+                        </thead>
+                        <tbody>
+                            {selectionState == 1 ? <tr><td className="danger">{boundaryHelpMessage}</td></tr> : childrenHTML}
+                            {selectionState == 2 ? <tr><td className="danger">{boundaryHelpMessage}</td></tr> : childrenHTML}
 
                         </tbody>
                     </table>
                 </div>
                 <div className="col-md-4">
 
-                    <table className="table table-bordered table-striped table-responsive table-hover">
-                        <tbody>
+                    <table className="table table-fixedheader table-striped table-responsive table-hover">
+                        <thead style={theadStyle}>
                             <tr className="info" colSpan="2">
-                                <th colSpan="2">User</th>
+                                <th colSpan="2" width="100%">User</th>
                             </tr>
-                            {this.props.isLoading ? <tr><td> <i className="fa fa-spinner fa-pulse fa-spin fa-3x fa-fw"></i>Loading...</td></tr> :
+                        </thead>
+                        <tbody>
+                            {this.props.isLoading ? <tr><td> <i className="fa fa-cog fa-spin fa-3x fa-fw"></i>Loading...</td></tr> :
                                 userlist}
                         </tbody>
                     </table>
                 </div>
                 <div className="col-md-4">
-                    <table className="table table-bordered table-striped table-responsive table-hover">
-                        <tbody>
+                    <table className="table table-fixedheader table-striped table-responsive table-hover">
+                        <thead style={theadStyle}>
                             <tr className="info" colSpan="2">
-                                <th colSpan="2">Assessments</th>
+                                <th colSpan="2" width="100%">Assessments</th>
                             </tr>
+                        </thead>
+                        <tbody>
                             {!assessmentList || assessmentList.length == 0 ? <tr><td><div className="bg-danger">No assessments available</div></td></tr> : assessmentList}
 
                         </tbody>

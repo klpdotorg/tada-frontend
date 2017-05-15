@@ -358,7 +358,6 @@ export default class Institution extends React.Component {
                     name="institutionCat"
                     label="Category:"
                     value={institution.cat}
-
                     options={this.state.institutionCategories.list}
 
                     />

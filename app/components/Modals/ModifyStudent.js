@@ -94,6 +94,15 @@ handleChange=()=>{
   })
 }
   render() {
+    console.log(this.props);
+    const selectGender = [
+            {value: 'male', label: 'Male'},
+            {value: 'female', label: 'Female'},
+        ];
+    const selectLanguage = [
+            {value: 'hindi', label: 'Hindi'},
+            {value: 'english', label: 'English'},
+        ];
     return (
       <Modal contentLabel="Confirm Modal" isOpen={this.props.isOpen} onRequestClose={this.props.onCloseModal} style={customStyles}>
         <div className=""
@@ -141,22 +150,21 @@ handleChange=()=>{
                 validations="minLength:1"/>
             </div>
              <div className="col-sm-12">
-               <Input name="gender"
-                id="gender"
-                value={this.state.gender || ''}
-                label="Gender:" type="text"
-                className="form-control"
+                <Select
+                      name="gender"
+                      label="Gender"
+                      value={this.state.gender}
+                      options={selectGender}
+                  />
 
-                validations="minLength:1"/>
               </div>
-             <div className="col-sm-12">
-               <Input name="language"
-                id="language"
-                value={this.state.language || ''}
-                label="Language:" type="text"
-                className="form-control"
-
-                validations="minLength:1"/>
+              <div className="col-sm-12">
+                  <Select
+                       name="language"
+                       label="language"
+                       value={this.state.language}
+                       options={selectLanguage}
+                   />
               </div>
               <div className="col-sm-12">
                <Input name="dob"
@@ -232,8 +240,8 @@ handleChange=()=>{
 
       <div className='button' onClick={ () => {
                                             this.props.saveStudent(this.state)
-                                          } }>Yes</div>
-        <div className='button' onClick={ this.props.onCloseModal }>No</div>
+                                          } }>Save</div>
+      <div className='button' onClick={ this.props.onCloseModal }>Discard</div>
       </Modal>
     )
   }

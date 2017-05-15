@@ -59,12 +59,18 @@ export default class Programs extends React.Component {
 		this.props.dispatch(actions.fetchAllPrograms());
 	}
 
+	// componentDidMount(){
+	// 	console.log(sessionStorage.getItem('isAdmin'));
+	// 	if(sessionStorage.getItem('isAdmin')){
+	//
+	// 	}
+	// }
 	/*
 	Setting state here will NOT trigger another render
 	*/
 	componentWillReceiveProps(nextProps)
 	{
-	
+
 		const programs = nextProps.programsById;
 		var selectedProgram = this.state.selectedProgram;
 		if(this.props.primarySelected != nextProps.primarySelected) {
@@ -379,7 +385,14 @@ export default class Programs extends React.Component {
 		var instType;
 		programs = this.props.programsById;
 		assessments = this.props.assessmentsById;
-
+		// console.log(sessionStorage.getItem('isAdmin'));
+		if(sessionStorage.getItem('isAdmin')==null){
+			//this.props.redirectTo('/');
+			return(<div>
+				You dont have permissions to access this page<br/>
+				  <Link to="/" className="btn btn-primary padded-btn">GO TO MAIN PAGE</Link>
+			</div>);
+		}
 		var programsList= Object.values(programs).map((program,i) => {
 				return <option key={program.id} value={program.id}>{program.name}</option>;
 		});
@@ -480,7 +493,6 @@ export default class Programs extends React.Component {
 							<button type="button" className="col-sm-6 btn btn-info navbar-btn brand-blue-bg all-padded-btn" onClick={this.handleShowEditDialog}><span className="fa fa-pencil-square-o"></span>Edit</button>
 							<button type="button" className="col-sm-6 btn btn-info navbar-btn brand-blue-bg all-padded-btn" onClick={this.openConfirmModal.bind(this)} disabled={disabledstate}>Deactivate</button>
 							<button type="button" className="col-sm-6 btn btn-info navbar-btn brand-blue-bg all-padded-btn" data-toggle="modal" data-target="#deleteProgramModal" disabled={disabledstate}><span className="fa fa-trash-o"></span>Delete</button>
-
 						</div>
 
 					</div>

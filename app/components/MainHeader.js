@@ -9,7 +9,7 @@ import jqueryValidation from 'jquery-validation';
 import ConfirmPassword from './Modals/ConfirmPassword';
 import ChangePassword from './Modals/ChangePassword';
 import ChangeUserInfo from './Modals/ChangeUserInfo';
-import { checkUserPassword, changePassword } from '../actions/';
+import { checkUserPassword, changePassword, modifySelf } from '../actions/';
 import Notifications from 'react-notification-system-redux';
 import { baseNotification } from '../actions/';
 class HeaderBar extends Component {
@@ -39,9 +39,24 @@ class HeaderBar extends Component {
       changeUserOpen:false,
     })
   }
-  changeUserInfo(email, firstname, lastname, mobile) {
 
+  changeUserInfo(email, firstname, lastname, mobile) {
+    this.closeChangeUser();
+    this.props.dispatch(modifySelf(email, firstname, lastname)).then(() => {
+       this.props.dispatch(Notifications.success({
+        ...baseNotification,
+        title: "User profile modified",
+        message: "User profile modified successfully!"
+      }));
+    }).catch(error => {
+      this.props.dispatch(Notifications.error({
+        ...baseNotification,
+        title: "Error",
+        message: "Could not modify user profile. ERROR: " + error
+      }));
+    });
   }
+
   openChangePasswordModal() {
     this.setState({
       changePasswordOpen: true,
@@ -146,7 +161,7 @@ class HeaderBar extends Component {
         </div>
         <ConfirmPassword isOpen={ this.state.enterCurrentPassword } onCloseModal={ this.closePasswordModal.bind(this)} handleSubmit={this.confirmCurrentPwd.bind(this)}/>
        <ChangePassword isOpen={ this.state.changePasswordOpen } onCloseModal={ this.closeChangePwd.bind(this)} handleSubmit={this.changePwd.bind(this)}/>
-       <ChangeUserInfo isOpen = { this.state.changeUserOpen} onCloseModal={this.closeChangeUser.bind(this)} handleSubmit={this.changeUserInfo.bind(this)}/>
+       <ChangeUserInfo firstname={this.props.firstname} lastname={this.props.lastname} email={this.props.email} isOpen = { this.state.changeUserOpen} onCloseModal={this.closeChangeUser.bind(this)} handleSubmit={this.changeUserInfo.bind(this)}/>
 
 
       </nav>

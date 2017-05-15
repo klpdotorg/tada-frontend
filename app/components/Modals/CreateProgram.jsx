@@ -64,7 +64,7 @@ export default class CreateProgram extends Component {
 	}
 
 	setEndDate() {
-		return moment().add('years', 1).format('YYYY-MM-DD');
+		return moment().add(1,'years').format('YYYY-MM-DD');
 	}
 
 	render()

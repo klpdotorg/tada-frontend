@@ -56,10 +56,10 @@ export default class CreateClass extends Component {
   disabled={this.state.disabled} ref={(ref) => this.myform = ref}
 							>
 								<Input name="class" id="class" value="" label="Class" type="text"
-  placeholder="Please enter the class/grade" help="This is a required field" required validations="isNumeric,minLength:1"
+  placeholder="Please enter the class/grade" help="This is a required field" required validations="isAlphanumeric,minLength:1"
 								/>
 								<Input name="section" id="section" value="" label="Section" type="text"
-  placeholder="Please enter the section" help="This is a required field" required validations="isAlphanumeric,minLength:1"
+  placeholder="Please enter the section" help="This is a required field" validations="isAlphanumeric,minLength:1"
 								/>
 
 								<Select name="group_type"

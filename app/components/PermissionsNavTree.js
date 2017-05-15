@@ -53,10 +53,10 @@ export default class PermissionsNavTree extends React.Component {
 
         var boundary = this.props.boundaryDetails[node];
      
-        const label = <a onClick={ this.onBoundarySelection.bind(null,boundary)}><span className="node" onClick={ this.onBoundarySelection.bind(this)}> { _.capitalize(boundary.label) || _.capitalize(boundary.name) || _.capitalize(boundary.first_name)} </span></a>;
+        const label = <a onClick={ this.onBoundarySelection.bind(this,boundary)}><span className="node" onClick={ this.onBoundarySelection.bind(this, boundary)}> { _.capitalize(boundary.label) || _.capitalize(boundary.name) || _.capitalize(boundary.first_name)} </span></a>;
         return (
 
-          <TreeView key={ node } onClick={ this.props.onBoundaryClick.bind(null, boundary) } nodeLabel={ label } collapsed={ boundary.collapsed }>
+          <TreeView key={ node } onClick={ this.props.onBoundaryClick.bind(this, boundary) } nodeLabel={ label } collapsed={ boundary.collapsed }>
           { (() => {
             if (children && children.length > 0) {
               ++depth
