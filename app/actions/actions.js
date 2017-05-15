@@ -3,7 +3,7 @@ import { push } from 'react-router-redux';
 import {checkStatus, get} from './utils'
 
 import {SERVER_API_BASE as serverApiBase,
- SERVER_AUTH_BASE as authApiBase} from 'config';
+ SERVER_AUTH_BASE as authApiBase, REPORTS_EMAIL as reportsEmail} from 'config';
 import { urls as Urls, roles as ROLES } from '../constants';
 import _ from 'lodash'
 import {boundaryType, genUrl} from './utils';
@@ -133,6 +133,8 @@ export function logoutUser() {
       });
   };
 }
+
+
 
 function userDataFetched(data) {
   return {
