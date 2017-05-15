@@ -115,7 +115,7 @@ Displayelement=(props)=>{
   if(sessionStorage.getItem('isAdmin')) {
     return(
         <div>
-        {hasClusters?<p className="col-md-12 bg-info"><h5><i className="fa fa-2x fa-info-circle" aria-hidden="true"></i>You cannot <small>delete this block until the clusters below it are deleted</small></h5></p>:<div></div>}
+        {hasClusters?<p className="col-md-12"><h5><i className="fa fa-info-circle brand-blue" aria-hidden="true"></i> You cannot delete this block until the clusters below it are deleted</h5></p>:<div></div>}
 
         <div className='heading-border-left'>
         <h4 className="brand-blue col-md-10">Modify Details</h4>
