@@ -29,6 +29,7 @@ const mapStateToProps = state => {
     boundariesByParentId: state.boundaries.boundariesByParentId,
     programsById: getProgramsBySchoolType(state),
     assessmentsById: state.assessments.assessmentsById,
+    assessmentsFetching: state.assessments.isFetching,
     questionsById: state.assessments.questionsById,
     modal: state.modal,
     permissions: state.login.permissions,
