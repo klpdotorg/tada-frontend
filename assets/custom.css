@@ -1,3 +1,183 @@
+/*-------------------------------------*/
+/* COLORS */
+
+.brand-orange, %brand-orange {
+  color: $brand-orange;
+}
+.brand-orange-bg, %brand-orange-bg {
+  background-color: $brand-orange;
+}
+
+.brand-green, %brand-green, .brand-school {
+  color: $brand-green;
+}
+.brand-green-bg, %brand-green-bg, .brand-school-bg {
+  background-color: $brand-green;
+}
+
+.brand-blue, %brand-blue, .brand-school-cluster {
+  color: $brand-blue;
+}
+.brand-blue-bg, %brand-blue-bg, .brand-school-cluster-bg {
+  background-color: $brand-blue;
+}
+
+.brand-turquoise, %brand-turquoise, .brand-school-block {
+  color: $brand-turquoise;
+}
+.brand-turquoise-bg, %brand-turquoise-bg, .brand-school-block-bg {
+  background-color: $brand-turquoise;
+}
+
+.brand-purple, %brand-purple, .brand-preschool {
+  color: $brand-purple;
+}
+.brand-purple-bg, %brand-purple-bg, .brand-preschool-bg {
+  background-color: $brand-purple;
+}
+
+.brand-red, %brand-red, .brand-preschool-project {
+  color: $brand-red;
+}
+.brand-red-bg, %brand-red-bg, .brand-preschool-project-bg {
+  background-color: $brand-red;
+}
+
+.pink-salmon, %pink-salmon, .brand-preschool-circle {
+  color: $pink-salmon;
+}
+.pink-salmon-bg, %pink-salmon-bg, .brand-preschool-circle-bg {
+  background-color: $pink-salmon;
+}
+
+.white, %white {
+  color: $white;
+}
+.white-bg, %white-bg {
+  background-color: $white;
+}
+
+.orange-mild, %orange-mild {
+  color: $orange-mild;
+}
+.orange-mild-bg, %orange-mild-bg {
+  background-color: $orange-mild;
+}
+
+.green-leaf, %green-leaf {
+  color: $green-leaf;
+}
+.green-leaf-bg, %green-leaf-bg {
+  background-color: $green-leaf;
+}
+
+.black, %black {
+  color: $black;
+}
+.black-bg, %black-bg {
+  background-color: $black;
+}
+
+.grey-mist, %grey-mist {
+  color: $grey-mist;
+}
+.grey-mist-bg, %grey-mist-bg {
+  background-color: $grey-mist;
+}
+
+.grey-silver, %grey-silver {
+  color: $grey-silver;
+}
+.grey-silver-bg, %grey-silver-bg {
+  background-color: $grey-silver;
+}
+
+.grey-steel, %grey-steel {
+  color: $grey-steel;
+}
+.grey-steel-bg, %grey-steel-bg {
+  background-color: $grey-steel;
+}
+
+.grey-gravel, %grey-gravel {
+  color: $grey-gravel;
+}
+.grey-gravel-bg, %grey-gravel-bg {
+  background-color: $grey-gravel;
+}
+
+
+/* FONT FAMILY - LATO */
+/*-------------------------------------*/
+/* font-family: default: regular */
+@font-face {
+  font-family: 'Lato';
+  src: url('../fonts/lato/Lato-Reg-webfont.eot');
+  src: url('../fonts/lato/Lato-Reg-webfont.eot?#iefix') format('embedded-opentype'),
+       url('../fonts/lato/Lato-Reg-webfont.woff') format('woff'),
+       url('../fonts/lato/Lato-Reg-webfont.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* font-family: default: italic */
+@font-face {
+  font-family: 'Lato';
+  src: url('../fonts/lato/Lato-RegIta-webfont.eot');
+  src: url('../fonts/lato/Lato-RegIta-webfont.eot?#iefix') format('embedded-opentype'),
+       url('../fonts/lato/Lato-RegIta-webfont.woff') format('woff'),
+       url('../fonts/lato/Lato-RegIta-webfont.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+}
+
+/* font-family: default: bold */
+@font-face {
+  font-family: 'Lato';
+  src: url('../fonts/lato/Lato-Bol-webfont.eot');
+  src: url('../fonts/lato/Lato-Bol-webfont.eot?#iefix') format('embedded-opentype'),
+       url('../fonts/lato/Lato-Bol-webfont.woff') format('woff'),
+       url('../fonts/lato/Lato-Bol-webfont.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* font-family: default: light */
+@font-face {
+  font-family: 'Lato';
+  src: url('../fonts/lato/Lato-Lig-webfont.eot');
+  src: url('../fonts/lato/Lato-Lig-webfont.eot?#iefix') format('embedded-opentype'),
+       url('../fonts/lato/Lato-Lig-webfont.woff') format('woff'),
+       url('../fonts/lato/Lato-Lig-webfont.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+/*-------------------------------------*/
+/* FONT BASE STYLES */
+
+$font-base-size: 16px;
+$font-base-family: 'Lato', sans-serif;
+
+.font-base-family, %font-base-family {
+  font-family: $font-base-family;
+}
+
+/* font-styles */
+.italic, %italic {
+  font-style: italic;
+}
+.bold, %bold {
+  font-weight: 700;
+}
+.font-light, %font-light {
+  font-weight: 300;
+}
+.uppercase, %uppercase {
+  text-transform: uppercase;
+}
+
+
 .boundary-form{
   margin-top: 10px;
 }

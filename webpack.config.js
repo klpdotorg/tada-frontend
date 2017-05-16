@@ -17,7 +17,6 @@ module.exports = {
         {test: /\.woff|\.woff2|\.svg|.eot|\.ttf|\.png|\.gif|\.ico|\.html/, loader: 'file-loader'},
         {test: /\.json$/, loader: 'file-loader'},
         {test: /\.css$/, loader: "style!css"},
-        {test: /\.scss$/, loader: 'style!css!sass'},
         {test: /\.js$/, exclude: /node_modules/, loader: "babel"},
         {test: /\.jsx$/, exclude: /node_modules/, loader: "babel"}      
 
