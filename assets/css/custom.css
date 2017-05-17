@@ -432,6 +432,16 @@ div.well{
   color: white;
 }
 
+.btn-orange:hover {
+  background-color: orange;
+  color: white;
+}
+
+.btn-green:hover {
+  background-color: darkseagreen;
+  color: white;
+}
+
 .boundary-form{
   margin-top: 10px;
 }
