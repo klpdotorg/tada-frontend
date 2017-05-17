@@ -127,10 +127,10 @@ DistrictSummary=(props)=>{
   if(sessionStorage.getItem('isAdmin')) {
     return(
         <div>
-          {hasBlocks?<p className="col-md-12 bg-info"><h5><i className="fa fa-2x fa-info-circle" aria-hidden="true"></i>You cannot <small>delete this boundary until its children are deleted</small></h5></p>:<div></div>}
+          {hasBlocks?<p className="col-md-12 bg-info"><h5><i className="fa fa-info-circle brand-blue" aria-hidden="true"></i> You cannot delete this boundary until its children are deleted</h5></p>:<div></div>}
 
-          <div className="heading-border-left brand-blue">
-            <h4 className="brand-blue brand-bg-blue col-md-10">Modify Details</h4>
+          <div className="heading-border-left">
+            <h4 className="text-primary col-md-10">Modify Details</h4>
             {boundaryType == 2 ? <Button title='Add Project' onClick={this.toggleProjectModal} /> : <Button title='Add Block' onClick={this.toggleBlockModal} />}
           </div>
 

@@ -1,140 +1,39 @@
-/*-------------------------------------*/
 /* COLORS */
+/* Use React native
+https://facebook.github.io/react-native/docs/colors.html
+Reds, Oranges and Pinks 
+----------------------
+coral (#ff7f50)
+orange (#ffa500)
+darkorange (#ff8c00)
+salmon (#fa8072)
+firebrick (#b22222)
+tomato (#ff6347)
 
+Blues
+-----------------------
+royalblue (#4169e1)
+steelblue (#4682b4)
+skyblue (#87ceeb)
+dodgerblue (#1e90ff)
+darkslateblue (#483d8b)
+darkcyan (#008b8b)
 
-/*-------------------------------------*/
-// COLORS
+Greens
+-----------------------
+seagreen (#2e8b57)
+mediumseagreen (#3cb371)
+forestgreen (#228b22)
+darkgreen (#006400)
 
-$font-base-color: #5F5F5F;
-
-$brand-orange: #ec6608;
-$brand-green: #26b262;
-$brand-blue: #3891e3;
-$brand-turquoise: #24b2b6;
-$brand-purple: #7575bc;
-$brand-red: #cb0012;
-
-$black: #000;
-$white: #fff;
-$grey-mist: #f6f6f6;
-$grey-cloud: #d8d8d8;
-$grey-silver: #bbb;
-$grey-steel: #898989;
-$grey-gravel: #4d4d4d;
-
-$red-mild: #e17e5b;
-$pink-salmon: #f87c84;
-
-$yellow-mild: #ffeda0;
-$orange-mild: lighten($brand-orange, 20%);
-
-$green-pista: #addd8e;
-$green-leaf: #44c28c;
-
-.brand-orange, %brand-orange {
-  color: $brand-orange;
-}
-.brand-orange-bg, %brand-orange-bg {
-  background-color: $brand-orange;
-}
-
-.brand-green, %brand-green, .brand-school {
-  color: $brand-green;
-}
-.brand-green-bg, %brand-green-bg, .brand-school-bg {
-  background-color: $brand-green;
-}
-
-.brand-blue, %brand-blue, .brand-school-cluster {
-  color: $brand-blue;
-}
-.brand-blue-bg, %brand-blue-bg, .brand-school-cluster-bg {
-  background-color: $brand-blue;
-}
-
-.brand-turquoise, %brand-turquoise, .brand-school-block {
-  color: $brand-turquoise;
-}
-.brand-turquoise-bg, %brand-turquoise-bg, .brand-school-block-bg {
-  background-color: $brand-turquoise;
-}
-
-.brand-purple, %brand-purple, .brand-preschool {
-  color: $brand-purple;
-}
-.brand-purple-bg, %brand-purple-bg, .brand-preschool-bg {
-  background-color: $brand-purple;
-}
-
-.brand-red, %brand-red, .brand-preschool-project {
-  color: $brand-red;
-}
-.brand-red-bg, %brand-red-bg, .brand-preschool-project-bg {
-  background-color: $brand-red;
-}
-
-.pink-salmon, %pink-salmon, .brand-preschool-circle {
-  color: $pink-salmon;
-}
-.pink-salmon-bg, %pink-salmon-bg, .brand-preschool-circle-bg {
-  background-color: $pink-salmon;
-}
-
-.white, %white {
-  color: $white;
-}
-.white-bg, %white-bg {
-  background-color: $white;
-}
-
-.orange-mild, %orange-mild {
-  color: $orange-mild;
-}
-.orange-mild-bg, %orange-mild-bg {
-  background-color: $orange-mild;
-}
-
-.green-leaf, %green-leaf {
-  color: $green-leaf;
-}
-.green-leaf-bg, %green-leaf-bg {
-  background-color: $green-leaf;
-}
-
-.black, %black {
-  color: $black;
-}
-.black-bg, %black-bg {
-  background-color: $black;
-}
-
-.grey-mist, %grey-mist {
-  color: $grey-mist;
-}
-.grey-mist-bg, %grey-mist-bg {
-  background-color: $grey-mist;
-}
-
-.grey-silver, %grey-silver {
-  color: $grey-silver;
-}
-.grey-silver-bg, %grey-silver-bg {
-  background-color: $grey-silver;
-}
-
-.grey-steel, %grey-steel {
-  color: $grey-steel;
-}
-.grey-steel-bg, %grey-steel-bg {
-  background-color: $grey-steel;
-}
-
-.grey-gravel, %grey-gravel {
-  color: $grey-gravel;
-}
-.grey-gravel-bg, %grey-gravel-bg {
-  background-color: $grey-gravel;
-}
+Greys
+-----------------------
+black (#000000)
+dimgray (#696969)
+darkgray (#a9a9a9)
+silver (#c0c0c0)
+lightgrey (#d3d3d3)
+white (#ffffff)
 
 
 /* FONT FAMILY - LATO */
@@ -185,12 +84,12 @@ $green-leaf: #44c28c;
 
 /*-------------------------------------*/
 /* FONT BASE STYLES */
-
-$font-base-size: 16px;
-$font-base-family: 'Lato', sans-serif;
-
+.root {
+  --font-base-size: 16px;
+  --font-base-family: 'Lato', sans-serif;
+}
 .font-base-family, %font-base-family {
-  font-family: $font-base-family;
+  font-family: var(--font-base-family);
 }
 
 /* font-styles */
@@ -206,6 +105,29 @@ $font-base-family: 'Lato', sans-serif;
 .uppercase, %uppercase {
   text-transform: uppercase;
 }
+/* HEADING BORDER */
+
+.heading-border-left {
+  &:after {
+  content: '';
+  display: block;
+  text-align: left;
+  margin: auto;
+  height: 3px;
+  background-color: royalblue;
+  }
+}
+
+.heading-border{
+  &:after {
+  content: '';
+  display: block;
+  margin: auto;
+  width: 80px;
+  height: 5px;
+  background-color: royalblue;
+  }
+}
 
 /* BASE STYLES */
 
@@ -218,7 +140,7 @@ body {
 
 .sub-header {
   padding-bottom: 10px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid lightgrey;
 }
 
 /*
@@ -297,24 +219,27 @@ div.well{
 }
 
 .primary-school-tab-active {
-  background-color: $brand-orange-bg !important;
+  background-color: darkorange !important;
   color: white !important;
 }
 
 .primary-school-tab, .preschool-tab{
-  background-color: $grey-mist-bg !important;
+  background-color: lightgrey !important;
+  color: white !important;
 }
 
 .primary-school-tab:hover {
-  background-color: $orange-mild-bg !important;
+  background-color: orange !important;
+  color: white !important;
 }
 
 .preschool-tab:hover {
-  background-color: $green-leaf-bg !important;
+  background-color: darkseagreen !important;
+  color: white !important;
 }
 
 .preschool-tab-active {
-  background-color: $brand-green-bg !important;
+  background-color: seagreen !important;
   color: white !important;
 }
 
@@ -329,7 +254,7 @@ div.well{
 /*http://codepen.io/marifrahman/pen/aAEpD*/
 .tab-content{
   padding:3px 0px 0px 8px;
-  border-top: 1px solid $grey-silver;
+  border-top: 1px solid silver;
   margin-left:1px;
 }
 
@@ -342,7 +267,7 @@ div.well{
 
 /* tab color */
 .nav-tabs>li>a {
-    color:$white;
+    color: var(--white);
 }
 
 
@@ -361,8 +286,8 @@ div.well{
 }
 
 #treetoggler a:hover {
-  background: #222;
-  color: #fff;
+  background: var(--grey-gravel);
+  color: var(--white);
 }
 
 /*-------------------------SECONDARY NAV BAR - BUTTONS -----------------------*/
@@ -488,7 +413,7 @@ div.well{
 .tree-view_arrow:after {
   content: "\f056";
   font-family: FontAwesome;
-  color: $brand-blue;
+  color: royalblue;
 }
 
 
@@ -503,7 +428,7 @@ div.well{
 .tree-view_arrow-collapsed:after {
   content: "\f055";
   font-family: FontAwesome;
-  color: $brand-blue;
+  color: royalblue
 }
 
 /* FORMS */
