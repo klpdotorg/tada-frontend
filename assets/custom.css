@@ -177,7 +177,181 @@ $font-base-family: 'Lato', sans-serif;
   text-transform: uppercase;
 }
 
+/* BASE STYLES */
 
+/* Move down content because we have a fixed navbar that is 50px tall */
+body {
+  font-family: Lato !important;
+  padding-top: 50px;
+}
+
+
+.sub-header {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+/*
+ * Main content
+ */
+
+.main {
+  padding: 20px;
+}
+@media (min-width: 768px) {
+  .main {
+    padding-right: 40px;
+    padding-left: 40px;
+  }
+}
+.main .page-header {
+  margin-top: 0;
+}
+
+/* ABSOLUTE CENTER - LOGIN, LOGOUT */
+div.well{
+  height: 250px;
+} 
+
+.absolute-center {
+  margin: auto;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+}
+
+.absolute-center.is-responsive {
+  width: 50%; 
+  height: 50%;
+  min-width: 200px;
+  max-width: 400px;
+  padding: 40px;
+}
+
+/* NAV BAR */
+
+/*-------------------------TOP LEVEL NAVIGATION - WELCOME PANEL-----------------------*/
+.navbar-fixed-top {
+  border: 0;
+}
+
+.navbar-white {
+  background-color: #ffffff;
+  border-color: #ffffff;
+}
+
+.nav > li > a {
+  position: relative;
+  display: block;
+  padding: 10px 5px;
+}
+
+.app-name {
+  color: #898989;
+  font-size: 110%;
+  font-weight: bold;
+  font-family: Lato;
+}
+
+.login-msg {
+  color: #898989;
+  font-size: 90%;
+  font-family: Lato;
+}
+
+/*-------------------------NAV TABS FOR SCHOOL PRESCHOOL -----------------------*/
+
+
+.inst-tabs {
+  padding-top: 20px;
+  padding-left: 20px;
+}
+
+.primary-school-tab-active {
+  background-color: #ec6608 !important;
+  color: white !important;
+}
+
+.primary-school-tab, .preschool-tab{
+  background-color: $grey-silver;
+}
+
+.primary-school-tab:hover {
+  background-color: #ec6608 !important;
+}
+
+.preschool-tab:hover {
+  background-color: #26b262 !important;
+}
+
+.preschool-tab-active {
+  background-color: #26b262 !important;
+  color: white !important;
+}
+
+.nav .nav-tab {
+  box-shadow: 0 1px 3px rgba(0,0,0,.25);
+}
+
+.nav-tabs {
+  padding-top:10px;
+}
+
+/*http://codepen.io/marifrahman/pen/aAEpD*/
+.tab-content{
+  padding:3px 0px 0px 8px;
+  border-top: 1px solid $grey-silver;
+  margin-left:1px;
+}
+
+
+.box-shadow {
+  -webkit-box-shadow: 0 1px 3px rgba(0,0,0,.25);
+     -moz-box-shadow: 0 1px 3px rgba(0,0,0,.25);
+          box-shadow: 0 1px 3px rgba(0,0,0,.25);
+}
+
+/* tab color */
+.nav-tabs>li>a {
+    color:$white;
+}
+
+
+/*
+.nav > li > a:hover, .nav > li > a:focus {
+    text-decoration: none;
+}*/
+
+/*-------------------------TREE TOGGLER-----------------------*/
+
+#treetoggler {
+  position: fixed;
+  top: 175px;
+  left:15px;
+  z-index: 99999;
+}
+
+#treetoggler a:hover {
+  background: #222;
+  color: #fff;
+}
+
+/*-------------------------SECONDARY NAV BAR - BUTTONS -----------------------*/
+
+#secondary-menu {
+  padding-right: 10px;
+}
+
+.padded-btn {
+  margin-left: 1px;
+  margin-right: 1px;
+}
+
+.all-padded-btn {
+  margin: 8px 1px 8px 1px;
+}
+
+
+/* FORMS */
 .boundary-form{
   margin-top: 10px;
 }
