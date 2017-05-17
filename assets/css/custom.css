@@ -107,24 +107,13 @@ white (#ffffff)
 }
 /* HEADING BORDER */
 
-.heading-border-left {
-  &:after {
-  content: '';
-  display: block;
-  text-align: left;
-  margin: auto;
-  height: 3px;
-  background-color: royalblue;
-  }
-}
-
-.heading-border{
+.heading-border {
   &:after {
   content: '';
   display: block;
   margin: auto;
-  width: 80px;
-  height: 5px;
+  width: 100%;
+  height: 2px;
   background-color: royalblue;
   }
 }
@@ -432,6 +421,17 @@ div.well{
 }
 
 /* FORMS */
+
+.btn-orange {
+  background-color: darkorange;
+  color: white;
+}
+
+.btn-green {
+  background-color: seagreen;
+  color: white;
+}
+
 .boundary-form{
   margin-top: 10px;
 }
