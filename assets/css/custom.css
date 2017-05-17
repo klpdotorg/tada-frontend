@@ -297,24 +297,24 @@ div.well{
 }
 
 .primary-school-tab-active {
-  background-color: #ec6608 !important;
+  background-color: $brand-orange-bg !important;
   color: white !important;
 }
 
 .primary-school-tab, .preschool-tab{
-  background-color: $grey-silver;
+  background-color: $grey-mist-bg !important;
 }
 
 .primary-school-tab:hover {
-  background-color: #ec6608 !important;
+  background-color: $orange-mild-bg !important;
 }
 
 .preschool-tab:hover {
-  background-color: #26b262 !important;
+  background-color: $green-leaf-bg !important;
 }
 
 .preschool-tab-active {
-  background-color: #26b262 !important;
+  background-color: $brand-green-bg !important;
   color: white !important;
 }
 
