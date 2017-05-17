@@ -112,10 +112,10 @@
 /* font-family: default: regular */
 @font-face {
   font-family: 'Lato';
-  src: url('../fonts/lato/Lato-Reg-webfont.eot');
-  src: url('../fonts/lato/Lato-Reg-webfont.eot?#iefix') format('embedded-opentype'),
-       url('../fonts/lato/Lato-Reg-webfont.woff') format('woff'),
-       url('../fonts/lato/Lato-Reg-webfont.ttf') format('truetype');
+  src: url('fonts/lato/Lato-Reg-webfont.eot');
+  src: url('fonts/lato/Lato-Reg-webfont.eot?#iefix') format('embedded-opentype'),
+       url('fonts/lato/Lato-Reg-webfont.woff') format('woff'),
+       url('fonts/lato/Lato-Reg-webfont.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
@@ -123,10 +123,10 @@
 /* font-family: default: italic */
 @font-face {
   font-family: 'Lato';
-  src: url('../fonts/lato/Lato-RegIta-webfont.eot');
-  src: url('../fonts/lato/Lato-RegIta-webfont.eot?#iefix') format('embedded-opentype'),
-       url('../fonts/lato/Lato-RegIta-webfont.woff') format('woff'),
-       url('../fonts/lato/Lato-RegIta-webfont.ttf') format('truetype');
+  src: url('fonts/lato/Lato-RegIta-webfont.eot');
+  src: url('fonts/lato/Lato-RegIta-webfont.eot?#iefix') format('embedded-opentype'),
+       url('fonts/lato/Lato-RegIta-webfont.woff') format('woff'),
+       url('fonts/lato/Lato-RegIta-webfont.ttf') format('truetype');
   font-weight: normal;
   font-style: italic;
 }
@@ -134,10 +134,10 @@
 /* font-family: default: bold */
 @font-face {
   font-family: 'Lato';
-  src: url('../fonts/lato/Lato-Bol-webfont.eot');
-  src: url('../fonts/lato/Lato-Bol-webfont.eot?#iefix') format('embedded-opentype'),
-       url('../fonts/lato/Lato-Bol-webfont.woff') format('woff'),
-       url('../fonts/lato/Lato-Bol-webfont.ttf') format('truetype');
+  src: url('fonts/lato/Lato-Bol-webfont.eot');
+  src: url('fonts/lato/Lato-Bol-webfont.eot?#iefix') format('embedded-opentype'),
+       url('fonts/lato/Lato-Bol-webfont.woff') format('woff'),
+       url('fonts/lato/Lato-Bol-webfont.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
 }
@@ -145,10 +145,10 @@
 /* font-family: default: light */
 @font-face {
   font-family: 'Lato';
-  src: url('../fonts/lato/Lato-Lig-webfont.eot');
-  src: url('../fonts/lato/Lato-Lig-webfont.eot?#iefix') format('embedded-opentype'),
-       url('../fonts/lato/Lato-Lig-webfont.woff') format('woff'),
-       url('../fonts/lato/Lato-Lig-webfont.ttf') format('truetype');
+  src: url('fonts/lato/Lato-Lig-webfont.eot');
+  src: url('fonts/lato/Lato-Lig-webfont.eot?#iefix') format('embedded-opentype'),
+       url('fonts/lato/Lato-Lig-webfont.woff') format('woff'),
+       url('fonts/lato/Lato-Lig-webfont.ttf') format('truetype');
   font-weight: 300;
   font-style: normal;
 }
