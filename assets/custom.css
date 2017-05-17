@@ -350,6 +350,131 @@ div.well{
   margin: 8px 1px 8px 1px;
 }
 
+/* SIDE BAR */
+
+/* Toggle Styles */
+/*https://github.com/IronSummitMedia/startbootstrap-simple-sidebar*/
+#wrapper {
+    padding-left: 0;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+#wrapper.toggled {
+    padding-left: 250px;
+}
+
+#sidebar-wrapper {
+    z-index: 1000;
+    position: absolute;
+    left: 300px;
+    width: 0;
+    height: 75%;
+    margin-left: -280px;
+    padding-left: 10px;
+    padding-top : 20px;
+    overflow-y: scroll;
+    background: #f5f5f5;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+#wrapper.toggled #sidebar-wrapper {
+    width: 300px;
+}
+
+#main-content-wrapper {
+    width: 100%;
+    position: absolute;
+    padding: 15px;
+    margin-left:20px;
+}
+
+#wrapper.toggled #main-content-wrapper {
+    position: absolute;
+    margin-right: -300px;
+}
+
+@media(min-width:768px) {
+    #wrapper {
+        padding-left: 300px;
+    }
+
+    #wrapper.toggled {
+        padding-left: 0;
+    }
+
+    #sidebar-wrapper {
+        width: 300px;
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+        width: 0;
+    }
+
+    #main-content-wrapper {
+        padding: 20px;
+        position: relative;
+    }
+
+    #wrapper.toggled #main-content-wrapper {
+        position: relative;
+        margin-right: 0;
+    }
+}
+
+/* the tree node's style */
+.tree-view {
+  overflow-y: hidden;
+}
+
+.tree-view_item {
+  /* immediate child of .tree-view, for styling convenience */
+}
+
+/* style for the children nodes container */
+.tree-view_children {
+  margin-left: 16px;
+}
+
+.tree-view_children-collapsed {
+  height: 0px;
+}
+
+.tree-view_arrow {
+  cursor: pointer;
+  margin-right: 6px;
+  display: inline-block;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.tree-view_arrow:after {
+  content: "\f056";
+  font-family: FontAwesome;
+  color: $brand-blue;
+}
+
+
+/* rotate the triangle to close it */
+.tree-view_arrow-collapsed {
+  /*-webkit-transform: rotate(-90deg);
+  -moz-transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
+  transform: rotate(-90deg);*/
+}
+
+.tree-view_arrow-collapsed:after {
+  content: "\f055";
+  font-family: FontAwesome;
+  color: $brand-blue;
+}
 
 /* FORMS */
 .boundary-form{
