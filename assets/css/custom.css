@@ -126,6 +126,43 @@ body {
   padding-top: 50px;
 }
 
+hr {
+  border: none;
+  color: royalblue;
+  background-color: royalblue;
+  height: 1px; 
+}
+
+.border-base {
+  border-bottom: 2px solid royalblue;
+}
+/*-------------------------------------*/
+/* SPACING */
+
+.base-spacing {
+  padding: 10px 0;
+}
+
+.base-spacing-sm {
+  padding: 5px 0;
+}
+
+.base-spacing-mid {
+  padding: 25px 0;
+}
+
+.base-spacing-lg {
+  padding: 20px 0;
+}
+
+.base-spacing-lg-x {
+  padding: 25px 0;
+}
+
+.base-spacing-lg-2x {
+  padding: 50px 0;
+}
+
 
 .sub-header {
   padding-bottom: 10px;
@@ -444,6 +481,10 @@ div.well{
   background-color: darkseagreen;
   color: white;
   border-color: seagreen;
+}
+
+.form-group {
+  margin: 15px;
 }
 
 .boundary-form{
