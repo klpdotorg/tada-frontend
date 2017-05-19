@@ -425,21 +425,25 @@ div.well{
 .btn-orange {
   background-color: darkorange;
   color: white;
+  border-color: orange;
 }
 
 .btn-green {
   background-color: seagreen;
   color: white;
+  border-color: darkseagreen;
 }
 
 .btn-orange:hover {
   background-color: orange;
   color: white;
+  border-color: darkorange;
 }
 
 .btn-green:hover {
   background-color: darkseagreen;
   color: white;
+  border-color: seagreen;
 }
 
 .boundary-form{
