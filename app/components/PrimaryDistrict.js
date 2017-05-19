@@ -129,7 +129,7 @@ DistrictSummary=(props)=>{
         <div>
           {hasBlocks?<p className="col-md-12 bg-info"><h5><i className="fa fa-info-circle brand-blue" aria-hidden="true"></i> You cannot delete this boundary until its children are deleted</h5></p>:<div></div>}
           <h4 className="text-primary heading-border col-md-10">Modify Details</h4>
-          {boundaryType == 2 ? <button className="btn btn-primary btn-green pull-right" title='Add Project' onClick={this.toggleProjectModal} /> : <button className="btn btn-primary btn-orange pull-right" title='Add Block' onClick={this.toggleBlockModal} />}
+          {boundaryType == 2 ? <button className="btn btn-primary btn-green pull-right" title='Add Project' onClick={this.toggleProjectModal}>Add Project</button>: <button className="btn btn-primary btn-orange pull-right" title='Add Block' onClick={this.toggleBlockModal}>'Add Block'</button>}
           
            <Formsy.Form
             onValidSubmit={this.saveDistrict}
