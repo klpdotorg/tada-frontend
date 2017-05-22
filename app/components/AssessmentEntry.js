@@ -6,7 +6,7 @@ const { Editors, Toolbar, Formatters } = require('react-data-grid-addons');
 const { AutoComplete: AutoCompleteEditor, DropDownEditor } = Editors;
 const { ImageFormatter } = Formatters;
 import { fetchStudents, fetchQuestionsForAssessment } from '../actions';
-
+import _ from 'underscore';
 faker.locale = 'en_GB';
 
 const val = [0, 1];
@@ -19,10 +19,7 @@ export default class AssessmentEntry extends React.Component {
   componentWillMount() {}
 
   componentWillReceiveProps(nextProps) {
-    if (
-      this.props.selectedProgramAssess.studentgroupId !=
-      nextProps.selectedProgramAssess.studentgroupId
-    ) {
+    if (!_.isEqual(nextProps.selectedProgramAssess, this.props.selectedProgramAssess)) {
       console.log('Current student groupid: ', this.props.selectedProgramAssess.studentgroupId);
       console.log('Next props is: ', nextProps.selectedProgramAssess.studentgroupId);
       this.props.dispatch(
@@ -57,7 +54,7 @@ export default class AssessmentEntry extends React.Component {
     let html = '';
     if (questions && questions.length > 0) {
       html = questions.map((id, index) => {
-        return <div className="col-md-1"><span>{index}</span></div>;
+        return <td><span>{index + 1}</span></td>;
       });
     }
     if (students && students.length > 0) {
@@ -71,21 +68,38 @@ export default class AssessmentEntry extends React.Component {
       });
     }
 
-    return (
+    /*return (
       <div>
         <div className="row">
           <h4> Assessment Entry </h4>
         </div>
         <div className="students-grid">
-          <div className="row ">
-            <div className="col-md-2 brand-blue-bg"><span>UID</span></div>
-            <div className="col-md-2 brand-blue-bg"><span>Name</span></div>
+          <div className="row header">
+            <div className="col-md-2"><span>UID</span></div>
+            <div className="col-md-2"><span>Name</span></div>
             {html}
             <div className="col-md-1"><span>Actions</span></div>
           </div>
 
           {studentsList}
         </div>
+      </div>
+    );*/
+
+    return (
+      <div>
+        <table className="table table-striped">
+          <thead>
+            <tr className="bg-info">
+              <td>UID</td>
+              <td colSpan="2">Name</td>
+              {html}
+            </tr>
+          </thead>
+          <tbody>
+            {studentsList}
+          </tbody>
+        </table>
       </div>
     );
   }
@@ -99,21 +113,21 @@ class InputRow extends React.Component {
       name = this.props.student.first_name + ' ' + this.props.student.last_name;
       id = this.props.student.id;
     }
+    console.log('Student name is: ', name);
+    console.log('Student id is: ', id);
     let html = '';
     if (this.props.questions && this.props.questions.length > 0) {
       html = this.props.questions.map((id, index) => {
-        return (
-          <div className="col-md-1"><input type="text" value="1" className="form-control" /></div>
-        );
+        return <td><input type="text" value="1" className="form-control" /></td>;
       });
     }
-    return (
+    /*return (
       <div className="row">
         <div className="col-md-2"><span>{id}</span></div>
         <div className="col-md-2 "><span>{name}</span></div>
         {html}
         <div className="col-md-1">
-          <span onClick={this.deleteStudent} className="glyphicon glyphicon-trash">Delete</span>
+          <span onClick={this.saveEntry} className="glyphicon glyphicon-trash">Save</span>
           <span
             className="glyphicon glyphicon-pencil"
             onClick={() => {
@@ -124,6 +138,13 @@ class InputRow extends React.Component {
           </span>
         </div>
       </div>
+    );*/
+    return (
+      <tr>
+        <td>{id}</td>
+        <td colSpan="2"> {name}</td>
+        {html}
+      </tr>
     );
   }
 }

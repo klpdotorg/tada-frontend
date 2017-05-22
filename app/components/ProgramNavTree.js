@@ -77,10 +77,13 @@ export default class PermissionsNavTree extends React.Component {
     });
   }
 
-  onBoundarySelection(assessId) {
-    let index = this.state.nodeHierarchy.indexOf(assessId);
-    let studentGroupId = this.state.nodeHierarchy[index - 1];
-    let institutionId = this.state.nodeHierarchy[index - 2];
+  onBoundarySelection(uniqueId) {
+    let index = this.state.nodeHierarchy.indexOf(uniqueId);
+    //Assessment ID is the last piece of the string. See render method for more comments on this.
+    var values = uniqueId.split('_');
+    let assessId = values[2];
+    let studentGroupId = values[1];
+    let institutionId = values[0];
     if (isAssessment(assessId, this.props.assessmentsById)) {
       //Fetch students from the student group (parent id)
       //set the selected student group, program, assessment in the store
@@ -103,17 +106,35 @@ export default class PermissionsNavTree extends React.Component {
         var children = boundaryHierarchy[node];
         visitedBoundaries.push(node);
         var boundary = boundaryDetails[node];
+        let nodeId;
         if (boundary) {
-          if (boundary.id) this.state.nodeHierarchy.push(boundary.id);
-          else this.state.nodeHierarchy.push(boundary.assessment_id);
+          if (boundary.id) nodeId = boundary.id;
+          else nodeId = boundary.assessment_id;
         }
+        if (boundary) {
+          if (isAssessment(nodeId, this.props.assessmentsById)) {
+            //This boundary is an assessment. Therefore, we need to be able to identify it uniquely w.r.t to its place in the nav tree (institution/class/assessment combo) so we
+            //can fetch the right student set. Note that assessment Id remains the same across student groups.
+            let copyVisitedBoundaries = visitedBoundaries.slice();
+            if (copyVisitedBoundaries.length > 2) {
+              let currentAssessment = copyVisitedBoundaries.pop();
+              let studentGroup = copyVisitedBoundaries.pop();
+              let institution = copyVisitedBoundaries.pop();
+              let uniqueAssessmentId = institution + '_' + studentGroup + '_' + currentAssessment;
+              console.log('unique assessment id is: ', uniqueAssessmentId);
+              this.state.nodeHierarchy.push(uniqueAssessmentId);
+              boundary.uniqueId = uniqueAssessmentId;
+            }
+          }
+        } //End of if
+
         const label = (
           <span
             className="node"
             id={boundary.id}
             onClick={() => {
-              if (boundary.assessment_id) {
-                this.onBoundarySelection(boundary.assessment_id);
+              if (boundary.uniqueId) {
+                this.onBoundarySelection(boundary.uniqueId);
               } else {
                 this.onBoundarySelection(boundary.id);
               }

@@ -15,8 +15,10 @@
 .students-grid {
   overflow-x: auto;
   white-space: nowrap;
-  padding: 10px 0;
-  margin: 10px 0;
+}
+
+.students-grid > .row .header {
+  background-color: blue;
 }
 
 .students-grid > .row > div {
