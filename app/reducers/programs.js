@@ -8,7 +8,12 @@ export function programs(
       assessments: {},
       assessmentsDetails: {},
     },
-    selected: '',
+    selected: {
+      programId: '',
+      assessmentId: '',
+      studentgroupId: '',
+      institutionId: '',
+    },
   },
   action,
 ) {
@@ -47,9 +52,15 @@ export function programs(
       st.boundaries.details[action.id].collapsed = !st.boundaries.details[action.id].collapsed;
       return st;
     case 'SELECT_PROGRAM_BOUNDARY':
+      let selected = {
+        assessmentId: action.assessmentId,
+        programId: action.programId,
+        studentgroupId: action.studentgroupId,
+        institutionId: action.institutionId,
+      };
       return {
         ...state,
-        selected: action.id,
+        selected,
       };
     default:
       return state;
@@ -67,6 +78,7 @@ const serializeProgramBoundaries = program => {
       if (key != 1) {
         o.depth = depth;
         o.collapsed = true;
+        o.parent = key;
         programs.details[key] = _.omit(o, 'boundaries', 'assessments', 'classes', 'institutions');
         ++depth;
       }

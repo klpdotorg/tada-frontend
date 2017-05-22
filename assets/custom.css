@@ -24,12 +24,21 @@
   float: none;
 }
 
+.students-grid > .row div:nth-child(even){
+  background-color: #dcdcdc;
+}
+.students-grid > .row div:nth-child(odd){
+  background-color: #aaaaaa;
+}
+
 .grid-header {
   margin-bottom: 10px;
   border: solid black;
   border-width: 2px 0;
   font-weight: 500;
 }
+
+
 
 /*
 Force table width to 100%

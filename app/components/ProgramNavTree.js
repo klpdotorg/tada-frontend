@@ -10,8 +10,10 @@ import {
   getProgramDetails,
   selectProgramBoundary,
   fetchEntitiesFromServer,
+  fetchAssessmentsForProgram,
 } from '../actions/';
 import { getEntityType, getBoundaryType, CLUSTER } from '../reducers/utils';
+import { isAssessment } from './utils';
 
 export default class PermissionsNavTree extends React.Component {
   constructor(props) {
@@ -21,6 +23,7 @@ export default class PermissionsNavTree extends React.Component {
       programsById: {},
       programs: [],
       isLoading: true,
+      nodeHierarchy: [],
     };
 
     this.onBoundarySelection = this.onBoundarySelection.bind(this);
@@ -51,6 +54,12 @@ export default class PermissionsNavTree extends React.Component {
       });
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.selectedProgram != this.state.selectedProgram && this.state.selectedProgram) {
+      this.props.dispatch(fetchAssessmentsForProgram(this.state.selectedProgram));
+    }
+  }
+
   toggleNode(boundary) {
     this.props.dispatch({ type: 'TOGGLE_PROGRAM_NODE', id: boundary.id });
   }
@@ -68,8 +77,18 @@ export default class PermissionsNavTree extends React.Component {
     });
   }
 
-  onBoundarySelection(id) {
-    this.props.dispatch(selectProgramBoundary(id));
+  onBoundarySelection(assessId) {
+    let index = this.state.nodeHierarchy.indexOf(assessId);
+    let studentGroupId = this.state.nodeHierarchy[index - 1];
+    let institutionId = this.state.nodeHierarchy[index - 2];
+    if (isAssessment(assessId, this.props.assessmentsById)) {
+      //Fetch students from the student group (parent id)
+      //set the selected student group, program, assessment in the store
+      //The double entry page should get activated when clicking on the assessment, else it should show a message.
+      this.props.dispatch(
+        selectProgramBoundary(assessId, this.state.selectedProgram, studentGroupId, institutionId),
+      );
+    }
   }
 
   renderSubTree(node, boundaryHierarchy, visitedBoundaries, depth, boundaryDetails) {
@@ -83,14 +102,21 @@ export default class PermissionsNavTree extends React.Component {
       if (node) {
         var children = boundaryHierarchy[node];
         visitedBoundaries.push(node);
-
         var boundary = boundaryDetails[node];
-
+        if (boundary) {
+          if (boundary.id) this.state.nodeHierarchy.push(boundary.id);
+          else this.state.nodeHierarchy.push(boundary.assessment_id);
+        }
         const label = (
           <span
             className="node"
+            id={boundary.id}
             onClick={() => {
-              this.onBoundarySelection(boundary.id);
+              if (boundary.assessment_id) {
+                this.onBoundarySelection(boundary.assessment_id);
+              } else {
+                this.onBoundarySelection(boundary.id);
+              }
             }}
           >
             {' '}
