@@ -15,13 +15,22 @@
 .students-grid {
   overflow-x: auto;
   white-space: nowrap;
-  padding: 10px 0;
-  margin: 10px 0;
+}
+
+.students-grid > .row .header {
+  background-color: blue;
 }
 
 .students-grid > .row > div {
   display: inline-block;
   float: none;
+}
+
+.students-grid > .row div:nth-child(even){
+  background-color: #dcdcdc;
+}
+.students-grid > .row div:nth-child(odd){
+  background-color: #aaaaaa;
 }
 
 .grid-header {
@@ -30,6 +39,8 @@
   border-width: 2px 0;
   font-weight: 500;
 }
+
+
 
 /*
 Force table width to 100%

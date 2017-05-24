@@ -9,9 +9,12 @@ const programDetails = program => ({
   program,
 });
 
-export const selectProgramBoundary = id => ({
+export const selectProgramBoundary = (assessmentId, programId, studentgroupId, institutionId) => ({
   type: 'SELECT_PROGRAM_BOUNDARY',
-  id,
+  assessmentId,
+  programId,
+  studentgroupId,
+  institutionId,
 });
 
 export function fetchAllPrograms() {
