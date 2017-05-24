@@ -78,7 +78,7 @@ const serializeProgramBoundaries = program => {
       if (key != 1) {
         o.depth = depth;
         o.collapsed = true;
-        o.parent = key;
+        o.type = o.classes || o.institutions || o.assessments;
         programs.details[key] = _.omit(o, 'boundaries', 'assessments', 'classes', 'institutions');
         ++depth;
       }

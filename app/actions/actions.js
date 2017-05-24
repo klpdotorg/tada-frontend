@@ -243,6 +243,35 @@ export const getStudents = (institutionId, classId) => {
   return get(`${serverApiBase}institutions/${institutionId}/studentgroups/${classId}/students/`);
 };
 
+export function fetchStudentsByGroupId(groupId) {
+  return function(dispatch, getState) {
+    dispatch({
+      type: 'REQUEST_SENT',
+    });
+    const state = getState();
+    var url = serverApiBase + `studentgroups/${groupId}/students/`;
+
+    return fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Token ' + sessionStorage.token,
+      },
+    })
+      .then(checkStatus)
+      .then(data => {
+        dispatch({
+          type: 'STUDENTS_FULFILLED',
+          payload: { students: data, groupId },
+        });
+      })
+      .catch(error => {
+        console.log(error);
+        dispatch(requestFailed(error));
+      });
+  };
+}
+
 export function fetchStudents(institutionId, groupId) {
   return function(dispatch, getState) {
     const state = getState();

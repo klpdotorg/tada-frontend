@@ -5,7 +5,7 @@ const React = require('react');
 const { Editors, Toolbar, Formatters } = require('react-data-grid-addons');
 const { AutoComplete: AutoCompleteEditor, DropDownEditor } = Editors;
 const { ImageFormatter } = Formatters;
-import { fetchStudents, fetchQuestionsForAssessment } from '../actions';
+import { fetchStudentsByGroupId, fetchQuestionsForAssessment } from '../actions';
 import _ from 'underscore';
 faker.locale = 'en_GB';
 
@@ -20,14 +20,7 @@ export default class AssessmentEntry extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (!_.isEqual(nextProps.selectedProgramAssess, this.props.selectedProgramAssess)) {
-      console.log('Current student groupid: ', this.props.selectedProgramAssess.studentgroupId);
-      console.log('Next props is: ', nextProps.selectedProgramAssess.studentgroupId);
-      this.props.dispatch(
-        fetchStudents(
-          nextProps.selectedProgramAssess.institutionId,
-          nextProps.selectedProgramAssess.studentgroupId,
-        ),
-      );
+      this.props.dispatch(fetchStudentsByGroupId(nextProps.selectedProgramAssess.studentgroupId));
     }
     if (
       this.props.selectedProgramAssess.assessmentId != nextProps.selectedProgramAssess.assessmentId
@@ -97,7 +90,13 @@ export default class AssessmentEntry extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {studentsList}
+            {this.props.isFetching
+              ? <tr colSpan="3">
+                  <td colSpan="3" style={{ 'text-align': 'center' }}>
+                    <i className="fa fa-cog fa-spin fa-3x fa-fw" />Loading...
+                  </td>
+                </tr>
+              : studentsList}
           </tbody>
         </table>
       </div>
@@ -113,12 +112,10 @@ class InputRow extends React.Component {
       name = this.props.student.first_name + ' ' + this.props.student.last_name;
       id = this.props.student.id;
     }
-    console.log('Student name is: ', name);
-    console.log('Student id is: ', id);
     let html = '';
     if (this.props.questions && this.props.questions.length > 0) {
       html = this.props.questions.map((id, index) => {
-        return <td><input type="text" value="1" className="form-control" /></td>;
+        return <td><input type="text" className="form-control" /></td>;
       });
     }
     /*return (

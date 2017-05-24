@@ -5,6 +5,7 @@ import * as Selectors from '../selectors/';
 const mapStateToProps = (state, ownProps) => {
   return {
     studentsById: state.boundaries.boundaryDetails,
+    isFetching: state.boundaries.isFetching,
     selectedProgramAssess: state.programs.selected,
     questionsByAssessId: state.assessments.questionsByAssessId,
   };

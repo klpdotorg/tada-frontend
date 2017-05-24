@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import TreeView from 'react-treeview';
 import { Link } from 'react-router';
 import { alphabeticalOrder } from '../utils';
+import { CLASS } from '../reducers/utils';
 import _ from 'lodash';
 import {
   fetchBoundaryDetails,
@@ -28,6 +29,7 @@ export default class PermissionsNavTree extends React.Component {
 
     this.onBoundarySelection = this.onBoundarySelection.bind(this);
     this.handleProgramSelection = this.handleProgramSelection.bind(this);
+    this.findKey = this.findKey.bind(this);
   }
 
   componentDidMount() {
@@ -77,22 +79,43 @@ export default class PermissionsNavTree extends React.Component {
     });
   }
 
-  onBoundarySelection(uniqueId) {
-    let index = this.state.nodeHierarchy.indexOf(uniqueId);
-    //Assessment ID is the last piece of the string. See render method for more comments on this.
-    var values = uniqueId.split('_');
-    let assessId = values[2];
-    let studentGroupId = values[1];
-    let institutionId = values[0];
-    if (isAssessment(assessId, this.props.assessmentsById)) {
+  onBoundarySelection(boundary, uniqueId) {
+    if (isAssessment(boundary.id, this.props.assessmentsById)) {
       //Fetch students from the student group (parent id)
       //set the selected student group, program, assessment in the store
       //The double entry page should get activated when clicking on the assessment, else it should show a message.
+      //Assessment ID is the last piece of the string. See render method for more comments on this.
+      var values = uniqueId.split('_');
+      let assessId = values[1];
+      let studentGroupId = values[0];
       this.props.dispatch(
-        selectProgramBoundary(assessId, this.state.selectedProgram, studentGroupId, institutionId),
+        selectProgramBoundary(assessId, this.state.selectedProgram, studentGroupId, ''),
       );
     }
   }
+
+  findKey(obj, value) {
+    var key;
+    _.each(_.keys(obj), function(k) {
+      var v = obj[k];
+      if (v.indexOf(value) > -1) {
+        key = k;
+      }
+    });
+
+    return key;
+  }
+
+  /**
+ * Given an array of DFS traversed boundaries and an assessment, this method will return a
+ * unique assessment id of the format {studentgroupid_assessmentid}. Reason is that assessment ids
+ * are not globally unique and we need a way to find out the studentgroup id of a particular assessment
+ * as the user clicks on it in the UI. Relying on DFS algorithm to give us the studentgroup id that this assessment
+ * belongs to
+ * @param {*} assessment 
+ * @param {*} visitedBoundaries 
+ */
+  createAssessmentId(assessment, visitedBoundaries) {}
 
   renderSubTree(node, boundaryHierarchy, visitedBoundaries, depth, boundaryDetails) {
     // const boundaryDetails = this.props.boundaryDetails;
@@ -104,13 +127,14 @@ export default class PermissionsNavTree extends React.Component {
     if (boundaryDetails[node].depth == depth && depth < 6) {
       if (node) {
         var children = boundaryHierarchy[node];
-        visitedBoundaries.push(node);
         var boundary = boundaryDetails[node];
+
         let nodeId;
         if (boundary) {
-          if (boundary.id) nodeId = boundary.id;
-          else nodeId = boundary.assessment_id;
+          nodeId = boundary.id;
         }
+        visitedBoundaries.push(node);
+        let uniqueAssessmentId;
         if (boundary) {
           if (isAssessment(nodeId, this.props.assessmentsById)) {
             //This boundary is an assessment. Therefore, we need to be able to identify it uniquely w.r.t to its place in the nav tree (institution/class/assessment combo) so we
@@ -118,12 +142,16 @@ export default class PermissionsNavTree extends React.Component {
             let copyVisitedBoundaries = visitedBoundaries.slice();
             if (copyVisitedBoundaries.length > 2) {
               let currentAssessment = copyVisitedBoundaries.pop();
-              let studentGroup = copyVisitedBoundaries.pop();
-              let institution = copyVisitedBoundaries.pop();
-              let uniqueAssessmentId = institution + '_' + studentGroup + '_' + currentAssessment;
-              console.log('unique assessment id is: ', uniqueAssessmentId);
-              this.state.nodeHierarchy.push(uniqueAssessmentId);
-              boundary.uniqueId = uniqueAssessmentId;
+              let lastClass = copyVisitedBoundaries.pop();
+              while (isAssessment(lastClass, this.props.assessmentsById)) {
+                lastClass = copyVisitedBoundaries.pop();
+              }
+              let studentGroup = lastClass;
+              //Now find the institution id based on student group id
+              uniqueAssessmentId = studentGroup + '_' + currentAssessment;
+              //boundary.uniqueId = uniqueAssessmentId;
+              nodeId = uniqueAssessmentId;
+              //console.log("Unique assessment id is: ", uniqueAssessmentId);
             }
           }
         } //End of if
@@ -131,13 +159,9 @@ export default class PermissionsNavTree extends React.Component {
         const label = (
           <span
             className="node"
-            id={boundary.id}
+            id={nodeId}
             onClick={() => {
-              if (boundary.uniqueId) {
-                this.onBoundarySelection(boundary.uniqueId);
-              } else {
-                this.onBoundarySelection(boundary.id);
-              }
+              this.onBoundarySelection(boundary, nodeId);
             }}
           >
             {' '}
