@@ -12,6 +12,7 @@ content: {
         transform: 'translate(-50%,-50%)',
         minWidth: '20rem',
         width: '80%',
-        maxWidth: '60rem'
+        maxWidth: '60rem',
+        maxHeight: '30rem'
     }
 };
