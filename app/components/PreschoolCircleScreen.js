@@ -18,6 +18,7 @@ export default class PreschoolCircle extends React.Component {
     this.toggleSchoolModal = this.toggleSchoolModal.bind(this);
     this.saveCircle = this.saveCircle.bind(this);
     this.deleteCircle = this.deleteCircle.bind(this);
+    this.hasChildren = this.hasChildren.bind(this);
     this.state = {
       schoolModalIsOpen: false,
       canSubmit: false,
@@ -126,6 +127,13 @@ export default class PreschoolCircle extends React.Component {
     })
   }
 
+  hasChildren() {
+    if(this.props.boundariesByParentId[this.props.params.circleId]) {
+      return this.props.boundariesByParentId[this.props.params.circleId].length > 0;
+    }
+    else
+      return false;
+  }
 
   toggleSchoolModal() {
    this.props.dispatch({

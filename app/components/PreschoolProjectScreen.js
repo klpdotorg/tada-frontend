@@ -15,6 +15,7 @@ export default class PreschoolProject extends Component{
     this.toggleCircleModal = this.toggleCircleModal.bind(this);
     this.saveCircle = this.saveCircle.bind(this);
     this.deleteProject = this.deleteProject.bind(this);
+    this.hasChildren = this.hasChildren.bind(this);
     this.state = {
       canSubmit: false,
       openConfirmModal: false,
@@ -52,6 +53,15 @@ export default class PreschoolProject extends Component{
       type: 'TOGGLE_MODAL',
       modal: 'createCircle'
     })
+  }
+
+  hasChildren() {
+    if(this.props.boundariesByParentId[this.props.params.projectId]) {
+      return this.props.boundariesByParentId[this.props.params.projectId].length > 0;
+    }
+    else
+      return false;
+    }
   }
 
   saveCircle(name) {
