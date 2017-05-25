@@ -373,7 +373,7 @@ div.well{
     width: 100%;
     position: absolute;
     padding: 15px;
-    margin-left:20px;
+    /*margin-left:20px;*/
 }
 
 #wrapper.toggled #main-content-wrapper {

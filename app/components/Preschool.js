@@ -374,7 +374,7 @@ Displayelement = (props) =>{
 
             <div className="col-md-2">
               <button type="submit" className="btn btn-primary" onClick={this.saveInsti}>Save</button>
-              <button type="submit" className="btn btn-primary" onClick={this.showConfirmation}>Delete</button>
+              <button type="submit" className="btn btn-primary padded-btn" onClick={this.showConfirmation}>Delete</button>
               <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteInstitution} onCloseModal={this.closeConfirmModal} entity={institution.name}/>
             </div>
           </div>

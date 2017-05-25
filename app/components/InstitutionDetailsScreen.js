@@ -271,6 +271,7 @@ export default class Institution extends React.Component {
           </div>:<div>          {hasClasses?<p className="col-md-12 bg-info"><h5><i className="fa fa-2x fa-info-circle" aria-hidden="true"></i>You cannot <small>delete this institution until the classes under it are deleted</small></h5></p>:<div></div>}
 </div>}
           <h4 className="text-primary heading-border col-md-10">{canModify? "Modify Details": "View Details"}</h4>
+          <div className="base-spacing-mid border-base"/>
             {!canModify?null:<button className="btn btn-orange pull-right" title='Add Class' onClick={this.toggleClassModal} disabled={!canModify}>Add Class</button>}
 
 
@@ -424,7 +425,7 @@ export default class Institution extends React.Component {
                     {!canModify?<div></div>:
                       <div className="col-md-2">
                       <button type="submit" className="btn btn-primary" onClick={this.saveInsti}>Save</button>
-                      <button type="submit" className="btn btn-primary" disabled={hasClasses} onClick={this.showConfirmation}>Delete</button>
+                      <button type="submit" className="btn btn-primary padded-btn" disabled={hasClasses} onClick={this.showConfirmation}>Delete</button>
                       <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteInstitution} onCloseModal={this.closeConfirmModal} entity={institution.name}/>
                       </div>}
 
