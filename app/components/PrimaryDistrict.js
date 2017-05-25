@@ -152,14 +152,11 @@ DistrictSummary=(props)=>{
     )
   }else{
       return(
-        <div>
-        <h4 className="heading-err heading-border-left brand-red">  <span className="fa-stack fa-lg"> <i className="fa fa-circle fa-stack-2x brand-red"></i>
-            <i className="fa fa-lock fa-stack-1x fa-inverse"></i></span>  Insufficient Permissions</h4>
-        <p>You need administrator privileges to modify Boundary details.</p>
-        <h4 className="brand-blue heading-border-left"> District Details</h4>
-        <p> Name: {boundary.name}</p>
-      </div>
-    )
+        <div className="alert alert-error"><i className="fa fa-lock fa-lg" aria-hidden="true"></i> Insufficient Privileges. Only administrators can modify boundary details.</div>
+        <h4 className="text-primary heading-border">District</h4>
+        <div className="base-spacing-mid border-base"/>
+        <div>{boundary.name}</div>
+      )
   }
 }
   render() {
