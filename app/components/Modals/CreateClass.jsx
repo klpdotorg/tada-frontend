@@ -72,7 +72,7 @@ export default class CreateClass extends Component {
 							</Formsy.Form>
 						</div>
 						<div className="modal-footer">
-							<button type="button" className="btn btn-default" onClick={this.props.onCloseModal}>Discard</button>
+							<button type="button" className="btn btn-primary" onClick={this.props.onCloseModal}>Discard</button>
 							<button type="button" disabled={!this.state.canSubmit} className="btn btn-primary" onClick={this.submitForm}>Save</button>
 						</div>
 					</div>
