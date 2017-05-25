@@ -242,43 +242,43 @@ Displayelement = (props) =>{
             <li className="active"> {institution.name}</li>
           </ol>
               <div>
-            <div className='heading-border-left'>
-              <h4 className="brand-blue col-md-10">Modify Details</h4>
-              <Button onClick={this.toggleClassModal} title='Add Class'/>
-            </div>
-            <Formsy.Form
-              onValidSubmit={this.saveInsti}
-             onValid={this.enableSubmitButton}
-             onInvalid={this.disableSubmitButton}
-             onChange={this.handleChange}
-             ref={(ref) => this.myform = ref}
-             >
-                <div className="form-group">
-                  {/*<label className="control-label col-sm-2" htmlFor="name">Name:</label>*/}
-                  <div className="col-sm-12">
-                    <Input name="institutionName"
-                     id="institutionName"
-                     value={institution.name}
-                     label="Name:" type="text"
-                     className="form-control"
-                     required
-                     validations="minLength:1"/>
-                  </div>
-                </div>
+                <h4 className="text-primary heading-border col-md-10">Modify Details</h4>
+                <button className="btn btn-green pull-right" title='Add Class' onClick={this.toggleClassModal}>Add Class</button>
+                <div className="base-spacing-mid border-base"/>
+            
+                <Formsy.Form
+                  onValidSubmit={this.saveInsti}
+                 onValid={this.enableSubmitButton}
+                 onInvalid={this.disableSubmitButton}
+                 onChange={this.handleChange}
+                 ref={(ref) => this.myform = ref}
+                 >
+                    <div className="form-group">
+                      {/*<label className="control-label col-sm-2" htmlFor="name">Name:</label>*/}
+                      <div className="col-sm-12">
+                        <Input name="institutionName"
+                         id="institutionName"
+                         value={institution.name}
+                         label="Name:" type="text"
+                         className="form-control"
+                         required
+                         validations="minLength:1"/>
+                      </div>
+                    </div>
 
-                <div className="form-group">
-                  {/*<label className="control-label col-sm-2" htmlFor="address">Address:</label>*/}
-                  <div className="col-sm-12">
-                    <Textarea
-                    rows={3}
-                    cols={40}
-                    name="institutionAddress"
-                    label="Address :"
-                    value={institution.address}
-                    required
-                    validations="minLength:1"
+                    <div className="form-group">
+                      {/*<label className="control-label col-sm-2" htmlFor="address">Address:</label>*/}
+                      <div className="col-sm-12">
+                        <Textarea
+                        rows={3}
+                        cols={40}
+                        name="institutionAddress"
+                        label="Address :"
+                        value={institution.address}
+                        required
+                        validations="minLength:1"
 
-                />
+                    />
                     {/*<textarea onChange={(e) => {this.setValue(e.target.value, 'address')}} className="form-control" id="address" rows="3" value={institution.address}>
                     </textarea>*/}
                   </div>

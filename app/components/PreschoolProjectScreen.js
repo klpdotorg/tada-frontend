@@ -61,7 +61,6 @@ export default class PreschoolProject extends Component{
     }
     else
       return false;
-    }
   }
 
   saveCircle(name) {
@@ -117,7 +116,7 @@ ProjectSummary=(props)=>{
         <div>
           {hasCircles?<div className="alert alert-info"><i className="fa fa-info-circle fa-lg" aria-hidden="true"></i> You cannot delete this boundary until its children are deleted</div>:<div></div>}
           <h4 className="text-primary heading-border col-md-10">Modify Details</h4>
-          <button className="btn btn-orange pull-right" title='Add Circle' onClick={this.toggleCircleModal}>Add Circle</button>
+          <button className="btn btn-green pull-right" title='Add Circle' onClick={this.toggleCircleModal}>Add Circle</button>
           <div className="base-spacing-mid border-base"/>
           
           <Formsy.Form
