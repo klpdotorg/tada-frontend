@@ -9,6 +9,7 @@ darkorange (#ff8c00)
 salmon (#fa8072)
 firebrick (#b22222)
 tomato (#ff6347)
+khaki (#f0e68c)
 
 Blues
 -----------------------
@@ -461,100 +462,66 @@ div.well{
 /* http://blog.koalite.com/bbg/ */
 
 /*------------------------*/
-.btn-orange { 
-  color: white; 
-  background-color: darkorange; 
-  border-color: orange
-} 
- 
-.btn-orange:hover, 
-.btn-orange:focus, 
-.btn-orange:active, 
-.btn-orange.active, 
-.open .dropdown-toggle.btn-orange { 
-  color: white; 
-  background-color: orange; 
-  border-color: darkorange; 
-} 
- 
-.btn-orange:active, 
-.btn-orange.active, 
-.open .dropdown-toggle.btn-orange { 
-  background-image: none; 
-} 
- 
-.btn-orange.disabled, 
-.btn-orange[disabled], 
-fieldset[disabled] .btn-orange, 
-.btn-orange.disabled:hover, 
-.btn-orange[disabled]:hover, 
-fieldset[disabled] .btn-orange:hover, 
-.btn-orange.disabled:focus, 
-.btn-orange[disabled]:focus, 
-fieldset[disabled] .btn-orange:focus, 
-.btn-orange.disabled:active, 
-.btn-orange[disabled]:active, 
-fieldset[disabled] .btn-orange:active, 
-.btn-orange.disabled.active, 
-.btn-orange[disabled].active, 
-fieldset[disabled] .btn-orange.active { 
-  background-color: darkorange; 
-  border-color: orange; 
-} 
- 
-.btn-orange .badge { 
-  color: white; 
-  background-color: darkorange; 
+.btn-orange {
+  background-color: darkorange;
+  border-color: darkorange;
+  color: white;
 }
-
+.btn-orange:hover,
+.btn-orange:focus,
+.btn-orange:active,
+.btn-orange.active {
+  background-color: orange;
+  border-color: orange;
+  color: white;
+}
+.btn-orange.disabled:hover,
+.btn-orange.disabled:focus,
+.btn-orange.disabled:active,
+.btn-orange.disabled.active,
+.btn-orange[disabled]:hover,
+.btn-orange[disabled]:focus,
+.btn-orange[disabled]:active,
+.btn-orange[disabled].active,
+fieldset[disabled] .btn-orange:hover,
+fieldset[disabled] .btn-orange:focus,
+fieldset[disabled] .btn-orange:active,
+fieldset[disabled] .btn-orange.active {
+  background-color: khaki;
+  border-color: khaki;
+  color: white;
+}
 /*------------------------*/
-
-.btn-green { 
-  color: white; 
-  background-color: seagreen; 
-  border-color: darkseagreen
-} 
- 
-.btn-green:hover, 
-.btn-green:focus, 
-.btn-green:active, 
-.btn-green.active, 
-.open .dropdown-toggle.btn-green { 
-  color: white; 
-  background-color: darkseagreen; 
-  border-color: seagreen; 
-} 
- 
-.btn-green:active, 
-.btn-green.active, 
-.open .dropdown-toggle.btn-green { 
-  background-image: none; 
-} 
- 
-.btn-green.disabled, 
-.btn-green[disabled], 
-fieldset[disabled] .btn-green, 
-.btn-green.disabled:hover, 
-.btn-green[disabled]:hover, 
-fieldset[disabled] .btn-green:hover, 
-.btn-green.disabled:focus, 
-.btn-green[disabled]:focus, 
-fieldset[disabled] .btn-green:focus, 
-.btn-green.disabled:active, 
-.btn-green[disabled]:active, 
-fieldset[disabled] .btn-green:active, 
-.btn-green.disabled.active, 
-.btn-green[disabled].active, 
-fieldset[disabled] .btn-green.active { 
-  background-color: seagreen; 
-  border-color: darkseagreen; 
-} 
- 
-.btn-green .badge { 
-  color: white; 
-  background-color: seagreen; 
+.btn-green {
+  background-color: seagreen;
+  border-color: seagreen;
+  color: white;
 }
-
+.btn-green:hover,
+.btn-green:focus,
+.btn-green:active,
+.btn-green.active {
+  background-color: darkseagreen;
+  border-color: darkseagreen;
+  color: white;
+}
+.btn-green.disabled:hover,
+.btn-green.disabled:focus,
+.btn-green.disabled:active,
+.btn-green.disabled.active,
+.btn-green[disabled]:hover,
+.btn-green[disabled]:focus,
+.btn-green[disabled]:active,
+.btn-green[disabled].active,
+fieldset[disabled] .btn-green:hover,
+fieldset[disabled] .btn-green:focus,
+fieldset[disabled] .btn-green:active,
+fieldset[disabled] .btn-green.active {
+  background-color: lightseagreen;
+  border-color: lightseagreen;
+  color: white;
+}
+/*------------------------*/
 
 .form-group {
   margin: 15px;

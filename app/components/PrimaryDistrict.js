@@ -129,7 +129,7 @@ DistrictSummary=(props)=>{
         <div>
           {hasBlocks?<div className="alert alert-info"><i className="fa fa-info-circle fa-lg" aria-hidden="true"></i> You cannot delete this boundary until its children are deleted</div>:<div></div>}
           <h4 className="text-primary heading-border col-md-10">Modify Details</h4>
-          {boundaryType == 2 ? <button className="btn btn-primary btn-green pull-right" title='Add Project' onClick={this.toggleProjectModal}>Add Project</button>: <button className="btn btn-primary btn-orange pull-right" title='Add Block' onClick={this.toggleBlockModal}>Add Block</button>}
+          {boundaryType == 2 ? <button className="btn btn-green pull-right" title='Add Project' onClick={this.toggleProjectModal}>Add Project</button>: <button className="btn btn-orange pull-right" title='Add Block' onClick={this.toggleBlockModal}>Add Block</button>}
           <div className="base-spacing-mid border-base"/>
            <Formsy.Form
             onValidSubmit={this.saveDistrict}
@@ -152,10 +152,16 @@ DistrictSummary=(props)=>{
     )
   }else{
       return(
-        <div className="alert alert-error"><i className="fa fa-lock fa-lg" aria-hidden="true"></i> Insufficient Privileges. Only administrators can modify boundary details.</div>
-        <h4 className="text-primary heading-border">District</h4>
-        <div className="base-spacing-mid border-base"/>
-        <div>{boundary.name}</div>
+        <div>
+          <div className="alert alert-danger">
+            <i className="fa fa-lock fa-lg" aria-hidden="true"></i> 
+            Insufficient Privileges. Only administrators can modify boundary details.
+          </div>
+          <h4 className="text-primary heading-border">District</h4>
+          <div className="border-base"></div>
+          <div className="base-spacing-mid"></div> 
+          <div>{boundary.name}</div>
+        </div>
       )
   }
 }
