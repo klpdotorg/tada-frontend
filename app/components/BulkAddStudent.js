@@ -40,7 +40,7 @@ export default class BulkAddStudent extends Component {
 
   render () {
     if (this.state.languages.isLoading) {
-      return (<div><i className="fa fa-cog fa-spin fa-lg fa-fw" /><span className="text-muted">Loading...</th>)
+      return (<div><i className="fa fa-cog fa-spin fa-lg fa-fw" /><span className="text-muted">Loading...</span></div>)
     } else {
         let rowsObj = [];
         for(let i=0; i< this.state.rows; i++) {
@@ -68,7 +68,7 @@ export default class BulkAddStudent extends Component {
             </thead>
             <tbody>
              { rowsObj }
-            </tbody>
+            </tbody
           </table>
           <div className="row">
             <div className="col-md-6">
