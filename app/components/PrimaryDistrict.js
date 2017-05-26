@@ -117,7 +117,7 @@ export default class PrimaryDistrict extends React.Component {
 
 DistrictSummary=(props)=>{
   var boundary = this.props.boundaryDetails[this.props.params.districtId];
- 
+
   if(!boundary)
     return null;
   var boundaryType = boundary.boundary_type;
@@ -146,7 +146,7 @@ DistrictSummary=(props)=>{
               required validations="minLength:1"/>
           </Formsy.Form>
               <div className="col-md-8">
-                <button type="button" disabled={!this.state.canSubmit} className="btn btn-primary" onClick={this.saveDistrict}>Save</button>
+                <button type="button" disabled={!this.state.canSubmit} className="btn btn-primary padded-btn" onClick={this.saveDistrict}>Save</button>
                 <button type="submit" className="btn btn-primary padded-btn" onClick={() => {this.showConfirmation() }} disabled={hasBlocks}>Delete</button>
                 <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteDistrict} onCloseModal={this.closeConfirmModal} entity={boundary.name}/>
               </div>
