@@ -308,13 +308,13 @@ div.well{
 #treetoggler {
   position: fixed;
   top: 175px;
-  left:15px;
+  /*left:15px;*/
   z-index: 99999;
 }
 
 #treetoggler a:hover {
-  background: var(--grey-gravel);
-  color: var(--white);
+  background: skyblue;
+  color: white;
 }
 
 /*-------------------------SECONDARY NAV BAR - BUTTONS -----------------------*/
@@ -530,34 +530,11 @@ fieldset[disabled] .btn-green.active {
 .boundary-form{
   margin-top: 10px;
 }
-.view-student-btn {
-  margin-top: 10px;
-  background-color: #ec6608; 
-}
 
 .no-border {
   border: 0;
   box-shadow: none; 
   outline: none;
-}
-
-.students-grid {
-  overflow-x: auto;
-  white-space: nowrap;
-  padding: 10px 0;
-  margin: 10px 0;
-}
-
-.students-grid > .row > div {
-  display: inline-block;
-  float: none;
-}
-
-.grid-header {
-  margin-bottom: 10px;
-  border: solid black;
-  border-width: 2px 0;
-  font-weight: 500;
 }
 
 /*

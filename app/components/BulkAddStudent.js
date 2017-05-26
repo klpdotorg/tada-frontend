@@ -40,37 +40,44 @@ export default class BulkAddStudent extends Component {
 
   render () {
     if (this.state.languages.isLoading) {
-      return (<div><i className="fa fa-cog fa-spin fa-lg fa-fw" /><span className="text-muted">Loading...</span></div>)
+      return (<div><i className="fa fa-cog fa-spin fa-lg fa-fw" /><span className="text-muted">Loading...</th>)
     } else {
         let rowsObj = [];
         for(let i=0; i< this.state.rows; i++) {
           rowsObj.push(<InputRow languages={this.state.languages.list} updateValue={this.updateValue} index={i} key={i} />)
         }
       return (
-          <div className="col-md-12 students-grid">
-            <div className="row">
-              <div className="col-md-2"><span>First Name</span></div>
-              <div className="col-md-2"><span>Middle Name</span></div>
-              <div className="col-md-2"><span>Last Name</span></div>
-              <div className="col-md-2"><span>UID</span></div>
-              <div className="col-md-2"><span>Gender</span></div>
-              <div className="col-md-2"><span>Mother Tongue</span></div>
-              <div className="col-md-2"><span>DoB</span></div>
-              <div className="col-md-2"><span>Father First Name</span></div>
-              <div className="col-md-2"><span>Father Middle Name</span></div>
-              <div className="col-md-2"><span>Father Last Name</span></div>
-              <div className="col-md-2"><span>Mother First Name</span></div>
-              <div className="col-md-2"><span>Mother Middle Name</span></div>
-              <div className="col-md-2"><span>Mother Last Name</span></div>
-            </div>
+        <div className="table-responsive">
+          <table className="table table-striped">
+            <thead>
+              <tr className="text-primary text-uppercase">
+                <th>First Name</th>
+                <th>Middle Name</th>
+                <th>Last Name</th>
+                <th>UID</th>
+                <th>Gender</th>
+                <th>Mother Tongue</th>
+                <th>Date of Birth</th>
+                <th>Father First Name</th>
+                <th>Father Middle Name</th>
+                <th>Father Last Name</th>
+                <th>Mother First Name</th>
+                <th>Mother Middle Name</th>
+                <th>Mother Last Name</th>
+              </tr>
+            </thead>
+            <tbody>
              { rowsObj }
-            <div className="col-md-12">
-              <div className="col-md-offset-8 col-md-4">
-                <button className="btn" onClick={() => {this.props.addStudents(this.state.values)}}>Save</button>
-                <button onClick={this.props.hide} className="btn">Discard</button>
-              </div>
-            </div>
-          </div>
+            </tbody>
+          </table>
+          <div className="row">
+            <div className="col-md-6">
+              <button className="btn btn-primary" onClick={() => {this.props.addStudents(this.state.values)}}>Save</button>
+              <button onClick={this.props.hide} className="btn btn-primary padded-btn">Discard</button>
+            </td>
+            <div className="col-md-6"></td>
+          </td>
+        </td>
         )
     }
    }
@@ -108,32 +115,32 @@ class InputRow extends Component {
   render() {
 
     return (
-        <div className="row">
-          <div className="col-md-2"><input value={this.state.first_name} onChange={(e) => {this.changeVal(e, 'first_name')}} type='text' className='form-control'/></div>
-          <div className="col-md-2"><input value={this.state.middle_name} onChange={(e) => {this.changeVal(e, 'middle_name')}} type='text' className='form-control'/></div>
-          <div className="col-md-2"><input value={this.state.last_name} onChange={(e) => {this.changeVal(e, 'last_name')}} type='text' className='form-control'/></div>
-          <div className="col-md-2"><input value={this.state.uid} onChange={(e) => {this.changeVal(e, 'uid')}} type='text' className='form-control'/></div>
-          <div className='col-md-2'>
+        <tr>
+          <td><input value={this.state.first_name} onChange={(e) => {this.changeVal(e, 'first_name')}} type='text' className='form-control'/></td>
+          <td><input value={this.state.middle_name} onChange={(e) => {this.changeVal(e, 'middle_name')}} type='text' className='form-control'/></td>
+          <td><input value={this.state.last_name} onChange={(e) => {this.changeVal(e, 'last_name')}} type='text' className='form-control'/></td>
+          <td><input value={this.state.uid} onChange={(e) => {this.changeVal(e, 'uid')}} type='text' className='form-control'/></td>
+          <td>
             <select className="col-sm-1" onChange={(e) => {this.changeVal(e, 'gender')}} value={this.state.gender} className="form-control" id="gender">
               <option value='male'>Male</option>
               <option value='female'>Female</option>
             </select>
-          </div>
-          <div className="col-md-2">
+          </td>
+          <td>
             <select onChange={(e) => {this.changeVal(e, 'mt')}} value={this.state.mt} className="form-control" id="gender">
               {this.props.languages.map((lang, i) => {
                 return <option key={i} value={lang.value}>{lang.label}</option>
               })}
             </select>
-          </div>
-          <div className="col-md-2"><input value={this.state.dob} onChange={(e) => {this.changeVal(e, 'dob')}} type='date' className='form-control'/></div>
-          <div className="col-md-2"><input value={this.state.fatherFirstName} onChange={(e) => {this.changeVal(e, 'fatherFirstName')}} type='text' className='form-control'/></div>
-          <div className="col-md-2"><input value={this.state.fatherMiddleName} onChange={(e) => {this.changeVal(e, 'fatherMiddleName')}} type='text' className='form-control'/></div>
-          <div className="col-md-2"><input value={this.state.fatherLastName} onChange={(e) => {this.changeVal(e, 'fatherLastName')}} type='text' className='form-control'/></div>
-          <div className="col-md-2"><input value={this.state.motherFirstName} onChange={(e) => {this.changeVal(e, 'motherFirstName')}} type='text' className='form-control'/></div>
-          <div className="col-md-2"><input value={this.state.motherMiddleName} onChange={(e) => {this.changeVal(e, 'motherMiddleName')}} type='text' className='form-control'/></div>
-          <div className="col-md-2"><input value={this.state.motherLastName} onChange={(e) => {this.changeVal(e, 'motherLastName')}} type='text' className='form-control'/></div>
-        </div>
+          </td>
+          <td><input value={this.state.dob} onChange={(e) => {this.changeVal(e, 'dob')}} type='date' className='form-control'/></td>
+          <td><input value={this.state.fatherFirstName} onChange={(e) => {this.changeVal(e, 'fatherFirstName')}} type='text' className='form-control'/></td>
+          <td><input value={this.state.fatherMiddleName} onChange={(e) => {this.changeVal(e, 'fatherMiddleName')}} type='text' className='form-control'/></td>
+          <td><input value={this.state.fatherLastName} onChange={(e) => {this.changeVal(e, 'fatherLastName')}} type='text' className='form-control'/></td>
+          <td><input value={this.state.motherFirstName} onChange={(e) => {this.changeVal(e, 'motherFirstName')}} type='text' className='form-control'/></td>
+          <td><input value={this.state.motherMiddleName} onChange={(e) => {this.changeVal(e, 'motherMiddleName')}} type='text' className='form-control'/></td>
+          <td><input value={this.state.motherLastName} onChange={(e) => {this.changeVal(e, 'motherLastName')}} type='text' className='form-control'/></td>
+        </tr>
     )
   }
 }

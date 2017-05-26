@@ -160,7 +160,7 @@ class StudentScreen extends Component {
     var Displayelement;
     if(sessionStorage.getItem('isAdmin')) {
       Displayelement = (props) =>
-        <div>
+        <div className="table-responsive">
           <table className="table table-condensed">
             <thead>
               <tr className="text-primary text-uppercase">
