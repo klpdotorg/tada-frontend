@@ -252,15 +252,19 @@ class StudentGroup extends Component {
           <li><Link className="active">{group.name}</Link></li>
         </ol>
         <div>
-          {!canModify?<div>
-            <span className="fa-stack fa-lg"> <i className="fa fa-circle fa-stack-2x yellow-mild"></i>
-            <i className="fa fa-lock fa-stack-1x grey-steel"></i></span><span>Limited Permissions</span>
-          </div>:<div></div>}
+          {!canModify?<div className="alert alert-danger"><i className="fa fa-lock fa-lg" aria-hidden="true"></i> Insufficient Privileges. Please contact the administrator.</div>:<div></div>}
           <div>
-            <h4 className="brand-blue col-md-10 heading-border-left">{canModify? "Modify Details": "View Details"}</h4>
-            <Button onClick={this.props.showBulkAdd} title='Add Students' disabled={!canModify}/>
-            <button className='btn btn-default view-student-btn' onClick={this.viewStudent.bind(null, group.path)}>View Students</button>
+            <div className="row">
+            <div className="col-md-8">
+              <h4 className="text-primary heading-border">{canModify? "Modify Details": "View Details"}</h4>
+            </div>
+            <div className="col-md-4">
+              <button className='btn btn-primary' onClick={this.props.showBulkAdd} title='Add Students' disabled={!canModify}>Add Students</button>
+              <button className='btn btn-primary padded-btn' onClick={this.viewStudent.bind(null, group.path)}>View Students</button>
+            </div>
           </div>
+          <div className="base-spacing-mid border-base"/>
+          
           <form className="form-horizontal boundary-form" role="form">
             <div className="form-group">
               <label className="control-label col-sm-2" htmlFor="class">Class</label>
@@ -286,7 +290,7 @@ class StudentGroup extends Component {
            </form>
           <div className="col-md-6">
             <button type="submit" className="btn btn-primary" onClick={this.saveClass} disabled={!canModify}>Save</button>
-            <button type="submit" className="btn btn-primary" onClick={this.showConfirmation} disabled={disableDeleteBtn}>Delete</button>
+            <button type="submit" className="btn btn-primary padded-btn" onClick={this.showConfirmation} disabled={disableDeleteBtn}>Delete</button>
             <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteClass} onCloseModal={this.closeConfirmation} entity={group.label}/>
           </div>
         </div>
