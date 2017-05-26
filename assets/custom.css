@@ -50,6 +50,14 @@
   margin-left: 10px;
 }
 
+.loading-assessments {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.loading-assessments-spinner {
+  font-size: 35px;
+}
 /*
 Force table width to 100%
 */
