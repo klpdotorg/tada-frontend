@@ -15,18 +15,21 @@ import {groupBy} from 'lodash'
 const StudentRow = (props) => {
   const relations = groupBy(props.relations, 'relation_type');
   return (
-    <div className="row">
-      <div className="col-md-1"><input checked={props.selectedStudents.has(props.id)} onChange={props.selectStudent} type="checkbox" /></div>
-      <div className="col-md-1"><span>{props.id}</span></div>
-      <div className="col-md-2"><span>{displayFullName(props)}</span></div>
-      <div className="col-md-1"><span>{props.uid}</span></div>
-      <div className="col-md-1"><span>{props.gender}</span></div>
-      <div className="col-md-1"><span>{props.language}</span></div>
-      <div className="col-md-1"><span>{props.dob}</span></div>
-      <div className="col-md-2"><span>{displayFullName(relations.Father[0])}</span></div>
-      <div className="col-md-2"><span>{displayFullName(relations.Mother[0])}</span></div>
-      <div className="col-md-1"><span onClick={() => { props.deleteStudent({...props}) }} className="glyphicon glyphicon-trash">Delete</span><span className="glyphicon glyphicon-pencil" onClick={() => { props.openModifyStudent({...props}) }}>Edit</span></div>
-    </div>
+    <tr>
+      <td><input checked={props.selectedStudents.has(props.id)} onChange={props.selectStudent} type="checkbox" /></td>
+      <td>{props.id}</td>
+      <td>{displayFullName(props)}</td>
+      <td>{props.uid}</td>
+      <td>{props.gender}</td>
+      <td>{props.language}</td>
+      <td>{props.dob}</td>
+      <td>{displayFullName(relations.Father[0])}</td>
+      <td>{displayFullName(relations.Mother[0])}</td>
+      <td>
+        <button onClick={() => { props.deleteStudent({...props}) }} className="btn btn-primary"><span className="fa fa-trash-o"></span></button>
+        <button onClick={() => { props.openModifyStudent({...props}) }} className="btn btn-primary padded-btn"><span className="fa fa-pencil-square-o"></span></button>
+      </td>
+    </tr>
   )
 }
 
@@ -158,41 +161,41 @@ class StudentScreen extends Component {
     var Displayelement;
     if(sessionStorage.getItem('isAdmin')) {
       Displayelement = (props) =>
-      <div>
-        <div className="students-grid">
-          <div className="row grid-header">
-            <div className="col-md-1"><span>Select</span></div>
-            <div className="col-md-1"><span>Student ID</span></div>
-            <div className="col-md-2"><span>Name</span></div>
-            <div className="col-md-1"><span>UID</span></div>
-            <div className="col-md-1"><span>Gender</span></div>
-            <div className="col-md-1"><span>Language</span></div>
-            <div className="col-md-1"><span>DoB</span></div>
-            <div className="col-md-2"><span>Father Name</span></div>
-            <div className="col-md-2"><span>Mother Name</span></div>
-            <div className="col-md-1"><span>Actions</span></div>
-          </div>
+    <div>
+      <table className="table table-condensed">
+        <thead>
+          <tr className="text-primary text-uppercase">
+            <th>Select</th>
+            <th>ID</th>
+            <th>Name</th>
+            <th>UID</th>
+            <th>Gender</th>
+            <th>Mother Tongue</th>
+            <th>Date of Birth</th>
+            <th>Father''s Name</th>
+            <th>Mother''s Name</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
           {checkStudents}
-        </div>
-        <div className="col-sm-2">
-          <select className="col-sm-2" onChange={(e) => {this.setState({mapToCentre : e.target.value})}} value={this.state.mapToCentre} className="form-control" id="gender">
-                  {studentGroups}
-          </select>
-          <button type="submit" className="btn btn-primary" onClick={this.mapToCentre}>Map to Center</button>
-
-        </div>
+        </tbody>
+      </table>
+      <div className="row">
         <div className="col-md-2">
-          <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteStudent} onCloseModal={this.closeConfirmation} entity={this.state.currentStudent.first_name}/>
-          <ModifyStudent saveStudent={this.saveStudent} isOpen={this.state.modifyStudentIsOpen} data={this.state.modifyStudentData} onCloseModal={this.closeModifyStudent} entity={cluster.name}/>
+          <select onChange={(e) => {this.setState({mapToCentre : e.target.value})}} value={this.state.mapToCentre} className="form-control" id="gender">
+            {studentGroups}
+          </select>
+        <div className="col-md-8">
+          <button type="submit" className="btn btn-primary" onClick={this.mapToCentre}>Map to Center</button>
         </div>
       </div>
+    </div>
     } else {
         Displayelement = (props) =>
-        <div>
-          <h4 className="heading-err heading-border-left brand-red"> <i className="fa fa-lock brand-red" aria-hidden="true"></i>  Insufficient Permissions</h4>
-          <p>You need administrator privileges to modify Boundary details.</p>
-          <h4 className="brand-blue heading-border-left"> Cluster Details</h4>
-          <p> Name: {cluster.name}</p>
+        <div className="alert alert-danger">
+          <i className="fa fa-lock fa-lg" aria-hidden="true"></i> 
+          Insufficient Privileges. Please contact administrator.
         </div>
     }
 

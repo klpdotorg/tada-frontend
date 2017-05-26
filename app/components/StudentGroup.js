@@ -240,6 +240,7 @@ class StudentGroup extends Component {
     const institution = boundaries.boundaryDetails[params.institutionId]
     const group = boundaries.boundaryDetails[params.groupId]
     var Displayelement;
+    let isSchool = cluster.boundary_type==1?true:false;
     let canModify = sessionStorage.getItem('isAdmin') || this.hasPermissions();
     let disableDeleteBtn = canModify && this.hasChildren();
    return(
@@ -255,12 +256,21 @@ class StudentGroup extends Component {
           {!canModify?<div className="alert alert-danger"><i className="fa fa-lock fa-lg" aria-hidden="true"></i> Insufficient Privileges. Please contact the administrator.</div>:<div></div>}
           <div>
             <div className="row">
-            <div className="col-md-8">
-              <h4 className="text-primary heading-border">{canModify? "Modify Details": "View Details"}</h4>
-            </div>
-            <div className="col-md-4">
-              <button className='btn btn-primary' onClick={this.props.showBulkAdd} title='Add Students' disabled={!canModify}>Add Students</button>
-              <button className='btn btn-primary padded-btn' onClick={this.viewStudent.bind(null, group.path)}>View Students</button>
+              <div className="col-md-8">
+                <h4 className="text-primary heading-border">{canModify? "Modify Details": "View Details"}</h4>
+              </div>
+              {isSchool ?
+                <div className="col-md-4 pull-right">
+                  <button className='btn btn-orange' onClick={this.props.showBulkAdd} title='Add Students' disabled={!canModify}>Add Students</button>
+                  <button className='btn btn-orange padded-btn' onClick={this.viewStudent.bind(null, group.path)}>View Students</button>
+                </div>
+              :
+                <div className="col-md-4 pull-right">
+                  <button className='btn btn-green' onClick={this.props.showBulkAdd} title='Add Students' disabled={!canModify}>Add Students</button>
+                  <button className='btn btn-green padded-btn' onClick={this.viewStudent.bind(null, group.path)}>View Students</button>
+                </div>
+              }
+              
             </div>
           </div>
           <div className="base-spacing-mid border-base"/>
