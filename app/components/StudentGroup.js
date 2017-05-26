@@ -126,7 +126,7 @@ export default class StudentGroupScreen extends Component {
   render () {
     return (
       this.state.isLoading ?
-      <div>Loading...</div> :
+      <div><i className="fa fa-cog fa-spin fa-lg fa-fw" /><span className="text-muted">Loading...</span></div> :
       <div>
         {this.state.showBulkAdd ? <BulkAddStudent addStudents={this.addStudents} hide={this.hideBulkAdd}/> : <StudentGroup showBulkAdd={this.showBulkAdd} {...this.props} />}
       </div>

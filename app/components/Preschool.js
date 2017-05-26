@@ -408,7 +408,7 @@ Displayelement = (props) =>{
 
     return (
       this.state.isLoading ?
-      <div>Loading...</div> :<div>{this.Displayelement(...this.props)}</div>
+      <div><i className="fa fa-cog fa-spin fa-lg fa-fw" /><span className="text-muted">Loading...</span></div> :<div>{this.Displayelement(...this.props)}</div>
     )
 
   }

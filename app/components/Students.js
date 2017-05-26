@@ -45,7 +45,6 @@ const NoStudentMsg = () => {
 
 
 class StudentScreen extends Component {
-
   constructor(props){
     super(props);
     this.deleteStudentConfirm = this.deleteStudentConfirm.bind(this);
@@ -82,7 +81,7 @@ class StudentScreen extends Component {
       return mapStudentsAPI(studentRequestBody)
     })
 
-    Promise.all(studentsPromise)
+  Promise.all(studentsPromise)
     .then(() => {
       this.props.dispatch(Notifications.success(studentStudentGroupMap))
     })
@@ -161,36 +160,36 @@ class StudentScreen extends Component {
     var Displayelement;
     if(sessionStorage.getItem('isAdmin')) {
       Displayelement = (props) =>
-    <div>
-      <table className="table table-condensed">
-        <thead>
-          <tr className="text-primary text-uppercase">
-            <th>Select</th>
-            <th>ID</th>
-            <th>Name</th>
-            <th>UID</th>
-            <th>Gender</th>
-            <th>Mother Tongue</th>
-            <th>Date of Birth</th>
-            <th>Father''s Name</th>
-            <th>Mother''s Name</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {checkStudents}
-        </tbody>
-      </table>
-      <div className="row">
-        <div className="col-md-2">
-          <select onChange={(e) => {this.setState({mapToCentre : e.target.value})}} value={this.state.mapToCentre} className="form-control" id="gender">
-            {studentGroups}
-          </select>
-        <div className="col-md-8">
-          <button type="submit" className="btn btn-primary" onClick={this.mapToCentre}>Map to Center</button>
+        <div>
+          <table className="table table-condensed">
+            <thead>
+              <tr className="text-primary text-uppercase">
+                <th>Select</th>
+                <th>ID</th>
+                <th>Name</th>
+                <th>UID</th>
+                <th>Gender</th>
+                <th>Mother Tongue</th>
+                <th>Date of Birth</th>
+                <th>{"Father's Name"}</th>
+                <th>{"Mother's Name"}</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {checkStudents}
+            </tbody>
+          </table>
+          <div className="row">
+            <div className="col-md-4">
+              <select onChange={(e) => {this.setState({mapToCentre : e.target.value})}} value={this.state.mapToCentre} className="form-control" id="gender">
+                {studentGroups}
+              </select>
+            </div><div className="col-md-8">
+              <button type="submit" className="btn btn-primary" onClick={this.mapToCentre}>Map to Center</button>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
     } else {
         Displayelement = (props) =>
         <div className="alert alert-danger">
@@ -298,7 +297,7 @@ export default class Students extends Component {
   render() {
     return (
             this.state.isLoading ?
-            <div>Loading...</div> :
+            <div><i className="fa fa-cog fa-spin fa-lg fa-fw" /><span className="text-muted">Loading...</span></div> :
             <StudentScreen {...this.props} />
           )
   }

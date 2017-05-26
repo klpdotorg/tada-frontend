@@ -261,7 +261,7 @@ Displayelement = (props) =>{
     var circle = this.props.boundaries.boundaryDetails[this.props.params.circleId];
     return (
       this.state.isLoading ?
-      <div>Loading...</div> :
+      <div><i className="fa fa-cog fa-spin fa-lg fa-fw" /><span className="text-muted">Loading...</span></div> :
       <div>
        <ol className="breadcrumb">
           <li><Link to={district.path}>{district.name}</Link></li>
