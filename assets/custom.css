@@ -3,12 +3,12 @@
 }
 .view-student-btn {
   margin-top: 10px;
-  background-color: #ec6608; 
+  background-color: #ec6608;
 }
 
 .no-border {
   border: 0;
-  box-shadow: none; 
+  box-shadow: none;
   outline: none;
 }
 
@@ -40,13 +40,21 @@
   font-weight: 500;
 }
 
-
+.warn-message-cont {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+.warn-message {
+  margin: 0;
+  margin-left: 10px;
+}
 
 /*
 Force table width to 100%
 */
  table.table-fixedheader {
-    width: 100%;   
+    width: 100%;
 }
 /*
 Set table elements to block mode.  (Normally they are inline).
@@ -75,7 +83,7 @@ when a scrollbar is visible and wider when it is not).
  table.table-fixedheader>tbody {
     overflow-y: scroll;
     height: 250px;
-    
+
 }
 /*
 We really don't want to scroll the thead contents, but we want to force
@@ -83,7 +91,7 @@ a scrollbar to be displayed anyway so that the usable width of the thead
 will exactly match the tbody.
 */
  table.table-fixedheader>thead {
-    overflow-y: scroll;    
+    overflow-y: scroll;
 }
 /*
 For browsers that support it (webkit), we set the background color of
@@ -111,8 +119,8 @@ overridden elsewhere.
 */
 
  table.table-fixedheader>thead tr th, table.table-fixedheader>tbody tr td {
-    float: left;    
-    word-wrap:break-word;     
+    float: left;
+    word-wrap:break-word;
 }
 
 
