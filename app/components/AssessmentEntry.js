@@ -6,7 +6,7 @@ const { Editors, Toolbar, Formatters } = require('react-data-grid-addons');
 const { AutoComplete: AutoCompleteEditor, DropDownEditor } = Editors;
 const { ImageFormatter } = Formatters;
 import { fetchStudentsByGroupId, fetchQuestionsForAssessment } from '../actions';
-import _ from 'underscore';
+import _ from 'lodash';
 faker.locale = 'en_GB';
 
 const val = [0, 1];
