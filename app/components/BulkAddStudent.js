@@ -48,7 +48,7 @@ export default class BulkAddStudent extends Component {
         }
       return (
         <div className="table-responsive">
-          <table className="table table-striped">
+          <table className="table table-striped table-students">
             <thead>
               <tr className="text-primary text-uppercase">
                 <th>First Name</th>
@@ -68,19 +68,20 @@ export default class BulkAddStudent extends Component {
             </thead>
             <tbody>
              { rowsObj }
-            </tbody
+            </tbody>
           </table>
           <div className="row">
-            <div className="col-md-6">
+            <div className="col-md-8"></div>
+            <div className="col-md-4">
               <button className="btn btn-primary" onClick={() => {this.props.addStudents(this.state.values)}}>Save</button>
               <button onClick={this.props.hide} className="btn btn-primary padded-btn">Discard</button>
-            </td>
-            <div className="col-md-6"></td>
-          </td>
-        </td>
+            </div>
+          </div>
+          <div className="base-spacing-mid"></div>
+        </div>
         )
     }
-   }
+  }
 }
 
 class InputRow extends Component {

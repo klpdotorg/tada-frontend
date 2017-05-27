@@ -610,5 +610,7 @@ overridden elsewhere.
     word-wrap:break-word;     
 }
 
-
+table.table-students td, .table-students th {
+    min-width: 150px;
+}
 
