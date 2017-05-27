@@ -505,7 +505,7 @@ export default class Programs extends React.Component {
 					<h4 className="brand-blue text-center"> Assessments in this Programme</h4>
 				</div>
 				<div>
-          {!_.isEmpty(assessments)
+          {!this.props.fetchingAssessments
             ?
             <table className="table table-bordered table-striped">
               <tbody>

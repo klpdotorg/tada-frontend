@@ -22,8 +22,8 @@ class SideBar extends Component {
 
   onBoundaryClick(boundary, depth) {
     this.props.dispatch(toggleNode(boundary.id));
-    this.props.dispatch(closePeerNodes(boundary.id, depth))
     this.props.dispatch(fetchEntitiesFromServer(boundary.id));
+    this.props.dispatch(closePeerNodes(boundary.id, depth))
   }
 
   toggleTree(e) {

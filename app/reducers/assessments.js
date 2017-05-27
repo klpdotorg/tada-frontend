@@ -85,7 +85,10 @@ export function assessments(
 
       case 'ASSESSMENTS_RESPONSE_RECEIVED':
         const assessmentsByProgram = processAssessments(action.data);
-        return Object.assign({}, state, { assessmentsById: assessmentsByProgram });
+        return Object.assign({}, state, {
+          assessmentsById: assessmentsByProgram,
+          isFetching: false
+        });
 
       case 'ASSESSMENT_DELETED':
         var copyState = _.omit(state.assessmentsById, action.id);
@@ -106,6 +109,12 @@ export function assessments(
         var copy = Object.assign({}, state.assessmentsById);
         copy[action.assessment.id] = action.assessment;
         return Object.assign({}, { assessmentsById: copy });
+
+      case 'FETCHING_ASSESSMENTS':
+        return {
+          ...state,
+          isFetching: true
+        }
 
       default:
         return state;
