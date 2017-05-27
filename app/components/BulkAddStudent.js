@@ -71,7 +71,6 @@ export default class BulkAddStudent extends Component {
             </tbody>
           </table>
           <div className="row">
-            <div className="col-md-8"></div>
             <div className="col-md-4">
               <button className="btn btn-primary" onClick={() => {this.props.addStudents(this.state.values)}}>Save</button>
               <button onClick={this.props.hide} className="btn btn-primary padded-btn">Discard</button>
