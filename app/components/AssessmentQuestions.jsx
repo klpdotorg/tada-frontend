@@ -63,8 +63,8 @@ export default class Questions extends React.Component {
 					<td>{question.score_min}</td>
 					<td>{question.score_max}</td>
 					<td>{question.grade}</td>
-					<td><button className="btn btn-primary"><span className="fa fa-pencil-square-o" ></span></button>
-					<button className="btn btn-primary padded-btn" onClick={this.deleteQuestion.bind(this)}><span className="fa fa-trash-o" onClick={this.deleteQuestion.bind(this)}></span></button></td>
+					<td><button className="btn btn-primary" data-toggle="tooltip" title="Edit"><span className="fa fa-pencil-square-o" ></span></button>
+					<button className="btn btn-primary padded-btn" data-toggle="tooltip" title="Delete" onClick={this.deleteQuestion.bind(this)}><span className="fa fa-trash-o" onClick={this.deleteQuestion.bind(this)}></span></button></td>
 
 				</tr>
 			);

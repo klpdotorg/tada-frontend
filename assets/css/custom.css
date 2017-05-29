@@ -349,7 +349,7 @@ div.well{
 }
 
 #sidebar-wrapper {
-    z-index: 1000;
+   /*z-index: 1000;*/
     position: absolute;
     left: 300px;
     width: 0;
