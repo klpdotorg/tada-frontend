@@ -428,8 +428,8 @@ export default class Programs extends React.Component {
 					<td>{double_entry}</td>
 					<td>{flexi_assessment}</td>
 					<td><input type="checkbox" onChange={this.selectAssessment} checked={jQuery.inArray(assessment.id.toString(),this.state.selectedAssessments)>-1}/></td>
-					<td><button className="btn btn-primary padded-btn" onClick={this.openEditAssessmentModal}><span className="fa fa-pencil-square-o" onClick={this.openEditAssessmentModal}></span>Edit</button></td>
-					<td><Link className="btn btn-primary padded-btn" to={assessment.questionsUrl}>View Questions<i className="fa fa-question"></i></Link></td>
+					<td><button className="btn btn-primary padded-btn" onClick={this.openEditAssessmentModal}><span className="fa fa-pencil-square-o" onClick={this.openEditAssessmentModal}></span></button>
+					<Link className="btn btn-primary padded-btn" to={assessment.questionsUrl}>View Questions<i className="fa fa-question"></i></Link></td>
 
 				</tr>
 			);
@@ -518,8 +518,7 @@ export default class Programs extends React.Component {
 							<th>Double Entry</th>
 							<th>Flexi-type</th>
 							<th>Select</th>
-							<th>Edit</th>
-							<th>Questions</th>
+							<th>Actions</th>
 						</tr>
 						{assessmentsList}
 					</tbody>
