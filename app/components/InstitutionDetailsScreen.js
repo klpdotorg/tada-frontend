@@ -266,7 +266,7 @@ export default class Institution extends React.Component {
                 <div>
                   <div className="alert alert-danger">
                     <i className="fa fa-lock fa-lg" aria-hidden="true"></i> 
-                    Insufficient Privileges. Please contact administrator for permissions to modify the institution.
+                     Insufficient Privileges. Please contact administrator for permissions to modify the institution.
                   </div>
                 </div>
               :

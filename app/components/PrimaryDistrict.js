@@ -155,7 +155,7 @@ DistrictSummary=(props)=>{
         <div>
           <div className="alert alert-danger">
             <i className="fa fa-lock fa-lg" aria-hidden="true"></i> 
-            Insufficient Privileges. Only administrators can modify boundary details.
+             Insufficient Privileges. Only administrators can modify boundary details.
           </div>
           <h4 className="text-primary heading-border">District</h4>
           <div className="border-base"></div>

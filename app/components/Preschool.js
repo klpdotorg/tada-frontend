@@ -391,10 +391,16 @@ Displayelement = (props) =>{
             <li> <Link to={circle.path}> {circle.name}</Link></li>
             <li className="active"> {institution.name}</li>
           </ol>
-          <h4 className="heading-err heading-border-left brand-red"> <i className="fa fa-lock brand-red" aria-hidden="true"></i>  Insufficient Permissions</h4>
-          <p>You need administrator privileges to modify Boundary details.</p>
-          <h4 className="brand-blue heading-border-left"> Institution Details</h4>
-          <p> Name: {institution.name}</p>
+          <div>
+            <div className="alert alert-danger">
+              <i className="fa fa-lock fa-lg" aria-hidden="true"></i> 
+               Insufficient Privileges. Please contact administrator for permissions to modify the institution.
+            </div>
+          </div>
+          <h4 className="text-primary heading-border">Institution Details</h4>
+          <div className="border-base"></div>
+          <div className="base-spacing-mid"></div> 
+          <div>{institution.name}</div>
         </div>
       )
   }

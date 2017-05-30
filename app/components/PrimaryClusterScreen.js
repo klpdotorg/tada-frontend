@@ -267,7 +267,7 @@ export default class PrimaryCluster extends React.Component {
         <div>
           <div className="alert alert-danger">
             <i className="fa fa-lock fa-lg" aria-hidden="true"></i> 
-            Insufficient Privileges. Only administrators can modify boundary details.
+             Insufficient Privileges. Only administrators can modify boundary details.
           </div>
           <h4 className="text-primary heading-border">Cluster</h4>
           <div className="border-base"></div>
