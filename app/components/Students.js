@@ -160,8 +160,9 @@ class StudentScreen extends Component {
     var Displayelement;
     if(sessionStorage.getItem('isAdmin')) {
       Displayelement = (props) =>
-        <div className="table-responsive">
-          <table className="table table-condensed">
+        <div>
+          <div className="base-spacing-mid"></div>
+          <table className="table table-condensed table-responsive table-students">
             <thead>
               <tr className="text-primary text-uppercase">
                 <th>Select</th>
