@@ -220,11 +220,11 @@ render() {
     else
         selectionState=3;
     return (
-        <div>
+        <div className="container-fluid">
 
-            <div className="col-md-8">
-                <h4 className="brand-blue">Assign Permissions</h4>
-                <hr className="brand-blue" />
+            <div className="col-md-12">
+                <h4 className="text-primary">Assign Permissions</h4>
+                <div className="base-spacing-mid border-base"></div>
             </div>
             <div className="col-md-12">
                 <div className="col-md-4">
@@ -250,7 +250,7 @@ render() {
                             </tr>
                         </thead>
                         <tbody>
-                            {this.props.isLoading ? <tr><td> <i className="fa fa-cog fa-spin fa-3x fa-fw"></i>Loading...</td></tr> :
+                            {this.props.isLoading ? <tr><td> <i className="fa fa-cog fa-spin fa-lg fa-fw"></i>Loading...</td></tr> :
                                 userlist}
                         </tbody>
                     </table>

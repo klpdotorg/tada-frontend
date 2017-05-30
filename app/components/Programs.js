@@ -430,7 +430,6 @@ export default class Programs extends React.Component {
 					<td><input type="checkbox" onChange={this.selectAssessment} checked={jQuery.inArray(assessment.id.toString(),this.state.selectedAssessments)>-1}/></td>
 					<td><button className="btn btn-primary padded-btn" data-toggle="tooltip" title="Edit Assessment" onClick={this.openEditAssessmentModal}><span className="fa fa-pencil-square-o" onClick={this.openEditAssessmentModal}></span></button>
 					<Link className="btn btn-primary padded-btn" to={assessment.questionsUrl} data-toggle="tooltip" title="View Questions"><i className="fa fa-question"></i></Link></td>
-
 				</tr>
 			);
 		});
