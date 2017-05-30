@@ -26,8 +26,8 @@ const StudentRow = (props) => {
       <td>{displayFullName(relations.Father[0])}</td>
       <td>{displayFullName(relations.Mother[0])}</td>
       <td>
-        <button onClick={() => { props.deleteStudent({...props}) }} className="btn btn-primary" data-toggle="tooltip" title="Edit"><span className="fa fa-trash-o"></span></button>
-        <button onClick={() => { props.openModifyStudent({...props}) }} className="btn btn-primary padded-btn" data-toggle="tooltip" title="Delete"><span className="fa fa-pencil-square-o"></span></button>
+        <button onClick={() => { props.deleteStudent({...props}) }} className="btn btn-primary" data-toggle="tooltip" title="Edit"><i className="fa fa-trash-o"></i></button>
+        <button onClick={() => { props.openModifyStudent({...props}) }} className="btn btn-primary padded-btn" data-toggle="tooltip" title="Delete"><i className="fa fa-pencil-square-o"></i></button>
       </td>
     </tr>
   )

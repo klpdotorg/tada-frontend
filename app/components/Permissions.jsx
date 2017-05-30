@@ -224,7 +224,8 @@ render() {
 
             <div className="col-md-12">
                 <h4 className="text-primary">Assign Permissions</h4>
-                <div className="base-spacing-mid border-base"></div>
+                <div className="base-spacing-sm border-base"></div>
+                <div className="base-spacing-mid"></div>
             </div>
             <div className="col-md-12">
                 <div className="col-md-4">

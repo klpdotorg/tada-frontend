@@ -268,9 +268,10 @@ else {
 							<button className="btn btn-primary pull-right" onClick={this.openCreateUserModal.bind(this)}>Add User</button>
 						</div>
 						<div className="col-md-12">
-							<h4 className="text-primary">Manage Users </h4>
-							<div className="base-spacing-sm base-border"></div>
-						</div>
+			                <h4 className="text-primary">All Users</h4>
+			                <div className="base-spacing-sm border-base"></div>
+			                <div className="base-spacing-mid"></div>
+			            </div>
 					</div>
 					<table className="table table-bordered table-striped">
 					<tbody>

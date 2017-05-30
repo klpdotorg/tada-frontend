@@ -72,13 +72,17 @@ export default class Reports extends React.Component {
         let dateicon = (<i className="fa fa-calendar" aria-hidden="true"></i>);
 
         return (
-            <div>
-                <h4 className="heading-border-left brand-blue">DEO REPORTS</h4>
+            <div class="container">
+                <h4 className="text-primary">DEO REPORTS</h4>
+                <div className="base-spacing-sm border-base"></div>
+                <div className="base-spacing-mid"></div>
                 <div className="row">
-                    <button className="btn btn-primary all-padded-btn brand-orange-bg" data-toggle="tooltip" data-placement="right" title="Click this to get a full report for the present month for all DEOs"  onClick={this.sendFullMonthReport}>Get Monthly Report</button>
+                    <button className="btn btn-info" data-toggle="tooltip" data-placement="right" title="Click this to get a full report for the present month for all DEOs"  onClick={this.sendFullMonthReport}>Get Monthly Report</button>
                 </div>
                 <div className="row">
-                    <h4> OR select a date filter to apply to reports </h4>
+                    <div className="col-md-8">
+                        <h5 className="text-primary"> OR select a date filter to apply to reports </h5>
+                    </div>
                 </div>
                 <div className="row col-md-8">
                 <Formsy.Form onValidSubmit={this.getReport}
