@@ -262,14 +262,16 @@ export default class Institution extends React.Component {
             <li className="active"> {institution.name}</li>
             </ol>
             <div>
-
-              {!canModify?<div>
-            <span className="fa-stack fa-lg"> <i className="fa fa-circle fa-stack-2x brand-red"></i>
-            <i className="fa fa-lock fa-stack-1x fa-inverse"></i></span><h4 className="heading-border-left brand-red">Insufficient Permissions</h4>
-            <div className="col-md-12">You need administrator privileges or permissions to modify this institution</div>
-
-          </div>:<div>{hasClasses?<p className="col-md-12 bg-info"><h5><i className="fa fa-2x fa-info-circle" aria-hidden="true"></i>You cannot <small>delete this institution until the classes under it are deleted</small></h5></p>:<div></div>}
-</div>}
+              {!canModify?
+                <div>
+                  <div className="alert alert-danger">
+                    <i className="fa fa-lock fa-lg" aria-hidden="true"></i> 
+                    Insufficient Privileges. Please contact administrator for permissions to modify the institution.
+                  </div>
+                </div>
+              :
+                <div>{hasClasses?<p className="col-md-12 bg-info"><h5><i className="fa fa-2x fa-info-circle" aria-hidden="true"></i>You cannot <small>delete this institution until the classes under it are deleted</small></h5></p>:<div></div>}</div>
+              }
           <h4 className="text-primary heading-border col-md-10">{canModify? "Modify Details": "View Details"}</h4>
           {!canModify?null:<button className="btn btn-orange pull-right" title='Add Class' onClick={this.toggleClassModal} disabled={!canModify}>Add Class</button>}
           <div className="base-spacing-mid border-base"/>

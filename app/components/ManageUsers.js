@@ -259,7 +259,7 @@ render()
 }
 else {
 	usersList = <tr colSpan="6"><td colSpan="6" style={{"text-align": "center"}}>
-<i className="fa fa-cog fa-spin fa-3x fa-fw"></i>Loading...</td></tr>
+<i className="fa fa-cog fa-spin fa-lg fa-fw"></i>Loading...</td></tr>
 }
 
 	return(		<div  className="container-fluid">
