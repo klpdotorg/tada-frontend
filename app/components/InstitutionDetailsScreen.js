@@ -270,7 +270,9 @@ export default class Institution extends React.Component {
                   </div>
                 </div>
               :
-                <div>{hasClasses?{hasSchools?<div className="alert alert-info"><i className="fa fa-info-circle fa-lg" aria-hidden="true"></i> You cannot delete this institution until its classes are deleted</div>:<div></div>}</div>
+                <div>
+                  {hasClasses?<div className="alert alert-info"><i className="fa fa-info-circle fa-lg" aria-hidden="true"></i> You cannot delete this institution until its classes are deleted</div>:<div></div>}
+                </div>
               }
           <h4 className="text-primary col-md-10">{canModify? "Modify Details": "View Details"}</h4>
           {!canModify?null:<button className="btn btn-orange pull-right" title='Add Class' onClick={this.toggleClassModal} disabled={!canModify}>Add Class</button>}
