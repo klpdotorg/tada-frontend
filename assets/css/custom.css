@@ -308,7 +308,7 @@ div.well{
 #treetoggler {
   position: fixed;
   top: 175px;
-  /*left:15px;*/
+  left: 15px;
   z-index: 99999;
 }
 
