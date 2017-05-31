@@ -148,6 +148,21 @@ export function boundaries(state = {
     boundaryDetails: newBoundaryDetails
   }
 
+  case 'CLOSE_PEER_NODES':
+    let boundaryDetails = _.clone(state.boundaryDetails)
+    let openNodes = _.forEach(boundaryDetails, (value, key) => {
+      if (!value.collapsed) {
+        if (value.depth === action.depth && value.id != action.id) {
+          value.collapsed = true
+        }
+      }
+    })
+
+    return {
+      ...state,
+      ...{boundaryDetails: boundaryDetails}
+    }
+
   default:
   return state;
 }

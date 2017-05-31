@@ -268,7 +268,7 @@ export default class Institution extends React.Component {
             <i className="fa fa-lock fa-stack-1x fa-inverse"></i></span><h4 className="heading-border-left brand-red">Insufficient Permissions</h4>
             <div className="col-md-12">You need administrator privileges or permissions to modify this institution</div>
 
-          </div>:<div>          {hasClasses?<p className="col-md-12 bg-info"><h5><i className="fa fa-2x fa-info-circle" aria-hidden="true"></i>You cannot <small>delete this institution until the classes under it are deleted</small></h5></p>:<div></div>}
+          </div>:<div>          {hasClasses?<p className="col-md-12 bg-info warn-message-cont"><i className="fa fa-2x fa-info-circle" aria-hidden="true"></i><h5 className='warn-message'>You cannot <small>delete this institution until the classes under it are deleted</small></h5></p>:<div></div>}
 </div>}
           <h4 className="heading-border-left brand-blue col-md-10">{canModify? "Modify Details": "View Details"}</h4>
             {!canModify?null:<Button onClick={this.toggleClassModal} title='Add Class'disabled={!canModify}/>}
@@ -423,8 +423,8 @@ export default class Institution extends React.Component {
 
                     {!canModify?<div></div>:
                       <div className="col-md-2">
-                      <button type="submit" className="btn btn-primary" onClick={this.saveInsti}>Save</button>
-                      <button type="submit" className="btn btn-primary" disabled={hasClasses} onClick={this.showConfirmation}>Delete</button>
+                      <button type="submit" className="btn btn-primary padded-btn" onClick={this.saveInsti}>Save</button>
+                      <button type="submit" className="btn btn-primary padded-btn" disabled={hasClasses} onClick={this.showConfirmation}>Delete</button>
                       <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteInstitution} onCloseModal={this.closeConfirmModal} entity={institution.name}/>
                       </div>}
 

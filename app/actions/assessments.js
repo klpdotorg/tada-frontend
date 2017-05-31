@@ -134,6 +134,7 @@ function handleQuestionsResponse(resp) {
 export function fetchAssessmentsForProgram(programId)
 {
   return function(dispatch, getState) {
+    dispatch(fetchingAssessments())
     var url =  serverApiBase + "programmes/" + programId + "/assessments/?active=2";
     return fetch(url, {
       method: 'GET',
@@ -150,7 +151,7 @@ export function fetchAssessmentsForProgram(programId)
   }
 }
 
-export function createAssessment(programId, assessmentName, startDate,endDate, 
+export function createAssessment(programId, assessmentName, startDate,endDate,
   isActive, doubleEntry,type)
 {
     return function(dispatch, getState){
@@ -186,7 +187,7 @@ return function(dispatch, getState){
           'Content-Type': 'application/json',
           'Authorization': 'Token ' + sessionStorage.token
         },
-        body: JSON.stringify({      
+        body: JSON.stringify({
         name: assessmentName,
         start_date: startDate,
         end_date: endDate,
@@ -212,9 +213,9 @@ export function activateAssessment(parentProgrammeId, assessmentId)
         'Authorization': 'Token ' + sessionStorage.token
       },
       body: JSON.stringify({
-       
+
         active: 1,
-        
+
       })
     }).then(checkStatus).then(response => {
         dispatch(editAssessmentSuccessful(response));
@@ -234,9 +235,9 @@ export function deactivateAssessment(parentProgrammeId, assessmentId)
         'Authorization': 'Token ' + sessionStorage.token
       },
       body: JSON.stringify({
-       
+
         active: 0,
-        
+
       })
     }).then(checkStatus).then(response => {
         dispatch(deleteAssessmentSuccessful(response.id));
@@ -275,6 +276,12 @@ function handleAssessmentsResponse(resp) {
   return {
     type: 'ASSESSMENTS_RESPONSE_RECEIVED',
     data: resp.results
+  }
+}
+
+function fetchingAssessments() {
+  return {
+    type: 'FETCHING_ASSESSMENTS'
   }
 }
 
