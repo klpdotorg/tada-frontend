@@ -116,10 +116,11 @@ export default class Reports extends React.Component {
                             }}
                             validationErrors={{dateValidation: "End date has to be greater than start date"}}/>
 
-                </Formsy.Form>
-                </div>
-                <div className="col-md-12">
-                    <button className="btn btn-primary" disabled={!this.state.sendReportEnabled} onClick={this.sendReportForDateRange.bind(this)}>Get Report</button>
+                        </Formsy.Form>
+                    </div>
+                    <div className="col-md-12">
+                        <button className="btn btn-primary" disabled={!this.state.sendReportEnabled} onClick={this.sendReportForDateRange.bind(this)}>Get Report</button>
+                    </div>
                 </div>
             </div>
         );
