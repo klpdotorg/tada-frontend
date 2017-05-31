@@ -115,7 +115,7 @@ ProjectSummary=(props)=>{
     return(
         <div>
           {hasCircles?<div className="alert alert-info"><i className="fa fa-info-circle fa-lg" aria-hidden="true"></i> You cannot delete this boundary until its children are deleted</div>:<div></div>}
-          <h4 className="text-primary heading-border col-md-10">Modify Details</h4>
+          <h4 className="text-primary col-md-10">Modify Details</h4>
           <button className="btn btn-green pull-right" title='Add Circle' onClick={this.toggleCircleModal}>Add Circle</button>
           <div className="base-spacing-mid border-base"/>
           
@@ -146,7 +146,7 @@ ProjectSummary=(props)=>{
             <i className="fa fa-lock fa-lg" aria-hidden="true"></i> 
              Insufficient Privileges. Only administrators can modify boundary details.
           </div>
-          <h4 className="text-primary heading-border">Project</h4>
+          <h4 className="text-primary">Project</h4>
           <div className="border-base"></div>
           <div className="base-spacing-mid"></div> 
           <div>{project.name}</div>

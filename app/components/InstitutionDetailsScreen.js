@@ -447,9 +447,9 @@ export default class Institution extends React.Component {
     //       <li> <Link to={cluster.path}> {cluster.name}</Link></li>
     //       <li className="active"> {institution.name}</li>
     //       </ol>
-    //       <h4 className="heading-err heading-border-left brand-red"> <i className="fa fa-lock brand-red" aria-hidden="true"></i>  Insufficient Permissions</h4>
+    //       <h4 className="heading-err brand-red"> <i className="fa fa-lock brand-red" aria-hidden="true"></i>  Insufficient Permissions</h4>
     //       <p>You need administrator privileges to modify Boundary details.</p>
-    //       <h4 className="brand-blue heading-border-left"> Institution Details</h4>
+    //       <h4 className="brand-blue"> Institution Details</h4>
     //       <p> Name: {institution.name}</p>
     //     </div>
     //   )

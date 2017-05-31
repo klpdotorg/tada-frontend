@@ -223,7 +223,7 @@ export default class PrimaryCluster extends React.Component {
       return(
         <div>
           {hasSchools?<div className="alert alert-info"><i className="fa fa-info-circle fa-lg" aria-hidden="true"></i> You cannot delete this boundary until its children are deleted</div>:<div></div>}
-          <h4 className="text-primary heading-border col-md-10">Modify Details</h4>
+          <h4 className="text-primary col-md-10">Modify Details</h4>
           <button className="btn btn-orange pull-right" title='Add School' onClick={this.toggleSchoolModal}>Add School</button>
           <div className="base-spacing-mid border-base"/>
           <Formsy.Form
@@ -254,10 +254,10 @@ export default class PrimaryCluster extends React.Component {
           <div className='pull-right'>
             <button className='btn btn-default brand-orange-bg' onClick={this.toggleSchoolModal}><i className="fa fa-university"/>Add School</button>
           </div>
-          <h4 className="heading-err heading-border-left yellow-mild"> <span className="fa-stack fa-lg"> <i className="fa fa-circle fa-stack-2x yellow-mild"></i>
+          <h4 className="heading-err yellow-mild"> <span className="fa-stack fa-lg"> <i className="fa fa-circle fa-stack-2x yellow-mild"></i>
             <i className="fa fa-lock fa-stack-1x grey-steel"></i></span>  Limited Permissions</h4>
           <p>You need administrator privileges to modify Boundary details but you can add institutions here.</p>
-          <h4 className="brand-blue heading-border-left"> Cluster Details</h4>
+          <h4 className="brand-blue"> Cluster Details</h4>
           <p> Name: {cluster.name}</p>
         </div>
       )
@@ -269,7 +269,7 @@ export default class PrimaryCluster extends React.Component {
             <i className="fa fa-lock fa-lg" aria-hidden="true"></i> 
              Insufficient Privileges. Only administrators can modify boundary details.
           </div>
-          <h4 className="text-primary heading-border">Cluster</h4>
+          <h4 className="text-primary">Cluster</h4>
           <div className="border-base"></div>
           <div className="base-spacing-mid"></div> 
           <div>{cluster.name}</div>

@@ -242,7 +242,7 @@ Displayelement = (props) =>{
             <li className="active"> {institution.name}</li>
           </ol>
               <div>
-                <h4 className="text-primary heading-border col-md-10">Modify Details</h4>
+                <h4 className="text-primary col-md-10">Modify Details</h4>
                 <button className="btn btn-green pull-right" title='Add Class' onClick={this.toggleClassModal}>Add Class</button>
                 <div className="base-spacing-mid border-base"/>
             
@@ -397,7 +397,7 @@ Displayelement = (props) =>{
                Insufficient Privileges. Please contact administrator for permissions to modify the institution.
             </div>
           </div>
-          <h4 className="text-primary heading-border">Institution Details</h4>
+          <h4 className="text-primary">Institution Details</h4>
           <div className="border-base"></div>
           <div className="base-spacing-mid"></div> 
           <div>{institution.name}</div>

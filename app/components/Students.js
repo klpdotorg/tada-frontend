@@ -26,8 +26,8 @@ const StudentRow = (props) => {
       <td>{displayFullName(relations.Father[0])}</td>
       <td>{displayFullName(relations.Mother[0])}</td>
       <td>
-        <button onClick={() => { props.deleteStudent({...props}) }} className="btn btn-primary" data-toggle="tooltip" title="Edit"><i className="fa fa-trash-o"></i></button>
         <button onClick={() => { props.openModifyStudent({...props}) }} className="btn btn-primary padded-btn" data-toggle="tooltip" title="Delete"><i className="fa fa-pencil-square-o"></i></button>
+        <button onClick={() => { props.deleteStudent({...props}) }} className="btn btn-primary" data-toggle="tooltip" title="Edit"><i className="fa fa-trash-o"></i></button>
       </td>
     </tr>
   )
@@ -160,9 +160,11 @@ class StudentScreen extends Component {
     var Displayelement;
     if(sessionStorage.getItem('isAdmin')) {
       Displayelement = (props) =>
-        <div>
-          <div className="base-spacing-mid"></div>
-          <table className="table table-condensed table-responsive table-students">
+        <div className="table-responsive">
+          <h4 className="text-primary">Student Details</h4>
+          <div className="base-spacing-mid base-border"></div>
+          <div className="base-spacing-sm"></div>
+          <table className="table table-condensed table-students">
             <thead>
               <tr className="text-primary text-uppercase">
                 <th>Select</th>
@@ -181,7 +183,7 @@ class StudentScreen extends Component {
               {checkStudents}
             </tbody>
           </table>
-          <div className="row">
+          <div className="row base-spacing-mid">
             <div className="col-md-4">
               <select onChange={(e) => {this.setState({mapToCentre : e.target.value})}} value={this.state.mapToCentre} className="form-control" id="gender">
                 {studentGroups}

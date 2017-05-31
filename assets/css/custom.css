@@ -94,29 +94,17 @@ white (#ffffff)
 }
 
 /* font-styles */
-.italic, %italic {
+.italic {
   font-style: italic;
 }
-.bold, %bold {
+.bold {
   font-weight: 700;
 }
-.font-light, %font-light {
+.font-light {
   font-weight: 300;
 }
-.uppercase, %uppercase {
+.uppercase {
   text-transform: uppercase;
-}
-/* HEADING BORDER */
-
-.heading-border {
-  &:after {
-  content: '';
-  display: block;
-  margin: auto;
-  width: 100%;
-  height: 2px;
-  background-color: royalblue;
-  }
 }
 
 /* BASE STYLES */

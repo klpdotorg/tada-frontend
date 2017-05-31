@@ -257,7 +257,7 @@ class StudentGroup extends Component {
           <div>
             <div className="row">
               <div className="col-md-8">
-                <h4 className="text-primary heading-border">{canModify? "Modify Details": "View Details"}</h4>
+                <h4 className="text-primary">{canModify? "Modify Details": "View Details"}</h4>
               </div>
               {isSchool ?
                 <div className="col-md-4 pull-right">
