@@ -210,7 +210,7 @@ export default class PermissionsNavTree extends React.Component {
 
     return this.state.isLoading
       ? <div><i className="fa fa-cog fa-spin fa-lg fa-fw" /><span className="text-muted">Loading...</span></div>
-      : <div className="brand-orange">
+      : <div>
           <select
             className="form-control"
             onChange={this.handleProgramSelection}

@@ -252,13 +252,16 @@ export default class PrimaryCluster extends React.Component {
         <div>
 
           <div className='pull-right'>
-            <button className='btn btn-default brand-orange-bg' onClick={this.toggleSchoolModal}><i className="fa fa-university"/>Add School</button>
+            <button className='btn btn-primary' onClick={this.toggleSchoolModal}><i className="fa fa-university"/>Add School</button>
           </div>
-          <h4 className="heading-err yellow-mild"> <span className="fa-stack fa-lg"> <i className="fa fa-circle fa-stack-2x yellow-mild"></i>
-            <i className="fa fa-lock fa-stack-1x grey-steel"></i></span>  Limited Permissions</h4>
-          <p>You need administrator privileges to modify Boundary details but you can add institutions here.</p>
-          <h4 className="brand-blue"> Cluster Details</h4>
-          <p> Name: {cluster.name}</p>
+          <div className="alert alert-warning">
+            <i className="fa fa-exclamation-triangle fa-lg" aria-hidden="true"></i> 
+             Limited permissions. You can add institutions but not modify the boundary.
+          </div>
+          <h4 className="text-primary"> Cluster Details</h4>
+          <div className="border-base"></div>
+          <div className="base-spacing-mid"></div> 
+          <div>{cluster.name}</div>
         </div>
       )
     }

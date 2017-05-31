@@ -449,7 +449,7 @@ export default class Institution extends React.Component {
     //       </ol>
     //       <h4 className="heading-err brand-red"> <i className="fa fa-lock brand-red" aria-hidden="true"></i>  Insufficient Permissions</h4>
     //       <p>You need administrator privileges to modify Boundary details.</p>
-    //       <h4 className="brand-blue"> Institution Details</h4>
+    //       <h4 className="text-primary"> Institution Details</h4>
     //       <p> Name: {institution.name}</p>
     //     </div>
     //   )

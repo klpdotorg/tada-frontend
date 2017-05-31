@@ -162,7 +162,7 @@ class StudentScreen extends Component {
       Displayelement = (props) =>
         <div className="table-responsive">
           <h4 className="text-primary">Student Details</h4>
-          <div className="base-spacing-mid base-border"></div>
+          <div className="base-spacing-mid border-base"></div>
           <div className="base-spacing-sm"></div>
           <table className="table table-condensed table-students">
             <thead>

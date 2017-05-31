@@ -164,7 +164,7 @@ ProjectSummary=(props)=>{
     //   ProjectSummary = (props) =>
     //     <div>
     //       <div className='heading-border-left'>
-    //         <h4 className="brand-blue col-md-10">Modify Details</h4>
+    //         <h4 className="text-primary col-md-10">Modify Details</h4>
     //         <Button onClick={this.toggleCircleModal} title='Add Circle'/>
     //       </div>
     //
@@ -189,7 +189,7 @@ ProjectSummary=(props)=>{
     //    <div>
     //       <h4 className="heading-border heading-warn"> Limited Permissions</h4>
     //       <p>You need administrator privileges to modify Boundary details. But you may add institutions here.</p>
-    //       <h4 className="heading-border brand-blue"> View Details</h4>
+    //       <h4 className="heading-border text-primary"> View Details</h4>
     //     </div>
     // }
 
