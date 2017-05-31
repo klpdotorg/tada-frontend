@@ -168,7 +168,7 @@ ProjectSummary=(props)=>{
     //         <Button onClick={this.toggleCircleModal} title='Add Circle'/>
     //       </div>
     //
-    //         <form className="form-horizontal boundary-form" role="form">
+    //         <form className="form-horizontal" role="form">
     //           <div className="form-group">
     //             <label className="control-label col-sm-2" htmlFor="name">Project :</label>
     //             <div className="col-sm-2">

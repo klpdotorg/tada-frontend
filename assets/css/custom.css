@@ -515,10 +515,6 @@ fieldset[disabled] .btn-green.active {
   margin: 5px 10px;
 }
 
-.boundary-form{
-  margin-top: 10px;
-}
-
 .no-border {
   border: 0;
   box-shadow: none; 
@@ -598,7 +594,7 @@ overridden elsewhere.
     word-wrap:break-word;     
 }
 
-table.table-students td, .table-students th {
+table.table-fixedwidth td, .table-fixedwidth th {
     min-width: 150px;
 }
 

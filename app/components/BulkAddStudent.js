@@ -48,7 +48,7 @@ export default class BulkAddStudent extends Component {
         }
       return (
         <div className="table-responsive">
-          <table className="table table-striped table-students">
+          <table className="table table-striped table-fixedwidth">
             <thead>
               <tr className="text-primary text-uppercase">
                 <th>First Name</th>

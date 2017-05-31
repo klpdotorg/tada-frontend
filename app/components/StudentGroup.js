@@ -275,7 +275,7 @@ class StudentGroup extends Component {
           </div>
           <div className="base-spacing-mid border-base"/>
           
-          <form className="form-horizontal boundary-form" role="form">
+          <form className="form-horizontal" role="form">
             <div className="form-group">
               <label className="control-label col-sm-2" htmlFor="class">Class</label>
               <div className="col-sm-2">

@@ -164,7 +164,7 @@ class StudentScreen extends Component {
           <h4 className="text-primary">Student Details</h4>
           <div className="base-spacing-mid border-base"></div>
           <div className="base-spacing-sm"></div>
-          <table className="table table-condensed table-students">
+          <table className="table table-condensed table-fixedwidth">
             <thead>
               <tr className="text-primary text-uppercase">
                 <th>Select</th>
