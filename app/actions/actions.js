@@ -264,6 +264,7 @@ export function fetchStudentsByGroupId(groupId) {
           type: 'STUDENTS_FULFILLED',
           payload: { students: data, groupId },
         });
+        return data;
       })
       .catch(error => {
         console.log(error);

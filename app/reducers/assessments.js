@@ -21,7 +21,7 @@ function processQuestions(data) {
     data.map(question => {
       newQuestionsById[question.id] = question;
       assessid = question.assessment;
-      questionIds.push(question.assessment);
+      questionIds.push(question.id);
     });
   }
   questionsByAssessId[assessid] = questionIds;
@@ -40,6 +40,18 @@ export const processAssessmentsByBoundary = (boundaryid, assessments) => {
   perBoundary[boundaryid] = boundArray;
   return perBoundary;
 };
+
+export const processAnswersPerStudent = (studentid, assessmentid, answersArray) => {
+  let answersByUniqueId = {};
+  if (answersArray && answersArray.length > 0) {
+    answersArray.map(answer => {
+      var answer_id = studentid + '_' + answer.question;
+      answersByUniqueId[answer_id] = answer;
+    });
+  }
+  return answersByUniqueId;
+};
+
 export function assessments(
   state = {
     assessmentsById: {},
@@ -47,6 +59,7 @@ export function assessments(
     isFetching: {},
     questionsByAssessId: {},
     assessmentsByBoundary: {},
+    answersById: {},
   },
   action,
 ) {
@@ -106,6 +119,17 @@ export function assessments(
         var copy = Object.assign({}, state.assessmentsById);
         copy[action.assessment.id] = action.assessment;
         return Object.assign({}, { assessmentsById: copy });
+
+      case 'ANSWERS_RECEIVED':
+        var copy = Object.assign({}, state.answersById);
+        let answers = processAnswersPerStudent(action.id, action.assessmentId, action.data.results);
+        let newAnswers = Object.assign({}, state.answersById, answers);
+
+        let result = {
+          ...state,
+          answersById: newAnswers,
+        };
+        return result;
 
       default:
         return state;

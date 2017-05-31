@@ -28,6 +28,17 @@ import { syncHistoryWithStore } from 'react-router-redux';
 
 const history = syncHistoryWithStore(browserHistory, tadastore);
 
+const isUserAuthenticated = (nextState, replace) => {
+  let token = sessionStorage.getItem('token');
+  if (token) {
+    // Allow user to proceed
+    console.log('User is authorized');
+  } else {
+    // redirect to login
+    replace('/login');
+  }
+};
+
 export const routes = (
   <Provider store={tadastore}>
     <Router history={history}>
@@ -36,8 +47,8 @@ export const routes = (
       <Route path="password/reset" component={ResetPassword} />
       <Route path="password/reset/confirm/:uid/:token" component={SetNewPassword} />
       <Route path="register" component={UserRegContainer} />
-      <Route path="/" component={App}>
-        <IndexRoute component={Dashboard} />
+      <Route path="/" component={App} onEnter={isUserAuthenticated}>
+        <IndexRoute component={Dashboard} onEnter={isUserAuthenticated} />
         <Route path="dashboard" component={Dashboard} />
         <Route path="programs" component={Programs} />
         <Route path="filterprograms" component={AnswersContainer} />
