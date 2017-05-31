@@ -598,3 +598,23 @@ table.table-fixedwidth td, .table-fixedwidth th {
     min-width: 150px;
 }
 
+/* PANKAJ's CHANGES */
+.warn-message-cont {
+ display: flex;
+ align-items: center;
+ padding: 10px;
+}
+.warn-message {
+ margin: 0;
+ margin-left: 10px;
+}
+​
+.loading-assessments {
+ display: flex;
+ align-items: center;
+ justify-content: center;
+}
+.loading-assessments-spinner {
+ font-size: 35px;
+}
+
