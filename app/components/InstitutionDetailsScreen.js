@@ -426,13 +426,8 @@ export default class Institution extends React.Component {
                   </div>
 
                     {!canModify?<div></div>:
-<<<<<<< HEAD
                       <div className="col-md-12">
                       <button type="submit" className="btn btn-primary" onClick={this.saveInsti}>Save</button>
-=======
-                      <div className="col-md-2">
-                      <button type="submit" className="btn btn-primary padded-btn" onClick={this.saveInsti}>Save</button>
->>>>>>> develop
                       <button type="submit" className="btn btn-primary padded-btn" disabled={hasClasses} onClick={this.showConfirmation}>Delete</button>
                       <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteInstitution} onCloseModal={this.closeConfirmModal} entity={institution.name}/>
                       </div>}
