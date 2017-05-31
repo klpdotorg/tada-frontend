@@ -10,6 +10,7 @@ import EditProgram from './Modals/EditProgram';
 import ConfirmDialog from './Modals/ConfirmDialog';
 import { assessmentCreated, assessCreateFailed } from '../actions/notifications';
 import Notifications from 'react-notification-system-redux';
+import _ from 'lodash'
 export default class Programs extends React.Component {
 
 	constructor(props)
@@ -507,21 +508,30 @@ export default class Programs extends React.Component {
 					<h4 className="text-primary text-center"> Assessments in this Programme</h4>
 				</div>
 				<div>
-					<table className="table table-bordered table-striped">
-					<tbody>
-						<tr className="info">
-							<th>Assessment</th>
-							<th>Start Date</th>
-							<th>End Date</th>
-							<th>Type</th>
-							<th>Double Entry</th>
-							<th>Flexi-type</th>
-							<th>Select</th>
-							<th>Actions</th>
-						</tr>
-						{assessmentsList}
-					</tbody>
-					</table>
+          {!this.props.fetchingAssessments
+            ?
+            <table className="table table-bordered table-striped">
+				<tbody>
+					<tr className="info">
+						<th>Assessment</th>
+						<th>Start Date</th>
+						<th>End Date</th>
+						<th>Type</th>
+						<th>Double Entry</th>
+						<th>Flexi-type</th>
+						<th>Select</th>
+						<th>Actions</th>
+					</tr>
+					{assessmentsList}
+				</tbody>
+			</table>
+            
+            :
+            <div className='loading-assessments'>
+              <i className='fa fa-spinner fa-spin loading-assessments-spinner'/>
+            </div>
+          }
+
 				</div>
 				<div className="col-md-8">
 						<button type="button" className="btn btn-info" onClick={this.createCopyAssess.bind(this)} disabled={this.state.selectedAssessments.length == 0}>Make a Copy</button>
