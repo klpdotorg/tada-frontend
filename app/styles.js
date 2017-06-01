@@ -1,15 +1,18 @@
 export const modalStyle = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-	  height: '350px',
-    width: '600px',
-	  overflow: 'auto',
-    margin: '0px',
-    padding: '0px',
-  }
+content: {
+        border: '0',
+        borderRadius: '4px',
+        bottom: 'auto',
+        minHeight: '10rem',
+        left: '50%',
+        padding: '1rem',
+        position: 'fixed',
+        right: 'auto',
+        top: '50%',
+        transform: 'translate(-50%,-50%)',
+        minWidth: '20rem',
+        width: '80%',
+        maxWidth: '65rem',
+        maxHeight: '30rem'
+    }
 };

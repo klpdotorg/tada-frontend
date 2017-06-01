@@ -242,43 +242,43 @@ Displayelement = (props) =>{
             <li className="active"> {institution.name}</li>
           </ol>
               <div>
-            <div className='heading-border-left'>
-              <h4 className="brand-blue col-md-10">Modify Details</h4>
-              <Button onClick={this.toggleClassModal} title='Add Class'/>
-            </div>
-            <Formsy.Form
-              onValidSubmit={this.saveInsti}
-             onValid={this.enableSubmitButton}
-             onInvalid={this.disableSubmitButton}
-             onChange={this.handleChange}
-             ref={(ref) => this.myform = ref}
-             >
-                <div className="form-group">
-                  {/*<label className="control-label col-sm-2" htmlFor="name">Name:</label>*/}
-                  <div className="col-sm-12">
-                    <Input name="institutionName"
-                     id="institutionName"
-                     value={institution.name}
-                     label="Name:" type="text"
-                     className="form-control"
-                     required
-                     validations="minLength:1"/>
-                  </div>
-                </div>
+                <h4 className="text-primary col-md-10">Modify Details</h4>
+                <button className="btn btn-green pull-right" title='Add Class' onClick={this.toggleClassModal}>Add Class</button>
+                <div className="base-spacing-mid border-base"/>
+            
+                <Formsy.Form
+                  onValidSubmit={this.saveInsti}
+                 onValid={this.enableSubmitButton}
+                 onInvalid={this.disableSubmitButton}
+                 onChange={this.handleChange}
+                 ref={(ref) => this.myform = ref}
+                 >
+                    <div className="form-group">
+                      {/*<label className="control-label col-sm-2" htmlFor="name">Name:</label>*/}
+                      <div className="col-sm-12">
+                        <Input name="institutionName"
+                         id="institutionName"
+                         value={institution.name}
+                         label="Name:" type="text"
+                         className="form-control"
+                         required
+                         validations="minLength:1"/>
+                      </div>
+                    </div>
 
-                <div className="form-group">
-                  {/*<label className="control-label col-sm-2" htmlFor="address">Address:</label>*/}
-                  <div className="col-sm-12">
-                    <Textarea
-                    rows={3}
-                    cols={40}
-                    name="institutionAddress"
-                    label="Address :"
-                    value={institution.address}
-                    required
-                    validations="minLength:1"
+                    <div className="form-group">
+                      {/*<label className="control-label col-sm-2" htmlFor="address">Address:</label>*/}
+                      <div className="col-sm-12">
+                        <Textarea
+                        rows={3}
+                        cols={40}
+                        name="institutionAddress"
+                        label="Address :"
+                        value={institution.address}
+                        required
+                        validations="minLength:1"
 
-                />
+                    />
                     {/*<textarea onChange={(e) => {this.setValue(e.target.value, 'address')}} className="form-control" id="address" rows="3" value={institution.address}>
                     </textarea>*/}
                   </div>
@@ -374,7 +374,7 @@ Displayelement = (props) =>{
 
             <div className="col-md-2">
               <button type="submit" className="btn btn-primary" onClick={this.saveInsti}>Save</button>
-              <button type="submit" className="btn btn-primary" onClick={this.showConfirmation}>Delete</button>
+              <button type="submit" className="btn btn-primary padded-btn" onClick={this.showConfirmation}>Delete</button>
               <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteInstitution} onCloseModal={this.closeConfirmModal} entity={institution.name}/>
             </div>
           </div>
@@ -391,10 +391,16 @@ Displayelement = (props) =>{
             <li> <Link to={circle.path}> {circle.name}</Link></li>
             <li className="active"> {institution.name}</li>
           </ol>
-          <h4 className="heading-err heading-border-left brand-red"> <i className="fa fa-lock brand-red" aria-hidden="true"></i>  Insufficient Permissions</h4>
-          <p>You need administrator privileges to modify Boundary details.</p>
-          <h4 className="brand-blue heading-border-left"> Institution Details</h4>
-          <p> Name: {institution.name}</p>
+          <div>
+            <div className="alert alert-danger">
+              <i className="fa fa-lock fa-lg" aria-hidden="true"></i> 
+               Insufficient Privileges. Please contact administrator for permissions to modify the institution.
+            </div>
+          </div>
+          <h4 className="text-primary">Institution Details</h4>
+          <div className="border-base"></div>
+          <div className="base-spacing-mid"></div> 
+          <div>{institution.name}</div>
         </div>
       )
   }
@@ -408,7 +414,7 @@ Displayelement = (props) =>{
 
     return (
       this.state.isLoading ?
-      <div>Loading...</div> :<div>{this.Displayelement(...this.props)}</div>
+      <div><i className="fa fa-cog fa-spin fa-lg fa-fw" /><span className="text-muted">Loading...</span></div> :<div>{this.Displayelement(...this.props)}</div>
     )
 
   }

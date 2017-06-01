@@ -262,18 +262,22 @@ export default class Institution extends React.Component {
             <li className="active"> {institution.name}</li>
             </ol>
             <div>
-
-              {!canModify?<div>
-            <span className="fa-stack fa-lg"> <i className="fa fa-circle fa-stack-2x brand-red"></i>
-            <i className="fa fa-lock fa-stack-1x fa-inverse"></i></span><h4 className="heading-border-left brand-red">Insufficient Permissions</h4>
-            <div className="col-md-12">You need administrator privileges or permissions to modify this institution</div>
-
-          </div>:<div>          {hasClasses?<p className="col-md-12 bg-info warn-message-cont"><i className="fa fa-2x fa-info-circle" aria-hidden="true"></i><h5 className='warn-message'>You cannot <small>delete this institution until the classes under it are deleted</small></h5></p>:<div></div>}
-</div>}
-          <h4 className="heading-border-left brand-blue col-md-10">{canModify? "Modify Details": "View Details"}</h4>
-            {!canModify?null:<Button onClick={this.toggleClassModal} title='Add Class'disabled={!canModify}/>}
-
-
+              {!canModify?
+                <div>
+                  <div className="alert alert-danger">
+                    <i className="fa fa-lock fa-lg" aria-hidden="true"></i> 
+                     Insufficient Privileges. Please contact administrator for permissions to modify the institution.
+                  </div>
+                </div>
+              :
+                <div>
+                  {hasClasses?<div className="alert alert-info"><i className="fa fa-info-circle fa-lg" aria-hidden="true"></i> You cannot delete this institution until its classes are deleted</div>:<div></div>}
+                </div>
+              }
+          <h4 className="text-primary col-md-10">{canModify? "Modify Details": "View Details"}</h4>
+          {!canModify?null:<button className="btn btn-orange pull-right" title='Add Class' onClick={this.toggleClassModal} disabled={!canModify}>Add Class</button>}
+          <div className="base-spacing-mid border-base"/>
+              <div className="base-spacing-sm"></div>
 
               <Formsy.Form
                 onValidSubmit={this.saveInsti}
@@ -422,8 +426,8 @@ export default class Institution extends React.Component {
                   </div>
 
                     {!canModify?<div></div>:
-                      <div className="col-md-2">
-                      <button type="submit" className="btn btn-primary padded-btn" onClick={this.saveInsti}>Save</button>
+                      <div className="col-md-12">
+                      <button type="submit" className="btn btn-primary" onClick={this.saveInsti}>Save</button>
                       <button type="submit" className="btn btn-primary padded-btn" disabled={hasClasses} onClick={this.showConfirmation}>Delete</button>
                       <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteInstitution} onCloseModal={this.closeConfirmModal} entity={institution.name}/>
                       </div>}
@@ -444,9 +448,9 @@ export default class Institution extends React.Component {
     //       <li> <Link to={cluster.path}> {cluster.name}</Link></li>
     //       <li className="active"> {institution.name}</li>
     //       </ol>
-    //       <h4 className="heading-err heading-border-left brand-red"> <i className="fa fa-lock brand-red" aria-hidden="true"></i>  Insufficient Permissions</h4>
+    //       <h4 className="heading-err brand-red"> <i className="fa fa-lock brand-red" aria-hidden="true"></i>  Insufficient Permissions</h4>
     //       <p>You need administrator privileges to modify Boundary details.</p>
-    //       <h4 className="brand-blue heading-border-left"> Institution Details</h4>
+    //       <h4 className="text-primary"> Institution Details</h4>
     //       <p> Name: {institution.name}</p>
     //     </div>
     //   )
@@ -461,7 +465,7 @@ export default class Institution extends React.Component {
 
     return (
           this.state.isLoading ?
-          <div>Loading...</div> :
+          <div><i className="fa fa-cog fa-spin fa-lg fa-fw" /><span className="text-muted">Loading...</span></div> :
             <div>{this.Displayelement()}</div>
 
         )

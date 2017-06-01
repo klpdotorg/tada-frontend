@@ -15,18 +15,21 @@ import {groupBy} from 'lodash'
 const StudentRow = (props) => {
   const relations = groupBy(props.relations, 'relation_type');
   return (
-    <div className="row">
-      <div className="col-md-1"><input checked={props.selectedStudents.has(props.id)} onChange={props.selectStudent} type="checkbox" /></div>
-      <div className="col-md-1"><span>{props.id}</span></div>
-      <div className="col-md-2"><span>{displayFullName(props)}</span></div>
-      <div className="col-md-1"><span>{props.uid}</span></div>
-      <div className="col-md-1"><span>{props.gender}</span></div>
-      <div className="col-md-1"><span>{props.language}</span></div>
-      <div className="col-md-1"><span>{props.dob}</span></div>
-      <div className="col-md-2"><span>{displayFullName(relations.Father[0])}</span></div>
-      <div className="col-md-2"><span>{displayFullName(relations.Mother[0])}</span></div>
-      <div className="col-md-1"><span onClick={() => { props.deleteStudent({...props}) }} className="glyphicon glyphicon-trash">Delete</span><span className="glyphicon glyphicon-pencil" onClick={() => { props.openModifyStudent({...props}) }}>Edit</span></div>
-    </div>
+    <tr>
+      <td><input checked={props.selectedStudents.has(props.id)} onChange={props.selectStudent} type="checkbox" /></td>
+      <td>{props.id}</td>
+      <td>{displayFullName(props)}</td>
+      <td>{props.uid}</td>
+      <td>{props.gender}</td>
+      <td>{props.language}</td>
+      <td>{props.dob}</td>
+      <td>{displayFullName(relations.Father[0])}</td>
+      <td>{displayFullName(relations.Mother[0])}</td>
+      <td>
+        <button onClick={() => { props.openModifyStudent({...props}) }} className="btn btn-primary padded-btn" data-toggle="tooltip" title="Delete"><i className="fa fa-pencil-square-o"></i></button>
+        <button onClick={() => { props.deleteStudent({...props}) }} className="btn btn-primary" data-toggle="tooltip" title="Edit"><i className="fa fa-trash-o"></i></button>
+      </td>
+    </tr>
   )
 }
 
@@ -42,7 +45,6 @@ const NoStudentMsg = () => {
 
 
 class StudentScreen extends Component {
-
   constructor(props){
     super(props);
     this.deleteStudentConfirm = this.deleteStudentConfirm.bind(this);
@@ -79,7 +81,7 @@ class StudentScreen extends Component {
       return mapStudentsAPI(studentRequestBody)
     })
 
-    Promise.all(studentsPromise)
+  Promise.all(studentsPromise)
     .then(() => {
       this.props.dispatch(Notifications.success(studentStudentGroupMap))
     })
@@ -158,41 +160,44 @@ class StudentScreen extends Component {
     var Displayelement;
     if(sessionStorage.getItem('isAdmin')) {
       Displayelement = (props) =>
-      <div>
-        <div className="students-grid">
-          <div className="row grid-header">
-            <div className="col-md-1"><span>Select</span></div>
-            <div className="col-md-1"><span>Student ID</span></div>
-            <div className="col-md-2"><span>Name</span></div>
-            <div className="col-md-1"><span>UID</span></div>
-            <div className="col-md-1"><span>Gender</span></div>
-            <div className="col-md-1"><span>Language</span></div>
-            <div className="col-md-1"><span>DoB</span></div>
-            <div className="col-md-2"><span>Father Name</span></div>
-            <div className="col-md-2"><span>Mother Name</span></div>
-            <div className="col-md-1"><span>Actions</span></div>
+        <div className="table-responsive">
+          <h4 className="text-primary">Student Details</h4>
+          <div className="base-spacing-mid border-base"></div>
+          <div className="base-spacing-sm"></div>
+          <table className="table table-condensed table-fixedwidth">
+            <thead>
+              <tr className="text-primary text-uppercase">
+                <th>Select</th>
+                <th>ID</th>
+                <th>Name</th>
+                <th>UID</th>
+                <th>Gender</th>
+                <th>Mother Tongue</th>
+                <th>Date of Birth</th>
+                <th>{"Father's Name"}</th>
+                <th>{"Mother's Name"}</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {checkStudents}
+            </tbody>
+          </table>
+          <div className="row base-spacing-mid">
+            <div className="col-md-4">
+              <select onChange={(e) => {this.setState({mapToCentre : e.target.value})}} value={this.state.mapToCentre} className="form-control" id="gender">
+                {studentGroups}
+              </select>
+            </div><div className="col-md-8">
+              <button type="submit" className="btn btn-primary" onClick={this.mapToCentre}>Map to Center</button>
+            </div>
           </div>
-          {checkStudents}
         </div>
-        <div className="col-sm-2">
-          <select className="col-sm-2" onChange={(e) => {this.setState({mapToCentre : e.target.value})}} value={this.state.mapToCentre} className="form-control" id="gender">
-                  {studentGroups}
-          </select>
-          <button type="submit" className="btn btn-primary" onClick={this.mapToCentre}>Map to Center</button>
-
-        </div>
-        <div className="col-md-2">
-          <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteStudent} onCloseModal={this.closeConfirmation} entity={this.state.currentStudent.first_name}/>
-          <ModifyStudent saveStudent={this.saveStudent} isOpen={this.state.modifyStudentIsOpen} data={this.state.modifyStudentData} onCloseModal={this.closeModifyStudent} entity={cluster.name}/>
-        </div>
-      </div>
     } else {
         Displayelement = (props) =>
-        <div>
-          <h4 className="heading-err heading-border-left brand-red"> <i className="fa fa-lock brand-red" aria-hidden="true"></i>  Insufficient Permissions</h4>
-          <p>You need administrator privileges to modify Boundary details.</p>
-          <h4 className="brand-blue heading-border-left"> Cluster Details</h4>
-          <p> Name: {cluster.name}</p>
+        <div className="alert alert-danger">
+          <i className="fa fa-lock fa-lg" aria-hidden="true"></i> 
+          Insufficient Privileges. Please contact administrator.
         </div>
     }
 
@@ -295,7 +300,7 @@ export default class Students extends Component {
   render() {
     return (
             this.state.isLoading ?
-            <div>Loading...</div> :
+            <div><i className="fa fa-cog fa-spin fa-lg fa-fw" /><span className="text-muted">Loading...</span></div> :
             <StudentScreen {...this.props} />
           )
   }

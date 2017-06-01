@@ -63,56 +63,58 @@ export default class Questions extends React.Component {
 					<td>{question.score_min}</td>
 					<td>{question.score_max}</td>
 					<td>{question.grade}</td>
-					<td><button className="btn"><span className="fa fa-pencil-square-o" ></span></button></td>
-					<td><button className="btn" onClick={this.deleteQuestion.bind(this)}><span className="fa fa-trash-o" onClick={this.deleteQuestion.bind(this)}></span></button></td>
+					<td><button className="btn btn-primary" data-toggle="tooltip" title="Edit"><span className="fa fa-pencil-square-o" ></span></button>
+					<button className="btn btn-primary padded-btn" data-toggle="tooltip" title="Delete" onClick={this.deleteQuestion.bind(this)}><span className="fa fa-trash-o" onClick={this.deleteQuestion.bind(this)}></span></button></td>
 
 				</tr>
 			);
 		});
 		return(
-			<div className="row center-block">
-				<div className="grey-mist-bg">
-					<div className="row center-block">
-						<div className="col-md-6 pull-left">
-							<div className="row">	
-								<label className="col-md-4">Program name:  {this.props.programsById[this.props.params.programId].name}</label>		
-							</div>
-							<div className="row">
-								<label className="col-md-4">Assessment name: {this.props.assessmentsById[this.props.params.assessmentId].name} </label>
-							</div>
-							<div className="row">
-								<Link to="/programs" className="col-md-4 btn btn-info navbar-btn brand-blue-bg all-padded-btn">Back to Program</Link>
-							</div>
+				<div className="container-fluid">
+					<h4 className="text-primary">Question Details</h4>
+					<div className="base-spacing-sm border-base"></div>
+					<div className="base-spacing-mid"></div>
+					<div className="row">
+						<div className="col-md-8">	
+							<h5>
+								<span className="text-primary"><strong>Program name: </strong></span>
+								{this.props.programsById[this.props.params.programId].name}
+							</h5>
+							<h5>
+								<span className="text-primary"><strong>Assessment name: </strong></span>
+								{this.props.assessmentsById[this.props.params.assessmentId].name}
+							</h5>
 						</div>
+						
 						<div className="col-md-4 pull-right">
-						<button type="button" className="col-md-4 btn btn-info navbar-btn brand-orange-bg all-padded-btn" onClick={this.openCreateQuestionModal.bind(this)}>Add Question</button>
+							<button type="button" className="btn btn-primary" onClick={this.openCreateQuestionModal.bind(this)}>Add Question</button>
+							<Link to="/programs" className="btn btn-info padded-btn">Back to Program</Link>
 						</div>
 					</div>
+				
+					<br/>
+					<div>
+						<h4 className="text-primary text-center"> Questions in this assessment</h4>	
+					</div>
+					<div>
+						<table className="table table-bordered table-striped">
+						<tbody>
+							<tr className="info">
+								<th>Question #</th>
+								<th>Order</th>
+								<th>Text</th>
+								<th>Type</th>
+								<th>Min Mk</th>
+								<th>Max Mk</th>
+								<th>Grade Set</th>							
+								<th>Actions</th>
+							</tr>
+							{questionsList}
+						</tbody>
+						</table>
+					</div>
+					<CreateQuestion isOpen={this.state.isCreateQuestionModalOpen} onCloseModal={this.closeCreateQuestionModal.bind(this)} handleSubmit={this.createQuestion.bind(this)}/>
 				</div>
-				<br/>
-				<div>
-					<h4 className="brand-blue text-center"> Questions in this assessment</h4>	
-				</div>
-				<div>
-					<table className="table table-bordered table-striped">
-					<tbody>
-						<tr className="info">
-							<th>Question #</th>
-							<th>Order</th>
-							<th>Text</th>
-							<th>Type</th>
-							<th>Min Mk</th>
-							<th>Max Mk</th>
-							<th>Grade Set</th>							
-							<th>Edit</th>
-							<th>Delete</th>
-						</tr>
-						{questionsList}
-					</tbody>
-					</table>
-				</div>
-				<CreateQuestion isOpen={this.state.isCreateQuestionModalOpen} onCloseModal={this.closeCreateQuestionModal.bind(this)} handleSubmit={this.createQuestion.bind(this)}/>
-			</div>
 			);
 	}
 }

@@ -249,26 +249,29 @@ render()
 					<td>{user.username}</td>
 					<td>{userRole}</td>
 					<td><input type="checkbox" className="btn" onClick={this.selectUser.bind(this)}/></td>
-					<td><button className="btn btn-primary brand-blue-bg fa fa-pencil-square-o" onClick={this.openEditUserModal.bind(this)}></button></td>
-					<td><button className="btn btn-primary brand-blue-bg fa fa-unlock-alt" onClick={this.openResetPasswordModal.bind(this)}></button></td>
+					<td>
+						<button className="btn btn-primary fa fa-pencil-square-o" data-toggle="tooltip" title="Edit User"onClick={this.openEditUserModal.bind(this)}></button>
+						<button className="btn btn-primary padded-btn fa fa-unlock-alt" data-toggle="tooltip" title="Reset Password" onClick={this.openResetPasswordModal.bind(this)}></button>
+					</td>
 				</tr>
 				);
 	});
 }
 else {
 	usersList = <tr colSpan="6"><td colSpan="6" style={{"text-align": "center"}}>
-<i className="fa fa-cog fa-spin fa-3x fa-fw"></i>Loading...</td></tr>
+<i className="fa fa-cog fa-spin fa-lg fa-fw"></i>Loading...</td></tr>
 }
 
-	return(		<div>
+	return(		<div  className="container-fluid">
 					<div className="row">
 						<div className="col-md-12">
-							<button className="btn btn-primary brand-orange-bg pull-right" onClick={this.openCreateUserModal.bind(this)}>Add User</button>
+							<button className="btn btn-primary pull-right" onClick={this.openCreateUserModal.bind(this)}>Add User</button>
 						</div>
-
-					</div>
-					<div className="row center-block">
-						<h4>Manage Users </h4>
+						<div className="col-md-12">
+			                <h4 className="text-primary">All Users</h4>
+			                <div className="base-spacing-sm border-base"></div>
+			                <div className="base-spacing-mid"></div>
+			            </div>
 					</div>
 					<table className="table table-bordered table-striped">
 					<tbody>
@@ -277,16 +280,14 @@ else {
 							<th>User ID</th>
 							<th>Role</th>
 							<th>Select</th>
-							<th>Edit</th>
-							<th>Reset Password</th>
-
+							<th>Actions</th>
 						</tr>
 						{usersList}
 					</tbody>
 					</table>
-					<div className="col-md-8 pull-right">
-						<button type="button" className="col-sm-2 btn btn-info navbar-btn brand-blue-bg all-padded-btn" onClick={this.openConfirmDlg.bind(this)}>Delete</button>
-						<button type="button" className="col-sm-3 btn btn-info navbar-btn brand-blue-bg all-padded-btn" onClick={this.deactivateUsers.bind(this)}>Deactivate</button>
+					<div className="col-md-8">
+						<button type="button" className="btn btn-info" onClick={this.openConfirmDlg.bind(this)}>Delete</button>
+						<button type="button" className="btn btn-info padded-btn" onClick={this.deactivateUsers.bind(this)}>Deactivate</button>
 					</div>
 					<div className="center-block row">
 						<nav aria-label="Page navigation">

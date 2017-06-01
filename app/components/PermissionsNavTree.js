@@ -80,7 +80,7 @@ export default class PermissionsNavTree extends React.Component {
     const {boundariesByParentId, boundaryDetails} = this.props
    
     return (
-      <div className="brand-orange">
+      <div>
       { alphabeticalOrder(boundariesByParentId, boundaryDetails).map(function(element, i) {
         return this.renderSubTree(element, boundariesByParentId, visitedBoundaries, 0)
       }.bind(this)) }

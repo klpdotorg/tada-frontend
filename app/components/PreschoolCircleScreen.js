@@ -18,6 +18,7 @@ export default class PreschoolCircle extends React.Component {
     this.toggleSchoolModal = this.toggleSchoolModal.bind(this);
     this.saveCircle = this.saveCircle.bind(this);
     this.deleteCircle = this.deleteCircle.bind(this);
+    this.hasChildren = this.hasChildren.bind(this);
     this.state = {
       schoolModalIsOpen: false,
       canSubmit: false,
@@ -126,6 +127,13 @@ export default class PreschoolCircle extends React.Component {
     })
   }
 
+  hasChildren() {
+    if(this.props.boundariesByParentId[this.props.params.circleId]) {
+      return this.props.boundariesByParentId[this.props.params.circleId].length > 0;
+    }
+    else
+      return false;
+  }
 
   toggleSchoolModal() {
    this.props.dispatch({
@@ -202,52 +210,46 @@ Displayelement = (props) =>{
   var project = this.props.boundaries.boundaryDetails[this.props.params.projectId];
   var district = this.props.boundaries.boundaryDetails[this.props.params.districtId];
   var circle = this.props.boundaries.boundaryDetails[this.props.params.circleId];
+  let hasSchools = this.hasChildren();
   if(sessionStorage.getItem('isAdmin')) {
-    return(
+    return (
       <div>
-        <div className='heading-border-left'>
-          <h4 className="brand-blue col-md-10">Modify Details</h4>
-          <Button onClick={this.toggleSchoolModal} title='Add School'/>
-        </div>
+        {hasSchools?<div className="alert alert-info"><i className="fa fa-info-circle fa-lg" aria-hidden="true"></i> You cannot delete this boundary until its children are deleted</div>:<div></div>}
+        <h4 className="text-primary col-md-10">Modify Details</h4>
+        <button className="btn btn-green pull-right" title='Add Preschool' onClick={this.toggleSchoolModal}>Add Preschool</button>
+        <div className="base-spacing-mid border-base"/>
         <Formsy.Form
-         onValidSubmit={this.saveCircle}
-         onValid={this.enableSubmitButton}
-         onInvalid={this.disableSubmitButton}
-         ref={(ref) => this.myform = ref}
-         >
-           <Input name="circleName"
-            id="circleName"
-            value={circle.name}
-            label="Circle :" type="text"
-            className="form-control"
-            required
-            validations="minLength:1"/>
-       </Formsy.Form>
-        {/*
-        <form className="form-horizontal boundary-form" role="form">
-          <div className="form-group">
-            <label className="control-label col-sm-2" htmlFor="name">Circle :</label>
-            <div className="col-sm-2">
-              <input type="text" ref={(ref) => this.circleName = ref} className="form-control" id="name" defaultValue={circle.name}/>
-            </div>
-          </div>
-         </form>*/}
+          onValidSubmit={this.saveCircle}
+          onValid={this.enableSubmitButton}
+          onInvalid={this.disableSubmitButton}
+          ref={(ref) => this.myform = ref}>
+            <Input name="circleName"
+              id="circleName"
+              value={circle.name}
+              label="Circle :" type="text"
+              className="form-control"
+              required
+              validations="minLength:1"/>
+        </Formsy.Form>
         <div className="col-md-8">
           <button type="submit" disabled={!this.state.canSubmit} className="btn btn-primary padded-btn" onClick={this.saveCircle}>Save</button>
           <button type="submit" className="btn btn-primary padded-btn" onClick={this.showConfirmation}>Delete</button>
           <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteCircle} onCloseModal={this.closeConfirmation} entity={circle.name}/>
         </div>
       </div>
-      )
-
+    )
   }
   else {
     return(
         <div>
-          <h4 className="heading-err heading-border-left brand-red"> <i className="fa fa-lock brand-red" aria-hidden="true"></i>  Insufficient Permissions</h4>
-          <p>You need administrator privileges to modify Boundary details.</p>
-          <h4 className="brand-blue heading-border-left"> Circle Details</h4>
-          <p> Name: {circle.name}</p>
+          <div className="alert alert-danger">
+            <i className="fa fa-lock fa-lg" aria-hidden="true"></i> 
+             Insufficient Privileges. Only administrators can modify boundary details.
+          </div>
+          <h4 className="text-primary">Circle</h4>
+          <div className="border-base"></div>
+          <div className="base-spacing-mid"></div> 
+          <div>{circle.name}</div>
         </div>
       )
   }
@@ -259,7 +261,7 @@ Displayelement = (props) =>{
     var circle = this.props.boundaries.boundaryDetails[this.props.params.circleId];
     return (
       this.state.isLoading ?
-      <div>Loading...</div> :
+      <div><i className="fa fa-cog fa-spin fa-lg fa-fw" /><span className="text-muted">Loading...</span></div> :
       <div>
        <ol className="breadcrumb">
           <li><Link to={district.path}>{district.name}</Link></li>

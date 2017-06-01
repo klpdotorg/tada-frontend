@@ -15,6 +15,7 @@ export default class PreschoolProject extends Component{
     this.toggleCircleModal = this.toggleCircleModal.bind(this);
     this.saveCircle = this.saveCircle.bind(this);
     this.deleteProject = this.deleteProject.bind(this);
+    this.hasChildren = this.hasChildren.bind(this);
     this.state = {
       canSubmit: false,
       openConfirmModal: false,
@@ -52,6 +53,14 @@ export default class PreschoolProject extends Component{
       type: 'TOGGLE_MODAL',
       modal: 'createCircle'
     })
+  }
+
+  hasChildren() {
+    if(this.props.boundariesByParentId[this.props.params.projectId]) {
+      return this.props.boundariesByParentId[this.props.params.projectId].length > 0;
+    }
+    else
+      return false;
   }
 
   saveCircle(name) {
@@ -101,50 +110,46 @@ export default class PreschoolProject extends Component{
 ProjectSummary=(props)=>{
   var project = this.props.boundaries.boundaryDetails[this.props.params.projectId];
   var district = this.props.boundaries.boundaryDetails[this.props.params.districtId];
+  let hasCircles = this.hasChildren();
   if(sessionStorage.getItem('isAdmin')) {
     return(
         <div>
-          <div className='heading-border-left'>
-            <h4 className="brand-blue col-md-10">Modify Details</h4>
-            <Button onClick={this.toggleCircleModal} title='Add Circle'/>
-          </div>
-
-            <Formsy.Form
+          {hasCircles?<div className="alert alert-info"><i className="fa fa-info-circle fa-lg" aria-hidden="true"></i> You cannot delete this boundary until its children are deleted</div>:<div></div>}
+          <h4 className="text-primary col-md-10">Modify Details</h4>
+          <button className="btn btn-green pull-right" title='Add Circle' onClick={this.toggleCircleModal}>Add Circle</button>
+          <div className="base-spacing-mid border-base"/>
+          
+          <Formsy.Form
              onValidSubmit={this.saveProject}
              onValid={this.enableSubmitButton}
              onInvalid={this.disableSubmitButton}
-             ref={(ref) => this.myform = ref}
-             >
+             ref={(ref) => this.myform = ref}>
                <Input name="ProjectName"
-                id="ProjectName"
-                value={project.name}
-                label="Project :" type="text"
-                 className="form-control"
-                 required validations="minLength:1"/>
-           </Formsy.Form>
-            {/*<form className="form-horizontal boundary-form" role="form">
-              <div className="form-group">
-                <label className="control-label col-sm-2" htmlFor="name">Project :</label>
-                <div className="col-sm-2">
-                  <input type="text" ref={(ref) => this.projectName = ref} className="form-control" id="name" defaultValue={project.name}/>
-                </div>
-              </div>
-              </form>
-                */}
-              <div className="col-md-8">
+                  id="ProjectName"
+                  value={project.name}
+                  label="Project :" type="text"
+                  className="form-control"
+                  required validations="minLength:1"/>
+          </Formsy.Form>
+          <div className="col-md-8">
                 <button type="submit" disabled={!this.state.canSubmit} className="btn btn-primary padded-btn" onClick={this.saveProject}>Save</button>
                 <button type="submit" className="btn btn-primary padded-btn" onClick={this.showConfirmation}>Delete</button>
                 <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteProject} onCloseModal={this.closeConfirmModal} entity={project.name}/>
-              </div>
+          </div>
         </div>
       )
   }
   else {
       return(
         <div>
-          <h4 className="heading-border heading-warn"> Limited Permissions</h4>
-          <p>You need administrator privileges to modify Boundary details. But you may add institutions here.</p>
-          <h4 className="heading-border brand-blue"> View Details</h4>
+          <div className="alert alert-danger">
+            <i className="fa fa-lock fa-lg" aria-hidden="true"></i> 
+             Insufficient Privileges. Only administrators can modify boundary details.
+          </div>
+          <h4 className="text-primary">Project</h4>
+          <div className="border-base"></div>
+          <div className="base-spacing-mid"></div> 
+          <div>{project.name}</div>
         </div>
     )
   }
@@ -159,11 +164,11 @@ ProjectSummary=(props)=>{
     //   ProjectSummary = (props) =>
     //     <div>
     //       <div className='heading-border-left'>
-    //         <h4 className="brand-blue col-md-10">Modify Details</h4>
+    //         <h4 className="text-primary col-md-10">Modify Details</h4>
     //         <Button onClick={this.toggleCircleModal} title='Add Circle'/>
     //       </div>
     //
-    //         <form className="form-horizontal boundary-form" role="form">
+    //         <form className="form-horizontal" role="form">
     //           <div className="form-group">
     //             <label className="control-label col-sm-2" htmlFor="name">Project :</label>
     //             <div className="col-sm-2">
@@ -184,13 +189,13 @@ ProjectSummary=(props)=>{
     //    <div>
     //       <h4 className="heading-border heading-warn"> Limited Permissions</h4>
     //       <p>You need administrator privileges to modify Boundary details. But you may add institutions here.</p>
-    //       <h4 className="heading-border brand-blue"> View Details</h4>
+    //       <h4 className="heading-border text-primary"> View Details</h4>
     //     </div>
     // }
 
     return (
       this.state.isLoading ?
-      <div>Loading...</div> :
+      <div><i className="fa fa-cog fa-spin fa-lg fa-fw" /><span className="text-muted">Loading...</span></div> :
       <div>
         <ol className="breadcrumb">
           <li><Link to={district.path}>{district.name}</Link></li>
