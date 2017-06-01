@@ -67,6 +67,10 @@ export default class AssessmentEntry extends React.Component {
     console.log(this._answers);
   }
 
+  deleteStudent = () => {
+    console.log('deleteStudent called');
+  };
+
   componentWillMount() {}
 
   componentWillReceiveProps(nextProps) {
@@ -243,24 +247,7 @@ class InputRow extends React.Component {
         );
       });
     }
-    /*return (
-      <div className="row">
-        <div className="col-md-2"><span>{id}</span></div>
-        <div className="col-md-2 "><span>{name}</span></div>
-        {html}
-        <div className="col-md-1">
-          <span onClick={this.saveEntry} className="glyphicon glyphicon-trash">Save</span>
-          <span
-            className="glyphicon glyphicon-pencil"
-            onClick={() => {
-              console.log('Edit Button Clicked');
-            }}
-          >
-            Edit
-          </span>
-        </div>
-      </div>
-    );*/
+
     return (
       <tr id={id} onClick={this.toggle}>
         <td>{id}</td>
@@ -281,7 +268,6 @@ class InputRow extends React.Component {
             Save
           </button>
         </td>
-
       </tr>
     );
   }

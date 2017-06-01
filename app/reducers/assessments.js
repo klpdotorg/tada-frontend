@@ -21,7 +21,8 @@ function processQuestions(data) {
     data.map(question => {
       newQuestionsById[question.id] = question;
       assessid = question.assessment;
-      questionIds.push(question.id);
+
+      questionIds.push(question.assessment);
     });
   }
   questionsByAssessId[assessid] = questionIds;
@@ -98,7 +99,11 @@ export function assessments(
 
       case 'ASSESSMENTS_RESPONSE_RECEIVED':
         const assessmentsByProgram = processAssessments(action.data);
-        return Object.assign({}, state, { assessmentsById: assessmentsByProgram });
+
+        return Object.assign({}, state, {
+          assessmentsById: assessmentsByProgram,
+          isFetching: false,
+        });
 
       case 'ASSESSMENT_DELETED':
         var copyState = _.omit(state.assessmentsById, action.id);
@@ -130,6 +135,11 @@ export function assessments(
           answersById: newAnswers,
         };
         return result;
+      case 'FETCHING_ASSESSMENTS':
+        return {
+          ...state,
+          isFetching: true,
+        };
 
       default:
         return state;

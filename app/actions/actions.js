@@ -25,6 +25,14 @@ export const toggleNode = id => {
   };
 };
 
+export const closePeerNodes = (id, depth) => {
+  return {
+    type: 'CLOSE_PEER_NODES',
+    id,
+    depth,
+  };
+};
+
 export const openNode = id => {
   return {
     type: 'TOGGLE_NODE',

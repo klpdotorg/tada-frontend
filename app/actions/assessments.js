@@ -227,6 +227,7 @@ function handleQuestionsResponse(resp) {
 /** ASSESSMENT ACTIONS BEGIN */
 export function fetchAssessmentsForProgram(programId) {
   return function(dispatch, getState) {
+    dispatch(fetchingAssessments());
     var url = serverApiBase + 'programmes/' + programId + '/assessments/?active=2';
     return fetch(url, {
       method: 'GET',
@@ -390,6 +391,12 @@ function handleAssessmentsResponse(resp) {
   return {
     type: 'ASSESSMENTS_RESPONSE_RECEIVED',
     data: resp.results,
+  };
+}
+
+function fetchingAssessments() {
+  return {
+    type: 'FETCHING_ASSESSMENTS',
   };
 }
 
