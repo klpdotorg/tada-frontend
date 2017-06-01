@@ -130,8 +130,8 @@ export default class SecondaryNavBar extends React.Component {
         <form className="navbar-form navbar-left" role="search">
           <div className="form-group">
             <input type="text" className="form-control" placeholder="Enter KLP ID" />
+            <button type="submit" className="btn btn-primary padded-btn">Search</button>
           </div>
-          <button type="submit" className="btn btn-default padded-btn">Search</button>
         </form>
         <Displayelement {...this.props} />
         <CreateDistrict

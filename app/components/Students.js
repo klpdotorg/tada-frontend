@@ -1,54 +1,91 @@
-import React, {Component} from 'react';
-import {modifyBoundary, deleteBoundary, newSchool, saveStudent, getStudents, getBoundaries, getInstitutions, getStudentGroups, selectPreschoolTree, removeBoundary ,openNode,fetchEntitiesFromServer} from '../actions';
+import React, { Component } from 'react';
+import {
+  modifyBoundary,
+  deleteBoundary,
+  newSchool,
+  saveStudent,
+  getStudents,
+  getBoundaries,
+  getInstitutions,
+  getStudentGroups,
+  selectPreschoolTree,
+  removeBoundary,
+  openNode,
+  fetchEntitiesFromServer,
+} from '../actions';
 import CreateInstitution from './Modals/CreateInstitution';
-import {toggleSet} from '../utils'
-import Button from './Button'
-import ConfirmModal from './Modals/Confirm'
-import ModifyStudent from './Modals/ModifyStudent'
-import { Link } from 'react-router'
-import { mapStudentsAPI, deleteStudentAPI, patchStudentAPI } from '../actions/utils'
-import { displayFullName } from './utils'
+import { toggleSet } from '../utils';
+import Button from './Button';
+import ConfirmModal from './Modals/Confirm';
+import ModifyStudent from './Modals/ModifyStudent';
+import { Link } from 'react-router';
+import { mapStudentsAPI, deleteStudentAPI, patchStudentAPI } from '../actions/utils';
+import { displayFullName } from './utils';
 import Notifications from 'react-notification-system-redux';
-import {studentStudentGroupMap, syncError} from '../actions/notifications'
-import {groupBy} from 'lodash'
+import { studentStudentGroupMap, syncError } from '../actions/notifications';
+import { groupBy } from 'lodash';
 
-const StudentRow = (props) => {
+const StudentRow = props => {
   const relations = groupBy(props.relations, 'relation_type');
   return (
-    <div className="row">
-      <div className="col-md-1"><input checked={props.selectedStudents.has(props.id)} onChange={props.selectStudent} type="checkbox" /></div>
-      <div className="col-md-1"><span>{props.id}</span></div>
-      <div className="col-md-2"><span>{displayFullName(props)}</span></div>
-      <div className="col-md-1"><span>{props.uid}</span></div>
-      <div className="col-md-1"><span>{props.gender}</span></div>
-      <div className="col-md-1"><span>{props.language}</span></div>
-      <div className="col-md-1"><span>{props.dob}</span></div>
-      <div className="col-md-2"><span>{displayFullName(relations.Father[0])}</span></div>
-      <div className="col-md-2"><span>{displayFullName(relations.Mother[0])}</span></div>
-      <div className="col-md-1"><span onClick={() => { props.deleteStudent({...props}) }} className="glyphicon glyphicon-trash">Delete</span><span className="glyphicon glyphicon-pencil" onClick={() => { props.openModifyStudent({...props}) }}>Edit</span></div>
-    </div>
-  )
-}
+    <tr>
+      <td>
+        <input
+          checked={props.selectedStudents.has(props.id)}
+          onChange={props.selectStudent}
+          type="checkbox"
+        />
+      </td>
+      <td>{props.id}</td>
+      <td>{displayFullName(props)}</td>
+      <td>{props.uid}</td>
+      <td>{props.gender}</td>
+      <td>{props.language}</td>
+      <td>{props.dob}</td>
+      <td>{displayFullName(relations.Father[0])}</td>
+      <td>{displayFullName(relations.Mother[0])}</td>
+      <td>
+        <button
+          onClick={() => {
+            props.openModifyStudent({ ...props });
+          }}
+          className="btn btn-primary padded-btn"
+          data-toggle="tooltip"
+          title="Delete"
+        >
+          <i className="fa fa-pencil-square-o" />
+        </button>
+        <button
+          onClick={() => {
+            props.deleteStudent({ ...props });
+          }}
+          className="btn btn-primary"
+          data-toggle="tooltip"
+          title="Edit"
+        >
+          <i className="fa fa-trash-o" />
+        </button>
+      </td>
+    </tr>
+  );
+};
 
 const NoStudentMsg = () => {
-
   return (
     <div className="row text-center">
-      <div className="col-md-3"></div>
-      {"No Student is present"}
+      <div className="col-md-3" />
+      {'No Student is present'}
     </div>
-  )
-}
-
+  );
+};
 
 class StudentScreen extends Component {
-
-  constructor(props){
+  constructor(props) {
     super(props);
     this.deleteStudentConfirm = this.deleteStudentConfirm.bind(this);
     this.deleteStudent = this.deleteStudent.bind(this);
     this.openModifyStudent = this.openModifyStudent.bind(this);
-    this.closeModifyStudent  =this.closeModifyStudent.bind(this);
+    this.closeModifyStudent = this.closeModifyStudent.bind(this);
     this.saveStudent = this.saveStudent.bind(this);
     this.selectStudent = this.selectStudent.bind(this);
     this.mapToCentre = this.mapToCentre.bind(this);
@@ -59,245 +96,268 @@ class StudentScreen extends Component {
       currentStudent: '',
       modifyStudentData: null,
       selectedStudents: new Set(),
-      mapToCentre: props.boundariesByParentId[props.params.institutionId][0]
+      mapToCentre: props.boundariesByParentId[props.params.institutionId][0],
     };
   }
 
   closeConfirmation = () => {
     this.setState({
-      openConfirmModal: false
-    })
-  }
+      openConfirmModal: false,
+    });
+  };
 
   mapToCentre() {
-
-    const studentsPromise = [...this.state.selectedStudents].map((val) => {
+    const studentsPromise = [...this.state.selectedStudents].map(val => {
       const studentRequestBody = {
         student: val,
-        student_group: this.state.mapToCentre
-      }
-      return mapStudentsAPI(studentRequestBody)
-    })
+        student_group: this.state.mapToCentre,
+      };
+      return mapStudentsAPI(studentRequestBody);
+    });
 
-    Promise.all(studentsPromise)
-    .then(() => {
-      this.props.dispatch(Notifications.success(studentStudentGroupMap))
-    })
+    Promise.all(studentsPromise).then(() => {
+      this.props.dispatch(Notifications.success(studentStudentGroupMap));
+    });
   }
 
   selectStudent(id) {
-   const selectedStudents = toggleSet(this.state.selectedStudents, id)
+    const selectedStudents = toggleSet(this.state.selectedStudents, id);
 
     this.setState({
-      selectedStudents
-    })
-
+      selectedStudents,
+    });
   }
 
-  saveStudent(student){
-    let relations = []
-    relations.push(student.Father, student.Mother)
-    student.relations = relations
+  saveStudent(student) {
+    let relations = [];
+    relations.push(student.Father, student.Mother);
+    student.relations = relations;
     console.log(student);
-    this.props.dispatch({
-      type: 'STUDENTS',
-      payload: patchStudentAPI(student, this.props.params.groupId)
-    }).then(() => {
-      this.closeModifyStudent()
-      this.props.dispatch(Notifications.success(studentStudentGroupMap))
-    })
+    this.props
+      .dispatch({
+        type: 'STUDENTS',
+        payload: patchStudentAPI(student, this.props.params.groupId),
+      })
+      .then(() => {
+        this.closeModifyStudent();
+        this.props.dispatch(Notifications.success(studentStudentGroupMap));
+      });
   }
 
-  openModifyStudent(data){
+  openModifyStudent(data) {
     this.setState({
       modifyStudentIsOpen: true,
-      modifyStudentData: data
-    })
+      modifyStudentData: data,
+    });
   }
 
   closeModifyStudent() {
     this.setState({
-      modifyStudentIsOpen: false
-    })
+      modifyStudentIsOpen: false,
+    });
   }
 
   deleteStudentConfirm(student) {
     this.setState({
       currentStudent: student,
-      openConfirmModal: true
-    })
+      openConfirmModal: true,
+    });
   }
 
   deleteStudent() {
     deleteStudentAPI(this.state.currentStudent.id).then(() => {
       this.setState({
-        openConfirmModal: false
-      })
-      this.props.dispatch(removeBoundary(this.state.currentStudent.id, this.props.params.groupId))
-    })
+        openConfirmModal: false,
+      });
+      this.props.dispatch(removeBoundary(this.state.currentStudent.id, this.props.params.groupId));
+    });
   }
 
   render() {
-    const {boundaryDetails, boundariesByParentId} = this.props.boundaries
-    const {params} = this.props
+    const { boundaryDetails, boundariesByParentId } = this.props.boundaries;
+    const { params } = this.props;
     const block = boundaryDetails[params.blockId] || boundaryDetails[params.projectId];
     const district = boundaryDetails[params.districtId];
-    const cluster = boundaryDetails[params.clusterId] || boundaryDetails[params.circleId]
-    const institution = boundaryDetails[params.institutionId]
-    const group = boundaryDetails[params.groupId]
-    const studentList = boundariesByParentId[params.groupId]
-    const studentRows = studentList.map((studentId, i) => <StudentRow key={i} { ...boundaryDetails[studentId]} deleteStudent={this.deleteStudentConfirm} selectedStudents={this.state.selectedStudents} selectStudent={() => {this.selectStudent(studentId)}} openModifyStudent={this.openModifyStudent} />)
-    const checkStudents = studentList.length>0? studentRows:<NoStudentMsg/>
+    const cluster = boundaryDetails[params.clusterId] || boundaryDetails[params.circleId];
+    const institution = boundaryDetails[params.institutionId];
+    const group = boundaryDetails[params.groupId];
+    const studentList = boundariesByParentId[params.groupId];
+    const studentRows = studentList.map((studentId, i) => (
+      <StudentRow
+        key={i}
+        {...boundaryDetails[studentId]}
+        deleteStudent={this.deleteStudentConfirm}
+        selectedStudents={this.state.selectedStudents}
+        selectStudent={() => {
+          this.selectStudent(studentId);
+        }}
+        openModifyStudent={this.openModifyStudent}
+      />
+    ));
+    const checkStudents = studentList.length > 0 ? studentRows : <NoStudentMsg />;
     const studentGroups = boundariesByParentId[params.institutionId]
-      .filter((id) => id !== group.id)
-      .map((id) => {
-        let group = boundaryDetails[id]
-        return <option key={id} value={group.id}>{group.label}</option>
-    })
+      .filter(id => id !== group.id)
+      .map(id => {
+        let group = boundaryDetails[id];
+        return <option key={id} value={group.id}>{group.label}</option>;
+      });
 
     var Displayelement;
-    if(sessionStorage.getItem('isAdmin')) {
-      Displayelement = (props) =>
-      <div>
-        <div className="students-grid">
-          <div className="row grid-header">
-            <div className="col-md-1"><span>Select</span></div>
-            <div className="col-md-1"><span>Student ID</span></div>
-            <div className="col-md-2"><span>Name</span></div>
-            <div className="col-md-1"><span>UID</span></div>
-            <div className="col-md-1"><span>Gender</span></div>
-            <div className="col-md-1"><span>Language</span></div>
-            <div className="col-md-1"><span>DoB</span></div>
-            <div className="col-md-2"><span>Father Name</span></div>
-            <div className="col-md-2"><span>Mother Name</span></div>
-            <div className="col-md-1"><span>Actions</span></div>
+    if (sessionStorage.getItem('isAdmin')) {
+      Displayelement = props => (
+        <div className="table-responsive">
+          <h4 className="text-primary">Student Details</h4>
+          <div className="base-spacing-mid border-base" />
+          <div className="base-spacing-sm" />
+          <table className="table table-condensed table-fixedwidth">
+            <thead>
+              <tr className="text-primary text-uppercase">
+                <th>Select</th>
+                <th>ID</th>
+                <th>Name</th>
+                <th>UID</th>
+                <th>Gender</th>
+                <th>Mother Tongue</th>
+                <th>Date of Birth</th>
+                <th>{"Father's Name"}</th>
+                <th>{"Mother's Name"}</th>
+                <th />
+              </tr>
+            </thead>
+            <tbody>
+              {checkStudents}
+            </tbody>
+          </table>
+          <div className="row base-spacing-mid">
+            <div className="col-md-4">
+              <select
+                onChange={e => {
+                  this.setState({ mapToCentre: e.target.value });
+                }}
+                value={this.state.mapToCentre}
+                className="form-control"
+                id="gender"
+              >
+                {studentGroups}
+              </select>
+            </div><div className="col-md-8">
+              <button type="submit" className="btn btn-primary" onClick={this.mapToCentre}>
+                Map to Center
+              </button>
+            </div>
           </div>
-          {checkStudents}
         </div>
-        <div className="col-sm-2">
-          <select className="col-sm-2" onChange={(e) => {this.setState({mapToCentre : e.target.value})}} value={this.state.mapToCentre} className="form-control" id="gender">
-                  {studentGroups}
-          </select>
-          <button type="submit" className="btn btn-primary" onClick={this.mapToCentre}>Map to Center</button>
-
-        </div>
-        <div className="col-md-2">
-          <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={this.deleteStudent} onCloseModal={this.closeConfirmation} entity={this.state.currentStudent.first_name}/>
-          <ModifyStudent saveStudent={this.saveStudent} isOpen={this.state.modifyStudentIsOpen} data={this.state.modifyStudentData} onCloseModal={this.closeModifyStudent} entity={cluster.name}/>
-        </div>
-      </div>
+      );
     } else {
-        Displayelement = (props) =>
-        <div>
-          <h4 className="heading-err heading-border-left brand-red"> <i className="fa fa-lock brand-red" aria-hidden="true"></i>  Insufficient Permissions</h4>
-          <p>You need administrator privileges to modify Boundary details.</p>
-          <h4 className="brand-blue heading-border-left"> Cluster Details</h4>
-          <p> Name: {cluster.name}</p>
+      Displayelement = props => (
+        <div className="alert alert-danger">
+          <i className="fa fa-lock fa-lg" aria-hidden="true" />
+          Insufficient Privileges. Please contact administrator.
         </div>
+      );
     }
 
-      return (
-            <div>
-              <ol className="breadcrumb">
-              <li><Link to={district.path}>{district.name}</Link></li>
-              <li><Link to={block.path}>{block.name}</Link></li>
-              <li><Link to={cluster.path}>{cluster.name}</Link></li>
-              <li><Link to={institution.path}>{institution.name}</Link></li>
-              <li>{group.label}</li>
-              </ol>
-              <Displayelement {...this.props}/>
-            </div>
-
-          )
-
+    return (
+      <div>
+        <ol className="breadcrumb">
+          <li><Link to={district.path}>{district.name}</Link></li>
+          <li><Link to={block.path}>{block.name}</Link></li>
+          <li><Link to={cluster.path}>{cluster.name}</Link></li>
+          <li><Link to={institution.path}>{institution.name}</Link></li>
+          <li>{group.label}</li>
+        </ol>
+        <Displayelement {...this.props} />
+      </div>
+    );
   }
-};
+}
 
 export default class Students extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
-      isLoading: true
+      isLoading: true,
     };
   }
 
   getStudentPromise(institutionId, groupId) {
     var promise = new Promise(function(resolve, reject) {
-      getStudents(institutionId, groupId).then((students) => {
-        resolve({
-          students,
-          groupId
+      getStudents(institutionId, groupId)
+        .then(students => {
+          resolve({
+            students,
+            groupId,
+          });
         })
-      }).catch((e) => {
-        reject(e)
-      })
-    })
+        .catch(e => {
+          reject(e);
+        });
+    });
 
-    return promise
+    return promise;
   }
 
   componentDidMount() {
-    const {params, dispatch} = this.props
+    const { params, dispatch } = this.props;
 
     //Choose Preschool Hierarchy
     if (params.circleId) {
-      this.props.dispatch(selectPreschoolTree())
+      this.props.dispatch(selectPreschoolTree());
     }
 
-    const blockId = params.blockId || params.projectId
-    const clusterId = params.clusterId || params.circleId
-    dispatch(openNode(params.districtId))
+    const blockId = params.blockId || params.projectId;
+    const clusterId = params.clusterId || params.circleId;
+    dispatch(openNode(params.districtId));
     dispatch(fetchEntitiesFromServer(params.districtId));
     dispatch({
       type: 'BOUNDARIES',
-      payload: getBoundaries(1)
-    }).then(() =>{
+      payload: getBoundaries(1),
+    }).then(() => {
       dispatch({
         type: 'BOUNDARIES',
-        payload: getBoundaries(params.districtId)
-      }).then(() =>{
-        dispatch(openNode(blockId))
+        payload: getBoundaries(params.districtId),
+      }).then(() => {
+        dispatch(openNode(blockId));
         dispatch(fetchEntitiesFromServer(blockId));
         dispatch({
           type: 'BOUNDARIES',
-          payload: getBoundaries(blockId)
-        }).then(() =>{
-          dispatch(openNode(clusterId))
+          payload: getBoundaries(blockId),
+        }).then(() => {
+          dispatch(openNode(clusterId));
           dispatch(fetchEntitiesFromServer(clusterId));
           dispatch({
             type: 'BOUNDARIES',
-            payload: getInstitutions(clusterId)
-          }).then(() =>{
-            dispatch(openNode(params.institutionId))
+            payload: getInstitutions(clusterId),
+          }).then(() => {
+            dispatch(openNode(params.institutionId));
             dispatch(fetchEntitiesFromServer(params.institutionId));
             dispatch({
               type: 'BOUNDARIES',
-              payload: getStudentGroups(params.institutionId)
-            }).then(() =>{
-                dispatch({
-                  type: 'STUDENTS',
-                  payload: this.getStudentPromise(params.institutionId, params.groupId)
-                }).then(() => {
+              payload: getStudentGroups(params.institutionId),
+            }).then(() => {
+              dispatch({
+                type: 'STUDENTS',
+                payload: this.getStudentPromise(params.institutionId, params.groupId),
+              }).then(() => {
                 this.setState({
-                  isLoading:false
-              })
-              dispatch(openNode(params.groupId))
-              // dispatch(fetchEntitiesFromServer(params.groupId));
-            })
-            })
-          })
-        })
-      })
-    })
-
+                  isLoading: false,
+                });
+                dispatch(openNode(params.groupId));
+                // dispatch(fetchEntitiesFromServer(params.groupId));
+              });
+            });
+          });
+        });
+      });
+    });
   }
 
   render() {
-    return (
-            this.state.isLoading ?
-            <div>Loading...</div> :
-            <StudentScreen {...this.props} />
-          )
+    return this.state.isLoading
+      ? <div>
+          <i className="fa fa-cog fa-spin fa-lg fa-fw" />
+          <span className="text-muted">Loading...</span>
+        </div>
+      : <StudentScreen {...this.props} />;
   }
-
 }

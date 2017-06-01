@@ -285,9 +285,9 @@ export default class Institution extends React.Component {
             : <div>
                 {' '}
                 {hasClasses
-                  ? <p className="col-md-12 bg-info warn-message-cont">
-                      <i className="fa fa-2x fa-info-circle" aria-hidden="true" />
-                      <h5 className="warn-message">
+                  ? <p className="col-md-12 bg-info">
+                      <h5>
+                        <i className="fa fa-2x fa-info-circle" aria-hidden="true" />
                         You cannot
                         {' '}
                         <small>
@@ -462,16 +462,12 @@ export default class Institution extends React.Component {
             {!canModify
               ? <div />
               : <div className="col-md-2">
-                  <button
-                    type="submit"
-                    className="btn btn-primary padded-btn"
-                    onClick={this.saveInsti}
-                  >
+                  <button type="submit" className="btn btn-primary" onClick={this.saveInsti}>
                     Save
                   </button>
                   <button
                     type="submit"
-                    className="btn btn-primary padded-btn"
+                    className="btn btn-primary"
                     disabled={hasClasses}
                     onClick={this.showConfirmation}
                   >

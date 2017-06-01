@@ -1,0 +1,620 @@
+/* COLORS */
+/* Use React native
+https://facebook.github.io/react-native/docs/colors.html
+Reds, Oranges and Pinks 
+----------------------
+coral (#ff7f50)
+orange (#ffa500)
+darkorange (#ff8c00)
+salmon (#fa8072)
+firebrick (#b22222)
+tomato (#ff6347)
+khaki (#f0e68c)
+
+Blues
+-----------------------
+royalblue (#4169e1)
+steelblue (#4682b4)
+skyblue (#87ceeb)
+dodgerblue (#1e90ff)
+darkslateblue (#483d8b)
+darkcyan (#008b8b)
+
+Greens
+-----------------------
+seagreen (#2e8b57)
+mediumseagreen (#3cb371)
+forestgreen (#228b22)
+darkgreen (#006400)
+
+Greys
+-----------------------
+black (#000000)
+dimgray (#696969)
+darkgray (#a9a9a9)
+silver (#c0c0c0)
+lightgrey (#d3d3d3)
+white (#ffffff)
+
+
+/* FONT FAMILY - LATO */
+/*-------------------------------------*/
+/* font-family: default: regular */
+@font-face {
+  font-family: 'Lato';
+  src: url('/assets/fonts/lato/Lato-Reg-webfont.eot');
+  src: url('/assets/fonts/lato/Lato-Reg-webfont.eot?#iefix') format('embedded-opentype'),
+       url('/assets/fonts/lato/Lato-Reg-webfont.woff') format('woff'),
+       url('/assets/fonts/lato/Lato-Reg-webfont.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* font-family: default: italic */
+@font-face {
+  font-family: 'Lato';
+  src: url('/assets/fonts/lato/Lato-RegIta-webfont.eot');
+  src: url('/assets/fonts/lato/Lato-RegIta-webfont.eot?#iefix') format('embedded-opentype'),
+       url('/assets/fonts/lato/Lato-RegIta-webfont.woff') format('woff'),
+       url('/assets/fonts/lato/Lato-RegIta-webfont.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+}
+
+/* font-family: default: bold */
+@font-face {
+  font-family: 'Lato';
+  src: url('/assets/fonts/lato/Lato-Bol-webfont.eot');
+  src: url('/assets/fonts/lato/Lato-Bol-webfont.eot?#iefix') format('embedded-opentype'),
+       url('/assets/fonts/lato/Lato-Bol-webfont.woff') format('woff'),
+       url('/assets/fonts/lato/Lato-Bol-webfont.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* font-family: default: light */
+@font-face {
+  font-family: 'Lato';
+  src: url('/assets/fonts/lato/Lato-Lig-webfont.eot');
+  src: url('/assets/fonts/lato/Lato-Lig-webfont.eot?#iefix') format('embedded-opentype'),
+       url('/assets/fonts/lato/Lato-Lig-webfont.woff') format('woff'),
+       url('/assets/fonts/lato/Lato-Lig-webfont.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+/*-------------------------------------*/
+/* FONT BASE STYLES */
+.root {
+  --font-base-size: 16px;
+  --font-base-family: 'Lato', sans-serif;
+}
+.font-base-family, %font-base-family {
+  font-family: var(--font-base-family);
+}
+
+/* font-styles */
+.italic {
+  font-style: italic;
+}
+.bold {
+  font-weight: 700;
+}
+.font-light {
+  font-weight: 300;
+}
+.uppercase {
+  text-transform: uppercase;
+}
+
+/* BASE STYLES */
+
+/* Move down content because we have a fixed navbar that is 50px tall */
+body {
+  font-family: Lato !important;
+  padding-top: 50px;
+}
+
+hr {
+  border: none;
+  color: royalblue;
+  background-color: royalblue;
+  height: 1px; 
+}
+
+.border-base {
+  border-bottom: 2px solid royalblue;
+}
+/*-------------------------------------*/
+/* SPACING */
+
+.base-spacing {
+  padding: 10px 0;
+}
+
+.base-spacing-sm {
+  padding: 5px 0;
+}
+
+.base-spacing-mid {
+  padding: 25px 0;
+}
+
+.base-spacing-lg {
+  padding: 20px 0;
+}
+
+.base-spacing-lg-x {
+  padding: 25px 0;
+}
+
+.base-spacing-lg-2x {
+  padding: 50px 0;
+}
+
+
+.sub-header {
+  padding-bottom: 10px;
+  border-bottom: 1px solid lightgrey;
+}
+
+/*
+ * Main content
+ */
+
+.main {
+  padding: 20px;
+}
+@media (min-width: 768px) {
+  .main {
+    padding-right: 40px;
+    padding-left: 40px;
+  }
+}
+.main .page-header {
+  margin-top: 0;
+}
+
+/* ABSOLUTE CENTER - LOGIN, LOGOUT */
+div.well{
+  height: 250px;
+} 
+
+.absolute-center {
+  margin: auto;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+}
+
+.absolute-center.is-responsive {
+  width: 50%; 
+  height: 50%;
+  min-width: 200px;
+  max-width: 400px;
+  padding: 40px;
+}
+
+/* NAV BAR */
+
+/*-------------------------TOP LEVEL NAVIGATION - WELCOME PANEL-----------------------*/
+.navbar-fixed-top {
+  border: 0;
+}
+
+.navbar-white {
+  background-color: #ffffff;
+  border-color: #ffffff;
+}
+
+.nav > li > a {
+  position: relative;
+  display: block;
+  padding: 10px 5px;
+}
+
+.app-name {
+  color: #898989;
+  font-size: 110%;
+  font-weight: bold;
+  font-family: Lato;
+}
+
+.login-msg {
+  color: #898989;
+  font-size: 90%;
+  font-family: Lato;
+}
+
+/*-------------------------NAV TABS FOR SCHOOL PRESCHOOL -----------------------*/
+
+
+.inst-tabs {
+  padding-top: 20px;
+  padding-left: 20px;
+}
+
+.primary-school-tab-active {
+  background-color: darkorange !important;
+  color: white !important;
+}
+
+.primary-school-tab, .preschool-tab{
+  background-color: lightgrey !important;
+  color: white !important;
+}
+
+.primary-school-tab:hover {
+  background-color: orange !important;
+  color: white !important;
+}
+
+.preschool-tab:hover {
+  background-color: darkseagreen !important;
+  color: white !important;
+}
+
+.preschool-tab-active {
+  background-color: seagreen !important;
+  color: white !important;
+}
+
+.nav .nav-tab {
+  box-shadow: 0 1px 3px rgba(0,0,0,.25);
+}
+
+.nav-tabs {
+  padding-top:10px;
+}
+
+/*http://codepen.io/marifrahman/pen/aAEpD*/
+.tab-content{
+  padding:3px 0px 0px 8px;
+  border-top: 1px solid silver;
+  margin-left:1px;
+}
+
+
+.box-shadow {
+  -webkit-box-shadow: 0 1px 3px rgba(0,0,0,.25);
+     -moz-box-shadow: 0 1px 3px rgba(0,0,0,.25);
+          box-shadow: 0 1px 3px rgba(0,0,0,.25);
+}
+
+/* tab color */
+.nav-tabs>li>a {
+    color: var(--white);
+}
+
+
+/*
+.nav > li > a:hover, .nav > li > a:focus {
+    text-decoration: none;
+}*/
+
+/*-------------------------TREE TOGGLER-----------------------*/
+
+#treetoggler {
+  position: fixed;
+  top: 175px;
+  left: 15px;
+  z-index: 99999;
+}
+
+#treetoggler a:hover {
+  background: skyblue;
+  color: white;
+}
+
+/*-------------------------SECONDARY NAV BAR - BUTTONS -----------------------*/
+
+#secondary-menu {
+  padding-right: 10px;
+}
+
+.padded-btn {
+  margin-left: 1px;
+  margin-right: 1px;
+}
+
+.all-padded-btn {
+  margin: 8px 1px 8px 1px;
+}
+
+/* SIDE BAR */
+
+/* Toggle Styles */
+/*https://github.com/IronSummitMedia/startbootstrap-simple-sidebar*/
+#wrapper {
+    padding-left: 0;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+#wrapper.toggled {
+    padding-left: 250px;
+}
+
+#sidebar-wrapper {
+   /*z-index: 1000;*/
+    position: absolute;
+    left: 300px;
+    width: 0;
+    height: 75%;
+    margin-left: -280px;
+    padding-left: 10px;
+    padding-top : 20px;
+    overflow-y: scroll;
+    background: #f5f5f5;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+#wrapper.toggled #sidebar-wrapper {
+    width: 300px;
+}
+
+#main-content-wrapper {
+    width: 100%;
+    position: absolute;
+    padding: 15px;
+    /*margin-left:20px;*/
+}
+
+#wrapper.toggled #main-content-wrapper {
+    position: absolute;
+    margin-right: -300px;
+}
+
+@media(min-width:768px) {
+    #wrapper {
+        padding-left: 300px;
+    }
+
+    #wrapper.toggled {
+        padding-left: 0;
+    }
+
+    #sidebar-wrapper {
+        width: 300px;
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+        width: 0;
+    }
+
+    #main-content-wrapper {
+        padding: 20px;
+        position: relative;
+    }
+
+    #wrapper.toggled #main-content-wrapper {
+        position: relative;
+        margin-right: 0;
+    }
+}
+
+/* the tree node's style */
+.tree-view {
+  overflow-y: hidden;
+}
+
+.tree-view_item {
+  /* immediate child of .tree-view, for styling convenience */
+}
+
+/* style for the children nodes container */
+.tree-view_children {
+  margin-left: 16px;
+}
+
+.tree-view_children-collapsed {
+  height: 0px;
+}
+
+.tree-view_arrow {
+  cursor: pointer;
+  margin-right: 6px;
+  display: inline-block;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.tree-view_arrow:after {
+  content: "\f056";
+  font-family: FontAwesome;
+  color: royalblue;
+}
+
+
+/* rotate the triangle to close it */
+.tree-view_arrow-collapsed {
+  /*-webkit-transform: rotate(-90deg);
+  -moz-transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
+  transform: rotate(-90deg);*/
+}
+
+.tree-view_arrow-collapsed:after {
+  content: "\f055";
+  font-family: FontAwesome;
+  color: royalblue
+}
+
+/* FORMS */
+/* http://blog.koalite.com/bbg/ */
+
+/*------------------------*/
+.btn-orange {
+  background-color: darkorange;
+  border-color: darkorange;
+  color: white;
+}
+.btn-orange:hover,
+.btn-orange:focus,
+.btn-orange:active,
+.btn-orange.active {
+  background-color: orange;
+  border-color: orange;
+  color: white;
+}
+.btn-orange.disabled:hover,
+.btn-orange.disabled:focus,
+.btn-orange.disabled:active,
+.btn-orange.disabled.active,
+.btn-orange[disabled]:hover,
+.btn-orange[disabled]:focus,
+.btn-orange[disabled]:active,
+.btn-orange[disabled].active,
+fieldset[disabled] .btn-orange:hover,
+fieldset[disabled] .btn-orange:focus,
+fieldset[disabled] .btn-orange:active,
+fieldset[disabled] .btn-orange.active {
+  background-color: khaki;
+  border-color: khaki;
+  color: white;
+}
+/*------------------------*/
+.btn-green {
+  background-color: seagreen;
+  border-color: seagreen;
+  color: white;
+}
+.btn-green:hover,
+.btn-green:focus,
+.btn-green:active,
+.btn-green.active {
+  background-color: darkseagreen;
+  border-color: darkseagreen;
+  color: white;
+}
+.btn-green.disabled:hover,
+.btn-green.disabled:focus,
+.btn-green.disabled:active,
+.btn-green.disabled.active,
+.btn-green[disabled]:hover,
+.btn-green[disabled]:focus,
+.btn-green[disabled]:active,
+.btn-green[disabled].active,
+fieldset[disabled] .btn-green:hover,
+fieldset[disabled] .btn-green:focus,
+fieldset[disabled] .btn-green:active,
+fieldset[disabled] .btn-green.active {
+  background-color: lightseagreen;
+  border-color: lightseagreen;
+  color: white;
+}
+/*------------------------*/
+
+.form-group {
+  margin: 5px 10px;
+}
+
+.no-border {
+  border: 0;
+  box-shadow: none; 
+  outline: none;
+}
+
+/*
+Force table width to 100%
+*/
+ table.table-fixedheader {
+    width: 100%;   
+}
+/*
+Set table elements to block mode.  (Normally they are inline).
+This allows a responsive table, such as one where columns can be stacked
+if the display is narrow.
+*/
+ table.table-fixedheader, table.table-fixedheader>thead, table.table-fixedheader>tbody, table.table-fixedheader>thead>tr, table.table-fixedheader>tbody>tr, table.table-fixedheader>thead>tr>th, table.table-fixedheader>tbody>td {
+    display: block;
+}
+table.table-fixedheader>thead>tr:after, table.table-fixedheader>tbody>tr:after {
+    content:' ';
+    display: block;
+    visibility: hidden;
+    clear: both;
+}
+/*
+When scrolling the table, actually it is only the tbody portion of the
+table that scrolls (not the entire table: we want the thead to remain
+fixed).  We must specify an explicit height for the tbody.  We include
+100px as a default, but it can be overridden elsewhere.
+
+Also, we force the scrollbar to always be displayed so that the usable
+width for the table contents doesn't change (such as becoming narrower
+when a scrollbar is visible and wider when it is not).
+*/
+ table.table-fixedheader>tbody {
+    overflow-y: scroll;
+    height: 250px;
+    
+}
+/*
+We really don't want to scroll the thead contents, but we want to force
+a scrollbar to be displayed anyway so that the usable width of the thead
+will exactly match the tbody.
+*/
+ table.table-fixedheader>thead {
+    overflow-y: scroll;    
+}
+/*
+For browsers that support it (webkit), we set the background color of
+the unneeded scrollbar in the thead to make it invisible.  (Setting
+visiblity: hidden defeats the purpose, as this alters the usable width
+of the thead.)
+*/
+ table.table-fixedheader>thead::-webkit-scrollbar {
+    background-color: inherit;
+}
+
+
+table.table-fixedheader>thead>tr>th:after, table.table-fixedheader>tbody>tr>td:after {
+    content:' ';
+    display: table-cell;
+    visibility: hidden;
+    clear: both;
+}
+
+/*
+We want to set <th> and <td> elements to float left.
+We also must explicitly set the width for each column (both for the <th>
+and the <td>).  We set to 20% here a default placeholder, but it can be
+overridden elsewhere.
+*/
+
+ table.table-fixedheader>thead tr th, table.table-fixedheader>tbody tr td {
+    float: left;    
+    word-wrap:break-word;     
+}
+
+table.table-fixedwidth td, .table-fixedwidth th {
+    min-width: 150px;
+}
+
+/* PANKAJ's CHANGES */
+.warn-message-cont {
+ display: flex;
+ align-items: center;
+ padding: 10px;
+}
+.warn-message {
+ margin: 0;
+ margin-left: 10px;
+}
+​
+.loading-assessments {
+ display: flex;
+ align-items: center;
+ justify-content: center;
+}
+.loading-assessments-spinner {
+ font-size: 35px;
+}
+

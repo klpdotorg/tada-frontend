@@ -131,29 +131,36 @@ export default class PrimaryDistrict extends React.Component {
       return (
         <div>
           {hasBlocks
-            ? <p className="col-md-12 bg-info">
-                <h5>
-                  <i className="fa fa-2x fa-info-circle" aria-hidden="true" />
-                  You cannot
-                  {' '}
-                  <small>delete this boundary until its children are deleted</small>
-                </h5>
-              </p>
+            ? <div className="alert alert-info">
+                <i className="fa fa-info-circle fa-lg" aria-hidden="true" />
+                {' '}
+                You cannot delete this boundary until its children are deleted
+              </div>
             : <div />}
-
-          <div className="heading-border-left brand-blue">
-            <h4 className="brand-blue brand-bg-blue col-md-10">Modify Details</h4>
-            {boundaryType == 2
-              ? <Button title="Add Project" onClick={this.toggleProjectModal} />
-              : <Button title="Add Block" onClick={this.toggleBlockModal} />}
-          </div>
-
+          <h4 className="text-primary col-md-10">Modify Details</h4>
+          {boundaryType == 2
+            ? <button
+                className="btn btn-green pull-right"
+                title="Add Project"
+                onClick={this.toggleProjectModal}
+              >
+                Add Project
+              </button>
+            : <button
+                className="btn btn-orange pull-right"
+                title="Add Block"
+                onClick={this.toggleBlockModal}
+              >
+                Add Block
+              </button>}
+          <div className="base-spacing-mid border-base" />
           <Formsy.Form
             onValidSubmit={this.saveDistrict}
             onValid={this.enableSubmitButton}
             onInvalid={this.disableSubmitButton}
             ref={ref => (this.myform = ref)}
           >
+            <div className="base-spacing-sm" />
             <Input
               name="DistrictName"
               id="DistrictName"
@@ -197,15 +204,14 @@ export default class PrimaryDistrict extends React.Component {
     } else {
       return (
         <div>
-          <h4 className="heading-err heading-border-left brand-red">
-            {' '}<span className="fa-stack fa-lg">
-              {' '}<i className="fa fa-circle fa-stack-2x brand-red" />
-              <i className="fa fa-lock fa-stack-1x fa-inverse" />
-            </span> Insufficient Permissions
-          </h4>
-          <p>You need administrator privileges to modify Boundary details.</p>
-          <h4 className="brand-blue heading-border-left"> District Details</h4>
-          <p> Name: {boundary.name}</p>
+          <div className="alert alert-danger">
+            <i className="fa fa-lock fa-lg" aria-hidden="true" />
+            Insufficient Privileges. Only administrators can modify boundary details.
+          </div>
+          <h4 className="text-primary">District</h4>
+          <div className="border-base" />
+          <div className="base-spacing-mid" />
+          <div>{boundary.name}</div>
         </div>
       );
     }
