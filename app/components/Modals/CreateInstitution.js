@@ -3,6 +3,7 @@ import Modal from 'react-modal'
 import Formsy from 'formsy-react';
 import 'react-select/dist/react-select.css';
 import {checkStatus} from '../../actions/utils';
+import { getInstitutionCategories } from '../utils'
 import {SERVER_API_BASE as serverApiBase} from 'config';
 import FRC from 'formsy-react-components';
 
@@ -59,6 +60,22 @@ export default class CreateDistrict extends Component {
 
   componentDidMount() {
     //getLanguages();
+    getInstitutionCategories().then(categories => {
+      const cat = categories.results.filter(cat => {
+        return cat.category_type === 1
+      })
+      .map(category => ({
+        value: category.id,
+        label: category.name
+      }))
+
+      this.setState({
+        institutionCategories: {
+          isLoading: false,
+          list: cat
+        }
+      })
+    })
   }
 
    enableSubmitButton() {
@@ -111,11 +128,8 @@ export default class CreateDistrict extends Component {
  }
 
  render() {
-   const schoolCategory = [
-           {value: 'lower', label: 'Lower'},
-           {value: 'upper', label: 'Upper'},
-           {value: 'middle', label: 'Middle'},
-       ];
+   let { institutionCategories } = this.state
+
    const selectOptions = [
            {value: 'co-ed', label: 'Co-Ed'},
            {value: 'boys', label: 'Boys'},
@@ -180,8 +194,8 @@ export default class CreateDistrict extends Component {
                  <Select
                  name="institutionCat"
                  label="Category:"
-                 value = {schoolCategory[0]}
-                 options={schoolCategory}
+                 value = {institutionCategories.list[0]}
+                 options={institutionCategories.list}
                  />
                  <Select
                    multiple
