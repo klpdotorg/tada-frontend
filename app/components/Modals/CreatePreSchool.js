@@ -5,30 +5,10 @@ import 'react-select/dist/react-select.css';
 import {checkStatus} from '../../actions/utils';
 import {SERVER_API_BASE as serverApiBase} from 'config';
 import FRC from 'formsy-react-components';
+import {getManagement, getLanguages, getInstitutionCategories} from '../utils'
 
 const { Input ,Textarea,Select} = FRC;
 import { modalStyle as customStyles } from '../../styles.js';
-
-export const getLanguages = () => {
-    return fetch(serverApiBase + 'languages/', {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Token ' + sessionStorage.token
-      }
-    }).then(checkStatus).then((languages) => {
-        const langs = languages.results.map((language) => ({
-          value: language.id,
-          label: language.name
-        }))
-        return {
-          options: langs,
-          complete: true
-        }
-      }).catch(error => {
-      console.log('request failed', error)
-    })
-  }
-
 
 export default class CreateDistrict extends Component {
   constructor(props) {
@@ -58,7 +38,36 @@ export default class CreateDistrict extends Component {
   }
 
   componentDidMount() {
-    //getLanguages();
+    getLanguages().then((languages) => {
+      const langs = languages.results.map((language) => ({
+          value: language.id,
+          label: language.name
+        }))
+      this.setState({
+        languages: {
+          isLoading: false,
+          list: langs
+        }
+      })
+    })
+
+    getInstitutionCategories().then((categories) => {
+
+      const cat = categories.results.filter((cat => {
+        return cat.category_type == 2
+      })).map((category) => ({
+        value: category.id,
+        label: category.name
+      }))
+
+
+      this.setState({
+        institutionCategories: {
+          isLoading: false,
+          list: cat
+        }
+      })
+    })
   }
 
    enableSubmitButton() {
@@ -111,6 +120,8 @@ export default class CreateDistrict extends Component {
  }
 
  render() {
+
+   let {languages, institutionCategories} = this.state
 
    const selectOptions = [
            {value: 'co-ed', label: 'Co-Ed'},
@@ -177,15 +188,15 @@ export default class CreateDistrict extends Component {
                  <Select
                  name="institutionCat"
                  label="Category:"
-                 value = {this.props.institutionCategories.list[0]}
-                 options={this.props.institutionCategories.list}
+                 value={_.get(institutionCategories, 'list[0].value')}
+                 options={institutionCategories.list}
                  />
                  <Select
                    multiple
                    name="institutionLang"
                    label="Medium:"
-                   value = {[this.props.languages.list[0].value]}
-                   options={this.props.languages.list}
+                   value = {[_.get(languages, 'list[0].value')]}
+                   options={languages.list}
                    required
                  />
                  <Select
