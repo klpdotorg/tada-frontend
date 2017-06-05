@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Modal from 'react-modal'
+import Modal from './ModalTemplate'
 import { modalStyle as customStyles } from '../../styles.js';
 
 
@@ -9,15 +9,22 @@ export default class ConfirmDialog extends Component {
     super(props)
    }
 
-  render() {  
+  render() {
     return (
-      <Modal contentLabel="Confirm Modal" isOpen={this.props.isOpen} onRequestClose={this.props.onCloseModal} style={customStyles}>
-        {this.props.entity && <p className="text-warning">{this.props.message}:{this.props.entity.name}</p>}
-        {!this.props.entity && <p className="text-warning">{this.props.message}</p>}
-        <button className='btn btn-primary' onClick={ () => {
-                                            this.props.onYes(this.props.entity)
-                                          } }>Yes</button>
-        <button className='btn btn-primary' onClick={ this.props.onCloseModal }>No</button>
+      <Modal
+        title='Confirm'
+        contentLabel='Confirm Modal'
+        isOpen={this.props.isOpen}
+        onCloseModal={this.props.onCloseModal}
+        canSubmit={true}
+        submitForm={this.props.onYes}
+        submitBtnLabel='Yes'
+        cancelBtnLabel='No'
+      >
+        <div>
+          {this.props.entity && <p className="text-warning">{this.props.message}:{this.props.entity.name}</p>}
+          {!this.props.entity && <p className="text-warning">{this.props.message}</p>}
+        </div>
       </Modal>
     )
   }

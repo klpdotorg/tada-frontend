@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Modal from 'react-modal'
+import Modal from './ModalTemplate'
 import {clone, groupBy} from 'lodash'
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
@@ -104,144 +104,140 @@ handleChange=()=>{
             {value: 'english', label: 'English'},
         ];
     return (
-      <Modal contentLabel="Confirm Modal" isOpen={this.props.isOpen} onRequestClose={this.props.onCloseModal} style={customStyles}>
-        <div className=""
-          style = {{overflowY:'scroll'}}>
-          <Formsy.Form
-            onValidSubmit={this.saveStudent}
-           onValid={this.enableSubmitButton}
-           onInvalid={this.disableSubmitButton}
-           onChange={this.handleChange}
-           ref={(ref) => this.myform = ref}
-             >
-             <div className="col-sm-12">
-               <Input name="firstName"
-                id="firstName"
-                value={this.state.first_name || ''}
-                label="First Name:" type="text"
-                className="form-control"
+      <Modal
+        title='Edit Student'
+        contentLabel='Edit Student'
+        isOpen={this.props.isOpen}
+        onCloseModal={this.props.onCloseModal}
+        canSubmit={true}
+        submitForm={this.saveStudent}
+        cancelBtnLabel='Cancel'
+      >
+        <Formsy.Form
+          onValidSubmit={this.saveStudent}
+          onValid={this.enableSubmitButton}
+          onInvalid={this.disableSubmitButton}
+          onChange={this.handleChange}
+          ref={(ref) => this.myform = ref}
+        >
+          <div className="col-sm-12">
+            <Input name="firstName"
+              id="firstName"
+              value={this.state.first_name || ''}
+              label="First Name:" type="text"
+              className="form-control"
+              validations="minLength:1"/>
+          </div>
+          <div className="col-sm-12">
+            <Input name="middleName"
+              id="middleName"
+              value={this.state.middle_name || ''}
+              label="Middle Name:" type="text"
+              className="form-control"
+              validations="minLength:1"/>
+          </div>
+          <div className="col-sm-12">
+            <Input name="lastName"
+              id="lastName"
+              value={this.state.last_name || ''}
+              label="Last Name:" type="text"
+              className="form-control"
 
-                validations="minLength:1"/>
-             </div>
-             <div className="col-sm-12">
-               <Input name="middleName"
-                id="middleName"
-                value={this.state.middle_name || ''}
-                label="Middle Name:" type="text"
-                className="form-control"
-
-                validations="minLength:1"/>
-             </div>
-             <div className="col-sm-12">
-               <Input name="lastName"
-                id="lastName"
-                value={this.state.last_name || ''}
-                label="Last Name:" type="text"
-                className="form-control"
-
-                validations="minLength:1"/>
-              </div>
-             <div className="col-sm-12">
-               <Input name="uid"
-                id="uid"
-                value={this.state.uid || ''}
-                label="UID:" type="text"
-                className="form-control"
-                validations="minLength:1"/>
-            </div>
-             <div className="col-sm-12">
-                <Select
-                      name="gender"
-                      label="Gender"
-                      value={this.state.gender}
-                      options={selectGender}
-                  />
-
-              </div>
-              <div className="col-sm-12">
-                  <Select
-                       name="language"
-                       label="language"
-                       value={this.state.language}
-                       options={selectLanguage}
-                   />
-              </div>
-              <div className="col-sm-12">
-               <Input name="dob"
-                id="date"
-                value={this.state.dob || ''}
-                label="DOB:" type="date"
-                className="form-control"
-
-                validations="minLength:1"/>
-              </div>
-               <div className="col-sm-12">
-                 <Input name="fatherFirstName"
-                  id="fatherFirstName"
-                  value={this.state.Father ?  this.state.Father.first_name || '' : ''}
-                  label="Father First Name:"
-                  type="text"
-                  className="form-control"
-
-                  validations="minLength:1"/>
-              </div>
-              <div className="col-sm-12">
-                <Input name="fatherMiddleName"
-                 id="fatherMiddleName"
-                 value={this.state.Father ?  this.state.Father.middle_name || '' : ''}
-                 label="Father Middle Name:"
-                 type="text"
-                 className="form-control"
-                 validations="minLength:1"/>
-              </div>
-              <div className="col-sm-12">
-                <Input name="fatherLastName"
-                 id="fatherLastName"
-                 value={this.state.Father ?  this.state.Father.last_name || '' : ''}
-                 label="Father Last Name:"
-                 type="text"
-                 className="form-control"
-                 validations="minLength:1"/>
-             </div>
-             <div className="col-sm-12">
-               <Input name="motherFirstName"
-                id="motherFirstName"
-                value={this.state.Mother ?  this.state.Mother.first_name || '' : ''}
-                label="Mother First Name:"
-                type="text"
-                className="form-control"
-                validations="minLength:1"/>
-            </div>
-              <div className="col-sm-12">
-              <Input name="motherMiddleName"
-               id="motherMiddleName"
-               value= {this.state.Mother ?  this.state.Mother.middle_name || '' : ''}
-               label="Mother Middle Name:"
-               type="text"
-               className="form-control"
-               validations="minLength:1"/>
-            </div>
-            <div className="col-sm-12">
+              validations="minLength:1"/>
+          </div>
+          <div className="col-sm-12">
+            <Input name="uid"
+              id="uid"
+              value={this.state.uid || ''}
+              label="UID:" type="text"
+              className="form-control"
+              validations="minLength:1"/>
+          </div>
+          <div className="col-sm-12">
+            <Select
+              name="gender"
+              label="Gender"
+              value={this.state.gender}
+              options={selectGender}
+            />
+          </div>
+          <div className="col-sm-12">
+            <Select
+              name="language"
+              label="language"
+              value={this.state.language}
+              options={selectLanguage}
+            />
+          </div>
+          <div className="col-sm-12">
+            <Input name="dob"
+              id="date"
+              value={this.state.dob || ''}
+              label="DOB:" type="date"
+              className="form-control"
+              validations="minLength:1"/>
+          </div>
+          <div className="col-sm-12">
+            <Input name="fatherFirstName"
+              id="fatherFirstName"
+              value={this.state.Father ?  this.state.Father.first_name || '' : ''}
+              label="Father First Name:"
+              type="text"
+              className="form-control"
+              validations="minLength:1"/>
+          </div>
+          <div className="col-sm-12">
+            <Input name="fatherMiddleName"
+              id="fatherMiddleName"
+              value={this.state.Father ?  this.state.Father.middle_name || '' : ''}
+              label="Father Middle Name:"
+              type="text"
+              className="form-control"
+              validations="minLength:1"/>
+          </div>
+          <div className="col-sm-12">
+            <Input name="fatherLastName"
+              id="fatherLastName"
+              value={this.state.Father ?  this.state.Father.last_name || '' : ''}
+              label="Father Last Name:"
+              type="text"
+              className="form-control"
+              validations="minLength:1"/>
+          </div>
+          <div className="col-sm-12">
+            <Input name="motherFirstName"
+              id="motherFirstName"
+              value={this.state.Mother ?  this.state.Mother.first_name || '' : ''}
+              label="Mother First Name:"
+              type="text"
+              className="form-control"
+              validations="minLength:1"/>
+          </div>
+          <div className="col-sm-12">
+            <Input name="motherMiddleName"
+              id="motherMiddleName"
+              value= {this.state.Mother ?  this.state.Mother.middle_name || '' : ''}
+              label="Mother Middle Name:"
+              type="text"
+              className="form-control"
+              validations="minLength:1"/>
+          </div>
+          <div className="col-sm-12">
             <Input name="motherLastName"
-             id="motherLastName"
-             value= {this.state.Mother ?  this.state.Mother.last_name || '' : ''}
-             label="Mother Last Name:"
-             type="text"
-             className="form-control"
-             validations="minLength:1"/>
-            </div>
-            {/*
+              id="motherLastName"
+              value= {this.state.Mother ?  this.state.Mother.last_name || '' : ''}
+              label="Mother Last Name:"
+              type="text"
+              className="form-control"
+              validations="minLength:1"/>
+          </div>
+          {/*
             <div>
 
-            <div>Mother Middle Name: <input value={this.state.Mother ?  this.state.Mother.middle_name || '' : ''} onChange={(e) => {this.changeParentVal('Mother', 'middle_name', e)}} type='text' className='form-control'/></div>
-            <div>Mother Last Name: <input value={this.state.Mother ?  this.state.Mother.last_name || '' : ''} onChange={(e) => {this.changeParentVal('Mother', 'last_name', e)}} type='text' className='form-control'/></div>*/}
-          </Formsy.Form>
-    </div>
-
-      <div className='button' onClick={ () => {
-                                            this.props.saveStudent(this.state)
-                                          } }>Save</div>
-      <div className='button' onClick={ this.props.onCloseModal }>Discard</div>
+              <div>Mother Middle Name: <input value={this.state.Mother ?  this.state.Mother.middle_name || '' : ''} onChange={(e) => {this.changeParentVal('Mother', 'middle_name', e)}} type='text' className='form-control'/></div>
+              <div>Mother Last Name: <input value={this.state.Mother ?  this.state.Mother.last_name || '' : ''} onChange={(e) => {this.changeParentVal('Mother', 'last_name', e)}} type='text' className='form-control'/></div>*/
+          }
+        </Formsy.Form>
       </Modal>
     )
   }
