@@ -240,8 +240,9 @@ class InputRow extends React.Component {
             <input
               id={qnId}
               disabled={disabled}
-              value={displayValue}
-              type="text"
+              defaultValue={displayValue}
+              type="number"
+              step="0.01"
               required
               className="form-control"
               style={{ color: 'red', padding: '0px', width: '30px' }}
