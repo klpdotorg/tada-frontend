@@ -57,6 +57,11 @@ export default class AssessmentEntry extends React.Component {
     console.log('Input change received: ', event);
     if (!this._answers[student]) {
       this._answers[student] = [];
+    } else {
+      //Check if answer for a qn already exists and then omit it, we only need to push the new answer..
+      this._answers[student] = _.reject(this._answers[student], function(answer) {
+        return (answer.question = question);
+      });
     }
     this._answers[student].push({
       question,
@@ -240,7 +245,7 @@ class InputRow extends React.Component {
               step="any"
               required
               className="form-control"
-              style={{ 'text-align': 'center', padding: '0px', width: '30px' }}
+              style={{ color: 'red', padding: '0px', width: '30px' }}
               onChange={this.props.handleInputChange.bind(this, id, questionid)}
             />
           </td>
