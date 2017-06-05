@@ -22,7 +22,7 @@ function processQuestions(data) {
       newQuestionsById[question.id] = question;
       assessid = question.assessment;
 
-      questionIds.push(question.assessment);
+      questionIds.push(question.id);
     });
   }
   questionsByAssessId[assessid] = questionIds;
