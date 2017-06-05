@@ -150,76 +150,74 @@ export default class CreateDistrict extends Component {
       canSubmit={this.state.canSubmit}
       submitForm={this.submitForm}
     >
-        <Formsy.Form
-          onValidSubmit={this.submitForm}
-          onValid={this.enableSubmitButton}
-          onInvalid={this.disableSubmitButton}
-          disabled={this.state.disabled}
-          ref={(ref) => this.myform = ref}
-        >
-          <Input name="name" id="name" value="" label="School Name:" type="text"
-            value = ""
-            placeholder={this.props.placeHolder} required validations="minLength:1"
-          />
-          <Textarea
-            rows={3}
-            cols={40}
-            name="institutionAddress"
-            label="Address :"
-            value = ""
-            required
-            validations="minLength:1"
-          />
-          <Input name="institutionArea"
-            id="institutionArea"
-            label="Area:" type="text"
-            value = ""
-            className="form-control"
-          />
-          <Input name="institutionLandmark"
-            id="institutionLandmark"
-            label="Landmark:" type="text"
-            value = ""
-            className="form-control"
-          />
-          <Input name="institutionPincode"
-            id="institutionPincode"
-            label="Pincode:" type="text"
-            value = ""
-            className="form-control"
-          />
-          <Select
-            name="institutionCat"
-            label="Category:"
-            value = {_.get(institutionCategories, 'list[0].value')}
-            options={institutionCategories.list}
-          />
-          <Select
-            multiple
-            name="institutionLang"
-            label="Medium:"
-            value = {[_.get(this.props.languages, 'list[0].value')]}
-            options={this.props.languages.list}
-            required
-          />
-          <Select
-            name="institutionGender"
-            label="Gender:"
-            value ={_.get(selectOptions, '[0].value')}
-            options={selectOptions}
-            required
-          />
-          <Input name="institutionDise_code"
-            id="institutionDise_code"
-            value=""
-            label="DISE Code:" type="text"
-            className="form-control"
-          />
-        {/*<label htmlFor="languages" className="control-label">Languages</label>
-          <Select.Async multi name="form-field-name" value={this.state.languages} loadOptions={getLanguages} onChange={this.selectLanguage}/>*/}
-        </Formsy.Form>
-      </Modal>
-    )
+      <Formsy.Form
+        onValidSubmit={this.submitForm}
+        onValid={this.enableSubmitButton}
+        onInvalid={this.disableSubmitButton}
+        disabled={this.state.disabled}
+        ref={(ref) => this.myform = ref}
+      >
+        <Input name="name" id="name" value="" label="School Name:" type="text"
+          value = ""
+          placeholder={this.props.placeHolder} required validations="minLength:1"
+        />
+        <Textarea
+          rows={3}
+          cols={40}
+          name="institutionAddress"
+          label="Address :"
+          value = ""
+          required
+          validations="minLength:1"
+        />
+        <Input name="institutionArea"
+          id="institutionArea"
+          label="Area:" type="text"
+          value = ""
+          className="form-control"
+        />
+        <Input name="institutionLandmark"
+          id="institutionLandmark"
+          label="Landmark:" type="text"
+          value = ""
+          className="form-control"
+        />
+        <Input name="institutionPincode"
+          id="institutionPincode"
+          label="Pincode:" type="text"
+          value = ""
+          className="form-control"
+        />
+        <Select
+          name="institutionCat"
+          label="Category:"
+          value = {_.get(institutionCategories, 'list[0].value')}
+          options={institutionCategories.list}
+        />
+        <Select
+          multiple
+          name="institutionLang"
+          label="Medium:"
+          value = {[_.get(this.props.languages, 'list[0].value')]}
+          options={this.props.languages.list}
+          required
+        />
+        <Select
+          name="institutionGender"
+          label="Gender:"
+          value ={_.get(selectOptions, '[0].value')}
+          options={selectOptions}
+          required
+        />
+        <Input name="institutionDise_code"
+          id="institutionDise_code"
+          value=""
+          label="DISE Code:" type="text"
+          className="form-control"
+        />
+      </Formsy.Form>
+    </Modal>
+  )
 }
 
 }
