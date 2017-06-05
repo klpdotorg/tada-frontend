@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Modal from 'react-modal';
+import Modal from './ModalTemplate';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
 import { modalStyle as customStyles } from '../../styles.js';
@@ -45,29 +45,23 @@ export default class ChangeUserInfo extends Component {
 	{
 
 		return(
-			<Modal contentLabel="Change Password" isOpen={ this.props.isOpen } onRequestClose={ this.props.onCloseModal} style = { customStyles }>
-				<div className="" role="document">
-            		<div className="modal-content">
-                		<div className="modal-header">
-                    		<button type="button" className="close" onClick={this.props.onCloseModal} aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    		<h4 className="modal-title" id="resetPasswordTitle">Change Profile</h4>
-                		</div>
-                		<div className="modal-body">
-						<Formsy.Form onValidSubmit={this.submitForm} onValid={this.enableSubmitButton} onInvalid={this.disableSubmitButton}
-								disabled={this.state.disabled} ref={(ref) => this.myform = ref}>
-							<Input name="email" id="email" type="text" label="E-mail"  validations="isEmail,minLength:1" defaultValue={this.props.email}/>
-							<Input name="firstName" id="firstName" type="text" label="First Name" validations="isAlpha" defaultValue={this.props.firstname}/>
-							<Input name="lastName" id="lastName" type="text" label="Last Name"  validations="isAlpha" defaultValue={this.props.lastname}/>
-							<Input name="phone" id="phone" type="text" label="Mobile" validations="isNumeric"/>
+      <Modal
+        title='Change Profile'
+        contentLabel='Change Profile'
+        isOpen={this.props.isOpen}
+        onCloseModal={this.props.onCloseModal}
+        canSubmit={this.state.canSubmit}
+        submitForm={this.submitForm}
+        cancelBtnLabel='Cancel..'
+      >
+        <Formsy.Form onValidSubmit={this.submitForm} onValid={this.enableSubmitButton} onInvalid={this.disableSubmitButton}
+            disabled={this.state.disabled} ref={(ref) => this.myform = ref}>
+          <Input name="email" id="email" type="text" label="E-mail"  validations="isEmail,minLength:1" defaultValue={this.props.email}/>
+          <Input name="firstName" id="firstName" type="text" label="First Name" validations="isAlpha" defaultValue={this.props.firstname}/>
+          <Input name="lastName" id="lastName" type="text" label="Last Name"  validations="isAlpha" defaultValue={this.props.lastname}/>
+          <Input name="phone" id="phone" type="text" label="Mobile" validations="isNumeric"/>
 
-						</Formsy.Form>
-						</div>
-               		  <div className="modal-footer">
-                 		 <button type="button" className="btn btn-primary" onClick={this.props.onCloseModal}>Cancel</button>
-                 		 <button type="button" disabled={!this.state.canSubmit} className="btn btn-primary" onClick={this.submitForm}>Save</button>
-              		 </div>
-              		</div>
-              	</div>
+        </Formsy.Form>
 			</Modal>
 			);
 	}

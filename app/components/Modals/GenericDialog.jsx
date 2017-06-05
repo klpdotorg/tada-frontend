@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Modal from 'react-modal';
+import Modal from './ModalTemplate';
 import { modalStyle as customStyles } from '../../styles.js';
 
 
@@ -16,21 +16,17 @@ export default class GenericDialog extends Component{
 	render()
 	{
 			return(
-				<Modal contentLabel={this.props.title} isOpen={ this.props.isOpen } onRequestClose={ this.props.onCloseModal} style={customStyles}>
-				<div className="" role="document">
-            		<div className="modal-content">
-                		<div className="modal-header">
-                    		<button type="button" className="close" onClick={this.props.onCloseModal} aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    		<h4 className="modal-title" id="title">{this.props.title}</h4>
-                		</div>
-                		<div className="modal-body">
-                			<p>{this.props.message}</p>
-                		</div>
-                		<div className="modal-footer">
-                 		 <button type="button" className="btn btn-primary" onClick={this.props.onCloseModal}>OK</button>                 		 
-              		 </div>
-              		</div>
-              	</div>
+        <Modal
+          title={this.props.title}
+          contentLabel={this.props.title}
+          isOpen={this.props.isOpen}
+          onCloseModal={this.props.onCloseModal}
+          canSubmit={true}
+          submitForm={this.props.onCloseModal}
+          submitBtnLabel='OK'
+          hideCancelBtn={true}
+        >
+          <p>{this.props.message}</p>
 			</Modal>
 			);
 	}
