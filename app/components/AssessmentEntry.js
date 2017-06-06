@@ -23,10 +23,7 @@ const val = [0, 1];
 export default class AssessmentEntry extends React.Component {
   // const Example = React.createClass({
 
-  saveEntry = event => {
-    console.log('Save entry called for -- ', event.currentTarget.id);
-    let studentId = event.currentTarget.id.split('_')[1];
-    let answers = this._answers[studentId];
+  saveEntry = (studentId, answers) => {
     this.props
       .dispatch(
         postAnswerForStudent(
@@ -48,14 +45,16 @@ export default class AssessmentEntry extends React.Component {
     super(props);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.sortStudentsAlpha = this.sortStudentsAlpha.bind(this);
-    this._answers = {};
+    this.state = {
+      answers: {},
+    };
     this.saveEntry = this.saveEntry.bind(this);
     $('[data-toggle="tooltip"]').tooltip();
   }
 
   handleInputChange(student, question, event) {
     console.log('Input change received: ', event);
-    if (!this._answers[student]) {
+    if (!this.state.answers[student]) {
       this._answers[student] = [];
     } else {
       //Check if answer for a qn already exists and then omit it, we only need to push the new answer..
@@ -204,15 +203,74 @@ class InputRow extends React.Component {
   constructor(props) {
     super(props);
     this.toggle = this.toggle.bind(this);
+    this.computeAnswers = this.computeAnswers.bind(this);
+    let initAnswers = this.computeAnswers(props.answers);
     this.state = {
       popoverOpen: false,
+      answers: initAnswers,
     };
+    this.handleAnswerInput = this.handleAnswerInput.bind(this);
+    this.getAnswerForQn = this.getAnswerForQn.bind(this);
+  }
+
+  computeAnswers(answers) {
+    let initialAnswers = {};
+    if (answers) {
+      Object.values(answers).map(answer => {
+        initialAnswers[answer.question] = answer.answer_score || answer.answer_grade;
+      });
+    }
+    return initialAnswers;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.answers != nextProps.answers) {
+      let newAnswers = this.computeAnswers(nextProps.answers);
+      this.setState({
+        answers: newAnswers,
+      });
+    }
+  }
+
+  handleAnswerInput(student, question, event) {
+    //Check if answer for a qn already exists and then omit it, we only need to push the new answer..
+    console.log('change called');
+    let newAnswer = {};
+    newAnswer[question] = event.target.value;
+    this.setState({
+      answers: newAnswer,
+    });
+    //  let existingAnswers = this.state.answers;
+    //  if(!existingAnswers)
+    //     existingAnswers=[];
+    //  existingAnswers = _.reject(this.state.answers, function(answer) {
+    //     return (answer.question = question);
+    //   });
+    // existingAnswers.push({
+    //   question,
+    //   student,
+    //   active: '2',
+    //   answer: event.currentTarget.value,
+    // })
+    // this.setState({
+    //   answers: existingAnswers,
+    // });
+  }
+
+  getAnswerForQn(questionId) {
+    let answer = this.state.answers[questionId];
+    if (!answer) answer = '';
+    return answer;
   }
 
   toggle() {
     this.setState({
       popoverOpen: !this.state.popoverOpen,
     });
+  }
+
+  saveAnswers() {
+    this.props.saveEntry(this.props.student.id, this.state.answers);
   }
 
   render() {
@@ -240,13 +298,12 @@ class InputRow extends React.Component {
             <input
               id={qnId}
               disabled={disabled}
-              defaultValue={displayValue}
-              type="number"
-              step="0.01"
+              value={this.getAnswerForQn.bind(this, qnId)}
+              type="text"
               required
               className="form-control"
               style={{ color: 'red', padding: '0px', width: '30px' }}
-              onChange={this.props.handleInputChange.bind(this, id, questionid)}
+              onChange={this.handleAnswerInput.bind(this, id, qnId)}
             />
           </td>
         );
@@ -269,7 +326,11 @@ class InputRow extends React.Component {
           </button>
         </td>
         <td>
-          <button id={'save_' + id} onClick={this.props.saveEntry} className="btn btn-primary">
+          <button
+            id={'save_' + id}
+            onClick={this.saveAnswers.bind(this)}
+            className="btn btn-primary"
+          >
             Save
           </button>
         </td>
