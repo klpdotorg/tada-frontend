@@ -1,6 +1,6 @@
 import { checkStatus } from '../actions/utils';
 import { SERVER_API_BASE as serverApiBase } from 'config';
-import { mapValues } from 'lodash';
+import { mapValues, get } from 'lodash';
 export const getManagement = () => {
   return fetch(serverApiBase + 'institutionmanagements/', {
     headers: {
@@ -45,7 +45,7 @@ export const replaceNull = obj => {
 };
 
 export const displayFullName = person => {
-  return `${person.first_name || ''} ${person.middle_name || ''} ${person.last_name || ''}`;
+  return `${get(person, 'first_name') || ''} ${get(person, 'middle_name') || ''} ${get(person, 'last_name') || ''}`;
 };
 
 export const userHasPermissions = (permissions, institutionId) => {
