@@ -8,6 +8,7 @@ const { ImageFormatter } = Formatters;
 import { fetchStudentsByGroupId, fetchQuestionsForAssessment } from '../actions';
 import _ from 'underscore';
 faker.locale = 'en_GB';
+import { Popover, OverlayTrigger } from 'react-bootstrap'
 
 const val = [0, 1];
 export default class AssessmentEntry extends React.Component {
@@ -136,10 +137,19 @@ class InputRow extends React.Component {
         </div>
       </div>
     );*/
+
+    const studentNamePopover = (
+      <Popover id="popover-trigger-hover-focus" title="Student Name">
+        {name}
+      </Popover>
+    );
+
     return (
       <tr>
         <td>{id}</td>
-        <td colSpan="2"> {name}</td>
+        <OverlayTrigger trigger={['hover', 'focus']} placement="top" overlay={studentNamePopover}>
+          <td colSpan="2"> {name}</td>
+        </OverlayTrigger>
         {html}
       </tr>
     );
