@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Modal from 'react-modal';
+import Modal from './ModalTemplate';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
 import { modalStyle as customStyles } from '../../styles.js';
@@ -40,31 +40,23 @@ export default class ConfirmPassword extends Component {
 		})
 	}
 
-	render()
-	{
-       
+	render() {
+
 		return(
-			<Modal contentLabel="Current Password" isOpen={ this.props.isOpen } onRequestClose={ this.props.onCloseModal} style = { customStyles }>
-				<div className="" role="document">
-            		<div className="modal-content">
-                		<div className="modal-header">
-                    		<button type="button" className="close" onClick={this.props.onCloseModal} aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    		<h4 className="modal-title" id="createAssessmentTitle">Current Password</h4>
-                		</div>
-                		<div className="modal-body">
-						<Formsy.Form onValidSubmit={this.submitForm} onValid={this.enableSubmitButton} onInvalid={this.disableSubmitButton}
-								disabled={this.state.disabled} ref={(ref) => this.myform = ref}>		
-							<Input name="password" id="password" help="Please enter your current password and press continue" type="password" label="Password" required/>							
-							
-                        	
-						</Formsy.Form>
-						</div>
-               		  <div className="modal-footer">
-                 		 <button type="button" className="btn btn-primary" onClick={this.props.onCloseModal}>Cancel</button>
-                 		 <button type="button" disabled={!this.state.canSubmit} className="btn btn-primary" onClick={this.submitForm}>Continue</button>
-              		 </div>
-              		</div>
-              	</div>
+      <Modal
+        title='Current Password'
+        contentLabel='Current Password'
+        isOpen={this.props.isOpen}
+        onCloseModal={this.props.onCloseModal}
+        canSubmit={this.state.canSubmit}
+        submitForm={this.submitForm}
+        submitBtnLabel='Continue'
+        cancelBtnLabel='Cancel'
+      >
+        <Formsy.Form onValidSubmit={this.submitForm} onValid={this.enableSubmitButton} onInvalid={this.disableSubmitButton}
+            disabled={this.state.disabled} ref={(ref) => this.myform = ref}>
+          <Input name="password" id="password" help="Please enter your current password and press continue" type="password" label="Password" required/>
+        </Formsy.Form>
 			</Modal>
 			);
 	}

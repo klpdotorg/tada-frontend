@@ -1,6 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchEntitiesFromServer, fetchProgramsInstitution, logoutUser, saveNewDistrict, loginSuccess, fetchUserData, changeUserName, changePassword, selectPreschoolTree, selectPrimaryTree, getBoundaries, toggleNode} from '../actions/';
+import {
+  fetchEntitiesFromServer,
+  fetchProgramsInstitution,
+  logoutUser,
+  saveNewDistrict,
+  loginSuccess,
+  fetchUserData,
+  changeUserName,
+  changePassword,
+  selectPreschoolTree,
+  selectPrimaryTree,
+  getBoundaries,
+  toggleNode,
+} from '../actions/';
 import { push } from 'react-router-redux';
 import NavBar from '../components/MainNavBar';
 import MainHeader from '../components/MainHeader';
@@ -11,46 +24,46 @@ import TreeTogglerSpacingDiv from '../components/TreeTogglerSpacingDiv';
 import Notifications from 'react-notification-system-redux';
 
 const mapStateToProps = (state, ownProps) => {
-  //console.log("Own props inside App.js", ownProps);
-  return ({
-  boundaryDetails: state.boundaries.boundaryDetails,
-  boundariesByParentId: state.boundaries.boundariesByParentId,
-  routerState: state.routing,
-  username: state.login.username,
-  useremail: state.login.email,
-  userfirstname: state.login.first_name,
-  userlastname: state.login.last_name,
-  districtModalIsOpen: state.modal.createDistrict,
-  primarySelected: state.schoolSelection.primarySchool,
-  programsByInstitutionId: state.programs.programsByInstitutionId,
-  programsByStudentId: state.programs.programsByStudentId,
-  notifications: state.notifications,
-});
+  // console.log("Own props inside App.js", ownProps);
+  return {
+    boundaryDetails: state.boundaries.boundaryDetails,
+    boundariesByParentId: state.boundaries.boundariesByParentId,
+    routerState: state.routing,
+    username: state.login.username,
+    useremail: state.login.email,
+    userfirstname: state.login.first_name,
+    userlastname: state.login.last_name,
+    districtModalIsOpen: state.modal.createDistrict,
+    primarySelected: state.schoolSelection.primarySchool,
+    programsByInstitutionId: state.programs.programsByInstitutionId,
+    programsByStudentId: state.programs.programsByStudentId,
+    notifications: state.notifications,
+  };
 };
 
-var mapDispatchToProps = function(dispatch) {
+var mapDispatchToProps = function (dispatch) {
   return {
     onBoundaryClick(boundary) {
-      dispatch(toggleNode(boundary.id))
+      dispatch(toggleNode(boundary.id));
       dispatch(fetchEntitiesFromServer(boundary.id));
     },
 
     getInitData() {
       return dispatch({
-          type: 'BOUNDARIES',
-          payload: getBoundaries(1)
-       })
+        type: 'BOUNDARIES',
+        payload: getBoundaries(1),
+      });
     },
 
     onPrimaryClick() {
       dispatch(selectPrimaryTree());
       dispatch(fetchEntitiesFromServer());
-      //dispatch(push('/'))
+      // dispatch(push('/'))
     },
     onPreSchoolClick() {
       dispatch(selectPreschoolTree());
       dispatch(fetchEntitiesFromServer());
-      //dispatch(push('/'))
+      // dispatch(push('/'))
     },
     fetchEntityDetails() {
       dispatch(fetchEntitiesFromServer(1));
@@ -63,8 +76,8 @@ var mapDispatchToProps = function(dispatch) {
     toggleDistrictModal() {
       dispatch({
         type: 'TOGGLE_MODAL',
-        modal: 'createDistrict'
-      })
+        modal: 'createDistrict',
+      });
     },
 
     saveNewDistrict(name) {
@@ -79,7 +92,7 @@ var mapDispatchToProps = function(dispatch) {
       let authData = {
         auth_token: token,
         user_id: userid,
-      }
+      };
       dispatch(loginSuccess(authData));
     },
 
@@ -99,60 +112,80 @@ var mapDispatchToProps = function(dispatch) {
       return dispatch(changePassword(oldPassword, newPassword));
     },
     dispatch,
-
   };
 };
 
-
 class TadaContentContainer extends Component {
-
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      isLoading: true
-    }
+      isLoading: true,
+    };
   }
 
   componentWillMount() {
-    const {dispatch} = this.props
-    if (!sessionStorage.token) {
-      this.props.redirectTo('/login');
-    } else {
-        //this.props.loggedIn(sessionStorage.token, sessionStorage.userid);
-          this.props.fetchUserData();
-          this.props.getInitData().then(() =>  {
-            this.setState({
-              isLoading:false
-            })
-          });
-        
-    }
+    const { dispatch } = this.props;
+    // if (!sessionStorage.token) {
+    //   this.props.redirectTo('/login');
+    // } else {
+    // this.props.loggedIn(sessionStorage.token, sessionStorage.userid);
+    this.props.fetchUserData();
+    this.props.getInitData().then(() => {
+      this.setState({
+        isLoading: false,
+      });
+    });
+
+    // }
   }
 
   render() {
-    const {onBoundaryClick, boundaryDetails, boundariesByParentId, saveNewDistrict, modifyDistrict, primarySelected, boundaries, notifications} = this.props
-    return (
-      this.state.isLoading ? <div>Loading... </div> :
-      <div>
-        <MainHeader handleLogout={ this.props.handleLogout } firstname= {this.props.userfirstname} lastname={this.props.userlastname} email={this.props.useremail} username={this.props.username} dispatch = {this.props.dispatch} handleChangeUserName = {this.props.changeUserName}/>
-        <TreeTogglerSpacingDiv/>
-        <NavBar onPrimaryClick={ this.props.onPrimaryClick } onPreSchoolClick={ this.props.onPreSchoolClick } primarySelected={ this.props.primarySelected } />
-        <SecondaryNavBar redirectTo = {this.props.redirectTo} toggleDistrictModal={ this.props.toggleDistrictModal } districtModalIsOpen={ this.props.districtModalIsOpen } saveNewDistrict={ saveNewDistrict } />
-        <div id="wrapper" className="main__wrapper">
-          {/** <SideBar child={<SchoolsNavTree/>}**/}
-          <SideBarContainer location = {this.props.location}/>
-          <MainContentArea children={ this.props.children } />
-        </div>
-        <Notifications
-        notifications={notifications}
-      />
-      </div>
-    );
+    const {
+      onBoundaryClick,
+      boundaryDetails,
+      boundariesByParentId,
+      saveNewDistrict,
+      modifyDistrict,
+      primarySelected,
+      boundaries,
+      notifications,
+    } = this.props;
+    return this.state.isLoading
+      ? <div>Loading... </div>
+      : <div>
+          <MainHeader
+            handleLogout={this.props.handleLogout}
+            firstname={this.props.userfirstname}
+            lastname={this.props.userlastname}
+            email={this.props.useremail}
+            username={this.props.username}
+            dispatch={this.props.dispatch}
+            handleChangeUserName={this.props.changeUserName}
+          />
+          <TreeTogglerSpacingDiv />
+          <NavBar
+            onPrimaryClick={this.props.onPrimaryClick}
+            onPreSchoolClick={this.props.onPreSchoolClick}
+            primarySelected={this.props.primarySelected}
+          />
+          <SecondaryNavBar
+            redirectTo={this.props.redirectTo}
+            toggleDistrictModal={this.props.toggleDistrictModal}
+            districtModalIsOpen={this.props.districtModalIsOpen}
+            saveNewDistrict={saveNewDistrict}
+          />
+          <div id="wrapper" className="main__wrapper">
+            {/** <SideBar child={<SchoolsNavTree/>}**/}
+            <SideBarContainer location={this.props.location} />
+            <MainContentArea children={this.props.children} />
+          </div>
+          <Notifications notifications={notifications} />
+        </div>;
   }
 }
 
 TadaContentContainer.contextTypes = {
-  router: React.PropTypes.object.isRequired
-}
+  router: React.PropTypes.object.isRequired,
+};
 
 module.exports = connect(mapStateToProps, mapDispatchToProps)(TadaContentContainer);
