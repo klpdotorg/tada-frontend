@@ -217,7 +217,9 @@ class InputRow extends React.Component {
     let initialAnswers = {};
     if (answers) {
       Object.values(answers).map(answer => {
-        initialAnswers[answer.question] = answer.answer_score || answer.answer_grade;
+        if (answer.student == this.props.student.id) {
+          initialAnswers[answer.question] = answer.answer_score || answer.answer_grade;
+        }
       });
     }
     return initialAnswers;
@@ -235,8 +237,9 @@ class InputRow extends React.Component {
   handleAnswerInput(student, question, event) {
     //Check if answer for a qn already exists and then omit it, we only need to push the new answer..
     console.log('change called');
-    let newAnswer = {};
-    newAnswer[question] = event.target.value;
+    let qnId = question.split('_')[1];
+    let newAnswer = this.state.answers;
+    newAnswer[qnId] = event.target.value;
     this.setState({
       answers: newAnswer,
     });
@@ -258,7 +261,8 @@ class InputRow extends React.Component {
   }
 
   getAnswerForQn(questionId) {
-    let answer = this.state.answers[questionId];
+    let qnId = questionId.split('_')[1];
+    let answer = this.state.answers[qnId];
     if (!answer) answer = '';
     return answer;
   }
@@ -298,7 +302,7 @@ class InputRow extends React.Component {
             <input
               id={qnId}
               disabled={disabled}
-              value={this.getAnswerForQn.bind(this, qnId)}
+              value={this.getAnswerForQn(qnId)}
               type="text"
               required
               className="form-control"

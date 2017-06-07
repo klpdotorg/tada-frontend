@@ -11,13 +11,26 @@ export const postAnswerForStudent = (programId, assessmentId, studentId, answers
   var url =
     serverApiBase +
     `programmes/${programId}/assessments/${assessmentId}/students/${studentId}/answers/`;
+  //Answers is just an array of question ids and answers..
+  let answersjson = [];
+  Object.keys(answersObj).map(qnId => {
+    if (answersObj[qnId] != null) {
+      answersjson.push({
+        question: qnId,
+        student: studentId,
+        active: '2',
+        answer: answersObj[qnId],
+      });
+    }
+  });
+  //Figure out whether its a PATCH or a POST. PATCH is if double_entry=1 and this is verification. POST is if double_entry is 0.
   return fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       Authorization: 'Token ' + sessionStorage.token,
     },
-    body: JSON.stringify(answersObj),
+    body: JSON.stringify(answersjson),
   })
     .then(checkStatus)
     .then(data => {
