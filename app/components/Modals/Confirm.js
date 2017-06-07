@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Modal from 'react-modal';
+import Modal from './ModalTemplate';
 import { modalStyle as customStyles } from '../../styles.js';
 
 export default class Confirm extends Component {
@@ -20,40 +20,20 @@ export default class Confirm extends Component {
   render() {
     return (
       <Modal
+        title="Delete?"
         contentLabel="Confirm Delete Modal"
         isOpen={this.props.isOpen}
-        onRequestClose={this.props.onCloseModal}
-        style={customStyles}
+        onCloseModal={this.props.onCloseModal}
+        canSubmit
+        submitForm={() => {
+          this.props.onAgree(this.state.value);
+        }}
+        cancelBtnLabel="No"
+        submitBtnLabel="Yes"
       >
-        <div className="" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <button
-                type="button"
-                className="close"
-                onClick={this.props.onCloseModal}
-                aria-label="Close"
-              >
-                <span aria-hidden="true">×</span>
-              </button>
-              <h4 className="modal-title" id="resetPasswordTitle">Delete?</h4>
-            </div>
-            <div className="modal-body">
-              <p>Are you sure you want to delete: <b> {this.props.entity}</b>?</p>
-            </div>
-            <div className="modal-footer">
-              <div
-                className="button"
-                onClick={() => {
-                  this.props.onAgree(this.state.value);
-                }}
-              >
-                Yes
-              </div>
-              <div className="button" onClick={this.props.onCloseModal}>No</div>
-            </div>
-          </div>{/* End of modal-content */}
-        </div>{/* End of outer wrapping div */}
+        <p className="text-warning">
+          Are you sure you want to delete: <b> {this.props.entity}</b>?
+        </p>
       </Modal>
     );
   }

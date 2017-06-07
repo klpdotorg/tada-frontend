@@ -13,21 +13,20 @@ export default class GenericDialog extends Component{
 		super(props);
 	}
 
-	render()
-	{
-			return(
-        <Modal
-          title={this.props.title}
-          contentLabel={this.props.title}
-          isOpen={this.props.isOpen}
-          onCloseModal={this.props.onCloseModal}
-          canSubmit={true}
-          submitForm={this.props.onCloseModal}
-          submitBtnLabel='OK'
-          hideCancelBtn={true}
-        >
-          <p>{this.props.message}</p>
-			</Modal>
-			);
+	render() {
+    return (
+      <Modal
+        title={this.props.title}
+        contentLabel={this.props.title}
+        isOpen={this.props.isOpen}
+        onCloseModal={this.props.onCloseModal}
+        canSubmit={true}
+        submitForm={this.props.onCloseModal}
+        submitBtnLabel='OK'
+        hideCancelBtn={true}
+      >
+        <p>{this.props.message}</p>
+      </Modal>
+    )
 	}
 }

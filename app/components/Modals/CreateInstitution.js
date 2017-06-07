@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import Modal from 'react-modal';
+import Modal from './ModalTemplate';
 import Formsy from 'formsy-react';
 import 'react-select/dist/react-select.css';
-import {checkStatus} from '../../actions/utils';
-import { getInstitutionCategories } from '../utils'
-import {SERVER_API_BASE as serverApiBase} from 'config';
+import { checkStatus } from '../../actions/utils';
+import { getInstitutionCategories } from '../utils';
+import { SERVER_API_BASE as serverApiBase } from 'config';
 
 import FRC from 'formsy-react-components';
 import _ from 'lodash';
@@ -65,21 +65,22 @@ export default class CreateDistrict extends Component {
   componentDidMount() {
     //getLanguages();
     getInstitutionCategories().then(categories => {
-      const cat = categories.results.filter(cat => {
-        return cat.category_type === 1
-      })
-      .map(category => ({
-        value: category.id,
-        label: category.name
-      }))
+      const cat = categories.results
+        .filter(cat => {
+          return cat.category_type === 1;
+        })
+        .map(category => ({
+          value: category.id,
+          label: category.name,
+        }));
 
       this.setState({
         institutionCategories: {
           isLoading: false,
-          list: cat
-        }
-      })
-    })
+          list: cat,
+        },
+      });
+    });
   }
 
   enableSubmitButton() {
@@ -130,95 +131,107 @@ export default class CreateDistrict extends Component {
     this.props.save(copy);
   }
 
- render() {
-   let { institutionCategories } = this.state
+  render() {
+    let { institutionCategories } = this.state;
 
-   const selectOptions = [
-           {value: 'co-ed', label: 'Co-Ed'},
-           {value: 'boys', label: 'Boys'},
-           {value: 'girls', label: 'Girls'},
-       ];
-   const singleSelectOptions = [
-       {value: '', label: 'Please select…'},
-       ...selectOptions
-   ];
-  //  console.log(this.props);
-  return (
-    <Modal
-      title={this.props.title}
-      contentLabel='Create Institution'
-      isOpen={this.props.isOpen}
-      onCloseModal={this.props.onCloseModal}
-      canSubmit={this.state.canSubmit}
-      submitForm={this.submitForm}
-    >
-      <Formsy.Form
-        onValidSubmit={this.submitForm}
-        onValid={this.enableSubmitButton}
-        onInvalid={this.disableSubmitButton}
-        disabled={this.state.disabled}
-        ref={(ref) => this.myform = ref}
+    const selectOptions = [
+      { value: 'co-ed', label: 'Co-Ed' },
+      { value: 'boys', label: 'Boys' },
+      { value: 'girls', label: 'Girls' },
+    ];
+    const singleSelectOptions = [{ value: '', label: 'Please select…' }, ...selectOptions];
+    //  console.log(this.props);
+    return (
+      <Modal
+        title={this.props.title}
+        contentLabel="Create Institution"
+        isOpen={this.props.isOpen}
+        onCloseModal={this.props.onCloseModal}
+        canSubmit={this.state.canSubmit}
+        submitForm={this.submitForm}
       >
-        <Input name="name" id="name" value="" label="School Name:" type="text"
-          value = ""
-          placeholder={this.props.placeHolder} required validations="minLength:1"
-        />
-        <Textarea
-          rows={3}
-          cols={40}
-          name="institutionAddress"
-          label="Address :"
-          value = ""
-          required
-          validations="minLength:1"
-        />
-        <Input name="institutionArea"
-          id="institutionArea"
-          label="Area:" type="text"
-          value = ""
-          className="form-control"
-        />
-        <Input name="institutionLandmark"
-          id="institutionLandmark"
-          label="Landmark:" type="text"
-          value = ""
-          className="form-control"
-        />
-        <Input name="institutionPincode"
-          id="institutionPincode"
-          label="Pincode:" type="text"
-          value = ""
-          className="form-control"
-        />
-        <Select
-          name="institutionCat"
-          label="Category:"
-          value = {_.get(institutionCategories, 'list[0].value')}
-          options={institutionCategories.list}
-        />
-        <Select
-          multiple
-          name="institutionLang"
-          label="Medium:"
-          value = {[_.get(this.props.languages, 'list[0].value')]}
-          options={this.props.languages.list}
-          required
-        />
-        <Select
-          name="institutionGender"
-          label="Gender:"
-          value ={_.get(selectOptions, '[0].value')}
-          options={selectOptions}
-          required
-        />
-        <Input name="institutionDise_code"
-          id="institutionDise_code"
-          value=""
-          label="DISE Code:" type="text"
-          className="form-control"
-        />
-      </Formsy.Form>
-    </Modal>
-  )
-}
+        <Formsy.Form
+          onValidSubmit={this.submitForm}
+          onValid={this.enableSubmitButton}
+          onInvalid={this.disableSubmitButton}
+          disabled={this.state.disabled}
+          ref={ref => (this.myform = ref)}
+        >
+          <Input
+            name="name"
+            id="name"
+            value=""
+            label="School Name:"
+            type="text"
+            value=""
+            placeholder={this.props.placeHolder}
+            required
+            validations="minLength:1"
+          />
+          <Textarea
+            rows={3}
+            cols={40}
+            name="institutionAddress"
+            label="Address :"
+            value=""
+            required
+            validations="minLength:1"
+          />
+          <Input
+            name="institutionArea"
+            id="institutionArea"
+            label="Area:"
+            type="text"
+            value=""
+            className="form-control"
+          />
+          <Input
+            name="institutionLandmark"
+            id="institutionLandmark"
+            label="Landmark:"
+            type="text"
+            value=""
+            className="form-control"
+          />
+          <Input
+            name="institutionPincode"
+            id="institutionPincode"
+            label="Pincode:"
+            type="text"
+            value=""
+            className="form-control"
+          />
+          <Select
+            name="institutionCat"
+            label="Category:"
+            value={_.get(institutionCategories, 'list[0].value')}
+            options={institutionCategories.list}
+          />
+          <Select
+            multiple
+            name="institutionLang"
+            label="Medium:"
+            value={[_.get(this.props.languages, 'list[0].value')]}
+            options={this.props.languages.list}
+            required
+          />
+          <Select
+            name="institutionGender"
+            label="Gender:"
+            value={_.get(selectOptions, '[0].value')}
+            options={selectOptions}
+            required
+          />
+          <Input
+            name="institutionDise_code"
+            id="institutionDise_code"
+            value=""
+            label="DISE Code:"
+            type="text"
+            className="form-control"
+          />
+        </Formsy.Form>
+      </Modal>
+    );
+  }
 }
