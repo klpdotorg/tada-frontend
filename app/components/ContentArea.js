@@ -34,7 +34,7 @@ const mapStateToProps = state => {
     permissions: state.login.permissions,
     programs: state.programs,
     primarySelected: state.schoolSelection.primarySchool,
-    fetchingAssessments: state.assessments.isFetching
+    fetchingAssessments: state.assessments.isFetching,
   };
 };
 

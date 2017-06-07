@@ -1,7 +1,7 @@
 /* Main entry point for the app. Start here to understand the UI composition */
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
-require('react-bootstrap-multiselect/css/bootstrap-multiselect.css')
+require('react-bootstrap-multiselect/css/bootstrap-multiselect.css');
 require('bootstrap/dist/js/bootstrap.js');
 require('bootstrap/dist/css/bootstrap.css');
 require('font-awesome/css/font-awesome.css');

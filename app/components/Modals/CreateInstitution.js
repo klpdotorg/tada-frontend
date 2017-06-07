@@ -1,58 +1,61 @@
 import React, { Component } from 'react';
-import Modal from './ModalTemplate'
+import Modal from 'react-modal';
 import Formsy from 'formsy-react';
 import 'react-select/dist/react-select.css';
 import {checkStatus} from '../../actions/utils';
 import { getInstitutionCategories } from '../utils'
 import {SERVER_API_BASE as serverApiBase} from 'config';
+
 import FRC from 'formsy-react-components';
 import _ from 'lodash';
 
-const { Input ,Textarea,Select} = FRC;
+const { Input, Textarea, Select } = FRC;
 import { modalStyle as customStyles } from '../../styles.js';
 
 export const getLanguages = () => {
-    return fetch(serverApiBase + 'languages/', {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Token ' + sessionStorage.token
-      }
-    }).then(checkStatus).then((languages) => {
-        const langs = languages.results.map((language) => ({
-          value: language.id,
-          label: language.name
-        }))
-        return {
-          options: langs,
-          complete: true
-        }
-      }).catch(error => {
-      console.log('request failed', error)
+  return fetch(serverApiBase + 'languages/', {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Token ' + sessionStorage.token,
+    },
+  })
+    .then(checkStatus)
+    .then(languages => {
+      const langs = languages.results.map(language => ({
+        value: language.id,
+        label: language.name,
+      }));
+      return {
+        options: langs,
+        complete: true,
+      };
     })
-  }
-
+    .catch(error => {
+      console.log('request failed', error);
+    });
+};
 
 export default class CreateDistrict extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       name: '',
       languages: [],
       disabled: false,
       canSubmit: false,
       languages: {
-        isLoading:true,
-        list:[]
+        isLoading: true,
+        list: [],
       },
       mgmt: {
         isLoading: true,
-        list:[]
+        list: [],
       },
       institutionCategories: {
         isLoading: true,
-        list:[]
+        list: [],
       },
-    }
+    };
     this.handleChange = this.handleChange.bind(this);
     this.enableSubmitButton = this.enableSubmitButton.bind(this);
     this.disableSubmitButton = this.disableSubmitButton.bind(this);
@@ -79,7 +82,7 @@ export default class CreateDistrict extends Component {
     })
   }
 
-   enableSubmitButton() {
+  enableSubmitButton() {
     this.setState({
       canSubmit: true,
     });
@@ -93,40 +96,39 @@ export default class CreateDistrict extends Component {
 
   handleChange(e) {
     this.setState({
-      name: e.target.value
-    })
+      name: e.target.value,
+    });
   }
 
-  selectLanguage = (value) => {
-   this.setState({
-     languages: value
-   })
- }
+  selectLanguage = value => {
+    this.setState({
+      languages: value,
+    });
+  };
 
- submitForm()
- {
-   var myform = this.myform.getModel();
-  //  console.log(myform.institutionLang)
-   let copy ={};
-   copy.dise_code = myform.institutionDise_code;
-  //  copy.mgmt = myform.institutionMgmt;
-   copy.institution_gender = myform.institutionGender;
-  //  copy.languages = myform.institutionLang;
-   copy.name = myform.name;
-   copy.address = myform.institutionAddress;
-   copy.area = myform.institutionArea;
-   copy.landmark = myform.institutionLandmark;
-   copy.pincode = myform.institutionPincode;
-   copy.cat = myform.institutionCat;
-  //  console.log(copy)
-   let languages=[];
+  submitForm() {
+    var myform = this.myform.getModel();
+    //  console.log(myform.institutionLang)
+    let copy = {};
+    copy.dise_code = myform.institutionDise_code;
+    //  copy.mgmt = myform.institutionMgmt;
+    copy.institution_gender = myform.institutionGender;
+    //  copy.languages = myform.institutionLang;
+    copy.name = myform.name;
+    copy.address = myform.institutionAddress;
+    copy.area = myform.institutionArea;
+    copy.landmark = myform.institutionLandmark;
+    copy.pincode = myform.institutionPincode;
+    copy.cat = myform.institutionCat;
+    //  console.log(copy)
+    let languages = [];
 
-   for(let i=0; i<myform.institutionLang.length; i++){
-     languages.push(parseInt(myform.institutionLang[i]));
-   }
-   copy.languages=languages;
-   this.props.save(copy);
- }
+    for (let i = 0; i < myform.institutionLang.length; i++) {
+      languages.push(parseInt(myform.institutionLang[i]));
+    }
+    copy.languages = languages;
+    this.props.save(copy);
+  }
 
  render() {
    let { institutionCategories } = this.state
@@ -219,5 +221,4 @@ export default class CreateDistrict extends Component {
     </Modal>
   )
 }
-
 }
