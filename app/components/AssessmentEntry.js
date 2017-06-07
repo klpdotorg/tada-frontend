@@ -16,8 +16,9 @@ import {
 import _ from 'underscore';
 import lodash from 'lodash';
 faker.locale = 'en_GB';
+import { Popover, OverlayTrigger } from 'react-bootstrap'
 import Notifications from 'react-notification-system-redux';
-import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
+
 
 const val = [0, 1];
 export default class AssessmentEntry extends React.Component {
@@ -313,11 +314,18 @@ class InputRow extends React.Component {
         );
       });
     }
+  const studentNamePopover = (
+      <Popover id="popover-trigger-hover-focus" title="Student Name">
+        {name}
+      </Popover>
+    );
 
     return (
-      <tr id={id} onClick={this.toggle}>
+      <tr>
         <td>{id}</td>
-        <td colSpan="2"> {name}</td>
+        <OverlayTrigger trigger={['hover', 'focus']} placement="top" overlay={studentNamePopover}>
+          <td colSpan="2"> {name}</td>
+        </OverlayTrigger>
         {html}
         <td>
           <button
