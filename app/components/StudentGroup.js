@@ -225,8 +225,8 @@ class StudentGroup extends Component {
   }
 
   hasChildren() {
-    if(this.props.boundariesByParentId[this.props.params.districtId]) {
-      return this.props.boundariesByParentId[this.props.params.districtId].length > 0;
+    if(this.props.boundariesByParentId[this.props.params.groupId]) {
+      return this.props.boundariesByParentId[this.props.params.groupId].length > 0;
     }
     else
       return false;
@@ -243,7 +243,7 @@ class StudentGroup extends Component {
     let isSchool = cluster.boundary_type==1?true:false;
     let canModify = sessionStorage.getItem('isAdmin') || this.hasPermissions();
     let disableDeleteBtn = canModify && this.hasChildren();
-   return(
+    return(
       <div>
        <ol className="breadcrumb">
           <li><Link to={district.path}>{district.name}</Link></li>
@@ -270,11 +270,11 @@ class StudentGroup extends Component {
                   <button className='btn btn-green padded-btn' onClick={this.viewStudent.bind(null, group.path)}>View Students</button>
                 </div>
               }
-              
+
             </div>
           </div>
           <div className="base-spacing-mid border-base"/>
-          
+
           <form className="form-horizontal" role="form">
             <div className="form-group">
               <label className="control-label col-sm-2" htmlFor="class">Class</label>
