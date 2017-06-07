@@ -4,7 +4,9 @@ import _ from 'lodash';
 import classNames from 'classnames';
 import $ from 'jquery';
 import { connect } from 'react-redux';
-import { fetchEntitiesFromServer, toggleNode, closePeerNodes} from '../actions/';
+
+import { fetchEntitiesFromServer, toggleNode, closePeerNodes } from '../actions/';
+
 import PermissionsNavTree from './PermissionsNavTree';
 import ProgramNavTree from './ProgramNavTree';
 import * as Selectors from '../selectors/';
@@ -23,7 +25,7 @@ class SideBar extends Component {
   onBoundaryClick(boundary, depth) {
     this.props.dispatch(toggleNode(boundary.id));
     this.props.dispatch(fetchEntitiesFromServer(boundary.id));
-    this.props.dispatch(closePeerNodes(boundary.id, depth))
+    this.props.dispatch(closePeerNodes(boundary.id, depth));
   }
 
   toggleTree(e) {

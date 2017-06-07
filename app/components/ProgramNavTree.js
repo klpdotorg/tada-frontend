@@ -209,7 +209,10 @@ export default class PermissionsNavTree extends React.Component {
     const { parent, details } = this.props.boundaries;
 
     return this.state.isLoading
-      ? <div><i className="fa fa-cog fa-spin fa-lg fa-fw" /><span className="text-muted">Loading...</span></div>
+      ? <div>
+          <i className="fa fa-cog fa-spin fa-lg fa-fw" />
+          <span className="text-muted">Loading...</span>
+        </div>
       : <div>
           <select
             className="form-control"
@@ -219,7 +222,10 @@ export default class PermissionsNavTree extends React.Component {
             {programsList}
           </select>
           {this.state.treeLoading
-            ? <div><i className="fa fa-cog fa-spin fa-lg fa-fw" /><span className="text-muted">Loading...</span></div>
+            ? <div>
+                <i className="fa fa-cog fa-spin fa-lg fa-fw" />
+                <span className="text-muted">Loading...</span>
+              </div>
             : alphabeticalOrder(parent, details).map(
                 function(element, i) {
                   return this.renderSubTree(element, parent, visitedBoundaries, 0, details);

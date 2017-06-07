@@ -29,9 +29,9 @@ export const closePeerNodes = (id, depth) => {
   return {
     type: 'CLOSE_PEER_NODES',
     id,
-    depth
-  }
-}
+    depth,
+  };
+};
 
 export const openNode = id => {
   return {
@@ -272,6 +272,7 @@ export function fetchStudentsByGroupId(groupId) {
           type: 'STUDENTS_FULFILLED',
           payload: { students: data, groupId },
         });
+        return data;
       })
       .catch(error => {
         console.log(error);
