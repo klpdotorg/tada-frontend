@@ -228,7 +228,7 @@ export default class CreateDistrict extends Component {
               </Formsy.Form>
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn btn-primary" onClick={this.props.onCloseModal}>
+              <button type="button" className="btn btn-default" onClick={this.props.onCloseModal}>
                 Discard
               </button>
               <button

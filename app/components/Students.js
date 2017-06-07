@@ -22,11 +22,18 @@ import { Link } from 'react-router';
 import { mapStudentsAPI, deleteStudentAPI, patchStudentAPI } from '../actions/utils';
 import { displayFullName } from './utils';
 import Notifications from 'react-notification-system-redux';
+
 import { studentStudentGroupMap, syncError } from '../actions/notifications';
-import { groupBy } from 'lodash';
+import { groupBy, get } from 'lodash';
+import { Popover, OverlayTrigger } from 'react-bootstrap';
 
 const StudentRow = props => {
   const relations = groupBy(props.relations, 'relation_type');
+  const studentNamePopover = (
+    <Popover id="popover-trigger-hover-focus" title="Student Name">
+      {displayFullName(props)}
+    </Popover>
+  );
   return (
     <tr>
       <td>
@@ -37,13 +44,15 @@ const StudentRow = props => {
         />
       </td>
       <td>{props.id}</td>
-      <td>{displayFullName(props)}</td>
+      <OverlayTrigger trigger={['hover', 'focus']} placement="top" overlay={studentNamePopover}>
+        <td>{displayFullName(props)}</td>
+      </OverlayTrigger>
       <td>{props.uid}</td>
       <td>{props.gender}</td>
       <td>{props.language}</td>
       <td>{props.dob}</td>
-      <td>{displayFullName(relations.Father[0])}</td>
-      <td>{displayFullName(relations.Mother[0])}</td>
+      <td>{displayFullName(get(relations, 'Father[0]'))}</td>
+      <td>{displayFullName(get(relations, 'Mother[0]'))}</td>
       <td>
         <button
           onClick={() => {
@@ -251,7 +260,9 @@ class StudentScreen extends Component {
     } else {
       Displayelement = props => (
         <div className="alert alert-danger">
+
           <i className="fa fa-lock fa-lg" aria-hidden="true" />
+
           Insufficient Privileges. Please contact administrator.
         </div>
       );

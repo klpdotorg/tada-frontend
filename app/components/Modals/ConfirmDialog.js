@@ -15,18 +15,17 @@ export default class ConfirmDialog extends Component {
         onRequestClose={this.props.onCloseModal}
         style={customStyles}
       >
-        {this.props.entity &&
-          <p className="text-warning">{this.props.message}:{this.props.entity.name}</p>}
-        {!this.props.entity && <p className="text-warning">{this.props.message}</p>}
-        <button
-          className="btn btn-primary"
+        {this.props.entity && <p>{this.props.message}:{this.props.entity.name}</p>}
+        {!this.props.entity && <p>{this.props.message}</p>}
+        <div
+          className="button"
           onClick={() => {
             this.props.onYes(this.props.entity);
           }}
         >
           Yes
-        </button>
-        <button className="btn btn-primary" onClick={this.props.onCloseModal}>No</button>
+        </div>
+        <div className="button" onClick={this.props.onCloseModal}>No</div>
       </Modal>
     );
   }

@@ -63,7 +63,7 @@ export default class CreateDistrict extends Component {
               >
                 <span aria-hidden="true">×</span>
               </button>
-              <h4 className="text-primary modal-title" id="title">{this.props.title}</h4>
+              <h4 className="modal-title" id="title">{this.props.title}</h4>
             </div>
             <div className="modal-body">
               <Formsy.Form
@@ -89,7 +89,7 @@ export default class CreateDistrict extends Component {
             </div>
 
             <div className="modal-footer">
-              <button type="button" className="btn btn-primary" onClick={this.props.onCloseModal}>
+              <button type="button" className="btn btn-default" onClick={this.props.onCloseModal}>
                 Cancel
               </button>
               <button

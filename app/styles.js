@@ -13,6 +13,7 @@ export const modalStyle = {
     minWidth: '20rem',
     width: '80%',
     maxWidth: '65rem',
-    maxHeight: '30rem',
+    maxHeight: '60rem',
+    overflow: 'hidden',
   },
 };

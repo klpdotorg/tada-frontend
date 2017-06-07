@@ -36,23 +36,21 @@ export default class Confirm extends Component {
               >
                 <span aria-hidden="true">×</span>
               </button>
-              <h4 className="text-primary modal-title" id="resetPasswordTitle">Delete?</h4>
+              <h4 className="modal-title" id="resetPasswordTitle">Delete?</h4>
             </div>
             <div className="modal-body">
-              <p className="text-warning">
-                Are you sure you want to delete: <b> {this.props.entity}</b>?
-              </p>
+              <p>Are you sure you want to delete: <b> {this.props.entity}</b>?</p>
             </div>
             <div className="modal-footer">
-              <button
-                className="btn btn-primary"
+              <div
+                className="button"
                 onClick={() => {
                   this.props.onAgree(this.state.value);
                 }}
               >
                 Yes
-              </button>
-              <button className="btn btn-primary" onClick={this.props.onCloseModal}>No</button>
+              </div>
+              <div className="button" onClick={this.props.onCloseModal}>No</div>
             </div>
           </div>{/* End of modal-content */}
         </div>{/* End of outer wrapping div */}

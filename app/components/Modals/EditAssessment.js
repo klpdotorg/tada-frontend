@@ -160,7 +160,7 @@ export default class EditAssessment extends Component {
 
               </Formsy.Form>
               <div className="modal-footer">
-                <button type="button" className="btn btn-primary" onClick={this.props.onCloseModal}>
+                <button type="button" className="btn btn-default" onClick={this.props.onCloseModal}>
                   Cancel
                 </button>
                 <button
