@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import Modal from 'react-modal';
 import Formsy from 'formsy-react';
 import 'react-select/dist/react-select.css';
-import { checkStatus } from '../../actions/utils';
-import { SERVER_API_BASE as serverApiBase } from 'config';
+import {checkStatus} from '../../actions/utils';
+import { getInstitutionCategories } from '../utils'
+import {SERVER_API_BASE as serverApiBase} from 'config';
+
 import FRC from 'formsy-react-components';
 
 const { Input, Textarea, Select } = FRC;
@@ -61,6 +63,22 @@ export default class CreateDistrict extends Component {
 
   componentDidMount() {
     //getLanguages();
+    getInstitutionCategories().then(categories => {
+      const cat = categories.results.filter(cat => {
+        return cat.category_type === 1
+      })
+      .map(category => ({
+        value: category.id,
+        label: category.name
+      }))
+
+      this.setState({
+        institutionCategories: {
+          isLoading: false,
+          list: cat
+        }
+      })
+    })
   }
 
   enableSubmitButton() {
@@ -111,26 +129,21 @@ export default class CreateDistrict extends Component {
     this.props.save(copy);
   }
 
-  render() {
-    const schoolCategory = [
-      { value: 'lower', label: 'Lower' },
-      { value: 'upper', label: 'Upper' },
-      { value: 'middle', label: 'Middle' },
-    ];
-    const selectOptions = [
-      { value: 'co-ed', label: 'Co-Ed' },
-      { value: 'boys', label: 'Boys' },
-      { value: 'girls', label: 'Girls' },
-    ];
-    const singleSelectOptions = [{ value: '', label: 'Please select…' }, ...selectOptions];
-    //  console.log(this.props);
-    return (
-      <Modal
-        contentLabel="Create Institution"
-        isOpen={this.props.isOpen}
-        onRequestClose={this.props.onCloseModal}
-        style={customStyles}
-      >
+ render() {
+   let { institutionCategories } = this.state
+
+   const selectOptions = [
+           {value: 'co-ed', label: 'Co-Ed'},
+           {value: 'boys', label: 'Boys'},
+           {value: 'girls', label: 'Girls'},
+       ];
+   const singleSelectOptions = [
+       {value: '', label: 'Please select…'},
+       ...selectOptions
+   ];
+  //  console.log(this.props);
+  return (
+    <Modal contentLabel="Create Institution" isOpen={ this.props.isOpen } onRequestClose={ this.props.onCloseModal } style={ customStyles }>
 
         <div className="" role="document">
           <div className="modal-content">
@@ -182,53 +195,41 @@ export default class CreateDistrict extends Component {
                   value=""
                   className="form-control"
                 />
-                <Input
-                  name="institutionLandmark"
-                  id="institutionLandmark"
-                  label="Landmark:"
-                  type="text"
-                  value=""
-                  className="form-control"
-                />
-                <Input
-                  name="institutionPincode"
-                  id="institutionPincode"
-                  label="Pincode:"
-                  type="text"
-                  value=""
-                  className="form-control"
-                />
-                <Select
-                  name="institutionCat"
-                  label="Category:"
-                  value={schoolCategory[0]}
-                  options={schoolCategory}
-                />
-                <Select
-                  multiple
-                  name="institutionLang"
-                  label="Medium:"
-                  value={[this.props.languages.list[0].value]}
-                  options={this.props.languages.list}
-                  required
-                />
-                <Select
-                  name="institutionGender"
-                  label="Gender:"
-                  value={selectOptions[0].value}
-                  options={selectOptions}
-                  required
-                />
-                <Input
-                  name="institutionDise_code"
-                  id="institutionDise_code"
-                  value=""
-                  label="DISE Code:"
-                  type="text"
-                  className="form-control"
-                />
-                {/*<label htmlFor="languages" className="control-label">Languages</label>
-                <Select.Async multi name="form-field-name" value={this.state.languages} loadOptions={getLanguages} onChange={this.selectLanguage}/>*/}
+                <Input name="institutionPincode"
+                 id="institutionPincode"
+                 label="Pincode:" type="text"
+                 value = ""
+                 className="form-control"
+                 />
+                 <Select
+                 name="institutionCat"
+                 label="Category:"
+                 value = {institutionCategories.list[0]}
+                 options={institutionCategories.list}
+                 />
+                 <Select
+                   multiple
+                   name="institutionLang"
+                   label="Medium:"
+                   value = {[this.props.languages.list[0].value]}
+                   options={this.props.languages.list}
+                   required
+                 />
+                 <Select
+                   name="institutionGender"
+                   label="Gender:"
+                   value ={selectOptions[0].value}
+                   options={selectOptions}
+                   required
+                 />
+                 <Input name="institutionDise_code"
+                    id="institutionDise_code"
+                    value=""
+                    label="DISE Code:" type="text"
+                    className="form-control"
+                  />
+
+              <Select.Async multi name="form-field-name" value={this.state.languages} loadOptions={getLanguages} onChange={this.selectLanguage}/>*/}
               </Formsy.Form>
             </div>
             <div className="modal-footer">
