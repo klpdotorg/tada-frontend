@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Modal from './CreateAssessment';
+import Modal from './ModalTemplate';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
 import { modalStyle } from '../../styles.js';
