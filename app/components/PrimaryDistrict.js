@@ -57,8 +57,9 @@ export default class PrimaryDistrict extends React.Component {
     });
   };
 
-  deleteDistrict() {
-    this.props.dispatch(deleteBoundary(this.districtId));
+  deleteDistrict(parentId) {
+    this.props.dispatch(deleteBoundary(this.districtId, parentId))
+
   }
 
   saveBlock(name) {
@@ -173,44 +174,24 @@ export default class PrimaryDistrict extends React.Component {
               validations="minLength:1"
             />
           </Formsy.Form>
-          <div className="col-md-8">
-            <button
-              type="button"
-              disabled={!this.state.canSubmit}
-              className="btn btn-primary padded-btn"
-              onClick={this.saveDistrict}
-            >
-              Save
-            </button>
-            <button
-              type="submit"
-              className="btn btn-primary padded-btn"
-              onClick={() => {
-                this.showConfirmation();
-              }}
-              disabled={hasBlocks}
-            >
-              Delete
-            </button>
-            <ConfirmModal
-              isOpen={this.state.openConfirmModal}
-              onAgree={this.deleteDistrict}
-              onCloseModal={this.closeConfirmModal}
-              entity={boundary.name}
-            />
-          </div>
+              <div className="col-md-8">
+                <button type="button" disabled={!this.state.canSubmit} className="btn btn-primary padded-btn" onClick={this.saveDistrict}>Save</button>
+                <button type="submit" className="btn btn-primary padded-btn" onClick={() => {this.showConfirmation() }} disabled={hasBlocks}>Delete</button>
+                <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={() => {this.deleteDistrict(boundary.parent)}} onCloseModal={this.closeConfirmModal} entity={boundary.name}/>
+              </div>
+
         </div>
       );
     } else {
       return (
         <div>
           <div className="alert alert-danger">
-            <i className="fa fa-lock fa-lg" aria-hidden="true" />
-            Insufficient Privileges. Only administrators can modify boundary details.
+            <i className="fa fa-lock fa-lg" aria-hidden="true"></i>
+             Insufficient Privileges. Only administrators can modify boundary details.
           </div>
           <h4 className="text-primary">District</h4>
-          <div className="border-base" />
-          <div className="base-spacing-mid" />
+          <div className="border-base"></div>
+          <div className="base-spacing-mid"></div>
           <div>{boundary.name}</div>
         </div>
       );

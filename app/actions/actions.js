@@ -433,7 +433,7 @@ export function deleteBoundary(boundaryid, parentId) {
           if (parentId == 1) {
             dispatch(push('/'));
           } else {
-            let parent = getState().boundaries.boundaryDetails[parentId];
+            let parent = getState().boundaries.boundaryDetails[boundaryid];
             dispatch(push(parent.path));
           }
           dispatch(removeBoundary(boundaryid, parentId));
