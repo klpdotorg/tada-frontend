@@ -14,12 +14,12 @@ export const postAnswerForStudent = (programId, assessmentId, studentId, answers
   //Answers is just an array of question ids and answers..
   let answersjson = [];
   Object.keys(answersObj).map(qnId => {
-    if (answersObj[qnId] != null) {
+    if (answersObj[qnId] != null && answersObj[qnId].value != null) {
       answersjson.push({
         question: qnId,
         student: studentId,
         active: '2',
-        answer: answersObj[qnId],
+        answer: answersObj[qnId].value,
       });
     }
   });

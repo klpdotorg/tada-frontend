@@ -16,9 +16,8 @@ import {
 import _ from 'underscore';
 import lodash from 'lodash';
 faker.locale = 'en_GB';
-import { Popover, OverlayTrigger } from 'react-bootstrap'
+import { Popover, OverlayTrigger } from 'react-bootstrap';
 import Notifications from 'react-notification-system-redux';
-
 
 const val = [0, 1];
 export default class AssessmentEntry extends React.Component {
@@ -244,21 +243,6 @@ class InputRow extends React.Component {
     this.setState({
       answers: newAnswer,
     });
-    //  let existingAnswers = this.state.answers;
-    //  if(!existingAnswers)
-    //     existingAnswers=[];
-    //  existingAnswers = _.reject(this.state.answers, function(answer) {
-    //     return (answer.question = question);
-    //   });
-    // existingAnswers.push({
-    //   question,
-    //   student,
-    //   active: '2',
-    //   answer: event.currentTarget.value,
-    // })
-    // this.setState({
-    //   answers: existingAnswers,
-    // });
   }
 
   getAnswerForQn(questionId) {
@@ -275,7 +259,43 @@ class InputRow extends React.Component {
   }
 
   saveAnswers() {
-    this.props.saveEntry(this.props.student.id, this.state.answers);
+    let postAnswers = [];
+    let error = false;
+    Object.keys(this.state.answers).map(questionId => {
+      let answer = {};
+      let studentQnIdCombo = this.props.student.id + '_' + questionId;
+      if (
+        this.props.answers[studentQnIdCombo] &&
+        this.props.answers[studentQnIdCombo].double_entry == 1
+      ) {
+        let existingAnswer =
+          this.props.answers[studentQnIdCombo].answer_score ||
+          this.props.answers[studentQnIdCombo].answer_grade;
+        if (this.state.answers[questionId] == existingAnswer) {
+          answer = {
+            double_entry: this.props.answers[studentQnIdCombo].double_entry,
+            value: this.state.answers[questionId],
+          };
+          postAnswers.push(answer);
+        } else {
+          //Answer doesn't match existing answer for double entry. Show popover now.
+          //PANKAJ: Show error popover over input box corresponding to this ID.
+          error = true;
+        }
+      } else {
+        // No double entry..this is a fresh answer, send it as POST as-is.
+        answer = {
+          value: this.state.answers[questionId],
+        };
+        postAnswers.push(answer);
+      }
+    });
+
+    if (!error) {
+      //post answers here
+      console.log('POSTING ANSWERS');
+      //this.props.saveEntry(this.props.student.id, this.state.answers);
+    }
   }
 
   render() {
@@ -314,7 +334,7 @@ class InputRow extends React.Component {
         );
       });
     }
-  const studentNamePopover = (
+    const studentNamePopover = (
       <Popover id="popover-trigger-hover-focus" title="Student Name">
         {name}
       </Popover>
