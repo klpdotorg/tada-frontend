@@ -269,41 +269,41 @@ export default class Institution extends React.Component {
           <li> <Link to={cluster.path}> {cluster.name}</Link></li>
           <li className="active"> {institution.name}</li>
         </ol>
-        <div>
 
+        <div>
           {!canModify
             ? <div>
-                <span className="fa-stack fa-lg">
-                  {' '}<i className="fa fa-circle fa-stack-2x brand-red" />
-                  <i className="fa fa-lock fa-stack-1x fa-inverse" />
-                </span><h4 className="heading-border-left brand-red">Insufficient Permissions</h4>
-                <div className="col-md-12">
-                  You need administrator privileges or permissions to modify this institution
+                <div className="alert alert-danger">
+                  <i className="fa fa-lock fa-lg" aria-hidden="true" />
+                  Insufficient Privileges. Please contact administrator for permissions to modify
+                  the institution.
                 </div>
-
               </div>
             : <div>
-                {' '}
                 {hasClasses
-                  ? <p className="col-md-12 bg-info">
-                      <h5>
-                        <i className="fa fa-2x fa-info-circle" aria-hidden="true" />
-                        You cannot
-                        {' '}
-                        <small>
-                          delete this institution until the classes under it are deleted
-                        </small>
-                      </h5>
-                    </p>
+                  ? <div className="alert alert-info">
+                      <i className="fa fa-info-circle fa-lg" aria-hidden="true" /> You cannot delete
+                      this institution until its classes are deleted
+                    </div>
                   : <div />}
               </div>}
-          <h4 className="heading-border-left brand-blue col-md-10">
+
+          <h4 className="text-primary col-md-10">
             {canModify ? 'Modify Details' : 'View Details'}
           </h4>
+
           {!canModify
             ? null
-            : <Button onClick={this.toggleClassModal} title="Add Class" disabled={!canModify} />}
-
+            : <button
+                className="btn btn-orange pull-right"
+                title="Add Class"
+                onClick={this.toggleClassModal}
+                disabled={!canModify}
+              >
+                Add Class
+              </button>}
+          <div className="base-spacing-mid border-base" />
+          <div className="base-spacing-sm" />
           <Formsy.Form
             onValidSubmit={this.saveInsti}
             onValid={this.enableSubmitButton}
@@ -312,7 +312,6 @@ export default class Institution extends React.Component {
             disabled={!canModify}
             ref={ref => (this.myform = ref)}
           >
-
             <div className="form-group">
               <div className="col-sm-12">
                 <Input
@@ -327,9 +326,7 @@ export default class Institution extends React.Component {
                 />
               </div>
             </div>
-
             <div className="form-group">
-
               <div className="col-sm-12">
                 <Textarea
                   rows={3}
@@ -340,10 +337,8 @@ export default class Institution extends React.Component {
                   required
                   validations="minLength:1"
                 />
-
               </div>
             </div>
-
             <div className="form-group">
               <div className="col-sm-12">
                 <Input
@@ -354,12 +349,9 @@ export default class Institution extends React.Component {
                   type="text"
                   className="form-control"
                 />
-
               </div>
             </div>
-
             <div className="form-group">
-
               <div className="col-sm-12">
                 <Input
                   name="institutionLandmark"
@@ -369,12 +361,9 @@ export default class Institution extends React.Component {
                   type="text"
                   className="form-control"
                 />
-
               </div>
             </div>
-
             <div className="form-group">
-
               <div className="col-sm-12">
                 <Input
                   name="institutionPincode"
@@ -384,12 +373,9 @@ export default class Institution extends React.Component {
                   type="text"
                   className="form-control"
                 />
-
               </div>
             </div>
-
             <div className="form-group">
-
               <div className="col-sm-12">
                 <Select
                   name="institutionCat"
@@ -397,12 +383,9 @@ export default class Institution extends React.Component {
                   value={institution.cat}
                   options={this.state.institutionCategories.list}
                 />
-
               </div>
             </div>
-
             <div className="form-group">
-
               <div className="col-sm-12">
                 <Select
                   multiple
@@ -412,12 +395,9 @@ export default class Institution extends React.Component {
                   options={this.state.languages.list}
                   required
                 />
-
               </div>
             </div>
-
             <div className="form-group">
-
               <div className="col-sm-12">
                 <Select
                   name="institutionGender"
@@ -426,12 +406,9 @@ export default class Institution extends React.Component {
                   options={singleSelectOptions}
                   required
                 />
-
               </div>
             </div>
-
             <div className="form-group">
-
               <div className="col-sm-12">
                 <Select
                   name="institutionMgmt"
@@ -440,12 +417,9 @@ export default class Institution extends React.Component {
                   options={this.state.mgmt.list}
                   required
                 />
-
               </div>
             </div>
-
             <div className="form-group">
-
               <div className="col-sm-12">
                 <Input
                   name="institutionDise_code"
@@ -455,19 +429,22 @@ export default class Institution extends React.Component {
                   type="text"
                   className="form-control"
                 />
-
               </div>
             </div>
 
             {!canModify
               ? <div />
-              : <div className="col-md-2">
-                  <button type="submit" className="btn btn-primary" onClick={this.saveInsti}>
+              : <div className="col-md-12">
+                  <button
+                    type="submit"
+                    className="btn btn-primary padded-btn"
+                    onClick={this.saveInsti}
+                  >
                     Save
                   </button>
                   <button
                     type="submit"
-                    className="btn btn-primary"
+                    className="btn btn-primary padded-btn"
                     disabled={hasClasses}
                     onClick={this.showConfirmation}
                   >
@@ -480,7 +457,6 @@ export default class Institution extends React.Component {
                     entity={institution.name}
                   />
                 </div>}
-
           </Formsy.Form>
         </div>
         <CreateClass
@@ -502,14 +478,15 @@ export default class Institution extends React.Component {
     //       <li> <Link to={cluster.path}> {cluster.name}</Link></li>
     //       <li className="active"> {institution.name}</li>
     //       </ol>
-    //       <h4 className="heading-err heading-border-left brand-red"> <i className="fa fa-lock brand-red" aria-hidden="true"></i>  Insufficient Permissions</h4>
+    //       <h4 className="heading-err brand-red"> <i className="fa fa-lock brand-red" aria-hidden="true"></i>  Insufficient Permissions</h4>
     //       <p>You need administrator privileges to modify Boundary details.</p>
-    //       <h4 className="brand-blue heading-border-left"> Institution Details</h4>
+    //       <h4 className="text-primary"> Institution Details</h4>
     //       <p> Name: {institution.name}</p>
     //     </div>
     //   )
     // }
   };
+
   hasPermissions = () => {
     return userHasPermissions(this.props.permissions, this.props.params.institutionId);
   };

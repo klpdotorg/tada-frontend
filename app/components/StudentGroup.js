@@ -132,7 +132,10 @@ export default class StudentGroupScreen extends Component {
 
   render() {
     return this.state.isLoading
-      ? <div>Loading...</div>
+      ? <div>
+          <i className="fa fa-cog fa-spin fa-lg fa-fw" />
+          <span className="text-muted">Loading...</span>
+        </div>
       : <div>
           {this.state.showBulkAdd
             ? <BulkAddStudent addStudents={this.addStudents} hide={this.hideBulkAdd} />
@@ -229,8 +232,8 @@ class StudentGroup extends Component {
   }
 
   hasChildren() {
-    if (this.props.boundariesByParentId[this.props.params.districtId]) {
-      return this.props.boundariesByParentId[this.props.params.districtId].length > 0;
+    if (this.props.boundariesByParentId[this.props.params.groupId]) {
+      return this.props.boundariesByParentId[this.props.params.groupId].length > 0;
     } else return false;
   }
 
@@ -244,6 +247,7 @@ class StudentGroup extends Component {
     const institution = boundaries.boundaryDetails[params.institutionId];
     const group = boundaries.boundaryDetails[params.groupId];
     var Displayelement;
+    let isSchool = cluster.boundary_type == 1 ? true : false;
     let canModify = sessionStorage.getItem('isAdmin') || this.hasPermissions();
     let disableDeleteBtn = canModify && this.hasChildren();
     return (
@@ -257,26 +261,55 @@ class StudentGroup extends Component {
         </ol>
         <div>
           {!canModify
-            ? <div>
-                <span className="fa-stack fa-lg">
-                  {' '}<i className="fa fa-circle fa-stack-2x yellow-mild" />
-                  <i className="fa fa-lock fa-stack-1x grey-steel" />
-                </span><span>Limited Permissions</span>
+            ? <div className="alert alert-danger">
+                <i className="fa fa-lock fa-lg" aria-hidden="true" /> Insufficient Privileges.
+                Please contact the administrator.
               </div>
             : <div />}
           <div>
-            <h4 className="brand-blue col-md-10 heading-border-left">
-              {canModify ? 'Modify Details' : 'View Details'}
-            </h4>
-            <Button onClick={this.props.showBulkAdd} title="Add Students" disabled={!canModify} />
-            <button
-              className="btn btn-default view-student-btn"
-              onClick={this.viewStudent.bind(null, group.path)}
-            >
-              View Students
-            </button>
+            <div className="row">
+              <div className="col-md-8">
+                <h4 className="text-primary">{canModify ? 'Modify Details' : 'View Details'}</h4>
+              </div>
+              {isSchool
+                ? <div className="col-md-4 pull-right">
+                    <button
+                      className="btn btn-orange"
+                      onClick={this.props.showBulkAdd}
+                      title="Add Students"
+                      disabled={!canModify}
+                    >
+                      Add Students
+                    </button>
+                    <button
+                      className="btn btn-orange padded-btn"
+                      onClick={this.viewStudent.bind(null, group.path)}
+                    >
+                      View Students
+                    </button>
+                  </div>
+                : <div className="col-md-4 pull-right">
+                    <button
+                      className="btn btn-green"
+                      onClick={this.props.showBulkAdd}
+                      title="Add Students"
+                      disabled={!canModify}
+                    >
+                      Add Students
+                    </button>
+                    <button
+                      className="btn btn-green padded-btn"
+                      onClick={this.viewStudent.bind(null, group.path)}
+                    >
+                      View Students
+                    </button>
+                  </div>}
+
+            </div>
           </div>
-          <form className="form-horizontal boundary-form" role="form">
+          <div className="base-spacing-mid border-base" />
+
+          <form className="form-horizontal" role="form">
             <div className="form-group">
               <label className="control-label col-sm-2" htmlFor="class">Class</label>
               <div className="col-sm-2">
@@ -337,7 +370,7 @@ class StudentGroup extends Component {
             </button>
             <button
               type="submit"
-              className="btn btn-primary"
+              className="btn btn-primary padded-btn"
               onClick={this.showConfirmation}
               disabled={disableDeleteBtn}
             >

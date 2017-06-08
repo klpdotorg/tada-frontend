@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Modal from 'react-modal';
+import Modal from './ModalTemplate';
 import { modalStyle as customStyles } from '../../styles.js';
 
 export default class ConfirmDialog extends Component {
@@ -10,22 +10,20 @@ export default class ConfirmDialog extends Component {
   render() {
     return (
       <Modal
+        title="Confirm"
         contentLabel="Confirm Modal"
         isOpen={this.props.isOpen}
-        onRequestClose={this.props.onCloseModal}
-        style={customStyles}
+        onCloseModal={this.props.onCloseModal}
+        canSubmit
+        submitForm={this.props.onYes}
+        submitBtnLabel="Yes"
+        cancelBtnLabel="No"
       >
-        {this.props.entity && <p>{this.props.message}:{this.props.entity.name}</p>}
-        {!this.props.entity && <p>{this.props.message}</p>}
-        <div
-          className="button"
-          onClick={() => {
-            this.props.onYes(this.props.entity);
-          }}
-        >
-          Yes
+        <div>
+          {this.props.entity &&
+            <p className="text-warning">{this.props.message}:{this.props.entity.name}</p>}
+          {!this.props.entity && <p className="text-warning">{this.props.message}</p>}
         </div>
-        <div className="button" onClick={this.props.onCloseModal}>No</div>
       </Modal>
     );
   }

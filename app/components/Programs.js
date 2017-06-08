@@ -10,6 +10,7 @@ import EditProgram from './Modals/EditProgram';
 import ConfirmDialog from './Modals/ConfirmDialog';
 import { assessmentCreated, assessCreateFailed } from '../actions/notifications';
 import Notifications from 'react-notification-system-redux';
+import _ from 'lodash';
 export default class Programs extends React.Component {
   constructor(props) {
     super(props);
@@ -416,7 +417,6 @@ export default class Programs extends React.Component {
           <td>
             <input
               type="checkbox"
-              className="form-control"
               onChange={this.selectAssessment}
               checked={
                 jQuery.inArray(assessment.id.toString(), this.state.selectedAssessments) > -1
@@ -424,14 +424,23 @@ export default class Programs extends React.Component {
             />
           </td>
           <td>
-            <button onClick={this.openEditAssessmentModal}>
+            <button
+              className="btn btn-primary padded-btn"
+              data-toggle="tooltip"
+              title="Edit Assessment"
+              onClick={this.openEditAssessmentModal}
+            >
               <span className="fa fa-pencil-square-o" onClick={this.openEditAssessmentModal} />
             </button>
+            <Link
+              className="btn btn-primary padded-btn"
+              to={assessment.questionsUrl}
+              data-toggle="tooltip"
+              title="View Questions"
+            >
+              <i className="fa fa-question" />
+            </Link>
           </td>
-          <td>
-            <Link className="btn brand-orange-bg fa fa-question" to={assessment.questionsUrl} />
-          </td>
-
         </tr>
       );
     });
@@ -450,11 +459,11 @@ export default class Programs extends React.Component {
     }
     var disabledstate = Object.keys(assessments).length > 0;
     return (
-      <div>
+      <div class="container">
         <div className="row center-block">
 
-          <div className="col-md-4 form-inline">
-            <label htmlFor="sel1">Programs:</label>
+          <div className="col-md-8 form-inline">
+            <h4 className="text-primary" htmlFor="sel1">Programs: </h4>
             <select
               ref={ref => (this.selProgram = ref)}
               className="form-control"
@@ -465,19 +474,18 @@ export default class Programs extends React.Component {
               {programsList}
             </select>
           </div>
-          <div className=" col-md-4 form-group">
-            {/*<button type="button" className="btn brand-orange-bg all-padded-btn" data-toggle="modal" data-target="#createProgramModal">Add Program</button>*/}
+          <div className=" col-md-4">
+            {/*<button type="button" className="btn btn-primary all-padded-btn" data-toggle="modal" data-target="#createProgramModal">Add Program</button>*/}
             <button
               type="button"
-              className="btn brand-orange-bg all-padded-btn"
+              className="btn btn-primary"
               onClick={this.openCreateProgramModal.bind(this)}
             >
               Add Program
             </button>
-
             <button
               type="button"
-              className="btn brand-orange-bg all-padded-btn"
+              className="btn btn-primary padded-btn"
               onClick={this.openCreateAssessmentModal}
             >
               Add Assessments
@@ -485,32 +493,41 @@ export default class Programs extends React.Component {
           </div>
 
         </div>
-        <div className="grey-mist-bg">
+        <div className="bg-faded">
+          <h4 className="text-primary">Program Details</h4>
+          <div className="base-spacing-sm border-base" />
+          <div className="base-spacing-mid" />
           <div className="row center-block">
             <div className="col-md-8 pull-left">
-              <h4>Program Details</h4>
-              <hr />
               <div className="row">
-                <label className="col-md-4">Program name: {selectedProgramName} </label>
-                <label className="col-md-4">Start Date: {startDate}</label>
+                <h5 className="col-md-4">
+                  <span className="text-primary"><strong>Program name: </strong></span>
+                  {selectedProgramName}
+                </h5>
+                <h5 className="col-md-4">
+                  <span className="text-primary"><strong>Start Date: </strong></span>
+                  {startDate}
+                </h5>
               </div>
               <div className="row">
-                <label className="col-md-4">Institution: {instType} </label>
-                <label className="col-md-4">End Date: {endDate}</label>
+                <h5 className="col-md-4">
+                  <span className="text-primary"><strong>Institution: </strong></span>
+                  {instType}
+                </h5>
+                <h5 className="col-md-4">
+                  <span className="text-primary"><strong>End Date: </strong></span>
+                  {endDate}
+                </h5>
               </div>
             </div>
 
             <div className="col-md-4 pull-right">
-              <button
-                type="button"
-                className="col-sm-6 btn btn-info navbar-btn brand-blue-bg all-padded-btn"
-                onClick={this.handleShowEditDialog}
-              >
+              <button type="button" className="btn btn-info" onClick={this.handleShowEditDialog}>
                 <span className="fa fa-pencil-square-o" />Edit
               </button>
               <button
                 type="button"
-                className="col-sm-6 btn btn-info navbar-btn brand-blue-bg all-padded-btn"
+                className="btn btn-info padded-btn"
                 onClick={this.openConfirmModal.bind(this)}
                 disabled={disabledstate}
               >
@@ -518,7 +535,7 @@ export default class Programs extends React.Component {
               </button>
               <button
                 type="button"
-                className="col-sm-6 btn btn-info navbar-btn brand-blue-bg all-padded-btn"
+                className="btn btn-info padded-btn"
                 data-toggle="modal"
                 data-target="#deleteProgramModal"
                 disabled={disabledstate}
@@ -528,34 +545,37 @@ export default class Programs extends React.Component {
             </div>
 
           </div>
-
         </div>
         <br />
         <div>
-          <h4 className="brand-blue text-center"> Assessments in this Programme</h4>
+          <h4 className="text-primary text-center"> Assessments in this Programme</h4>
         </div>
         <div>
-          <table className="table table-bordered table-striped">
-            <tbody>
-              <tr className="info">
-                <th>Assessment</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Type</th>
-                <th>Double Entry</th>
-                <th>Flexi-type</th>
-                <th>Select</th>
-                <th>Edit</th>
-                <th>Questions</th>
-              </tr>
-              {assessmentsList}
-            </tbody>
-          </table>
+          {!this.props.fetchingAssessments
+            ? <table className="table table-bordered table-striped">
+                <tbody>
+                  <tr className="info">
+                    <th>Assessment</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Type</th>
+                    <th>Double Entry</th>
+                    <th>Flexi-type</th>
+                    <th>Select</th>
+                    <th>Actions</th>
+                  </tr>
+                  {assessmentsList}
+                </tbody>
+              </table>
+            : <div className="loading-assessments">
+                <i className="fa fa-spinner fa-spin loading-assessments-spinner" />
+              </div>}
+
         </div>
-        <div className="col-md-8 pull-right">
+        <div className="col-md-8">
           <button
             type="button"
-            className="col-sm-3 btn btn-info navbar-btn brand-blue-bg all-padded-btn"
+            className="btn btn-info"
             onClick={this.createCopyAssess.bind(this)}
             disabled={this.state.selectedAssessments.length == 0}
           >
@@ -563,7 +583,7 @@ export default class Programs extends React.Component {
           </button>
           <button
             type="button"
-            className="col-sm-2 btn btn-info navbar-btn brand-blue-bg all-padded-btn"
+            className="btn btn-info padded-btn"
             onClick={this.deleteAssessments}
             disabled={this.state.selectedAssessments.length == 0}
           >
@@ -571,7 +591,7 @@ export default class Programs extends React.Component {
           </button>
           <button
             type="button"
-            className="col-sm-3 btn btn-info navbar-btn brand-blue-bg all-padded-btn"
+            className="btn btn-info padded-btn"
             onClick={this.deactivateAssessments}
             disabled={this.state.selectedAssessments.length == 0}
           >
@@ -629,7 +649,7 @@ export default class Programs extends React.Component {
             <div className="modal-content">
               <div className="modal-header">
                 <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">×</span>
+                  <span aria-hidden="true">&times;</span>
                 </button>
                 <h4 className="modal-title" id="deleteProgramTitle"> Delete Program?</h4>
               </div>
@@ -645,7 +665,7 @@ export default class Programs extends React.Component {
               <div className="modal-footer">
                 <button
                   type="button"
-                  className="btn btn-default"
+                  className="btn btn-primary"
                   onClick={this.handleDeleteProgram}
                 >
                   Yes
@@ -654,7 +674,8 @@ export default class Programs extends React.Component {
               </div>
             </div>
           </div>
-        </div>{/*End of modal*/}
+        </div>
+        {/*End of modal*/}
 
         {/* Error dialog */}
         <div
@@ -669,7 +690,7 @@ export default class Programs extends React.Component {
             <div className="modal-content">
               <div className="modal-header">
                 <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">×</span>
+                  <span aria-hidden="true">&times;</span>
                 </button>
                 <h4 className="modal-title" id="errorTitle"> Program creation failed!</h4>
               </div>
@@ -685,7 +706,7 @@ export default class Programs extends React.Component {
                 </form>
               </div>
               <div className="modal-footer">
-                <button type="button" className="btn btn-default" data-dismiss="modal">OK</button>
+                <button type="button" className="btn btn-primary" data-dismiss="modal">OK</button>
               </div>
             </div>
           </div>
