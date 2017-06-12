@@ -81,7 +81,6 @@ export const getAnswersForStudents = (programId, assessmentId, studentsData) => 
     })
       .then(checkStatus)
       .then(data => {
-        console.log('Student answer data is: ', data);
         dispatch({
           type: 'ANSWERS_RECEIVED',
           id,

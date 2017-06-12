@@ -16,8 +16,8 @@ import {
 import _ from 'underscore';
 import lodash from 'lodash';
 faker.locale = 'en_GB';
-import { Popover, OverlayTrigger } from 'react-bootstrap'
 import Notifications from 'react-notification-system-redux';
+import Bootstrap from 'bootstrap';
 
 
 const val = [0, 1];
@@ -50,7 +50,6 @@ export default class AssessmentEntry extends React.Component {
       answers: {},
     };
     this.saveEntry = this.saveEntry.bind(this);
-    $('[data-toggle="tooltip"]').tooltip();
   }
 
   handleInputChange(student, question, event) {
@@ -207,7 +206,6 @@ class InputRow extends React.Component {
     this.computeAnswers = this.computeAnswers.bind(this);
     let initAnswers = this.computeAnswers(props.answers);
     this.state = {
-      popoverOpen: false,
       answers: initAnswers,
     };
     this.handleAnswerInput = this.handleAnswerInput.bind(this);
@@ -270,7 +268,6 @@ class InputRow extends React.Component {
 
   toggle() {
     this.setState({
-      popoverOpen: !this.state.popoverOpen,
     });
   }
 
@@ -314,18 +311,11 @@ class InputRow extends React.Component {
         );
       });
     }
-  const studentNamePopover = (
-      <Popover id="popover-trigger-hover-focus" title="Student Name">
-        {name}
-      </Popover>
-    );
 
     return (
       <tr>
         <td>{id}</td>
-        <OverlayTrigger trigger={['hover', 'focus']} placement="top" overlay={studentNamePopover}>
-          <td colSpan="2"> {name}</td>
-        </OverlayTrigger>
+        <td className="td-student-name" colSpan="2" data-toggle="popover" data-trigger="focus" title="Student name" data-content={name}>{name}</td>
         {html}
         <td>
           <button
@@ -348,6 +338,13 @@ class InputRow extends React.Component {
         </td>
       </tr>
     );
+  }
+
+  componentDidMount() {
+    $('.td-student-name').popover({
+      placement: 'top',
+      trigger: 'hover'
+    });
   }
 }
 
