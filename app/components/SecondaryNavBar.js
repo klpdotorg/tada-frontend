@@ -29,6 +29,10 @@ export default class SecondaryNavBar extends React.Component {
     this.props.redirectTo('/permissions');
   }
 
+  mapAssessments() {
+    this.props.redirectTo('/mapassessments');
+  }
+
   render() {
     var Displayelement;
     if (sessionStorage.getItem('isAdmin')) {
@@ -79,6 +83,7 @@ export default class SecondaryNavBar extends React.Component {
               data-toggle="tooltip"
               data-placement="bottom"
               title="Map Assessments"
+              onClick={this.mapAssessments.bind(this)}
             >
               <span className="fa fa-database" />
             </button>

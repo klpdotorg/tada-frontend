@@ -17,6 +17,7 @@ import App from './containers/App';
 import UserRegContainer from './containers/UserRegContainer';
 import Programs from './components/Programs';
 import AnswersContainer from './containers/AnswersContainer';
+import MapAssessments from './containers/MapAssessments';
 import ResetPassword from './components/ResetPassword';
 import SetNewPassword from './components/SetNewPassword';
 import Users from './containers/UsersContainer';
@@ -52,6 +53,7 @@ export const routes = (
         <Route path="dashboard" component={Dashboard} />
         <Route path="programs" component={Programs} />
         <Route path="filterprograms" component={AnswersContainer} />
+        <Route path="mapassessments" component={MapAssessments} />
         <Route path="reports" component={Reports} />
         <Route path="programs/:programId" component={Programs} />
         <Route
