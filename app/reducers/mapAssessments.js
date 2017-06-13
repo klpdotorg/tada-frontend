@@ -1,14 +1,4 @@
-import {
-  processStudents,
-  computeRouterPathForEntity,
-  nodeDepth,
-  getParentId,
-  getEntityType,
-  CLASS,
-  INSTITUTION,
-  STUDENT,
-  BOUNDARY,
-} from './utils';
+import { nodeDepth, getParentId } from './utils';
 
 export function mapAssessments(
   state = {
@@ -26,7 +16,7 @@ export function mapAssessments(
       programId: {},
       assessmentIds: {},
       classIds: {},
-      assessmentType: {},
+      assessmentTypeId: {},
     },
   },
   action,
@@ -85,6 +75,17 @@ export function mapAssessments(
           ...{ selected: selected },
         };
 
+      case 'SET_ASSESSMENT_TYPE_IN_MA':
+        const selectedAssessmentType = {
+          ...state.selected,
+          ...{ assessmentTypeId: action.value },
+        };
+
+        return {
+          ...state,
+          ...{ selected: selectedAssessmentType },
+        };
+
       default:
         return state;
     }
@@ -107,9 +108,7 @@ function processBoundaryDetails(data, boundariesByParentId, boundaryDetails) {
     if (soFar.details[boundary.id] == undefined) {
       boundary.collapsed = true;
     }
-    boundary = computeRouterPathForEntity(boundary, boundaryDetails);
     boundary = nodeDepth(boundary);
-    boundary = createLabelForClass(boundary);
 
     soFar.details[boundary.id] = { ...soFar.details[boundary.id], ...boundary };
     return soFar;
@@ -119,18 +118,4 @@ function processBoundaryDetails(data, boundariesByParentId, boundaryDetails) {
     boundariesByParentId: processed.parents,
     boundaryDetails: processed.details,
   };
-}
-
-/**
- + * Classes need to have a label that's a combination of name and section. This method
- + * combines the name and section and adds a label field to the boundary. NavTree will look for this
- + * field when rendering.
- + * @param {*} entity
- + */
-function createLabelForClass(entity) {
-  var entityType = getEntityType(entity);
-  if (entityType == CLASS) {
-    entity.label = entity.name + entity.section;
-  }
-  return entity;
 }

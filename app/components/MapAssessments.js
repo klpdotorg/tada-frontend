@@ -10,7 +10,15 @@ import ShowClusters from './map-assessments/ShowClusters';
 
 export default class MapAssessments extends React.Component {
   render() {
-    let { programId, programs, primarySelected, dispatch } = this.props;
+    let {
+      programId,
+      programs,
+      primarySelected,
+      assessmentTypeId,
+      assessments,
+      fetchingAssessments,
+      dispatch,
+    } = this.props;
 
     return (
       <div className="row">
@@ -31,9 +39,19 @@ export default class MapAssessments extends React.Component {
             value={programId}
             primarySelected={primarySelected}
           />
-          <ShowAssessmentTypes />
-          <ShowAssessments />
+          <ShowAssessmentTypes value={assessmentTypeId} dispatch={dispatch} />
+          <ShowAssessments
+            dispatch={dispatch}
+            programId={programId}
+            assessments={assessments}
+            fetchingAssessments={fetchingAssessments}
+          />
           <ShowClasses />
+          <div className="row center-block">
+            <div className="col-md-12">
+              <button type="button" className="btn btn-primary">Map to Assessment</button>
+            </div>
+          </div>
         </div>
       </div>
     );

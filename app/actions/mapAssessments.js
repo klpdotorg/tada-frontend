@@ -19,3 +19,10 @@ export function setProgramInMA(value) {
     value,
   };
 }
+
+export function setAssessmentTypeInMA(value) {
+  return {
+    type: 'SET_ASSESSMENT_TYPE_IN_MA',
+    value,
+  };
+}

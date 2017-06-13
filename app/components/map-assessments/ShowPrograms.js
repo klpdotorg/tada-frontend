@@ -1,5 +1,6 @@
 import React from 'react';
 import * as action from '../../actions';
+import _ from 'lodash';
 
 export default class ShowPrograms extends React.Component {
   componentDidMount() {
@@ -50,7 +51,7 @@ export default class ShowPrograms extends React.Component {
     });
 
     return (
-      <div className="row center-block">
+      <div className="row center-block margin-bottom">
         <div className="col-md-12">
           <p className="text-default" htmlFor="selectProgram">Select Programme: </p>
           <select

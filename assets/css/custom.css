@@ -618,3 +618,6 @@ table.table-fixedwidth td, .table-fixedwidth th {
  font-size: 35px;
 }
 
+.margin-bottom {
+  margin-bottom: 10px;
+}

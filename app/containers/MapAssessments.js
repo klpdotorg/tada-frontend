@@ -6,6 +6,9 @@ const mapStateToProps = (state, ownProps) => {
     programs: state.programs.programsById,
     programId: state.mapAssessments.selected.programId,
     primarySelected: state.schoolSelection.primarySchool,
+    assessmentTypeId: state.mapAssessments.selected.assessmentTypeId,
+    assessments: state.assessments.assessmentsById,
+    fetchingAssessments: state.assessments.isFetching,
   };
 };
 
