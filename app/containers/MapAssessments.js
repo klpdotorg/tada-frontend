@@ -3,7 +3,9 @@ import MapAssessments from '../components/MapAssessments';
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    // state
+    programs: state.programs.programsById,
+    programId: state.mapAssessments.selected.programId,
+    primarySelected: state.schoolSelection.primarySchool,
   };
 };
 

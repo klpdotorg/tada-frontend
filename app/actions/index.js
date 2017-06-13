@@ -6,3 +6,4 @@ export * from './boundaries.js';
 export * from './appevents.js';
 export * from './permissions.js';
 export * from './reports.js';
+export * from './mapAssessments.js';

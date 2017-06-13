@@ -9,6 +9,7 @@ import { fetchEntitiesFromServer, toggleNode, closePeerNodes } from '../actions/
 
 import PermissionsNavTree from './PermissionsNavTree';
 import ProgramNavTree from './ProgramNavTree';
+import MapAssessmentNavTree from './map-assessments/NavTree';
 import * as Selectors from '../selectors/';
 
 class SideBar extends Component {
@@ -33,14 +34,33 @@ class SideBar extends Component {
     $('#wrapper').toggleClass('toggled');
   }
 
-  render() {
-    let { boundariesByParentId, boundaryDetails, primarySelected, location } = this.props;
-    var DisplayElement;
-    const schoolType = primarySelected ? 1 : 2;
-    boundariesByParentId[1] = _.filter(boundariesByParentId[1], key => {
+  filterBoundariesByType(boundariesByParentId, boundaryDetails) {
+    const schoolType = this.props.primarySelected ? 1 : 2;
+
+    return _.filter(boundariesByParentId[1], key => {
       const boundaryType = boundaryDetails[key].boundary_type;
       return boundaryType ? boundaryType == schoolType : true;
     });
+  }
+
+  render() {
+    let {
+      boundariesByParentId,
+      boundaryDetails,
+      primarySelected,
+      location,
+      mapAssessmentBoundaries,
+    } = this.props;
+    var DisplayElement;
+    let mABoundariesByParentId = mapAssessmentBoundaries.boundariesByParentId;
+
+    boundariesByParentId[1] = this.filterBoundariesByType(boundariesByParentId, boundaryDetails);
+
+    mABoundariesByParentId[1] = this.filterBoundariesByType(
+      mABoundariesByParentId,
+      mapAssessmentBoundaries.boundaryDetails,
+    );
+
     var sidebarClass = classNames({
       toggled: this.state.isExpanded,
     });
@@ -64,6 +84,15 @@ class SideBar extends Component {
           boundaryDetails={this.props.boundaryDetails}
           boundariesByParentId={this.props.boundariesByParentId}
           assessmentsById={this.props.assessmentsById}
+        />
+      );
+    } else if (location.pathname.includes('mapassessment')) {
+      DisplayElement = (
+        <MapAssessmentNavTree
+          dispatch={this.props.dispatch}
+          boundaryDetails={mapAssessmentBoundaries.boundaryDetails}
+          boundariesByParentId={mABoundariesByParentId}
+          primarySelected={primarySelected}
         />
       );
     } else {
@@ -117,6 +146,7 @@ const mapStateToProps = (state, ownProps) => ({
   filteredBoundaryDetails: Selectors.getBoundaryDetailsOnly(state),
   filteredBoundaryHierarchy: Selectors.getBoundariesOnly(state),
   assessmentsById: state.assessments.assessmentsById,
+  mapAssessmentBoundaries: state.mapAssessments.boundaries,
 });
 
 const SideBarContainer = connect(mapStateToProps)(SideBar);

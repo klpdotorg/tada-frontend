@@ -2,9 +2,21 @@ import { applyMiddleware, compose, combineReducers, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import { browserHistory } from 'react-router';
 import { routerMiddleware, routerReducer } from 'react-router-redux';
-import { schoolSelection, login, modal, userregistration, programs, assessments, passwordreset, users, boundaries, appstate} from './reducers';
+import {
+  schoolSelection,
+  login,
+  modal,
+  userregistration,
+  programs,
+  assessments,
+  passwordreset,
+  users,
+  boundaries,
+  appstate,
+  mapAssessments,
+} from './reducers';
 import promiseMiddleware from 'redux-promise-middleware';
-import {reducer as notifications} from 'react-notification-system-redux';
+import { reducer as notifications } from 'react-notification-system-redux';
 
 const reducer = combineReducers({
   schoolSelection,
@@ -18,14 +30,15 @@ const reducer = combineReducers({
   assessments,
   passwordreset,
   boundaries,
-  appstate
+  appstate,
+  mapAssessments,
 });
 
 const middleware = compose(
   applyMiddleware(thunk),
   applyMiddleware(promiseMiddleware()),
   applyMiddleware(routerMiddleware(browserHistory)),
-  window.devToolsExtension ? window.devToolsExtension() : f => f
-  )(createStore);
+  window.devToolsExtension ? window.devToolsExtension() : f => f,
+)(createStore);
 
 export default middleware(reducer);

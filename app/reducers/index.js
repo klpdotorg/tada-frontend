@@ -3,3 +3,4 @@ export * from './UserAuth.js';
 export * from './programs.js';
 export * from './assessments.js';
 export * from './events.js';
+export * from './mapAssessments.js';
