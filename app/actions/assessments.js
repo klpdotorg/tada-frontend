@@ -3,40 +3,65 @@ import fetch from 'isomorphic-fetch';
 import { push } from 'react-router-redux';
 import { SERVER_API_BASE as serverApiBase, SERVER_AUTH_BASE as authApiBase } from 'config';
 import { urls as URLs } from '../constants';
-
+import Notifications from 'react-notification-system-redux';
+import { answersSaved, answersNotSaved } from './actions';
 export const postAnswerForStudent = (programId, assessmentId, studentId, answersObj) => (
   dispatch,
   getState,
 ) => {
-  var url =
-    serverApiBase +
-    `programmes/${programId}/assessments/${assessmentId}/students/${studentId}/answers/`;
   //Answers is just an array of question ids and answers..
-  let answersjson = [];
-  Object.keys(answersObj).map(qnId => {
-    if (answersObj[qnId] != null) {
-      answersjson.push({
-        question: qnId,
+  let promises = answersObj.map(answer => {
+    let uniqueQuestionId = studentId + '_' + answer.qnId;
+    var url =
+      serverApiBase +
+      `programmes/${programId}/assessments/${assessmentId}/students/${studentId}/answers/`;
+    //Decide whether POST or PATCH. If POST, bulk post answers. Else, need to PATCH answers one by one.
+    let method = 'POST';
+    let answerid = '';
+    if (
+      getState().assessments.answersById[uniqueQuestionId] &&
+      getState().assessments.answersById[uniqueQuestionId].double_entry == 1
+    ) {
+      method = 'PATCH';
+      answerid = getState().assessments.answersById[uniqueQuestionId].id;
+      url = url + answerid + '/';
+    }
+    if (answer.value != null) {
+      let postAnswer = {
+        question: answer.qnId,
         student: studentId,
         active: '2',
-        answer: answersObj[qnId],
-      });
+        answer: answer.value,
+      };
+      return fetch(url, {
+        method: method,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Token ' + sessionStorage.token,
+        },
+        body: JSON.stringify(postAnswer),
+      })
+        .then(checkStatus)
+        .then(data => {
+          dispatch(postedAnswerSuccessfully(studentId, data));
+          return Promise.resolve(data);
+        });
     }
   });
-  //Figure out whether its a PATCH or a POST. PATCH is if double_entry=1 and this is verification. POST is if double_entry is 0.
-  return fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Token ' + sessionStorage.token,
-    },
-    body: JSON.stringify(answersjson),
-  })
-    .then(checkStatus)
-    .then(data => {
-      console.log(data);
-    });
+  return Promise.all(promises).then(response => {
+    return response;
+    //Now return some notification from here.
+    //dispatch(Notifications.success(answersSaved(studentId)));
+  });
 };
+
+function postedAnswerSuccessfully(studentId, answer) {
+  return {
+    type: 'ANSWER_UPDATED',
+    studentId,
+    answer,
+  };
+}
 
 export const fetchAnswersForStudentQuestion = (programId, assessmentId, studentId) => (
   dispatch,
@@ -81,7 +106,6 @@ export const getAnswersForStudents = (programId, assessmentId, studentsData) => 
     })
       .then(checkStatus)
       .then(data => {
-        console.log('Student answer data is: ', data);
         dispatch({
           type: 'ANSWERS_RECEIVED',
           id,

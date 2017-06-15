@@ -53,6 +53,13 @@ export const processAnswersPerStudent = (studentid, assessmentid, answersArray) 
   return answersByUniqueId;
 };
 
+const processUpdatedAnswer = (studentid, answer) => {
+  let answersByUniqueId = {};
+  var answer_id = studentid + '_' + answer.question;
+  answersByUniqueId[answer_id] = answer;
+  return answersByUniqueId;
+};
+
 export function assessments(
   state = {
     assessmentsById: {},
@@ -133,6 +140,15 @@ export function assessments(
         let result = {
           ...state,
           answersById: newAnswers,
+        };
+        return result;
+      case 'ANSWER_UPDATED':
+        var copy = Object.assign({}, state.answersById);
+        let answer = processUpdatedAnswer(action.studentId, action.answer);
+        let newAnswer = Object.assign({}, state.answersById, answer);
+        var result = {
+          ...state,
+          answersById: newAnswer,
         };
         return result;
       case 'FETCHING_ASSESSMENTS':

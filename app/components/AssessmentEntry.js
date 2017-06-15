@@ -16,15 +16,15 @@ import {
 import _ from 'underscore';
 import lodash from 'lodash';
 faker.locale = 'en_GB';
-import { Popover, OverlayTrigger } from 'react-bootstrap'
 import Notifications from 'react-notification-system-redux';
-
+import Bootstrap from 'bootstrap';
 
 const val = [0, 1];
 export default class AssessmentEntry extends React.Component {
   // const Example = React.createClass({
 
   saveEntry = (studentId, answers) => {
+    this.hideDangerAlert();
     this.props
       .dispatch(
         postAnswerForStudent(
@@ -35,10 +35,11 @@ export default class AssessmentEntry extends React.Component {
         ),
       )
       .then(() => {
-        this.props.dispatch(Notifications.success(answersSaved(studentId)));
+        this.props.dispatch(Notifications.success(answersSaved));
       })
-      .catch(() => {
-        this.props.dispatch(Notifications.error(answersNotSaved(studentId)));
+      .catch(error => {
+        console.log(error);
+        this.props.dispatch(Notifications.error(answersNotSaved));
       });
   };
 
@@ -46,11 +47,24 @@ export default class AssessmentEntry extends React.Component {
     super(props);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.sortStudentsAlpha = this.sortStudentsAlpha.bind(this);
+    this.hideDangerAlert = this.hideDangerAlert.bind(this);
     this.state = {
       answers: {},
+      showAlert: false,
     };
     this.saveEntry = this.saveEntry.bind(this);
-    $('[data-toggle="tooltip"]').tooltip();
+  }
+
+  showDangerAlert() {
+    this.setState({
+      showAlert: true,
+    });
+  }
+
+  hideDangerAlert() {
+    this.setState({
+      showAlert: false,
+    });
   }
 
   handleInputChange(student, question, event) {
@@ -150,6 +164,8 @@ export default class AssessmentEntry extends React.Component {
               questions={questions}
               saveEntry={this.saveEntry.bind(this)}
               handleInputChange={this.handleInputChange.bind(this)}
+              showAlert={this.showDangerAlert.bind(this)}
+              hideAlert={this.hideDangerAlert.bind(this)}
             />
           );
         }
@@ -174,9 +190,21 @@ export default class AssessmentEntry extends React.Component {
         </div>
       </div>
     );*/
-
+    let alert = (
+      <div className="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" className="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <p>
+          <strong>Warning!</strong> You have entered values which don't match existing answers.
+          Please check the red-colored boxes and correct the answer if needed. Then, press "Save".
+          Your answer will overwrite existing answer.
+        </p>
+      </div>
+    );
     return (
       <div>
+        {this.state.showAlert ? alert : null}
         <table className="table table-striped">
           <thead>
             <tr className="bg-info">
@@ -207,11 +235,13 @@ class InputRow extends React.Component {
     this.computeAnswers = this.computeAnswers.bind(this);
     let initAnswers = this.computeAnswers(props.answers);
     this.state = {
-      popoverOpen: false,
       answers: initAnswers,
+      verify: [],
+      errors: [],
     };
     this.handleAnswerInput = this.handleAnswerInput.bind(this);
     this.getAnswerForQn = this.getAnswerForQn.bind(this);
+    this.saveAnswers = this.saveAnswers.bind(this);
   }
 
   computeAnswers(answers) {
@@ -244,21 +274,6 @@ class InputRow extends React.Component {
     this.setState({
       answers: newAnswer,
     });
-    //  let existingAnswers = this.state.answers;
-    //  if(!existingAnswers)
-    //     existingAnswers=[];
-    //  existingAnswers = _.reject(this.state.answers, function(answer) {
-    //     return (answer.question = question);
-    //   });
-    // existingAnswers.push({
-    //   question,
-    //   student,
-    //   active: '2',
-    //   answer: event.currentTarget.value,
-    // })
-    // this.setState({
-    //   answers: existingAnswers,
-    // });
   }
 
   getAnswerForQn(questionId) {
@@ -269,13 +284,74 @@ class InputRow extends React.Component {
   }
 
   toggle() {
-    this.setState({
-      popoverOpen: !this.state.popoverOpen,
-    });
+    this.setState({});
   }
 
   saveAnswers() {
-    this.props.saveEntry(this.props.student.id, this.state.answers);
+    let postAnswers = [];
+    let errorObj = [];
+    let verifyQns = [];
+    let error = false;
+    Object.keys(this.state.answers).map(questionId => {
+      let answer = {};
+      let studentQnIdCombo = this.props.student.id + '_' + questionId;
+      if (
+        this.props.answers[studentQnIdCombo] &&
+        this.props.answers[studentQnIdCombo].double_entry == 1
+      ) {
+        let existingAnswer =
+          this.props.answers[studentQnIdCombo].answer_score ||
+          this.props.answers[studentQnIdCombo].answer_grade;
+        if (this.state.answers[questionId] == existingAnswer) {
+          answer = {
+            qnId: questionId,
+            value: this.state.answers[questionId],
+          };
+          postAnswers.push(answer);
+        } else {
+          if (this.state.verify.indexOf(questionId) > -1) {
+            //We've checked this once already and alerted. DEO has still entered same answer again and pressed Submit. Allow them to proceed and overwrite existing answer
+            // Don't set error=true here!!
+            answer = {
+              qnId: questionId,
+              value: this.state.answers[questionId],
+            };
+            postAnswers.push(answer);
+          } else {
+            //Answer doesn't match existing answer for double entry. Add it to the errors array
+            error = true;
+            errorObj.push(questionId);
+            //Push the entry to verify so we know this answer has already been checked once and alerted.
+            verifyQns.push(questionId);
+          }
+        }
+      } else {
+        // No double entry..this is a fresh answer, send it as POST as-is.
+        answer = {
+          qnId: questionId,
+          value: this.state.answers[questionId],
+        };
+        postAnswers.push(answer);
+      }
+    });
+
+    if (!error) {
+      this.props.hideAlert();
+      //post answers here
+      console.log('POSTING ANSWERS');
+      this.setState({
+        errors: [],
+        verify: [],
+      });
+      this.props.saveEntry(this.props.student.id, postAnswers);
+    } else {
+      this.props.showAlert();
+      //Set state for errors..
+      this.setState({
+        errors: errorObj,
+        verify: verifyQns,
+      });
+    }
   }
 
   render() {
@@ -292,14 +368,27 @@ class InputRow extends React.Component {
         let qnId = id + '_' + questionid;
         let value = answers[qnId];
         let disabled = false;
-        let displayValue = '';
+        let displayValue = this.getAnswerForQn(qnId);
         if (value) {
-          disabled = value.double_entry == 2;
-          displayValue = value.answer_score || value.answer_grade;
+          if (
+            value.history &&
+            value.history.created_by != parseInt(sessionStorage.getItem('userid')) &&
+            value.double_entry == 1
+          ) {
+            //In this case, this current user is about to verify the assessment answer by double entry. Hence, don't show the
+            //existing answer in the UI
+            displayValue = '';
+          } else {
+            disabled = value.double_entry == 2;
+          }
         }
+        let inputClassName = '';
 
+        if (this.state.errors.indexOf(questionid.toString()) > -1) {
+          inputClassName = 'has-error danger';
+        }
         return (
-          <td id={qnId}>
+          <td id={qnId} className={inputClassName}>
             <input
               id={qnId}
               disabled={disabled}
@@ -314,18 +403,20 @@ class InputRow extends React.Component {
         );
       });
     }
-  const studentNamePopover = (
-      <Popover id="popover-trigger-hover-focus" title="Student Name">
-        {name}
-      </Popover>
-    );
 
     return (
       <tr>
         <td>{id}</td>
-        <OverlayTrigger trigger={['hover', 'focus']} placement="top" overlay={studentNamePopover}>
-          <td colSpan="2"> {name}</td>
-        </OverlayTrigger>
+        <td
+          className="td-student-name"
+          colSpan="2"
+          data-toggle="popover"
+          data-trigger="focus"
+          title="Student Info"
+          data-content={name}
+        >
+          {name}
+        </td>
         {html}
         <td>
           <button
@@ -348,6 +439,13 @@ class InputRow extends React.Component {
         </td>
       </tr>
     );
+  }
+
+  componentDidMount() {
+    $('.td-student-name').popover({
+      placement: 'top',
+      trigger: 'hover',
+    });
   }
 }
 
