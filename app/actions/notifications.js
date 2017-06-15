@@ -37,21 +37,18 @@ export const assessmentCreated = {
 export const assessCreateFailed = {
   ...baseNotification,
   title: 'Failed to create assessments',
-  message: 'Something went wrong and we couldn not create a copy of the assessments. Please check logs.',
+  message:
+    'Something went wrong and we couldn not create a copy of the assessments. Please check logs.',
 };
 
-export const answersSaved = id => {
-  return {
-    ...baseNotification,
-    title: 'Answers Saved',
-    message: `Answers for student id ${id} saved!`,
-  };
+export const answersSaved = {
+  ...baseNotification,
+  title: 'Answers Saved',
+  message: 'Answers for student saved!',
 };
 
-export const answersNotSaved = id => {
-  return {
-    ...baseNotification,
-    title: 'Error!',
-    message: `Answers could not be saved for student id ${id}!`,
-  };
+export const answersNotSaved = {
+  ...baseNotification,
+  title: 'Error!',
+  message: 'Answers could not be saved for student!',
 };

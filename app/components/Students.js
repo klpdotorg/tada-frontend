@@ -25,15 +25,10 @@ import Notifications from 'react-notification-system-redux';
 
 import { studentStudentGroupMap, syncError } from '../actions/notifications';
 import { groupBy, get } from 'lodash';
-import { Popover, OverlayTrigger } from 'react-bootstrap';
 
 const StudentRow = props => {
   const relations = groupBy(props.relations, 'relation_type');
-  const studentNamePopover = (
-    <Popover id="popover-trigger-hover-focus" title="Student Name">
-      {displayFullName(props)}
-    </Popover>
-  );
+
   return (
     <tr>
       <td>
@@ -44,9 +39,7 @@ const StudentRow = props => {
         />
       </td>
       <td>{props.id}</td>
-      <OverlayTrigger trigger={['hover', 'focus']} placement="top" overlay={studentNamePopover}>
-        <td>{displayFullName(props)}</td>
-      </OverlayTrigger>
+      <td>{displayFullName(props)}</td>
       <td>{props.uid}</td>
       <td>{props.gender}</td>
       <td>{props.language}</td>
@@ -191,7 +184,7 @@ class StudentScreen extends Component {
     const institution = boundaryDetails[params.institutionId];
     const group = boundaryDetails[params.groupId];
     const studentList = boundariesByParentId[params.groupId];
-    const studentRows = studentList.map((studentId, i) => (
+    const studentRows = studentList.map((studentId, i) =>
       <StudentRow
         key={i}
         {...boundaryDetails[studentId]}
@@ -201,8 +194,8 @@ class StudentScreen extends Component {
           this.selectStudent(studentId);
         }}
         openModifyStudent={this.openModifyStudent}
-      />
-    ));
+      />,
+    );
     const checkStudents = studentList.length > 0 ? studentRows : <NoStudentMsg />;
     const studentGroups = boundariesByParentId[params.institutionId]
       .filter(id => id !== group.id)
@@ -213,7 +206,7 @@ class StudentScreen extends Component {
 
     var Displayelement;
     if (sessionStorage.getItem('isAdmin')) {
-      Displayelement = props => (
+      Displayelement = props =>
         <div className="table-responsive">
           <h4 className="text-primary">Student Details</h4>
           <div className="base-spacing-mid border-base" />
@@ -249,23 +242,22 @@ class StudentScreen extends Component {
               >
                 {studentGroups}
               </select>
-            </div><div className="col-md-8">
+            </div>
+            <div className="col-md-8">
               <button type="submit" className="btn btn-primary" onClick={this.mapToCentre}>
                 Map to Center
               </button>
             </div>
           </div>
-        </div>
-      );
+        </div>;
     } else {
-      Displayelement = props => (
+      Displayelement = props =>
         <div className="alert alert-danger">
 
           <i className="fa fa-lock fa-lg" aria-hidden="true" />
 
           Insufficient Privileges. Please contact administrator.
-        </div>
-      );
+        </div>;
     }
 
     return (
