@@ -6,6 +6,7 @@ import {
   getBoundaries,
   setMapAssessmentsBoundaries,
   toggleMapAssessmentsNode,
+  setMapAssessmentsClusters,
 } from '../../actions';
 import _ from 'lodash';
 
@@ -29,10 +30,17 @@ export default class NavTree extends React.Component {
     }
   };
 
-  onBoundaryClick(boundary, depth) {
+  toggleBoundaryLevel(boundary, depth) {
     this.props.dispatch(toggleMapAssessmentsNode(boundary.id));
     getBoundaries(boundary.id).then(res => {
       this.props.dispatch(setMapAssessmentsBoundaries(res));
+    });
+  }
+
+  onBoundaryClick(boundary, depth, e) {
+    e.preventDefault();
+    getBoundaries(boundary.id).then(res => {
+      this.props.dispatch(setMapAssessmentsClusters(res));
     });
   }
 
@@ -43,20 +51,23 @@ export default class NavTree extends React.Component {
         var children = boundaryHierarchy[node];
         visitedBoundaries.push(node);
 
+        // TODO: Make link only on bottom two levels
         var boundary = this.props.boundaryDetails[node];
         const label = (
           <span className="node">
-            {' '}
-            {_.capitalize(boundary.label) ||
-              _.capitalize(boundary.name) ||
-              _.capitalize(boundary.first_name)}
-            {' '}
+            <a href="#" onClick={this.onBoundaryClick.bind(this, boundary, depth)}>
+              {' '}
+              {_.capitalize(boundary.label) ||
+                _.capitalize(boundary.name) ||
+                _.capitalize(boundary.first_name)}
+              {' '}
+            </a>
           </span>
         );
         return (
           <TreeView
             key={node}
-            onClick={this.onBoundaryClick.bind(this, boundary, depth)}
+            onClick={this.toggleBoundaryLevel.bind(this, boundary, depth)}
             nodeLabel={label}
             collapsed={boundary.collapsed}
           >

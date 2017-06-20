@@ -11,6 +11,8 @@ export function mapAssessments(
       boundariesByParentId: {},
       isFetching: {},
     },
+    clusterIds: [],
+    institutionIds: [],
     selected: {
       navTreeBoundary: {},
       programId: {},
@@ -79,6 +81,12 @@ export function mapAssessments(
         const selectedAssessmentType = {
           ...state.selected,
           ...{ assessmentTypeId: action.value },
+        };
+
+      case 'SET_MA_CLUSTERS':
+        const ids = _.map(action.payload.results, (i)=> {return i.id});
+        const clusters = {
+          ...state.clusterIds
         };
 
         return {

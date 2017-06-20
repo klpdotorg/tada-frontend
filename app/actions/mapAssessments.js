@@ -26,3 +26,11 @@ export function setAssessmentTypeInMA(value) {
     value,
   };
 }
+
+
+export function setMapAssessmentsClusters(data) {
+  return {
+    type: 'SET_MA_CLUSTERS',
+    payload: data,
+  };
+}
