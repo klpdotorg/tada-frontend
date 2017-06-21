@@ -7,6 +7,11 @@ import {
   setMapAssessmentsBoundaries,
   toggleMapAssessmentsNode,
   setMapAssessmentsClusters,
+  getInstitutions,
+  setMAInstitutions,
+  selectMABoundaryCategory,
+  fetchingMAClusters,
+  fetchingMAInstitutions,
 } from '../../actions';
 import _ from 'lodash';
 
@@ -39,9 +44,18 @@ export default class NavTree extends React.Component {
 
   onBoundaryClick(boundary, depth, e) {
     e.preventDefault();
-    getBoundaries(boundary.id).then(res => {
-      this.props.dispatch(setMapAssessmentsClusters(res));
-    });
+    this.props.dispatch(selectMABoundaryCategory(boundary.boundary_category));
+    if (depth === 1) {
+      this.props.dispatch(fetchingMAClusters());
+      getBoundaries(boundary.id).then(res => {
+        this.props.dispatch(setMapAssessmentsClusters(res));
+      });
+    } else {
+      this.props.dispatch(fetchingMAInstitutions());
+      getInstitutions(boundary.id).then(res => {
+        this.props.dispatch(setMAInstitutions(res));
+      });
+    }
   }
 
   renderSubTree(node, boundaryHierarchy, visitedBoundaries, depth) {
@@ -51,19 +65,24 @@ export default class NavTree extends React.Component {
         var children = boundaryHierarchy[node];
         visitedBoundaries.push(node);
 
-        // TODO: Make link only on bottom two levels
         var boundary = this.props.boundaryDetails[node];
-        const label = (
-          <span className="node">
-            <a href="#" onClick={this.onBoundaryClick.bind(this, boundary, depth)}>
+        const label = depth === 0
+          ? <span className="node">
               {' '}
               {_.capitalize(boundary.label) ||
                 _.capitalize(boundary.name) ||
                 _.capitalize(boundary.first_name)}
               {' '}
-            </a>
-          </span>
-        );
+            </span>
+          : <span className="node">
+              <a href="#" onClick={this.onBoundaryClick.bind(this, boundary, depth)}>
+                {' '}
+                {_.capitalize(boundary.label) ||
+                  _.capitalize(boundary.name) ||
+                  _.capitalize(boundary.first_name)}
+                {' '}
+              </a>
+            </span>;
         return (
           <TreeView
             key={node}

@@ -17,6 +17,16 @@ export default class MapAssessments extends React.Component {
       assessmentTypeId,
       assessments,
       fetchingAssessments,
+      clusters,
+      institutions,
+      boundaryCategory,
+      selectedInstitutions,
+      selectedClusters,
+      showClusterInstitutions,
+      fetchingClusters,
+      fetchingInstitutions,
+      selectAllClusters,
+      selectAllInstitutions,
       dispatch,
     } = this.props;
 
@@ -24,12 +34,28 @@ export default class MapAssessments extends React.Component {
       <div className="row">
         <div className="col-md-9">
           <div className="row">
-            <div className="col-md-6">
-              <ShowClusters />
-            </div>
-            <div className="col-md-6">
-              <ShowInstitutions />
-            </div>
+            {boundaryCategory == 10 || (!primarySelected && boundaryCategory == 14)
+              ? <div className="col-md-6">
+                  <ShowClusters
+                    clusters={clusters}
+                    selectedClusters={selectedClusters}
+                    dispatch={dispatch}
+                    fetchingClusters={fetchingClusters}
+                    selectAllClusters={selectAllClusters}
+                  />
+                </div>
+              : <div />}
+            {boundaryCategory == 11 || showClusterInstitutions
+              ? <div className="col-md-6">
+                  <ShowInstitutions
+                    institutions={institutions}
+                    selectedInstitutions={selectedInstitutions}
+                    fetchingInstitutions={fetchingInstitutions}
+                    dispatch={dispatch}
+                    selectAllInstitutions={selectAllInstitutions}
+                  />
+                </div>
+              : <div />}
           </div>
         </div>
         <div className="col-md-3">
