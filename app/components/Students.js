@@ -14,6 +14,9 @@ import {groupBy} from 'lodash'
 
 const StudentRow = (props) => {
   const relations = groupBy(props.relations, 'relation_type')
+  const fatherName = relations.Father ? relations.Father[0] : {};
+  const motherName = relations.Mother ? relations.Mother[0] : {};
+
   return (
     <div className="row">
       <div className="col-md-1"><input checked={props.selectedStudents.has(props.id)} onChange={props.selectStudent} type="checkbox" /></div>
@@ -22,8 +25,8 @@ const StudentRow = (props) => {
       <div className="col-md-1"><span>{props.gender}</span></div>
       <div className="col-md-1"><span>{props.language}</span></div>
       <div className="col-md-1"><span>{props.dob}</span></div>
-      <div className="col-md-2"><span>{displayFullName(relations.Father[0])}</span></div>
-      <div className="col-md-2"><span>{displayFullName(relations.Mother[0])}</span></div>
+      <div className="col-md-2"><span>{displayFullName(fatherName)}</span></div>
+      <div className="col-md-2"><span>{displayFullName(motherName)}</span></div>
       <div className="col-md-1"><span onClick={() => { props.deleteStudent({...props}) }} className="glyphicon glyphicon-trash">Delete</span><span className="glyphicon glyphicon-pencil" onClick={() => { props.openModifyStudent({...props}) }}>Edit</span></div>
     </div>
   )
