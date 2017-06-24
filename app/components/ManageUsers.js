@@ -242,8 +242,9 @@ render()
 	          		userRole = this.mapRoleToDisplayLabel(item.name);
         	});
 			}
+
 			return(
-				<tr id={user.id} key={user.id}>
+				<tr className={user.is_active ? '': 'bg-danger'} id={user.id} key={user.id}>
 					<td>{fullName}</td>
 					<td>{user.username}</td>
 					<td>{userRole}</td>
@@ -265,7 +266,7 @@ render()
 					<div className="row center-block"> 
 						<h4>Manage Users </h4>
 					</div>
-					<table className="table table-bordered table-striped">
+					<table className="table table-bordered">
 					<tbody>
 						<tr className="info">
 							<th>Full Name</th>

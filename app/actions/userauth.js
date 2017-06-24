@@ -212,6 +212,9 @@ export function deactivateUser(id)
         body: JSON.stringify({isActive: "False"})
       }
       ).then(checkStatus).then(data => {
+            // TODO: File a bug with backend team about is_active=True returning
+            // for all calls
+            data.is_active = false;
             dispatch(userModified(data));
       });
   }

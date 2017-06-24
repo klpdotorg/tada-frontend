@@ -121,6 +121,13 @@ export function users(state={
           pages: userPages,
           userCount: state.userCount -1
         }
+  case 'USER_MODIFIED':
+        var copy = Object.assign({}, state.usersById);
+        copy[action.user.id] = action.user;
+        return {
+          ...state,
+          usersById: copy
+        };
     default:
       return state;
 
