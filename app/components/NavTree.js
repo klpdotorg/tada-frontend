@@ -18,6 +18,31 @@ export default class SchoolsNavTree extends React.Component {
     //console.log("Inside navtree", this.props.params);
   }
 
+  renderLabel(boundary, depth) {
+    let label =
+      _.capitalize(boundary.label) ||
+      _.capitalize(boundary.name) ||
+      _.capitalize(boundary.first_name);
+
+    if (depth == 4) {
+      return (
+        <Link key={boundary.name || boundary.id} to={boundary.path}>
+          <span className="node" onClick={this.props.onBoundaryClick.bind(null, boundary, depth)}>
+            {label}
+          </span>
+        </Link>
+      );
+    }
+
+    return (
+      <Link key={boundary.name || boundary.id} to={boundary.path}>
+        <span className="node">
+          {label}
+        </span>
+      </Link>
+    );
+  }
+
   renderSubTree(node, boundaryHierarchy, visitedBoundaries, depth) {
     const boundaryDetails = this.props.boundaryDetails;
     if (boundaryDetails[node].depth == depth && depth < 5) {
@@ -26,17 +51,7 @@ export default class SchoolsNavTree extends React.Component {
         visitedBoundaries.push(node);
 
         var boundary = this.props.boundaryDetails[node];
-        const label = (
-          <Link key={boundary.name || boundary.id} to={boundary.path}>
-            <span className="node">
-              {' '}
-              {_.capitalize(boundary.label) ||
-                _.capitalize(boundary.name) ||
-                _.capitalize(boundary.first_name)}
-              {' '}
-            </span>
-          </Link>
-        );
+        const label = this.renderLabel(boundary, depth);
         return (
           <TreeView
             key={node}
