@@ -191,9 +191,8 @@ export default class ManageUsers extends React.Component {
         this.setState({
           showDialog: true,
           dialogTitle: 'Password reset failed',
-          dialogMessage: 'Password could not be reset for user ' +
-            user.username +
-            '. Please try again later!',
+          dialogMessage:
+            'Password could not be reset for user ' + user.username + '. Please try again later!',
         });
       });
   }
@@ -206,7 +205,7 @@ export default class ManageUsers extends React.Component {
 
     var paginationList = pages.map(page => {
       return (
-        <li><a href="#" key={page} onClick={this.handlePageClick.bind(null, page)}>{page}</a></li>
+        <li key={page}><a href="#" onClick={this.handlePageClick.bind(null, page)}>{page}</a></li>
       );
     });
     var usersList;
@@ -246,7 +245,7 @@ export default class ManageUsers extends React.Component {
     } else {
       usersList = (
         <tr colSpan="6">
-          <td colSpan="6" style={{ 'text-align': 'center' }}>
+          <td colSpan="6" style={{ textAlign: 'center' }}>
             <i className="fa fa-cog fa-spin fa-lg fa-fw" />Loading...
           </td>
         </tr>
