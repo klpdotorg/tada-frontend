@@ -30,11 +30,12 @@ const history = syncHistoryWithStore(browserHistory, tadastore);
 
 const isUserAuthenticated = (nextState, replace) => {
   let token = sessionStorage.getItem('token');
-  if (token) {
-    // Allow user to proceed
-    console.log('User is authorized');
-  } else {
-    // redirect to login
+  if (!token) {
+    // redirect to login and set next location
+    console.log(nextState, replace)
+    if(nextState.location && nextState.location.pathname) {
+      sessionStorage.setItem('nextUrl', nextState.location.pathname);
+    }
     replace('/login');
   }
 };

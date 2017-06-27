@@ -411,7 +411,14 @@ export function sendLoginToServer(email, pass) {
         sessionStorage.setItem('userid', data.user_id);
         dispatch(loginSuccess(data));
         dispatch(fetchUserData(sessionStorage.token));
-        dispatch(push('/'));
+
+        let nextUrl = sessionStorage.getItem('nextUrl');
+        if (nextUrl) {
+          sessionStorage.removeItem('nextUrl');
+          dispatch(push(nextUrl));
+        } else {
+          dispatch(push('/'));
+        }
       })
       .catch(error => {
         dispatch(loginError(error));
