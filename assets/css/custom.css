@@ -621,3 +621,20 @@ table.table-fixedwidth td, .table-fixedwidth th {
 .margin-bottom {
   margin-bottom: 10px;
 }
+.margin-left {
+  margin-left: 10px;
+}
+.ma-boundary-heading {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.ma-boundary-title {
+  flex: 1;
+}
+.ma-boundary-selectAll {
+  display: flex;
+}
+.ma-boundary-checkbox {
+  margin-left: 6px !important;
+}
