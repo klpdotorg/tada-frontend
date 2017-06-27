@@ -196,7 +196,7 @@ class InputRow extends Component {
             id="gender"
           >
             {this.props.languages.map((lang, i) => {
-              return <option key={i} value={lang.value}>{lang.label}</option>;
+              return <option key={i} value={lang.value}>_.startCase({lang.label})</option>;
             })}
           </select>
         </td>
