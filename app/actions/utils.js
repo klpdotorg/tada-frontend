@@ -130,7 +130,7 @@ export const boundaryType = (id = 1, details) => {
     case 3:
       return fetchStudentGroups;
     case 4:
-      return fetchStudents;
+      return fetchStudents.bind(null, details[id].institution);
     default:
       return fetchBoundaryDetails;
   }
