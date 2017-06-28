@@ -11,8 +11,10 @@ export default class BulkAddStudent extends Component {
       languages: {
         isLoading: true,
       },
+      formError: []
     };
     this.updateValue = this.updateValue.bind(this);
+    this.validate = this.validate.bind(this);
   }
 
   componentDidMount() {
@@ -35,6 +37,41 @@ export default class BulkAddStudent extends Component {
     this.setState({ values: this.state.values });
   }
 
+  validate() {
+    let values = this.state.values;
+    const requiredValues = [
+      'first_name',
+      'middle_name',
+      'last_name',
+      'dob',
+      'fatherFirstName',
+      'fatherMiddleName',
+      'fatherLastName',
+      'motherFirstName',
+      'motherMiddleName',
+      'motherLastName',
+      'uid',
+      'gender'
+    ];
+    var errorList = [];
+
+    for(var v in values) {
+      if(values[v].first_name.trim()) {
+        for(let i = 0; i < requiredValues.length; i++) {
+          if(!values[v][requiredValues[i]].trim()) {
+            errorList.push(v);
+            break;
+          }
+        }
+      }
+    }
+    this.setState({formError: errorList});
+    if(_.isEmpty(errorList)) {
+      console.log(errorList)
+      this.props.addStudents(this.state.values);
+    }
+  }
+
   render() {
     if (this.state.languages.isLoading) {
       return (
@@ -52,49 +89,51 @@ export default class BulkAddStudent extends Component {
             updateValue={this.updateValue}
             index={i}
             key={i}
+            formError={this.state.formError}
           />,
         );
       }
       return (
-        <div className="table-responsive">
-          <table className="table table-striped table-fixedwidth">
-            <thead>
-              <tr className="text-primary text-uppercase">
-                <th>First Name</th>
-                <th>Middle Name</th>
-                <th>Last Name</th>
-                <th>UID</th>
-                <th>Gender</th>
-                <th>Mother Tongue</th>
-                <th>Date of Birth</th>
-                <th>Father First Name</th>
-                <th>Father Middle Name</th>
-                <th>Father Last Name</th>
-                <th>Mother First Name</th>
-                <th>Mother Middle Name</th>
-                <th>Mother Last Name</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rowsObj}
-            </tbody>
-          </table>
-          <div className="row">
-            <div className="col-md-4">
-              <button
-                className="btn btn-primary"
-                onClick={() => {
-                  this.props.addStudents(this.state.values);
-                }}
-              >
-                Save
-              </button>
-              <button onClick={this.props.hide} className="btn btn-primary padded-btn">
-                Discard
-              </button>
+        <div>
+          {!_.isEmpty(this.state.formError) && <div className="alert alert-danger"><strong>Error:</strong>Please enter all required values before submitting the form.</div>}
+          <div className="table-responsive">
+            <table className="table table-hover table-fixedwidth">
+              <thead>
+                <tr className="text-primary text-uppercase">
+                  <th>First Name</th>
+                  <th>Middle Name</th>
+                  <th>Last Name</th>
+                  <th>UID</th>
+                  <th>Gender</th>
+                  <th>Mother Tongue</th>
+                  <th>Date of Birth</th>
+                  <th>Father First Name</th>
+                  <th>Father Middle Name</th>
+                  <th>Father Last Name</th>
+                  <th>Mother First Name</th>
+                  <th>Mother Middle Name</th>
+                  <th>Mother Last Name</th>
+                </tr>
+              </thead>
+              <tbody>
+                {rowsObj}
+              </tbody>
+            </table>
+            <div className="row">
+              <div className="col-md-4">
+                <button
+                  className="btn btn-primary"
+                  onClick={this.validate}
+                >
+                  Save
+                </button>
+                <button onClick={this.props.hide} className="btn btn-primary padded-btn">
+                  Discard
+                </button>
+              </div>
             </div>
+            <div className="base-spacing-mid" />
           </div>
-          <div className="base-spacing-mid" />
         </div>
       );
     }
@@ -131,7 +170,7 @@ class InputRow extends Component {
 
   render() {
     return (
-      <tr>
+      <tr className={_.includes(this.props.formError, this.props.index + "") ? 'bg-danger': ''}>
         <td>
           <input
             value={this.state.first_name}
@@ -196,7 +235,7 @@ class InputRow extends Component {
             id="gender"
           >
             {this.props.languages.map((lang, i) => {
-              return <option key={i} value={lang.value}>_.startCase({lang.label})</option>;
+              return <option key={i} value={lang.value}>{_.startCase(lang.label)}</option>;
             })}
           </select>
         </td>
