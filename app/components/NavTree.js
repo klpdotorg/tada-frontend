@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import TreeView from 'react-treeview';
 import { Link } from 'react-router';
-import { alphabeticalOrder } from '../utils';
+import { alphabeticalOrder, capitalize } from '../utils';
 import _ from 'lodash';
 
 export default class SchoolsNavTree extends React.Component {
@@ -20,9 +20,7 @@ export default class SchoolsNavTree extends React.Component {
 
   renderLabel(boundary, depth) {
     let label =
-      _.capitalize(boundary.label) ||
-      _.capitalize(boundary.name) ||
-      _.capitalize(boundary.first_name);
+      capitalize(boundary.label) || capitalize(boundary.name) || capitalize(boundary.first_name);
 
     if (depth == 4) {
       return (
