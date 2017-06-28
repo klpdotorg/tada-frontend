@@ -20,7 +20,7 @@ import ConfirmModal from './Modals/Confirm';
 import ModifyStudent from './Modals/ModifyStudent';
 import { Link } from 'react-router';
 import { mapStudentsAPI, deleteStudentAPI, patchStudentAPI } from '../actions/utils';
-import { displayFullName } from './utils';
+import { displayFullName, getLanguages } from './utils';
 import Notifications from 'react-notification-system-redux';
 
 import { studentStudentGroupMap, syncError } from '../actions/notifications';
@@ -53,7 +53,7 @@ const StudentRow = props => {
           }}
           className="btn btn-primary padded-btn"
           data-toggle="tooltip"
-          title="Delete"
+          title="Edit"
         >
           <i className="fa fa-pencil-square-o" />
         </button>
@@ -63,7 +63,7 @@ const StudentRow = props => {
           }}
           className="btn btn-primary"
           data-toggle="tooltip"
-          title="Edit"
+          title="Delete"
         >
           <i className="fa fa-trash-o" />
         </button>
@@ -99,8 +99,28 @@ class StudentScreen extends Component {
       modifyStudentData: null,
       selectedStudents: new Set(),
       mapToCentre: props.boundariesByParentId[props.params.institutionId][0],
+      languages: {
+        isLoading: true,
+        list: [],
+      },
     };
   }
+
+  componentDidMount = () => {
+    getLanguages().then(languages => {
+      const langs = languages.results.map(language => ({
+        value: language.id,
+        label: language.name,
+      }));
+
+      this.setState({
+        languages: {
+          isLoading: false,
+          list: langs,
+        },
+      });
+    });
+  };
 
   closeConfirmation = () => {
     this.setState({
@@ -134,16 +154,15 @@ class StudentScreen extends Component {
     let relations = [];
     relations.push(student.Father, student.Mother);
     student.relations = relations;
-    console.log(student);
-    this.props
-      .dispatch({
-        type: 'STUDENTS',
-        payload: patchStudentAPI(student, this.props.params.groupId),
-      })
-      .then(() => {
-        this.closeModifyStudent();
-        this.props.dispatch(Notifications.success(studentStudentGroupMap));
+    patchStudentAPI(student, this.props.params.groupId).then(res => {
+      this.props.dispatch({
+        type: 'STUDENTS_FULFILLED',
+        payload: res,
       });
+
+      this.closeModifyStudent();
+      this.props.dispatch(Notifications.success(studentStudentGroupMap));
+    });
   }
 
   openModifyStudent(data) {
@@ -270,6 +289,13 @@ class StudentScreen extends Component {
           <li>{group.label}</li>
         </ol>
         <Displayelement {...this.props} />
+        <ModifyStudent
+          isOpen={this.state.modifyStudentIsOpen}
+          onCloseModal={this.closeModifyStudent}
+          data={this.state.modifyStudentData}
+          languages={this.state.languages}
+          saveStudent={this.saveStudent}
+        />
       </div>
     );
   }
