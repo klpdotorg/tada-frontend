@@ -3,6 +3,7 @@ import * as actions from '../actions';
 import { getEntityType, INSTITUTION, BOUNDARY } from '../reducers/utils';
 import { permissionsAssignedToBound, permissionsFailed } from '../actions/notifications';
 import Notifications from 'react-notification-system-redux';
+import NoPermissions from './NoPermissions'
 
 const theadStyle = {
     "background-color":"#D9EDF7",
@@ -27,7 +28,7 @@ export default class Permissions extends React.Component {
     componentWillMount() {
         this.props.dispatch(actions.fetchAllUsers());
     }
-    
+
     componentWillReceiveProps(nextProps) {
         if (this.props.selectedBoundary != nextProps.selectedBoundary)
         {
@@ -52,7 +53,7 @@ export default class Permissions extends React.Component {
         {
             disableButton = false;
         }
-    
+
         this.setState({
             users: newSelUsers,
             disablePermsBoundaries: disableButton,
@@ -152,10 +153,16 @@ assignPermsToAssessments() {
     }).catch(reason => {
         this.props.dispatch(Notifications.error(permissionsFailed));
     });
-    
+
 }
 
 render() {
+    if (sessionStorage.getItem('isAdmin') == null) {
+      return (
+        <NoPermissions />
+      );
+    }
+
     let selBoundary = this.props.selectedBoundary;
     var children, childrenHTML;
     if (selBoundary) {
@@ -273,7 +280,7 @@ render() {
                     <button type="button" className="btn btn-info all-padded-btn" data-toggle="tooltip" onClick={this.assignPermsToBoundaries.bind(this)} disabled={this.state.disablePermsBoundaries}>Assign Permissions to Boundaries</button>
                     <button type="button" className="btn btn-info all-padded-btn pull-right" data-toggle="tooltip" onClick={this.assignPermsToAssessments.bind(this)} disabled={this.state.disablePermsAssess}>Assign Permissions to Assessments</button>
                 </div>
-               
+
             </div>
         </div>
     );

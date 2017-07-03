@@ -4,6 +4,7 @@ import Formsy from 'formsy-react';
 import  * as actions from '../actions';
 import { REPORTS_EMAIL } from 'config';
 import Notifications from 'react-notification-system-redux';
+import NoPermissions from './NoPermissions'
 
 const { Input} = FRC;
 
@@ -28,7 +29,7 @@ export default class Reports extends React.Component {
         })
     }
 
-    componentDidMount() 
+    componentDidMount()
     {
         //init all tooltips
        // $('[data-toggle="tooltip"]').tooltip();
@@ -69,6 +70,12 @@ export default class Reports extends React.Component {
     }
 
     render() {
+      if (sessionStorage.getItem('isAdmin') == null) {
+        return (
+          <NoPermissions />
+        );
+      }
+
         let dateicon = (<i className="fa fa-calendar" aria-hidden="true"></i>);
 
         return (
@@ -96,7 +103,7 @@ export default class Reports extends React.Component {
                             id="startDate"
                             label="Start Date :" type="date"
                             className="form-control col-md-4"
-                            required 
+                            required
                             ref={(input) => {this.startDate = input; }}
                             addonAfter={dateicon}
                             validations="minLength:1"/>
@@ -104,7 +111,7 @@ export default class Reports extends React.Component {
                             id="endDate"
                             label="End Date :" type="date"
                             className="form-control col-md-4"
-                            required 
+                            required
                             ref={(input) => {this.endDate = input; }}
                             addonAfter={dateicon}
                             validations={{

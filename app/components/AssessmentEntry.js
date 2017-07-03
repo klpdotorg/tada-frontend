@@ -18,6 +18,7 @@ import lodash from 'lodash';
 faker.locale = 'en_GB';
 import Notifications from 'react-notification-system-redux';
 import Bootstrap from 'bootstrap';
+import NoPermissions from './NoPermissions';
 
 const val = [0, 1];
 export default class AssessmentEntry extends React.Component {
@@ -134,6 +135,10 @@ export default class AssessmentEntry extends React.Component {
   }
 
   render() {
+    if (sessionStorage.getItem('isAdmin') == null) {
+      return <NoPermissions />;
+    }
+
     let students = this.props.boundariesByParentId[this.props.selectedProgramAssess.studentgroupId];
     let studentsList;
     let questions = this.props.questionsByAssessId[this.props.selectedProgramAssess.assessmentId];

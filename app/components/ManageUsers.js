@@ -6,6 +6,8 @@ import ResetPassword from './Modals/ResetPassword';
 import GenericDialog from './Modals/GenericDialog';
 import ConfirmDialog from './Modals/ConfirmDialog';
 import { roles as ROLES } from '../constants';
+import NoPermissions from './NoPermissions';
+
 export default class ManageUsers extends React.Component {
   constructor(props) {
     super(props);
@@ -191,14 +193,17 @@ export default class ManageUsers extends React.Component {
         this.setState({
           showDialog: true,
           dialogTitle: 'Password reset failed',
-          dialogMessage: 'Password could not be reset for user ' +
-            user.username +
-            '. Please try again later!',
+          dialogMessage:
+            'Password could not be reset for user ' + user.username + '. Please try again later!',
         });
       });
   }
 
   render() {
+    if (sessionStorage.getItem('isAdmin') == null) {
+      return <NoPermissions />;
+    }
+
     var users = this.props.usersById;
     var usersByPage = this.props.usersByPage[this.state.selectedPage];
     var userCount = this.props.userCount;

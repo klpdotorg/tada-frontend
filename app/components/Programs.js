@@ -11,6 +11,8 @@ import ConfirmDialog from './Modals/ConfirmDialog';
 import { assessmentCreated, assessCreateFailed } from '../actions/notifications';
 import Notifications from 'react-notification-system-redux';
 import _ from 'lodash';
+import NoPermissions from './NoPermissions';
+
 export default class Programs extends React.Component {
   constructor(props) {
     super(props);
@@ -370,6 +372,10 @@ export default class Programs extends React.Component {
   }
 
   render() {
+    if (sessionStorage.getItem('isAdmin') == null) {
+      return <NoPermissions />;
+    }
+
     var selectedProgram;
     var selectedProgramName = '';
     var programs, assessments;
@@ -378,16 +384,7 @@ export default class Programs extends React.Component {
     var instType;
     programs = this.props.programsById;
     assessments = this.props.assessmentsById;
-    // console.log(sessionStorage.getItem('isAdmin'));
-    if (sessionStorage.getItem('isAdmin') == null) {
-      //this.props.redirectTo('/');
-      return (
-        <div>
-          You dont have permissions to access this page<br />
-          <Link to="/" className="btn btn-primary padded-btn">GO TO MAIN PAGE</Link>
-        </div>
-      );
-    }
+
     var programsList = Object.values(programs).map((program, i) => {
       return <option key={program.id} value={program.id}>{program.name}</option>;
     });
