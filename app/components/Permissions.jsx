@@ -5,7 +5,7 @@ import { permissionsAssignedToBound, permissionsFailed } from '../actions/notifi
 import Notifications from 'react-notification-system-redux';
 
 const theadStyle = {
-    "background-color":"#D9EDF7",
+  backgroundColor: "#D9EDF7",
 }
 
 
@@ -27,7 +27,7 @@ export default class Permissions extends React.Component {
     componentWillMount() {
         this.props.dispatch(actions.fetchAllUsers());
     }
-    
+
     componentWillReceiveProps(nextProps) {
         if (this.props.selectedBoundary != nextProps.selectedBoundary)
         {
@@ -52,7 +52,7 @@ export default class Permissions extends React.Component {
         {
             disableButton = false;
         }
-    
+
         this.setState({
             users: newSelUsers,
             disablePermsBoundaries: disableButton,
@@ -110,7 +110,8 @@ assignPermsToBoundaries()
     var users = this.state.users;
     var boundaries = this.state.boundaries;
     const options = {};
-    if(getEntityType(boundaries[0] == BOUNDARY)) {
+
+    if(getEntityType(this.props.boundaryDetails[boundaries[0]]) == BOUNDARY) {
         options.boundary_id = boundaries[0];
     }
     else {
@@ -152,7 +153,7 @@ assignPermsToAssessments() {
     }).catch(reason => {
         this.props.dispatch(Notifications.error(permissionsFailed));
     });
-    
+
 }
 
 render() {
@@ -163,9 +164,9 @@ render() {
         children = this.props.boundariesByParentId[selBoundary.id];
         if (children) {
             //console.log("Boundary has children ", children);
-            childrenHTML = children.map(id => {
+            childrenHTML = children.map((id, i) => {
                 var details = this.props.boundaryDetails[id];
-                return (<tr colSpan="2" id={details.id}>
+                return (<tr colSpan="2" id={details.id} key={i}>
                     <td width="70%">{details.name}</td>
                     <td width="30%"><input type="checkbox" className="no-border" onChange={this.selectBoundary} checked={jQuery.inArray(details.id.toString(),this.state.boundaries)>-1} /></td>
                 </tr>);
@@ -178,10 +179,10 @@ render() {
 
     let userlist;
     if (this.props.users) {
-        userlist = Object.values(this.props.users).map(user => {
+        userlist = Object.values(this.props.users).map((user, index) => {
             if (user) {
                 return (
-                    <tr id={user.id}>
+                    <tr id={user.id} key={index}>
                         <td width="70%">{user.username}</td>
                         <td width="30%"><input type="checkbox" className=" no-border" onChange={this.selectUser} checked={jQuery.inArray(user.id.toString(),this.state.users)>-1}/></td>
 
@@ -195,11 +196,11 @@ render() {
     if(this.props.assessmentsByBoundary && this.props.selectedBoundary) {
         var selectedAssessments = this.props.assessmentsByBoundary[this.props.selectedBoundary.id];
         if(selectedAssessments) {
-            assessmentList = selectedAssessments.map(id => {
+            assessmentList = selectedAssessments.map((id, index) => {
                 var assess = this.props.assessmentsById[id];
                 if(assess) {
                     return (
-                        <tr id={assess.id}>
+                        <tr id={assess.id} key={index}>
                             <td width="70%">{assess.name}</td>
                             <td width="30%"><input type="checkbox" className="no-border" onChange={this.selectAssessment} checked={jQuery.inArray(assess.id.toString(),this.state.assessments)>-1}/></td>
                         </tr>
@@ -208,17 +209,14 @@ render() {
             });
         }
     }
-    var selectionState = 1;
     var boundaryHelpMessage;
     if(!this.props.selectedBoundary) {
         boundaryHelpMessage = "Please click on a boundary in the left hand side to see boundaries here";
     }
     else if(!childrenHTML || (childrenHTML && childrenHTML.length == 0)) {
-        selectionState =2;
         boundaryHelpMessage = "No boundaries or institutions under selected boundary";
     }
-    else
-        selectionState=3;
+
     return (
         <div className="container-fluid">
 
@@ -236,9 +234,7 @@ render() {
                             </tr>
                         </thead>
                         <tbody>
-                            {selectionState == 1 ? <tr><td className="danger">{boundaryHelpMessage}</td></tr> : childrenHTML}
-                            {selectionState == 2 ? <tr><td className="danger">{boundaryHelpMessage}</td></tr> : childrenHTML}
-
+                            { boundaryHelpMessage ? <tr><td className="danger">{boundaryHelpMessage}</td></tr> : childrenHTML}
                         </tbody>
                     </table>
                 </div>
@@ -273,7 +269,7 @@ render() {
                     <button type="button" className="btn btn-info all-padded-btn" data-toggle="tooltip" onClick={this.assignPermsToBoundaries.bind(this)} disabled={this.state.disablePermsBoundaries}>Assign Permissions to Boundaries</button>
                     <button type="button" className="btn btn-info all-padded-btn pull-right" data-toggle="tooltip" onClick={this.assignPermsToAssessments.bind(this)} disabled={this.state.disablePermsAssess}>Assign Permissions to Assessments</button>
                 </div>
-               
+
             </div>
         </div>
     );
