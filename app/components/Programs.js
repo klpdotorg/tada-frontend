@@ -457,6 +457,35 @@ export default class Programs extends React.Component {
     return 'Pre-School';
   };
 
+  renderAssessmentList = assessmentList => {
+    if (this.props.fetchingAssessments) {
+      return (
+        <div className="text-center">
+          <i className="fa fa-cog fa-spin fa-lg fa-fw" />
+          <span className="text-muted">Loading...</span>
+        </div>
+      );
+    }
+
+    return (
+      <table className="table table-bordered table-striped">
+        <tbody>
+          <tr className="info">
+            <th>Assessment</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Type</th>
+            <th>Double Entry</th>
+            <th>Flexi-type</th>
+            <th>Select</th>
+            <th>Actions</th>
+          </tr>
+          {assessmentList}
+        </tbody>
+      </table>
+    );
+  };
+
   render() {
     if (sessionStorage.getItem('isAdmin') == null) {
       return (
@@ -470,7 +499,7 @@ export default class Programs extends React.Component {
     const disabledstate = Object.keys(this.props.assessmentsById).length > 0;
     const programs = this.props.programsById;
     const selectedProgramDetails = programs[this.state.selectedProgram] || {};
-    const assessmentsList = this.getAssessmentList();
+    const assessmentList = this.getAssessmentList();
     const programsList = this.getProgramList();
 
     return (
@@ -563,28 +592,11 @@ export default class Programs extends React.Component {
         <br />
         <div>
           <h4 className="text-primary text-center"> Assessments in this Programme</h4>
+          <div className="base-spacing-sm border-base" />
+          <div className="base-spacing-mid" />
         </div>
         <div>
-          {!this.props.fetchingAssessments
-            ? <table className="table table-bordered table-striped">
-                <tbody>
-                  <tr className="info">
-                    <th>Assessment</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Type</th>
-                    <th>Double Entry</th>
-                    <th>Flexi-type</th>
-                    <th>Select</th>
-                    <th>Actions</th>
-                  </tr>
-                  {assessmentsList}
-                </tbody>
-              </table>
-            : <div className="loading-assessments">
-                <i className="fa fa-spinner fa-spin loading-assessments-spinner" />
-              </div>}
-
+          {this.renderAssessmentList(assessmentList)}
         </div>
         <div className="col-md-8">
           <button
