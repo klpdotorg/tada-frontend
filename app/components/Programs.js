@@ -11,6 +11,8 @@ import ConfirmDialog from './Modals/ConfirmDialog';
 import { assessmentCreated, assessCreateFailed } from '../actions/notifications';
 import Notifications from 'react-notification-system-redux';
 import _ from 'lodash';
+import DeleteProgram from './Modals/DeleteProgram';
+
 export default class Programs extends React.Component {
   constructor(props) {
     super(props);
@@ -26,6 +28,7 @@ export default class Programs extends React.Component {
       dialogTitle: '',
       dialogMessage: '',
       isConfirmModalOpen: false,
+      showDeleteModal: false,
     };
     this.handleProgramSelection = this.handleProgramSelection.bind(this);
     this.handleCreateProgram = this.handleCreateProgram.bind(this);
@@ -235,7 +238,7 @@ export default class Programs extends React.Component {
   }
 
   handleDeleteProgram() {
-    $('#deleteProgramModal').modal('hide');
+    this.closeDeleteModal();
     var deleteId = this.state.selectedProgram;
     this.props
       .dispatch(actions.deleteProgram(deleteId))
@@ -369,6 +372,18 @@ export default class Programs extends React.Component {
       });
   }
 
+  showDeleteModal = () => {
+    this.setState({
+      showDeleteModal: true,
+    });
+  };
+
+  closeDeleteModal = () => {
+    this.setState({
+      showDeleteModal: false,
+    });
+  };
+
   render() {
     var selectedProgram;
     var selectedProgramName = '';
@@ -459,7 +474,7 @@ export default class Programs extends React.Component {
     }
     var disabledstate = Object.keys(assessments).length > 0;
     return (
-      <div class="container">
+      <div className="container">
         <div className="row center-block">
 
           <div className="col-md-8 form-inline">
@@ -536,11 +551,10 @@ export default class Programs extends React.Component {
               <button
                 type="button"
                 className="btn btn-info padded-btn"
-                data-toggle="modal"
-                data-target="#deleteProgramModal"
+                onClick={this.showDeleteModal}
                 disabled={disabledstate}
               >
-                <span className="fa fa-trash-o" />Delete
+                <span className="fa fa-trash-o" /> Delete
               </button>
             </div>
 
@@ -636,7 +650,12 @@ export default class Programs extends React.Component {
           title={this.state.dialogTitle}
           message={this.state.dialogMessage}
         />
-        {/*DELETE program modal dialog*/}
+        <DeleteProgram
+          isOpen={this.state.showDeleteModal}
+          onCloseModal={this.closeDeleteModal}
+          deleteProgram={this.handleDeleteProgram}
+        />
+        {/*DELETE program modal dialog
         <div
           className="modal fade"
           data-backdrop="false"
@@ -674,7 +693,7 @@ export default class Programs extends React.Component {
               </div>
             </div>
           </div>
-        </div>
+        </div>*/}
         {/*End of modal*/}
 
         {/* Error dialog */}
