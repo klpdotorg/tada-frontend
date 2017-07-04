@@ -435,15 +435,11 @@ export default class Institution extends React.Component {
             {!canModify
               ? <div />
               : <div className="col-md-12">
-                  <button
-                    type="submit"
-                    className="btn btn-primary padded-btn"
-                    onClick={this.saveInsti}
-                  >
+                  <button type="submit" className="btn btn-primary padded-btn">
                     Save
                   </button>
                   <button
-                    type="submit"
+                    type="button"
                     className="btn btn-primary padded-btn"
                     disabled={hasClasses}
                     onClick={this.showConfirmation}

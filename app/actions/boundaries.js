@@ -1,3 +1,4 @@
+import Notifications from 'react-notification-system-redux';
 import { SERVER_API_BASE as serverApiBase } from 'config';
 import { checkStatus, mapStudentsAPI } from './utils';
 import {
@@ -7,6 +8,7 @@ import {
   studentsFetched,
   openNode,
 } from './actions';
+import { institutionSaved, institutionNotSaved } from './notifications';
 import { push } from 'react-router-redux';
 import store from '../store';
 import { computeRouterPathForEntity } from '../reducers/utils';
@@ -81,6 +83,10 @@ const institutionFetch = options => {
 
 export const saveInstitution = options => (dispatch, getState) => {
   return institutionFetch(options).then(checkStatus).then(response => {
+    if (!response) {
+      dispatch(Notifications.error(institutionNotSaved));
+    }
+    dispatch(Notifications.success(institutionSaved));
     dispatch(responseReceivedFromServer({ results: [response] }));
   });
 };
