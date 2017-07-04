@@ -384,30 +384,10 @@ export default class Programs extends React.Component {
     });
   };
 
-  render() {
-    var selectedProgram;
-    var selectedProgramName = '';
-    var programs, assessments;
-    var startDate;
-    var endDate;
-    var instType;
-    programs = this.props.programsById;
-    assessments = this.props.assessmentsById;
-    // console.log(sessionStorage.getItem('isAdmin'));
-    if (sessionStorage.getItem('isAdmin') == null) {
-      //this.props.redirectTo('/');
-      return (
-        <div>
-          You dont have permissions to access this page<br />
-          <Link to="/" className="btn btn-primary padded-btn">GO TO MAIN PAGE</Link>
-        </div>
-      );
-    }
-    var programsList = Object.values(programs).map((program, i) => {
-      return <option key={program.id} value={program.id}>{program.name}</option>;
-    });
+  getAssessmentList = () => {
+    const assessments = this.props.assessmentsById;
 
-    var assessmentsList = Object.values(assessments).map((assessment, i) => {
+    return _.map(assessments, (assessment, i) => {
       var flexi_assessment = 'No';
       var double_entry = 'No';
       var type = '';
@@ -459,20 +439,40 @@ export default class Programs extends React.Component {
         </tr>
       );
     });
+  };
 
-    // if (Object.keys(programs).length > 0 && this.state.selectedProgram == 0 ) {
-    // 	selectedProgram = Object.values(programs)[0];
-    // } else {
-    selectedProgram = programs[this.state.selectedProgram];
-    // }
-    if (!jQuery.isEmptyObject(selectedProgram)) {
-      selectedProgramName = selectedProgram.name;
-      startDate = selectedProgram.start_date;
-      endDate = selectedProgram.end_date;
-      if (selectedProgram.programme_institution_category == 1) instType = 'Primary';
-      else instType = 'Pre-School';
+  getProgramList = () => {
+    const programs = this.props.programsById;
+
+    return _.map(programs, (program, i) => {
+      return <option key={program.id} value={program.id}>{program.name}</option>;
+    });
+  };
+
+  getInstitutionName = categoryId => {
+    if (categoryId === 1) {
+      return 'Primary';
     }
-    var disabledstate = Object.keys(assessments).length > 0;
+
+    return 'Pre-School';
+  };
+
+  render() {
+    if (sessionStorage.getItem('isAdmin') == null) {
+      return (
+        <div>
+          You dont have permissions to access this page<br />
+          <Link to="/" className="btn btn-primary padded-btn">GO TO MAIN PAGE</Link>
+        </div>
+      );
+    }
+
+    const disabledstate = Object.keys(this.props.assessmentsById).length > 0;
+    const programs = this.props.programsById;
+    const selectedProgramDetails = programs[this.state.selectedProgram] || {};
+    const assessmentsList = this.getAssessmentList();
+    const programsList = this.getProgramList();
+
     return (
       <div className="container">
         <div className="row center-block">
@@ -517,21 +517,21 @@ export default class Programs extends React.Component {
               <div className="row">
                 <h5 className="col-md-4">
                   <span className="text-primary"><strong>Program name: </strong></span>
-                  {selectedProgramName}
+                  {selectedProgramDetails.name}
                 </h5>
                 <h5 className="col-md-4">
                   <span className="text-primary"><strong>Start Date: </strong></span>
-                  {startDate}
+                  {selectedProgramDetails.start_date}
                 </h5>
               </div>
               <div className="row">
                 <h5 className="col-md-4">
                   <span className="text-primary"><strong>Institution: </strong></span>
-                  {instType}
+                  {this.getInstitutionName(selectedProgramDetails.programme_institution_category)}
                 </h5>
                 <h5 className="col-md-4">
                   <span className="text-primary"><strong>End Date: </strong></span>
-                  {endDate}
+                  {selectedProgramDetails.end_date}
                 </h5>
               </div>
             </div>
@@ -631,13 +631,13 @@ export default class Programs extends React.Component {
           handleSubmit={this.handleCreateProgram}
         />
         <EditProgram
-          program={selectedProgram}
+          program={selectedProgramDetails}
           isOpen={this.state.isEditProgramModalOpen}
           onCloseModal={this.closeEditProgramModal}
           handleSubmit={this.handleEditProgram.bind(this)}
         />
         <ConfirmDialog
-          entity={selectedProgram}
+          entity={selectedProgramDetails}
           message="Are you sure you want to deactivate this program?"
           isOpen={this.state.isConfirmModalOpen}
           onCloseModal={this.closeConfirmModal.bind(this)}
