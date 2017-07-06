@@ -241,12 +241,13 @@ export default class Programs extends React.Component {
   handleDeleteProgram() {
     this.closeDeleteModal();
     var deleteId = this.state.selectedProgram;
+    const nextValue = this.getNextValue();
+
     this.props
       .dispatch(actions.deleteProgram(deleteId))
       .then(response => {
-        console.log('Selected index is, ', this.selProgram.selectedIndex);
         this.setState({
-          selectedProgram: this.selProgram.value,
+          selectedProgram: nextValue,
         });
         this.selProgram.remove(deleteId);
       })
@@ -333,12 +334,40 @@ export default class Programs extends React.Component {
     });
   }
 
-  deactivateProgram(id) {
+  getNextValue = () => {
+    const programs = this.props.programsById;
+    let setNextValue = null;
+    let nextValue = null;
+
+    _.forEach(programs, program => {
+      if (nextValue) {
+        return;
+      }
+
+      if (setNextValue) {
+        nextValue = program.id;
+      }
+
+      if (program.id == this.selProgram.value) {
+        setNextValue = true;
+      }
+    });
+
+    if (!nextValue) {
+      nextValue = _.values(programs)[0].id;
+    }
+
+    return nextValue;
+  };
+
+  deactivateProgram() {
     this.closeConfirmModal();
+    const nextValue = this.getNextValue();
+
     this.props.dispatch(actions.deactivateProgram(this.state.selectedProgram)).then(() => {
       this.selProgram.remove(this.state.selectedProgram);
       this.setState({
-        selectedProgram: this.selProgram.selectedIndex + 1,
+        selectedProgram: nextValue,
       });
     });
   }
