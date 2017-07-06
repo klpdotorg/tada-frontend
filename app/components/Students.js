@@ -180,7 +180,10 @@ class StudentScreen extends Component {
 
   deleteStudentConfirm(student) {
     this.setState({
-      currentStudent: student,
+      currentStudent: {
+        id: student.id,
+        name: `${student.first_name} ${student.middle_name} ${student.last_name}`,
+      },
       openConfirmModal: true,
     });
   }
@@ -278,7 +281,6 @@ class StudentScreen extends Component {
           Insufficient Privileges. Please contact administrator.
         </div>;
     }
-
     return (
       <div>
         <ol className="breadcrumb">
@@ -295,6 +297,12 @@ class StudentScreen extends Component {
           data={this.state.modifyStudentData}
           languages={this.state.languages}
           saveStudent={this.saveStudent}
+        />
+        <ConfirmModal
+          isOpen={this.state.openConfirmModal}
+          onCloseModal={this.closeConfirmation}
+          entity={this.state.currentStudent.name}
+          onAgree={this.deleteStudent}
         />
       </div>
     );
