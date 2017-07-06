@@ -14,7 +14,7 @@ import {
   fetchEntitiesFromServer,
 } from '../actions';
 import CreateInstitution from './Modals/CreateInstitution';
-import { toggleSet } from '../utils';
+import { toggleSet, dateParser } from '../utils';
 import Button from './Button';
 import ConfirmModal from './Modals/Confirm';
 import ModifyStudent from './Modals/ModifyStudent';
@@ -44,7 +44,7 @@ const StudentRow = props => {
       <td>{props.uid}</td>
       <td>{props.gender}</td>
       <td>{langVal}</td>
-      <td>{props.dob}</td>
+      <td>{dateParser(props.dob)}</td>
       <td>{displayFullName(get(relations, 'Father[0]'))}</td>
       <td>{displayFullName(get(relations, 'Mother[0]'))}</td>
       <td>

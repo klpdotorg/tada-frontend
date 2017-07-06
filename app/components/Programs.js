@@ -12,6 +12,7 @@ import { assessmentCreated, assessCreateFailed } from '../actions/notifications'
 import Notifications from 'react-notification-system-redux';
 import _ from 'lodash';
 import DeleteProgram from './Modals/DeleteProgram';
+import { dateParser } from '../utils';
 
 export default class Programs extends React.Component {
   constructor(props) {
@@ -404,8 +405,8 @@ export default class Programs extends React.Component {
       return (
         <tr key={assessment.id} id={assessment.id}>
           <td>{assessment.name}</td>
-          <td>{assessment.start_date}</td>
-          <td>{assessment.end_date}</td>
+          <td>{dateParser(assessment.start_date)}</td>
+          <td>{dateParser(assessment.end_date)}</td>
           <td>{type}</td>
           <td>{double_entry}</td>
           <td>{flexi_assessment}</td>
@@ -550,7 +551,7 @@ export default class Programs extends React.Component {
                 </h5>
                 <h5 className="col-md-4">
                   <span className="text-primary"><strong>Start Date: </strong></span>
-                  {selectedProgramDetails.start_date}
+                  {dateParser(selectedProgramDetails.start_date)}
                 </h5>
               </div>
               <div className="row">
@@ -560,7 +561,7 @@ export default class Programs extends React.Component {
                 </h5>
                 <h5 className="col-md-4">
                   <span className="text-primary"><strong>End Date: </strong></span>
-                  {selectedProgramDetails.end_date}
+                  {dateParser(selectedProgramDetails.end_date)}
                 </h5>
               </div>
             </div>
