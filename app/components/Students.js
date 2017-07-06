@@ -28,7 +28,8 @@ import { groupBy, get } from 'lodash';
 
 const StudentRow = props => {
   const relations = groupBy(props.relations, 'relation_type');
-
+  const language = _.filter(props.languages, language => language.value === props.mt);
+  const langVal = _.get(language[0], 'label');
   return (
     <tr>
       <td>
@@ -42,7 +43,7 @@ const StudentRow = props => {
       <td>{displayFullName(props)}</td>
       <td>{props.uid}</td>
       <td>{props.gender}</td>
-      <td>{props.language}</td>
+      <td>{langVal}</td>
       <td>{props.dob}</td>
       <td>{displayFullName(get(relations, 'Father[0]'))}</td>
       <td>{displayFullName(get(relations, 'Mother[0]'))}</td>
@@ -212,6 +213,7 @@ class StudentScreen extends Component {
         {...boundaryDetails[studentId]}
         deleteStudent={this.deleteStudentConfirm}
         selectedStudents={this.state.selectedStudents}
+        languages={this.state.languages.list}
         selectStudent={() => {
           this.selectStudent(studentId);
         }}
