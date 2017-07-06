@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
   fetchEntitiesFromServer,
@@ -185,7 +186,7 @@ class TadaContentContainer extends Component {
 }
 
 TadaContentContainer.contextTypes = {
-  router: React.PropTypes.object.isRequired,
+  router: PropTypes.object.isRequired,
 };
 
 module.exports = connect(mapStateToProps, mapDispatchToProps)(TadaContentContainer);
