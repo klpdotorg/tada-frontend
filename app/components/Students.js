@@ -42,6 +42,7 @@ const StudentRow = props => {
       <td>{props.id}</td>
       <td>{displayFullName(props)}</td>
       <td>{props.uid}</td>
+      <td>{props.govt_student_id}</td>
       <td>{props.gender}</td>
       <td>{langVal}</td>
       <td>{dateParser(props.dob)}</td>
@@ -242,6 +243,7 @@ class StudentScreen extends Component {
                 <th>ID</th>
                 <th>Name</th>
                 <th>UID</th>
+                <th>Government student ID</th>
                 <th>Gender</th>
                 <th>Mother Tongue</th>
                 <th>Date of Birth</th>
