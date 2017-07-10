@@ -36,7 +36,6 @@ export default class ConfirmDialog extends Component {
       middle_name: myform.middleName,
       last_name: myform.lastName,
       uid: myform.uid,
-      govt_student_id: myform.govtStudentId,
       dob: myform.dob,
       gender: myform.gender,
       mt: myform.language,
@@ -88,7 +87,6 @@ export default class ConfirmDialog extends Component {
       middle_name,
       last_name,
       uid,
-      govt_student_id,
       mt,
       gender,
       language,
@@ -151,17 +149,6 @@ export default class ConfirmDialog extends Component {
               name="uid"
               id="uid"
               value={uid || ''}
-              label="UID:"
-              type="text"
-              className="form-control"
-              validations="minLength:1"
-            />
-          </div>
-          <div className="col-sm-12">
-            <Input
-              name="govtStudentId"
-              id="govtStudentId"
-              value={govt_student_id || ''}
               label="Government student ID:"
               type="text"
               className="form-control"
