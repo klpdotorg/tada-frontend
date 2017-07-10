@@ -23,6 +23,7 @@ import Users from './containers/UsersContainer';
 import PermissionsContainer from './containers/PermissionsContainer';
 import Questions from './components/AssessmentQuestions';
 import Reports from './components/Reports';
+import Teachers from './components/Teachers';
 import tadastore from './store';
 import { syncHistoryWithStore } from 'react-router-redux';
 
@@ -86,6 +87,10 @@ export const routes = (
         <Route
           path="district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId"
           component={Institution}
+        />
+        <Route
+          path="district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId/teachers"
+          component={Teachers}
         />
         <Route
           path="district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId/studentgroups/:groupId"
