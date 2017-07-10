@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import moment from 'moment';
 
 export const alphabeticalOrder = (obj, details) => {
   return obj[1].sort((a, b) => {
@@ -25,3 +26,5 @@ export const capitalize = string => {
 
   return;
 };
+
+export const dateParser = date => moment(date).format('DD-MM-YYYY');

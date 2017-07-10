@@ -11,6 +11,9 @@ import ConfirmDialog from './Modals/ConfirmDialog';
 import { assessmentCreated, assessCreateFailed } from '../actions/notifications';
 import Notifications from 'react-notification-system-redux';
 import _ from 'lodash';
+import DeleteProgram from './Modals/DeleteProgram';
+import { dateParser } from '../utils';
+
 export default class Programs extends React.Component {
   constructor(props) {
     super(props);
@@ -26,6 +29,7 @@ export default class Programs extends React.Component {
       dialogTitle: '',
       dialogMessage: '',
       isConfirmModalOpen: false,
+      showDeleteModal: false,
     };
     this.handleProgramSelection = this.handleProgramSelection.bind(this);
     this.handleCreateProgram = this.handleCreateProgram.bind(this);
@@ -235,14 +239,15 @@ export default class Programs extends React.Component {
   }
 
   handleDeleteProgram() {
-    $('#deleteProgramModal').modal('hide');
+    this.closeDeleteModal();
     var deleteId = this.state.selectedProgram;
+    const nextValue = this.getNextValue();
+
     this.props
       .dispatch(actions.deleteProgram(deleteId))
       .then(response => {
-        console.log('Selected index is, ', this.selProgram.selectedIndex);
         this.setState({
-          selectedProgram: this.selProgram.value,
+          selectedProgram: nextValue,
         });
         this.selProgram.remove(deleteId);
       })
@@ -329,12 +334,40 @@ export default class Programs extends React.Component {
     });
   }
 
-  deactivateProgram(id) {
+  getNextValue = () => {
+    const programs = this.props.programsById;
+    let setNextValue = null;
+    let nextValue = null;
+
+    _.forEach(programs, program => {
+      if (nextValue) {
+        return;
+      }
+
+      if (setNextValue) {
+        nextValue = program.id;
+      }
+
+      if (program.id == this.selProgram.value) {
+        setNextValue = true;
+      }
+    });
+
+    if (!nextValue) {
+      nextValue = _.values(programs)[0].id;
+    }
+
+    return nextValue;
+  };
+
+  deactivateProgram() {
     this.closeConfirmModal();
+    const nextValue = this.getNextValue();
+
     this.props.dispatch(actions.deactivateProgram(this.state.selectedProgram)).then(() => {
       this.selProgram.remove(this.state.selectedProgram);
       this.setState({
-        selectedProgram: this.selProgram.selectedIndex + 1,
+        selectedProgram: nextValue,
       });
     });
   }
@@ -369,30 +402,22 @@ export default class Programs extends React.Component {
       });
   }
 
-  render() {
-    var selectedProgram;
-    var selectedProgramName = '';
-    var programs, assessments;
-    var startDate;
-    var endDate;
-    var instType;
-    programs = this.props.programsById;
-    assessments = this.props.assessmentsById;
-    // console.log(sessionStorage.getItem('isAdmin'));
-    if (sessionStorage.getItem('isAdmin') == null) {
-      //this.props.redirectTo('/');
-      return (
-        <div>
-          You dont have permissions to access this page<br />
-          <Link to="/" className="btn btn-primary padded-btn">GO TO MAIN PAGE</Link>
-        </div>
-      );
-    }
-    var programsList = Object.values(programs).map((program, i) => {
-      return <option key={program.id} value={program.id}>{program.name}</option>;
+  showDeleteModal = () => {
+    this.setState({
+      showDeleteModal: true,
     });
+  };
 
-    var assessmentsList = Object.values(assessments).map((assessment, i) => {
+  closeDeleteModal = () => {
+    this.setState({
+      showDeleteModal: false,
+    });
+  };
+
+  getAssessmentList = () => {
+    const assessments = this.props.assessmentsById;
+
+    return _.map(assessments, (assessment, i) => {
       var flexi_assessment = 'No';
       var double_entry = 'No';
       var type = '';
@@ -409,8 +434,8 @@ export default class Programs extends React.Component {
       return (
         <tr key={assessment.id} id={assessment.id}>
           <td>{assessment.name}</td>
-          <td>{assessment.start_date}</td>
-          <td>{assessment.end_date}</td>
+          <td>{dateParser(assessment.start_date)}</td>
+          <td>{dateParser(assessment.end_date)}</td>
           <td>{type}</td>
           <td>{double_entry}</td>
           <td>{flexi_assessment}</td>
@@ -444,22 +469,71 @@ export default class Programs extends React.Component {
         </tr>
       );
     });
+  };
 
-    // if (Object.keys(programs).length > 0 && this.state.selectedProgram == 0 ) {
-    // 	selectedProgram = Object.values(programs)[0];
-    // } else {
-    selectedProgram = programs[this.state.selectedProgram];
-    // }
-    if (!jQuery.isEmptyObject(selectedProgram)) {
-      selectedProgramName = selectedProgram.name;
-      startDate = selectedProgram.start_date;
-      endDate = selectedProgram.end_date;
-      if (selectedProgram.programme_institution_category == 1) instType = 'Primary';
-      else instType = 'Pre-School';
+  getProgramList = () => {
+    const programs = this.props.programsById;
+
+    return _.map(programs, (program, i) => {
+      return <option key={program.id} value={program.id}>{program.name}</option>;
+    });
+  };
+
+  getInstitutionName = categoryId => {
+    if (categoryId === 1) {
+      return 'Primary';
     }
-    var disabledstate = Object.keys(assessments).length > 0;
+
+    return 'Pre-School';
+  };
+
+  renderAssessmentList = assessmentList => {
+    if (this.props.fetchingAssessments) {
+      return (
+        <div className="text-center">
+          <i className="fa fa-cog fa-spin fa-lg fa-fw" />
+          <span className="text-muted">Loading...</span>
+        </div>
+      );
+    }
+
     return (
-      <div class="container">
+      <table className="table table-bordered table-striped">
+        <tbody>
+          <tr className="info">
+            <th>Assessment</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Type</th>
+            <th>Double Entry</th>
+            <th>Flexi-type</th>
+            <th>Select</th>
+            <th>Actions</th>
+          </tr>
+          {assessmentList}
+        </tbody>
+      </table>
+    );
+  };
+
+  render() {
+    if (sessionStorage.getItem('isAdmin') == null) {
+      return (
+        <div>
+          You dont have permissions to access this page<br />
+          <Link to="/" className="btn btn-primary padded-btn">GO TO MAIN PAGE</Link>
+        </div>
+      );
+    }
+
+    const disabledstate = Object.keys(this.props.assessmentsById).length > 0;
+    const programs = this.props.programsById;
+    const selectedProgramDetails = programs[this.state.selectedProgram] || {};
+    const assessmentList = this.getAssessmentList();
+    const programsList = this.getProgramList();
+
+    return (
+      <div className="container">
         <div className="row center-block">
 
           <div className="col-md-8 form-inline">
@@ -502,21 +576,21 @@ export default class Programs extends React.Component {
               <div className="row">
                 <h5 className="col-md-4">
                   <span className="text-primary"><strong>Program name: </strong></span>
-                  {selectedProgramName}
+                  {selectedProgramDetails.name}
                 </h5>
                 <h5 className="col-md-4">
                   <span className="text-primary"><strong>Start Date: </strong></span>
-                  {startDate}
+                  {dateParser(selectedProgramDetails.start_date)}
                 </h5>
               </div>
               <div className="row">
                 <h5 className="col-md-4">
                   <span className="text-primary"><strong>Institution: </strong></span>
-                  {instType}
+                  {this.getInstitutionName(selectedProgramDetails.programme_institution_category)}
                 </h5>
                 <h5 className="col-md-4">
                   <span className="text-primary"><strong>End Date: </strong></span>
-                  {endDate}
+                  {dateParser(selectedProgramDetails.end_date)}
                 </h5>
               </div>
             </div>
@@ -536,11 +610,10 @@ export default class Programs extends React.Component {
               <button
                 type="button"
                 className="btn btn-info padded-btn"
-                data-toggle="modal"
-                data-target="#deleteProgramModal"
+                onClick={this.showDeleteModal}
                 disabled={disabledstate}
               >
-                <span className="fa fa-trash-o" />Delete
+                <span className="fa fa-trash-o" /> Delete
               </button>
             </div>
 
@@ -549,28 +622,11 @@ export default class Programs extends React.Component {
         <br />
         <div>
           <h4 className="text-primary text-center"> Assessments in this Programme</h4>
+          <div className="base-spacing-sm border-base" />
+          <div className="base-spacing-mid" />
         </div>
         <div>
-          {!this.props.fetchingAssessments
-            ? <table className="table table-bordered table-striped">
-                <tbody>
-                  <tr className="info">
-                    <th>Assessment</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Type</th>
-                    <th>Double Entry</th>
-                    <th>Flexi-type</th>
-                    <th>Select</th>
-                    <th>Actions</th>
-                  </tr>
-                  {assessmentsList}
-                </tbody>
-              </table>
-            : <div className="loading-assessments">
-                <i className="fa fa-spinner fa-spin loading-assessments-spinner" />
-              </div>}
-
+          {this.renderAssessmentList(assessmentList)}
         </div>
         <div className="col-md-8">
           <button
@@ -617,13 +673,13 @@ export default class Programs extends React.Component {
           handleSubmit={this.handleCreateProgram}
         />
         <EditProgram
-          program={selectedProgram}
+          program={selectedProgramDetails}
           isOpen={this.state.isEditProgramModalOpen}
           onCloseModal={this.closeEditProgramModal}
           handleSubmit={this.handleEditProgram.bind(this)}
         />
         <ConfirmDialog
-          entity={selectedProgram}
+          entity={selectedProgramDetails}
           message="Are you sure you want to deactivate this program?"
           isOpen={this.state.isConfirmModalOpen}
           onCloseModal={this.closeConfirmModal.bind(this)}
@@ -636,7 +692,12 @@ export default class Programs extends React.Component {
           title={this.state.dialogTitle}
           message={this.state.dialogMessage}
         />
-        {/*DELETE program modal dialog*/}
+        <DeleteProgram
+          isOpen={this.state.showDeleteModal}
+          onCloseModal={this.closeDeleteModal}
+          deleteProgram={this.handleDeleteProgram}
+        />
+        {/*DELETE program modal dialog
         <div
           className="modal fade"
           data-backdrop="false"
@@ -674,7 +735,7 @@ export default class Programs extends React.Component {
               </div>
             </div>
           </div>
-        </div>
+        </div>*/}
         {/*End of modal*/}
 
         {/* Error dialog */}

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { getLanguages } from './utils';
-import { Select } from 'react-select';
+import _ from 'lodash';
 
 export default class BulkAddStudent extends Component {
   constructor(props) {
@@ -11,7 +11,8 @@ export default class BulkAddStudent extends Component {
       languages: {
         isLoading: true,
       },
-      formError: []
+      formError: [],
+      requiredFields: ['first_name', 'dob', 'fatherFirstName', 'motherFirstName', 'uid', 'gender'],
     };
     this.updateValue = this.updateValue.bind(this);
     this.validate = this.validate.bind(this);
@@ -38,24 +39,18 @@ export default class BulkAddStudent extends Component {
   }
 
   validate() {
-    let values = this.state.values;
-    const requiredValues = [
-      'first_name',
-      'middle_name',
-      'last_name',
-      'dob',
-      'fatherFirstName',
-      'fatherMiddleName',
-      'fatherLastName',
-      'motherFirstName',
-      'motherMiddleName',
-      'motherLastName',
-      'uid',
-      'gender'
-    ];
-    var errorList = [];
+    const { values, requiredFields } = this.state;
 
-    for(var v in values) {
+    const errorList = [];
+    _.forEach(values, value => {
+      _.forEach(requiredFields, requiredField => {
+        if (!value[requiredField]) {
+          errorList.push(requiredField);
+        }
+      });
+    });
+
+    /* for(var v in values) {
       if(values[v].first_name.trim()) {
         for(let i = 0; i < requiredValues.length; i++) {
           if(!values[v][requiredValues[i]].trim()) {
@@ -64,12 +59,22 @@ export default class BulkAddStudent extends Component {
           }
         }
       }
-    }
-    this.setState({formError: errorList});
-    if(_.isEmpty(errorList)) {
-      console.log(errorList)
+    }*/
+
+    this.setState({ formError: errorList });
+
+    if (_.isEmpty(errorList)) {
       this.props.addStudents(this.state.values);
     }
+  }
+
+  setRequiredField(field) {
+    const { requiredFields } = this.state;
+
+    if (_.includes(requiredFields, field)) {
+      return '*';
+    }
+    return '';
   }
 
   render() {
@@ -80,63 +85,64 @@ export default class BulkAddStudent extends Component {
           <span className="text-muted">Loading...</span>
         </div>
       );
-    } else {
-      let rowsObj = [];
-      for (let i = 0; i < this.state.rows; i++) {
-        rowsObj.push(
-          <InputRow
-            languages={this.state.languages.list}
-            updateValue={this.updateValue}
-            index={i}
-            key={i}
-            formError={this.state.formError}
-          />,
-        );
-      }
-      return (
-        <div>
-          {!_.isEmpty(this.state.formError) && <div className="alert alert-danger"><strong>Error:</strong>Please enter all required values before submitting the form.</div>}
-          <div className="table-responsive">
-            <table className="table table-hover table-fixedwidth">
-              <thead>
-                <tr className="text-primary text-uppercase">
-                  <th>First Name</th>
-                  <th>Middle Name</th>
-                  <th>Last Name</th>
-                  <th>UID</th>
-                  <th>Gender</th>
-                  <th>Mother Tongue</th>
-                  <th>Date of Birth</th>
-                  <th>Father First Name</th>
-                  <th>Father Middle Name</th>
-                  <th>Father Last Name</th>
-                  <th>Mother First Name</th>
-                  <th>Mother Middle Name</th>
-                  <th>Mother Last Name</th>
-                </tr>
-              </thead>
-              <tbody>
-                {rowsObj}
-              </tbody>
-            </table>
-            <div className="row">
-              <div className="col-md-4">
-                <button
-                  className="btn btn-primary"
-                  onClick={this.validate}
-                >
-                  Save
-                </button>
-                <button onClick={this.props.hide} className="btn btn-primary padded-btn">
-                  Discard
-                </button>
-              </div>
-            </div>
-            <div className="base-spacing-mid" />
-          </div>
-        </div>
+    }
+
+    let rowsObj = [];
+    for (let i = 0; i < this.state.rows; i++) {
+      rowsObj.push(
+        <InputRow
+          languages={this.state.languages.list}
+          updateValue={this.updateValue}
+          index={i}
+          key={i}
+          formError={this.state.formError}
+        />,
       );
     }
+
+    return (
+      <div>
+        {!_.isEmpty(this.state.formError) &&
+          <div className="alert alert-danger">
+            <strong>Error:</strong>Please enter all required values before submitting the form.
+          </div>}
+        <div className="table-responsive">
+          <table className="table table-hover table-fixedwidth">
+            <thead>
+              <tr className="text-primary text-uppercase">
+                <th>First Name{this.setRequiredField('first_name')}</th>
+                <th>Middle Name{this.setRequiredField('middle_name')}</th>
+                <th>Last Name{this.setRequiredField('last_name')}</th>
+                <th>UID{this.setRequiredField('uid')}</th>
+                <th>Gender{this.setRequiredField('gender')}</th>
+                <th>Mother Tongue{this.setRequiredField('mt')}</th>
+                <th>Date of Birth{this.setRequiredField('dob')}</th>
+                <th>Father First Name{this.setRequiredField('fatherFirstName')}</th>
+                <th>Father Middle Name{this.setRequiredField('fatherMiddleName')}</th>
+                <th>Father Last Name{this.setRequiredField('fatherLastName')}</th>
+                <th>Mother First Name{this.setRequiredField('motherFirstName')}</th>
+                <th>Mother Middle Name{this.setRequiredField('motherMiddleName')}</th>
+                <th>Mother Last Name{this.setRequiredField('motherLastName')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rowsObj}
+            </tbody>
+          </table>
+          <div className="row">
+            <div className="col-md-4">
+              <button className="btn btn-primary" onClick={this.validate}>
+                Save
+              </button>
+              <button onClick={this.props.hide} className="btn btn-primary padded-btn">
+                Discard
+              </button>
+            </div>
+          </div>
+          <div className="base-spacing-mid" />
+        </div>
+      </div>
+    );
   }
 }
 
@@ -170,7 +176,7 @@ class InputRow extends Component {
 
   render() {
     return (
-      <tr className={_.includes(this.props.formError, this.props.index + "") ? 'bg-danger': ''}>
+      <tr className={_.includes(this.props.formError, this.props.index + '') ? 'bg-danger' : ''}>
         <td>
           <input
             value={this.state.first_name}
@@ -179,6 +185,7 @@ class InputRow extends Component {
             }}
             type="text"
             className="form-control"
+            required
           />
         </td>
         <td>

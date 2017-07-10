@@ -52,3 +52,15 @@ export const answersNotSaved = {
   title: 'Error!',
   message: 'Answers could not be saved for student!',
 };
+
+export const institutionSaved = {
+  ...baseNotification,
+  title: 'Institution Saved',
+  message: 'Institution modified successfully.',
+};
+
+export const institutionNotSaved = {
+  ...baseNotification,
+  title: 'Error!',
+  message: 'Institution could not be modified.',
+};

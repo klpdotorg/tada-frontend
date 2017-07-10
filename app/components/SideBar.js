@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import SchoolsNavTree from './NavTree';
 import _ from 'lodash';
 import classNames from 'classnames';
@@ -97,13 +98,13 @@ class SideBar extends Component {
 }
 
 SideBar.propTypes = {
-  dispatch: React.PropTypes.func,
-  boundariesByParentId: React.PropTypes.object,
-  boundaryDetails: React.PropTypes.object,
-  primarySelected: React.PropTypes.bool,
-  location: React.PropTypes.object,
-  filteredBoundaryDetails: React.PropTypes.object,
-  filteredBoundaryHierarchy: React.PropTypes.object,
+  dispatch: PropTypes.func,
+  boundariesByParentId: PropTypes.object,
+  boundaryDetails: PropTypes.object,
+  primarySelected: PropTypes.bool,
+  location: PropTypes.object,
+  filteredBoundaryDetails: PropTypes.object,
+  filteredBoundaryHierarchy: PropTypes.object,
 };
 
 const mapStateToProps = (state, ownProps) => ({

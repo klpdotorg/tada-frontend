@@ -80,13 +80,14 @@ export default class EditProgram extends Component {
         ];
         var program = this.props.program;
         var name="", desc="", startdate="", enddate="", instcat="";
-        if(program)
-        {
+        if(program) {
+					const categoryId = program.programme_institution_category
+
         	name=program.name;
         	desc=program.description;
         	startdate=program.start_date;
         	enddate=program.end_date;
-        	instcat=program.programme_institution_category.toString();
+        	instcat= categoryId ? categoryId.toString(): '';
         }
 		return(
       <Modal
