@@ -149,7 +149,7 @@ export default class ConfirmDialog extends Component {
               name="uid"
               id="uid"
               value={uid || ''}
-              label="UID:"
+              label="Government student ID:"
               type="text"
               className="form-control"
               validations="minLength:1"

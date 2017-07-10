@@ -39,14 +39,30 @@ const StudentRow = props => {
           type="checkbox"
         />
       </td>
-      <td>{props.id}</td>
-      <td>{displayFullName(props)}</td>
-      <td>{props.uid}</td>
-      <td>{props.gender}</td>
-      <td>{langVal}</td>
-      <td>{dateParser(props.dob)}</td>
-      <td>{displayFullName(get(relations, 'Father[0]'))}</td>
-      <td>{displayFullName(get(relations, 'Mother[0]'))}</td>
+      <td>
+        {props.id}
+      </td>
+      <td>
+        {displayFullName(props)}
+      </td>
+      <td>
+        {props.uid}
+      </td>
+      <td>
+        {props.gender}
+      </td>
+      <td>
+        {langVal}
+      </td>
+      <td>
+        {dateParser(props.dob)}
+      </td>
+      <td>
+        {displayFullName(get(relations, 'Father[0]'))}
+      </td>
+      <td>
+        {displayFullName(get(relations, 'Mother[0]'))}
+      </td>
       <td>
         <button
           onClick={() => {
@@ -225,7 +241,11 @@ class StudentScreen extends Component {
       .filter(id => id !== group.id)
       .map(id => {
         let group = boundaryDetails[id];
-        return <option key={id} value={group.id}>{group.label}</option>;
+        return (
+          <option key={id} value={group.id}>
+            {group.label}
+          </option>
+        );
       });
 
     var Displayelement;
@@ -241,12 +261,16 @@ class StudentScreen extends Component {
                 <th>Select</th>
                 <th>ID</th>
                 <th>Name</th>
-                <th>UID</th>
+                <th>Government student ID</th>
                 <th>Gender</th>
                 <th>Mother Tongue</th>
                 <th>Date of Birth</th>
-                <th>{"Father's Name"}</th>
-                <th>{"Mother's Name"}</th>
+                <th>
+                  {"Father's Name"}
+                </th>
+                <th>
+                  {"Mother's Name"}
+                </th>
                 <th />
               </tr>
             </thead>
@@ -277,20 +301,36 @@ class StudentScreen extends Component {
     } else {
       Displayelement = props =>
         <div className="alert alert-danger">
-
           <i className="fa fa-lock fa-lg" aria-hidden="true" />
-
           Insufficient Privileges. Please contact administrator.
         </div>;
     }
     return (
       <div>
         <ol className="breadcrumb">
-          <li><Link to={district.path}>{district.name}</Link></li>
-          <li><Link to={block.path}>{block.name}</Link></li>
-          <li><Link to={cluster.path}>{cluster.name}</Link></li>
-          <li><Link to={institution.path}>{institution.name}</Link></li>
-          <li>{group.label}</li>
+          <li>
+            <Link to={district.path}>
+              {district.name}
+            </Link>
+          </li>
+          <li>
+            <Link to={block.path}>
+              {block.name}
+            </Link>
+          </li>
+          <li>
+            <Link to={cluster.path}>
+              {cluster.name}
+            </Link>
+          </li>
+          <li>
+            <Link to={institution.path}>
+              {institution.name}
+            </Link>
+          </li>
+          <li>
+            {group.label}
+          </li>
         </ol>
         <Displayelement {...this.props} />
         <ModifyStudent

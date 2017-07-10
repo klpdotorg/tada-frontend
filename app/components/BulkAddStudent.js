@@ -12,7 +12,7 @@ export default class BulkAddStudent extends Component {
         isLoading: true,
       },
       formError: [],
-      requiredFields: ['first_name', 'dob', 'fatherFirstName', 'motherFirstName', 'uid', 'gender'],
+      requiredFields: ['first_name', 'dob', 'fatherFirstName', 'motherFirstName', 'gender'],
     };
     this.updateValue = this.updateValue.bind(this);
     this.validate = this.validate.bind(this);
@@ -110,19 +110,45 @@ export default class BulkAddStudent extends Component {
           <table className="table table-hover table-fixedwidth">
             <thead>
               <tr className="text-primary text-uppercase">
-                <th>First Name{this.setRequiredField('first_name')}</th>
-                <th>Middle Name{this.setRequiredField('middle_name')}</th>
-                <th>Last Name{this.setRequiredField('last_name')}</th>
-                <th>UID{this.setRequiredField('uid')}</th>
-                <th>Gender{this.setRequiredField('gender')}</th>
-                <th>Mother Tongue{this.setRequiredField('mt')}</th>
-                <th>Date of Birth{this.setRequiredField('dob')}</th>
-                <th>Father First Name{this.setRequiredField('fatherFirstName')}</th>
-                <th>Father Middle Name{this.setRequiredField('fatherMiddleName')}</th>
-                <th>Father Last Name{this.setRequiredField('fatherLastName')}</th>
-                <th>Mother First Name{this.setRequiredField('motherFirstName')}</th>
-                <th>Mother Middle Name{this.setRequiredField('motherMiddleName')}</th>
-                <th>Mother Last Name{this.setRequiredField('motherLastName')}</th>
+                <th>
+                  First Name{this.setRequiredField('first_name')}
+                </th>
+                <th>
+                  Middle Name{this.setRequiredField('middle_name')}
+                </th>
+                <th>
+                  Last Name{this.setRequiredField('last_name')}
+                </th>
+                <th>
+                  Government student ID{this.setRequiredField('uid')}
+                </th>
+                <th>
+                  Gender{this.setRequiredField('gender')}
+                </th>
+                <th>
+                  Mother Tongue{this.setRequiredField('mt')}
+                </th>
+                <th>
+                  Date of Birth{this.setRequiredField('dob')}
+                </th>
+                <th>
+                  Father First Name{this.setRequiredField('fatherFirstName')}
+                </th>
+                <th>
+                  Father Middle Name{this.setRequiredField('fatherMiddleName')}
+                </th>
+                <th>
+                  Father Last Name{this.setRequiredField('fatherLastName')}
+                </th>
+                <th>
+                  Mother First Name{this.setRequiredField('motherFirstName')}
+                </th>
+                <th>
+                  Mother Middle Name{this.setRequiredField('motherMiddleName')}
+                </th>
+                <th>
+                  Mother Last Name{this.setRequiredField('motherLastName')}
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -242,7 +268,11 @@ class InputRow extends Component {
             id="gender"
           >
             {this.props.languages.map((lang, i) => {
-              return <option key={i} value={lang.value}>{_.startCase(lang.label)}</option>;
+              return (
+                <option key={i} value={lang.value}>
+                  {_.startCase(lang.label)}
+                </option>
+              );
             })}
           </select>
         </td>
