@@ -1,18 +1,59 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Teachers from './Teachers/ShowTeachers';
-import { getBoundaries, getInstitutions, openNode, fetchEntitiesFromServer } from '../actions';
+import {
+  getBoundaries,
+  getInstitutions,
+  openNode,
+  fetchEntitiesFromServer,
+  selectPrimaryTree,
+  selectPreschoolTree,
+} from '../actions';
 
 class TeacherContainer extends Component {
   state = {
     isLoading: true,
   };
 
-  componentDidMount() {
+  getPreshoolData = () => {
     const { dispatch, params } = this.props;
 
-    dispatch(openNode(params.districtId));
-    dispatch(fetchEntitiesFromServer(params.districtId));
+    dispatch(selectPreschoolTree());
+    dispatch({
+      type: 'BOUNDARIES',
+      payload: getBoundaries(1),
+    }).then(() => {
+      dispatch({
+        type: 'BOUNDARIES',
+        payload: getBoundaries(params.districtId),
+      }).then(() => {
+        dispatch(openNode(params.projectId));
+        dispatch(fetchEntitiesFromServer(params.projectId));
+        dispatch({
+          type: 'BOUNDARIES',
+          payload: getBoundaries(params.projectId),
+        }).then(() => {
+          dispatch(openNode(params.circleId));
+          dispatch(fetchEntitiesFromServer(params.circleId));
+          dispatch({
+            type: 'BOUNDARIES',
+            payload: getInstitutions(params.circleId),
+          }).then(() => {
+            this.setState({
+              isLoading: false,
+            });
+            dispatch(openNode(params.institutionId));
+            dispatch(fetchEntitiesFromServer(params.institutionId));
+          });
+        });
+      });
+    });
+  };
+
+  getPrimarySchoolData = () => {
+    const { dispatch, params } = this.props;
+
+    dispatch(selectPrimaryTree());
     dispatch({
       type: 'BOUNDARIES',
       payload: getBoundaries(1),
@@ -42,6 +83,19 @@ class TeacherContainer extends Component {
         });
       });
     });
+  };
+
+  componentDidMount() {
+    const { dispatch, params } = this.props;
+
+    dispatch(openNode(params.districtId));
+    dispatch(fetchEntitiesFromServer(params.districtId));
+
+    if (params.projectId) {
+      this.getPreshoolData();
+    } else {
+      this.getPrimarySchoolData();
+    }
   }
 
   loadingData() {

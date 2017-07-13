@@ -1,4 +1,10 @@
 import React from 'react';
+import { push } from 'react-router-redux';
+import { Link } from 'react-router';
+import { mapValues } from 'lodash';
+import Formsy from 'formsy-react';
+import FRC from 'formsy-react-components';
+
 import ConfirmModal from './Modals/Confirm';
 import {
   deleteInstitution,
@@ -12,12 +18,11 @@ import {
 } from '../actions';
 import Button from './Button';
 import CreateClass from './Modals/CreateClass';
-import { mapValues } from 'lodash';
-import Formsy from 'formsy-react';
+
 // import Select from 'react-select';
-import FRC from 'formsy-react-components';
+
 import { getManagement, getLanguages, getInstitutionCategories, replaceNull } from './utils';
-import { Link } from 'react-router';
+
 const { Input, Textarea, Select } = FRC;
 export default class Institution extends React.Component {
   constructor(props) {
@@ -225,6 +230,10 @@ export default class Institution extends React.Component {
     });
   };
 
+  showTeachers = path => {
+    this.props.dispatch(push(`${path}/teachers`));
+  };
+
   Displayelement = props => {
     const selectOptions = [
       { value: 'co-ed', label: 'Co-Ed' },
@@ -242,22 +251,36 @@ export default class Institution extends React.Component {
       return (
         <div>
           <ol className="breadcrumb">
-            <li><Link to={district.path}>{district.name}</Link></li>
-            <li> <Link to={project.path}> {project.name}</Link></li>
-            <li> <Link to={circle.path}> {circle.name}</Link></li>
-            <li className="active"> {institution.name}</li>
+            <li>
+              <Link to={district.path}>
+                {district.name}
+              </Link>
+            </li>
+            <li>
+              {' '}<Link to={project.path}> {project.name}</Link>
+            </li>
+            <li>
+              {' '}<Link to={circle.path}> {circle.name}</Link>
+            </li>
+            <li className="active">
+              {' '}{institution.name}
+            </li>
           </ol>
-          <div>
-            <h4 className="text-primary col-md-10">Modify Details</h4>
-            <button
-              className="btn btn-green pull-right"
-              title="Add Class"
-              onClick={this.toggleClassModal}
-            >
-              Add Class
-            </button>
+          <div className="row">
+            <h4 className="text-primary col-md-9">Modify Details</h4>
+            <div className="col-md-3 text-right">
+              <button className="btn btn-green" title="Add Class" onClick={this.toggleClassModal}>
+                Add Class
+              </button>
+              <button
+                className="btn btn-green padded-btn"
+                title="View Teachers"
+                onClick={this.showTeachers.bind(null, institution.path)}
+              >
+                View Teachers
+              </button>
+            </div>
             <div className="base-spacing-mid border-base" />
-
             <Formsy.Form
               onValidSubmit={this.saveInsti}
               onValid={this.enableSubmitButton}
@@ -389,7 +412,6 @@ export default class Institution extends React.Component {
                     type="text"
                     className="form-control"
                   />
-
                 </div>
               </div>
             </Formsy.Form>
@@ -426,21 +448,34 @@ export default class Institution extends React.Component {
       return (
         <div>
           <ol className="breadcrumb">
-            <li><Link to={district.path}>{district.name}</Link></li>
-            <li> <Link to={project.path}> {project.name}</Link></li>
-            <li> <Link to={circle.path}> {circle.name}</Link></li>
-            <li className="active"> {institution.name}</li>
+            <li>
+              <Link to={district.path}>
+                {district.name}
+              </Link>
+            </li>
+            <li>
+              {' '}<Link to={project.path}> {project.name}</Link>
+            </li>
+            <li>
+              {' '}<Link to={circle.path}> {circle.name}</Link>
+            </li>
+            <li className="active">
+              {' '}{institution.name}
+            </li>
           </ol>
           <div>
             <div className="alert alert-danger">
               <i className="fa fa-lock fa-lg" aria-hidden="true" />
-              Insufficient Privileges. Please contact administrator for permissions to modify the institution.
+              Insufficient Privileges. Please contact administrator for permissions to modify the
+              institution.
             </div>
           </div>
           <h4 className="text-primary">Institution Details</h4>
           <div className="border-base" />
           <div className="base-spacing-mid" />
-          <div>{institution.name}</div>
+          <div>
+            {institution.name}
+          </div>
         </div>
       );
     }
@@ -456,6 +491,8 @@ export default class Institution extends React.Component {
           <i className="fa fa-cog fa-spin fa-lg fa-fw" />
           <span className="text-muted">Loading...</span>
         </div>
-      : <div>{this.Displayelement(...this.props)}</div>;
+      : <div>
+          {this.Displayelement(...this.props)}
+        </div>;
   }
 }

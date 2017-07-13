@@ -71,6 +71,10 @@ export const routes = (
           component={Preschool}
         />
         <Route
+          path="district/:districtId/project/:projectId/circle/:circleId/institution/:institutionId/teachers"
+          component={Teachers}
+        />
+        <Route
           path="district/:districtId/project/:projectId/circle/:circleId/institution/:institutionId/studentgroups/:groupId"
           component={StudentGroup}
         />
