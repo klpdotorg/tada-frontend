@@ -1,4 +1,5 @@
 import React from 'react';
+import { push } from 'react-router-redux';
 import ConfirmModal from './Modals/Confirm';
 import {
   deleteInstitution,
@@ -223,6 +224,10 @@ export default class Institution extends React.Component {
     } else return false;
   }
 
+  showTeachers = path => {
+    this.props.dispatch(push(`${path}/teachers`));
+  };
+
   handleChange = () => {
     var myform = this.myform.getModel();
     // console.log(myform)
@@ -243,6 +248,7 @@ export default class Institution extends React.Component {
       institution: copy,
     });
   };
+
   Displayelement = props => {
     const selectOptions = [
       { value: 'co-ed', label: 'Co-Ed' },
@@ -264,10 +270,20 @@ export default class Institution extends React.Component {
     return (
       <div>
         <ol className="breadcrumb">
-          <li><Link to={district.path}>{district.name}</Link></li>
-          <li> <Link to={block.path}> {block.name}</Link></li>
-          <li> <Link to={cluster.path}> {cluster.name}</Link></li>
-          <li className="active"> {institution.name}</li>
+          <li>
+            <Link to={district.path}>
+              {district.name}
+            </Link>
+          </li>
+          <li>
+            {' '}<Link to={block.path}> {block.name}</Link>
+          </li>
+          <li>
+            {' '}<Link to={cluster.path}> {cluster.name}</Link>
+          </li>
+          <li className="active">
+            {' '}{institution.name}
+          </li>
         </ol>
 
         <div>
@@ -287,22 +303,32 @@ export default class Institution extends React.Component {
                     </div>
                   : <div />}
               </div>}
-
-          <h4 className="text-primary col-md-10">
-            {canModify ? 'Modify Details' : 'View Details'}
-          </h4>
-
-          {!canModify
-            ? null
-            : <button
-                className="btn btn-orange pull-right"
-                title="Add Class"
-                onClick={this.toggleClassModal}
+          <div className="row">
+            <h4 className="text-primary col-md-9">
+              {canModify ? 'Modify Details' : 'View Details'}
+            </h4>
+            <div className="col-md-3 text-right">
+              {!canModify
+                ? null
+                : <button
+                    className="btn btn-orange"
+                    title="Add Class"
+                    onClick={this.toggleClassModal}
+                    disabled={!canModify}
+                  >
+                    Add Class
+                  </button>}
+              <button
+                className="btn btn-orange padded-btn"
+                title="View Teachers"
+                onClick={this.showTeachers.bind(null, institution.path)}
                 disabled={!canModify}
               >
-                Add Class
-              </button>}
-          <div className="base-spacing-mid border-base" />
+                View Teachers
+              </button>
+            </div>
+          </div>
+          <div className="border-base" />
           <div className="base-spacing-sm" />
           <Formsy.Form
             onValidSubmit={this.saveInsti}
@@ -488,6 +514,10 @@ export default class Institution extends React.Component {
   };
 
   render() {
-    return this.state.isLoading ? <div>Loading...</div> : <div>{this.Displayelement()}</div>;
+    return this.state.isLoading
+      ? <div>Loading...</div>
+      : <div>
+          {this.Displayelement()}
+        </div>;
   }
 }
