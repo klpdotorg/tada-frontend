@@ -16,9 +16,9 @@ const DATA = {
 };
 
 class TeacherList extends Component {
-  renderItem = (item = DATA) => {
-    return (
-      <tr>
+  renderTeachers = () =>
+    _.map(this.props.teachers, item =>
+      <tr key={item.id}>
         <td>
           {item.first_name}
         </td>
@@ -77,9 +77,8 @@ class TeacherList extends Component {
             <i className="fa fa-trash-o" />
           </button>
         </td>
-      </tr>
+      </tr>,
     );
-  };
 
   render() {
     return (
@@ -118,7 +117,7 @@ class TeacherList extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.renderItem()}
+            {this.renderTeachers()}
           </tbody>
         </table>
       </div>

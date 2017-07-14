@@ -64,3 +64,39 @@ export const institutionNotSaved = {
   title: 'Error!',
   message: 'Institution could not be modified.',
 };
+
+export const teacherCreated = {
+  ...baseNotification,
+  title: 'Teacher Saved',
+  message: 'Teacher created successfully.',
+};
+
+export const teacherUpdated = {
+  ...baseNotification,
+  title: 'Teacher Updated',
+  message: 'Teacher updated successfully',
+};
+
+export const teacherDeleted = {
+  ...baseNotification,
+  title: 'Teacher Deleted',
+  message: 'Teacher deleted successfully',
+};
+
+export const teacherNotDeleted = {
+  ...baseNotification,
+  title: 'Error!',
+  message: 'Teacher could not be deleted.',
+};
+
+export const teacherNotUpdated = {
+  ...baseNotification,
+  title: 'Error!',
+  message: 'Teacher could not be updated.',
+};
+
+export const teacherNotCreated = {
+  ...baseNotification,
+  title: 'Error!',
+  title: 'Teacher could not be created.',
+};

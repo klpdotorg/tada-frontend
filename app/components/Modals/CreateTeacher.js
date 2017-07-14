@@ -5,13 +5,14 @@ import PropTypes from 'prop-types';
 import FRC from 'formsy-react-components';
 import Modal from './ModalTemplate';
 
-const { Input } = FRC;
+const { Input, Select } = FRC;
 
 class CreateTeacher extends Component {
   constructor(props) {
     super(props);
     this.state = {
       canSubmit: false,
+      gender: 'male',
     };
   }
 
@@ -28,10 +29,22 @@ class CreateTeacher extends Component {
   };
 
   submitForm = () => {
-    console.log(this.myform.getModel());
+    this.props.onSubmit(this.myform.getModel());
   };
 
   render() {
+    const { institution } = this.props;
+    const gender = [
+      {
+        label: 'Male',
+        value: 'male',
+      },
+      {
+        label: 'Female',
+        value: 'female',
+      },
+    ];
+
     return (
       <Modal
         title="Create Teacher"
@@ -84,6 +97,7 @@ class CreateTeacher extends Component {
             value=""
             validations="minLength:1"
           />
+          <Select name="gender" label="Gender" value="male" options={gender} />
           <Input
             name="qualification"
             id="qualification"
@@ -98,18 +112,20 @@ class CreateTeacher extends Component {
             id="total_work_experience_years"
             value=""
             label="Total Work Experience Years"
-            type="text"
+            type="number"
             value=""
             validations="minLength:1"
+            required
           />
           <Input
             name="total_work_experience_months"
             id="total_work_experience_months"
             value=""
             label="Total Work Experience Months"
-            type="text"
+            type="number"
             value=""
             validations="minLength:1"
+            required
           />
           <Input
             name="subject"
@@ -121,12 +137,12 @@ class CreateTeacher extends Component {
             validations="minLength:1"
           />
           <Input
-            name="school_id"
-            id="school_id"
+            name="institution"
+            id="institution"
             value=""
             label="School ID"
             type="text"
-            value=""
+            value={institution}
             validations="minLength:1"
           />
           <Input

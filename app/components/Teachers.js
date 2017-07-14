@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Teachers from './Teachers/ShowTeachers';
+import ShowTeachers from './Teachers/ShowTeachers';
 import {
   getBoundaries,
   getInstitutions,
@@ -8,11 +8,12 @@ import {
   fetchEntitiesFromServer,
   selectPrimaryTree,
   selectPreschoolTree,
+  getTeachers,
 } from '../actions';
 
-class TeacherContainer extends Component {
+class Teachers extends Component {
   state = {
-    isLoading: true,
+    isFetching: true,
   };
 
   getPreshoolData = () => {
@@ -39,11 +40,12 @@ class TeacherContainer extends Component {
             type: 'BOUNDARIES',
             payload: getInstitutions(params.circleId),
           }).then(() => {
-            this.setState({
-              isLoading: false,
-            });
             dispatch(openNode(params.institutionId));
             dispatch(fetchEntitiesFromServer(params.institutionId));
+            dispatch(getTeachers(params.institutionId));
+            this.setState({
+              isFetching: false,
+            });
           });
         });
       });
@@ -74,11 +76,12 @@ class TeacherContainer extends Component {
             type: 'BOUNDARIES',
             payload: getInstitutions(params.clusterId),
           }).then(() => {
-            this.setState({
-              isLoading: false,
-            });
             dispatch(openNode(params.institutionId));
             dispatch(fetchEntitiesFromServer(params.institutionId));
+            dispatch(getTeachers(params.institutionId));
+            this.setState({
+              isFetching: false,
+            });
           });
         });
       });
@@ -108,17 +111,28 @@ class TeacherContainer extends Component {
   }
 
   render() {
-    if (this.state.isLoading) {
+    if (this.state.isFetching) {
       return this.loadingData();
     }
 
-    return <Teachers {...this.props} />;
+    const { teachers, params, boundaryDetails, dispatch } = this.props;
+
+    console.log(this.props.teachers);
+
+    return (
+      <ShowTeachers
+        params={params}
+        boundaryDetails={boundaryDetails}
+        teachers={teachers}
+        dispatch={dispatch}
+      />
+    );
   }
 }
 
-TeacherContainer.propTypes = {
+Teachers.propTypes = {
   dispatch: PropTypes.func,
   params: PropTypes.object,
 };
 
-export default TeacherContainer;
+export default Teachers;
