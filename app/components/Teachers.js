@@ -117,8 +117,6 @@ class Teachers extends Component {
 
     const { teachers, params, boundaryDetails, dispatch } = this.props;
 
-    console.log(this.props.teachers);
-
     return (
       <ShowTeachers
         params={params}

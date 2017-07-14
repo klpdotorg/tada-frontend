@@ -59,9 +59,7 @@ class Teachers extends Component {
   deleteTeacher = id => {
     const teacher = this.getTeacher(id);
     teacher.active = 0;
-    this.props.dispatch(updateTeacher(teacher, id, true)).then(() => {
-      console.log('Deleted successfully.');
-    });
+    this.props.dispatch(updateTeacher(teacher, id, true));
   };
 
   getTeacher = id => {

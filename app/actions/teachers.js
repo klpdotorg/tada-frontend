@@ -23,7 +23,7 @@ export const getTeachers = institutionId =>
       .then(res => {
         dispatch({
           type: 'TEACHER_FETCHED',
-          payload: { [institutionId]: res.results },
+          payload: { [institutionId]: res },
         });
       });
   };
@@ -43,15 +43,13 @@ export const saveTeacher = options => dispatch => {
   })
     .then(checkStatus)
     .then(teacher => {
+      console.log(teacher);
       if (!teacher) {
         dispatch(Notifications.error(teacherNotCreated));
       }
 
       dispatch(Notifications.success(teacherCreated));
-      dispatch({
-        type: 'ADD_TEACHER',
-        teacher,
-      });
+      dispatch(getTeachers(options.institution));
     });
 };
 
