@@ -64,6 +64,7 @@ export default class StudentGroupScreen extends Component {
             type: 'BOUNDARIES',
             payload: getInstitutions(clusterId),
           }).then(() => {
+            console.log(params);
             dispatch(openNode(params.institutionId));
             dispatch(fetchEntitiesFromServer(params.institutionId));
             dispatch({
@@ -253,11 +254,31 @@ class StudentGroup extends Component {
     return (
       <div>
         <ol className="breadcrumb">
-          <li><Link to={district.path}>{district.name}</Link></li>
-          <li><Link to={block.path}>{block.name}</Link></li>
-          <li><Link to={cluster.path}>{cluster.name}</Link></li>
-          <li><Link to={institution.path}>{institution.name}</Link></li>
-          <li><Link className="active">{group.name}</Link></li>
+          <li>
+            <Link to={district.path}>
+              {district.name}
+            </Link>
+          </li>
+          <li>
+            <Link to={block.path}>
+              {block.name}
+            </Link>
+          </li>
+          <li>
+            <Link to={cluster.path}>
+              {cluster.name}
+            </Link>
+          </li>
+          <li>
+            <Link to={institution.path}>
+              {institution.name}
+            </Link>
+          </li>
+          <li>
+            <Link className="active">
+              {group.name}
+            </Link>
+          </li>
         </ol>
         <div>
           {!canModify
@@ -269,7 +290,9 @@ class StudentGroup extends Component {
           <div>
             <div className="row">
               <div className="col-md-8">
-                <h4 className="text-primary">{canModify ? 'Modify Details' : 'View Details'}</h4>
+                <h4 className="text-primary">
+                  {canModify ? 'Modify Details' : 'View Details'}
+                </h4>
               </div>
               {isSchool
                 ? <div className="col-md-4 pull-right">
@@ -304,14 +327,15 @@ class StudentGroup extends Component {
                       View Students
                     </button>
                   </div>}
-
             </div>
           </div>
           <div className="base-spacing-mid border-base" />
 
           <form className="form-horizontal" role="form">
             <div className="form-group">
-              <label className="control-label col-sm-2" htmlFor="class">Class</label>
+              <label className="control-label col-sm-2" htmlFor="class">
+                Class
+              </label>
               <div className="col-sm-2">
                 <input
                   type="text"
@@ -326,7 +350,9 @@ class StudentGroup extends Component {
               </div>
             </div>
             <div className="form-group">
-              <label className="control-label col-sm-2" htmlFor="section">Section</label>
+              <label className="control-label col-sm-2" htmlFor="section">
+                Section
+              </label>
               <div className="col-sm-2">
                 <input
                   type="text"
@@ -341,7 +367,9 @@ class StudentGroup extends Component {
               </div>
             </div>
             <div className="form-group">
-              <label className="control-label col-sm-2" htmlFor="section">Type</label>
+              <label className="control-label col-sm-2" htmlFor="section">
+                Type
+              </label>
               <div className="col-sm-2">
                 <select
                   className="col-sm-2"

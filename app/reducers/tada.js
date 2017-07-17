@@ -128,7 +128,6 @@ export function boundaries(
 
     case 'TOGGLE_NODE':
       const boundary = _.clone(state.boundaryDetails[action.id]);
-      //console.log(boundary.collapsed);
       if (action.open) {
         boundary.collapsed = !action.open;
       } else {
