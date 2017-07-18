@@ -55,6 +55,46 @@ export default class Institution extends React.Component {
     this.hasChildren = this.hasChildren.bind(this);
   }
 
+  fetchTree = params => {
+    const { dispatch } = this.props;
+
+    this.setState({
+      isLoading: true,
+    });
+
+    dispatch(openNode(params.districtId));
+    dispatch(fetchEntitiesFromServer(params.districtId));
+    dispatch({
+      type: 'BOUNDARIES',
+      payload: getBoundaries(1),
+    }).then(() => {
+      dispatch({
+        type: 'BOUNDARIES',
+        payload: getBoundaries(params.districtId),
+      }).then(() => {
+        dispatch(openNode(params.blockId));
+        dispatch(fetchEntitiesFromServer(params.blockId));
+        dispatch({
+          type: 'BOUNDARIES',
+          payload: getBoundaries(params.blockId),
+        }).then(() => {
+          dispatch(openNode(params.clusterId));
+          dispatch(fetchEntitiesFromServer(params.clusterId));
+          dispatch({
+            type: 'BOUNDARIES',
+            payload: getInstitutions(params.clusterId),
+          }).then(() => {
+            this.setState({
+              isLoading: false,
+            });
+            dispatch(openNode(params.institutionId));
+            dispatch(fetchEntitiesFromServer(params.institutionId));
+          });
+        });
+      });
+    });
+  };
+
   componentDidMount() {
     const { params, dispatch } = this.props;
     getLanguages().then(languages => {
@@ -102,45 +142,19 @@ export default class Institution extends React.Component {
       });
     });
 
-    dispatch(openNode(params.districtId));
-    dispatch(fetchEntitiesFromServer(params.districtId));
-    dispatch({
-      type: 'BOUNDARIES',
-      payload: getBoundaries(1),
-    }).then(() => {
-      dispatch({
-        type: 'BOUNDARIES',
-        payload: getBoundaries(params.districtId),
-      }).then(() => {
-        dispatch(openNode(params.blockId));
-        dispatch(fetchEntitiesFromServer(params.blockId));
-        dispatch({
-          type: 'BOUNDARIES',
-          payload: getBoundaries(params.blockId),
-        }).then(() => {
-          dispatch(openNode(params.clusterId));
-          dispatch(fetchEntitiesFromServer(params.clusterId));
-          dispatch({
-            type: 'BOUNDARIES',
-            payload: getInstitutions(params.clusterId),
-          }).then(() => {
-            this.setState({
-              isLoading: false,
-            });
-            dispatch(openNode(params.institutionId));
-            dispatch(fetchEntitiesFromServer(params.institutionId));
-          });
-        });
-      });
-    });
+    this.fetchTree(this.props.params);
   }
 
-  componentWillReceiveProps(props) {
-    let institution = props.boundaries.boundaryDetails[props.params.institutionId];
-    institution = replaceNull(props.boundaries.boundaryDetails[props.params.institutionId]);
+  componentWillReceiveProps(nextProps) {
+    let institution = nextProps.boundaries.boundaryDetails[nextProps.params.institutionId];
+    institution = replaceNull(nextProps.boundaries.boundaryDetails[nextProps.params.institutionId]);
     this.setState({
       institution,
     });
+
+    if (nextProps.params.institutionId !== this.props.params.institutionId) {
+      this.fetchTree(nextProps.params);
+    }
   }
 
   saveInsti() {

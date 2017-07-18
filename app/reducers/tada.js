@@ -120,7 +120,7 @@ export function boundaries(
         isFetching: false,
       };
 
-    case 'STUDENT_FULFILLED':
+    case 'BOUNDARY_FETECHED':
       const boundaryDetailsWithStudent = {
         ...state.boundaryDetails,
         ...{ [action.data.id]: action.data },

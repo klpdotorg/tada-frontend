@@ -208,6 +208,12 @@ export const getStudent = params => {
   );
 };
 
+export const getStudentGroup = params => {
+  return get(
+    `${serverApiBase}institutions/${params.institution}/studentgroups/${params.studentgroup}`,
+  );
+};
+
 //Method fetches institutions belonging to a particular Id from the institutions endpoint
 export function fetchInstitutionDetails(parentBoundaryId) {
   return function(dispatch, getState) {

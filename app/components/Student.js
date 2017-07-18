@@ -19,6 +19,7 @@ import {
   openNode,
   fetchEntitiesFromServer,
   getStudent,
+  getStudentGroup,
   removeBoundary,
 } from '../actions';
 const { Input, Textarea, Select } = FRC;
@@ -34,11 +35,20 @@ class Student extends Component {
     };
   }
 
-  componentDidMount = () => {
-    const { params, dispatch, location } = this.props;
+  componentWillReceiveProps = nextProps => {
+    if (this.props.params.studentId !== nextProps.params.studentId) {
+      this.fetchTree(nextProps.params);
+    }
+  };
+
+  fetchTree = params => {
+    const { dispatch } = this.props;
     if (params.circleId) {
       this.props.dispatch(selectPreschoolTree());
     }
+    this.setState({
+      isLoading: true,
+    });
 
     const blockId = params.blockId || params.projectId;
     const clusterId = params.clusterId || params.circleId;
@@ -69,19 +79,27 @@ class Student extends Component {
             dispatch({
               type: 'BOUNDARIES',
               payload: getStudentGroups(params.institutionId),
-            }).then(() => {
-              dispatch(openNode(params.groupId));
-              getStudent({
+            }).then(res => {
+              getStudentGroup({
                 institution: params.institutionId,
                 studentgroup: params.groupId,
-                student: params.studentId,
               }).then(response => {
                 dispatch({
-                  type: 'STUDENT_FULFILLED',
+                  type: 'BOUNDARY_FETECHED',
                   data: response,
                 });
-                this.setState({
-                  isLoading: false,
+                getStudent({
+                  institution: params.institutionId,
+                  studentgroup: params.groupId,
+                  student: params.studentId,
+                }).then(response => {
+                  dispatch({
+                    type: 'BOUNDARY_FETECHED',
+                    data: response,
+                  });
+                  this.setState({
+                    isLoading: false,
+                  });
                 });
               });
             });
@@ -89,6 +107,10 @@ class Student extends Component {
         });
       });
     });
+  };
+
+  componentDidMount = () => {
+    this.fetchTree(this.props.params);
   };
 
   saveStudent = student => {
