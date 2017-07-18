@@ -44,7 +44,7 @@ export default class SecondaryNavBar extends React.Component {
 
   filterSearchData = data => {
     const institutions = _.map(data.institutions, item => ({
-      label: `${item.id}_${'institution'} ${capitalize(item.name)}`,
+      label: `${'Institution'} - ${item.id} - ${capitalize(item.name)}`,
       value: item.id,
       type: 'institution',
       boundaryDetails: item.boundary_details,
@@ -54,7 +54,7 @@ export default class SecondaryNavBar extends React.Component {
       const name = capitalize(`${item.first_name} ${item.last_name}`);
 
       return {
-        label: `${item.id}_${'student'} ${name}`,
+        label: `${'Student'} - ${item.id} - ${name}`,
         value: item.id,
         type: 'student',
         boundaryDetails: item.boundary_details,
@@ -191,15 +191,12 @@ export default class SecondaryNavBar extends React.Component {
         <form className="navbar-form navbar-left" role="search" onSubmit={this.handleSubmit}>
           <div className="form-group">
             <AsyncTypeahead
-              placeholder="Enter KLP ID"
+              placeholder="Start typing KLP ID"
               onSearch={this.onSearch}
               onChange={this.handleSubmit}
               options={this.state.options}
             />
           </div>
-          <button type="submit" className="btn btn-primary padded-btn">
-            Search
-          </button>
         </form>
         <Displayelement {...this.props} />
         <CreateDistrict

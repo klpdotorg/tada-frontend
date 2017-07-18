@@ -301,8 +301,8 @@ class EditStudent extends Component {
     if (student) {
       relations = groupBy(student.relations, 'relation_type');
       relations = {
-        Father: relations.Father[0],
-        Mother: relations.Mother[0],
+        Father: get(relations, 'Father[0]'),
+        Mother: get(relations, 'Mother[0]'),
       };
     }
     return {
