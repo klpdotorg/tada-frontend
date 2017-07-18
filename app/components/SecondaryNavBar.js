@@ -2,11 +2,24 @@
 * Secondary navigation bar for filtering/search etc..
 */
 import React, { Component } from 'react';
+import { asyncContainer, Typeahead } from 'react-bootstrap-typeahead';
+import { SERVER_API_BASE as serverApiBase } from 'config';
+import { push, replace } from 'react-router-redux';
+
+import { capitalize } from '../utils';
 import CreateDistrict from './Modals/CreateBoundary';
+
+const API = `${serverApiBase}searchklp/?klp_id=`;
+
+const AsyncTypeahead = asyncContainer(Typeahead);
 
 export default class SecondaryNavBar extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      options: [],
+    };
   }
 
   managePrograms() {
@@ -28,6 +41,54 @@ export default class SecondaryNavBar extends React.Component {
   managePermissions() {
     this.props.redirectTo('/permissions');
   }
+
+  filterSearchData = data => {
+    const institutions = _.map(data.institutions, item => ({
+      label: `${item.id}_${'institution'} ${capitalize(item.name)}`,
+      value: item.id,
+      type: 'institution',
+      boundaryDetails: item.boundary_details,
+    }));
+
+    const students = _.map(data.students, item => {
+      const name = capitalize(`${item.first_name} ${item.last_name}`);
+
+      return {
+        label: `${item.id}_${'student'} ${name}`,
+        value: item.id,
+        type: 'student',
+        boundaryDetails: item.boundary_details,
+      };
+    });
+
+    return [...institutions, ...students];
+  };
+
+  handleSubmit = entities => {
+    const data = entities[0];
+    if (data) {
+      const url = `/district/${data.boundaryDetails.district}/block/${data.boundaryDetails
+        .block}/cluster/${data.boundaryDetails.cluster}/institution/${data.value}`;
+      if (data.type === 'institution') {
+        this.props.redirectTo(url);
+      } else {
+        this.props.redirectTo(
+          `/district/${data.boundaryDetails.district}/block/${data.boundaryDetails
+            .block}/cluster/${data.boundaryDetails.cluster}/institution/${data.boundaryDetails
+            .institution}/studentgroups/${data.boundaryDetails
+            .student_group}/students/${data.value}`,
+        );
+      }
+    }
+  };
+
+  onSearch = query => {
+    fetch(`${API}${query}`).then(resp => resp.json()).then(json => {
+      this.setState({
+        options: this.filterSearchData(json),
+      });
+    });
+  };
 
   render() {
     var Displayelement;
@@ -127,11 +188,18 @@ export default class SecondaryNavBar extends React.Component {
         >
           <span className="glyphicon glyphicon-home" />
         </button>
-        <form className="navbar-form navbar-left" role="search">
+        <form className="navbar-form navbar-left" role="search" onSubmit={this.handleSubmit}>
           <div className="form-group">
-            <input type="text" className="form-control" placeholder="Enter KLP ID" />
-            <button type="submit" className="btn btn-primary padded-btn">Search</button>
+            <AsyncTypeahead
+              placeholder="Enter KLP ID"
+              onSearch={this.onSearch}
+              onChange={this.handleSubmit}
+              options={this.state.options}
+            />
           </div>
+          <button type="submit" className="btn btn-primary padded-btn">
+            Search
+          </button>
         </form>
         <Displayelement {...this.props} />
         <CreateDistrict

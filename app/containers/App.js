@@ -150,6 +150,7 @@ class TadaContentContainer extends Component {
       primarySelected,
       boundaries,
       notifications,
+      dispatch,
     } = this.props;
     return this.state.isLoading
       ? <div>Loading... </div>
@@ -174,6 +175,7 @@ class TadaContentContainer extends Component {
             toggleDistrictModal={this.props.toggleDistrictModal}
             districtModalIsOpen={this.props.districtModalIsOpen}
             saveNewDistrict={saveNewDistrict}
+            dispatch={dispatch}
           />
           <div id="wrapper" className="main__wrapper">
             {/** <SideBar child={<SchoolsNavTree/>}**/}

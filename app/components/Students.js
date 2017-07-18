@@ -30,8 +30,14 @@ const StudentRow = props => {
   const relations = groupBy(props.relations, 'relation_type');
   const language = _.filter(props.languages, language => language.value === props.mt);
   const langVal = _.get(language[0], 'label');
+  let style = {};
+  console.log(props.searchedStudent);
+  if (props.searchedStudent === props.id) {
+    style = { backgroundColor: 'rgba(243, 194, 198, 0.85)' };
+  }
+
   return (
-    <tr>
+    <tr style={style}>
       <td>
         <input
           checked={props.selectedStudents.has(props.id)}
@@ -115,6 +121,7 @@ class StudentScreen extends Component {
       currentStudent: '',
       modifyStudentData: null,
       selectedStudents: new Set(),
+      searchedStudent: _.get(this.props.location, 'query.studentId'),
       mapToCentre: props.boundariesByParentId[props.params.institutionId][0],
       languages: {
         isLoading: true,
@@ -230,6 +237,7 @@ class StudentScreen extends Component {
         deleteStudent={this.deleteStudentConfirm}
         selectedStudents={this.state.selectedStudents}
         languages={this.state.languages.list}
+        searchedStudent={this.state.searchedStudent}
         selectStudent={() => {
           this.selectStudent(studentId);
         }}
@@ -377,8 +385,8 @@ export default class Students extends Component {
   }
 
   componentDidMount() {
-    const { params, dispatch } = this.props;
-
+    const { params, dispatch, location } = this.props;
+    console.log(params, this.props.location.query);
     //Choose Preschool Hierarchy
     if (params.circleId) {
       this.props.dispatch(selectPreschoolTree());

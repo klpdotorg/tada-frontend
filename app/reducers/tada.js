@@ -120,6 +120,17 @@ export function boundaries(
         isFetching: false,
       };
 
+    case 'BOUNDARY_FETECHED':
+      const boundaryDetailsWithStudent = {
+        ...state.boundaryDetails,
+        ...{ [action.data.id]: action.data },
+      };
+
+      return {
+        ...state,
+        ...{ boundaryDetails: boundaryDetailsWithStudent },
+      };
+
     case 'REQUEST_SENT':
       return {
         ...state,
@@ -128,7 +139,6 @@ export function boundaries(
 
     case 'TOGGLE_NODE':
       const boundary = _.clone(state.boundaryDetails[action.id]);
-      //console.log(boundary.collapsed);
       if (action.open) {
         boundary.collapsed = !action.open;
       } else {
