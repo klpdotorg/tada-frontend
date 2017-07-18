@@ -72,13 +72,11 @@ export default class SecondaryNavBar extends React.Component {
       if (data.type === 'institution') {
         this.props.redirectTo(url);
       } else {
-        this.props.dispatch(
-          push({
-            pathname: `/district/${data.boundaryDetails.district}/block/${data.boundaryDetails
-              .block}/cluster/${data.boundaryDetails.cluster}/institution/${data.boundaryDetails
-              .institution}/studentgroups/${data.boundaryDetails.student_group}/students`,
-            query: { studentId: data.value },
-          }),
+        this.props.redirectTo(
+          `/district/${data.boundaryDetails.district}/block/${data.boundaryDetails
+            .block}/cluster/${data.boundaryDetails.cluster}/institution/${data.boundaryDetails
+            .institution}/studentgroups/${data.boundaryDetails
+            .student_group}/students/${data.value}`,
         );
       }
     }

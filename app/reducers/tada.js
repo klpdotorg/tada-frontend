@@ -120,6 +120,17 @@ export function boundaries(
         isFetching: false,
       };
 
+    case 'STUDENT_FULFILLED':
+      const boundaryDetailsWithStudent = {
+        ...state.boundaryDetails,
+        ...{ [action.data.id]: action.data },
+      };
+
+      return {
+        ...state,
+        ...{ boundaryDetails: boundaryDetailsWithStudent },
+      };
+
     case 'REQUEST_SENT':
       return {
         ...state,

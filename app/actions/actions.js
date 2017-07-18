@@ -202,6 +202,12 @@ export const getInstitutions = parentId => {
   return get(`${serverApiBase}institutions/?boundary=${parentId}`);
 };
 
+export const getStudent = params => {
+  return get(
+    `${serverApiBase}institutions/${params.institution}/studentgroups/${params.studentgroup}/students/${params.student}`,
+  );
+};
+
 //Method fetches institutions belonging to a particular Id from the institutions endpoint
 export function fetchInstitutionDetails(parentBoundaryId) {
   return function(dispatch, getState) {

@@ -11,6 +11,7 @@ import Institution from './components/InstitutionDetailsScreen';
 import Preschool from './components/Preschool';
 import StudentGroup from './components/StudentGroup';
 import Students from './components/Students';
+import Student from './components/Student';
 import LoginContainer from './containers/LoginContainer';
 import Logout from './components/Logout';
 import App from './containers/App';
@@ -103,6 +104,10 @@ export const routes = (
         <Route
           path="district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId/studentgroups/:groupId/students"
           component={Students}
+        />
+        <Route
+          path="district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId/studentgroups/:groupId/students/:studentId"
+          component={Student}
         />
       </Route>
     </Router>

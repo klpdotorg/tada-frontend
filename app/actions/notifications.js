@@ -98,5 +98,17 @@ export const teacherNotUpdated = {
 export const teacherNotCreated = {
   ...baseNotification,
   title: 'Error!',
-  title: 'Teacher could not be created.',
+  message: 'Teacher could not be created.',
+};
+
+export const studentSaved = {
+  ...baseNotification,
+  title: 'Student Saved',
+  message: 'Student modified successfully.',
+};
+
+export const studentDeleted = {
+  ...baseNotification,
+  title: 'Student Deleted',
+  message: 'Student deleted successfully.',
 };
