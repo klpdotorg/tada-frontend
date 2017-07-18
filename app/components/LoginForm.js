@@ -60,6 +60,7 @@ class Login extends Component {
                     <i className="glyphicon glyphicon-user" />
                   </span>
                   <input
+                    autoFocus
                     ref="email"
                     className="form-control"
                     type="text"
