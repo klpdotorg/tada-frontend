@@ -26,6 +26,7 @@ import Questions from './components/AssessmentQuestions';
 import Reports from './components/Reports';
 import Teachers from './containers/Teachers';
 import tadastore from './store';
+import RevertEntity from './containers/RevertEntity';
 import { syncHistoryWithStore } from 'react-router-redux';
 
 const history = syncHistoryWithStore(browserHistory, tadastore);
@@ -55,6 +56,7 @@ export const routes = (
         <Route path="programs" component={Programs} />
         <Route path="filterprograms" component={AnswersContainer} />
         <Route path="reports" component={Reports} />
+        <Route path="revert-entity/:entityName" component={RevertEntity} />
         <Route path="programs/:programId" component={Programs} />
         <Route
           path="programs/:programId/assessments/:assessmentId/questions"
