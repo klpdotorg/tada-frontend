@@ -58,8 +58,7 @@ export default class PrimaryDistrict extends React.Component {
   };
 
   deleteDistrict(parentId) {
-    this.props.dispatch(deleteBoundary(this.districtId, parentId))
-
+    this.props.dispatch(deleteBoundary(this.districtId, parentId));
   }
 
   saveBlock(name) {
@@ -133,9 +132,8 @@ export default class PrimaryDistrict extends React.Component {
         <div>
           {hasBlocks
             ? <div className="alert alert-info">
-                <i className="fa fa-info-circle fa-lg" aria-hidden="true" />
-                {' '}
-                You cannot delete this boundary until its children are deleted
+                <i className="fa fa-info-circle fa-lg" aria-hidden="true" /> You cannot delete this
+                boundary until its children are deleted
               </div>
             : <div />}
           <h4 className="text-primary col-md-10">Modify Details</h4>
@@ -166,33 +164,61 @@ export default class PrimaryDistrict extends React.Component {
               name="DistrictName"
               id="DistrictName"
               value={boundary.name}
-              label="District Name:"
               type="text"
+              label="District Name:"
               placeholder="Please enter the district name"
               className="form-control"
               required
-              validations="minLength:1"
+              validations={{
+                textValidation: function(values, value) {
+                  return value.match(/^[a-zA-Z0-9 ]*$/g) ? true : 'Please enter text only';
+                },
+              }}
             />
           </Formsy.Form>
-              <div className="col-md-8">
-                <button type="button" disabled={!this.state.canSubmit} className="btn btn-primary padded-btn" onClick={this.saveDistrict}>Save</button>
-                <button type="submit" className="btn btn-primary padded-btn" onClick={() => {this.showConfirmation() }} disabled={hasBlocks}>Delete</button>
-                <ConfirmModal isOpen={this.state.openConfirmModal} onAgree={() => {this.deleteDistrict(boundary.parent)}} onCloseModal={this.closeConfirmModal} entity={boundary.name}/>
-              </div>
-
+          <div className="col-md-8">
+            <button
+              type="button"
+              disabled={!this.state.canSubmit}
+              className="btn btn-primary padded-btn"
+              onClick={this.saveDistrict}
+            >
+              Save
+            </button>
+            <button
+              type="submit"
+              className="btn btn-primary padded-btn"
+              onClick={() => {
+                this.showConfirmation();
+              }}
+              disabled={hasBlocks}
+            >
+              Delete
+            </button>
+            <ConfirmModal
+              isOpen={this.state.openConfirmModal}
+              onAgree={() => {
+                this.deleteDistrict(boundary.parent);
+              }}
+              onCloseModal={this.closeConfirmModal}
+              entity={boundary.name}
+            />
+          </div>
         </div>
       );
     } else {
       return (
         <div>
           <div className="alert alert-danger">
-            <i className="fa fa-lock fa-lg" aria-hidden="true"></i>
-             Insufficient Privileges. Only administrators can modify boundary details.
+            <i className="fa fa-lock fa-lg" aria-hidden="true" />
+            Insufficient Privileges. Only administrators can modify boundary details.
           </div>
           <h4 className="text-primary">District</h4>
-          <div className="border-base"></div>
-          <div className="base-spacing-mid"></div>
-          <div>{boundary.name}</div>
+          <div className="border-base" />
+          <div className="base-spacing-mid" />
+          <div>
+            {boundary.name}
+          </div>
         </div>
       );
     }
@@ -207,7 +233,9 @@ export default class PrimaryDistrict extends React.Component {
     return (
       <div>
         <ol className="breadcrumb">
-          <li className="active">{boundary.name}</li>
+          <li className="active">
+            {boundary.name}
+          </li>
         </ol>
         {this.DistrictSummary()}
         <CreateBoundary
