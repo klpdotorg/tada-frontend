@@ -87,7 +87,7 @@ class Login extends Component {
                   </button>
                 </div>
                 <div className="form-group text-center">
-                  <Link to="/password/reset">Forgot Password</Link>&nbsp;|&nbsp;<a href="#">Support</a>
+                  <Link to="/password/reset">Forgot Password</Link>&nbsp;|&nbsp;<a href="mailto:dev@klp.org.in">Support</a>
                 </div>
 
               </form>
