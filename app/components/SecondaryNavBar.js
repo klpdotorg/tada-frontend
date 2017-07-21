@@ -161,6 +161,9 @@ export default class SecondaryNavBar extends React.Component {
               data-toggle="tooltip"
               data-placement="bottom"
               title="Revert Entity State"
+              onClick={() => {
+                this.props.redirectTo('/revert-entity/students');
+              }}
             >
               <span className="fa fa-undo" />
             </button>

@@ -2,6 +2,29 @@ import React, { Component } from 'react';
 import { getLanguages } from './utils';
 import _ from 'lodash';
 
+const REQUIRED_FIELDS = [
+  {
+    value: 'first_name',
+    label: 'First Name',
+  },
+  {
+    value: 'dob',
+    label: 'Date of Birth',
+  },
+  {
+    value: 'fatherFirstName',
+    label: 'Father First Name',
+  },
+  {
+    value: 'motherFirstName',
+    label: 'Mother First Name',
+  },
+  {
+    value: 'gender',
+    label: 'Gender',
+  },
+];
+
 export default class BulkAddStudent extends Component {
   constructor(props) {
     super(props);
@@ -12,7 +35,6 @@ export default class BulkAddStudent extends Component {
         isLoading: true,
       },
       formError: [],
-      requiredFields: ['first_name', 'dob', 'fatherFirstName', 'motherFirstName', 'gender'],
     };
     this.updateValue = this.updateValue.bind(this);
     this.validate = this.validate.bind(this);
@@ -39,27 +61,17 @@ export default class BulkAddStudent extends Component {
   }
 
   validate() {
-    const { values, requiredFields } = this.state;
+    const { values } = this.state;
 
+    console.log(values);
     const errorList = [];
     _.forEach(values, value => {
-      _.forEach(requiredFields, requiredField => {
-        if (!value[requiredField]) {
-          errorList.push(requiredField);
+      _.forEach(REQUIRED_FIELDS, requiredField => {
+        if (!value[requiredField.value]) {
+          errorList.push(requiredField.label);
         }
       });
     });
-
-    /* for(var v in values) {
-      if(values[v].first_name.trim()) {
-        for(let i = 0; i < requiredValues.length; i++) {
-          if(!values[v][requiredValues[i]].trim()) {
-            errorList.push(v);
-            break;
-          }
-        }
-      }
-    }*/
 
     this.setState({ formError: errorList });
 
@@ -69,12 +81,15 @@ export default class BulkAddStudent extends Component {
   }
 
   setRequiredField(field) {
-    const { requiredFields } = this.state;
+    let required = '';
 
-    if (_.includes(requiredFields, field)) {
-      return '*';
-    }
-    return '';
+    _.map(REQUIRED_FIELDS, requiredField => {
+      if (_.includes(requiredField.value, field)) {
+        required = '*';
+      }
+    });
+
+    return required;
   }
 
   render() {
@@ -104,7 +119,10 @@ export default class BulkAddStudent extends Component {
       <div>
         {!_.isEmpty(this.state.formError) &&
           <div className="alert alert-danger">
-            <strong>Error:</strong>Please enter all required values before submitting the form.
+            <strong>Error:</strong>
+            {` Please enter ${_.uniq(this.state.formError).join(
+              ', ',
+            )} fields value before submitting the form.`}
           </div>}
         <div className="table-responsive">
           <table className="table table-hover table-fixedwidth">

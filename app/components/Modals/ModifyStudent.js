@@ -103,7 +103,7 @@ export default class ConfirmDialog extends Component {
         onCloseModal={this.props.onCloseModal}
         canSubmit={true}
         submitForm={this.saveStudent}
-        cancelBtnLabel="Cancel"
+        cancelBtnLabel="Discard"
       >
         <Formsy.Form
           onValidSubmit={this.saveStudent}
