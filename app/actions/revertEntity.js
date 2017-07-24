@@ -11,28 +11,41 @@ export const getInactiveEntities = (entityName, from) => {
   return get(`${serverApiBase}${entityName}/?active=1&offset=${from}`);
 };
 
+const showReactivationStatus = (res, dispatch) => {
+  if (!res) {
+    dispatch(Notifications.error(entityNotActivated));
+  } else {
+    dispatch(Notifications.success(entityActivated));
+  }
+};
+
+const reactiveUser = (entity, entityName, dispatch) =>
+  fetch(`${authApiBase}auth/${entityName}/${entity.id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Token ${sessionStorage.token}`,
+    },
+    body: JSON.stringify({ is_active: true }),
+  })
+    .then(checkStatus)
+    .then(res => {
+      showReactivationStatus(res, dispatch);
+      return res;
+    });
+
 export const revertEntity = (entityName, entity, dispatch) => {
   if (entityName === 'users') {
-    return fetch(`${authApiBase}auth/${entityName}/${entity.id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Token ${sessionStorage.token}`,
-      },
-      body: JSON.stringify(entity),
-    })
-      .then(checkStatus)
-      .then(res => {
-        if (!res) {
-          dispatch(Notifications.error(entityNotActivated));
-        } else {
-          dispatch(Notifications.success(entityActivated));
-        }
-        return res;
-      });
+    return reactiveUser(entity, entityName, dispatch);
   }
 
-  return fetch(`${serverApiBase}${entityName}/${entity.id}`, {
+  let url = `${serverApiBase}${entityName}/${entity.id}`;
+
+  if (entityName === 'assessments') {
+    url = `${serverApiBase}programmes/${entity.programme}/${entityName}/${entity.id}`;
+  }
+
+  return fetch(url, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -42,11 +55,7 @@ export const revertEntity = (entityName, entity, dispatch) => {
   })
     .then(checkStatus)
     .then(res => {
-      if (!res) {
-        dispatch(Notifications.error(entityNotActivated));
-      } else {
-        dispatch(Notifications.success(entityActivated));
-      }
+      showReactivationStatus(res, dispatch);
       return res;
     });
 };
