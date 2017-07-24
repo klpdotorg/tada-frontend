@@ -6,7 +6,7 @@ class RevertEntityTabs extends Component {
     switch (this.props.activeTab) {
       case 'students':
         return <StudentTab />;
-      case 'programs':
+      case 'programmes':
         return <ProgramTab />;
       case 'users':
         return <UserTab />;
@@ -24,7 +24,7 @@ const StudentTab = () =>
       <Link to="/revert-entity/students">Students</Link>
     </li>
     <li role="presentation">
-      <Link to="/revert-entity/programs">Programs</Link>
+      <Link to="/revert-entity/programmes">Programs</Link>
     </li>
     <li role="presentation">
       <Link to="/revert-entity/users">Users</Link>
@@ -40,7 +40,7 @@ const ProgramTab = () =>
       <Link to="/revert-entity/students">Students</Link>
     </li>
     <li role="presentation" className="active">
-      <Link to="/revert-entity/programs">Programs</Link>
+      <Link to="/revert-entity/programmes">Programs</Link>
     </li>
     <li role="presentation">
       <Link to="/revert-entity/users">Users</Link>
@@ -56,7 +56,7 @@ const UserTab = () =>
       <Link to="/revert-entity/students">Students</Link>
     </li>
     <li role="presentation">
-      <Link to="/revert-entity/programs">Programs</Link>
+      <Link to="/revert-entity/programmes">Programs</Link>
     </li>
     <li role="presentation" className="active">
       <Link to="/revert-entity/users">Users</Link>
@@ -72,7 +72,7 @@ const AssessementTab = () =>
       <Link to="/revert-entity/students">Students</Link>
     </li>
     <li role="presentation">
-      <Link to="/revert-entity/programs">Programs</Link>
+      <Link to="/revert-entity/programmes">Programs</Link>
     </li>
     <li role="presentation">
       <Link to="/revert-entity/users">Users</Link>

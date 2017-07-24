@@ -112,3 +112,15 @@ export const studentDeleted = {
   title: 'Student Deleted',
   message: 'Student deleted successfully.',
 };
+
+export const entityActivated = {
+  ...baseNotification,
+  title: 'Entity Activated',
+  message: 'Entity activated successfully.',
+};
+
+export const entityNotActivated = {
+  ...baseNotification,
+  title: 'Error!',
+  message: 'Entity not activated!',
+};

@@ -1,24 +1,13 @@
-import React, { Component } from 'react';
-import StudentEntity from './StudentEntity';
-import UserEntity from './UserEntity';
-import ProgramEntity from './ProgramEntity';
-import AssessmentEntity from './AssessmentEntity';
+import React from 'react';
+import PropTypes from 'prop-types';
+import Entity from './Entity';
 
-class ShowSelectedEntity extends Component {
-  render() {
-    switch (this.props.selectedEntity) {
-      case 'students':
-        return <StudentEntity />;
-      case 'users':
-        return <UserEntity />;
-      case 'prgrams':
-        return <ProgramEntity />;
-      case 'assessments':
-        return <AssessmentEntity />;
-      default:
-        return <StudentEntity />;
-    }
-  }
-}
+const ShowSelectedEntity = ({ selectedEntity, dispatch }) =>
+  <Entity dispatch={dispatch} entityName={selectedEntity} />;
+
+ShowSelectedEntity.propTypes = {
+  selectedEntity: PropTypes.string,
+  dispatch: PropTypes.func,
+};
 
 export default ShowSelectedEntity;
