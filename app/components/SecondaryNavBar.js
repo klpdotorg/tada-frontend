@@ -23,7 +23,7 @@ export default class SecondaryNavBar extends React.Component {
   }
 
   managePrograms() {
-    this.props.redirectTo('/programmes');
+    this.props.redirectTo('/programs');
   }
 
   manageProgramFilter = () => {

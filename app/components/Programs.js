@@ -433,12 +433,24 @@ export default class Programs extends React.Component {
 
       return (
         <tr key={assessment.id} id={assessment.id}>
-          <td>{assessment.name}</td>
-          <td>{dateParser(assessment.start_date)}</td>
-          <td>{dateParser(assessment.end_date)}</td>
-          <td>{type}</td>
-          <td>{double_entry}</td>
-          <td>{flexi_assessment}</td>
+          <td>
+            {assessment.name}
+          </td>
+          <td>
+            {dateParser(assessment.start_date)}
+          </td>
+          <td>
+            {dateParser(assessment.end_date)}
+          </td>
+          <td>
+            {type}
+          </td>
+          <td>
+            {double_entry}
+          </td>
+          <td>
+            {flexi_assessment}
+          </td>
           <td>
             <input
               type="checkbox"
@@ -475,7 +487,11 @@ export default class Programs extends React.Component {
     const programs = this.props.programsById;
 
     return _.map(programs, (program, i) => {
-      return <option key={program.id} value={program.id}>{program.name}</option>;
+      return (
+        <option key={program.id} value={program.id}>
+          {program.name}
+        </option>
+      );
     });
   };
 
@@ -521,7 +537,9 @@ export default class Programs extends React.Component {
       return (
         <div>
           You dont have permissions to access this page<br />
-          <Link to="/" className="btn btn-primary padded-btn">GO TO MAIN PAGE</Link>
+          <Link to="/" className="btn btn-primary padded-btn">
+            GO TO MAIN PAGE
+          </Link>
         </div>
       );
     }
@@ -533,11 +551,12 @@ export default class Programs extends React.Component {
     const programsList = this.getProgramList();
 
     return (
-      <div className="container">
+      <div>
         <div className="row center-block">
-
           <div className="col-md-8 form-inline">
-            <h4 className="text-primary" htmlFor="sel1">Programs: </h4>
+            <h4 className="text-primary" htmlFor="sel1">
+              Programs:{' '}
+            </h4>
             <select
               ref={ref => (this.selProgram = ref)}
               className="form-control"
@@ -548,7 +567,7 @@ export default class Programs extends React.Component {
               {programsList}
             </select>
           </div>
-          <div className=" col-md-4">
+          <div className=" col-md-4 text-right">
             {/*<button type="button" className="btn btn-primary all-padded-btn" data-toggle="modal" data-target="#createProgramModal">Add Program</button>*/}
             <button
               type="button"
@@ -565,7 +584,6 @@ export default class Programs extends React.Component {
               Add Assessments
             </button>
           </div>
-
         </div>
         <div className="bg-faded">
           <h4 className="text-primary">Program Details</h4>
@@ -575,27 +593,35 @@ export default class Programs extends React.Component {
             <div className="col-md-8 pull-left">
               <div className="row">
                 <h5 className="col-md-4">
-                  <span className="text-primary"><strong>Program name: </strong></span>
+                  <span className="text-primary">
+                    <strong>Program name: </strong>
+                  </span>
                   {selectedProgramDetails.name}
                 </h5>
                 <h5 className="col-md-4">
-                  <span className="text-primary"><strong>Start Date: </strong></span>
+                  <span className="text-primary">
+                    <strong>Start Date: </strong>
+                  </span>
                   {dateParser(selectedProgramDetails.start_date)}
                 </h5>
               </div>
               <div className="row">
                 <h5 className="col-md-4">
-                  <span className="text-primary"><strong>Institution: </strong></span>
+                  <span className="text-primary">
+                    <strong>Institution: </strong>
+                  </span>
                   {this.getInstitutionName(selectedProgramDetails.programme_institution_category)}
                 </h5>
                 <h5 className="col-md-4">
-                  <span className="text-primary"><strong>End Date: </strong></span>
+                  <span className="text-primary">
+                    <strong>End Date: </strong>
+                  </span>
                   {dateParser(selectedProgramDetails.end_date)}
                 </h5>
               </div>
             </div>
 
-            <div className="col-md-4 pull-right">
+            <div className="col-md-4 pull-right text-right">
               <button type="button" className="btn btn-info" onClick={this.handleShowEditDialog}>
                 <span className="fa fa-pencil-square-o" />Edit
               </button>
@@ -616,7 +642,6 @@ export default class Programs extends React.Component {
                 <span className="fa fa-trash-o" /> Delete
               </button>
             </div>
-
           </div>
         </div>
         <br />
@@ -653,7 +678,6 @@ export default class Programs extends React.Component {
           >
             Deactivate
           </button>
-
         </div>
         <CreateAssessment
           handleSubmit={this.handleCreateAssessment}
@@ -753,7 +777,9 @@ export default class Programs extends React.Component {
                 <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 className="modal-title" id="errorTitle"> Program creation failed!</h4>
+                <h4 className="modal-title" id="errorTitle">
+                  {' '}Program creation failed!
+                </h4>
               </div>
               <div className="modal-body">
                 <form id="createProgram">
@@ -763,11 +789,12 @@ export default class Programs extends React.Component {
                     </label>
                     <label id="errorDetails" />
                   </div>
-
                 </form>
               </div>
               <div className="modal-footer">
-                <button type="button" className="btn btn-primary" data-dismiss="modal">OK</button>
+                <button type="button" className="btn btn-primary" data-dismiss="modal">
+                  OK
+                </button>
               </div>
             </div>
           </div>
