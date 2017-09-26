@@ -6,6 +6,7 @@ import {
   SERVER_API_BASE as serverApiBase,
   SERVER_AUTH_BASE as authApiBase,
   REPORTS_EMAIL as reportsEmail,
+  DEFAULT_PARENT_ID,
 } from 'config';
 import { urls as Urls, roles as ROLES } from '../constants';
 import _ from 'lodash';
@@ -505,12 +506,13 @@ const newBoundaryFetch = options => {
 };
 
 export const saveNewDistrict = name => (dispatch, getState) => {
-  const boundaryType = getState().schoolSelection.primarySchool ? 1 : 2;
+  const boundaryType = getState().schoolSelection.primarySchool ? 'primary' : 'pre';
   const options = {
     name,
-    boundary_category: 9,
-    boundary_type: boundaryType,
-    parent: 1,
+    type: boundaryType,
+    boundary_type: 'SD',
+    parent: 2,
+    status: 'AC',
   };
   return newBoundaryFetch(options).then(checkStatus).then(response => {
     dispatch(responseReceivedFromServer({ results: [response] }));

@@ -125,8 +125,8 @@ export const boundaryType = (id = 1, details) => {
 
   // console.log(details[id])
   switch (details[id].depth) {
-    case 2:
-      return fetchInstitutionDetails;
+    // case 2:
+    //   return fetchInstitutionDetails;
     case 3:
       return fetchStudentGroups;
     case 4:

@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { DEFAULT_PARENT_ID } from 'config';
 import {
   processStudents,
   computeRouterPathForEntity,
@@ -87,7 +88,7 @@ export function boundaries(
   state = {
     boundariesByParentId: {},
     boundaryDetails: {
-      1: {
+      [DEFAULT_PARENT_ID]: {
         depth: 0,
       },
     },
@@ -102,6 +103,7 @@ export function boundaries(
           state.boundariesByParentId,
           state.boundaryDetails,
         );
+        console.log(boundaryDetails);
         return boundaryDetails;
       }
       return state;

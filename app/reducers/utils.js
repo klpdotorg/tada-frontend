@@ -75,16 +75,16 @@ export const computeRouterPathForEntity = (entity, boundaryDetails, groupId) => 
   var parentEntityId = getParentId(entity, groupId);
   var path = '';
 
-  if (parentEntityId == 1) {
+  if (parentEntityId == 2) {
     path = '/district/' + entity.id;
   } else {
     var parent = boundaryDetails[parentEntityId];
     if (parent) {
-      if (entity.boundary_category == '10') {
+      if (entity.boundary_type === 'SB') {
         // path is parent's path plus child's
 
         path = parent.path + '/block/' + entity.id;
-      } else if (entity.boundary_category == '11') {
+      } else if (entity.boundary_type == 'SC') {
         path = parent.path + '/cluster/' + entity.id;
       } else if (entity.boundary_category == '14') {
         path = parent.path + '/project/' + entity.id;
@@ -104,14 +104,11 @@ export const computeRouterPathForEntity = (entity, boundaryDetails, groupId) => 
 };
 
 export const nodeDepth = node => {
-  const category = node.boundary_category;
+  const category = node.boundary_type;
   const mapDepthCategory = {
-    13: 0,
-    9: 0,
-    14: 1,
-    10: 1,
-    15: 2,
-    11: 2,
+    SD: 0,
+    SB: 1,
+    SC: 2,
   };
 
   if (category) {

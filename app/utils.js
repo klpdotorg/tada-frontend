@@ -1,8 +1,9 @@
 import _ from 'lodash';
 import moment from 'moment';
+import { DEFAULT_PARENT_ID } from 'config';
 
 export const alphabeticalOrder = (obj, details) => {
-  return obj[1].sort((a, b) => {
+  return obj[DEFAULT_PARENT_ID].sort((a, b) => {
     const aName = _.capitalize(details[a].name);
     const bName = _.capitalize(details[b].name);
     return aName < bName ? -1 : aName > bName ? 1 : 0;

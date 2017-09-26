@@ -50,9 +50,13 @@ var mapDispatchToProps = function (dispatch) {
     },
 
     getInitData() {
+      getBoundaries(2).then(res => {
+        console.log(res);
+      });
+
       return dispatch({
         type: 'BOUNDARIES',
-        payload: getBoundaries(1),
+        payload: getBoundaries(2),
       });
     },
 
@@ -125,7 +129,6 @@ class TadaContentContainer extends Component {
   }
 
   componentWillMount() {
-    const { dispatch } = this.props;
     // if (!sessionStorage.token) {
     //   this.props.redirectTo('/login');
     // } else {

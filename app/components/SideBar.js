@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import SchoolsNavTree from './NavTree';
 import _ from 'lodash';
-import classNames from 'classnames';
 import $ from 'jquery';
 import { connect } from 'react-redux';
+import { DEFAULT_PARENT_ID } from 'config';
 
 import { fetchEntitiesFromServer, toggleNode, closePeerNodes } from '../actions/';
 
@@ -15,6 +15,9 @@ import * as Selectors from '../selectors/';
 class SideBar extends Component {
   constructor(props) {
     super(props);
+
+    this.onBoundaryClick = this.onBoundaryClick.bind(this);
+
     this.state = {
       isExpanded: false,
       results: [],
@@ -24,6 +27,7 @@ class SideBar extends Component {
   componentDidMount() {}
 
   onBoundaryClick(boundary, depth) {
+    console.log(boundary);
     this.props.dispatch(toggleNode(boundary.id));
     this.props.dispatch(fetchEntitiesFromServer(boundary.id));
     this.props.dispatch(closePeerNodes(boundary.id, depth));
@@ -34,49 +38,67 @@ class SideBar extends Component {
     $('#wrapper').toggleClass('toggled');
   }
 
-  render() {
-    let { boundariesByParentId, boundaryDetails, primarySelected, location } = this.props;
-    var DisplayElement;
-    const schoolType = primarySelected ? 1 : 2;
-    boundariesByParentId[1] = _.filter(boundariesByParentId[1], key => {
-      const boundaryType = boundaryDetails[key].boundary_type;
-      return boundaryType ? boundaryType == schoolType : true;
+  filterBoundaries(type) {
+    const { boundariesByParentId, boundaryDetails } = this.props;
+    const boundaryIds = _.clone(boundariesByParentId);
+
+    boundaryIds[DEFAULT_PARENT_ID] = _.filter(boundariesByParentId[DEFAULT_PARENT_ID], key => {
+      const boundaryType = boundaryDetails[key].type;
+      return boundaryType === type;
     });
-    var sidebarClass = classNames({
-      toggled: this.state.isExpanded,
-    });
+
+    return boundaryIds;
+  }
+
+  renderNavTree() {
+    const {
+      boundariesByParentId,
+      boundaryDetails,
+      primarySelected,
+      location,
+      programsById,
+      dispatch,
+      programBoundaries,
+      assessmentsById,
+    } = this.props;
+    const selectedSchoolType = primarySelected ? 'primary' : 'pre';
+    const boundaryIds = this.filterBoundaries(selectedSchoolType);
+
     if (location.pathname.includes('permissions')) {
       let { filteredBoundaryDetails, filteredBoundaryHierarchy } = this.props;
-      DisplayElement = (
+      return (
         <PermissionsNavTree
           dispatch={this.props.dispatch}
-          onBoundaryClick={this.onBoundaryClick.bind(this)}
+          onBoundaryClick={this.onBoundaryClick}
           boundaryDetails={filteredBoundaryDetails}
           boundariesByParentId={filteredBoundaryHierarchy}
         />
       );
-    } else if (location.pathname.includes('filterprograms')) {
-      let { filteredBoundaryDetails, filteredBoundaryHierarchy } = this.props;
-      DisplayElement = (
+    }
+
+    if (location.pathname.includes('filterprograms')) {
+      return (
         <ProgramNavTree
-          dispatch={this.props.dispatch}
-          programsById={this.props.programsById}
-          boundaries={this.props.programBoundaries}
-          boundaryDetails={this.props.boundaryDetails}
-          boundariesByParentId={this.props.boundariesByParentId}
-          assessmentsById={this.props.assessmentsById}
-        />
-      );
-    } else {
-      DisplayElement = (
-        <SchoolsNavTree
-          onBoundaryClick={this.onBoundaryClick.bind(this)}
+          dispatch={dispatch}
+          programsById={programsById}
+          boundaries={programBoundaries}
           boundaryDetails={boundaryDetails}
           boundariesByParentId={boundariesByParentId}
+          assessmentsById={assessmentsById}
         />
       );
     }
 
+    return (
+      <SchoolsNavTree
+        onBoundaryClick={this.onBoundaryClick}
+        boundaryDetails={boundaryDetails}
+        boundaryIds={boundaryIds}
+      />
+    );
+  }
+
+  render() {
     return (
       <div id="sidebar-wrapper">
         <div id="treetoggler">
@@ -90,7 +112,7 @@ class SideBar extends Component {
           </a>
         </div>
         <div id="treeview_side" className="treeview">
-          {DisplayElement}
+          {this.renderNavTree()}
         </div>
       </div>
     );

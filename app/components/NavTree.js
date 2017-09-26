@@ -75,14 +75,13 @@ export default class SchoolsNavTree extends React.Component {
 
   //boundaryDetails={this.state.boundaryDetails} boundaryParentChildMap={this.state.childrenByParentId}
   render() {
-    var visitedBoundaries = [];
-    const { boundariesByParentId, boundaryDetails } = this.props;
+    const visitedBoundaries = [];
+    const { boundaryIds, boundaryDetails } = this.props;
+    console.log(boundaryIds);
     return (
       <div>
-        {alphabeticalOrder(boundariesByParentId, boundaryDetails).map(
-          function(element, i) {
-            return this.renderSubTree(element, boundariesByParentId, visitedBoundaries, 0);
-          }.bind(this),
+        {alphabeticalOrder(boundaryIds, boundaryDetails).map(element =>
+          this.renderSubTree(element, boundaryIds, visitedBoundaries, 0),
         )}
       </div>
     );
