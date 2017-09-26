@@ -2,6 +2,7 @@ import React from 'react';
 import Dashboard from './components/Dashboard';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
+
 import PrimaryDistrict from './components/PrimaryDistrict';
 import PrimaryBlock from './components/PrimaryBlockScreen';
 import PrimaryCluster from './components/PrimaryClusterScreen';
@@ -12,7 +13,7 @@ import Preschool from './components/Preschool';
 import StudentGroup from './components/StudentGroup';
 import Students from './components/Students';
 import Student from './components/Student';
-import LoginContainer from './containers/LoginContainer';
+import { LoginContainer } from './containers/Login';
 import Logout from './components/Logout';
 import App from './containers/App';
 import UserRegContainer from './containers/UserRegContainer';
@@ -35,8 +36,8 @@ const isUserAuthenticated = (nextState, replace) => {
   let token = sessionStorage.getItem('token');
   if (!token) {
     // redirect to login and set next location
-    console.log(nextState, replace)
-    if(nextState.location && nextState.location.pathname) {
+    console.log(nextState, replace);
+    if (nextState.location && nextState.location.pathname) {
       sessionStorage.setItem('nextUrl', nextState.location.pathname);
     }
     replace('/login');
