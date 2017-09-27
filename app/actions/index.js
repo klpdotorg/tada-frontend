@@ -8,3 +8,4 @@ export * from './permissions.js';
 export * from './reports.js';
 export * from './teachers.js';
 export * from './revertEntity';
+export * from './Header.js';

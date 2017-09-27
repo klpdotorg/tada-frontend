@@ -6,9 +6,9 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import klplogo from '../../assets/images/KLP_logo.png';
 import jqueryValidation from 'jquery-validation';
-import ConfirmPassword from './Modals/ConfirmPassword';
-import ChangePassword from './Modals/ChangePassword';
-import ChangeUserInfo from './Modals/ChangeUserInfo';
+// import ConfirmPassword from './Modals/ConfirmPassword';
+// import ChangePassword from './Modals/ChangePassword';
+// import ChangeUserInfo from './Modals/ChangeUserInfo';
 import { checkUserPassword, changePassword, modifySelf } from '../actions/';
 import Notifications from 'react-notification-system-redux';
 import { baseNotification } from '../actions/';
@@ -167,13 +167,17 @@ class HeaderBar extends Component {
                 aria-expanded="false"
                 onClick={this.openUpdateProfileOptions}
               >
-                <span className="glyphicon glyphicon-user" /><span className="caret" />
+                <span className="glyphicon glyphicon-user" />
+                <span className="caret" />
               </button>
               <ul className="dropdown-menu">
-                <li onClick={this.openPasswordModal.bind(this)}><a href="#">Change Password</a></li>
+                <li onClick={this.openPasswordModal.bind(this)}>
+                  <a href="#">Change Password</a>
+                </li>
                 <li className="divider" />
-                <li onClick={this.openChangeUser.bind(this)}><a href="#">Update Profile</a></li>
-
+                <li onClick={this.openChangeUser.bind(this)}>
+                  <a href="#">Update Profile</a>
+                </li>
               </ul>
 
               <Link
@@ -183,7 +187,6 @@ class HeaderBar extends Component {
               >
                 <span className="glyphicon glyphicon-off" />
               </Link>
-
             </div>
 
             <p className="login-msg navbar-text pull-right">
@@ -192,25 +195,26 @@ class HeaderBar extends Component {
             </p>
           </div>
         </div>
-        <ConfirmPassword
-          isOpen={this.state.enterCurrentPassword}
-          onCloseModal={this.closePasswordModal.bind(this)}
-          handleSubmit={this.confirmCurrentPwd.bind(this)}
-        />
-        <ChangePassword
-          isOpen={this.state.changePasswordOpen}
-          onCloseModal={this.closeChangePwd.bind(this)}
-          handleSubmit={this.changePwd.bind(this)}
-        />
-        <ChangeUserInfo
-          firstname={this.props.firstname}
-          lastname={this.props.lastname}
-          email={this.props.email}
-          isOpen={this.state.changeUserOpen}
-          onCloseModal={this.closeChangeUser.bind(this)}
-          handleSubmit={this.changeUserInfo.bind(this)}
-        />
-
+        {
+          // <ConfirmPassword
+          //   isOpen={this.state.enterCurrentPassword}
+          //   onCloseModal={this.closePasswordModal.bind(this)}
+          //   handleSubmit={this.confirmCurrentPwd.bind(this)}
+          // />
+          // <ChangePassword
+          //   isOpen={this.state.changePasswordOpen}
+          //   onCloseModal={this.closeChangePwd.bind(this)}
+          //   handleSubmit={this.changePwd.bind(this)}
+          // />
+          // <ChangeUserInfo
+          //   firstname={this.props.firstname}
+          //   lastname={this.props.lastname}
+          //   email={this.props.email}
+          //   isOpen={this.state.changeUserOpen}
+          //   onCloseModal={this.closeChangeUser.bind(this)}
+          //   handleSubmit={this.changeUserInfo.bind(this)}
+          // />
+        }
       </nav>
     );
   }

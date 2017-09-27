@@ -2,11 +2,16 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Formsy from 'formsy-react';
-
-import { toggleChangeUserInfoModal } from '../../actions';
-
-import Modal from '../../components/Modal';
 import FRC from 'formsy-react-components';
+
+import {
+  closeChangeUserInfoModal,
+  enableChangeUserInfoForm,
+  disableChangeUserInfoForm,
+  changeUserInfo,
+} from '../../actions';
+
+import { Modal } from '../../components/Modal';
 
 const { Input } = FRC;
 
@@ -20,7 +25,7 @@ class ChangeUserInfoScreen extends Component {
   submitForm() {
     const myform = this.myform.getModel();
 
-    this.props.changePassword(myform.password);
+    this.props.changeUserInfo(myform.password);
   }
 
   render() {
@@ -29,8 +34,8 @@ class ChangeUserInfoScreen extends Component {
         title="Change Profile"
         contentLabel="Change Profile"
         isOpen={this.props.isOpen}
-        onCloseModal={this.props.toggleChangeUserInfoModal}
-        canSubmit={this.state.canSubmit}
+        onCloseModal={this.props.closeChangeUserInfoModal}
+        canSubmit={this.props.canSubmit}
         submitForm={this.submitForm}
         cancelBtnLabel="Cancel.."
       >
@@ -38,7 +43,6 @@ class ChangeUserInfoScreen extends Component {
           onValidSubmit={this.submitForm}
           onValid={this.props.enableChangeUserInfoForm}
           onInvalid={this.props.disableChangeUserInfoForm}
-          disabled={this.state.disabled}
           ref={ref => {
             this.myform = ref;
           }}
@@ -76,11 +80,14 @@ class ChangeUserInfoScreen extends Component {
 
 ChangeUserInfoScreen.propTypes = {
   isOpen: PropTypes.bool,
+  canSubmit: PropTypes.bool,
   email: PropTypes.string,
-  firstName: PropTypes.string,
-  lastName: PropTypes.string,
-  toggleChangePasswordModal: PropTypes.func,
-  changePassword: PropTypes.func,
+  firstname: PropTypes.string,
+  lastname: PropTypes.string,
+  closeChangeUserInfoModal: PropTypes.func,
+  enableChangeUserInfoForm: PropTypes.func,
+  disableChangeUserInfoForm: PropTypes.func,
+  changeUserInfo: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
@@ -88,10 +95,11 @@ const mapStateToProps = state => ({
   email: state.login.email,
   firstName: state.login.firstName,
   lastName: state.login.lastName,
+  canSubmit: state.header.enableChangeUserInfoForm,
 });
 
 const ChangeUserInfo = connect(mapStateToProps, {
-  toggleChangeUserInfoModal,
+  closeChangeUserInfoModal,
   enableChangeUserInfoForm,
   disableChangeUserInfoForm,
   changeUserInfo,

@@ -4,8 +4,12 @@ const Dashboard = () =>
   <div>
     <div className="col-sm-offset-2 col-sm-10">
       <h3> Welcome back! </h3>
-      <button type="submit" className="btn btn-primary">Take me back!</button>
-      <p>{"Here is yesterday's summary: "}</p>
+      <button type="submit" className="btn btn-primary">
+        Take me back!
+      </button>
+      <p>
+        {"Here is yesterday's summary: "}
+      </p>
       <ul>
         <li> Number of schools created or modified: </li>
         <li> Number of Preschools created or modified: </li>
@@ -16,4 +20,4 @@ const Dashboard = () =>
     </div>
   </div>;
 
-export default Dashboard;
+export { Dashboard };

@@ -1,8 +1,8 @@
 import React from 'react';
-import Dashboard from './components/Dashboard';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
 
+import { Dashboard } from './components/Dashboard';
 import PrimaryDistrict from './components/PrimaryDistrict';
 import PrimaryBlock from './components/PrimaryBlockScreen';
 import PrimaryCluster from './components/PrimaryClusterScreen';
@@ -15,7 +15,7 @@ import Students from './components/Students';
 import Student from './components/Student';
 import { LoginContainer } from './containers/Login';
 import Logout from './components/Logout';
-import App from './containers/App';
+import { App } from './containers/Dashboard';
 import UserRegContainer from './containers/UserRegContainer';
 import Programs from './components/Programs';
 import AnswersContainer from './containers/AnswersContainer';
