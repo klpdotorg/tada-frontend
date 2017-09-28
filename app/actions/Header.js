@@ -1,4 +1,6 @@
 import Notifications from 'react-notification-system-redux';
+import { SERVER_API_BASE as serverApiBase } from 'config';
+import _ from 'lodash';
 
 import {
   OPEN_CONFIRM_PASSWORD_MODAL,
@@ -15,8 +17,12 @@ import {
   ENABLE_CHANGE_USER_INFO_FORM,
   DISABLE_CHANGE_PASSWORD_FORM,
   DISABLE_CHANGE_USER_INFO_FORM,
+  SUGGESTION_RESULTS,
 } from '../actions/types';
 import { checkUserPassword, baseNotification, changePassword, modifySelf } from './index';
+import { capitalize } from '../utils';
+
+const searchAPI = `${serverApiBase}searchklp/?klp_id=`;
 
 export const openConfirmPasswordModal = () => ({
   type: OPEN_CONFIRM_PASSWORD_MODAL,
@@ -76,6 +82,39 @@ export const disableChangeUserInfoForm = () => ({
   type: DISABLE_CHANGE_USER_INFO_FORM,
 });
 
+export const setSuggestionResults = results => ({
+  type: SUGGESTION_RESULTS,
+  results,
+});
+
+export const filterSearchData = data => {
+  const institutions = _.map(data.institutions, item => ({
+    label: `${'Institution'} - ${item.id} - ${capitalize(item.name)}`,
+    value: item.id,
+    type: 'institution',
+    boundaryDetails: item.boundary_details,
+  }));
+
+  const students = _.map(data.students, item => {
+    const name = capitalize(`${item.first_name} ${item.last_name}`);
+
+    return {
+      label: `${'Student'} - ${item.id} - ${name}`,
+      value: item.id,
+      type: 'student',
+      boundaryDetails: item.boundary_details,
+    };
+  });
+
+  return [...institutions, ...students];
+};
+
+export const handleSearchText = query => dispatch => {
+  fetch(`${searchAPI}${query}`).then(resp => resp.json()).then(json => {
+    dispatch(setSuggestionResults(filterSearchData(json)));
+  });
+};
+
 export const confirmCurrentPwd = pwd => dispatch => {
   dispatch(checkUserPassword)
     .then(response => {
@@ -130,7 +169,7 @@ export const changePwd = newPass => (dispatch, getState) => {
 };
 
 export const changeUserInfo = (email, firstname, lastname) => dispatch => {
-  dispatch(closeChangeUserModal());
+  dispatch(closeChangeUserInfoModal());
   dispatch(modifySelf(email, firstname, lastname))
     .then(() => {
       dispatch(
