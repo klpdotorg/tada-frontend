@@ -1,124 +1,29 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {
-  fetchEntitiesFromServer,
-  fetchProgramsInstitution,
-  logoutUser,
-  saveNewDistrict,
-  loginSuccess,
-  fetchUserData,
-  changeUserName,
-  changePassword,
-  selectPreschoolTree,
-  selectPrimaryTree,
-  getBoundaries,
-  toggleNode,
-} from '../../actions/';
-import { push } from 'react-router-redux';
-import NavBar from '../../components/MainNavBar';
-import { MainHeader } from '../Header';
-import SideBarContainer from '../../components/SideBar';
-import SecondaryNavBar from '../../components/SecondaryNavBar';
+import { fetchUserData, getBoundaries } from '../../actions/';
+
+import { MainHeader, MainNavBar, SecondaryNavBarCont } from '../Header';
+import { SideBarContainer } from '../SideBar';
 import MainContentArea from '../../components/ContentArea';
 import TreeTogglerSpacingDiv from '../../components/TreeTogglerSpacingDiv';
 import Notifications from 'react-notification-system-redux';
 
-const mapStateToProps = (state, ownProps) => {
-  // console.log("Own props inside App.js", ownProps);
-  return {
-    boundaryDetails: state.boundaries.boundaryDetails,
-    boundariesByParentId: state.boundaries.boundariesByParentId,
-    routerState: state.routing,
-    username: state.login.username,
-    useremail: state.login.email,
-    userfirstname: state.login.first_name,
-    userlastname: state.login.last_name,
-    districtModalIsOpen: state.modal.createDistrict,
-    primarySelected: state.schoolSelection.primarySchool,
-    programsByInstitutionId: state.programs.programsByInstitutionId,
-    programsByStudentId: state.programs.programsByStudentId,
-    notifications: state.notifications,
-  };
-};
+const mapStateToProps = state => ({
+  notifications: state.notifications,
+});
 
-var mapDispatchToProps = function (dispatch) {
-  return {
-    onBoundaryClick(boundary) {
-      dispatch(toggleNode(boundary.id));
-      dispatch(fetchEntitiesFromServer(boundary.id));
-    },
-
-    getInitData() {
-      getBoundaries(2).then(res => {
-        console.log(res);
-      });
-
-      return dispatch({
-        type: 'BOUNDARIES',
-        payload: getBoundaries(2),
-      });
-    },
-
-    onPrimaryClick() {
-      dispatch(selectPrimaryTree());
-      dispatch(fetchEntitiesFromServer());
-      // dispatch(push('/'))
-    },
-    onPreSchoolClick() {
-      dispatch(selectPreschoolTree());
-      dispatch(fetchEntitiesFromServer());
-      // dispatch(push('/'))
-    },
-    fetchEntityDetails() {
-      dispatch(fetchEntitiesFromServer(1));
-    },
-
-    handleLogout() {
-      dispatch(logoutUser());
-    },
-
-    toggleDistrictModal() {
-      dispatch({
-        type: 'TOGGLE_MODAL',
-        modal: 'createDistrict',
-      });
-    },
-
-    saveNewDistrict(name) {
-      dispatch(saveNewDistrict(name));
-    },
-
-    redirectTo(url) {
-      dispatch(push(url));
-    },
-
-    loggedIn(token, userid) {
-      let authData = {
-        auth_token: token,
-        user_id: userid,
-      };
-      dispatch(loginSuccess(authData));
-    },
-
-    fetchUserData() {
-      return dispatch(fetchUserData(sessionStorage.token));
-    },
-
-    fetchProgramsByInstitution() {
-      return dispatch(fetchProgramsInstitution());
-    },
-
-    changeUserName(userName, password) {
-      return dispatch(changeUserName(userName, password));
-    },
-
-    changePassword(oldPassword, newPassword) {
-      return dispatch(changePassword(oldPassword, newPassword));
-    },
-    dispatch,
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  getInitData() {
+    return dispatch({
+      type: 'BOUNDARIES',
+      payload: getBoundaries(2),
+    });
+  },
+  fetchUserData() {
+    return dispatch(fetchUserData(sessionStorage.token));
+  },
+});
 
 class TadaContentContainer extends Component {
   constructor(props) {
@@ -129,69 +34,39 @@ class TadaContentContainer extends Component {
   }
 
   componentWillMount() {
-    // if (!sessionStorage.token) {
-    //   this.props.redirectTo('/login');
-    // } else {
-    // this.props.loggedIn(sessionStorage.token, sessionStorage.userid);
     this.props.fetchUserData();
     this.props.getInitData().then(() => {
       this.setState({
         isLoading: false,
       });
     });
-
-    // }
   }
 
   render() {
-    const {
-      onBoundaryClick,
-      boundaryDetails,
-      boundariesByParentId,
-      saveNewDistrict,
-      modifyDistrict,
-      primarySelected,
-      boundaries,
-      notifications,
-      dispatch,
-    } = this.props;
+    const { location, children, notifications } = this.props;
+
     return this.state.isLoading
       ? <div>Loading... </div>
       : <div>
-          <MainHeader
-            handleLogout={this.props.handleLogout}
-            firstname={this.props.userfirstname}
-            lastname={this.props.userlastname}
-            email={this.props.useremail}
-            username={this.props.username}
-            dispatch={this.props.dispatch}
-            handleChangeUserName={this.props.changeUserName}
-          />
+          <MainHeader />
           <TreeTogglerSpacingDiv />
-          <NavBar
-            onPrimaryClick={this.props.onPrimaryClick}
-            onPreSchoolClick={this.props.onPreSchoolClick}
-            primarySelected={this.props.primarySelected}
-          />
-          <SecondaryNavBar
-            redirectTo={this.props.redirectTo}
-            toggleDistrictModal={this.props.toggleDistrictModal}
-            districtModalIsOpen={this.props.districtModalIsOpen}
-            saveNewDistrict={saveNewDistrict}
-            dispatch={dispatch}
-          />
+          <MainNavBar />
+          <SecondaryNavBarCont />
           <div id="wrapper" className="main__wrapper">
-            {/** <SideBar child={<SchoolsNavTree/>}**/}
-            <SideBarContainer location={this.props.location} />
-            <MainContentArea children={this.props.children} />
+            <SideBarContainer location={location} />
+            <MainContentArea children={children} />
           </div>
           <Notifications notifications={notifications} />
         </div>;
   }
 }
 
-TadaContentContainer.contextTypes = {
-  router: PropTypes.object.isRequired,
+TadaContentContainer.propTypes = {
+  children: PropTypes.element,
+  notifications: PropTypes.array,
+  fetchUserData: PropTypes.func,
+  getInitData: PropTypes.func,
+  location: PropTypes.object,
 };
 
 const App = connect(mapStateToProps, mapDispatchToProps)(TadaContentContainer);

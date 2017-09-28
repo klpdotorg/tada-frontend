@@ -12,3 +12,4 @@ export const ENABLE_CHANGE_PASSWORD_FORM = 'enable_change_password_form';
 export const ENABLE_CHANGE_USER_INFO_FORM = 'enable_change_user_info_form';
 export const DISABLE_CHANGE_PASSWORD_FORM = 'disable_change_password_form';
 export const DISABLE_CHANGE_USER_INFO_FORM = 'disable_change_user_info_form';
+export const SUGGESTION_RESULTS = 'auto_suggest_results';
