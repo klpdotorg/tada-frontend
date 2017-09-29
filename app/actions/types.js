@@ -13,3 +13,6 @@ export const ENABLE_CHANGE_USER_INFO_FORM = 'enable_change_user_info_form';
 export const DISABLE_CHANGE_PASSWORD_FORM = 'disable_change_password_form';
 export const DISABLE_CHANGE_USER_INFO_FORM = 'disable_change_user_info_form';
 export const SUGGESTION_RESULTS = 'auto_suggest_results';
+export const TOGGLE_DISTRICT_CONFIRM_MODAL = 'toggle_district_confirm_modal';
+export const ENABLE_SUBMIT_FORM = 'enable_submit_form';
+export const DISABLE_SUBMIT_FORM = 'disable_submit_form';

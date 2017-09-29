@@ -3,7 +3,7 @@ export * from './programmes.js';
 export * from './assessments.js';
 export * from './userauth.js';
 export * from './boundaries.js';
-export * from './appevents.js';
+export * from './AppState';
 export * from './permissions.js';
 export * from './reports.js';
 export * from './teachers.js';

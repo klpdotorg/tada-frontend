@@ -3,7 +3,7 @@ import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
 
 import { Dashboard } from './components/Dashboard';
-import PrimaryDistrict from './components/PrimaryDistrict';
+import { PrimaryDistrict } from './containers/PrimaryDistrict';
 import PrimaryBlock from './components/PrimaryBlockScreen';
 import PrimaryCluster from './components/PrimaryClusterScreen';
 import PreschoolProject from './components/PreschoolProjectScreen';

@@ -108,7 +108,7 @@ const mapStateToProps = state => {
       boundariesByParentId,
       boundaryDetails,
     ),
-    boundaryDetails: state.boundaries.boundariesByParentId,
+    boundaryDetails: state.boundaries.boundaryDetails,
   };
 };
 

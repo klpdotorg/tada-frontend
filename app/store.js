@@ -3,16 +3,16 @@ import thunk from 'redux-thunk';
 import { browserHistory } from 'react-router';
 import { routerMiddleware, routerReducer } from 'react-router-redux';
 import {
-  schoolSelection,
-  login,
-  modal,
+  SchoolSelection,
+  Login,
+  Modal,
   userregistration,
   programs,
   assessments,
-  passwordreset,
+  PasswordReset,
   users,
   boundaries,
-  appstate,
+  AppState,
   teachers,
   Header,
 } from './reducers';
@@ -20,19 +20,19 @@ import promiseMiddleware from 'redux-promise-middleware';
 import { reducer as notifications } from 'react-notification-system-redux';
 
 const reducer = combineReducers({
-  schoolSelection,
-  login,
+  schoolSelection: SchoolSelection,
+  login: Login,
   routing: routerReducer,
   notifications,
-  modal,
+  modal: Modal,
   userregistration,
   users,
   programs,
   assessments,
   teachers,
-  passwordreset,
+  passwordreset: PasswordReset,
   boundaries,
-  appstate,
+  appstate: AppState,
   header: Header,
 });
 
