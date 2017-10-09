@@ -17,13 +17,7 @@ const mapDispatchToProps = dispatch => ({
     });
   },
   save: (name, districtId) => {
-    const options = {
-      name,
-      parent: districtId,
-      boundary_type: 1,
-      boundary_category: 10,
-    };
-    dispatch(saveNewBlock(options));
+    dispatch(saveNewBlock(name, districtId));
   },
 });
 

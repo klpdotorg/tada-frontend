@@ -523,7 +523,16 @@ export const saveNewDistrict = name => (dispatch, getState) => {
   });
 };
 
-export const saveNewBlock = options => (dispatch, getState) => {
+export const saveNewBlock = (name, districtId) => (dispatch, getState) => {
+  const boundaryType = getState().schoolSelection.primarySchool ? 'primary' : 'pre';
+  const options = {
+    name,
+    parent: districtId,
+    boundary_type: 'SB',
+    type: boundaryType,
+    status: 'AC',
+  };
+
   return newBoundaryFetch(options).then(checkStatus).then(response => {
     dispatch(responseReceivedFromServer({ results: [response] }));
     dispatch(toggleModal('createBlock'));

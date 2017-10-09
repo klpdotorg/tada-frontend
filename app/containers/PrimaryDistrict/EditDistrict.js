@@ -13,7 +13,8 @@ import {
   openNode,
   fetchEntitiesFromServer,
   selectPreschoolTree,
-  toggleDistrictConfirmModal,
+  showDistrictConfirmModal,
+  closeDistrictConfirmModal,
 } from '../../actions';
 
 const { Input } = FRC;
@@ -97,7 +98,7 @@ class EditDistrictForm extends Component {
             type="submit"
             className="btn btn-primary padded-btn"
             onClick={() => {
-              this.showConfirmation();
+              this.props.showConfirmModal();
             }}
             disabled={hasBlocks}
           >
@@ -108,7 +109,7 @@ class EditDistrictForm extends Component {
             onAgree={() => {
               this.props.deleteDistrict(districtId, boundary.parent);
             }}
-            onCloseModal={this.closeConfirmModal}
+            onCloseModal={this.props.closeConfirmModal}
             entity={boundary.name}
           />
         </div>
@@ -141,8 +142,11 @@ const mapDispatchToProps = dispatch => ({
       modal: 'createProject',
     });
   },
-  toggleConfirmModal: () => {
-    dispatch(toggleDistrictConfirmModal());
+  showConfirmModal: () => {
+    dispatch(showDistrictConfirmModal());
+  },
+  closeConfirmModal: () => {
+    dispatch(closeDistrictConfirmModal());
   },
   enableSubmitForm: () => {
     dispatch(enableSubmitForm());
@@ -173,7 +177,8 @@ EditDistrictForm.propTypes = {
   districtId: PropTypes.string,
   toggleBlockModal: PropTypes.func,
   toggleProjectModal: PropTypes.func,
-  toggleConfirmModal: PropTypes.func,
+  showConfirmModal: PropTypes.func,
+  closeConfirmModal: PropTypes.func,
   enableSubmitForm: PropTypes.func,
   disableSubmitForm: PropTypes.func,
   saveDistrict: PropTypes.func,

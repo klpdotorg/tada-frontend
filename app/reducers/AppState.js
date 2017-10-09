@@ -1,7 +1,9 @@
 import {
-  TOGGLE_DISTRICT_CONFIRM_MODAL,
+  SHOW_DISTRICT_CONFIRM_MODAL,
+  CLOSE_DISTRICT_CONFIRM_MODAL,
   ENABLE_SUBMIT_FORM,
   DISABLE_SUBMIT_FORM,
+  TOGGLE_BLOCK_CONFIRM_MODAL,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -23,10 +25,20 @@ const AppState = (state = INITIAL_STATE, action) => {
         ...state,
         selectedBoundary: action.boundary,
       };
-    case TOGGLE_DISTRICT_CONFIRM_MODAL:
+    case SHOW_DISTRICT_CONFIRM_MODAL:
       return {
         ...state,
-        districtConfirmModal: !state.districtConfirmModal,
+        districtConfirmModal: true,
+      };
+    case CLOSE_DISTRICT_CONFIRM_MODAL:
+      return {
+        ...state,
+        districtConfirmModal: false,
+      };
+    case TOGGLE_BLOCK_CONFIRM_MODAL:
+      return {
+        ...state,
+        blockConfirmModal: !state.blockConfirmModal,
       };
     case ENABLE_SUBMIT_FORM:
       return {

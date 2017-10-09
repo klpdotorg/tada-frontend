@@ -35,7 +35,7 @@ export default class CreateDistrict extends Component {
   submitForm() {
     var myform = this.myform.getModel();
 
-    this.props.save(myform.entityName);
+    this.props.save(myform.entityName, this.props.parent);
   }
 
   handleChange(e) {
@@ -74,7 +74,6 @@ export default class CreateDistrict extends Component {
             required
             validations="minLength:1"
           />
-
         </Formsy.Form>
       </Modal>
     );

@@ -15,12 +15,13 @@ const PrimaryDistrictView = ({ name, districtId }) =>
     {sessionStorage.getItem('isAdmin')
       ? <EditDistrict districtId={districtId} />
       : <NoPermissionDistrictView name={name} />}
-    <CreateBlock />
-    <CreateProject />
+    <CreateBlock parent={districtId} />
+    <CreateProject parent={districtId} />
   </div>;
 
 PrimaryDistrictView.propTypes = {
   name: PropTypes.string,
+  districtId: PropTypes.string,
 };
 
 export { PrimaryDistrictView };
