@@ -391,12 +391,12 @@ export function sendRegisterUser(email, password, username) {
   };
 }
 
-function toggleModal(modalType) {
+export const toggleModal = modalType => {
   return {
     type: 'TOGGLE_MODAL',
     modal: `${modalType}`,
   };
-}
+};
 
 export function sendLoginToServer(email, pass) {
   return function(dispatch, getState) {
@@ -492,7 +492,7 @@ export function modifyBoundary(boundaryid, name) {
   };
 }
 
-const newBoundaryFetch = options => {
+export const newBoundaryFetch = options => {
   return fetch(serverApiBase + 'boundaries/', {
     method: 'POST',
     headers: {
@@ -502,53 +502,6 @@ const newBoundaryFetch = options => {
     body: JSON.stringify(options),
   }).catch(error => {
     console.log('request failed', error);
-  });
-};
-
-export const saveNewDistrict = name => (dispatch, getState) => {
-  const boundaryType = getState().schoolSelection.primarySchool ? 'primary' : 'pre';
-  const options = {
-    name,
-    type: boundaryType,
-    boundary_type: 'SD',
-    parent: 2,
-    status: 'AC',
-  };
-  return newBoundaryFetch(options).then(checkStatus).then(response => {
-    dispatch(responseReceivedFromServer({ results: [response] }));
-    dispatch(openNode(response.id));
-    dispatch(toggleModal('createDistrict'));
-    var boundary = computeRouterPathForEntity(response, getState().boundaries.boundaryDetails);
-    dispatch(push(boundary.path));
-  });
-};
-
-export const saveNewBlock = (name, districtId) => (dispatch, getState) => {
-  const boundaryType = getState().schoolSelection.primarySchool ? 'primary' : 'pre';
-  const options = {
-    name,
-    parent: districtId,
-    boundary_type: 'SB',
-    type: boundaryType,
-    status: 'AC',
-  };
-
-  return newBoundaryFetch(options).then(checkStatus).then(response => {
-    dispatch(responseReceivedFromServer({ results: [response] }));
-    dispatch(toggleModal('createBlock'));
-    dispatch(openNode(response.id));
-    var boundary = computeRouterPathForEntity(response, getState().boundaries.boundaryDetails);
-    dispatch(push(boundary.path));
-  });
-};
-
-export const saveNewCluster = options => (dispatch, getState) => {
-  return newBoundaryFetch(options).then(checkStatus).then(response => {
-    dispatch(responseReceivedFromServer({ results: [response] }));
-    dispatch(toggleModal('createCluster'));
-    dispatch(openNode(response.id));
-    var boundary = computeRouterPathForEntity(response, getState().boundaries.boundaryDetails);
-    dispatch(push(boundary.path));
   });
 };
 

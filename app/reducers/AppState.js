@@ -1,15 +1,18 @@
 import {
-  SHOW_DISTRICT_CONFIRM_MODAL,
-  CLOSE_DISTRICT_CONFIRM_MODAL,
+  SHOW_CONFIRM_MODAL,
+  CLOSE_CONFIRM_MODAL,
   ENABLE_SUBMIT_FORM,
   DISABLE_SUBMIT_FORM,
-  TOGGLE_BLOCK_CONFIRM_MODAL,
+  SHOW_BOUNDARY_LOADING,
+  CLOSE_BOUNDARY_LOADING,
 } from '../actions/types';
 
 const INITIAL_STATE = {
   singleSelectMode: false,
   selectedBoundary: '',
-  districtConfirmModal: false,
+  confirmModal: false,
+  loadingBoundary: false,
+  blockConfirmModal: false,
   enableSubmitForm: false,
 };
 
@@ -25,20 +28,25 @@ const AppState = (state = INITIAL_STATE, action) => {
         ...state,
         selectedBoundary: action.boundary,
       };
-    case SHOW_DISTRICT_CONFIRM_MODAL:
+    case SHOW_CONFIRM_MODAL:
       return {
         ...state,
-        districtConfirmModal: true,
+        confirmModal: true,
       };
-    case CLOSE_DISTRICT_CONFIRM_MODAL:
+    case CLOSE_CONFIRM_MODAL:
       return {
         ...state,
-        districtConfirmModal: false,
+        confirmModal: false,
       };
-    case TOGGLE_BLOCK_CONFIRM_MODAL:
+    case SHOW_BOUNDARY_LOADING:
       return {
         ...state,
-        blockConfirmModal: !state.blockConfirmModal,
+        loadingBoundary: true,
+      };
+    case CLOSE_BOUNDARY_LOADING:
+      return {
+        ...state,
+        loadingBoundary: false,
       };
     case ENABLE_SUBMIT_FORM:
       return {

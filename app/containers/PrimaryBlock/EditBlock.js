@@ -6,7 +6,14 @@ import FRC from 'formsy-react-components';
 import Formsy from 'formsy-react';
 
 import ConfirmModal from '../../components/Modals/Confirm';
-import { modifyBoundary, enableSubmitForm, disableSubmitForm, deleteBoundary } from '../../actions';
+import {
+  modifyBoundary,
+  enableSubmitForm,
+  disableSubmitForm,
+  deleteBoundary,
+  showConfirmModal,
+  closeConfirmModal,
+} from '../../actions';
 
 const { Input } = FRC;
 
@@ -79,7 +86,7 @@ class EditBlockForm extends Component {
             className="btn btn-primary padded-btn"
             disabled={hasClusters}
             onClick={() => {
-              this.props.showConfirmation();
+              this.props.showConfirmModal();
             }}
           >
             Delete
@@ -87,7 +94,7 @@ class EditBlockForm extends Component {
           <ConfirmModal
             isOpen={this.props.openConfirmModal}
             onAgree={this.onClickDeleteBlock}
-            onCloseModal={this.props.closeConfirmation}
+            onCloseModal={this.props.closeConfirmModal}
             entity={block.name}
           />
         </div>
@@ -98,8 +105,8 @@ class EditBlockForm extends Component {
 
 EditBlockForm.propTypes = {
   block: PropTypes.object,
-  blockId: PropTypes.string,
-  districtId: PropTypes.string,
+  blockId: PropTypes.number,
+  districtId: PropTypes.number,
   hasClusters: PropTypes.bool,
   openConfirmModal: PropTypes.bool,
   canSubmit: PropTypes.bool,
@@ -108,16 +115,19 @@ EditBlockForm.propTypes = {
   deleteBlock: PropTypes.func,
   enableSubmitForm: PropTypes.func,
   disableSubmitForm: PropTypes.func,
+  closeConfirmModal: PropTypes.func,
+  showConfirmModal: PropTypes.func,
 };
 
 const mapStateToProps = (state, ownProps) => {
   const { blockId } = ownProps;
-  const hasClusters = state.boundaries.boundariesByParentId[blockId].length;
+  const blockIds = state.boundaries.boundariesByParentId[blockId];
+  const hasClusters = blockIds && blockIds.length;
   return {
-    block: state.boundaries.boundaryDetails[blockId],
+    block: state.boundaries.boundaryDetails[blockId] || {},
     hasClusters,
-    openConfirmModal: state.appstate.blockConfirmModal,
-    canSubmit: state.appState.enableSubmitForm,
+    openConfirmModal: state.appstate.confirmModal,
+    canSubmit: state.appstate.enableSubmitForm,
   };
 };
 
@@ -139,6 +149,12 @@ const mapDispatchToProps = dispatch => ({
   },
   disableSubmitForm: () => {
     dispatch(disableSubmitForm());
+  },
+  showConfirmModal: () => {
+    dispatch(showConfirmModal());
+  },
+  closeConfirmModal: () => {
+    dispatch(closeConfirmModal());
   },
 });
 

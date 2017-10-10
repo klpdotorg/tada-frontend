@@ -13,8 +13,8 @@ import {
   openNode,
   fetchEntitiesFromServer,
   selectPreschoolTree,
-  showDistrictConfirmModal,
-  closeDistrictConfirmModal,
+  showConfirmModal,
+  closeConfirmModal,
 } from '../../actions';
 
 const { Input } = FRC;
@@ -125,7 +125,7 @@ const mapStateToProps = (state, ownProps) => {
     canSubmit: state.appstate.enableSubmitForm,
     boundary: state.boundaries.boundaryDetails[districtId],
     hasBlocks: state.boundaries[districtId] && state.boundaries[districtId].length,
-    confirmModal: state.appstate.districtConfirmModal,
+    confirmModal: state.appstate.confirmModal,
   };
 };
 
@@ -143,10 +143,10 @@ const mapDispatchToProps = dispatch => ({
     });
   },
   showConfirmModal: () => {
-    dispatch(showDistrictConfirmModal());
+    dispatch(showConfirmModal());
   },
   closeConfirmModal: () => {
-    dispatch(closeDistrictConfirmModal());
+    dispatch(closeConfirmModal());
   },
   enableSubmitForm: () => {
     dispatch(enableSubmitForm());

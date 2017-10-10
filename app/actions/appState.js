@@ -1,9 +1,10 @@
 import {
   ENABLE_SUBMIT_FORM,
   DISABLE_SUBMIT_FORM,
-  TOGGLE_BLOCK_CONFIRM_MODAL,
-  SHOW_DISTRICT_CONFIRM_MODAL,
-  CLOSE_DISTRICT_CONFIRM_MODAL,
+  SHOW_CONFIRM_MODAL,
+  CLOSE_CONFIRM_MODAL,
+  SHOW_BOUNDARY_LOADING,
+  CLOSE_BOUNDARY_LOADING,
 } from './types';
 
 export const enableNavTreeSingleSelect = singleSelMode => ({
@@ -21,17 +22,21 @@ export const boundaryClicked = bound => ({
   boundary: bound,
 });
 
-export const showDistrictConfirmModal = () => ({
-  type: SHOW_DISTRICT_CONFIRM_MODAL,
+export const showConfirmModal = () => ({
+  type: SHOW_CONFIRM_MODAL,
 });
 
-export const closeDistrictConfirmModal = () => ({
-  type: CLOSE_DISTRICT_CONFIRM_MODAL,
+export const closeConfirmModal = () => ({
+  type: CLOSE_CONFIRM_MODAL,
 });
 
-export const toggleBlockConfirmModal = {
-  type: TOGGLE_BLOCK_CONFIRM_MODAL,
-};
+export const showBoundaryLoading = () => ({
+  type: SHOW_BOUNDARY_LOADING,
+});
+
+export const closeBoundaryLoading = () => ({
+  type: CLOSE_BOUNDARY_LOADING,
+});
 
 export const enableSubmitForm = () => ({
   type: ENABLE_SUBMIT_FORM,
