@@ -121,8 +121,8 @@ EditBlockForm.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const { blockId } = ownProps;
-  const blockIds = state.boundaries.boundariesByParentId[blockId];
-  const hasClusters = blockIds && blockIds.length;
+  const clusterIds = state.boundaries.boundariesByParentId[blockId];
+  const hasClusters = clusterIds && clusterIds.length > 0;
   return {
     block: state.boundaries.boundaryDetails[blockId] || {},
     hasClusters,
@@ -135,7 +135,7 @@ const mapDispatchToProps = dispatch => ({
   toggleClusterModal: () => {
     dispatch({
       type: 'TOGGLE_MODAL',
-      modal: 'createCluter',
+      modal: 'createCluster',
     });
   },
   saveBlock: (blockId, blockName) => {

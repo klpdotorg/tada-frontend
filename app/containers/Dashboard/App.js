@@ -15,6 +15,13 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   getInitData() {
+    getBoundaries(2)
+      .then(res => {
+        console.log('priting', res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
     return dispatch({
       type: 'BOUNDARIES',
       payload: getBoundaries(2),

@@ -14,7 +14,6 @@ export const get = url => {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: 'Token ' + sessionStorage.token,
     },
   })
     .then(checkStatus)
