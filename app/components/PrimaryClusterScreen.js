@@ -232,9 +232,8 @@ export default class PrimaryCluster extends React.Component {
         <div>
           {hasSchools
             ? <div className="alert alert-info">
-                <i className="fa fa-info-circle fa-lg" aria-hidden="true" />
-                {' '}
-                You cannot delete this boundary until its children are deleted
+                <i className="fa fa-info-circle fa-lg" aria-hidden="true" /> You cannot delete this
+                boundary until its children are deleted
               </div>
             : <div />}
           <h4 className="text-primary col-md-10">Modify Details</h4>
@@ -292,7 +291,6 @@ export default class PrimaryCluster extends React.Component {
     } else if (canModify) {
       return (
         <div>
-
           <div className="pull-right">
             <button className="btn btn-primary" onClick={this.toggleSchoolModal}>
               <i className="fa fa-university" />Add School
@@ -305,7 +303,9 @@ export default class PrimaryCluster extends React.Component {
           <h4 className="text-primary"> Cluster Details</h4>
           <div className="border-base" />
           <div className="base-spacing-mid" />
-          <div>{cluster.name}</div>
+          <div>
+            {cluster.name}
+          </div>
         </div>
       );
     } else {
@@ -318,7 +318,9 @@ export default class PrimaryCluster extends React.Component {
           <h4 className="text-primary">Cluster</h4>
           <div className="border-base" />
           <div className="base-spacing-mid" />
-          <div>{cluster.name}</div>
+          <div>
+            {cluster.name}
+          </div>
         </div>
       );
     }
@@ -336,9 +338,19 @@ export default class PrimaryCluster extends React.Component {
         </div>
       : <div>
           <ol className="breadcrumb">
-            <li><Link to={district.path}>{district.name}</Link></li>
-            <li><Link to={block.path}>{block.name}</Link></li>
-            <li className="active">{cluster.name}</li>
+            <li>
+              <Link to={district.path}>
+                {district.name}
+              </Link>
+            </li>
+            <li>
+              <Link to={block.path}>
+                {block.name}
+              </Link>
+            </li>
+            <li className="active">
+              {cluster.name}
+            </li>
           </ol>
           {this.Displayelement(...this.props)}
 

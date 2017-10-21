@@ -17,13 +17,7 @@ const mapDispatchToProps = dispatch => ({
     });
   },
   save: (name, blockId) => {
-    const options = {
-      name,
-      parent: blockId,
-      boundary_type: 1,
-      boundary_category: 11,
-    };
-    dispatch(saveNewCluster(options));
+    dispatch(saveNewCluster(name, blockId));
   },
 });
 

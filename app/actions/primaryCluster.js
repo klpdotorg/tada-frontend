@@ -4,15 +4,15 @@ import { checkStatus } from './utils';
 import { computeRouterPathForEntity } from '../reducers/utils';
 import { newBoundaryFetch, responseReceivedFromServer, openNode, toggleModal } from './index';
 
-export const saveNewCluster = options => (dispatch, getState) => {
-  // const boundaryType = getState().schoolSelection.primarySchool ? 'primary' : 'pre';
-  // const options = {
-  //   name,
-  //   parent: districtId,
-  //   boundary_type: 'SB',
-  //   type: boundaryType,
-  //   status: 'AC',
-  // };
+export const saveNewCluster = (name, blockId) => (dispatch, getState) => {
+  const boundaryType = getState().schoolSelection.primarySchool ? 'primary' : 'pre';
+  const options = {
+    name,
+    parent: blockId,
+    boundary_type: 'SC',
+    type: boundaryType,
+    status: 'AC',
+  };
 
   return newBoundaryFetch(options).then(checkStatus).then(response => {
     dispatch(responseReceivedFromServer({ results: [response] }));
