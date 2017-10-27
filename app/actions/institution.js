@@ -1,7 +1,15 @@
+import { push } from 'react-router-redux';
+
 import { SERVER_API_BASE as serverApiBase } from 'config';
-import { checkStatus, get } from './requests';
+import { checkStatus, get, post } from './requests';
 import { SET_INSTITUTION_LANGUAGES, SET_INSTITUTION_CATS } from './types';
-import { responseReceivedFromServer, requestFailed } from './index';
+import {
+  responseReceivedFromServer,
+  requestFailed,
+  openNode,
+  toggleModal,
+} from './index';
+import { computeRouterPathForEntity } from '../reducers/utils';
 
 export const setInstitutionCats = value => ({
   type: SET_INSTITUTION_CATS,
@@ -37,7 +45,7 @@ export const getLanguages = () => dispatch => {
         value: language.id,
         label: language.name,
       }));
-      dispatch(setLanguages(langs));
+      dispatch(setInstitutionLanguages(langs));
     })
     .catch(error => {
       console.log('request failed', error);
@@ -65,3 +73,19 @@ export const getInstitutionCategories = () => dispatch => {
       console.log('request failed', error);
     });
 };
+
+export const saveNewInstitution = (options) => (
+  (dispatch, getState) => {
+    const boundaryType = getState().schoolSelection.primarySchool ? 'primary' : 'pre';
+    const newOptions = { ...options, institution_type: boundaryType };
+    console.log(newOptions);
+    post(`${serverApiBase}institutions/`, newOptions)
+    .then(response => {
+      dispatch(responseReceivedFromServer({ results: [response] }));
+      dispatch(toggleModal('createInstitution'));
+      dispatch(openNode(response.id));
+      const boundary = computeRouterPathForEntity(response, getState().boundaries.boundaryDetails);
+      dispatch(push(boundary.path));
+    });
+  }
+);

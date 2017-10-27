@@ -9,3 +9,4 @@ export * from './SchoolSelection';
 export * from './Login';
 export * from './Modal';
 export * from './PasswordReset';
+export * from './Institution';

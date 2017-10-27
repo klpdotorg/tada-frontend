@@ -50,7 +50,7 @@ class EditClusterView extends Component {
         <button
           className="btn btn-orange pull-right"
           title="Add School"
-          onClick={this.toggleSchoolModal}
+          onClick={this.props.toggleSchoolModal}
         >
           Add School
         </button>
@@ -111,6 +111,7 @@ EditClusterView.propTypes = {
   saveCluster: PropTypes.func,
   deleteCluster: PropTypes.func,
   enableSubmitForm: PropTypes.func,
+  toggleSchoolModal: PropTypes.func,
   disableSubmitForm: PropTypes.func,
   showConfirmModal: PropTypes.func,
   closeConfirmModal: PropTypes.func,

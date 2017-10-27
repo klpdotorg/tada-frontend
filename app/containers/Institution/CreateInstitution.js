@@ -1,90 +1,50 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
 import _ from 'lodash';
 
 import 'react-select/dist/react-select.css';
-import Modal from '../../components/Modal';
+import { Modal } from '../../components/Modal';
+import {
+  saveNewInstitution,
+  enableSubmitForm,
+  disableSubmitForm,
+} from '../../actions';
 
 const { Input, Textarea, Select } = FRC;
 
-class CreateInstitution extends Component {
+class CreateInstitutionForm extends Component {
+
   constructor(props) {
     super(props);
-    this.state = {
-      name: '',
-      disabled: false,
-      canSubmit: false,
-      languages: {
-        isLoading: true,
-        list: [],
-      },
-      mgmt: {
-        isLoading: true,
-        list: [],
-      },
-      institutionCategories: {
-        isLoading: true,
-        list: [],
-      },
-    };
-    this.handleChange = this.handleChange.bind(this);
-    this.enableSubmitButton = this.enableSubmitButton.bind(this);
-    this.disableSubmitButton = this.disableSubmitButton.bind(this);
+
     this.submitForm = this.submitForm.bind(this);
-    this.selectLanguage = this.selectLanguage.bind(this);
-  }
-
-  enableSubmitButton() {
-    this.setState({
-      canSubmit: true,
-    });
-  }
-
-  disableSubmitButton() {
-    this.setState({
-      canSubmit: false,
-    });
-  }
-
-  handleChange(e) {
-    this.setState({
-      name: e.target.value,
-    });
-  }
-
-  selectLanguage(value) {
-    this.setState({
-      languages: value,
-    });
   }
 
   submitForm() {
     const myform = this.myform.getModel();
-    const languages = [];
     const copy = {
-      dise_code: myform.institutionDise_code,
-      institution_gender: myform.institutionGender,
+      dise: 599419,
       name: myform.name,
       address: myform.institutionAddress,
-      area: myform.institutionArea,
-      landmark: myform.institutionLandmark,
-      pincode: myform.institutionPincode,
-      cat: myform.institutionCat,
+      //area: myform.institutionArea,
+      //landmark: myform.institutionLandmark,
+      //pincode: myform.institutionPincode,
+      languages: '1' || myform.languages,
+      admin3: this.props.clusterId,
+      gender: myform.institutionGender,
+      category: '10',
+      management: '1',
+      status: 'AC',
     };
-
-    myform.institutionLang(lang => {
-      languages.push(parseInt(lang, 10));
-    });
-    copy.languages = languages;
 
     this.props.save(copy);
   }
 
   render() {
-    const { institutionCategories } = this.state;
-    const { title, isOpen, onCloseModal, placeHolder, languages } = this.props;
+    const { title, isOpen, placeHolder, languages, institutionCategories } = this.props;
 
     const selectOptions = [
       { value: 'co-ed', label: 'Co-Ed' },
@@ -92,20 +52,21 @@ class CreateInstitution extends Component {
       { value: 'girls', label: 'Girls' },
     ];
 
+    console.log(isOpen, title, languages, institutionCategories);
+
     return (
       <Modal
         title={title}
-        contentLabel="Create Institution"
+        contentLabel={title}
         isOpen={isOpen}
-        onCloseModal={onCloseModal}
-        canSubmit={this.state.canSubmit}
+        onCloseModal={this.props.closeConfirmModal}
+        canSubmit={this.props.canSubmit}
         submitForm={this.submitForm}
       >
         <Formsy.Form
           onValidSubmit={this.submitForm}
-          onValid={this.enableSubmitButton}
-          onInvalid={this.disableSubmitButton}
-          disabled={this.state.disabled}
+          onValid={this.props.enableSubmitForm}
+          onInvalid={this.props.disableSubmitForm}
           ref={ref => (this.myform = ref)}
         >
           <Input
@@ -156,14 +117,14 @@ class CreateInstitution extends Component {
             name="institutionCat"
             label="Category:"
             value={_.get(institutionCategories, 'list[0].value')}
-            options={institutionCategories.list}
+            options={institutionCategories}
           />
           <Select
             multiple
             name="institutionLang"
             label="Medium:"
             value={[_.get(languages, 'list[0].value')]}
-            options={languages.list}
+            options={languages}
             required
           />
           <Select
@@ -187,13 +148,48 @@ class CreateInstitution extends Component {
   }
 }
 
-CreateInstitution.propTypes = {
+CreateInstitutionForm.propTypes = {
   isOpen: PropTypes.bool,
+  canSubmit: PropTypes.bool,
   title: PropTypes.string,
   placeHolder: PropTypes.string,
+  clusterId: PropTypes.number,
   languages: PropTypes.array,
-  onCloseModal: PropTypes.func,
+  institutionCategories: PropTypes.array,
   save: PropTypes.func,
+  enableSubmitForm: PropTypes.func,
+  disableSubmitForm: PropTypes.func,
+  closeConfirmModal: PropTypes.func,
 };
+
+const mapStateToProps = (state) => ({
+  title: 'Create New Institution',
+  isOpen: state.modal.createInstitution,
+  canSubmit: state.appstate.enableSubmitForm,
+  languages: state.institution.languages,
+  mgmt: state.institution.mgmt,
+  institutionCategories: state.institution.institutionCats,
+});
+
+const mapDispatchToProps = dispatch => ({
+  save: (form) => {
+    console.log(form);
+    dispatch(saveNewInstitution(form));
+  },
+  enableSubmitForm: () => {
+    dispatch(enableSubmitForm());
+  },
+  disableSubmitForm: () => {
+    dispatch(disableSubmitForm());
+  },
+  closeConfirmModal: () => {
+    dispatch({
+      type: 'TOGGLE_MODAL',
+      modal: 'createInstitution',
+    });
+  },
+});
+
+const CreateInstitution = connect(mapStateToProps, mapDispatchToProps)(CreateInstitutionForm);
 
 export { CreateInstitution };
