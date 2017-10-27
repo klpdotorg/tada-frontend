@@ -2,7 +2,7 @@ import fetch from 'isomorphic-fetch';
 import { push } from 'react-router-redux';
 import { SERVER_API_BASE as serverApiBase, SERVER_AUTH_BASE as authApiBase } from 'config';
 
-import { get } from './utils';
+import { get } from './requests';
 
 const programDetails = program => ({
   type: 'PROGRAM_DETAILS',

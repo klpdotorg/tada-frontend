@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import { push } from 'react-router-redux';
-import { checkStatus, get } from './utils';
+import { checkStatus, get } from './requests';
 
 import {
   SERVER_API_BASE as serverApiBase,
@@ -54,22 +54,21 @@ function requestDataFromServer() {
   };
 }
 
-export function responseReceivedFromServer(resp) {
+export const responseReceivedFromServer = resp => {
   return {
     type: 'BOUNDARIES_FULFILLED',
     payload: resp,
   };
-}
+};
 
-function requestFailed(error) {
-  console.log('error', error);
+export const requestFailed = error => {
   return {
     type: 'REQUEST_FAILED',
     statusCode: error.response.status,
     statusText: error.response.statusText,
     error: error.response,
   };
-}
+};
 
 export function requestLogin(username) {
   return {
@@ -185,7 +184,6 @@ export function fetchBoundaryDetails(parentBoundaryId = 1) {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: 'Token ' + sessionStorage.token,
       },
     })
       .then(checkStatus)
@@ -216,25 +214,6 @@ export const getStudentGroup = params => {
 };
 
 //Method fetches institutions belonging to a particular Id from the institutions endpoint
-export function fetchInstitutionDetails(parentBoundaryId) {
-  return function(dispatch, getState) {
-    var institutionsUrl = serverApiBase + 'institutions/?';
-    return fetch(institutionsUrl + 'boundary=' + parentBoundaryId, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Token ' + sessionStorage.token,
-      },
-    })
-      .then(checkStatus)
-      .then(data => {
-        dispatch(responseReceivedFromServer(data));
-      })
-      .catch(error => {
-        dispatch(requestFailed(error));
-      });
-  };
-}
 
 export const getStudentGroups = institutionId => {
   return get(`${serverApiBase}institutions/${institutionId}/studentgroups/`);
@@ -327,6 +306,7 @@ Everything is just one big nav tree in the UI.
 export function fetchEntitiesFromServer(parentBoundaryId) {
   return function(dispatch, getState) {
     const state = getState();
+    console.log(parentBoundaryId);
     return dispatch(
       boundaryType(parentBoundaryId, state.boundaries.boundaryDetails)(parentBoundaryId),
     );
@@ -497,7 +477,6 @@ export const newBoundaryFetch = options => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: 'Token ' + sessionStorage.token,
     },
     body: JSON.stringify(options),
   }).catch(error => {

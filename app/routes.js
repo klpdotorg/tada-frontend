@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { Dashboard } from './components/Dashboard';
 import { PrimaryDistrict } from './containers/PrimaryDistrict';
 import { PrimaryBlock } from './containers/PrimaryBlock';
-import PrimaryCluster from './components/PrimaryClusterScreen';
+import { PrimaryCluster } from './containers/PrimaryCluster';
 import PreschoolProject from './components/PreschoolProjectScreen';
 import PreschoolCircle from './components/PreschoolCircleScreen';
 import Institution from './components/InstitutionDetailsScreen';

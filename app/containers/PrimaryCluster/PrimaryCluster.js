@@ -3,23 +3,17 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { get } from 'lodash';
 
-import { PrimaryBlockView } from '../../components/PrimaryBlock';
-import {
-  showBoundaryLoading,
-  openNode,
-  fetchEntitiesFromServer,
-  getBoundaries,
-  closeBoundaryLoading,
-} from '../../actions';
+import { fetchClusterEntity } from '../../actions';
+import { PrimaryClusterView } from '../../components/PrimaryCluster';
 
 class FetchClusterEntity extends Component {
-  componentDidMount() {
+  componentWillMount() {
     const { districtId, blockId, clusterId } = this.props.params;
     this.props.fetchEntities(districtId, blockId, clusterId);
   }
 
   render() {
-    return <PrimaryBlockView {...this.props} />;
+    return <PrimaryClusterView {...this.props} />;
   }
 }
 
@@ -41,29 +35,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = dispatch => ({
   fetchEntities: (districtId, blockId, clusterId) => {
-    dispatch(showBoundaryLoading());
-    dispatch(openNode(districtId));
-    dispatch(fetchEntitiesFromServer(districtId));
-    dispatch({
-      type: 'BOUNDARIES',
-      payload: getBoundaries(2),
-    }).then(() => {
-      dispatch({
-        type: 'BOUNDARIES',
-        payload: getBoundaries(districtId),
-      }).then(() => {
-        dispatch(openNode(blockId));
-        dispatch(fetchEntitiesFromServer(blockId));
-        dispatch({
-          type: 'BOUNDARIES',
-          payload: getBoundaries(blockId),
-        }).then(() => {
-          dispatch(openNode(clusterId));
-          dispatch(fetchEntitiesFromServer(clusterId));
-          dispatch(closeBoundaryLoading());
-        });
-      });
-    });
+    dispatch(fetchClusterEntity(districtId, blockId, clusterId));
   },
 });
 

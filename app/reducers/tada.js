@@ -73,7 +73,6 @@ export function boundaries(
           state.boundariesByParentId,
           state.boundaryDetails,
         );
-        console.log(boundaryDetails);
         return boundaryDetails;
       }
       return state;

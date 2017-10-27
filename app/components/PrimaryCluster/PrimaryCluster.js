@@ -6,7 +6,7 @@ import { Loading } from '../common';
 import { CheckPermissions } from './index';
 
 const PrimaryClusterView = ({ isLoading, district, block, cluster }) => {
-  if (isLoading) {
+  if (isLoading || !Object.keys(cluster).length) {
     return <Loading />;
   }
 
@@ -27,7 +27,7 @@ const PrimaryClusterView = ({ isLoading, district, block, cluster }) => {
           {cluster.name}
         </li>
       </ol>
-      <CheckPermissions />
+      <CheckPermissions clusterId={cluster.id} />
     </div>
   );
 };

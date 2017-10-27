@@ -1,6 +1,6 @@
 import Notifications from 'react-notification-system-redux';
 import { SERVER_API_BASE as serverApiBase, SERVER_AUTH_BASE as authApiBase } from 'config';
-import { get, checkStatus } from './utils';
+import { get, checkStatus } from './requests';
 import { entityActivated, entityNotActivated } from './notifications';
 
 export const getInactiveEntities = (entityName, from) => {

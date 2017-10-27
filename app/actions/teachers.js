@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import Notifications from 'react-notification-system-redux';
 import { SERVER_API_BASE as serverApiBase } from 'config';
-import { checkStatus } from './utils';
+import { checkStatus } from './requests';
 import {
   teacherCreated,
   teacherUpdated,

@@ -3,7 +3,7 @@ import { push } from 'react-router-redux';
 import { SERVER_API_BASE as serverApiBase, SERVER_AUTH_BASE as authApiBase } from 'config';
 import store from '../store';
 import { urls as Urls } from '../constants';
-import { checkStatusNoJSON } from './utils';
+import { checkStatusNoJSON } from './requests';
 
 export function checkUserPassword(pass) {
   return function (dispatch, getState) {

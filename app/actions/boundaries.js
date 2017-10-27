@@ -1,13 +1,7 @@
 import Notifications from 'react-notification-system-redux';
 import { SERVER_API_BASE as serverApiBase } from 'config';
-import { checkStatus, mapStudentsAPI } from './utils';
-import {
-  fetchEntitiesFromServer,
-  removeBoundary,
-  responseReceivedFromServer,
-  studentsFetched,
-  openNode,
-} from './actions';
+import { checkStatus } from './requests';
+import { removeBoundary, responseReceivedFromServer, studentsFetched, openNode } from './actions';
 import { institutionSaved, institutionNotSaved } from './notifications';
 import { push } from 'react-router-redux';
 import store from '../store';
@@ -20,30 +14,23 @@ function dispatchToggleModal(modalType) {
   });
 }
 
-export function deleteInstitution(parentId, instiId) {
-  return function(dispatch, getState) {
-    return fetch(serverApiBase + 'institutions/' + instiId + '/', {
-      method: 'DELETE',
-      headers: {
-        Authorization: 'Token ' + sessionStorage.token,
-      },
+export const deleteInstitution = (parentId, instiId) => (dispatch, getState) => {
+  return deleteRequest(`${serverApiBase}institutions/${instiId}`)
+    .then(response => {
+      if (response.status >= 200 && response.status < 300) {
+        dispatch(removeBoundary(instiId, parentId));
+        // Route the user to the home dashboard page since the page they were on will be deleted
+        dispatch(push('/'));
+      } else {
+        const error = new Error(response.statusText);
+        error.response = response;
+        throw error;
+      }
     })
-      .then(response => {
-        if (response.status >= 200 && response.status < 300) {
-          dispatch(removeBoundary(instiId, parentId));
-          // Route the user to the home dashboard page since the page they were on will be deleted
-          dispatch(push('/'));
-        } else {
-          const error = new Error(response.statusText);
-          error.response = response;
-          throw error;
-        }
-      })
-      .catch(error => {
-        console.log('request failed', error);
-      });
-  };
-}
+    .catch(error => {
+      console.log('request failed', error);
+    });
+};
 
 const newInstitutionFetch = options => {
   return fetch(serverApiBase + 'institutions/', {
@@ -211,25 +198,3 @@ export const saveStudent = (options, groupId) => dispatch => {
     dispatch(studentsFetched(data));
   });
 };
-
-// const  getStudentPromise = (institutionId, groupId) => {
-//     var promise = new Promise(function(resolve, reject) {
-//       getStudents(institutionId, groupId).then((students) => {
-//         resolve({
-//           students,
-//           groupId
-//         });
-//       }).catch((e) => {
-//         reject(e)
-//       });
-//     });
-
-//     return promise;
-//   };
-
-//   export const getStudentsForGroupId = (institutionId, groupId) => (dispatch) => {
-//     return({
-//                   type: 'STUDENTS',
-//                   payload: this.getStudentPromise(params.institutionId, params.groupId)
-//                 });
-//   };

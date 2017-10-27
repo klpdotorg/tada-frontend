@@ -20,8 +20,8 @@ represented as parent. We are treating everything as an "entity" and thus the ne
 export const getParentId = (entity, group) => {
   var parent = -1;
   // Hack to figure out if we're dealing with a school or something else. This won't work. FIX IT!
-  if (entity.institution_gender) {
-    parent = entity.boundary;
+  if (_.get(entity, 'boundary.boundary_type') === 'SC') {
+    parent = entity.boundary.id;
   } else if (entity.group_type) {
     parent = entity.institution;
   } else if (entity.dob) {
@@ -113,7 +113,7 @@ export const nodeDepth = node => {
 
   if (category) {
     node.depth = mapDepthCategory[category];
-  } else if (node.institution_gender) {
+  } else if (_.get(node, 'type.name') === 'Primary School') {
     node.depth = 3;
   } else if (node.group_type) {
     node.depth = 4;

@@ -1,8 +1,9 @@
 import { push } from 'react-router-redux';
 
-import { checkStatus } from './utils';
+import { checkStatus, post } from './requests';
 import { computeRouterPathForEntity } from '../reducers/utils';
-import { newBoundaryFetch, responseReceivedFromServer, openNode, toggleModal } from './index';
+import { responseReceivedFromServer, openNode, toggleModal } from './index';
+import { SERVER_API_BASE as serverApiBase } from 'config';
 
 export const saveNewDistrict = name => (dispatch, getState) => {
   const boundaryType = getState().schoolSelection.primarySchool ? 'primary' : 'pre';
@@ -14,7 +15,7 @@ export const saveNewDistrict = name => (dispatch, getState) => {
     status: 'AC',
   };
 
-  return newBoundaryFetch(options).then(checkStatus).then(response => {
+  post(`${serverApiBase}boundaries/`, options).then(checkStatus).then(response => {
     dispatch(responseReceivedFromServer({ results: [response] }));
     dispatch(openNode(response.id));
     dispatch(toggleModal('createDistrict'));

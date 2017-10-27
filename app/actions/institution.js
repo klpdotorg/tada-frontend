@@ -1,6 +1,7 @@
 import { SERVER_API_BASE as serverApiBase } from 'config';
-import { checkStatus } from '../utils';
+import { checkStatus, get } from './requests';
 import { SET_INSTITUTION_LANGUAGES, SET_INSTITUTION_CATS } from './types';
+import { responseReceivedFromServer, requestFailed } from './index';
 
 export const setInstitutionCats = value => ({
   type: SET_INSTITUTION_CATS,
@@ -11,6 +12,17 @@ export const setInstitutionLanguages = value => ({
   type: SET_INSTITUTION_LANGUAGES,
   value,
 });
+
+export const fetchInstitutionDetails = parentBoundaryId => dispatch => {
+  const institutionsUrl = `${serverApiBase}institutions/?`;
+  return get(`${institutionsUrl}admin3=${parentBoundaryId}`)
+    .then(data => {
+      dispatch(responseReceivedFromServer(data));
+    })
+    .catch(error => {
+      dispatch(requestFailed(error));
+    });
+};
 
 export const getLanguages = () => dispatch => {
   fetch(`${serverApiBase}languages/`, {

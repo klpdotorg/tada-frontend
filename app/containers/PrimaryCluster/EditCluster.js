@@ -90,7 +90,7 @@ class EditClusterView extends Component {
             Delete
           </button>
           <ConfirmModal
-            isOpen={this.props.showConfirmModal}
+            isOpen={this.props.openConfirmModal}
             onAgree={this.deleteCluster}
             onCloseModal={this.props.closeConfirmModal}
             entity={cluster.name}
@@ -104,6 +104,7 @@ class EditClusterView extends Component {
 EditClusterView.propTypes = {
   hasSchools: PropTypes.bool,
   canSubmit: PropTypes.bool,
+  openConfirmModal: PropTypes.bool,
   cluster: PropTypes.object,
   clusterId: PropTypes.number,
   blockId: PropTypes.number,
@@ -119,11 +120,11 @@ const mapStateToProps = (state, ownProps) => {
   const { clusterId } = ownProps;
   const institutionIds = state.boundaries.boundariesByParentId[clusterId];
   const hasSchools = institutionIds && institutionIds.length > 0;
-
   return {
     hasSchools,
     openConfirmModal: state.appstate.confirmModal,
     canSubmit: state.appstate.enableSubmitForm,
+    cluster: state.boundaries.boundaryDetails[clusterId],
   };
 };
 
