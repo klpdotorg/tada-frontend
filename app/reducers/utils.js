@@ -90,7 +90,7 @@ export const computeRouterPathForEntity = (entity, boundaryDetails, groupId) => 
         path = parent.path + '/project/' + entity.id;
       } else if (entity.boundary_category == '15') {
         path = parent.path + '/circle/' + entity.id;
-      } else if (entity.institution_gender) {
+      } else if (_.get(entity, 'type.name') === 'Primary School') {
         path = parent.path + '/institution/' + entity.id;
       } else if (entity.group_type) {
         path = parent.path + '/studentgroups/' + entity.id;

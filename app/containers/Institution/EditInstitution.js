@@ -21,8 +21,8 @@ class EditInstitutionForm extends Component {
   constructor() {
     super();
 
-    this.saveCluster = this.saveCluster.bind(this);
-    this.deleteCluster = this.deleteCluster.bind(this);
+    this.saveInsti = this.saveInsti.bind(this);
+    this.deleteInstitution = this.deleteInstitution.bind(this);
   }
 
   saveInsti() {
@@ -44,7 +44,7 @@ class EditInstitutionForm extends Component {
     this.props.saveInstitution(institution);
   }
 
-  deleteCluster() {
+  deleteInstitution() {
     this.props.deleteInstitution(Number(this.props.clusterId), Number(this.props.institutionId));
   }
 
@@ -56,6 +56,7 @@ class EditInstitutionForm extends Component {
     ];
 
     const singleSelectOptions = [{ value: '', label: 'Please select…' }, ...selectOptions];
+
     const {
       canModify,
       institution,
@@ -197,24 +198,24 @@ class EditInstitutionForm extends Component {
         {!canModify
           ? <div />
           : <div className="col-md-12">
-              <button type="submit" className="btn btn-primary padded-btn">
-                Save
-              </button>
-              <button
-                type="button"
-                className="btn btn-primary padded-btn"
-                disabled={hasClasses}
-                onClick={this.props.showConfirmModal}
-              >
-                Delete
-              </button>
-              <ConfirmModal
-                isOpen={openConfirmModal}
-                onAgree={this.deleteInstitution}
-                onCloseModal={this.props.closeConfirmModal}
-                entity={institution.name}
-              />
-            </div>}
+            <button type="submit" className="btn btn-primary padded-btn">
+              Save
+            </button>
+            <button
+              type="button"
+              className="btn btn-primary padded-btn"
+              disabled={hasClasses}
+              onClick={this.props.showConfirmModal}
+            >
+              Delete
+            </button>
+            <ConfirmModal
+              isOpen={openConfirmModal}
+              onAgree={this.deleteInstitution}
+              onCloseModal={this.props.closeConfirmModal}
+              entity={institution.name}
+            />
+          </div>}
       </Formsy.Form>
     );
   }
@@ -223,10 +224,10 @@ class EditInstitutionForm extends Component {
 EditInstitutionForm.propTypes = {
   canModify: PropTypes.bool,
   openConfirmModal: PropTypes.bool,
-  institutionId: PropTypes.string,
-  clusterId: PropTypes.string,
+  institutionId: PropTypes.number,
+  clusterId: PropTypes.number,
   institution: PropTypes.object,
-  hasClasses: PropTypes.object,
+  hasClasses: PropTypes.bool,
   languages: PropTypes.array,
   mgmt: PropTypes.array,
   institutionCategories: PropTypes.array,
@@ -238,14 +239,15 @@ EditInstitutionForm.propTypes = {
   disableSubmitForm: PropTypes.func,
 };
 
-const mapStateToProps = state => {
-  const { institutionId } = this.props;
+const mapStateToProps = (state, ownProps) => {
+  const { institutionId } = ownProps;
   const classesIds = state.boundaries.boundariesByParentId[institutionId];
   const hasClasses = classesIds && classesIds.length > 0;
 
   return {
     hasClasses,
     openConfirmModal: state.appstate.confirmModal,
+    institution: state.boundaries.boundaryDetails[institutionId],
     canSubmit: state.appstate.enableSubmitForm,
     languages: state.institution.languages,
     mgmt: state.institution.mgmt,

@@ -14,8 +14,8 @@ import {
 
 class FetchInstitutionEntity extends Component {
   componentDidMount() {
-    const { institutionId } = this.props.params;
-    this.props.fetchEntities(institutionId);
+    const { blockId, districtId, clusterId } = this.props.params;
+    this.props.fetchEntities(districtId, blockId, clusterId);
   }
 
   render() {
@@ -74,6 +74,6 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
-const Institution = connect(mapStateToProps, mapDispatchToProps)(InstitutionView);
+const Institution = connect(mapStateToProps, mapDispatchToProps)(FetchInstitutionEntity);
 
 export { Institution };

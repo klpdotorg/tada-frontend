@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
+import { isEmpty } from 'lodash';
 
 import { PermissionMessages, InstitutionActions } from './index';
 import { EditInstitution } from '../../containers/Institution';
@@ -9,7 +10,7 @@ import { Loading } from '../common';
 const InstitutionView = props => {
   const { isLoading, district, block, cluster, institution } = props;
 
-  if (isLoading) {
+  if (isLoading || isEmpty(institution)) {
     return <Loading />;
   }
 
@@ -36,7 +37,10 @@ const InstitutionView = props => {
         <InstitutionActions />
         <div className="border-base" />
         <div className="base-spacing-sm" />
-        <EditInstitution />
+        <EditInstitution
+          clusterId={cluster.id}
+          institutionId={institution.id}
+        />
       </div>
     </div>
   );

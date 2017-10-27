@@ -28,6 +28,7 @@ export const fetchInstitutionDetails = parentBoundaryId => dispatch => {
       dispatch(responseReceivedFromServer(data));
     })
     .catch(error => {
+      console.log(error);
       dispatch(requestFailed(error));
     });
 };
@@ -78,7 +79,7 @@ export const saveNewInstitution = (options) => (
   (dispatch, getState) => {
     const boundaryType = getState().schoolSelection.primarySchool ? 'primary' : 'pre';
     const newOptions = { ...options, institution_type: boundaryType };
-    console.log(newOptions);
+
     post(`${serverApiBase}institutions/`, newOptions)
     .then(response => {
       dispatch(responseReceivedFromServer({ results: [response] }));
