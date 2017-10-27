@@ -306,7 +306,6 @@ Everything is just one big nav tree in the UI.
 export function fetchEntitiesFromServer(parentBoundaryId) {
   return function(dispatch, getState) {
     const state = getState();
-    console.log(parentBoundaryId);
     return dispatch(
       boundaryType(parentBoundaryId, state.boundaries.boundaryDetails)(parentBoundaryId),
     );

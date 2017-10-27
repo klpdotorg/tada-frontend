@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 
 import { Loading } from '../common';
 import { CheckPermissions } from './index';
+import { CreateInstitution } from '../../containers/Institution';
 
 const PrimaryClusterView = ({ isLoading, district, block, cluster }) => {
   if (isLoading || !Object.keys(cluster).length) {
@@ -28,6 +29,7 @@ const PrimaryClusterView = ({ isLoading, district, block, cluster }) => {
         </li>
       </ol>
       <CheckPermissions clusterId={cluster.id} />
+      <CreateInstitution clusterId={cluster.id} />
     </div>
   );
 };
@@ -40,15 +42,3 @@ PrimaryClusterView.propTypes = {
 };
 
 export { PrimaryClusterView };
-/*
-<CreateInstitution
-  languages={this.state.languages}
-  mgmt={this.state.mgmt}
-  institutionCategories={this.state.institutionCategories}
-  placeHolder="School Name"
-  title="Create New School"
-  isOpen={this.props.modal.createInstitution}
-  onCloseModal={this.toggleSchoolModal}
-  save={this.saveSchool}
-/>
-*/

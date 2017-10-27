@@ -45,16 +45,6 @@ const newInstitutionFetch = options => {
   });
 };
 
-export const saveNewInstitution = options => (dispatch, getState) => {
-  return newInstitutionFetch(options).then(checkStatus).then(response => {
-    dispatch(responseReceivedFromServer({ results: [response] }));
-    dispatchToggleModal('createInstitution');
-    dispatch(openNode(response.id));
-    var boundary = computeRouterPathForEntity(response, getState().boundaries.boundaryDetails);
-    dispatch(push(boundary.path));
-  });
-};
-
 const institutionFetch = options => {
   return fetch(serverApiBase + 'institutions/' + options.id + '/', {
     method: 'PATCH',

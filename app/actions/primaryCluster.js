@@ -1,6 +1,6 @@
 import { push } from 'react-router-redux';
 
-import { checkStatus, post } from './requests';
+import { post } from './requests';
 import { computeRouterPathForEntity } from '../reducers/utils';
 import {
   responseReceivedFromServer,
@@ -11,6 +11,7 @@ import {
   closeBoundaryLoading,
   toggleModal,
 } from './index';
+
 import { SERVER_API_BASE as serverApiBase } from 'config';
 
 export const saveNewCluster = (name, blockId) => (dispatch, getState) => {
@@ -23,7 +24,7 @@ export const saveNewCluster = (name, blockId) => (dispatch, getState) => {
     status: 'AC',
   };
 
-  post(`${serverApiBase}boundaries/`, options).then(checkStatus).then(response => {
+  post(`${serverApiBase}boundaries/`, options).then(response => {
     dispatch(responseReceivedFromServer({ results: [response] }));
     dispatch(toggleModal('createCluster'));
     dispatch(openNode(response.id));

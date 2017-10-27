@@ -1,6 +1,6 @@
 import { push } from 'react-router-redux';
 
-import { checkStatus, post } from './requests';
+import { post } from './requests';
 import { computeRouterPathForEntity } from '../reducers/utils';
 import { responseReceivedFromServer, openNode, toggleModal } from './index';
 import { SERVER_API_BASE as serverApiBase } from 'config';
@@ -15,7 +15,7 @@ export const saveNewBlock = (name, districtId) => (dispatch, getState) => {
     status: 'AC',
   };
 
-  post(`${serverApiBase}boundaries/`, options).then(checkStatus).then(response => {
+  post(`${serverApiBase}boundaries/`, options).then(response => {
     dispatch(responseReceivedFromServer({ results: [response] }));
     dispatch(toggleModal('createBlock'));
     dispatch(openNode(response.id));
