@@ -1,15 +1,20 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { get } from 'lodash';
+import { get, isEmpty } from 'lodash';
 
-import { fetchClusterEntity } from '../../actions';
+import { DEFAULT_PARENT_ID } from 'config';
+import { getEntities } from '../../actions';
 import { PrimaryClusterView } from '../../components/PrimaryCluster';
 
 class FetchClusterEntity extends Component {
   componentWillMount() {
-    const { districtId, blockId, clusterId } = this.props.params;
-    this.props.fetchEntities(districtId, blockId, clusterId);
+    const { params, cluster } = this.props;
+    const { districtId, blockId, clusterId } = params;
+
+    if (isEmpty(cluster)) {
+      this.props.getEntities([DEFAULT_PARENT_ID, districtId, blockId, clusterId]);
+    }
   }
 
   render() {
@@ -19,7 +24,8 @@ class FetchClusterEntity extends Component {
 
 FetchClusterEntity.propTypes = {
   params: PropTypes.object,
-  fetchEntities: PropTypes.func,
+  cluster: PropTypes.object,
+  getEntities: PropTypes.func,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -33,12 +39,6 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const mapDispatchToProps = dispatch => ({
-  fetchEntities: (districtId, blockId, clusterId) => {
-    dispatch(fetchClusterEntity(districtId, blockId, clusterId));
-  },
-});
-
-const PrimaryCluster = connect(mapStateToProps, mapDispatchToProps)(FetchClusterEntity);
+const PrimaryCluster = connect(mapStateToProps, { getEntities })(FetchClusterEntity);
 
 export { PrimaryCluster };

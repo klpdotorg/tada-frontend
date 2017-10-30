@@ -29,7 +29,7 @@ const PrimaryClusterView = ({ isLoading, district, block, cluster }) => {
         </li>
       </ol>
       <CheckPermissions clusterId={cluster.id} />
-      <CreateInstitution clusterId={cluster.id} />
+      <CreateInstitution parent={cluster.id} />
     </div>
   );
 };
