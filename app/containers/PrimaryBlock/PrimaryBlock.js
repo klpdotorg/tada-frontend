@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { isEmpty } from 'lodash';
+
+import { DEFAULT_PARENT_ID } from 'config';
 import { PrimaryBlockView } from '../../components/PrimaryBlock';
 import {
-  showBoundaryLoading,
-  openNode,
-  fetchEntitiesFromServer,
-  getBoundaries,
-  closeBoundaryLoading,
+  getEntities,
 } from '../../actions';
 
 class FetchBlockEntity extends Component {
@@ -18,8 +17,12 @@ class FetchBlockEntity extends Component {
   }
 
   componentDidMount() {
-    const { districtId, blockId } = this.props.params;
-    this.props.fetchEntities(districtId, blockId);
+    const { params, block } = this.props;
+    const { districtId, blockId } = params;
+
+    if (isEmpty(block)) {
+      this.props.fetchEntities(districtId, blockId);
+    }
   }
 
   render() {
@@ -29,6 +32,7 @@ class FetchBlockEntity extends Component {
 
 FetchBlockEntity.propTypes = {
   params: PropTypes.object,
+  block: PropTypes.object,
   fetchEntities: PropTypes.func,
 };
 
@@ -43,22 +47,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = dispatch => ({
   fetchEntities: (districtId, blockId) => {
-    dispatch(showBoundaryLoading());
-    dispatch(openNode(districtId));
-    dispatch(fetchEntitiesFromServer(districtId));
-    dispatch({
-      type: 'BOUNDARIES',
-      payload: getBoundaries(2),
-    }).then(() => {
-      dispatch({
-        type: 'BOUNDARIES',
-        payload: getBoundaries(districtId),
-      }).then(() => {
-        dispatch(openNode(blockId));
-        dispatch(fetchEntitiesFromServer(blockId));
-        dispatch(closeBoundaryLoading());
-      });
-    });
+    dispatch(getEntities([DEFAULT_PARENT_ID, districtId, blockId]));
   },
 });
 

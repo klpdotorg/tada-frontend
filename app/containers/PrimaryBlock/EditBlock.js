@@ -40,11 +40,14 @@ class EditBlockForm extends Component {
     return (
       <div>
         {hasClusters
-          ? <div className="alert alert-info">
-              <i className="fa fa-info-circle fa-lg" aria-hidden="true" /> You cannot delete this
-              boundary until its children are deleted
-            </div>
-          : <div />}
+          ?
+          <div className="alert alert-info">
+            <i className="fa fa-info-circle fa-lg" aria-hidden="true" /> You cannot delete this
+            boundary until its children are deleted
+          </div>
+          :
+          <div />
+        }
         <h4 className="text-primary col-md-10">Modify Details</h4>
         <button
           className="btn btn-orange pull-right"
