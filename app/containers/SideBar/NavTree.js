@@ -7,7 +7,7 @@ import { Link } from 'react-router';
 import { DEFAULT_PARENT_ID } from 'config';
 
 import { alphabeticalOrder, capitalize } from '../../utils';
-import { fetchEntitiesFromServer, toggleNode, closePeerNodes } from '../../actions/';
+import { getEntity, toggleNode, closePeerNodes } from '../../actions/';
 
 class NavTree extends Component {
   renderLabel(boundary, depth) {
@@ -79,9 +79,9 @@ class NavTree extends Component {
     const { boundariesByParentId, boundaryDetails } = this.props;
     return (
       <div>
-        {alphabeticalOrder(boundariesByParentId, boundaryDetails).map(element =>
-          this.renderSubTree(element, boundariesByParentId, visitedBoundaries, 0),
-        )}
+        {alphabeticalOrder(boundariesByParentId, boundaryDetails).map(element => (
+          this.renderSubTree(element, boundariesByParentId, visitedBoundaries, 0)
+        ))}
       </div>
     );
   }
@@ -106,7 +106,7 @@ const mapStateToProps = state => {
     boundariesByParentId: filterBoundaries(
       selectedSchoolType,
       boundariesByParentId,
-      boundaryDetails,
+      boundaryDetails
     ),
     boundaryDetails: state.boundaries.boundaryDetails,
   };
@@ -115,7 +115,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
   onBoundaryClick: (boundary, depth) => {
     dispatch(toggleNode(boundary.id));
-    dispatch(fetchEntitiesFromServer(boundary.id));
+    dispatch(getEntity(boundary.id));
     dispatch(closePeerNodes(boundary.id, depth));
   },
 });
