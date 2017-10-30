@@ -1,21 +1,22 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { get } from 'lodash';
+import { get, isEmpty } from 'lodash';
 
+import { DEFAULT_PARENT_ID } from 'config';
 import { InstitutionView } from '../../components/Institution';
 import {
-  showBoundaryLoading,
-  openNode,
-  fetchEntitiesFromServer,
-  getBoundaries,
-  closeBoundaryLoading,
+  getEntities,
 } from '../../actions';
 
 class FetchInstitutionEntity extends Component {
   componentDidMount() {
-    const { blockId, districtId, clusterId } = this.props.params;
-    this.props.fetchEntities(districtId, blockId, clusterId);
+    const { params, institution } = this.props;
+
+    const { blockId, districtId, clusterId, institutionId } = params;
+    if (isEmpty(institution)) {
+      this.props.getEntities([DEFAULT_PARENT_ID, districtId, blockId, clusterId, institutionId]);
+    }
   }
 
   render() {
@@ -25,7 +26,8 @@ class FetchInstitutionEntity extends Component {
 
 FetchInstitutionEntity.propTypes = {
   params: PropTypes.object,
-  fetchEntities: PropTypes.func,
+  institution: PropTypes.object,
+  getEntities: PropTypes.func,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -47,30 +49,8 @@ const mapDispatchToProps = dispatch => ({
       modal: 'createClass',
     });
   },
-  fetchEntities: (districtId, blockId, clusterId) => {
-    dispatch(showBoundaryLoading());
-    dispatch(openNode(districtId));
-    dispatch(fetchEntitiesFromServer(districtId));
-    dispatch({
-      type: 'BOUNDARIES',
-      payload: getBoundaries(2),
-    }).then(() => {
-      dispatch({
-        type: 'BOUNDARIES',
-        payload: getBoundaries(districtId),
-      }).then(() => {
-        dispatch(openNode(blockId));
-        dispatch(fetchEntitiesFromServer(blockId));
-        dispatch({
-          type: 'BOUNDARIES',
-          payload: getBoundaries(blockId),
-        }).then(() => {
-          dispatch(openNode(clusterId));
-          dispatch(fetchEntitiesFromServer(clusterId));
-          dispatch(closeBoundaryLoading());
-        });
-      });
-    });
+  getEntities: (ids) => {
+    dispatch(getEntities(ids));
   },
 });
 

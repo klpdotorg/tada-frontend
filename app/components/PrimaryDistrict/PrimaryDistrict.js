@@ -5,7 +5,7 @@ import { CreateBlock } from '../../containers/PrimaryBlock';
 import { CreateProject } from '../../containers/PreschoolProject';
 import { EditDistrict } from '../../containers/PrimaryDistrict';
 
-const PrimaryDistrictView = ({ name, districtId }) =>
+const PrimaryDistrictView = ({ district, districtId }) =>
   <div>
     <ol className="breadcrumb">
       <li className="active">
@@ -14,13 +14,13 @@ const PrimaryDistrictView = ({ name, districtId }) =>
     </ol>
     {sessionStorage.getItem('isAdmin')
       ? <EditDistrict districtId={districtId} />
-      : <NoPermissionDistrictView name={name} />}
+      : <NoPermissionDistrictView name={district.name} />}
     <CreateBlock parent={districtId} />
     <CreateProject parent={districtId} />
   </div>;
 
 PrimaryDistrictView.propTypes = {
-  name: PropTypes.string,
+  district: PropTypes.object,
   districtId: PropTypes.string,
 };
 

@@ -58,8 +58,8 @@ class EditInstitutionForm extends Component {
     const singleSelectOptions = [{ value: '', label: 'Please select…' }, ...selectOptions];
 
     const {
-      canModify,
       institution,
+      canSubmit,
       hasClasses,
       languages,
       institutionCategories,
@@ -72,7 +72,6 @@ class EditInstitutionForm extends Component {
         onValidSubmit={this.saveInsti}
         onValid={this.props.enableSubmitForm}
         onInvalid={this.props.disableSubmitForm}
-        disabled={!canModify}
         ref={ref => (this.myform = ref)}
       >
         <div className="form-group">
@@ -156,7 +155,7 @@ class EditInstitutionForm extends Component {
               label="Medium:"
               value={institution.languages}
               options={languages}
-              required
+              // required
             />
           </div>
         </div>
@@ -178,7 +177,7 @@ class EditInstitutionForm extends Component {
               label="Management:"
               value={institution.mgmt}
               options={mgmt}
-              required
+              // required
             />
           </div>
         </div>
@@ -194,35 +193,36 @@ class EditInstitutionForm extends Component {
             />
           </div>
         </div>
-
-        {!canModify
-          ? <div />
-          : <div className="col-md-12">
-            <button type="submit" className="btn btn-primary padded-btn">
-              Save
-            </button>
-            <button
-              type="button"
-              className="btn btn-primary padded-btn"
-              disabled={hasClasses}
-              onClick={this.props.showConfirmModal}
-            >
-              Delete
-            </button>
-            <ConfirmModal
-              isOpen={openConfirmModal}
-              onAgree={this.deleteInstitution}
-              onCloseModal={this.props.closeConfirmModal}
-              entity={institution.name}
-            />
-          </div>}
+        <div className="col-md-12">
+          <button
+            type="submit"
+            className="btn btn-primary padded-btn"
+            disabled={!canSubmit}
+          >
+            Save
+          </button>
+          <button
+            type="button"
+            className="btn btn-primary padded-btn"
+            disabled={hasClasses}
+            onClick={this.props.showConfirmModal}
+          >
+            Delete
+          </button>
+          <ConfirmModal
+            isOpen={openConfirmModal}
+            onAgree={this.deleteInstitution}
+            onCloseModal={this.props.closeConfirmModal}
+            entity={institution.name}
+          />
+        </div>
       </Formsy.Form>
     );
   }
 }
 
 EditInstitutionForm.propTypes = {
-  canModify: PropTypes.bool,
+  canSubmit: PropTypes.bool,
   openConfirmModal: PropTypes.bool,
   institutionId: PropTypes.number,
   clusterId: PropTypes.number,

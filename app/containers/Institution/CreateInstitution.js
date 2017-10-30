@@ -29,11 +29,11 @@ class CreateInstitutionForm extends Component {
       dise: 599419,
       name: myform.name,
       address: myform.institutionAddress,
-      //area: myform.institutionArea,
-      //landmark: myform.institutionLandmark,
-      //pincode: myform.institutionPincode,
+      // area: myform.institutionArea,
+      // landmark: myform.institutionLandmark,
+      // pincode: myform.institutionPincode,
       languages: '1' || myform.languages,
-      admin3: this.props.clusterId,
+      admin3: this.props.parent,
       gender: myform.institutionGender,
       category: '10',
       management: '1',
@@ -51,8 +51,6 @@ class CreateInstitutionForm extends Component {
       { value: 'boys', label: 'Boys' },
       { value: 'girls', label: 'Girls' },
     ];
-
-    console.log(isOpen, title, languages, institutionCategories);
 
     return (
       <Modal
@@ -153,7 +151,7 @@ CreateInstitutionForm.propTypes = {
   canSubmit: PropTypes.bool,
   title: PropTypes.string,
   placeHolder: PropTypes.string,
-  clusterId: PropTypes.number,
+  parent: PropTypes.number,
   languages: PropTypes.array,
   institutionCategories: PropTypes.array,
   save: PropTypes.func,

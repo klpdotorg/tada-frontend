@@ -20,11 +20,6 @@ import {
 const { Input } = FRC;
 
 class EditDistrictForm extends Component {
-  componentDidMount() {
-    const { districtId, boundary } = this.props;
-
-    this.props.fetchEntities(districtId, boundary.boundary_type);
-  }
 
   saveDistrict() {
     const myform = this.myform.getModel();
