@@ -86,9 +86,9 @@ export const computeRouterPathForEntity = (entity, boundaryDetails, groupId) => 
         path = parent.path + '/block/' + entity.id;
       } else if (entity.boundary_type == 'SC') {
         path = parent.path + '/cluster/' + entity.id;
-      } else if (entity.boundary_category == '14') {
+      } else if (entity.boundary_type == 'PP') {
         path = parent.path + '/project/' + entity.id;
-      } else if (entity.boundary_category == '15') {
+      } else if (entity.boundary_type == 'PC') {
         path = parent.path + '/circle/' + entity.id;
       } else if (_.get(entity, 'type.name') === 'Primary School') {
         path = parent.path + '/institution/' + entity.id;
@@ -109,6 +109,9 @@ export const nodeDepth = node => {
     SD: 0,
     SB: 1,
     SC: 2,
+    PD: 0,
+    PP: 1,
+    PC: 2,
   };
 
   if (category) {
