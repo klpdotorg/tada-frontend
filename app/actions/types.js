@@ -19,3 +19,4 @@ export const SHOW_CONFIRM_MODAL = 'show_confirm_modal';
 export const CLOSE_CONFIRM_MODAL = 'close_confirm_modal';
 export const SHOW_BOUNDARY_LOADING = 'show_boundary_loading';
 export const CLOSE_BOUNDARY_LOADING = 'close_boundary_loading';
+export const SET_BOUNDARIES = 'BOUNDARIES_FULFILLED';

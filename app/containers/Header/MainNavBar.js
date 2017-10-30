@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { NavBar } from '../../components/Header';
-import { selectPreschoolTree, selectPrimaryTree, fetchEntitiesFromServer } from '../../actions';
+import { selectPreschoolTree, selectPrimaryTree } from '../../actions';
 
 const mapStateToProps = state => ({
   primarySelected: state.schoolSelection.primarySchool,
@@ -9,11 +9,11 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   onPrimaryClick() {
     dispatch(selectPrimaryTree());
-    dispatch(fetchEntitiesFromServer());
+    // dispatch(fetchEntitiesFromServer());
   },
   onPreSchoolClick() {
     dispatch(selectPreschoolTree());
-    dispatch(fetchEntitiesFromServer());
+    // dispatch(fetchEntitiesFromServer());
   },
 });
 

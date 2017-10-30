@@ -161,10 +161,6 @@ export const studentsFetched = (data, groupId) => {
   type: 'STUDENTS_FETCHED', data, groupId;
 };
 
-export const getBoundaries = parentId => {
-  return get(`${serverApiBase}boundaries/?parent=${parentId}&limit=500`);
-};
-
 export function fetchBoundaryDetails(parentBoundaryId = 1) {
   return function(dispatch, getState) {
     var requestBody = {};

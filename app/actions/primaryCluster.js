@@ -5,10 +5,6 @@ import { computeRouterPathForEntity } from '../reducers/utils';
 import {
   responseReceivedFromServer,
   openNode,
-  showBoundaryLoading,
-  fetchEntitiesFromServer,
-  getBoundaries,
-  closeBoundaryLoading,
   toggleModal,
 } from './index';
 
@@ -30,31 +26,5 @@ export const saveNewCluster = (name, blockId) => (dispatch, getState) => {
     dispatch(openNode(response.id));
     const boundary = computeRouterPathForEntity(response, getState().boundaries.boundaryDetails);
     dispatch(push(boundary.path));
-  });
-};
-
-export const fetchClusterEntity = (districtId, blockId, clusterId) => dispatch => {
-  dispatch(showBoundaryLoading());
-  dispatch(openNode(districtId));
-  dispatch(fetchEntitiesFromServer(districtId));
-  dispatch({
-    type: 'BOUNDARIES',
-    payload: getBoundaries(2),
-  }).then(() => {
-    dispatch({
-      type: 'BOUNDARIES',
-      payload: getBoundaries(districtId),
-    }).then(() => {
-      dispatch(openNode(blockId));
-      dispatch(fetchEntitiesFromServer(blockId));
-      dispatch({
-        type: 'BOUNDARIES',
-        payload: getBoundaries(blockId),
-      }).then(() => {
-        dispatch(openNode(clusterId));
-        dispatch(fetchEntitiesFromServer(clusterId));
-        dispatch(closeBoundaryLoading());
-      });
-    });
   });
 };

@@ -1,13 +1,15 @@
 import { push } from 'react-router-redux';
 
 import { SERVER_API_BASE as serverApiBase } from 'config';
-import { checkStatus, get, post } from './requests';
+import { checkStatus, get, post, deleteRequest } from './requests';
 import { SET_INSTITUTION_LANGUAGES, SET_INSTITUTION_CATS } from './types';
 import {
   responseReceivedFromServer,
   requestFailed,
   openNode,
   toggleModal,
+  getEntities,
+  closeBoundaryLoading,
 } from './index';
 import { computeRouterPathForEntity } from '../reducers/utils';
 
@@ -21,17 +23,23 @@ export const setInstitutionLanguages = value => ({
   value,
 });
 
-export const fetchInstitutionDetails = parentBoundaryId => dispatch => {
-  const institutionsUrl = `${serverApiBase}institutions/?`;
-  return get(`${institutionsUrl}admin3=${parentBoundaryId}`)
+export const fetchInstitutionDetails = (parentBoundaryId, moreIds) => (
+  (dispatch) => {
+    const institutionsUrl = `${serverApiBase}institutions/?`;
+    return get(`${institutionsUrl}admin3=${parentBoundaryId}`)
     .then(data => {
       dispatch(responseReceivedFromServer(data));
+      if (moreIds && moreIds.length) {
+        dispatch(getEntities(moreIds));
+      } else {
+        dispatch(closeBoundaryLoading());
+      }
     })
     .catch(error => {
-      console.log(error);
       dispatch(requestFailed(error));
     });
-};
+  }
+);
 
 export const getLanguages = () => dispatch => {
   fetch(`${serverApiBase}languages/`, {
@@ -90,3 +98,21 @@ export const saveNewInstitution = (options) => (
     });
   }
 );
+
+export const deleteInstitution = (parentId, instiId) => (dispatch, getState) => {
+  return deleteRequest(`${serverApiBase}institutions/${instiId}`)
+    .then(response => {
+      if (response.status >= 200 && response.status < 300) {
+        dispatch(removeBoundary(instiId, parentId));
+        // Route the user to the home dashboard page since the page they were on will be deleted
+        dispatch(push('/'));
+      } else {
+        const error = new Error(response.statusText);
+        error.response = response;
+        throw error;
+      }
+    })
+    .catch(error => {
+      console.log('request failed', error);
+    });
+};
