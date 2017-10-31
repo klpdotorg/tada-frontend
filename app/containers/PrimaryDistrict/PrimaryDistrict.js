@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { isEmpty } from 'lodash';
 
 import { DEFAULT_PARENT_ID } from 'config';
 
@@ -11,7 +12,7 @@ class GetEntity extends Component {
   componentDidMount() {
     const { district, districtId } = this.props;
 
-    if (district) {
+    if (isEmpty(district)) {
       this.props.getEntities([DEFAULT_PARENT_ID, districtId]);
     }
   }

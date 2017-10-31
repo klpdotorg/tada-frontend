@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
+import { isEmpty } from 'lodash';
+
 import { NoPermissionBlockView } from './index';
 import { EditBlock } from '../../containers/PrimaryBlock';
 import { CreateCluster } from '../../containers/PrimaryCluster';
 
 const PrimaryBlockView = ({ isLoading, district, block }) => {
-  if (isLoading) {
+  if (isLoading || isEmpty(block)) {
     return (
       <div>
         <i className="fa fa-cog fa-spin fa-lg fa-fw" />

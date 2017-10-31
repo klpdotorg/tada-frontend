@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import FRC from 'formsy-react-components';
 import Formsy from 'formsy-react';
 import PropTypes from 'prop-types';
+import { DEFAULT_PARENT_ID } from 'config';
 
 import ConfirmModal from '../../components/Modals/Confirm';
 import {
@@ -21,25 +22,38 @@ const { Input } = FRC;
 
 class EditDistrictForm extends Component {
 
+  constructor() {
+    super();
+
+    this.saveDistrict = this.saveDistrict.bind(this);
+    this.deleteDistrict = this.deleteDistrict.bind(this);
+  }
+
   saveDistrict() {
     const myform = this.myform.getModel();
+    this.props.saveDistrict(this.props.districtId, myform.DistrictName);
+  }
 
-    this.props.saveDistrict(this.districtId, myform.DistrictName);
+  deleteDistrict() {
+    this.props.deleteDistrict(this.props.districtId, DEFAULT_PARENT_ID);
   }
 
   render() {
-    const { boundary, hasBlocks, districtId } = this.props;
+    const { boundary, hasBlocks } = this.props;
 
     const boundaryType = boundary.boundary_type;
 
     return (
       <div>
         {hasBlocks
-          ? <div className="alert alert-info">
-              <i className="fa fa-info-circle fa-lg" aria-hidden="true" /> You cannot delete this
-              boundary until its children are deleted
-            </div>
-          : <div />}
+          ?
+          <div className="alert alert-info">
+            <i className="fa fa-info-circle fa-lg" aria-hidden="true" /> You cannot delete this
+            boundary until its children are deleted
+          </div>
+          :
+          <div />
+        }
         <h4 className="text-primary col-md-10">Modify Details</h4>
         {boundaryType === 2
           ? <button
@@ -47,15 +61,16 @@ class EditDistrictForm extends Component {
             title="Add Project"
             onClick={this.props.toggleProjectModal}
           >
-              Add Project
-            </button>
+            Add Project
+          </button>
           : <button
             className="btn btn-orange pull-right"
             title="Add Block"
             onClick={this.props.toggleBlockModal}
           >
-              Add Block
-            </button>}
+            Add Block
+          </button>
+        }
         <div className="base-spacing-mid border-base" />
         <Formsy.Form
           onValidSubmit={this.saveDistrict}
@@ -101,9 +116,7 @@ class EditDistrictForm extends Component {
           </button>
           <ConfirmModal
             isOpen={this.props.confirmModal}
-            onAgree={() => {
-              this.props.deleteDistrict(districtId, boundary.parent);
-            }}
+            onAgree={this.deleteDistrict}
             onCloseModal={this.props.closeConfirmModal}
             entity={boundary.name}
           />

@@ -1,5 +1,5 @@
-import { SERVER_API_BASE as serverApiBase } from 'config';
-import { get } from './requests';
+import { SERVER_API_BASE, STATE_CODE } from 'config';
+import { get, patch } from './requests';
 import {
   fetchInstitutionDetails,
   showBoundaryLoading,
@@ -44,7 +44,7 @@ export const fetchBoundaries = (parentId, moreIds) => (
     // const state = getState();
     // const type = state.schoolSelection.primarySchool ? 'primary' : 'pre';
 
-    get(`${serverApiBase}boundaries/?parent=${parentId}&limit=500`)
+    get(`${SERVER_API_BASE}boundaries/?parent=${parentId}&limit=500&state=${STATE_CODE}`)
     .then((response) => {
       if (response) {
         dispatch(setBoundaries(response));
@@ -58,6 +58,18 @@ export const fetchBoundaries = (parentId, moreIds) => (
   }
 );
 
+export const modifyBoundary = (boundaryId, name) => (
+  (dispatch) => {
+    console.log(boundaryId, name);
+    patch(`${SERVER_API_BASE}boundaries/${boundaryId}/ping `, { name })
+    .then(response => {
+      dispatch(setBoundaries({ results: [response] }));
+    })
+    .catch(error => {
+      console.log('request failed', error);
+    });
+  }
+);
 
 // function dispatchToggleModal(modalType) {
 //   store.dispatch({
@@ -67,7 +79,7 @@ export const fetchBoundaries = (parentId, moreIds) => (
 // }
 
 // const newInstitutionFetch = options => {
-//   return fetch(serverApiBase + 'institutions/', {
+//   return fetch(SERVER_API_BASE + 'institutions/', {
 //     method: 'POST',
 //     headers: {
 //       'Content-Type': 'application/json',
@@ -80,7 +92,7 @@ export const fetchBoundaries = (parentId, moreIds) => (
 // };
 //
 // const institutionFetch = options => {
-//   return fetch(serverApiBase + 'institutions/' + options.id + '/', {
+//   return fetch(SERVER_API_BASE + 'institutions/' + options.id + '/', {
 //     method: 'PATCH',
 //     headers: {
 //       'Content-Type': 'application/json',
@@ -103,7 +115,7 @@ export const fetchBoundaries = (parentId, moreIds) => (
 // };
 //
 // const classNewFetch = options => {
-//   return fetch(serverApiBase + 'studentgroups/', {
+//   return fetch(SERVER_API_BASE + 'studentgroups/', {
 //     method: 'POST',
 //     headers: {
 //       'Content-Type': 'application/json',
@@ -116,7 +128,7 @@ export const fetchBoundaries = (parentId, moreIds) => (
 // };
 //
 // const classFetch = options => {
-//   return fetch(serverApiBase + 'studentgroups/' + options.id + '/', {
+//   return fetch(SERVER_API_BASE + 'studentgroups/' + options.id + '/', {
 //     method: 'PATCH',
 //     headers: {
 //       'Content-Type': 'application/json',
@@ -146,7 +158,7 @@ export const fetchBoundaries = (parentId, moreIds) => (
 //
 // export const deleteStudentGroup = options => {
 //   return function(dispatch, getState) {
-//     return fetch(serverApiBase + 'studentgroups/' + options.id + '/', {
+//     return fetch(SERVER_API_BASE + 'studentgroups/' + options.id + '/', {
 //       method: 'DELETE',
 //       headers: {
 //         Authorization: 'Token ' + sessionStorage.token,
@@ -171,7 +183,7 @@ export const fetchBoundaries = (parentId, moreIds) => (
 //
 // const addStudentsFetch = options => {
 //   return fetch(
-//     serverApiBase +
+//     SERVER_API_BASE +
 //       'institutions/' +
 //       options.institution +
 //       '/studentgroups/' +
@@ -197,7 +209,7 @@ export const fetchBoundaries = (parentId, moreIds) => (
 // };
 //
 // const studentFetch = options => {
-//   return fetch(serverApiBase + 'students/' + options.id + '/', {
+//   return fetch(SERVER_API_BASE + 'students/' + options.id + '/', {
 //     method: 'PATCH',
 //     headers: {
 //       'Content-Type': 'application/json',

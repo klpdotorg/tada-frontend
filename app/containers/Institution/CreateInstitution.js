@@ -32,7 +32,7 @@ class CreateInstitutionForm extends Component {
       // area: myform.institutionArea,
       // landmark: myform.institutionLandmark,
       // pincode: myform.institutionPincode,
-      languages: '1' || myform.languages,
+      languages: 'hin' || myform.languages,
       admin3: this.props.parent,
       gender: myform.institutionGender,
       category: '10',

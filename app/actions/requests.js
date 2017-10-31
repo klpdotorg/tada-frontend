@@ -32,7 +32,7 @@ export const checkStatusNoJSON = response => {
 };
 
 export const get = url =>
-  fetch(`${url}&state=${STATE_CODE}`, {
+  fetch(url, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -54,9 +54,25 @@ export const deleteRequest = url =>
     store.dispatch(Notifications.error(syncError(e)));
   });
 
-export const post = (url, body) => {
-  return fetch(url, {
+export const post = (url, body) => (
+  fetch(url, {
     method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Token 47d78a3b3a324896999a8caa0f153c2cda39f8a6',
+    },
+    body: JSON.stringify(body),
+  })
+  .then(checkStatus)
+  .catch(e => {
+    store.dispatch(Notifications.error(syncError(e)));
+    throw e;
+  })
+);
+
+export const patch = (url, body) =>
+  fetch(url, {
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
       Authorization: 'Token 47d78a3b3a324896999a8caa0f153c2cda39f8a6',
@@ -65,21 +81,7 @@ export const post = (url, body) => {
   })
     .then(checkStatus)
     .catch(e => {
-      store.dispatch(Notifications.error(syncError(e)));
-      throw e;
-    });
-};
-
-export const patch = (url, body) =>
-  fetch(url, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(body),
-  })
-    .then(checkStatus)
-    .catch(e => {
+      console.log(e);
       store.dispatch(Notifications.error(syncError(e)));
       throw e;
     });

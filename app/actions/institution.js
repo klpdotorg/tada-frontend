@@ -41,17 +41,12 @@ export const fetchInstitutionDetails = (parentBoundaryId, moreIds) => (
   }
 );
 
-export const getLanguages = () => dispatch => {
-  fetch(`${serverApiBase}languages/`, {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Token ${sessionStorage.token}`,
-    },
-  })
-    .then(checkStatus)
+export const getLanguages = () => (
+  (dispatch) => {
+    get(`${serverApiBase}institution/languages`)
     .then(languages => {
-      const langs = languages.results.map(language => ({
-        value: language.id,
+      const langs = languages.map(language => ({
+        value: language.char_id,
         label: language.name,
       }));
       dispatch(setInstitutionLanguages(langs));
@@ -59,29 +54,25 @@ export const getLanguages = () => dispatch => {
     .catch(error => {
       console.log('request failed', error);
     });
-};
+  }
+);
 
-export const getInstitutionCategories = () => dispatch => {
-  fetch(`${serverApiBase}institutioncategories/`, {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Token ${sessionStorage.token}`,
-    },
-  })
-    .then(checkStatus)
+export const getInstitutionCategories = () => (
+  (dispatch) => {
+    get(`${serverApiBase}institution/categories`)
     .then(categories => {
-      const filterCats = categories.results
-        .filter(cat => cat.category_type === 1)
-        .map(category => ({
-          value: category.id,
-          label: category.name,
-        }));
+      const filterCats = categories.filter(cat => cat.type.id === 'primary')
+      .map(category => ({
+        value: category.name,
+        label: category.name,
+      }));
       dispatch(setInstitutionCats(filterCats));
     })
     .catch(error => {
       console.log('request failed', error);
     });
-};
+  }
+);
 
 export const saveNewInstitution = (options) => (
   (dispatch, getState) => {
@@ -90,10 +81,12 @@ export const saveNewInstitution = (options) => (
 
     post(`${serverApiBase}institutions/`, newOptions)
     .then(response => {
+      console.log(response);
       dispatch(responseReceivedFromServer({ results: [response] }));
       dispatch(toggleModal('createInstitution'));
       dispatch(openNode(response.id));
       const boundary = computeRouterPathForEntity(response, getState().boundaries.boundaryDetails);
+      console.log(boundary, 'Boundary save new institution.');
       dispatch(push(boundary.path));
     });
   }

@@ -444,29 +444,6 @@ export function deleteBoundary(boundaryid, parentId) {
   };
 }
 
-export function modifyBoundary(boundaryid, name) {
-  return function(dispatch, getState) {
-    return fetch(serverApiBase + 'boundaries/' + boundaryid + '/', {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Token ' + sessionStorage.token,
-      },
-      body: JSON.stringify({
-        name: name,
-      }),
-    })
-      .then(checkStatus)
-      .then(response => {
-        dispatch(responseReceivedFromServer({ results: [response] }));
-        return response;
-      })
-      .catch(error => {
-        console.log('request failed', error);
-      });
-  };
-}
-
 export const newBoundaryFetch = options => {
   return fetch(serverApiBase + 'boundaries/', {
     method: 'POST',

@@ -20,3 +20,5 @@ export const CLOSE_CONFIRM_MODAL = 'close_confirm_modal';
 export const SHOW_BOUNDARY_LOADING = 'show_boundary_loading';
 export const CLOSE_BOUNDARY_LOADING = 'close_boundary_loading';
 export const SET_BOUNDARIES = 'BOUNDARIES_FULFILLED';
+export const SET_INSTITUTION_CATS = 'set_institution_cats';
+export const SET_INSTITUTION_LANGUAGES = 'set_institution_languages';
