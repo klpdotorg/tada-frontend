@@ -21,9 +21,9 @@ export const getEntity = (parentEntityId, moreIds) => (
 
     switch (entity.depth) {
       case 2:
-        return dispatch(fetchInstitutionDetails(parentEntityId, moreIds));
+        return dispatch(fetchInstitutionDetails(entity.id, moreIds));
       default:
-        return dispatch(fetchBoundaries(parentEntityId, moreIds));
+        return dispatch(fetchBoundaries(entity.id, moreIds));
     }
   }
 );
@@ -61,7 +61,7 @@ export const fetchBoundaries = (parentId, moreIds) => (
 export const modifyBoundary = (boundaryId, name) => (
   (dispatch) => {
     console.log(boundaryId, name);
-    patch(`${SERVER_API_BASE}boundaries/${boundaryId}/ping `, { name })
+    patch(`${SERVER_API_BASE}boundaries/${boundaryId}/`, { name })
     .then(response => {
       dispatch(setBoundaries({ results: [response] }));
     })

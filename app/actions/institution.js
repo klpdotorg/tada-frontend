@@ -1,8 +1,12 @@
 import { push } from 'react-router-redux';
 
 import { SERVER_API_BASE as serverApiBase } from 'config';
-import { checkStatus, get, post, deleteRequest } from './requests';
-import { SET_INSTITUTION_LANGUAGES, SET_INSTITUTION_CATS } from './types';
+import { get, post, deleteRequest } from './requests';
+import {
+  SET_INSTITUTION_LANGUAGES,
+  SET_INSTITUTION_CATS,
+  SET_INSTITUTION_MANAGEMENTS,
+} from './types';
 import {
   responseReceivedFromServer,
   requestFailed,
@@ -10,6 +14,7 @@ import {
   toggleModal,
   getEntities,
   closeBoundaryLoading,
+  removeBoundary,
 } from './index';
 import { computeRouterPathForEntity } from '../reducers/utils';
 
@@ -20,6 +25,11 @@ export const setInstitutionCats = value => ({
 
 export const setInstitutionLanguages = value => ({
   type: SET_INSTITUTION_LANGUAGES,
+  value,
+});
+
+export const setInstitutionManagements = value => ({
+  type: SET_INSTITUTION_MANAGEMENTS,
   value,
 });
 
@@ -57,13 +67,29 @@ export const getLanguages = () => (
   }
 );
 
+export const getManagements = () => (
+  (dispatch) => {
+    get(`${serverApiBase}institution/managements`)
+    .then(managements => {
+      const mnmts = managements.map(management => ({
+        value: management.id,
+        label: management.name,
+      }));
+      dispatch(setInstitutionManagements(mnmts));
+    })
+    .catch(error => {
+      console.log('request failed', error);
+    });
+  }
+);
+
 export const getInstitutionCategories = () => (
   (dispatch) => {
     get(`${serverApiBase}institution/categories`)
     .then(categories => {
       const filterCats = categories.filter(cat => cat.type.id === 'primary')
       .map(category => ({
-        value: category.name,
+        value: category.id,
         label: category.name,
       }));
       dispatch(setInstitutionCats(filterCats));
@@ -92,7 +118,7 @@ export const saveNewInstitution = (options) => (
   }
 );
 
-export const deleteInstitution = (parentId, instiId) => (dispatch, getState) => {
+export const deleteInstitution = (parentId, instiId) => (dispatch) => {
   return deleteRequest(`${serverApiBase}institutions/${instiId}`)
     .then(response => {
       if (response.status >= 200 && response.status < 300) {

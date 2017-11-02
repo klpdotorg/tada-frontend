@@ -72,7 +72,7 @@ export const post = (url, body) => (
 
 export const patch = (url, body) =>
   fetch(url, {
-    method: 'PUT',
+    method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
       Authorization: 'Token 47d78a3b3a324896999a8caa0f153c2cda39f8a6',
