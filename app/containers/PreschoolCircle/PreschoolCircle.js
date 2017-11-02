@@ -3,17 +3,17 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { get, isEmpty } from 'lodash';
 
-import { DEFAULT_PARENT_ID } from 'config';
+import { DEFAULT_PARENT_NODE_ID } from 'config';
 import { getEntities } from '../../actions';
 import { PreschoolCircleView } from '../../components/PreschoolCircle';
 
 class FetchCircleEntity extends Component {
   componentWillMount() {
     const { params, circle } = this.props;
-    const { districtId, projectId, circleId } = params;
+    const { districtNodeId, projectNodeId, circleNodeId } = params;
 
     if (isEmpty(circle)) {
-      this.props.getEntities([DEFAULT_PARENT_ID, districtId, projectId, circleId]);
+      this.props.getEntities([DEFAULT_PARENT_NODE_ID, districtNodeId, projectNodeId, circleNodeId]);
     }
   }
 
@@ -29,12 +29,12 @@ FetchCircleEntity.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const { projectId, districtId, circleId } = ownProps.params;
+  const { projectNodeId, districtNodeId, circleNodeId } = ownProps.params;
 
   return {
-    circle: get(state.boundaries.boundaryDetails, circleId, {}),
-    project: get(state.boundaries.boundaryDetails, projectId, {}),
-    district: get(state.boundaries.boundaryDetails, districtId, {}),
+    circle: get(state.boundaries.boundaryDetails, circleNodeId, {}),
+    project: get(state.boundaries.boundaryDetails, projectNodeId, {}),
+    district: get(state.boundaries.boundaryDetails, districtNodeId, {}),
     isLoading: state.appstate.loadingBoundary,
   };
 };

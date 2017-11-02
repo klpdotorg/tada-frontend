@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { DEFAULT_PARENT_ID } from 'config';
+import { DEFAULT_PARENT_ID, DEFAULT_PARENT_NODE_ID } from 'config';
 import {
   processStudents,
   computeRouterPathForEntity,
@@ -10,6 +10,7 @@ import {
   INSTITUTION,
   STUDENT,
   BOUNDARY,
+  getBoundaryType
 } from './utils';
 import store from '../store';
 
@@ -27,24 +28,27 @@ function createLabelForClass(entity) {
   return entity;
 }
 
-function processBoundaryDetails(data, boundariesByParentId, boundaryDetails) {
+function processBoundaryDetails(data, boundariesByParentId, boundaryDetails, parentNode) {
   let init = {
     parents: _.clone(boundariesByParentId),
     details: _.clone(boundaryDetails),
   };
 
-  const parentId = getParentId(data[0]);
-
   const processed = data.reduce((soFar, boundary) => {
-    soFar.parents[parentId] = _.union([boundary.id], soFar.parents[parentId]);
-    if (soFar.details[boundary.id] == undefined) {
+    const boundaryId = `${boundary.id}${getBoundaryType(boundary)}`;
+    soFar.parents[parentNode] = _.union([boundaryId], soFar.parents[parentNode]);
+    if (soFar.details[boundaryId] == undefined) {
       boundary.collapsed = true;
     }
+    boundary = { ...boundary, parentNode }
     boundary = computeRouterPathForEntity(boundary, boundaryDetails);
-    boundary = nodeDepth(boundary);
+    boundary = {
+      ...boundary,
+      depth: nodeDepth(boundary)
+    };
     boundary = createLabelForClass(boundary);
 
-    soFar.details[boundary.id] = { ...soFar.details[boundary.id], ...boundary };
+    soFar.details[boundaryId] = { ...soFar.details[boundaryId], ...boundary };
     return soFar;
   }, init);
 
@@ -58,10 +62,12 @@ export function boundaries(
   state = {
     boundariesByParentId: {},
     boundaryDetails: {
-      [DEFAULT_PARENT_ID]: {
+      [DEFAULT_PARENT_NODE_ID]: {
         depth: 0,
+        id: DEFAULT_PARENT_ID
       },
     },
+    parentNode: DEFAULT_PARENT_NODE_ID
   },
   action,
 ) {
@@ -72,8 +78,13 @@ export function boundaries(
           action.payload.results,
           state.boundariesByParentId,
           state.boundaryDetails,
+          state.parentNode
         );
-        return boundaryDetails;
+
+        return {
+          ...state,
+          ...boundaryDetails
+        };
       }
       return state;
 
@@ -108,23 +119,34 @@ export function boundaries(
         isFetching: true,
       };
 
-    case 'TOGGLE_NODE':
-      const boundary = _.clone(state.boundaryDetails[action.id]);
-      if (action.open) {
-        boundary.collapsed = !action.open;
+    case 'TOGGLE_NODE': {
+      const existingBoundary = state.boundaryDetails[action.id];
+
+      const updatedBoundary = {
+        ...existingBoundary,
+        collapsed: action.open ? !action.open : !existingBoundary.collapsed
+      };
+      const boundaryType = getBoundaryType(updatedBoundary);
+      let parentNode;
+      if (updatedBoundary.id === DEFAULT_PARENT_ID) {
+        parentNode = DEFAULT_PARENT_NODE_ID
       } else {
-        boundary.collapsed = !boundary.collapsed;
+        parentNode = `${updatedBoundary.id}${boundaryType}`
       }
 
       const details = {
         ...state.boundaryDetails,
-        ...{ [action.id]: boundary },
+        ...{ [action.id]: updatedBoundary },
       };
       const val = {
         ...state,
-        ...{ boundaryDetails: details },
+        ...{
+          boundaryDetails: details,
+          parentNode
+        },
       };
       return val;
+    }
 
     case 'REQUEST_FAILED':
       return {
@@ -155,8 +177,9 @@ export function boundaries(
     case 'CLOSE_PEER_NODES':
       let boundaryDetails = _.clone(state.boundaryDetails);
       let openNodes = _.forEach(boundaryDetails, (value, key) => {
+        const parentNode = `${value.id}${getBoundaryType(value)}`
         if (!value.collapsed) {
-          if (value.depth === action.depth && value.id != action.id) {
+          if (value.depth === action.depth && parentNode !== action.id) {
             value.collapsed = true;
           }
         }

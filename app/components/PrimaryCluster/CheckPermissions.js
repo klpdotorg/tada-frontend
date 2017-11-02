@@ -5,9 +5,9 @@ import { EditCluster } from '../../containers/PrimaryCluster';
 
 import { LimitedPermissionsView, NoPermissionClusterView } from './index';
 
-const CheckPermissions = ({ canModify, clusterId }) => {
+const CheckPermissions = ({ canModify, clusterNodeId, blockId }) => {
   if (sessionStorage.getItem('isAdmin')) {
-    return <EditCluster clusterId={clusterId} />;
+    return <EditCluster clusterNodeId={clusterNodeId} blockId={blockId} />;
   }
 
   if (canModify) {
@@ -19,7 +19,8 @@ const CheckPermissions = ({ canModify, clusterId }) => {
 
 CheckPermissions.propTypes = {
   canModify: PropTypes.bool,
-  clusterId: PropTypes.number,
+  clusterNodeId: PropTypes.string,
+  blockId: PropTypes.number,
 };
 
 export { CheckPermissions };

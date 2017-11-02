@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import TreeView from 'react-treeview';
 import { Link } from 'react-router';
-import { DEFAULT_PARENT_ID } from 'config';
+import { DEFAULT_PARENT_NODE_ID } from 'config';
 
 import { alphabeticalOrder, capitalize } from '../../utils';
 import { getEntity, toggleNode, closePeerNodes } from '../../actions/';
@@ -48,23 +48,23 @@ class NavTree extends Component {
 
         const boundary = boundaryDetails[node];
         const label = this.renderLabel(boundary, depth);
+        let newDepth = depth;
+        if (children && children.length) {
+          newDepth = newDepth + 1;
+        }
+
         return (
           <TreeView
             key={node}
             onClick={() => {
-              onBoundaryClick(boundary, depth);
+              onBoundaryClick(node, newDepth);
             }}
             nodeLabel={label}
             collapsed={boundary.collapsed}
           >
-            {(() => {
-              if (children && children.length > 0) {
-                ++depth;
-                return children.map((child, i) => {
-                  return this.renderSubTree(child, boundaryHierarchy, visitedBoundaries, depth);
-                });
-              }
-            })()}
+            {children && children.map((child) => (
+              this.renderSubTree(child, boundaryHierarchy, visitedBoundaries, newDepth)
+            ))}
           </TreeView>
         );
       }
@@ -90,7 +90,7 @@ class NavTree extends Component {
 const filterBoundaries = (type, boundariesByParentId, boundaryDetails) => {
   const boundaryIds = _.clone(boundariesByParentId);
 
-  boundaryIds[DEFAULT_PARENT_ID] = _.filter(boundariesByParentId[DEFAULT_PARENT_ID], key => {
+  boundaryIds[DEFAULT_PARENT_NODE_ID] = _.filter(boundariesByParentId[DEFAULT_PARENT_NODE_ID], key => {
     const boundaryType = boundaryDetails[key].type;
     return boundaryType === type;
   });
@@ -113,10 +113,10 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  onBoundaryClick: (boundary, depth) => {
-    dispatch(toggleNode(boundary.id));
-    dispatch(getEntity(boundary.id));
-    dispatch(closePeerNodes(boundary.id, depth));
+  onBoundaryClick: (id, depth) => {
+    dispatch(toggleNode(id));
+    dispatch(getEntity(id));
+    dispatch(closePeerNodes(id, depth));
   },
 });
 

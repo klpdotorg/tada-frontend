@@ -38,14 +38,14 @@ class EditInstitutionForm extends Component {
       cat: myform.institutionCat,
       languages: myform.institutionLang,
       mgmt: myform.institutionMgmt,
-      id: this.props.institutionId,
+      id: this.props.institution.id,
     };
 
     this.props.saveInstitution(institution);
   }
 
   deleteInstitution() {
-    this.props.deleteInstitution(Number(this.props.clusterId), Number(this.props.institutionId));
+    this.props.deleteInstitution(Number(this.props.clusterId), Number(this.props.institution.id));
   }
 
   render() {
@@ -56,17 +56,15 @@ class EditInstitutionForm extends Component {
     ];
 
     const singleSelectOptions = [{ value: '', label: 'Please select…' }, ...selectOptions];
-
     const {
       institution,
       canSubmit,
       hasClasses,
       languages,
       institutionCategories,
-      mgmt,
+      managements,
       openConfirmModal,
     } = this.props;
-
     return (
       <Formsy.Form
         onValidSubmit={this.saveInsti}
@@ -142,7 +140,7 @@ class EditInstitutionForm extends Component {
             <Select
               name="institutionCat"
               label="Category:"
-              value={institution.cat}
+              value={institution.category}
               options={institutionCategories}
             />
           </div>
@@ -155,7 +153,7 @@ class EditInstitutionForm extends Component {
               label="Medium:"
               value={institution.languages}
               options={languages}
-              // required
+              required
             />
           </div>
         </div>
@@ -176,8 +174,8 @@ class EditInstitutionForm extends Component {
               name="institutionMgmt"
               label="Management:"
               value={institution.mgmt}
-              options={mgmt}
-              // required
+              options={managements}
+              required
             />
           </div>
         </div>
@@ -224,12 +222,11 @@ class EditInstitutionForm extends Component {
 EditInstitutionForm.propTypes = {
   canSubmit: PropTypes.bool,
   openConfirmModal: PropTypes.bool,
-  institutionId: PropTypes.number,
   clusterId: PropTypes.number,
   institution: PropTypes.object,
   hasClasses: PropTypes.bool,
   languages: PropTypes.array,
-  mgmt: PropTypes.array,
+  managements: PropTypes.array,
   institutionCategories: PropTypes.array,
   saveInstitution: PropTypes.func,
   deleteInstitution: PropTypes.func,
@@ -240,17 +237,17 @@ EditInstitutionForm.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const { institutionId } = ownProps;
-  const classesIds = state.boundaries.boundariesByParentId[institutionId];
+  const { institutionNodeId } = ownProps;
+  const classesIds = state.boundaries.boundariesByParentId[institutionNodeId];
   const hasClasses = classesIds && classesIds.length > 0;
 
   return {
     hasClasses,
     openConfirmModal: state.appstate.confirmModal,
-    institution: state.boundaries.boundaryDetails[institutionId],
+    institution: state.boundaries.boundaryDetails[institutionNodeId],
     canSubmit: state.appstate.enableSubmitForm,
     languages: state.institution.languages,
-    mgmt: state.institution.mgmt,
+    managements: state.institution.managements,
     institutionCategories: state.institution.institutionCats,
   };
 };

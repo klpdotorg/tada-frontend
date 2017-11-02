@@ -20,11 +20,11 @@ class EditProjectForm extends Component {
 
   saveProject() {
     const myform = this.myform.getModel();
-    this.props.saveProject(this.props.projectId, myform.ProjectName);
+    this.props.saveProject(this.props.project.id, myform.ProjectName);
   }
 
   deleteProject() {
-    this.props.deleteProject(this.props.projectId, this.props.districtId);
+    this.props.deleteProject(this.props.project.id, this.props.districtId);
   }
 
   render() {
@@ -114,12 +114,12 @@ EditProjectForm.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const { projectId } = ownProps;
-  const circleIds = state.boundaries.boundariesByParentId[projectId];
+  const { projectNodeId } = ownProps;
+  const circleIds = state.boundaries.boundariesByParentId[projectNodeId];
   const hasCircles = circleIds && circleIds.length > 0;
 
   return {
-    project: state.boundaries.boundaryDetails[projectId] || {},
+    project: state.boundaries.boundaryDetails[projectNodeId] || {},
     hasCircles,
     openConfirmModal: state.appstate.confirmModal,
     canSubmit: state.appstate.enableSubmitForm,

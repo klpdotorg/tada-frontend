@@ -21,7 +21,7 @@ export const getParentId = (entity, group) => {
   var parent = -1;
   // Hack to figure out if we're dealing with a school or something else. This won't work. FIX IT!
   if (_.get(entity, 'boundary.boundary_type') === 'SC') {
-    parent = entity.boundary.id;
+    parent = `${entity.boundary.id}${entity.boundary_type}`;
   } else if (entity.group_type) {
     parent = entity.institution;
   } else if (entity.dob) {
@@ -49,82 +49,88 @@ export const getEntityType = entity => {
   return type;
 };
 
-export const getBoundaryType = boundary => {
-  var type;
-  var boundCat = boundary.boundary_category;
-  if (boundCat == 13) {
-    type = PRESCHOOL_DISTRICT;
-  } else if (boundCat == 14) {
-    type = PROJECT;
-  } else if (boundCat == 15) {
-    type = CIRCLE;
-  } else if (boundCat == 9) {
-    type = PRIMARY_DISTRICT;
-  } else if (boundCat == 10) {
-    type = BLOCK;
-  } else if (boundCat == 11) {
-    type = CLUSTER;
-  }
-  return type;
-};
+export const getBoundaryType = boundary => (
+  boundary.boundary_type || boundary.institution_type || (boundary.type && boundary.type.id)
+);
 /*
 Method computes the router path for an entity and returns it
 */
 
 export const computeRouterPathForEntity = (entity, boundaryDetails, groupId) => {
-  var parentEntityId = getParentId(entity, groupId);
-  var path = '';
+  const parentEntityId = getParentId(entity, groupId);
+  const boundaryType = getBoundaryType(entity);
+  let path = '';
 
-  if (parentEntityId == 2) {
-    path = '/district/' + entity.id;
+  if (parentEntityId === 2) {
+    path = `/district/${entity.id}${boundaryType}`;
   } else {
-    var parent = boundaryDetails[parentEntityId];
+    const parent = boundaryDetails[entity.parentNode];
     if (parent) {
-      if (entity.boundary_type === 'SB') {
-        // path is parent's path plus child's
-
-        path = parent.path + '/block/' + entity.id;
-      } else if (entity.boundary_type == 'SC') {
-        path = parent.path + '/cluster/' + entity.id;
-      } else if (entity.boundary_type == 'PP') {
-        path = parent.path + '/project/' + entity.id;
-      } else if (entity.boundary_type == 'PC') {
-        path = parent.path + '/circle/' + entity.id;
-      } else if (_.get(entity, 'type.name') === 'Primary School') {
-        path = parent.path + '/institution/' + entity.id;
-      } else if (entity.group_type) {
-        path = parent.path + '/studentgroups/' + entity.id;
-      } else if (entity.dob) {
-        path = parent.path + '/student/' + entity.id;
+      switch (boundaryType) {
+        case 'SB':
+          path = `${parent.path}/block/${entity.id}${boundaryType}`;
+          break;
+        case 'SC':
+          path = `${parent.path}/cluster/${entity.id}${boundaryType}`;
+          break;
+        case 'PP':
+          path = `${parent.path}/project/${entity.id}${boundaryType}`;
+          break;
+        case 'PC':
+          path = `${parent.path}/circle/${entity.id}${boundaryType}`;
+          break;
+        case 'primary':
+          path = `${parent.path}/institution/${entity.id}${boundaryType}`;
+          break;
+        case 'pre':
+          path = `${parent.path}/institution/${entity.id}${boundaryType}`;
+          break;
+        default:
+          path = null;
       }
+      // if (boundaryType === 'SB') {
+      //
+      // } else if (entity.boundary_type === 'SC') {
+      //   path = `${parent.path}/cluster/${entity.id}${boundaryType}`;
+      // } else if (entity.boundary_type === 'PP') {
+      //   path = `${parent.path}/project/${entity.id}${boundaryType}`;
+      // } else if (entity.boundary_type === 'PC') {
+      //   path = `${parent.path}/circle/${entity.id}`;
+      // } else if (_.get(entity, 'type.name') === 'Primary School') {
+      //   path = parent.path + '/institution/' + entity.id;
+      // } else if (entity.group_type) {
+      //   path = parent.path + '/studentgroups/' + entity.id;
+      // } else if (entity.dob) {
+      //   path = parent.path + '/student/' + entity.id;
+      // }
     }
   }
-  entity.path = path;
-  return entity;
+
+  return { ...entity, path };
 };
 
 export const nodeDepth = node => {
-  const category = node.boundary_type;
-  const mapDepthCategory = {
-    SD: 0,
-    SB: 1,
-    SC: 2,
-    PD: 0,
-    PP: 1,
-    PC: 2,
-  };
-
-  if (category) {
-    node.depth = mapDepthCategory[category];
-  } else if (_.get(node, 'type.name') === 'Primary School') {
-    node.depth = 3;
-  } else if (node.group_type) {
-    node.depth = 4;
-  } else {
-    node.depth = 5;
+  const category = getBoundaryType(node);
+  switch (category) {
+    case 'SD':
+      return 0;
+    case 'SB':
+      return 1;
+    case 'SC':
+      return 2;
+    case 'PD':
+      return 0;
+    case 'PP':
+      return 1;
+    case 'PC':
+      return 2;
+    case 'primary':
+      return 3;
+    case 'pre':
+      return 3;
+    default:
+      return null;
   }
-
-  return node;
 };
 
 export const processStudents = (students, groupId, boundariesByParent, boundaryDetails) => {

@@ -8,7 +8,7 @@ import { EditInstitution } from '../../containers/Institution';
 import { Loading } from '../common';
 
 const InstitutionView = props => {
-  const { isLoading, district, block, cluster, institution } = props;
+  const { isLoading, district, block, cluster, institution, params } = props;
 
   if (isLoading || isEmpty(institution)) {
     return <Loading />;
@@ -39,7 +39,7 @@ const InstitutionView = props => {
         <div className="base-spacing-sm" />
         <EditInstitution
           clusterId={cluster.id}
-          institutionId={institution.id}
+          institutionNodeId={params.institutionNodeId}
         />
       </div>
     </div>
@@ -52,6 +52,7 @@ InstitutionView.propTypes = {
   block: PropTypes.object,
   cluster: PropTypes.object,
   institution: PropTypes.object,
+  params: PropTypes.object,
 };
 
 export { InstitutionView };

@@ -26,13 +26,13 @@ class EditCircleForm extends Component {
 
   saveCircle() {
     const myform = this.myform.getModel();
-    this.props.saveCircle(this.props.circleId, myform.ClusterName);
+    this.props.saveCircle(this.props.circle.id, myform.ClusterName);
   }
 
   deleteCircle() {
-    const { circleId, projectId, deleteCircle } = this.props;
+    const { circle, projectId, deleteCircle } = this.props;
 
-    deleteCircle(circleId, projectId);
+    deleteCircle(circle.id, projectId);
   }
 
   render() {
@@ -109,7 +109,6 @@ EditCircleForm.propTypes = {
   canSubmit: PropTypes.bool,
   openConfirmModal: PropTypes.bool,
   circle: PropTypes.object,
-  circleId: PropTypes.number,
   projectId: PropTypes.number,
   saveCircle: PropTypes.func,
   deleteCircle: PropTypes.func,
@@ -121,14 +120,14 @@ EditCircleForm.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const { circleId } = ownProps;
-  const institutionIds = state.boundaries.boundariesByParentId[circleId];
+  const { circleNodeId } = ownProps;
+  const institutionIds = state.boundaries.boundariesByParentId[circleNodeId];
   const hasSchools = institutionIds && institutionIds.length > 0;
   return {
     hasSchools,
     openConfirmModal: state.appstate.confirmModal,
     canSubmit: state.appstate.enableSubmitForm,
-    circle: state.boundaries.boundaryDetails[circleId],
+    circle: state.boundaries.boundaryDetails[circleNodeId],
   };
 };
 

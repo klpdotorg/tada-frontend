@@ -66,9 +66,9 @@ export const routes = (
         />
         <Route path="users" component={Users} />
         <Route path="permissions" component={PermissionsContainer} />
-        <Route path="district/:districtId/project/:projectId" component={PreschoolProject} />
+        <Route path="district/:districtNodeId/project/:projectNodeId" component={PreschoolProject} />
         <Route
-          path="district/:districtId/project/:projectId/circle/:circleId"
+          path="district/:districtNodeId/project/:projectNodeId/circle/:circleNodeId"
           component={PreschoolCircle}
         />
         <Route
@@ -87,14 +87,14 @@ export const routes = (
           path="district/:districtId/project/:projectId/circle/:circleId/institution/:institutionId/studentgroups/:groupId/students"
           component={Students}
         />
-        <Route path="district/:districtId" component={PrimaryDistrict} />
-        <Route path="district/:districtId/block/:blockId" component={PrimaryBlock} />
+        <Route path="district/:districtNodeId" component={PrimaryDistrict} />
+        <Route path="district/:districtNodeId/block/:blockNodeId" component={PrimaryBlock} />
         <Route
-          path="district/:districtId/block/:blockId/cluster/:clusterId"
+          path="district/:districtNodeId/block/:blockNodeId/cluster/:clusterNodeId"
           component={PrimaryCluster}
         />
         <Route
-          path="district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId"
+          path="district/:districtNodeId/block/:blockNodeId/cluster/:clusterNodeId/institution/:institutionNodeId"
           component={Institution}
         />
         <Route

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { isEmpty } from 'lodash';
 
-import { DEFAULT_PARENT_ID } from 'config';
+import { DEFAULT_PARENT_NODE_ID } from 'config';
 import { PrimaryBlockView } from '../../components/PrimaryBlock';
 import {
   getEntities,
@@ -18,10 +18,10 @@ class FetchBlockEntity extends Component {
 
   componentDidMount() {
     const { params, block } = this.props;
-    const { districtId, blockId } = params;
+    const { districtNodeId, blockNodeId } = params;
 
     if (isEmpty(block)) {
-      this.props.fetchEntities(districtId, blockId);
+      this.props.getEntities([DEFAULT_PARENT_NODE_ID, districtNodeId, blockNodeId]);
     }
   }
 
@@ -33,24 +33,18 @@ class FetchBlockEntity extends Component {
 FetchBlockEntity.propTypes = {
   params: PropTypes.object,
   block: PropTypes.object,
-  fetchEntities: PropTypes.func,
+  getEntities: PropTypes.func,
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const { blockId, districtId } = ownProps.params;
+  const { blockNodeId, districtNodeId } = ownProps.params;
   return {
-    block: state.boundaries.boundaryDetails[blockId] || {},
-    district: state.boundaries.boundaryDetails[districtId] || {},
+    block: state.boundaries.boundaryDetails[blockNodeId] || {},
+    district: state.boundaries.boundaryDetails[districtNodeId] || {},
     isLoading: state.appstate.loadingBoundary,
   };
 };
 
-const mapDispatchToProps = dispatch => ({
-  fetchEntities: (districtId, blockId) => {
-    dispatch(getEntities([DEFAULT_PARENT_ID, districtId, blockId]));
-  },
-});
-
-const PrimaryBlock = connect(mapStateToProps, mapDispatchToProps)(FetchBlockEntity);
+const PrimaryBlock = connect(mapStateToProps, { getEntities })(FetchBlockEntity);
 
 export { PrimaryBlock };

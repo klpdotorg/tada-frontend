@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { isEmpty } from 'lodash';
 
-import { DEFAULT_PARENT_ID } from 'config';
+import { DEFAULT_PARENT_NODE_ID } from 'config';
 import { PreschoolProjectView } from '../../components/PreschoolProject';
 import {
   getEntities,
@@ -18,10 +18,10 @@ class FetchProjectEntity extends Component {
 
   componentDidMount() {
     const { params, project } = this.props;
-    const { districtId, projectId } = params;
+    const { districtNodeId, projectNodeId } = params;
 
     if (isEmpty(project)) {
-      this.props.getEntities([DEFAULT_PARENT_ID, districtId, projectId]);
+      this.props.getEntities([DEFAULT_PARENT_NODE_ID, districtNodeId, projectNodeId]);
     }
   }
 
@@ -37,11 +37,11 @@ FetchProjectEntity.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const { projectId, districtId } = ownProps.params;
+  const { projectNodeId, districtNodeId } = ownProps.params;
 
   return {
-    project: state.boundaries.boundaryDetails[projectId] || {},
-    district: state.boundaries.boundaryDetails[districtId] || {},
+    project: state.boundaries.boundaryDetails[projectNodeId] || {},
+    district: state.boundaries.boundaryDetails[districtNodeId] || {},
     isLoading: state.appstate.loadingBoundary,
   };
 };

@@ -27,11 +27,11 @@ class EditBlockForm extends Component {
 
   onClickSaveBlock() {
     const myform = this.myform.getModel();
-    this.props.saveBlock(this.props.blockId, myform.BlockName);
+    this.props.saveBlock(this.props.block.id, myform.BlockName);
   }
 
   onClickDeleteBlock() {
-    this.props.deleteBlock(this.props.blockId, this.props.districtId);
+    this.props.deleteBlock(this.props.block.id, this.props.districtId);
   }
 
   render() {
@@ -108,7 +108,6 @@ class EditBlockForm extends Component {
 
 EditBlockForm.propTypes = {
   block: PropTypes.object,
-  blockId: PropTypes.number,
   districtId: PropTypes.number,
   hasClusters: PropTypes.bool,
   openConfirmModal: PropTypes.bool,
@@ -123,11 +122,11 @@ EditBlockForm.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const { blockId } = ownProps;
-  const clusterIds = state.boundaries.boundariesByParentId[blockId];
+  const { blockNodeId } = ownProps;
+  const clusterIds = state.boundaries.boundariesByParentId[blockNodeId];
   const hasClusters = clusterIds && clusterIds.length > 0;
   return {
-    block: state.boundaries.boundaryDetails[blockId] || {},
+    block: state.boundaries.boundaryDetails[blockNodeId] || {},
     hasClusters,
     openConfirmModal: state.appstate.confirmModal,
     canSubmit: state.appstate.enableSubmitForm,

@@ -7,7 +7,7 @@ import { CreateInstitution } from '../../containers/Institution';
 import { EditCircle } from '../../containers/PreschoolCircle';
 import { NoPermissionView } from './index';
 
-const PreschoolCircleView = ({ isLoading, district, project, circle }) => {
+const PreschoolCircleView = ({ isLoading, district, project, circle, params }) => {
   if (isLoading || isEmpty(circle)) {
     return (
       <div>
@@ -25,7 +25,7 @@ const PreschoolCircleView = ({ isLoading, district, project, circle }) => {
         <li className="active">{circle.name}</li>
       </ol>
       {sessionStorage.getItem('isAdmin')
-        ? <EditCircle circleId={circle.id} />
+        ? <EditCircle circleNodeId={params.circleNodeId} projectId={project.id} />
         : <NoPermissionView />}
       <CreateInstitution parent={circle.id} />
     </div>
@@ -37,6 +37,7 @@ PreschoolCircleView.propTypes = {
   district: PropTypes.object,
   project: PropTypes.object,
   circle: PropTypes.object,
+  params: PropTypes.object,
 };
 
 export { PreschoolCircleView };

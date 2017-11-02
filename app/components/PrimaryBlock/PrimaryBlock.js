@@ -7,7 +7,7 @@ import { NoPermissionBlockView } from './index';
 import { EditBlock } from '../../containers/PrimaryBlock';
 import { CreateCluster } from '../../containers/PrimaryCluster';
 
-const PrimaryBlockView = ({ isLoading, district, block }) => {
+const PrimaryBlockView = ({ isLoading, district, block, params }) => {
   if (isLoading || isEmpty(block)) {
     return (
       <div>
@@ -30,7 +30,7 @@ const PrimaryBlockView = ({ isLoading, district, block }) => {
         </li>
       </ol>
       {sessionStorage.getItem('isAdmin')
-        ? <EditBlock blockId={block.id} districtId={district.id} />
+        ? <EditBlock blockNodeId={params.blockNodeId} districtId={district.id} />
         : <NoPermissionBlockView />}
       <CreateCluster parent={block.id} />
     </div>
@@ -41,6 +41,7 @@ PrimaryBlockView.propTypes = {
   isLoading: PropTypes.bool,
   district: PropTypes.object,
   block: PropTypes.object,
+  params: PropTypes.object,
 };
 
 export { PrimaryBlockView };

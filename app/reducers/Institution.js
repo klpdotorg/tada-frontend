@@ -1,12 +1,13 @@
 import {
   SET_INSTITUTION_CATS,
   SET_INSTITUTION_LANGUAGES,
+  SET_INSTITUTION_MANAGEMENTS,
 } from '../actions/types';
 
 const INITIAL_STATE = {
   languages: [],
   institutionCats: [],
-  mgmt: [],
+  managements: [],
 };
 
 const Institution = (state = INITIAL_STATE, action) => {
@@ -20,6 +21,11 @@ const Institution = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         languages: action.value,
+      };
+    case SET_INSTITUTION_MANAGEMENTS:
+      return {
+        ...state,
+        managements: action.value,
       };
     default:
       return state;

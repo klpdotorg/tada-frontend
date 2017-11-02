@@ -25,26 +25,40 @@ class CreateInstitutionForm extends Component {
 
   submitForm() {
     const myform = this.myform.getModel();
-    const copy = {
-      dise: 599419,
+    const institution = {
       name: myform.name,
       address: myform.institutionAddress,
-      // area: myform.institutionArea,
-      // landmark: myform.institutionLandmark,
-      // pincode: myform.institutionPincode,
-      languages: 'hin' || myform.languages,
+      area: myform.institutionArea,
+      landmark: myform.institutionLandmark,
+      pincode: myform.institutionPincode,
+      languages: myform.institutionLang,
       admin3: this.props.parent,
       gender: myform.institutionGender,
-      category: '10',
-      management: '1',
+      category: myform.institutionCat,
+      management: myform.institutionManagement,
       status: 'AC',
+      dise: 599419,
     };
 
-    this.props.save(copy);
+    const filterInstitution = _.reduce(institution, (soFar, value, key) => {
+      if (value) {
+        soFar[key] = value;
+      }
+      return soFar;
+    }, {});
+
+    this.props.save(filterInstitution);
   }
 
   render() {
-    const { title, isOpen, placeHolder, languages, institutionCategories } = this.props;
+    const {
+      title,
+      isOpen,
+      placeHolder,
+      languages,
+      managements,
+      institutionCategories,
+    } = this.props;
 
     const selectOptions = [
       { value: 'co-ed', label: 'Co-Ed' },
@@ -114,15 +128,22 @@ class CreateInstitutionForm extends Component {
           <Select
             name="institutionCat"
             label="Category:"
-            value={_.get(institutionCategories, 'list[0].value')}
+            value={_.get(institutionCategories[0], 'value')}
             options={institutionCategories}
           />
           <Select
             multiple
             name="institutionLang"
             label="Medium:"
-            value={[_.get(languages, 'list[0].value')]}
+            value={[_.get(languages[0], 'value')]}
             options={languages}
+            required
+          />
+          <Select
+            name="institutionManagement"
+            label="Management:"
+            value={_.get(managements[0], 'value')}
+            options={managements}
             required
           />
           <Select
@@ -153,6 +174,7 @@ CreateInstitutionForm.propTypes = {
   placeHolder: PropTypes.string,
   parent: PropTypes.number,
   languages: PropTypes.array,
+  managements: PropTypes.array,
   institutionCategories: PropTypes.array,
   save: PropTypes.func,
   enableSubmitForm: PropTypes.func,
@@ -165,13 +187,12 @@ const mapStateToProps = (state) => ({
   isOpen: state.modal.createInstitution,
   canSubmit: state.appstate.enableSubmitForm,
   languages: state.institution.languages,
-  mgmt: state.institution.mgmt,
+  managements: state.institution.managements,
   institutionCategories: state.institution.institutionCats,
 });
 
 const mapDispatchToProps = dispatch => ({
   save: (form) => {
-    console.log(form);
     dispatch(saveNewInstitution(form));
   },
   enableSubmitForm: () => {

@@ -6,7 +6,7 @@ import $ from 'jquery';
 import { SideBarWrapper } from '../../components/SideBar';
 import { SchoolsNavTree, PermissionsNavTree, ProgramNavTree } from './index';
 import { getEntity } from '../../actions';
-import { DEFAULT_PARENT_ID } from 'config';
+import { DEFAULT_PARENT_NODE_ID } from 'config';
 
 class SideBar extends Component {
   constructor() {
@@ -16,12 +16,12 @@ class SideBar extends Component {
   }
 
   componentDidMount() {
-    this.props.getEntity(DEFAULT_PARENT_ID);
+    this.props.getEntity(DEFAULT_PARENT_NODE_ID);
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.selectedPrimarySchool !== nextProps.selectedPrimarySchool) {
-      this.props.getEntity(DEFAULT_PARENT_ID);
+      this.props.getEntity(DEFAULT_PARENT_NODE_ID);
     }
   }
 

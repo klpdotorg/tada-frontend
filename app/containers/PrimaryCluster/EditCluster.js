@@ -26,13 +26,13 @@ class EditClusterView extends Component {
 
   saveCluster() {
     const myform = this.myform.getModel();
-    this.props.saveCluster(this.props.clusterId, myform.ClusterName);
+    this.props.saveCluster(this.props.cluster.id, myform.ClusterName);
   }
 
   deleteCluster() {
-    const { clusterId, blockId, deleteCluster } = this.props;
+    const { cluster, blockId, deleteCluster } = this.props;
 
-    deleteCluster(clusterId, blockId);
+    deleteCluster(cluster.id, blockId);
   }
 
   render() {
@@ -41,11 +41,14 @@ class EditClusterView extends Component {
     return (
       <div>
         {hasSchools
-          ? <div className="alert alert-info">
-              <i className="fa fa-info-circle fa-lg" aria-hidden="true" /> You cannot delete this
-              boundary until its children are deleted
-            </div>
-          : <div />}
+          ?
+          <div className="alert alert-info">
+            <i className="fa fa-info-circle fa-lg" aria-hidden="true" /> You cannot delete this
+            boundary until its children are deleted
+          </div>
+          :
+          <div />
+        }
         <h4 className="text-primary col-md-10">Modify Details</h4>
         <button
           className="btn btn-orange pull-right"
@@ -106,7 +109,6 @@ EditClusterView.propTypes = {
   canSubmit: PropTypes.bool,
   openConfirmModal: PropTypes.bool,
   cluster: PropTypes.object,
-  clusterId: PropTypes.number,
   blockId: PropTypes.number,
   saveCluster: PropTypes.func,
   deleteCluster: PropTypes.func,
@@ -118,14 +120,14 @@ EditClusterView.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const { clusterId } = ownProps;
-  const institutionIds = state.boundaries.boundariesByParentId[clusterId];
+  const { clusterNodeId } = ownProps;
+  const institutionIds = state.boundaries.boundariesByParentId[clusterNodeId];
   const hasSchools = institutionIds && institutionIds.length > 0;
   return {
     hasSchools,
     openConfirmModal: state.appstate.confirmModal,
     canSubmit: state.appstate.enableSubmitForm,
-    cluster: state.boundaries.boundaryDetails[clusterId],
+    cluster: state.boundaries.boundaryDetails[clusterNodeId],
   };
 };
 

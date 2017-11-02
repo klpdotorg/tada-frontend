@@ -31,11 +31,11 @@ class EditDistrictForm extends Component {
 
   saveDistrict() {
     const myform = this.myform.getModel();
-    this.props.saveDistrict(this.props.districtId, myform.DistrictName);
+    this.props.saveDistrict(this.props.boundary.id, myform.DistrictName);
   }
 
   deleteDistrict() {
-    this.props.deleteDistrict(this.props.districtId, DEFAULT_PARENT_ID);
+    this.props.deleteDistrict(this.props.boundary.id, DEFAULT_PARENT_ID);
   }
 
   render() {
@@ -127,12 +127,12 @@ class EditDistrictForm extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  const { districtId } = ownProps;
+  const { districtNodeId } = ownProps;
 
   return {
     canSubmit: state.appstate.enableSubmitForm,
-    boundary: state.boundaries.boundaryDetails[districtId],
-    hasBlocks: state.boundaries[districtId] && state.boundaries[districtId].length,
+    boundary: state.boundaries.boundaryDetails[districtNodeId],
+    hasBlocks: state.boundaries[districtNodeId] && state.boundaries[districtNodeId].length,
     confirmModal: state.appstate.confirmModal,
   };
 };
