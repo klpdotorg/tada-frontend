@@ -5,7 +5,7 @@ import $ from 'jquery';
 
 import { SideBarWrapper } from '../../components/SideBar';
 import { SchoolsNavTree, PermissionsNavTree, ProgramNavTree } from './index';
-import { getEntity } from '../../actions';
+import { getEntity, setParentNode } from '../../actions';
 import { DEFAULT_PARENT_NODE_ID } from 'config';
 
 class SideBar extends Component {
@@ -17,11 +17,13 @@ class SideBar extends Component {
 
   componentDidMount() {
     this.props.getEntity(DEFAULT_PARENT_NODE_ID);
+    this.props.setParentNode(DEFAULT_PARENT_NODE_ID);
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.selectedPrimarySchool !== nextProps.selectedPrimarySchool) {
       this.props.getEntity(DEFAULT_PARENT_NODE_ID);
+      this.props.setParentNode(DEFAULT_PARENT_NODE_ID);
     }
   }
 
@@ -53,6 +55,7 @@ SideBar.propTypes = {
   location: PropTypes.object,
   selectedPrimarySchool: PropTypes.bool,
   getEntity: PropTypes.func,
+  setParentNode: PropTypes.func,
 };
 
 const mapStateToProps = (state, ownProps) => ({
@@ -60,6 +63,6 @@ const mapStateToProps = (state, ownProps) => ({
   selectedPrimarySchool: state.schoolSelection.primarySchool,
 });
 
-const SideBarContainer = connect(mapStateToProps, { getEntity })(SideBar);
+const SideBarContainer = connect(mapStateToProps, { getEntity, setParentNode })(SideBar);
 
 export { SideBarContainer };

@@ -23,3 +23,4 @@ export const SET_BOUNDARIES = 'BOUNDARIES_FULFILLED';
 export const SET_INSTITUTION_CATS = 'set_institution_cats';
 export const SET_INSTITUTION_LANGUAGES = 'set_institution_languages';
 export const SET_INSTITUTION_MANAGEMENTS = 'set_institution_managements';
+export const SET_PARENT_NODE = 'set_parent_node';

@@ -13,6 +13,9 @@ import {
   getBoundaryType
 } from './utils';
 import store from '../store';
+import {
+  SET_PARENT_NODE
+} from '../actions';
 
 /**
  + * Classes need to have a label that's a combination of name and section. This method
@@ -72,6 +75,11 @@ export function boundaries(
   action,
 ) {
   switch (action.type) {
+    case SET_PARENT_NODE:
+      return {
+        ...state,
+        parentNode: action.value
+      }
     case 'BOUNDARIES_FULFILLED':
       if (action.payload.results.length > 0) {
         const boundaryDetails = processBoundaryDetails(

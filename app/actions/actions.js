@@ -12,6 +12,16 @@ import { urls as Urls, roles as ROLES } from '../constants';
 import _ from 'lodash';
 import { boundaryType, genUrl } from './utils';
 import { computeRouterPathForEntity } from '../reducers/utils';
+import {
+  SET_PARENT_NODE
+} from './types';
+
+export const setParentNode = (value) => {
+  return {
+    type: SET_PARENT_NODE,
+    value
+  }
+}
 
 export const selectPrimaryTree = () => {
   return {

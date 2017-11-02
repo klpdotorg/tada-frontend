@@ -9,7 +9,7 @@ import { PrimaryCluster } from './containers/PrimaryCluster';
 import { Institution } from './containers/Institution';
 import { PreschoolProject } from './containers/PreschoolProject';
 import { PreschoolCircle } from './containers/PreschoolCircle';
-import Preschool from './components/Preschool';
+import { Preschool } from './containers/Preschool';
 import StudentGroup from './components/StudentGroup';
 import Students from './components/Students';
 import Student from './components/Student';
@@ -72,7 +72,7 @@ export const routes = (
           component={PreschoolCircle}
         />
         <Route
-          path="district/:districtId/project/:projectId/circle/:circleId/institution/:institutionId"
+          path="district/:districtNodeId/project/:projectNodeId/circle/:circleNodeId/institution/:institutionNodeId"
           component={Preschool}
         />
         <Route
