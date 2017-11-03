@@ -27,8 +27,8 @@ const PrimaryDistrictView = ({ isLoading, district, districtNodeId }) => {
       {sessionStorage.getItem('isAdmin')
         ? <EditDistrict districtNodeId={districtNodeId} />
         : <NoPermissionDistrictView name={district.name} />}
-      <CreateBlock parent={district.id} />
-      <CreateProject parent={district.id} />
+      <CreateBlock parent={district.id} parentNodeId={districtNodeId} />
+      <CreateProject parent={district.id} parentNodeId={districtNodeId} />
     </div>
   );
 };

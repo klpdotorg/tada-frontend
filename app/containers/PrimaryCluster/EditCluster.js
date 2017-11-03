@@ -11,6 +11,7 @@ import {
   disableSubmitForm,
   showConfirmModal,
   closeConfirmModal,
+  setParentNode,
 } from '../../actions';
 import ConfirmModal from '../../components/Modals/Confirm';
 
@@ -26,7 +27,7 @@ class EditClusterView extends Component {
 
   saveCluster() {
     const myform = this.myform.getModel();
-    this.props.saveCluster(this.props.cluster.id, myform.ClusterName);
+    this.props.saveCluster(this.props.blockNodeId, this.props.cluster.id, myform.ClusterName);
   }
 
   deleteCluster() {
@@ -110,6 +111,7 @@ EditClusterView.propTypes = {
   openConfirmModal: PropTypes.bool,
   cluster: PropTypes.object,
   blockId: PropTypes.number,
+  blockNodeId: PropTypes.string,
   saveCluster: PropTypes.func,
   deleteCluster: PropTypes.func,
   enableSubmitForm: PropTypes.func,
@@ -138,7 +140,8 @@ const mapDispatchToProps = dispatch => ({
       modal: 'createInstitution',
     });
   },
-  saveCluster: (clusterId, clusterName) => {
+  saveCluster: (blockNodeId, clusterId, clusterName) => {
+    dispatch(setParentNode(blockNodeId));
     dispatch(modifyBoundary(clusterId, clusterName));
   },
   deleteCluster: (clusterId, blockId) => {

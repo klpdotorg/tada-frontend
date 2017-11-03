@@ -13,6 +13,7 @@ import {
   deleteBoundary,
   showConfirmModal,
   closeConfirmModal,
+  setParentNode
 } from '../../actions';
 
 const { Input } = FRC;
@@ -27,7 +28,7 @@ class EditBlockForm extends Component {
 
   onClickSaveBlock() {
     const myform = this.myform.getModel();
-    this.props.saveBlock(this.props.block.id, myform.BlockName);
+    this.props.saveBlock(this.props.districtNodeId, this.props.block.id, myform.BlockName);
   }
 
   onClickDeleteBlock() {
@@ -109,6 +110,7 @@ class EditBlockForm extends Component {
 EditBlockForm.propTypes = {
   block: PropTypes.object,
   districtId: PropTypes.number,
+  districtNodeId: PropTypes.string,
   hasClusters: PropTypes.bool,
   openConfirmModal: PropTypes.bool,
   canSubmit: PropTypes.bool,
@@ -140,7 +142,8 @@ const mapDispatchToProps = dispatch => ({
       modal: 'createCluster',
     });
   },
-  saveBlock: (blockId, blockName) => {
+  saveBlock: (districtNodeId, blockId, blockName) => {
+    dispatch(setParentNode(districtNodeId));
     dispatch(modifyBoundary(blockId, blockName));
   },
   deleteBlock: (blockId, districtId) => {

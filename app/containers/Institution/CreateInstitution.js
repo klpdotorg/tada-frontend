@@ -11,6 +11,7 @@ import {
   saveNewInstitution,
   enableSubmitForm,
   disableSubmitForm,
+  openNode,
 } from '../../actions';
 
 const { Input, Textarea, Select } = FRC;
@@ -47,7 +48,7 @@ class CreateInstitutionForm extends Component {
       return soFar;
     }, {});
 
-    this.props.save(filterInstitution);
+    this.props.save(this.props.clusterNodeId, filterInstitution);
   }
 
   render() {
@@ -168,6 +169,7 @@ class CreateInstitutionForm extends Component {
 }
 
 CreateInstitutionForm.propTypes = {
+  clusterNodeId: PropTypes.string,
   isOpen: PropTypes.bool,
   canSubmit: PropTypes.bool,
   title: PropTypes.string,
@@ -192,7 +194,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  save: (form) => {
+  save: (clusterNodeId, form) => {
+    dispatch(openNode(clusterNodeId));
     dispatch(saveNewInstitution(form));
   },
   enableSubmitForm: () => {

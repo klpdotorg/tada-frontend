@@ -11,6 +11,7 @@ import {
   disableSubmitForm,
   showConfirmModal,
   closeConfirmModal,
+  setParentNode,
 } from '../../actions';
 
 import ConfirmModal from '../../components/Modals/Confirm';
@@ -41,7 +42,7 @@ class EditInstitutionForm extends Component {
       id: this.props.institution.id,
     };
 
-    this.props.saveInstitution(institution);
+    this.props.saveInstitution(this.props.clusterNodeId, institution);
   }
 
   deleteInstitution() {
@@ -223,6 +224,7 @@ EditInstitutionForm.propTypes = {
   canSubmit: PropTypes.bool,
   openConfirmModal: PropTypes.bool,
   clusterId: PropTypes.number,
+  clusterNodeId: PropTypes.string,
   institution: PropTypes.object,
   hasClasses: PropTypes.bool,
   languages: PropTypes.array,
@@ -253,8 +255,10 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  saveInstitution: institution => {
-    dispatch(saveInstitution(institution));
+  saveInstitution: (clusterNodeId, institution) => {
+    console.log('calling this is the clusternodeId', clusterNodeId);
+    dispatch(setParentNode(clusterNodeId));
+    dispatch(saveInstitution(clusterNodeId, institution));
   },
   deleteInstitution: (clusterId, institutionId) => {
     dispatch(deleteInstitution(clusterId, institutionId));

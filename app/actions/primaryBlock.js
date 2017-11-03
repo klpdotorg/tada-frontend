@@ -1,8 +1,11 @@
 import { push } from 'react-router-redux';
 
 import { post } from './requests';
-import { computeRouterPathForEntity } from '../reducers/utils';
-import { responseReceivedFromServer, openNode, toggleModal } from './index';
+import {
+  responseReceivedFromServer,
+  openNode,
+  toggleModal,
+} from './index';
 import { SERVER_API_BASE as serverApiBase } from 'config';
 
 export const saveNewBlock = (name, districtId) => (dispatch, getState) => {
@@ -19,7 +22,11 @@ export const saveNewBlock = (name, districtId) => (dispatch, getState) => {
     dispatch(responseReceivedFromServer({ results: [response] }));
     dispatch(toggleModal('createBlock'));
     dispatch(openNode(response.id));
-    const boundary = computeRouterPathForEntity(response, getState().boundaries.boundaryDetails);
+
+    // fetching entity from store
+    const boundaryDetails = getState().boundaries.boundaryDetails;
+    const boundary = boundaryDetails[`${response.id}${response.boundary_type}`];
+    console.log(boundary);
     dispatch(push(boundary.path));
   });
 };

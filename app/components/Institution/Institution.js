@@ -39,6 +39,7 @@ const InstitutionView = props => {
         <div className="base-spacing-sm" />
         <EditInstitution
           clusterId={cluster.id}
+          clusterNodeId={params.clusterNodeId}
           institutionNodeId={params.institutionNodeId}
         />
       </div>

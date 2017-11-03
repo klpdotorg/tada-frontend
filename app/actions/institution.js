@@ -2,6 +2,7 @@ import { push } from 'react-router-redux';
 
 import { SERVER_API_BASE as serverApiBase } from 'config';
 import { get, post, deleteRequest } from './requests';
+import { getBoundaryType } from '../reducers/utils';
 import {
   SET_INSTITUTION_LANGUAGES,
   SET_INSTITUTION_CATS,
@@ -16,7 +17,6 @@ import {
   closeBoundaryLoading,
   removeBoundary,
 } from './index';
-import { computeRouterPathForEntity } from '../reducers/utils';
 
 export const setInstitutionCats = value => ({
   type: SET_INSTITUTION_CATS,
@@ -107,31 +107,34 @@ export const saveNewInstitution = (options) => (
 
     post(`${serverApiBase}institutions/`, newOptions)
     .then(response => {
-      console.log(response);
+      const type = getBoundaryType(response);
       dispatch(responseReceivedFromServer({ results: [response] }));
       dispatch(toggleModal('createInstitution'));
       dispatch(openNode(response.id));
-      const boundary = computeRouterPathForEntity(response, getState().boundaries.boundaryDetails);
-      console.log(boundary, 'Boundary save new institution.');
+
+      // fetching entity from store
+      const boundaryDetails = getState().boundaries.boundaryDetails;
+      const boundary = boundaryDetails[`${response.id}${type}`];
+      console.log(boundary);
       dispatch(push(boundary.path));
     });
   }
 );
 
-export const deleteInstitution = (parentId, instiId) => (dispatch) => {
-  return deleteRequest(`${serverApiBase}institutions/${instiId}`)
-    .then(response => {
-      if (response.status >= 200 && response.status < 300) {
-        dispatch(removeBoundary(instiId, parentId));
-        // Route the user to the home dashboard page since the page they were on will be deleted
-        dispatch(push('/'));
-      } else {
-        const error = new Error(response.statusText);
-        error.response = response;
-        throw error;
-      }
-    })
-    .catch(error => {
-      console.log('request failed', error);
-    });
-};
+export const deleteInstitution = (parentId, instiId) => (dispatch) => (
+  deleteRequest(`${serverApiBase}institutions/${instiId}`)
+  .then(response => {
+    if (response.status >= 200 && response.status < 300) {
+      dispatch(removeBoundary(instiId, parentId));
+      // Route the user to the home dashboard page since the page they were on will be deleted
+      dispatch(push('/'));
+    } else {
+      const error = new Error(response.statusText);
+      error.response = response;
+      throw error;
+    }
+  })
+  .catch(error => {
+    console.log('request failed', error);
+  })
+);

@@ -35,7 +35,7 @@ export default class CreateDistrict extends Component {
   submitForm() {
     var myform = this.myform.getModel();
 
-    this.props.save(myform.entityName, this.props.parent);
+    this.props.save(myform.entityName, this.props.parent, this.props.parentNodeId);
   }
 
   handleChange(e) {

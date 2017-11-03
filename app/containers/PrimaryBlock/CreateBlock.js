@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { saveNewBlock } from '../../actions';
+import { saveNewBlock, openNode } from '../../actions';
 
 import CreateBoundary from '../../components/Modals/CreateBoundary';
 
@@ -16,7 +16,8 @@ const mapDispatchToProps = dispatch => ({
       modal: 'createBlock',
     });
   },
-  save: (name, districtId) => {
+  save: (name, districtId, parentNodeId) => {
+    dispatch(openNode(parentNodeId));
     dispatch(saveNewBlock(name, districtId));
   },
 });

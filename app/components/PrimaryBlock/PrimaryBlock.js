@@ -30,9 +30,17 @@ const PrimaryBlockView = ({ isLoading, district, block, params }) => {
         </li>
       </ol>
       {sessionStorage.getItem('isAdmin')
-        ? <EditBlock blockNodeId={params.blockNodeId} districtId={district.id} />
+        ?
+        <EditBlock
+          blockNodeId={params.blockNodeId}
+          districtNodeId={params.districtNodeId}
+          districtId={district.id}
+        />
         : <NoPermissionBlockView />}
-      <CreateCluster parent={block.id} />
+      <CreateCluster
+        parent={block.id}
+        parentNodeId={params.districtNodeId}
+      />
     </div>
   );
 };

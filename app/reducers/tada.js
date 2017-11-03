@@ -15,7 +15,7 @@ import {
 import store from '../store';
 import {
   SET_PARENT_NODE
-} from '../actions';
+} from '../actions/types';
 
 /**
  + * Classes need to have a label that's a combination of name and section. This method
@@ -76,6 +76,7 @@ export function boundaries(
 ) {
   switch (action.type) {
     case SET_PARENT_NODE:
+      console.log(action.value, 'Calling set block');
       return {
         ...state,
         parentNode: action.value

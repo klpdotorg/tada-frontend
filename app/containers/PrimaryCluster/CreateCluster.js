@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { saveNewCluster } from '../../actions';
+import { saveNewCluster, openNode } from '../../actions';
 
 import CreateBoundary from '../../components/Modals/CreateBoundary';
 
@@ -16,7 +16,8 @@ const mapDispatchToProps = dispatch => ({
       modal: 'createCluster',
     });
   },
-  save: (name, blockId) => {
+  save: (name, blockId, parentNodeId) => {
+    dispatch(openNode(parentNodeId));
     dispatch(saveNewCluster(name, blockId));
   },
 });
