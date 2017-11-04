@@ -2,6 +2,7 @@ import { SERVER_API_BASE, STATE_CODE } from 'config';
 import { get, patch } from './requests';
 import {
   fetchInstitutionDetails,
+  fetchStudentGroup,
   showBoundaryLoading,
   closeBoundaryLoading,
   openNode,
@@ -22,6 +23,8 @@ export const getEntity = (parentEntityId, moreIds) => (
     switch (entity.depth) {
       case 2:
         return dispatch(fetchInstitutionDetails(entity.id, moreIds));
+      case 3:
+        return dispatch(fetchStudentGroup(entity.id, moreIds));
       default:
         return dispatch(fetchBoundaries(entity.id, moreIds));
     }

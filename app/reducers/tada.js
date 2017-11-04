@@ -26,7 +26,7 @@ import {
 function createLabelForClass(entity) {
   var entityType = getEntityType(entity);
   if (entityType == CLASS) {
-    entity.label = entity.name + entity.section;
+    entity.label = entity.name + entity.section ? entity.section : '';
   }
   return entity;
 }

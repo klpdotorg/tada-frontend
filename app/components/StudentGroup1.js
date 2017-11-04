@@ -294,6 +294,7 @@ class StudentGroup extends Component {
                   {canModify ? 'Modify Details' : 'View Details'}
                 </h4>
               </div>
+
               {isSchool
                 ? <div className="col-md-4 pull-right">
                     <button

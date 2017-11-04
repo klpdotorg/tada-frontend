@@ -10,7 +10,7 @@ import { Institution } from './containers/Institution';
 import { PreschoolProject } from './containers/PreschoolProject';
 import { PreschoolCircle } from './containers/PreschoolCircle';
 import { Preschool } from './containers/Preschool';
-import StudentGroup from './components/StudentGroup';
+import { StudentGroup } from './containers/StudentGroup';
 import Students from './components/Students';
 import Student from './components/Student';
 import { LoginContainer } from './containers/Login';
@@ -80,7 +80,7 @@ export const routes = (
           component={Teachers}
         />
         <Route
-          path="district/:districtId/project/:projectId/circle/:circleId/institution/:institutionId/studentgroups/:groupId"
+          path="district/:districtNodeId/project/:projectNodeId/circle/:circleNodeId/institution/:institutionNodeId/studentgroup/:studentGroupNodeId"
           component={StudentGroup}
         />
         <Route
@@ -102,7 +102,7 @@ export const routes = (
           component={Teachers}
         />
         <Route
-          path="district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId/studentgroups/:groupId"
+          path="district/:districtNodeId/block/:blockNodeId/cluster/:clusterNodeId/institution/:institutionNodeId/studentgroup/:studentGroupNodeId"
           component={StudentGroup}
         />
         <Route

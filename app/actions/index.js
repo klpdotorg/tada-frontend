@@ -13,3 +13,4 @@ export * from './primaryBlock';
 export * from './primaryCluster';
 export * from './primaryDistrict';
 export * from './institution';
+export * from './StudentGroup';

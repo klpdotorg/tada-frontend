@@ -3,16 +3,32 @@ import PropTypes from 'prop-types';
 import { isEmpty } from 'lodash';
 import { Link } from 'react-router';
 
-const StudentGroupView = (props) => {
-  const { isLoading, district, block, cluster, institution, group } = props;
+import {
+  NoPermissionView,
+  StudentGroupActions,
+} from './index';
+import {
+  EditStudentGroup,
+} from '../../containers/StudentGroup';
+import {
+  Loading,
+} from '../common';
 
-  if (isLoading || isEmpty(group)) {
-    return (
-      <div>
-        <i className="fa fa-cog fa-spin fa-lg fa-fw" />
-        <span className="text-muted">Loading...</span>
-      </div>
-    );
+const StudentGroupView = (props) => {
+  const {
+    isPrimary,
+    isLoading,
+    district,
+    block,
+    cluster,
+    institution,
+    studentGroup,
+    params,
+  } = props;
+  const canModify = props.hasPermissions(institution.id);
+
+  if (isLoading || isEmpty(studentGroup)) {
+    return <Loading />;
   }
 
   return (
@@ -40,21 +56,46 @@ const StudentGroupView = (props) => {
         </li>
         <li>
           <Link className="active">
-            {group.name}
+            {studentGroup.name}
           </Link>
         </li>
       </ol>
+      <NoPermissionView canModify={canModify} />
+      <div className="row">
+        <div className="col-md-8">
+          <h4 className="text-primary">
+            {canModify ? 'Modify Details' : 'View Details'}
+          </h4>
+        </div>
+        <StudentGroupActions
+          isPrimary={isPrimary}
+          canModify={canModify}
+          viewStudent={() => props.viewStudent(studentGroup.path)}
+          showBulkAdd={props.showBulkAdd}
+        />
+      </div>
+      <div className="base-spacing-mid border-base" />
+      <EditStudentGroup
+        institutionId={institution.id}
+        institutionNodeId={params.institutionNodeId}
+        studentGroupNodeId={params.studentGroupNodeId}
+      />
     </div>
   );
 };
 
 StudentGroupView.propTypes = {
   isLoading: PropTypes.bool,
+  isPrimary: PropTypes.bool,
   district: PropTypes.object,
   block: PropTypes.object,
   cluster: PropTypes.object,
   institution: PropTypes.object,
-  group: PropTypes.object,
+  studentGroup: PropTypes.object,
+  showBulkAdd: PropTypes.func,
+  viewStudent: PropTypes.func,
+  hasPermissions: PropTypes.func,
+  params: PropTypes.object,
 };
 
 export { StudentGroupView };
