@@ -5,10 +5,12 @@ import { isEmpty } from 'lodash';
 
 import { PermissionMessages, InstitutionActions } from './index';
 import { EditInstitution } from '../../containers/Institution';
+import { CreateClass } from '../../containers/StudentGroup';
 import { Loading } from '../common';
 
 const InstitutionView = props => {
   const { isLoading, district, block, cluster, institution, params } = props;
+  const canModify = sessionStorage.getItem('isAdmin');
 
   if (isLoading || isEmpty(institution)) {
     return <Loading />;
@@ -18,23 +20,21 @@ const InstitutionView = props => {
     <div>
       <ol className="breadcrumb">
         <li>
-          <Link to={district.path}>
-            {district.name}
-          </Link>
+          <Link to={district.path}>{district.name}</Link>
         </li>
         <li>
-          {' '}<Link to={block.path}> {block.name}</Link>
+          {' '}
+          <Link to={block.path}> {block.name}</Link>
         </li>
         <li>
-          {' '}<Link to={cluster.path}> {cluster.name}</Link>
+          {' '}
+          <Link to={cluster.path}> {cluster.name}</Link>
         </li>
-        <li className="active">
-          {' '}{institution.name}
-        </li>
+        <li className="active"> {institution.name}</li>
       </ol>
       <div>
         <PermissionMessages />
-        <InstitutionActions />
+        <InstitutionActions canModify={canModify} toggleClassModal={props.toggleClassModal} />
         <div className="border-base" />
         <div className="base-spacing-sm" />
         <EditInstitution
@@ -42,6 +42,7 @@ const InstitutionView = props => {
           clusterNodeId={params.clusterNodeId}
           institutionNodeId={params.institutionNodeId}
         />
+        <CreateClass institutionId={institution.id} institutionNodeId={params.institutionNodeId} />
       </div>
     </div>
   );
@@ -54,6 +55,7 @@ InstitutionView.propTypes = {
   cluster: PropTypes.object,
   institution: PropTypes.object,
   params: PropTypes.object,
+  toggleClassModal: PropTypes.func,
 };
 
 export { InstitutionView };
