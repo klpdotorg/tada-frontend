@@ -49,15 +49,12 @@ export const getEntityType = entity => {
   return type;
 };
 
-export const getBoundaryType = boundary => (
-  boundary.boundary_type
-  ||
-  boundary.institution_type
-  ||
-  (boundary.type && boundary.type.id)
-  ||
-  boundary.group_type
-);
+export const getBoundaryType = boundary =>
+  boundary.boundary_type ||
+  boundary.institution_type ||
+  (boundary.type && boundary.type.id) ||
+  boundary.group_type ||
+  'student';
 /*
 Method computes the router path for an entity and returns it
 */
@@ -94,6 +91,8 @@ export const computeRouterPathForEntity = (entity, boundaryDetails, groupId) => 
         case 'class':
           path = `${parent.path}/studentgroup/${entity.id}${boundaryType}`;
           break;
+        case 'student':
+          path = `${parent.path}/students`;
         default:
           path = null;
       }
@@ -139,6 +138,8 @@ export const nodeDepth = node => {
       return 3;
     case 'class':
       return 4;
+    case 'student':
+      return 5;
     default:
       return null;
   }

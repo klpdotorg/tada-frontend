@@ -15,7 +15,8 @@ import {
   AppState,
   teachers,
   Header,
-  Institution
+  Institution,
+  AddStudents,
 } from './reducers';
 import promiseMiddleware from 'redux-promise-middleware';
 import { reducer as notifications } from 'react-notification-system-redux';
@@ -35,7 +36,8 @@ const reducer = combineReducers({
   boundaries,
   appstate: AppState,
   header: Header,
-  institution: Institution
+  institution: Institution,
+  addStudents: AddStudents,
 });
 
 const middleware = compose(

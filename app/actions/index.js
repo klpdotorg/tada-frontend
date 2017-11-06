@@ -14,3 +14,5 @@ export * from './primaryCluster';
 export * from './primaryDistrict';
 export * from './institution';
 export * from './StudentGroup';
+export * from './Students';
+export * from './AddStudents';

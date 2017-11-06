@@ -24,3 +24,6 @@ export const SET_INSTITUTION_CATS = 'set_institution_cats';
 export const SET_INSTITUTION_LANGUAGES = 'set_institution_languages';
 export const SET_INSTITUTION_MANAGEMENTS = 'set_institution_managements';
 export const SET_PARENT_NODE = 'set_parent_node';
+export const SET_ADD_STUDENTS_FORM_ERRORS = 'set_add_students_form_errors';
+export const SET_LANGUAGES_FOR_ADD_STUDENTS_FORM = 'set_languages_for_add_students_form';
+export const ADD_STUDENTS_FORM_VALUE_CHANGED = 'add_students_form_value_changed';

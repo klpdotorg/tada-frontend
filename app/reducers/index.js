@@ -10,3 +10,4 @@ export * from './Login';
 export * from './Modal';
 export * from './PasswordReset';
 export * from './Institution';
+export * from './AddStudents';

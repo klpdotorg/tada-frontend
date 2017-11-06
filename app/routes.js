@@ -11,6 +11,7 @@ import { PreschoolProject } from './containers/PreschoolProject';
 import { PreschoolCircle } from './containers/PreschoolCircle';
 import { Preschool } from './containers/Preschool';
 import { StudentGroup } from './containers/StudentGroup';
+import { AddStudents } from './containers/AddStudents';
 import Students from './components/Students';
 import Student from './components/Student';
 import { LoginContainer } from './containers/Login';
@@ -66,7 +67,10 @@ export const routes = (
         />
         <Route path="users" component={Users} />
         <Route path="permissions" component={PermissionsContainer} />
-        <Route path="district/:districtNodeId/project/:projectNodeId" component={PreschoolProject} />
+        <Route
+          path="district/:districtNodeId/project/:projectNodeId"
+          component={PreschoolProject}
+        />
         <Route
           path="district/:districtNodeId/project/:projectNodeId/circle/:circleNodeId"
           component={PreschoolCircle}
@@ -86,6 +90,10 @@ export const routes = (
         <Route
           path="district/:districtId/project/:projectId/circle/:circleId/institution/:institutionId/studentgroups/:groupId/students"
           component={Students}
+        />
+        <Route
+          path="district/:districtId/project/:projectId/circle/:circleId/institution/:institutionId/studentgroups/:groupId/addStudents"
+          component={AddStudents}
         />
         <Route path="district/:districtNodeId" component={PrimaryDistrict} />
         <Route path="district/:districtNodeId/block/:blockNodeId" component={PrimaryBlock} />
@@ -108,6 +116,10 @@ export const routes = (
         <Route
           path="district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId/studentgroups/:groupId/students"
           component={Students}
+        />
+        <Route
+          path="district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId/studentgroups/:groupId/addStudents"
+          component={AddStudents}
         />
         <Route
           path="district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId/studentgroups/:groupId/students/:studentId"
