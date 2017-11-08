@@ -4,7 +4,7 @@ import { STATE_CODE } from 'config';
 import store from '../store';
 import { syncError } from './notifications';
 
-export const checkStatus = response => {
+export const checkStatus = (response) => {
   if (response.status >= 200 && response.status < 300) {
     return response.json();
   } else if (response.status === 401) {
@@ -18,7 +18,7 @@ export const checkStatus = response => {
   throw error;
 };
 
-export const checkStatusNoJSON = response => {
+export const checkStatusNoJSON = (response) => {
   if (response.status >= 200 && response.status < 300) {
     return response;
   } else if (response.status === 401) {
@@ -40,7 +40,7 @@ export const get = url =>
     },
   })
     .then(checkStatus)
-    .catch(e => {
+    .catch((e) => {
       store.dispatch(Notifications.error(syncError(e)));
     });
 
@@ -49,12 +49,13 @@ export const deleteRequest = url =>
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: 'Token 47d78a3b3a324896999a8caa0f153c2cda39f8a6',
     },
-  }).catch(e => {
+  }).catch((e) => {
     store.dispatch(Notifications.error(syncError(e)));
   });
 
-export const post = (url, body) => (
+export const post = (url, body) =>
   fetch(url, {
     method: 'POST',
     headers: {
@@ -63,12 +64,11 @@ export const post = (url, body) => (
     },
     body: JSON.stringify(body),
   })
-  .then(checkStatus)
-  .catch(e => {
-    store.dispatch(Notifications.error(syncError(e)));
-    throw e;
-  })
-);
+    .then(checkStatus)
+    .catch((e) => {
+      store.dispatch(Notifications.error(syncError(e)));
+      throw e;
+    });
 
 export const patch = (url, body) =>
   fetch(url, {
@@ -80,7 +80,7 @@ export const patch = (url, body) =>
     body: JSON.stringify(body),
   })
     .then(checkStatus)
-    .catch(e => {
+    .catch((e) => {
       console.log(e);
       store.dispatch(Notifications.error(syncError(e)));
       throw e;
