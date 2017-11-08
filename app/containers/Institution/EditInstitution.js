@@ -39,6 +39,7 @@ class EditInstitutionForm extends Component {
       cat: myform.institutionCat,
       languages: myform.institutionLang,
       mgmt: myform.institutionMgmt,
+      last_verified_year: myform.lastVerifiedYear,
       id: this.props.institution.id,
     };
 
@@ -65,6 +66,7 @@ class EditInstitutionForm extends Component {
       institutionCategories,
       managements,
       openConfirmModal,
+      lastVerifiedYears,
     } = this.props;
     return (
       <Formsy.Form
@@ -192,12 +194,19 @@ class EditInstitutionForm extends Component {
             />
           </div>
         </div>
+        <div className="form-group">
+          <div className="col-sm-12">
+            <Select
+              name="lastVerifiedYear"
+              label="Last Verified Year:"
+              value={institution.last_verified_year}
+              options={lastVerifiedYears}
+              required
+            />
+          </div>
+        </div>
         <div className="col-md-12">
-          <button
-            type="submit"
-            className="btn btn-primary padded-btn"
-            disabled={!canSubmit}
-          >
+          <button type="submit" className="btn btn-primary padded-btn" disabled={!canSubmit}>
             Save
           </button>
           <button
@@ -229,6 +238,7 @@ EditInstitutionForm.propTypes = {
   hasClasses: PropTypes.bool,
   languages: PropTypes.array,
   managements: PropTypes.array,
+  lastVerifiedYears: PropTypes.array,
   institutionCategories: PropTypes.array,
   saveInstitution: PropTypes.func,
   deleteInstitution: PropTypes.func,
@@ -248,15 +258,15 @@ const mapStateToProps = (state, ownProps) => {
     openConfirmModal: state.appstate.confirmModal,
     institution: state.boundaries.boundaryDetails[institutionNodeId],
     canSubmit: state.appstate.enableSubmitForm,
-    languages: state.institution.languages,
+    languages: state.languages.languages,
     managements: state.institution.managements,
     institutionCategories: state.institution.institutionCats,
+    lastVerifiedYears: state.institution.lastVerifiedYears,
   };
 };
 
 const mapDispatchToProps = dispatch => ({
   saveInstitution: (clusterNodeId, institution) => {
-    console.log('calling this is the clusternodeId', clusterNodeId);
     dispatch(setParentNode(clusterNodeId));
     dispatch(saveInstitution(clusterNodeId, institution));
   },

@@ -1,8 +1,10 @@
 import { SET_INSTITUTION_CATS, SET_INSTITUTION_MANAGEMENTS } from '../actions/types';
+import { lastVerifiedYears } from '../Data';
 
 const INITIAL_STATE = {
   institutionCats: [],
   managements: [],
+  lastVerifiedYears,
 };
 
 const Institution = (state = INITIAL_STATE, action) => {

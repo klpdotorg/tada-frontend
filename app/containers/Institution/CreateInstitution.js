@@ -7,17 +7,11 @@ import _ from 'lodash';
 
 import 'react-select/dist/react-select.css';
 import { Modal } from '../../components/Modal';
-import {
-  saveNewInstitution,
-  enableSubmitForm,
-  disableSubmitForm,
-  openNode,
-} from '../../actions';
+import { saveNewInstitution, enableSubmitForm, disableSubmitForm, openNode } from '../../actions';
 
 const { Input, Textarea, Select } = FRC;
 
 class CreateInstitutionForm extends Component {
-
   constructor(props) {
     super(props);
 
@@ -37,16 +31,21 @@ class CreateInstitutionForm extends Component {
       gender: myform.institutionGender,
       category: myform.institutionCat,
       management: myform.institutionManagement,
+      last_verified_year: myform.last_verified_year,
       status: 'AC',
       dise: 599419,
     };
 
-    const filterInstitution = _.reduce(institution, (soFar, value, key) => {
-      if (value) {
-        soFar[key] = value;
-      }
-      return soFar;
-    }, {});
+    const filterInstitution = _.reduce(
+      institution,
+      (soFar, value, key) => {
+        if (value) {
+          soFar[key] = value;
+        }
+        return soFar;
+      },
+      {},
+    );
 
     this.props.save(this.props.clusterNodeId, filterInstitution);
   }
@@ -59,6 +58,7 @@ class CreateInstitutionForm extends Component {
       languages,
       managements,
       institutionCategories,
+      lastVerifiedYears,
     } = this.props;
 
     const selectOptions = [
@@ -88,7 +88,6 @@ class CreateInstitutionForm extends Component {
             value=""
             label="School Name:"
             type="text"
-            value=""
             placeholder={placeHolder}
             required
             validations="minLength:1"
@@ -162,6 +161,13 @@ class CreateInstitutionForm extends Component {
             type="text"
             className="form-control"
           />
+          <Select
+            name="last_verified_year"
+            label="Last Verified Year:"
+            value={_.get(lastVerifiedYears[0], 'value')}
+            options={lastVerifiedYears}
+            required
+          />
         </Formsy.Form>
       </Modal>
     );
@@ -177,6 +183,7 @@ CreateInstitutionForm.propTypes = {
   parent: PropTypes.number,
   languages: PropTypes.array,
   managements: PropTypes.array,
+  lastVerifiedYears: PropTypes.array,
   institutionCategories: PropTypes.array,
   save: PropTypes.func,
   enableSubmitForm: PropTypes.func,
@@ -184,13 +191,14 @@ CreateInstitutionForm.propTypes = {
   closeConfirmModal: PropTypes.func,
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   title: 'Create New Institution',
   isOpen: state.modal.createInstitution,
   canSubmit: state.appstate.enableSubmitForm,
-  languages: state.institution.languages,
+  languages: state.languages.languages,
   managements: state.institution.managements,
   institutionCategories: state.institution.institutionCats,
+  lastVerifiedYears: state.institution.lastVerifiedYears,
 });
 
 const mapDispatchToProps = dispatch => ({

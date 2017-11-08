@@ -11,3 +11,5 @@ export * from './Modal';
 export * from './PasswordReset';
 export * from './Institution';
 export * from './AddStudents';
+export * from './Students';
+export * from './Languages';
