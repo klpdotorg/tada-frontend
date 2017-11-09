@@ -3,9 +3,14 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 
 import { AddStudentsForm } from '../../containers/AddStudents';
+import { Loading } from '../common';
 
-const AddStudentsView = props => {
-  const { district, block, cluster, institution, studentGroup } = props;
+const AddStudentsView = (props) => {
+  const { district, block, cluster, institution, studentGroup, isLoading, params } = props;
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <div>
@@ -26,7 +31,11 @@ const AddStudentsView = props => {
           <Link className="active">{studentGroup.name}</Link>
         </li>
       </ol>
-      <AddStudentsForm />
+      <AddStudentsForm
+        studentGroupNodeId={params.studentGroupNodeId}
+        studentGroupId={studentGroup.id}
+        institutionId={institution.id}
+      />
     </div>
   );
 };
@@ -37,6 +46,7 @@ AddStudentsView.propTypes = {
   cluster: PropTypes.object,
   institution: PropTypes.object,
   studentGroup: PropTypes.object,
+  params: PropTypes.object,
   isLoading: PropTypes.bool,
 };
 
