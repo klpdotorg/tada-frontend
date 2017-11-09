@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { openNode, saveNewStudends, addStudentsFormValueChanged } from '../../actions';
+import { lastVerifiedYears } from '../../Data';
 
 class AddStudentsInputRowForm extends Component {
   constructor(props) {
@@ -20,7 +21,8 @@ class AddStudentsInputRowForm extends Component {
       motherMiddleName: '',
       motherLastName: '',
       uid: '',
-      mt: 1,
+      mt: _.get(this.props.languages, '[0].value'),
+      academic_year: '0607',
       gender: 'male',
     };
   }
@@ -41,7 +43,7 @@ class AddStudentsInputRowForm extends Component {
         <td>
           <input
             value={this.state.first_name}
-            onChange={e => {
+            onChange={(e) => {
               this.changeVal(e, 'first_name');
             }}
             type="text"
@@ -52,7 +54,7 @@ class AddStudentsInputRowForm extends Component {
         <td>
           <input
             value={this.state.middle_name}
-            onChange={e => {
+            onChange={(e) => {
               this.changeVal(e, 'middle_name');
             }}
             type="text"
@@ -62,7 +64,7 @@ class AddStudentsInputRowForm extends Component {
         <td>
           <input
             value={this.state.last_name}
-            onChange={e => {
+            onChange={(e) => {
               this.changeVal(e, 'last_name');
             }}
             type="text"
@@ -72,7 +74,7 @@ class AddStudentsInputRowForm extends Component {
         <td>
           <input
             value={this.state.uid}
-            onChange={e => {
+            onChange={(e) => {
               this.changeVal(e, 'uid');
             }}
             type="text"
@@ -82,7 +84,7 @@ class AddStudentsInputRowForm extends Component {
         <td>
           <select
             className="col-sm-1"
-            onChange={e => {
+            onChange={(e) => {
               this.changeVal(e, 'gender');
             }}
             value={this.state.gender}
@@ -95,7 +97,7 @@ class AddStudentsInputRowForm extends Component {
         </td>
         <td>
           <select
-            onChange={e => {
+            onChange={(e) => {
               this.changeVal(e, 'mt');
             }}
             value={this.state.mt}
@@ -110,9 +112,25 @@ class AddStudentsInputRowForm extends Component {
           </select>
         </td>
         <td>
+          <select
+            onChange={(e) => {
+              this.changeVal(e, 'academic_year');
+            }}
+            value={this.state.academic_year}
+            className="form-control"
+            id="gender"
+          >
+            {lastVerifiedYears.map((year, i) => (
+              <option key={i} value={year.value}>
+                {_.startCase(year.label)}
+              </option>
+            ))}
+          </select>
+        </td>
+        <td>
           <input
             value={this.state.dob}
-            onChange={e => {
+            onChange={(e) => {
               this.changeVal(e, 'dob');
             }}
             type="date"
@@ -122,7 +140,7 @@ class AddStudentsInputRowForm extends Component {
         <td>
           <input
             value={this.state.fatherFirstName}
-            onChange={e => {
+            onChange={(e) => {
               this.changeVal(e, 'fatherFirstName');
             }}
             type="text"
@@ -132,7 +150,7 @@ class AddStudentsInputRowForm extends Component {
         <td>
           <input
             value={this.state.fatherMiddleName}
-            onChange={e => {
+            onChange={(e) => {
               this.changeVal(e, 'fatherMiddleName');
             }}
             type="text"
@@ -142,7 +160,7 @@ class AddStudentsInputRowForm extends Component {
         <td>
           <input
             value={this.state.fatherLastName}
-            onChange={e => {
+            onChange={(e) => {
               this.changeVal(e, 'fatherLastName');
             }}
             type="text"
@@ -152,7 +170,7 @@ class AddStudentsInputRowForm extends Component {
         <td>
           <input
             value={this.state.motherFirstName}
-            onChange={e => {
+            onChange={(e) => {
               this.changeVal(e, 'motherFirstName');
             }}
             type="text"
@@ -162,7 +180,7 @@ class AddStudentsInputRowForm extends Component {
         <td>
           <input
             value={this.state.motherMiddleName}
-            onChange={e => {
+            onChange={(e) => {
               this.changeVal(e, 'motherMiddleName');
             }}
             type="text"
@@ -172,7 +190,7 @@ class AddStudentsInputRowForm extends Component {
         <td>
           <input
             value={this.state.motherLastName}
-            onChange={e => {
+            onChange={(e) => {
               this.changeVal(e, 'motherLastName');
             }}
             type="text"
@@ -186,7 +204,7 @@ class AddStudentsInputRowForm extends Component {
 
 const mapStateToProps = state => ({
   formErrors: state.addStudents.formErrors,
-  languages: state.addStudents.languages,
+  languages: state.languages.languages,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -194,8 +212,8 @@ const mapDispatchToProps = dispatch => ({
     dispatch(openNode(studentGroupNodeId));
     dispatch(saveNewStudends(form));
   },
-  updateValue: value => {
-    dispatch(addStudentsFormValueChanged(value));
+  updateValue: (value, rowNumber) => {
+    dispatch(addStudentsFormValueChanged(value, rowNumber));
   },
 });
 

@@ -7,9 +7,7 @@ import { push } from 'react-router-redux';
 import { DEFAULT_PARENT_NODE_ID } from 'config';
 import { userHasPermissions } from '../../components/utils';
 import { StudentGroupView } from '../../components/StudentGroup';
-import {
-  getEntities,
-} from '../../actions';
+import { getEntities } from '../../actions';
 
 class FetchStudentGroupEntity extends Component {
   constructor(props) {
@@ -91,8 +89,8 @@ const mapDispatchToProps = dispatch => ({
   getEntities: (entityIds) => {
     dispatch(getEntities(entityIds));
   },
-  showBulkAdd: () => {
-    console.log('Show bulk add.');
+  showBulkAdd: (path) => {
+    dispatch(push(`${path}/addStudents`));
   },
 });
 

@@ -5,6 +5,7 @@ import { pop } from 'react-router-redux';
 import _ from 'lodash';
 
 import { AddStudentsInputRow } from './index';
+import { setAddStudentsFormErrors, addStudents, openNode } from '../../actions';
 
 const REQUIRED_FIELDS = [
   {
@@ -14,14 +15,6 @@ const REQUIRED_FIELDS = [
   {
     value: 'dob',
     label: 'Date of Birth',
-  },
-  {
-    value: 'fatherFirstName',
-    label: 'Father First Name',
-  },
-  {
-    value: 'motherFirstName',
-    label: 'Mother First Name',
   },
   {
     value: 'gender',
@@ -35,12 +28,13 @@ class AddStudentsFormView extends Component {
 
     this.renderErrors = this.renderErrors.bind(this);
     this.renderRows = this.renderRows.bind(this);
+    this.validate = this.validate.bind(this);
   }
 
   setRequiredField(field) {
     let required = '';
 
-    _.map(REQUIRED_FIELDS, requiredField => {
+    _.map(REQUIRED_FIELDS, (requiredField) => {
       if (_.includes(requiredField.value, field)) {
         required = '*';
       }
@@ -62,6 +56,24 @@ class AddStudentsFormView extends Component {
         {` Please enter ${_.uniq(formErrors).join(', ')} fields value before submitting the form.`}
       </div>
     );
+  }
+
+  validate() {
+    const { values, studentGroupId, studentGroupNodeId, institutionId, path } = this.props;
+
+    const errorList = [];
+    _.values(values).forEach((value) => {
+      REQUIRED_FIELDS.forEach((requiredField) => {
+        if (!value[requiredField.value]) {
+          errorList.push(requiredField.label);
+        }
+      });
+    });
+
+    this.props.setAddStudentFormErrors(errorList);
+    if (_.isEmpty(errorList)) {
+      this.props.addStudents(studentGroupNodeId, studentGroupId, institutionId, path);
+    }
   }
 
   renderRows() {
@@ -118,18 +130,34 @@ class AddStudentsFormView extends Component {
 AddStudentsFormView.propTypes = {
   closeAddStudentForm: PropTypes.func,
   formErrors: PropTypes.array,
+  studentGroupNodeId: PropTypes.string,
+  institutionId: PropTypes.number,
+  studentGroupId: PropTypes.number,
+  path: PropTypes.string,
   rows: PropTypes.number,
+  values: PropTypes.object,
+  setAddStudentFormErrors: PropTypes.func,
+  addStudents: PropTypes.func,
 };
 
 const mapDispatchToProps = dispatch => ({
   closeAddStudentForm: () => {
     dispatch(pop());
   },
+  setAddStudentFormErrors: (errors) => {
+    dispatch(setAddStudentsFormErrors(errors));
+  },
+  addStudents: (studentGroupNodeId, studentGroupId, institutionId, path) => {
+    dispatch(openNode(studentGroupNodeId));
+    dispatch(addStudents(studentGroupId, institutionId, path));
+  },
 });
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, ownProps) => ({
   formErrors: state.addStudents.formErrors,
   rows: state.addStudents.rows,
+  values: state.addStudents.values,
+  path: _.get(state.boundaries.boundaryDetails, `[${ownProps.studentGroupNodeId}].path`),
 });
 
 const AddStudentsForm = connect(mapStateToProps, mapDispatchToProps)(AddStudentsFormView);

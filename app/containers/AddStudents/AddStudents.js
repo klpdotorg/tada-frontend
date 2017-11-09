@@ -1,18 +1,49 @@
 import React, { Component } from 'react';
-import { get } from 'lodash';
+import PropTypes from 'prop-types';
+import { get, isEmpty } from 'lodash';
 import { connect } from 'react-redux';
 
+import { DEFAULT_PARENT_NODE_ID } from 'config';
+
 import { AddStudentsView } from '../../components/AddStudents';
+import { getEntities, getLanguages } from '../../actions';
 
 class FetchAddStudentResources extends Component {
   componentDidMount() {
-    // this.props.getLanguages();
+    const { params, studentGroup } = this.props;
+
+    const {
+      blockNodeId,
+      districtNodeId,
+      clusterNodeId,
+      institutionNodeId,
+      studentGroupNodeId,
+    } = params;
+
+    if (isEmpty(studentGroup)) {
+      this.props.getEntities([
+        DEFAULT_PARENT_NODE_ID,
+        districtNodeId,
+        blockNodeId,
+        clusterNodeId,
+        institutionNodeId,
+        studentGroupNodeId,
+      ]);
+    }
+    this.props.getLanguages();
   }
 
   render() {
     return <AddStudentsView {...this.props} />;
   }
 }
+
+FetchAddStudentResources.propTypes = {
+  params: PropTypes.object,
+  studentGroup: PropTypes.object,
+  getEntities: PropTypes.func,
+  getLanguages: PropTypes.func,
+};
 
 const mapStateToProps = (state, ownProps) => {
   const {
@@ -32,6 +63,10 @@ const mapStateToProps = (state, ownProps) => {
     isLoading: state.appstate.loadingBoundary,
   };
 };
-const AddStudents = connect(mapStateToProps)(FetchAddStudentResources);
+
+const AddStudents = connect(mapStateToProps, {
+  getEntities,
+  getLanguages,
+})(FetchAddStudentResources);
 
 export { AddStudents };

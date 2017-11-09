@@ -29,7 +29,7 @@ export const fetchStudentGroup = (parentBoundaryId, moreIds) => (dispatch) => {
     });
 };
 
-export const modifyStudentGroup = (studentGroup, studentGroupId) => (dispatch, getState) => {
+export const modifyStudentGroup = (studentGroup, studentGroupId) => (dispatch) => {
   patch(`${SERVER_API_BASE}studentgroups/${studentGroupId}/`, studentGroup).then((response) => {
     dispatch(setBoundaries({ results: [response] }));
   });

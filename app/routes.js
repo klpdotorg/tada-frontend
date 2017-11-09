@@ -118,7 +118,7 @@ export const routes = (
           component={ViewStudents}
         />
         <Route
-          path="district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId/studentgroup/:groupId/addStudents"
+          path="district/:districtNodeId/block/:blockNodeId/cluster/:clusterNodeId/institution/:institutionNodeId/studentgroup/:studentGroupNodeId/addStudents"
           component={AddStudents}
         />
         <Route

@@ -26,7 +26,10 @@ const AddStudents = (state = INITIAL_STATE, action) => {
     case ADD_STUDENTS_FORM_VALUE_CHANGED:
       return {
         ...state,
-        values: action.value,
+        values: {
+          ...state.values,
+          [action.rowNumber]: action.value,
+        },
       };
     default:
       return state;
