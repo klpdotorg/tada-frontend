@@ -21,7 +21,6 @@ import {
 const { Input } = FRC;
 
 class EditDistrictForm extends Component {
-
   constructor() {
     super();
 
@@ -45,32 +44,32 @@ class EditDistrictForm extends Component {
 
     return (
       <div>
-        {hasBlocks
-          ?
+        {hasBlocks ? (
           <div className="alert alert-info">
             <i className="fa fa-info-circle fa-lg" aria-hidden="true" /> You cannot delete this
             boundary until its children are deleted
           </div>
-          :
+        ) : (
           <div />
-        }
+        )}
         <h4 className="text-primary col-md-10">Modify Details</h4>
-        {boundaryType === 2
-          ? <button
+        {boundaryType === 2 ? (
+          <button
             className="btn btn-green pull-right"
             title="Add Project"
             onClick={this.props.toggleProjectModal}
           >
             Add Project
           </button>
-          : <button
+        ) : (
+          <button
             className="btn btn-orange pull-right"
             title="Add Block"
             onClick={this.props.toggleBlockModal}
           >
             Add Block
           </button>
-        }
+        )}
         <div className="base-spacing-mid border-base" />
         <Formsy.Form
           onValidSubmit={this.saveDistrict}
@@ -166,7 +165,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(modifyBoundary(districtId, name));
   },
   deleteDistrict(districtId, parentId) {
-    dispatch(deleteBoundary(this.districtId, parentId));
+    dispatch(deleteBoundary(districtId, parentId));
   },
   fetchEntities: (districtId, boundaryType) => {
     dispatch(openNode(districtId));

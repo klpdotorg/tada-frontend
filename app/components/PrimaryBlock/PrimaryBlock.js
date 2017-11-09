@@ -21,26 +21,20 @@ const PrimaryBlockView = ({ isLoading, district, block, params }) => {
     <div>
       <ol className="breadcrumb">
         <li>
-          <Link to={district.path}>
-            {district.name}
-          </Link>
+          <Link to={district.path}>{district.name}</Link>
         </li>
-        <li className="active">
-          {block.name}
-        </li>
+        <li className="active">{block.name}</li>
       </ol>
-      {sessionStorage.getItem('isAdmin')
-        ?
+      {sessionStorage.getItem('isAdmin') ? (
         <EditBlock
           blockNodeId={params.blockNodeId}
           districtNodeId={params.districtNodeId}
           districtId={district.id}
         />
-        : <NoPermissionBlockView />}
-      <CreateCluster
-        parent={block.id}
-        parentNodeId={params.districtNodeId}
-      />
+      ) : (
+        <NoPermissionBlockView />
+      )}
+      <CreateCluster parent={block.id} parentNodeId={params.blockNodeId} />
     </div>
   );
 };
