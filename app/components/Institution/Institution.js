@@ -8,9 +8,9 @@ import { EditInstitution } from '../../containers/Institution';
 import { CreateClass } from '../../containers/StudentGroup';
 import { Loading } from '../common';
 
-const InstitutionView = props => {
+const InstitutionView = (props) => {
   const { isLoading, district, block, cluster, institution, params } = props;
-  const canModify = sessionStorage.getItem('isAdmin');
+  const canModify = !isEmpty(sessionStorage.getItem('isAdmin'));
 
   if (isLoading || isEmpty(institution)) {
     return <Loading />;
@@ -33,7 +33,7 @@ const InstitutionView = props => {
         <li className="active"> {institution.name}</li>
       </ol>
       <div>
-        <PermissionMessages />
+        <PermissionMessages canModify={canModify} />
         <InstitutionActions canModify={canModify} toggleClassModal={props.toggleClassModal} />
         <div className="border-base" />
         <div className="base-spacing-sm" />

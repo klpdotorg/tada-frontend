@@ -1,7 +1,7 @@
 import { push } from 'react-router-redux';
 
 import { SERVER_API_BASE as serverApiBase } from 'config';
-import { get, post, deleteRequest } from './requests';
+import { get, post, patch, deleteRequest } from './requests';
 import { getBoundaryType } from '../reducers/utils';
 import { SET_INSTITUTION_CATS, SET_INSTITUTION_MANAGEMENTS } from './types';
 import {
@@ -70,6 +70,16 @@ export const getInstitutionCategories = () => (dispatch) => {
     });
 };
 
+export const modifyInstitution = (options, Id) => (dispatch, getState) => {
+  console.log(JSON.stringify(options));
+  const boundaryType = getState().schoolSelection.primarySchool ? 'primary' : 'pre';
+  const newOptions = { ...options, institution_type: boundaryType };
+
+  patch(`${serverApiBase}institutions/${Id}/`, newOptions).then((response) => {
+    dispatch(responseReceivedFromServer({ results: [response] }));
+  });
+};
+
 export const saveNewInstitution = options => (dispatch, getState) => {
   const boundaryType = getState().schoolSelection.primarySchool ? 'primary' : 'pre';
   const newOptions = { ...options, institution_type: boundaryType };
@@ -83,7 +93,7 @@ export const saveNewInstitution = options => (dispatch, getState) => {
     // fetching entity from store
     const boundaryDetails = getState().boundaries.boundaryDetails;
     const boundary = boundaryDetails[`${response.id}${type}`];
-    console.log(boundary);
+    console.log(boundary, response);
     dispatch(push(boundary.path));
   });
 };

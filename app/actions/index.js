@@ -16,3 +16,4 @@ export * from './institution';
 export * from './StudentGroup';
 export * from './Students';
 export * from './AddStudents';
+export * from './languages';

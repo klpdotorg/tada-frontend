@@ -12,7 +12,7 @@ import { PreschoolCircle } from './containers/PreschoolCircle';
 import { Preschool } from './containers/Preschool';
 import { StudentGroup } from './containers/StudentGroup';
 import { AddStudents } from './containers/AddStudents';
-import Students from './components/Students';
+import { ViewStudents } from './containers/ViewStudents';
 import Student from './components/Student';
 import { LoginContainer } from './containers/Login';
 import Logout from './components/Logout';
@@ -88,11 +88,11 @@ export const routes = (
           component={StudentGroup}
         />
         <Route
-          path="district/:districtId/project/:projectId/circle/:circleId/institution/:institutionId/studentgroups/:groupId/students"
-          component={Students}
+          path="district/:districtId/project/:projectId/circle/:circleId/institution/:institutionId/studentgroup/:groupId/students"
+          component={ViewStudents}
         />
         <Route
-          path="district/:districtId/project/:projectId/circle/:circleId/institution/:institutionId/studentgroups/:groupId/addStudents"
+          path="district/:districtId/project/:projectId/circle/:circleId/institution/:institutionId/studentgroup/:groupId/addStudents"
           component={AddStudents}
         />
         <Route path="district/:districtNodeId" component={PrimaryDistrict} />
@@ -114,11 +114,11 @@ export const routes = (
           component={StudentGroup}
         />
         <Route
-          path="district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId/studentgroups/:groupId/students"
-          component={Students}
+          path="district/:districtNodeId/block/:blockNodeId/cluster/:clusterNodeId/institution/:institutionNodeId/studentgroup/:studentGroupNodeId/students"
+          component={ViewStudents}
         />
         <Route
-          path="district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId/studentgroups/:groupId/addStudents"
+          path="district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId/studentgroup/:groupId/addStudents"
           component={AddStudents}
         />
         <Route

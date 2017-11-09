@@ -33,7 +33,7 @@ export const getParentId = (entity, group) => {
   return parent;
 };
 
-export const getEntityType = entity => {
+export const getEntityType = (entity) => {
   var type = '';
   if (entity) {
     if (entity.institution_gender) {
@@ -93,6 +93,7 @@ export const computeRouterPathForEntity = (entity, boundaryDetails, groupId) => 
           break;
         case 'student':
           path = `${parent.path}/students`;
+          break;
         default:
           path = null;
       }
@@ -117,7 +118,7 @@ export const computeRouterPathForEntity = (entity, boundaryDetails, groupId) => 
   return { ...entity, path };
 };
 
-export const nodeDepth = node => {
+export const nodeDepth = (node) => {
   const category = getBoundaryType(node);
   switch (category) {
     case 'SD':

@@ -4,10 +4,9 @@ import { connect } from 'react-redux';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
 
-
 import {
   deleteStudentGroup,
-  saveStudentGroup,
+  modifyStudentGroup,
   enableSubmitForm,
   disableSubmitForm,
   showConfirmModal,
@@ -20,10 +19,37 @@ import ConfirmModal from '../../components/Modals/Confirm';
 const { Input, Select } = FRC;
 
 class EditStudentGroupForm extends Component {
+  constructor(props) {
+    super(props);
+
+    this.saveStudentGroup = this.saveStudentGroup.bind(this);
+    this.deleteStudentGroup = this.deleteStudentGroup.bind(this);
+  }
+
+  saveStudentGroup() {
+    const myform = this.myform.getModel();
+
+    const studentGroup = {
+      name: myform.className,
+      section: myform.sectionName,
+      group_type: myform.groupType,
+    };
+
+    this.props.saveStudentGroup(
+      this.props.institutionNodeId,
+      this.props.studentGroup.id,
+      studentGroup,
+    );
+  }
+
+  deleteStudentGroup() {
+    console.log('Delete student group');
+  }
+
   render() {
     const studentGroupTypes = [
       { label: 'Class', value: 'class' },
-      { label: 'Center', value: 'Center' },
+      { label: 'Center', value: 'center' },
     ];
 
     const { canSubmit, openConfirmModal, studentGroup, hasStudents } = this.props;
@@ -77,7 +103,7 @@ class EditStudentGroupForm extends Component {
           <button
             type="submit"
             className="btn btn-primary padded-btn"
-            disabled={!canSubmit}
+            onClick={this.saveStudentGroup}
           >
             Save
           </button>
@@ -101,22 +127,19 @@ class EditStudentGroupForm extends Component {
   }
 }
 
-
 EditStudentGroupForm.propTypes = {
   canSubmit: PropTypes.bool,
   openConfirmModal: PropTypes.bool,
-  institutionId: PropTypes.number,
-  institutionNodeId: PropTypes.string,
   studentGroup: PropTypes.object,
   hasStudents: PropTypes.bool,
   saveStudentGroup: PropTypes.func,
+  institutionNodeId: PropTypes.string,
   deleteStudentGroup: PropTypes.func,
   showConfirmModal: PropTypes.func,
   closeConfirmModal: PropTypes.func,
   enableSubmitForm: PropTypes.func,
   disableSubmitForm: PropTypes.func,
 };
-
 
 const mapStateToProps = (state, ownProps) => {
   const { studentGroupNodeId } = ownProps;
@@ -133,9 +156,9 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  saveStudentGroup: (institutionNodeId, studentGroup) => {
+  saveStudentGroup: (institutionNodeId, studentGroupId, studentGroup) => {
     dispatch(setParentNode(institutionNodeId));
-    dispatch(saveStudentGroup(institutionNodeId, studentGroup));
+    dispatch(modifyStudentGroup(studentGroup, studentGroupId));
   },
   deleteStudentGroup: (institutionId, studentGroupId) => {
     dispatch(deleteStudentGroup(institutionId, studentGroupId));

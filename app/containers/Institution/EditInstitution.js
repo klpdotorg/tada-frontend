@@ -6,7 +6,7 @@ import FRC from 'formsy-react-components';
 
 import {
   deleteInstitution,
-  saveInstitution,
+  modifyInstitution,
   enableSubmitForm,
   disableSubmitForm,
   showConfirmModal,
@@ -26,28 +26,31 @@ class EditInstitutionForm extends Component {
     this.deleteInstitution = this.deleteInstitution.bind(this);
   }
 
-  saveInsti() {
-    const myform = this.myform.getModel();
-    const institution = {
-      dise_code: myform.institutionDise_code,
-      institution_gender: myform.institutionGender,
-      name: myform.name,
-      address: myform.institutionAddress,
-      area: myform.institutionArea,
-      landmark: myform.institutionLandmark,
-      pincode: myform.institutionPincode,
-      cat: myform.institutionCat,
-      languages: myform.institutionLang,
-      mgmt: myform.institutionMgmt,
-      last_verified_year: myform.lastVerifiedYear,
-      id: this.props.institution.id,
-    };
-
-    this.props.saveInstitution(this.props.clusterNodeId, institution);
+  getValue(value) {
+    return value || '';
   }
 
   deleteInstitution() {
     this.props.deleteInstitution(Number(this.props.clusterId), Number(this.props.institution.id));
+  }
+
+  saveInsti() {
+    const myform = this.myform.getModel();
+    const institution = {
+      dise: myform.institutionDise_code,
+      gender: myform.institutionGender,
+      name: myform.institutionName,
+      address: myform.institutionAddress,
+      area: myform.institutionArea,
+      landmark: myform.institutionLandmark,
+      pincode: myform.institutionPincode,
+      category: myform.institutionCat,
+      languages: myform.institutionLang,
+      management: myform.institutionMgmt,
+      last_verified_year: myform.lastVerifiedYear,
+    };
+
+    this.props.saveInstitution(this.props.clusterNodeId, this.props.institution.id, institution);
   }
 
   render() {
@@ -80,7 +83,7 @@ class EditInstitutionForm extends Component {
             <Input
               name="institutionName"
               id="institutionName"
-              value={institution.name}
+              value={this.getValue(institution.name)}
               label="Institution :"
               type="text"
               className="form-control"
@@ -96,7 +99,7 @@ class EditInstitutionForm extends Component {
               cols={40}
               name="institutionAddress"
               label="Address :"
-              value={institution.address}
+              value={this.getValue(institution.address)}
               required
               validations="minLength:1"
             />
@@ -107,7 +110,7 @@ class EditInstitutionForm extends Component {
             <Input
               name="institutionArea"
               id="institutionArea"
-              value={institution.area}
+              value={this.getValue(institution.area)}
               label="Area:"
               type="text"
               className="form-control"
@@ -119,7 +122,7 @@ class EditInstitutionForm extends Component {
             <Input
               name="institutionLandmark"
               id="institutionLandmark"
-              value={institution.landmark}
+              value={this.getValue(institution.landmark)}
               label="Landmark:"
               type="text"
               className="form-control"
@@ -131,7 +134,7 @@ class EditInstitutionForm extends Component {
             <Input
               name="institutionPincode"
               id="institutionPincode"
-              value={institution.pincode}
+              value={this.getValue(institution.pincode)}
               label="Pincode:"
               type="text"
               className="form-control"
@@ -143,7 +146,7 @@ class EditInstitutionForm extends Component {
             <Select
               name="institutionCat"
               label="Category:"
-              value={institution.category}
+              value={this.getValue(institution.category)}
               options={institutionCategories}
             />
           </div>
@@ -154,7 +157,7 @@ class EditInstitutionForm extends Component {
               multiple
               name="institutionLang"
               label="Medium:"
-              value={institution.languages}
+              value={this.getValue(institution.languages)}
               options={languages}
               required
             />
@@ -165,7 +168,7 @@ class EditInstitutionForm extends Component {
             <Select
               name="institutionGender"
               label="Gender:"
-              value={institution.institution_gender}
+              value={this.getValue(institution.gender)}
               options={singleSelectOptions}
               required
             />
@@ -176,7 +179,7 @@ class EditInstitutionForm extends Component {
             <Select
               name="institutionMgmt"
               label="Management:"
-              value={institution.mgmt}
+              value={this.getValue(institution.management)}
               options={managements}
               required
             />
@@ -187,7 +190,7 @@ class EditInstitutionForm extends Component {
             <Input
               name="institutionDise_code"
               id="institutionDise_code"
-              value={institution.dise_code}
+              value={this.getValue(institution.dise_code)}
               label="DISE Code:"
               type="text"
               className="form-control"
@@ -199,14 +202,14 @@ class EditInstitutionForm extends Component {
             <Select
               name="lastVerifiedYear"
               label="Last Verified Year:"
-              value={institution.last_verified_year}
+              value={this.getValue(institution.last_verified_year)}
               options={lastVerifiedYears}
               required
             />
           </div>
         </div>
         <div className="col-md-12">
-          <button type="submit" className="btn btn-primary padded-btn" disabled={!canSubmit}>
+          <button type="submit" className="btn btn-primary padded-btn">
             Save
           </button>
           <button
@@ -266,9 +269,9 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  saveInstitution: (clusterNodeId, institution) => {
+  saveInstitution: (clusterNodeId, institutionId, institution) => {
     dispatch(setParentNode(clusterNodeId));
-    dispatch(saveInstitution(clusterNodeId, institution));
+    dispatch(modifyInstitution(institution, institutionId));
   },
   deleteInstitution: (clusterId, institutionId) => {
     dispatch(deleteInstitution(clusterId, institutionId));

@@ -1,7 +1,7 @@
 import { push } from 'react-router-redux';
 
 import { SERVER_API_BASE } from 'config';
-import { get, post } from './requests';
+import { get, post, patch } from './requests';
 import { getBoundaryType } from '../reducers/utils';
 import {
   setBoundaries,
@@ -13,10 +13,10 @@ import {
   openNode,
 } from './index';
 
-export const fetchStudentGroup = (parentBoundaryId, moreIds) => dispatch => {
+export const fetchStudentGroup = (parentBoundaryId, moreIds) => (dispatch) => {
   const studentgroupUrl = `${SERVER_API_BASE}institutions/${parentBoundaryId}/studentgroups/`;
   return get(studentgroupUrl)
-    .then(data => {
+    .then((data) => {
       dispatch(setBoundaries(data));
       if (moreIds && moreIds.length) {
         dispatch(getEntities(moreIds));
@@ -24,13 +24,19 @@ export const fetchStudentGroup = (parentBoundaryId, moreIds) => dispatch => {
         dispatch(closeBoundaryLoading());
       }
     })
-    .catch(error => {
+    .catch((error) => {
       dispatch(requestFailed(error));
     });
 };
 
+export const modifyStudentGroup = (studentGroup, studentGroupId) => (dispatch, getState) => {
+  patch(`${SERVER_API_BASE}studentgroups/${studentGroupId}/`, studentGroup).then((response) => {
+    dispatch(setBoundaries({ results: [response] }));
+  });
+};
+
 export const saveNewClass = options => (dispatch, getState) => {
-  post(`${SERVER_API_BASE}studentgroups/`, options).then(response => {
+  post(`${SERVER_API_BASE}studentgroups/`, options).then((response) => {
     const type = getBoundaryType(response);
     dispatch(responseReceivedFromServer({ results: [response] }));
     dispatch(toggleModal('createClass'));

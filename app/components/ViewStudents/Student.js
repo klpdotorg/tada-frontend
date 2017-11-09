@@ -2,16 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { dateParser } from '../../utils';
 
-const StudentView = props => {
-  const { id, first_name, last_name, uid, gender, dob, langVal } = props.student;
+const StudentView = (props) => {
+  const { student, selectedStudents } = props;
+  const { id, first_name, last_name, uid, gender, dob, langVal } = student;
+  const checked = selectedStudents.includes(id);
   return (
     <tr>
       <td>
-        <input
-          checked={true || props.selectedStudents.has(props.id)}
-          // onChange={props.selectStudent}
-          type="checkbox"
-        />
+        <input checked={checked} onChange={props.selectStudent} type="checkbox" />
       </td>
       <td>{id}</td>
       <td>
@@ -23,11 +21,11 @@ const StudentView = props => {
       <td>{dateParser(dob)}</td>
       <td>
         ___
-        {/* displayFullName(get(relations, 'Father[0]'))*/}
+        {/* displayFullName(get(relations, 'Father[0]')) */}
       </td>
       <td>
         ___
-        {/* displayFullName(get(relations, 'Mother[0]'))*/}
+        {/* displayFullName(get(relations, 'Mother[0]')) */}
       </td>
       <td>
         <button
@@ -57,6 +55,8 @@ const StudentView = props => {
 
 StudentView.propTypes = {
   student: PropTypes.object,
+  selectedStudents: PropTypes.array,
+  selectStudent: PropTypes.func,
 };
 
 export { StudentView };
