@@ -53,8 +53,6 @@ const mapStateToProps = (state, ownProps) => {
 
   const studentIds = state.boundaries.boundariesByParentId[studentGroupNodeId];
 
-  console.log(studentIds);
-
   return {
     district: get(state.boundaries.boundaryDetails, districtNodeId, {}),
     block: get(state.boundaries.boundaryDetails, blockNodeId, {}),
@@ -66,11 +64,13 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const mapDispatchToProps = dispatch => ({
-  getEntities: entities => {
-    dispatch(getEntities(entities));
-  },
-});
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getEntities: (entities) => {
+      dispatch(getEntities(entities));
+    },
+  };
+};
 
 const ViewStudents = connect(mapStateToProps, mapDispatchToProps)(FetchStudents);
 

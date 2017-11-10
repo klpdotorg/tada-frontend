@@ -30,7 +30,7 @@ const StudentView = (props) => {
       <td>
         <button
           onClick={() => {
-            // props.openModifyStudent({ ...props });
+            props.openEditStudentModal(props.id);
           }}
           className="btn btn-primary padded-btn"
           data-toggle="tooltip"
@@ -56,6 +56,7 @@ const StudentView = (props) => {
 StudentView.propTypes = {
   student: PropTypes.object,
   selectedStudents: PropTypes.array,
+  openEditStudentModal: PropTypes.func,
   selectStudent: PropTypes.func,
 };
 

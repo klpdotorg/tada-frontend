@@ -1,13 +1,15 @@
 import { connect } from 'react-redux';
 
 import { StudentView } from '../../components/ViewStudents';
-import { selectStudent } from '../../actions';
+import { selectStudent, openEditStudentModal } from '../../actions';
 
-const mapStateToProps = (state, ownProps) => ({
-  student: state.boundaries.boundaryDetails[ownProps.id],
-  selectedStudents: state.students.selectedStudents,
-});
+const mapStateToProps = (state, ownProps) => {
+  return {
+    student: state.boundaries.boundaryDetails[ownProps.id],
+    selectedStudents: state.students.selectedStudents,
+  };
+};
 
-const Student = connect(mapStateToProps, { selectStudent })(StudentView);
+const Student = connect(mapStateToProps, { selectStudent, openEditStudentModal })(StudentView);
 
 export { Student };

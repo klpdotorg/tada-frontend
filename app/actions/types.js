@@ -28,3 +28,5 @@ export const SET_ADD_STUDENTS_FORM_ERRORS = 'set_add_students_form_errors';
 export const SET_LANGUAGES_FOR_ADD_STUDENTS_FORM = 'set_languages_for_add_students_form';
 export const ADD_STUDENTS_FORM_VALUE_CHANGED = 'add_students_form_value_changed';
 export const SELECT_STUDENT_IN_VIEW_STUDENTS = 'select_student_in_view_students';
+export const TOGGLE_MODAL = 'TOGGLE_MODAL';
+export const SET_EDIT_STUDENT_ID = 'set_edit_student_id';

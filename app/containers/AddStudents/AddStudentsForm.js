@@ -43,21 +43,6 @@ class AddStudentsFormView extends Component {
     return required;
   }
 
-  renderErrors() {
-    const { formErrors } = this.props;
-
-    if (!formErrors.length) {
-      return <div />;
-    }
-
-    return (
-      <div className="alert alert-danger">
-        <strong>Error:</strong>
-        {` Please enter ${_.uniq(formErrors).join(', ')} fields value before submitting the form.`}
-      </div>
-    );
-  }
-
   validate() {
     const { values, studentGroupId, studentGroupNodeId, institutionId, path } = this.props;
 
@@ -76,10 +61,25 @@ class AddStudentsFormView extends Component {
     }
   }
 
+  renderErrors() {
+    const { formErrors } = this.props;
+
+    if (!formErrors.length) {
+      return <div />;
+    }
+
+    return (
+      <div className="alert alert-danger">
+        <strong>Error:</strong>
+        {` Please enter ${_.uniq(formErrors).join(', ')} fields value before submitting the form.`}
+      </div>
+    );
+  }
+
   renderRows() {
     const rows = Array.from(Array(this.props.rows).keys());
 
-    return rows.map((row, index) => <AddStudentsInputRow key={index} index={index} />);
+    return rows.map((row, index) => { return <AddStudentsInputRow key={index} index={index} />; });
   }
 
   render() {
@@ -140,25 +140,29 @@ AddStudentsFormView.propTypes = {
   addStudents: PropTypes.func,
 };
 
-const mapDispatchToProps = dispatch => ({
-  closeAddStudentForm: () => {
-    dispatch(pop());
-  },
-  setAddStudentFormErrors: (errors) => {
-    dispatch(setAddStudentsFormErrors(errors));
-  },
-  addStudents: (studentGroupNodeId, studentGroupId, institutionId, path) => {
-    dispatch(openNode(studentGroupNodeId));
-    dispatch(addStudents(studentGroupId, institutionId, path));
-  },
-});
+const mapDispatchToProps = (dispatch) => {
+  return {
+    closeAddStudentForm: () => {
+      dispatch(pop());
+    },
+    setAddStudentFormErrors: (errors) => {
+      dispatch(setAddStudentsFormErrors(errors));
+    },
+    addStudents: (studentGroupNodeId, studentGroupId, institutionId, path) => {
+      dispatch(openNode(studentGroupNodeId));
+      dispatch(addStudents(studentGroupId, institutionId, path));
+    },
+  };
+};
 
-const mapStateToProps = (state, ownProps) => ({
-  formErrors: state.addStudents.formErrors,
-  rows: state.addStudents.rows,
-  values: state.addStudents.values,
-  path: _.get(state.boundaries.boundaryDetails, `[${ownProps.studentGroupNodeId}].path`),
-});
+const mapStateToProps = (state, ownProps) => {
+  return {
+    formErrors: state.addStudents.formErrors,
+    rows: state.addStudents.rows,
+    values: state.addStudents.values,
+    path: _.get(state.boundaries.boundaryDetails, `[${ownProps.studentGroupNodeId}].path`),
+  };
+};
 
 const AddStudentsForm = connect(mapStateToProps, mapDispatchToProps)(AddStudentsFormView);
 

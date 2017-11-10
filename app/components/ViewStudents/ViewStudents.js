@@ -4,9 +4,19 @@ import { Link } from 'react-router';
 
 import { Loading } from '../common';
 import { StudentList } from './index';
+import { EditStudent } from '../../containers/EditStudent';
 
-const ViewStudentsCont = props => {
-  const { district, block, cluster, institution, studentGroup, studentIds, isLoading } = props;
+const ViewStudentsCont = (props) => {
+  const {
+    district,
+    block,
+    cluster,
+    institution,
+    studentGroup,
+    studentIds,
+    params,
+    isLoading,
+  } = props;
 
   if (isLoading) {
     return <Loading />;
@@ -43,8 +53,8 @@ const ViewStudentsCont = props => {
               <th>Gender</th>
               <th>Mother Tongue</th>
               <th>Date of Birth</th>
-              <th>{"Father's Name"}</th>
-              <th>{"Mother's Name"}</th>
+              <th>Father's Name</th>
+              <th>Mother's Name</th>
               <th />
             </tr>
           </thead>
@@ -62,7 +72,7 @@ const ViewStudentsCont = props => {
             >
               {studentGroups}
             </select>
-          </div>*/}
+          </div> */}
           <div className="col-md-8">
             <button type="submit" className="btn btn-primary">
               Map to Center
@@ -70,6 +80,7 @@ const ViewStudentsCont = props => {
           </div>
         </div>
       </div>
+      <EditStudent studentGroupNodeId={params.studentGroupNodeId} />
     </div>
   );
 };
@@ -81,6 +92,7 @@ ViewStudentsCont.propTypes = {
   institution: PropTypes.object,
   studentGroup: PropTypes.object,
   studentIds: PropTypes.array,
+  params: PropTypes.object,
   isLoading: PropTypes.bool,
 };
 
