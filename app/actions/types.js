@@ -30,3 +30,5 @@ export const ADD_STUDENTS_FORM_VALUE_CHANGED = 'add_students_form_value_changed'
 export const SELECT_STUDENT_IN_VIEW_STUDENTS = 'select_student_in_view_students';
 export const TOGGLE_MODAL = 'TOGGLE_MODAL';
 export const SET_EDIT_STUDENT_ID = 'set_edit_student_id';
+export const TEACHER_FETCHED = 'teacher_fetched';
+export const SET_EDIT_TEACHER_ID = 'set_edit_teacher_id';
