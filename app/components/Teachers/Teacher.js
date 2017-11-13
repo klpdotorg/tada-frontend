@@ -1,6 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const Teacher = (props) => {
+const TeacherView = (props) => {
   const { teacher } = props;
   return (
     <tr key={teacher.id}>
@@ -41,3 +42,11 @@ const Teacher = (props) => {
     </tr>
   );
 };
+
+TeacherView.propTypes = {
+  showEditTeacherPopup: PropTypes.func,
+  deleteTeacher: PropTypes.func,
+  teacher: PropTypes.object,
+};
+
+export { TeacherView };

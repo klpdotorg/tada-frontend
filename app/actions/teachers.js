@@ -7,7 +7,20 @@ import {
   teacherNotDeleted,
   teacherNotUpdated,
 } from './notifications';
-import { TEACHER_FETCHED } from './types';
+import { TEACHER_FETCHED, TOGGLE_MODAL, SET_EDIT_TEACHER_ID } from './types';
+
+export const setEditTeacherId = (value) => {
+  return (dispatch) => {
+    dispatch({
+      type: TOGGLE_MODAL,
+      modal: 'editTeacher',
+    });
+    dispatch({
+      type: SET_EDIT_TEACHER_ID,
+      value,
+    });
+  };
+};
 
 export const getTeachers = (institutionId) => {
   return (dispatch) => {

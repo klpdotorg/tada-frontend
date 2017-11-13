@@ -1,11 +1,13 @@
 {
   "extends": "airbnb",
+  "parser": "babel-eslint",
   "rules": {
     "import/prefer-default-export": "off",
     "react/jsx-filename-extension": "off",
     "react/require-default-props": "off",
     "react/forbid-prop-types": "off",
     "object-curly-newline": "off",
-    "class-methods-use-this": "off"
+    "class-methods-use-this": "off",
+    "arrow-body-style": ["error", "always"],
   }
 }
