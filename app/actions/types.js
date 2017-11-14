@@ -32,3 +32,7 @@ export const TOGGLE_MODAL = 'TOGGLE_MODAL';
 export const SET_EDIT_STUDENT_ID = 'set_edit_student_id';
 export const TEACHER_FETCHED = 'teacher_fetched';
 export const SET_EDIT_TEACHER_ID = 'set_edit_teacher_id';
+export const SET_PROGRAMS = 'set_programs';
+export const SET_PROGRAM = 'set_program';
+export const SET_EDIT_PROGRAM_ID = 'set_edit_program_id';
+export const SELECT_PROGRAM = 'select_program';

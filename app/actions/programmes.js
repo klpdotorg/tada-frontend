@@ -1,193 +1,89 @@
-import fetch from 'isomorphic-fetch';
-import { push } from 'react-router-redux';
-import { SERVER_API_BASE as serverApiBase, SERVER_AUTH_BASE as authApiBase } from 'config';
+import { SERVER_API_BASE as serverApiBase } from 'config';
 
-import { get } from './requests';
+import { get, post, patch } from './requests';
+import { SET_PROGRAMS, SET_PROGRAM, TOGGLE_MODAL, SELECT_PROGRAM } from './types';
 
-const programDetails = program => ({
-  type: 'PROGRAM_DETAILS',
-  program,
-});
-
-export const selectProgramBoundary = (assessmentId, programId, studentgroupId, institutionId) => ({
-  type: 'SELECT_PROGRAM_BOUNDARY',
-  assessmentId,
-  programId,
-  studentgroupId,
-  institutionId,
-});
-
-export function fetchAllPrograms() {
-  return function (dispatch, getState) {
-    var url = serverApiBase + 'programmes/' + '?active=2';
-    return fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Token ' + sessionStorage.token,
-      },
-    })
-      .then(checkStatus)
-      .then(data => {
-        dispatch(handleProgramsResponse(data));
-      })
-      .catch(error => {
-        throw error; // Let the higher level layers handle this.
-      });
+export const openEditProgramModal = () => {
+  return (dispatch) => {
+    dispatch({
+      type: TOGGLE_MODAL,
+      modal: 'editProgram',
+    });
   };
-}
-
-/* This method handles the responses received from the programs endpoint
-*/
-function handleProgramsResponse(resp) {
-  return {
-    type: 'PROGRAMS_RESPONSE_RECEIVED',
-    data: resp.results,
-  };
-}
-
-export const programDetailsAPI = id => get(`${serverApiBase}programmes/${id}/?details=True`);
-
-export const getProgramDetails = id => dispatch => {
-  return programDetailsAPI(id).then(details => {
-    return dispatch(programDetails(details));
-  });
 };
 
-function checkStatus(response) {
-  if (response.status >= 200 && response.status < 300) {
-    return response.json();
-  } else if (response.status === 401) {
-    dispatch(push('/login'));
-    return;
-  }
-  const error = new Error(response.statusText);
-  error.response = response.json();
-  throw error;
-}
-
-export function createNewProgram(name, description, startDate, endDate, isActive, instCat) {
-  return function (dispatch, getState) {
-    var url = serverApiBase + 'programmes/';
-    var programInstCat = JSON.stringify({
-      id: 1,
-      boundary_type: 'Primary School',
+export const openCreateProgramModal = () => {
+  return (dispatch) => {
+    dispatch({
+      type: TOGGLE_MODAL,
+      modal: 'createProgram',
     });
-    return fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Token ' + sessionStorage.token,
-      },
-      body: JSON.stringify({
-        name,
-        description,
-        start_date: startDate,
-        end_date: endDate,
-        active: 2,
-        programme_institution_category: instCat,
-      }),
-    })
-      .then(checkStatus)
-      .then(response => {
-        dispatch(createProgramSuccessful(response));
-        return response;
-      });
   };
-}
+};
 
-function createProgramSuccessful(newProgram) {
+export const selectProgram = (value) => {
+  return (dispatch) => {
+    dispatch({
+      type: SELECT_PROGRAM,
+      value,
+    });
+  };
+};
+
+export const setPrograms = (value) => {
   return {
-    type: 'PROGRAM_CREATED',
-    program: newProgram,
+    type: SET_PROGRAMS,
+    value,
   };
-}
+};
 
-function deleteProgramSuccessful(id) {
+export const programCreated = (value) => {
   return {
-    type: 'PROGRAM_DELETED',
-    programId: id,
+    type: SET_PROGRAM,
+    value,
   };
-}
+};
 
-function editProgramSuccessful(edited) {
-  return {
-    type: 'PROGRAM_EDITED',
-    program: edited,
+export const fetchAllPrograms = () => {
+  return (dispatch) => {
+    const fetchProgramsUrl = `${serverApiBase}surveys/`;
+
+    get(fetchProgramsUrl).then((response) => {
+      const { results } = response;
+      dispatch(setPrograms(results));
+      if (results.length) {
+        dispatch(selectProgram(results[0].id));
+      }
+    });
   };
-}
+};
 
-export function deactivateProgram(id) {
-  return function (dispatch, getState) {
-    var url = serverApiBase + 'programmes/' + id + '/';
-    return fetch(url, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Token ' + sessionStorage.token,
-      },
-      body: JSON.stringify({
-        active: 1,
-      }),
-    })
-      .then(checkStatus)
-      .then(response => {
-        // Treat this as a local delete because anyway we are only showing/fetching active programs
-        dispatch(deleteProgramSuccessful(response.id));
-        return response;
+export const saveNewProgram = (options) => {
+  return (dispatch) => {
+    const createProgramURL = `${serverApiBase}surveys/`;
+
+    post(createProgramURL, options).then((response) => {
+      dispatch(programCreated({ [response.id]: response }));
+      dispatch({
+        type: TOGGLE_MODAL,
+        modal: 'createProgram',
       });
+    });
   };
-}
+};
 
-export function editProgram(id, name, description, startDate, endDate, isActive, instCat) {
-  return function (dispatch, getState) {
-    var url = serverApiBase + 'programmes/' + id + '/';
-    return fetch(url, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Token ' + sessionStorage.token,
-      },
-      body: JSON.stringify({
-        name,
-        description,
-        start_date: startDate,
-        end_date: endDate,
-        active: 2,
-        programme_institution_category: instCat,
-      }),
-    })
-      .then(checkStatus)
-      .then(response => {
-        dispatch(editProgramSuccessful(response));
-        return response;
-      });
-  };
-}
+export const saveProgram = (options) => {
+  return (dispatch, getState) => {
+    const { selectedProgram } = getState().programs;
+    const editProgramURL = `${serverApiBase}surveys/${selectedProgram}/`;
 
-export function deleteProgram(id) {
-  return function (dispatch, getState) {
-    var url = serverApiBase + 'programmes/' + id + '/';
-    return fetch(url, {
-      method: 'DELETE',
-      headers: {
-        Authorization: 'Token ' + sessionStorage.token,
-      },
-    })
-      .then(response => {
-        if (response.status >= 200 && response.status < 300) {
-          return response;
-        } else if (response.status === 401) {
-          dispatch(push('/login'));
-          return;
-        }
-        const error = new Error(response.statusText);
-        error.response = response.json();
-        throw error;
-      })
-      .then(response => {
-        dispatch(deleteProgramSuccessful(id));
-        return response;
+    patch(editProgramURL, options).then((response) => {
+      console.log(response);
+      dispatch(programCreated({ [response.id]: response }));
+      dispatch({
+        type: TOGGLE_MODAL,
+        modal: 'editProgram',
       });
+    });
   };
-}
+};

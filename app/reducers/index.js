@@ -1,6 +1,6 @@
 export * from './tada.js';
 export * from './UserAuth.js';
-export * from './programs.js';
+export * from './Programs.js';
 export * from './assessments.js';
 export * from './AppState';
 export * from './Header';

@@ -1,6 +1,8 @@
 import React from 'react';
 import * as actions from '../actions/';
+
 require('bootstrap-datepicker');
+
 import CreateAssessment from './Modals/CreateAssessment';
 import EditAssessment from './Modals/EditAssessment';
 import { Link } from 'react-router';
@@ -109,10 +111,10 @@ export default class Programs extends React.Component {
     // var end = this.createEndDate.value;
     // var isActive = this.isActive.value;
     // var instCat = this.instCat.value;
-    //$('#createProgramModal').modal('hide');
+    // $('#createProgramModal').modal('hide');
     this.props
       .dispatch(actions.createNewProgram(programName, desc, start, end, isActive, instCat))
-      .then(response => {
+      .then((response) => {
         var programName = response.name;
         var message = 'Program created successfully!';
         this.setState({
@@ -122,11 +124,11 @@ export default class Programs extends React.Component {
           selectedProgram: response.id,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         'ERROR in creating program..', JSON.stringify(error);
         $('#programCreationError').text(JSON.stringify(error.response));
         $('#programErrorModal').modal('show');
-        //Show error modal for creating programs
+        // Show error modal for creating programs
       });
   }
 
@@ -156,34 +158,31 @@ export default class Programs extends React.Component {
 
   handleCreateAssessment(name, start_date, end_date, isActive, isDoubleEntry, type) {
     ('Creating assessment');
+
     this.closeCreateAssessmentModal();
-    this.props.dispatch(
-      actions.createAssessment(
-        this.state.selectedProgram,
-        name,
-        start_date,
-        end_date,
-        1,
-        isDoubleEntry,
-        type,
-      ),
-    );
+    this.props.dispatch(actions.createAssessment(
+      this.state.selectedProgram,
+      name,
+      start_date,
+      end_date,
+      1,
+      isDoubleEntry,
+      type,
+    ));
   }
 
   handleEditAssessment(id, name, start_date, end_date, isActive, isDoubleEntry, type) {
     this.closeEditAssessmentModal();
-    this.props.dispatch(
-      actions.editAssessment(
-        this.state.selectedProgram,
-        id,
-        name,
-        start_date,
-        end_date,
-        1,
-        isDoubleEntry,
-        type,
-      ),
-    );
+    this.props.dispatch(actions.editAssessment(
+      this.state.selectedProgram,
+      id,
+      name,
+      start_date,
+      end_date,
+      1,
+      isDoubleEntry,
+      type,
+    ));
   }
 
   openEditProgramModal() {
@@ -223,7 +222,9 @@ export default class Programs extends React.Component {
   }
 
   openEditAssessmentModal(e) {
-    var trId = $(e.currentTarget).closest('tr').prop('id');
+    var trId = $(e.currentTarget)
+      .closest('tr')
+      .prop('id');
     var selectedAssessment = this.props.assessmentsById[trId];
     this.setState({
       isEditAssessmentModalOpen: true,
@@ -245,13 +246,13 @@ export default class Programs extends React.Component {
 
     this.props
       .dispatch(actions.deleteProgram(deleteId))
-      .then(response => {
+      .then((response) => {
         this.setState({
           selectedProgram: nextValue,
         });
         this.selProgram.remove(deleteId);
       })
-      .catch(error => {});
+      .catch((error) => {});
   }
 
   handleShowEditDialog() {
@@ -263,24 +264,22 @@ export default class Programs extends React.Component {
   handleEditProgram(programName, desc, start, end, isActive, instCat) {
     this.closeEditProgramModal();
     this.props
-      .dispatch(
-        actions.editProgram(
-          this.state.selectedProgram,
-          programName,
-          desc,
-          start,
-          end,
-          isActive,
-          instCat,
-        ),
-      )
-      .catch(error => {
+      .dispatch(actions.editProgram(
+        this.state.selectedProgram,
+        programName,
+        desc,
+        start,
+        end,
+        isActive,
+        instCat,
+      ))
+      .catch((error) => {
         'ERROR in editing program..', JSON.stringify(error);
         $('#errorDetails').text(JSON.stringify(error.response));
         $('#errorTitle').text('Edit failed!');
         $('#errorLabel').text('Program could not be edited. Please try again!');
         $('#programErrorModal').modal('show');
-        //Show error modal for creating programs
+        // Show error modal for creating programs
       });
   }
 
@@ -293,7 +292,9 @@ export default class Programs extends React.Component {
   }
 
   selectAssessment(e) {
-    var assId = $(e.currentTarget).closest('tr').prop('id');
+    var assId = $(e.currentTarget)
+      .closest('tr')
+      .prop('id');
     var newSelAssessments = this.state.selectedAssessments.slice();
     if (e.currentTarget.checked && jQuery.inArray(assId, this.state.selectedAssessments) == -1) {
       newSelAssessments.push(assId);
@@ -308,7 +309,7 @@ export default class Programs extends React.Component {
   deleteAssessments() {
     var itemsToDelete = this.state.selectedAssessments;
     var programId = this.state.selectedProgram;
-    itemsToDelete.map(assessmentId => {
+    itemsToDelete.map((assessmentId) => {
       this.props.dispatch(actions.deleteAssessment(programId, assessmentId));
     });
     this.setState({
@@ -339,7 +340,7 @@ export default class Programs extends React.Component {
     let setNextValue = null;
     let nextValue = null;
 
-    _.forEach(programs, program => {
+    _.forEach(programs, (program) => {
       if (nextValue) {
         return;
       }
@@ -375,20 +376,18 @@ export default class Programs extends React.Component {
   createCopyAssess() {
     var itemsToCopy = this.state.selectedAssessments;
     var programId = this.state.selectedProgram;
-    const makeACopy = itemsToCopy.map(assessmentId => {
+    const makeACopy = itemsToCopy.map((assessmentId) => {
       var a = this.props.assessmentsById[assessmentId];
-      var copyName = a.name + ' COPY';
-      return this.props.dispatch(
-        actions.createAssessment(
-          this.state.selectedProgram,
-          copyName,
-          a.start_date,
-          a.end_date,
-          1,
-          a.isDoubleEntry,
-          a.type,
-        ),
-      );
+      var copyName = `${a.name} COPY`;
+      return this.props.dispatch(actions.createAssessment(
+        this.state.selectedProgram,
+        copyName,
+        a.start_date,
+        a.end_date,
+        1,
+        a.isDoubleEntry,
+        a.type,
+      ));
     });
     Promise.all(makeACopy)
       .then(() => {
@@ -397,7 +396,7 @@ export default class Programs extends React.Component {
           selectedAssessments: [],
         });
       })
-      .catch(reason => {
+      .catch((reason) => {
         this.props.dispatch(Notifications.error(assessCreateFailed));
       });
   }
@@ -422,8 +421,7 @@ export default class Programs extends React.Component {
       var double_entry = 'No';
       var type = '';
       if (assessment.double_entry && assessment.double_entry == true) double_entry = 'Yes';
-      if (assessment.flexi_assessment && assessment.flexi_assessment == true)
-        flexi_assessment = 'Yes';
+      if (assessment.flexi_assessment && assessment.flexi_assessment == true) { flexi_assessment = 'Yes'; }
 
       if (assessment.type) {
         if (assessment.type == 1) type = 'Institution';
@@ -475,11 +473,15 @@ export default class Programs extends React.Component {
     const programs = this.props.programsById;
 
     return _.map(programs, (program, i) => {
-      return <option key={program.id} value={program.id}>{program.name}</option>;
+      return (
+        <option key={program.id} value={program.id}>
+          {program.name}
+        </option>
+      );
     });
   };
 
-  getInstitutionName = categoryId => {
+  getInstitutionName = (categoryId) => {
     if (categoryId === 1) {
       return 'Primary';
     }
@@ -487,7 +489,7 @@ export default class Programs extends React.Component {
     return 'Pre-School';
   };
 
-  renderAssessmentList = assessmentList => {
+  renderAssessmentList = (assessmentList) => {
     if (this.props.fetchingAssessments) {
       return (
         <div className="text-center">
@@ -521,7 +523,9 @@ export default class Programs extends React.Component {
       return (
         <div>
           You dont have permissions to access this page<br />
-          <Link to="/" className="btn btn-primary padded-btn">GO TO MAIN PAGE</Link>
+          <Link to="/" className="btn btn-primary padded-btn">
+            GO TO MAIN PAGE
+          </Link>
         </div>
       );
     }
@@ -535,11 +539,12 @@ export default class Programs extends React.Component {
     return (
       <div className="container">
         <div className="row center-block">
-
           <div className="col-md-8 form-inline">
-            <h4 className="text-primary" htmlFor="sel1">Programs: </h4>
+            <h4 className="text-primary" htmlFor="sel1">
+              Programs:{' '}
+            </h4>
             <select
-              ref={ref => (this.selProgram = ref)}
+              ref={(ref) => { return (this.selProgram = ref); }}
               className="form-control"
               id="sel1"
               onChange={this.handleProgramSelection}
@@ -549,7 +554,7 @@ export default class Programs extends React.Component {
             </select>
           </div>
           <div className=" col-md-4">
-            {/*<button type="button" className="btn btn-primary all-padded-btn" data-toggle="modal" data-target="#createProgramModal">Add Program</button>*/}
+            {/* <button type="button" className="btn btn-primary all-padded-btn" data-toggle="modal" data-target="#createProgramModal">Add Program</button> */}
             <button
               type="button"
               className="btn btn-primary"
@@ -565,7 +570,6 @@ export default class Programs extends React.Component {
               Add Assessments
             </button>
           </div>
-
         </div>
         <div className="bg-faded">
           <h4 className="text-primary">Program Details</h4>
@@ -575,21 +579,29 @@ export default class Programs extends React.Component {
             <div className="col-md-8 pull-left">
               <div className="row">
                 <h5 className="col-md-4">
-                  <span className="text-primary"><strong>Program name: </strong></span>
+                  <span className="text-primary">
+                    <strong>Program name: </strong>
+                  </span>
                   {selectedProgramDetails.name}
                 </h5>
                 <h5 className="col-md-4">
-                  <span className="text-primary"><strong>Start Date: </strong></span>
+                  <span className="text-primary">
+                    <strong>Start Date: </strong>
+                  </span>
                   {dateParser(selectedProgramDetails.start_date)}
                 </h5>
               </div>
               <div className="row">
                 <h5 className="col-md-4">
-                  <span className="text-primary"><strong>Institution: </strong></span>
+                  <span className="text-primary">
+                    <strong>Institution: </strong>
+                  </span>
                   {this.getInstitutionName(selectedProgramDetails.programme_institution_category)}
                 </h5>
                 <h5 className="col-md-4">
-                  <span className="text-primary"><strong>End Date: </strong></span>
+                  <span className="text-primary">
+                    <strong>End Date: </strong>
+                  </span>
                   {dateParser(selectedProgramDetails.end_date)}
                 </h5>
               </div>
@@ -616,7 +628,6 @@ export default class Programs extends React.Component {
                 <span className="fa fa-trash-o" /> Delete
               </button>
             </div>
-
           </div>
         </div>
         <br />
@@ -625,9 +636,7 @@ export default class Programs extends React.Component {
           <div className="base-spacing-sm border-base" />
           <div className="base-spacing-mid" />
         </div>
-        <div>
-          {this.renderAssessmentList(assessmentList)}
-        </div>
+        <div>{this.renderAssessmentList(assessmentList)}</div>
         <div className="col-md-8">
           <button
             type="button"
@@ -653,7 +662,6 @@ export default class Programs extends React.Component {
           >
             Deactivate
           </button>
-
         </div>
         <CreateAssessment
           handleSubmit={this.handleCreateAssessment}
@@ -697,7 +705,7 @@ export default class Programs extends React.Component {
           onCloseModal={this.closeDeleteModal}
           deleteProgram={this.handleDeleteProgram}
         />
-        {/*DELETE program modal dialog
+        {/* DELETE program modal dialog
         <div
           className="modal fade"
           data-backdrop="false"
@@ -735,8 +743,8 @@ export default class Programs extends React.Component {
               </div>
             </div>
           </div>
-        </div>*/}
-        {/*End of modal*/}
+        </div> */}
+        {/* End of modal */}
 
         {/* Error dialog */}
         <div
@@ -753,7 +761,10 @@ export default class Programs extends React.Component {
                 <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 className="modal-title" id="errorTitle"> Program creation failed!</h4>
+                <h4 className="modal-title" id="errorTitle">
+                  {' '}
+                  Program creation failed!
+                </h4>
               </div>
               <div className="modal-body">
                 <form id="createProgram">
@@ -763,11 +774,12 @@ export default class Programs extends React.Component {
                     </label>
                     <label id="errorDetails" />
                   </div>
-
                 </form>
               </div>
               <div className="modal-footer">
-                <button type="button" className="btn btn-primary" data-dismiss="modal">OK</button>
+                <button type="button" className="btn btn-primary" data-dismiss="modal">
+                  OK
+                </button>
               </div>
             </div>
           </div>

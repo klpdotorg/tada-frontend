@@ -18,7 +18,7 @@ import { LoginContainer } from './containers/Login';
 import Logout from './components/Logout';
 import { App } from './containers/Dashboard';
 import UserRegContainer from './containers/UserRegContainer';
-import Programs from './components/Programs';
+import { Programs } from './containers/Programs';
 import AnswersContainer from './containers/AnswersContainer';
 import ResetPassword from './components/ResetPassword';
 import SetNewPassword from './components/SetNewPassword';
@@ -56,7 +56,7 @@ export const routes = (
       <Route path="/" component={App} onEnter={isUserAuthenticated}>
         <IndexRoute component={Dashboard} onEnter={isUserAuthenticated} />
         <Route path="dashboard" component={Dashboard} />
-        <Route path="programs" component={Programs} />
+        <Route path="programmes" component={Programs} />
         <Route path="filterprograms" component={AnswersContainer} />
         <Route path="reports" component={Reports} />
         <Route path="revert-entity/:entityName" component={RevertEntity} />

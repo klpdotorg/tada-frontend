@@ -4,6 +4,7 @@ import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
 import moment from 'moment';
 import { modalStyle } from '../../styles.js';
+
 const { Input, RadioGroup } = FRC;
 
 
