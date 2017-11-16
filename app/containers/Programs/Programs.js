@@ -28,6 +28,7 @@ GetPrograms.propTypes = {
 const mapStateToProps = (state) => {
   return {
     programs: state.programs.programs,
+    loading: state.programs.loading,
   };
 };
 

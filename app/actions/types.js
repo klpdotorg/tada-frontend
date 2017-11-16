@@ -36,3 +36,6 @@ export const SET_PROGRAMS = 'set_programs';
 export const SET_PROGRAM = 'set_program';
 export const SET_EDIT_PROGRAM_ID = 'set_edit_program_id';
 export const SELECT_PROGRAM = 'select_program';
+export const SHOW_PROGRAMS_LOADING = 'show_programs_loading';
+export const CLOSE_PROGRAMS_LOADING = 'close_programs_loading';
+export const SET_ASSESSMENTS = 'set_assessments';

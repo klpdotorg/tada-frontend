@@ -2,10 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { map } from 'lodash';
 
+import { Assessments } from '../../containers/Assessments';
+import { Message, Loading } from '../common';
 import { SelectedProgram, CreateProgram, EditProgram } from '../../containers/Programs';
 
 const ProgramView = (props) => {
-  const { selectedProgram, programs } = props;
+  const { selectedProgram, programs, loading } = props;
+
+  if (loading) {
+    return <Loading />;
+  }
+
+  if (!Object.keys(programs).length) {
+    return <Message message="No Programs Found!" />;
+  }
 
   return (
     <div className="container">
@@ -45,6 +55,7 @@ const ProgramView = (props) => {
         </div>
       </div>
       <SelectedProgram />
+      <Assessments />
       <CreateProgram />
       <EditProgram />
     </div>
@@ -54,6 +65,7 @@ const ProgramView = (props) => {
 ProgramView.propTypes = {
   selectedProgram: PropTypes.string,
   programs: PropTypes.object,
+  loading: PropTypes.bool,
   selectProgram: PropTypes.func,
   openCreateProgramModal: PropTypes.func,
   openCreateAssessmentModal: PropTypes.func,

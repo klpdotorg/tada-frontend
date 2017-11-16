@@ -8,7 +8,7 @@ import {
   Modal,
   userregistration,
   Programs,
-  assessments,
+  Assessments,
   PasswordReset,
   users,
   boundaries,
@@ -32,7 +32,7 @@ const reducer = combineReducers({
   userregistration,
   users,
   programs: Programs,
-  assessments,
+  assessments: Assessments,
   teachers: Teachers,
   passwordreset: PasswordReset,
   boundaries,
@@ -48,7 +48,11 @@ const middleware = compose(
   applyMiddleware(thunk),
   applyMiddleware(promiseMiddleware()),
   applyMiddleware(routerMiddleware(browserHistory)),
-  window.devToolsExtension ? window.devToolsExtension() : (f) => { return f; },
+  window.devToolsExtension
+    ? window.devToolsExtension()
+    : (f) => {
+      return f;
+    },
 )(createStore);
 
 export default middleware(reducer);
