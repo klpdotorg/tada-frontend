@@ -39,3 +39,7 @@ export const SELECT_PROGRAM = 'select_program';
 export const SHOW_PROGRAMS_LOADING = 'show_programs_loading';
 export const CLOSE_PROGRAMS_LOADING = 'close_programs_loading';
 export const SET_ASSESSMENTS = 'set_assessments';
+export const SET_ASSESSMENT = 'set_assessment';
+export const SHOW_ASSESSMENT_LOADING = 'show_assessment_loading';
+export const CLOSE_ASSESSMENT_LOADING = 'close_assessment_loading';
+export const SET_EDIT_ASSESSMENT_ID = 'set_edit_assessment_id';

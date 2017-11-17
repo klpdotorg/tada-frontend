@@ -27,7 +27,9 @@ const AssessmentRow = (props) => {
           className="btn btn-primary padded-btn"
           data-toggle="tooltip"
           title="Edit Assessment"
-          // onClick={this.openEditAssessmentModal}
+          onClick={() => {
+            props.openEditAssessmentModal(assessment.id);
+          }}
         >
           <span className="fa fa-pencil-square-o" />
         </button>
@@ -46,6 +48,7 @@ const AssessmentRow = (props) => {
 
 AssessmentRow.propTypes = {
   assessment: PropTypes.object,
+  openEditAssessmentModal: PropTypes.func,
 };
 
 export { AssessmentRow };

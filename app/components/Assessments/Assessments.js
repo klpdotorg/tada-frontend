@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Assessment } from '../../containers/Assessments';
+import { Assessment, EditAssessment } from '../../containers/Assessments';
 import { Loading, Message } from '../common';
 
 const AssessmentTable = (props) => {
@@ -41,6 +41,7 @@ const AssessmentTable = (props) => {
           <div />
         )}
       </div>
+      <EditAssessment />
     </div>
   );
 };

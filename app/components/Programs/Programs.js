@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { map } from 'lodash';
 
-import { Assessments } from '../../containers/Assessments';
+import { Assessments, CreateAssessment } from '../../containers/Assessments';
 import { Message, Loading } from '../common';
 import { SelectedProgram, CreateProgram, EditProgram } from '../../containers/Programs';
 
@@ -48,7 +48,7 @@ const ProgramView = (props) => {
           <button
             type="button"
             className="btn btn-primary padded-btn"
-            onClick={props.openCreateAssessmentModal}
+            onClick={props.openAddAssessmentModal}
           >
             Add Assessments
           </button>
@@ -57,13 +57,14 @@ const ProgramView = (props) => {
       <SelectedProgram />
       <Assessments />
       <CreateProgram />
+      <CreateAssessment />
       <EditProgram />
     </div>
   );
 };
 
 ProgramView.propTypes = {
-  selectedProgram: PropTypes.string,
+  selectedProgram: PropTypes.number,
   programs: PropTypes.object,
   loading: PropTypes.bool,
   selectProgram: PropTypes.func,

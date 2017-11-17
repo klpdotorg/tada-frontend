@@ -6,7 +6,7 @@ import { ProgramView } from '../../components/Programs';
 import {
   fetchAllPrograms,
   openCreateProgramModal,
-  openCreateAssessmentModal,
+  openAddAssessmentModal,
   selectProgram,
 } from '../../actions';
 
@@ -28,13 +28,14 @@ GetPrograms.propTypes = {
 const mapStateToProps = (state) => {
   return {
     programs: state.programs.programs,
+    selectedProgram: Number(state.programs.selectedProgram),
     loading: state.programs.loading,
   };
 };
 
 const Programs = connect(mapStateToProps, {
   fetchAllPrograms,
-  openCreateAssessmentModal,
+  openAddAssessmentModal,
   openCreateProgramModal,
   selectProgram,
 })(GetPrograms);

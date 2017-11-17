@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 
 import { AssessmentRow } from '../../components/Assessments';
+import { openEditAssessmentModal } from '../../actions';
 
 const mapStateToProps = (state, ownProps) => {
   const selectedProgramId = state.programs.selectedProgram;
@@ -10,6 +11,6 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const Assessment = connect(mapStateToProps)(AssessmentRow);
+const Assessment = connect(mapStateToProps, { openEditAssessmentModal })(AssessmentRow);
 
 export { Assessment };
