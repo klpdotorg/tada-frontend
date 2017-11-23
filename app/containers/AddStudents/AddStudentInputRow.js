@@ -83,12 +83,11 @@ class AddStudentsInputRowForm extends Component {
         </td>
         <td>
           <select
-            className="col-sm-1"
+            className="col-sm-1 form-control"
             onChange={(e) => {
               this.changeVal(e, 'gender');
             }}
             value={this.state.gender}
-            className="form-control"
             id="gender"
           >
             <option value="male">Male</option>
@@ -104,11 +103,13 @@ class AddStudentsInputRowForm extends Component {
             className="form-control"
             id="gender"
           >
-            {languages.map((lang, i) => (
-              <option key={i} value={lang.value}>
-                {_.startCase(lang.label)}
-              </option>
-            ))}
+            {languages.map((lang, i) => {
+ return (
+   <option key={i} value={lang.value}>
+     {_.startCase(lang.label)}
+   </option>
+            );
+})}
           </select>
         </td>
         <td>
@@ -120,11 +121,13 @@ class AddStudentsInputRowForm extends Component {
             className="form-control"
             id="gender"
           >
-            {lastVerifiedYears.map((year, i) => (
-              <option key={i} value={year.value}>
-                {_.startCase(year.label)}
-              </option>
-            ))}
+            {lastVerifiedYears.map((year, i) => {
+return (
+  <option key={i} value={year.value}>
+    {_.startCase(year.label)}
+  </option>
+            );
+})}
           </select>
         </td>
         <td>
@@ -202,20 +205,24 @@ class AddStudentsInputRowForm extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  formErrors: state.addStudents.formErrors,
-  languages: state.languages.languages,
-});
+const mapStateToProps = (state) => {
+  return {
+    formErrors: state.addStudents.formErrors,
+    languages: state.languages.languages,
+  };
+};
 
-const mapDispatchToProps = dispatch => ({
-  save: (studentGroupNodeId, form) => {
-    dispatch(openNode(studentGroupNodeId));
-    dispatch(saveNewStudends(form));
-  },
-  updateValue: (value, rowNumber) => {
-    dispatch(addStudentsFormValueChanged(value, rowNumber));
-  },
-});
+const mapDispatchToProps = (dispatch) => {
+  return {
+    save: (studentGroupNodeId, form) => {
+      dispatch(openNode(studentGroupNodeId));
+      dispatch(saveNewStudends(form));
+    },
+    updateValue: (value, rowNumber) => {
+      dispatch(addStudentsFormValueChanged(value, rowNumber));
+    },
+  };
+};
 
 AddStudentsInputRowForm.propTypes = {
   formErrors: PropTypes.array,

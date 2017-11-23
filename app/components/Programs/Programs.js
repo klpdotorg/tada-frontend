@@ -69,7 +69,7 @@ ProgramView.propTypes = {
   loading: PropTypes.bool,
   selectProgram: PropTypes.func,
   openCreateProgramModal: PropTypes.func,
-  openCreateAssessmentModal: PropTypes.func,
+  openAddAssessmentModal: PropTypes.func,
 };
 
 export { ProgramView };

@@ -5,7 +5,7 @@ import { Link } from 'react-router';
 import { dateParser } from '../../utils';
 
 const AssessmentRow = (props) => {
-  const { assessment } = props;
+  const { assessment, url } = props;
 
   return (
     <tr key={assessment.id} id={assessment.id}>
@@ -35,7 +35,7 @@ const AssessmentRow = (props) => {
         </button>
         <Link
           className="btn btn-primary padded-btn"
-          to={assessment.questionsUrl}
+          to={url}
           data-toggle="tooltip"
           title="View Questions"
         >
@@ -49,6 +49,7 @@ const AssessmentRow = (props) => {
 AssessmentRow.propTypes = {
   assessment: PropTypes.object,
   openEditAssessmentModal: PropTypes.func,
+  url: PropTypes.string,
 };
 
 export { AssessmentRow };

@@ -18,7 +18,7 @@ const Assessments = (state = INITIAL_STATE, action) => {
     case SET_ASSESSMENTS:
       return {
         ...state,
-        assessments: { [action.programId]: changeArrayToObject(action.value, 'id') },
+        assessments: changeArrayToObject(action.value, 'id'),
       };
     case SHOW_ASSESSMENT_LOADING:
       return {

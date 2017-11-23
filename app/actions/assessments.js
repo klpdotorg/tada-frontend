@@ -31,11 +31,10 @@ export const assessmentCreated = (value, programId) => {
   };
 };
 
-export const setAssessments = (value, programId) => {
+export const setAssessments = (value) => {
   return {
     type: SET_ASSESSMENTS,
     value,
-    programId,
   };
 };
 
@@ -43,7 +42,7 @@ export const getAssessments = (programId) => {
   return (dispatch) => {
     const fetchAssessmentsURL = `${serverApiBase}surveys/${programId}/questiongroup/`;
     get(fetchAssessmentsURL).then((response) => {
-      dispatch(setAssessments(response.results, programId));
+      dispatch(setAssessments(response.results));
     });
   };
 };

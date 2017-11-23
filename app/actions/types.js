@@ -43,3 +43,4 @@ export const SET_ASSESSMENT = 'set_assessment';
 export const SHOW_ASSESSMENT_LOADING = 'show_assessment_loading';
 export const CLOSE_ASSESSMENT_LOADING = 'close_assessment_loading';
 export const SET_EDIT_ASSESSMENT_ID = 'set_edit_assessment_id';
+export const SET_QUESTIONS = 'set_questions';

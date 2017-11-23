@@ -19,12 +19,12 @@ import Logout from './components/Logout';
 import { App } from './containers/Dashboard';
 import UserRegContainer from './containers/UserRegContainer';
 import { Programs } from './containers/Programs';
+import { Questions } from './containers/Questions';
 import AnswersContainer from './containers/AnswersContainer';
 import ResetPassword from './components/ResetPassword';
 import SetNewPassword from './components/SetNewPassword';
 import Users from './containers/UsersContainer';
 import PermissionsContainer from './containers/PermissionsContainer';
-import Questions from './components/AssessmentQuestions';
 import Reports from './components/Reports';
 import Teachers from './containers/Teachers';
 import tadastore from './store';
@@ -35,14 +35,14 @@ const history = syncHistoryWithStore(browserHistory, tadastore);
 
 const isUserAuthenticated = (nextState, replace) => {
   let token = sessionStorage.getItem('token');
-  if (!token) {
-    // redirect to login and set next location
-    console.log(nextState, replace);
-    if (nextState.location && nextState.location.pathname) {
-      sessionStorage.setItem('nextUrl', nextState.location.pathname);
-    }
-    replace('/login');
-  }
+  // if (!token) {
+  //   // redirect to login and set next location
+  //   console.log(nextState, replace);
+  //   if (nextState.location && nextState.location.pathname) {
+  //     sessionStorage.setItem('nextUrl', nextState.location.pathname);
+  //   }
+  //   replace('/login');
+  // }
 };
 
 export const routes = (

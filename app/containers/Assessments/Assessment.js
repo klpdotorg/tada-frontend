@@ -7,7 +7,8 @@ const mapStateToProps = (state, ownProps) => {
   const selectedProgramId = state.programs.selectedProgram;
 
   return {
-    assessment: state.assessments.assessments[selectedProgramId][ownProps.id],
+    assessment: state.assessments.assessments[ownProps.id],
+    url: `programs/${selectedProgramId}/assessments/${ownProps.id}/questions`,
   };
 };
 

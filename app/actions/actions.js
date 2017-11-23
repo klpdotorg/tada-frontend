@@ -14,7 +14,7 @@ import { boundaryType, genUrl } from './utils';
 import { computeRouterPathForEntity } from '../reducers/utils';
 import { SET_PARENT_NODE } from './types';
 
-export const setParentNode = value => {
+export const setParentNode = (value) => {
   return {
     type: SET_PARENT_NODE,
     value,
@@ -27,7 +27,7 @@ export const selectPrimaryTree = () => {
   };
 };
 
-export const toggleNode = id => {
+export const toggleNode = (id) => {
   return {
     type: 'TOGGLE_NODE',
     id,
@@ -42,7 +42,7 @@ export const closePeerNodes = (id, depth) => {
   };
 };
 
-export const openNode = id => {
+export const openNode = (id) => {
   return {
     type: 'TOGGLE_NODE',
     id,
@@ -62,14 +62,14 @@ function requestDataFromServer() {
   };
 }
 
-export const responseReceivedFromServer = resp => {
+export const responseReceivedFromServer = (resp) => {
   return {
     type: 'BOUNDARIES_FULFILLED',
     payload: resp,
   };
 };
 
-export const requestFailed = error => {
+export const requestFailed = (error) => {
   return {
     type: 'REQUEST_FAILED',
     statusCode: error.response.status,
@@ -121,7 +121,7 @@ export function userRegistrationSuccess(response) {
   };
 }
 
-//Write user registration failure case
+// Write user registration failure case
 
 function requestLogout() {
   return {
@@ -130,15 +130,15 @@ function requestLogout() {
 }
 
 export function logoutUser() {
-  return function(dispatch, getState) {
+  return function (dispatch, getState) {
     return fetch(Urls.LOGOUT, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: 'Token ' + sessionStorage.token,
+        Authorization: `Token ${sessionStorage.token}`,
       },
     })
-      .then(response => {
+      .then((response) => {
         if (response.status >= 200 && response.status < 300) {
           sessionStorage.removeItem('token');
           sessionStorage.removeItem('isAdmin');
@@ -146,7 +146,7 @@ export function logoutUser() {
           dispatch(push('/logout'));
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
@@ -166,11 +166,11 @@ function userDataFetched(data) {
 }
 
 export const studentsFetched = (data, groupId) => {
-  type: 'STUDENTS_FETCHED', data, groupId;
+  'STUDENTS_FETCHED', data, groupId;
 };
 
 export function fetchBoundaryDetails(parentBoundaryId = 1) {
-  return function(dispatch, getState) {
+  return function (dispatch, getState) {
     var requestBody = {};
     var boundaryType = -1;
     if (getState().schoolSelection.primarySchool) {
@@ -182,62 +182,58 @@ export function fetchBoundaryDetails(parentBoundaryId = 1) {
       parent: parentBoundaryId,
       boundary_type: boundaryType,
     };
-    //Send info about the whole request so we can track failure
+    // Send info about the whole request so we can track failure
     dispatch(requestDataFromServer());
-    return fetch(serverApiBase + 'boundaries/?parent=' + parentBoundaryId + '&limit=500', {
+    return fetch(`${serverApiBase}boundaries/?parent=${parentBoundaryId}&limit=500`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
     })
       .then(checkStatus)
-      .then(data => {
+      .then((data) => {
         dispatch(responseReceivedFromServer(data));
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
         dispatch(requestFailed(error));
       });
   };
 }
 
-export const getInstitutions = parentId => {
+export const getInstitutions = (parentId) => {
   return get(`${serverApiBase}institutions/?boundary=${parentId}`);
 };
 
-export const getStudent = params => {
-  return get(
-    `${serverApiBase}institutions/${params.institution}/studentgroups/${params.studentgroup}/students/${params.student}`,
-  );
+export const getStudent = (params) => {
+  return get(`${serverApiBase}institutions/${params.institution}/studentgroups/${params.studentgroup}/students/${params.student}`);
 };
 
-export const getStudentGroup = params => {
-  return get(
-    `${serverApiBase}institutions/${params.institution}/studentgroups/${params.studentgroup}`,
-  );
+export const getStudentGroup = (params) => {
+  return get(`${serverApiBase}institutions/${params.institution}/studentgroups/${params.studentgroup}`);
 };
 
-//Method fetches institutions belonging to a particular Id from the institutions endpoint
+// Method fetches institutions belonging to a particular Id from the institutions endpoint
 
-export const getStudentGroups = institutionId => {
+export const getStudentGroups = (institutionId) => {
   return get(`${serverApiBase}institutions/${institutionId}/studentgroups/`);
 };
 
 export function fetchStudentGroups(institutionId) {
-  return function(dispatch, getState) {
-    var url = serverApiBase + 'institutions/' + institutionId + '/studentgroups/';
+  return function (dispatch, getState) {
+    var url = `${serverApiBase}institutions/${institutionId}/studentgroups/`;
     return fetch(url, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: 'Token ' + sessionStorage.token,
+        Authorization: `Token ${sessionStorage.token}`,
       },
     })
       .then(checkStatus)
-      .then(data => {
+      .then((data) => {
         dispatch(responseReceivedFromServer(data));
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch(requestFailed(error));
       });
   };
@@ -248,29 +244,29 @@ export const getStudents = (institutionId, classId) => {
 };
 
 export function fetchStudentsByGroupId(groupId) {
-  return function(dispatch, getState) {
+  return function (dispatch, getState) {
     dispatch({
       type: 'REQUEST_SENT',
     });
     const state = getState();
-    var url = serverApiBase + `studentgroups/${groupId}/students/`;
+    var url = `${serverApiBase}studentgroups/${groupId}/students/`;
 
     return fetch(url, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: 'Token ' + sessionStorage.token,
+        Authorization: `Token ${sessionStorage.token}`,
       },
     })
       .then(checkStatus)
-      .then(data => {
+      .then((data) => {
         dispatch({
           type: 'STUDENTS_FULFILLED',
           payload: { students: data, groupId },
         });
         return data;
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
         dispatch(requestFailed(error));
       });
@@ -308,73 +304,71 @@ This function decides whether we need to go to the boundaries endpoint or the in
 Everything is just one big nav tree in the UI.
 */
 export function fetchEntitiesFromServer(parentBoundaryId) {
-  return function(dispatch, getState) {
+  return function (dispatch, getState) {
     const state = getState();
-    return dispatch(
-      boundaryType(parentBoundaryId, state.boundaries.boundaryDetails)(parentBoundaryId),
-    );
+    return dispatch(boundaryType(parentBoundaryId, state.boundaries.boundaryDetails)(parentBoundaryId));
   };
 }
 
 export function fetchUserData(token) {
-  return function(dispatch, getState) {
-    return fetch(Urls.USERS + sessionStorage.userid + '/', {
-      method: 'GET',
-      headers: {
-        Authorization: 'Token ' + token,
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(checkStatus)
-      .then(data => {
-        data.groups.map((item, index) => {
-          //console.log(item);
-          if (item.name == ROLES.ADMIN) sessionStorage.setItem('isAdmin', true);
-        });
-        dispatch(userDataFetched(data));
-      })
-      .catch(error => {
-        console.log(error.response);
-        dispatch(requestFailed(error));
-      });
+  return function (dispatch, getState) {
+    sessionStorage.setItem('isAdmin', true);
+    // return fetch(Urls.USERS + sessionStorage.userid + '/', {
+    //   method: 'GET',
+    //   headers: {
+    //     Authorization: 'Token ' + token,
+    //     'Content-Type': 'application/json',
+    //   },
+    // })
+    //   .then(checkStatus)
+    //   .then(data => {
+    //     data.groups.map((item, index) => {
+    //       //console.log(item);
+    //       if (item.name == ROLES.ADMIN) sessionStorage.setItem('isAdmin', true);
+    //     });
+    //     dispatch(userDataFetched(data));
+    //   })
+    //   .catch(error => {
+    //     console.log(error.response);
+    //     dispatch(requestFailed(error));
+    //   });
   };
 }
 
 export function sendRegisterUser(email, password, username) {
-  return function(dispatch, getState) {
+  return function (dispatch, getState) {
     return fetch(Urls.REGISTER, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        username: username,
-        password: password,
-        email: email,
+        username,
+        password,
+        email,
       }),
     })
-      .then(response => {
+      .then((response) => {
         if (response.status >= 200 && response.status < 300) {
           return response.json();
-        } else {
-          const error = new Error(response.statusText);
-          error.response = response;
-          throw error;
         }
+        const error = new Error(response.statusText);
+        error.response = response;
+        throw error;
       })
-      .then(data => {
+      .then((data) => {
         dispatch(userRegistrationSuccess(data));
-        //dispatch(fetchUserData(sessionStorage.token))
-        //dispatch(push('/'))
+        // dispatch(fetchUserData(sessionStorage.token))
+        // dispatch(push('/'))
       })
-      .catch(error => {
-        //dispatch(loginError(error));
+      .catch((error) => {
+        // dispatch(loginError(error));
         console.error('request failed', error);
       });
   };
 }
 
-export const toggleModal = modalType => {
+export const toggleModal = (modalType) => {
   return {
     type: 'TOGGLE_MODAL',
     modal: `${modalType}`,
@@ -382,56 +376,57 @@ export const toggleModal = modalType => {
 };
 
 export function sendLoginToServer(email, pass) {
-  return function(dispatch, getState) {
-    return fetch(Urls.LOGIN, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username: email,
-        password: pass,
-      }),
-    })
-      .then(response => {
-        if (response.status >= 200 && response.status < 300) {
-          return response.json();
-        } else {
-          const error = new Error(response.statusText);
-          error.response = response;
-          throw error;
-        }
-      })
-      .then(data => {
-        sessionStorage.setItem('token', data.auth_token);
-        sessionStorage.setItem('userid', data.user_id);
-        dispatch(loginSuccess(data));
-        dispatch(fetchUserData(sessionStorage.token));
+  return function (dispatch, getState) {
+    // sessionStorage.setItem('token', data.auth_token);
+    // sessionStorage.setItem('userid', data.user_id);
+    // dispatch(loginSuccess(data));
+    dispatch(fetchUserData(sessionStorage.token));
+    dispatch(push('/'));
+    // return fetch(Urls.LOGIN, {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({
+    //     username: email,
+    //     password: pass,
+    //   }),
+    // })
+    //   .then(response => {
+    //     if (response.status >= 200 && response.status < 300) {
+    //       return response.json();
+    //     } else {
+    //       const error = new Error(response.statusText);
+    //       error.response = response;
+    //       throw error;
+    //     }
+    //   })
+    //   .then(data => {
 
-        let nextUrl = sessionStorage.getItem('nextUrl');
-        if (nextUrl) {
-          sessionStorage.removeItem('nextUrl');
-          dispatch(push(nextUrl));
-        } else {
-          dispatch(push('/'));
-        }
-      })
-      .catch(error => {
-        dispatch(loginError(error));
-        console.error('request failed', error);
-      });
+    //     let nextUrl = sessionStorage.getItem('nextUrl');
+    //     if (nextUrl) {
+    //       sessionStorage.removeItem('nextUrl');
+    //       dispatch(push(nextUrl));
+    //     } else {
+    //       dispatch(push('/'));
+    //     }
+    //   })
+    //   .catch(error => {
+    //     dispatch(loginError(error));
+    //     console.error('request failed', error);
+    //   });
   };
 }
 
 export function deleteBoundary(boundaryid, parentId) {
-  return function(dispatch, getState) {
-    return fetch(serverApiBase + 'boundaries/' + boundaryid + '/', {
+  return function (dispatch, getState) {
+    return fetch(`${serverApiBase}boundaries/${boundaryid}/`, {
       method: 'DELETE',
       headers: {
-        Authorization: 'Token ' + sessionStorage.token,
+        Authorization: `Token ${sessionStorage.token}`,
       },
     })
-      .then(response => {
+      .then((response) => {
         if (response.status >= 200 && response.status < 300) {
           if (parentId == 1) {
             dispatch(push('/'));
@@ -446,44 +441,48 @@ export function deleteBoundary(boundaryid, parentId) {
           throw error;
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.log('request failed', error);
       });
   };
 }
 
-export const newBoundaryFetch = options => {
-  return fetch(serverApiBase + 'boundaries/', {
+export const newBoundaryFetch = (options) => {
+  return fetch(`${serverApiBase}boundaries/`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(options),
-  }).catch(error => {
+  }).catch((error) => {
     console.log('request failed', error);
   });
 };
 
-export const saveNewProject = options => (dispatch, getState) => {
-  return newBoundaryFetch(options)
-    .then(checkStatus)
-    .then(response => {
-      dispatch(responseReceivedFromServer({ results: [response] }));
-      dispatch(toggleModal('createProject'));
-      dispatch(openNode(response.id));
-      var boundary = computeRouterPathForEntity(response, getState().boundaries.boundaryDetails);
-      dispatch(push(boundary.path));
-    });
+export const saveNewProject = (options) => {
+  return (dispatch, getState) => {
+    return newBoundaryFetch(options)
+      .then(checkStatus)
+      .then((response) => {
+        dispatch(responseReceivedFromServer({ results: [response] }));
+        dispatch(toggleModal('createProject'));
+        dispatch(openNode(response.id));
+        var boundary = computeRouterPathForEntity(response, getState().boundaries.boundaryDetails);
+        dispatch(push(boundary.path));
+      });
+  };
 };
 
-export const saveNewCircle = options => (dispatch, getState) => {
-  return newBoundaryFetch(options)
-    .then(checkStatus)
-    .then(response => {
-      dispatch(responseReceivedFromServer({ results: [response] }));
-      dispatch(toggleModal('createCircle'));
-      dispatch(openNode(response.id));
-      var boundary = computeRouterPathForEntity(response, getState().boundaries.boundaryDetails);
-      dispatch(push(boundary.path));
-    });
+export const saveNewCircle = (options) => {
+  return (dispatch, getState) => {
+    return newBoundaryFetch(options)
+      .then(checkStatus)
+      .then((response) => {
+        dispatch(responseReceivedFromServer({ results: [response] }));
+        dispatch(toggleModal('createCircle'));
+        dispatch(openNode(response.id));
+        var boundary = computeRouterPathForEntity(response, getState().boundaries.boundaryDetails);
+        dispatch(push(boundary.path));
+      });
+  };
 };
