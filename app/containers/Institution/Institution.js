@@ -2,15 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { get, isEmpty } from 'lodash';
+import { push } from 'react-router-redux';
 
 import { DEFAULT_PARENT_NODE_ID } from 'config';
 import { InstitutionView } from '../../components/Institution';
-import {
-  getEntities,
-  getLanguages,
-  getInstitutionCategories,
-  getManagements,
-} from '../../actions';
+import { getEntities, getLanguages, getInstitutionCategories, getManagements } from '../../actions';
 
 class FetchInstitutionEntity extends Component {
   componentDidMount() {
@@ -57,26 +53,31 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const mapDispatchToProps = dispatch => ({
-  toggleClassModal: () => {
-    dispatch({
-      type: 'TOGGLE_MODAL',
-      modal: 'createClass',
-    });
-  },
-  getEntities: (ids) => {
-    dispatch(getEntities(ids));
-  },
-  getLanguages: () => {
-    dispatch(getLanguages());
-  },
-  getInstitutionCats: () => {
-    dispatch(getInstitutionCategories());
-  },
-  getManagements: () => {
-    dispatch(getManagements());
-  },
-});
+const mapDispatchToProps = (dispatch) => {
+  return {
+    toggleClassModal: () => {
+      dispatch({
+        type: 'TOGGLE_MODAL',
+        modal: 'createClass',
+      });
+    },
+    getEntities: (ids) => {
+      dispatch(getEntities(ids));
+    },
+    getLanguages: () => {
+      dispatch(getLanguages());
+    },
+    getInstitutionCats: () => {
+      dispatch(getInstitutionCategories());
+    },
+    getManagements: () => {
+      dispatch(getManagements());
+    },
+    showTeachers: (path) => {
+      dispatch(push(`${path}/teachers`));
+    },
+  };
+};
 
 const Institution = connect(mapStateToProps, mapDispatchToProps)(FetchInstitutionEntity);
 

@@ -44,3 +44,5 @@ export const SHOW_ASSESSMENT_LOADING = 'show_assessment_loading';
 export const CLOSE_ASSESSMENT_LOADING = 'close_assessment_loading';
 export const SET_EDIT_ASSESSMENT_ID = 'set_edit_assessment_id';
 export const SET_QUESTIONS = 'set_questions';
+export const SHOW_TEACHER_LOADING = 'show_teacher_loading';
+export const CLOSE_TEACHER_LOADING = 'clsoe_teacher_loading';

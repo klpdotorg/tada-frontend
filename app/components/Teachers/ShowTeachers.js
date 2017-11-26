@@ -1,10 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CreateTeacher, ModifyTeacher } from '../../containers/Teachers';
-import { TeacherList } from './TeacherList';
+import { Link } from 'react-router';
+
+import { Loading } from '../common';
+import { CreateTeacher, EditTeacher } from '../../containers/Teachers';
+import { TeacherList } from './index';
 
 const TeacherScreen = (props) => {
-  const { district, block, cluster, institution, teacherIds } = props;
+  const { district, block, cluster, institution, teacherIds, isLoading, teacherLoading } = props;
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
     <div>
       <ol className="breadcrumb">
@@ -22,19 +30,25 @@ const TeacherScreen = (props) => {
         </li>
         <li>Teachers</li>
       </ol>
-      <TeacherList teachers={teacherIds} showAddTeacherPopup={props.showAddTeacherPopup} />
+      <TeacherList
+        teacherIds={teacherIds}
+        showAddTeacherPopup={props.showAddTeacherPopup}
+        loading={teacherLoading}
+      />
+      <EditTeacher institution={institution.id} />
       <CreateTeacher institution={institution.id} />
-      <ModifyTeacher institution={institution.id} />
     </div>
   );
 };
 
 TeacherScreen.propTypes = {
+  isLoading: PropTypes.bool,
   district: PropTypes.object,
   block: PropTypes.object,
   cluster: PropTypes.object,
   institution: PropTypes.object,
-  teacherIds: PropTypes.object,
+  teacherIds: PropTypes.array,
+  teacherLoading: PropTypes.bool,
   showAddTeacherPopup: PropTypes.func,
 };
 

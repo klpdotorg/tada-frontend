@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { Loading, Message } from '../common';
 import { Teacher } from '../../containers/Teachers';
 
 // const DATA = {
@@ -18,7 +19,11 @@ import { Teacher } from '../../containers/Teachers';
 //   pincode: '175036',
 // };
 
-const TeacherList = ({ teacherIds, showAddTeacherPopup }) => {
+const TeacherList = ({ teacherIds, showAddTeacherPopup, loading }) => {
+  if (loading) {
+    return <Loading />;
+  }
+
   return (
     <div className="table-responsive">
       <div className="row">
@@ -31,36 +36,43 @@ const TeacherList = ({ teacherIds, showAddTeacherPopup }) => {
           </button>
         </div>
       </div>
-      <div className="border-base" />
+      <hr style={{ width: '100%' }} />
       <div className="base-spacing-sm" />
-      <table className="table table-condensed table-fixedwidth">
-        <thead>
-          <tr className="text-primary text-uppercase">
-            <th>First Name</th>
-            <th>Middle Name</th>
-            <th>Last Name</th>
-            <th>Contact No</th>
-            <th>Qualification</th>
-            <th>Total Work Experience Years</th>
-            <th>Total Work Experience Months</th>
-            <th>Subject</th>
-            <th>School ID</th>
-            <th>Address</th>
-            <th>Area</th>
-            <th>Pincode</th>
-          </tr>
-        </thead>
-        <tbody>
-          {teacherIds.map((id) => {
-            return <Teacher id={id} key={id} />;
-          })}
-        </tbody>
-      </table>
+      <div className="border-table">
+        <table className="table table-striped" style={{ marginBottom: 0 }}>
+          <thead>
+            <tr className="info">
+              <th>First Name</th>
+              <th>Middle Name</th>
+              <th>Last Name</th>
+              <th>School ID</th>
+              <th>Gender</th>
+              <th>Language</th>
+              <th>Staff Type</th>
+              <th>UID</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {teacherIds.map((id) => {
+              return <Teacher id={id} key={id} />;
+            })}
+          </tbody>
+        </table>
+        {!teacherIds.length ? (
+          <div className="base-spacing">
+            <Message message="No Teachers Found!" />
+          </div>
+        ) : (
+          <div />
+        )}
+      </div>
     </div>
   );
 };
 
 TeacherList.propTypes = {
+  loading: PropTypes.bool,
   showAddTeacherPopup: PropTypes.func,
   teacherIds: PropTypes.array,
 };

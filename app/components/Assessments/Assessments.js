@@ -15,7 +15,7 @@ const AssessmentTable = (props) => {
     <div>
       <h4 className="text-primary text-center">Assessments in this Programme</h4>
       <hr style={{ width: 100 }} />
-      <div className="assessment-table">
+      <div className="border-table">
         <table className="table table-striped" style={{ marginBottom: 0 }}>
           <tbody>
             <tr className="info">

@@ -2,21 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const TeacherView = (props) => {
-  const { teacher } = props;
+  const { teacher, languages } = props;
+  const language = languages.find((lang) => {
+    return lang.value === teacher.mt;
+  });
+
   return (
     <tr key={teacher.id}>
       <td>{teacher.first_name}</td>
       <td>{teacher.middle_name}</td>
       <td>{teacher.last_name}</td>
-      <td>{teacher.contact_no}</td>
-      <td>{teacher.qualification}</td>
-      <td>{teacher.total_work_experience_years}</td>
-      <td>{teacher.total_work_experience_months}</td>
-      <td>{teacher.subject}</td>
-      <td>{teacher.school_id}</td>
-      <td>{teacher.address}</td>
-      <td>{teacher.area}</td>
-      <td>{teacher.pincode}</td>
+      <td>{teacher.institution}</td>
+      <td>{teacher.gender}</td>
+      <td>{language.label}</td>
+      <td>{teacher.staff_type}</td>
+      <td>{teacher.uid}</td>
       <td>
         <button
           onClick={() => {
@@ -47,6 +47,7 @@ TeacherView.propTypes = {
   showEditTeacherPopup: PropTypes.func,
   deleteTeacher: PropTypes.func,
   teacher: PropTypes.object,
+  languages: PropTypes.array,
 };
 
 export { TeacherView };

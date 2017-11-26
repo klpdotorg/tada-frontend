@@ -26,7 +26,7 @@ import SetNewPassword from './components/SetNewPassword';
 import Users from './containers/UsersContainer';
 import PermissionsContainer from './containers/PermissionsContainer';
 import Reports from './components/Reports';
-import Teachers from './containers/Teachers';
+import { Teachers } from './containers/Teachers';
 import tadastore from './store';
 import RevertEntity from './containers/RevertEntity';
 import { syncHistoryWithStore } from 'react-router-redux';
@@ -106,7 +106,7 @@ export const routes = (
           component={Institution}
         />
         <Route
-          path="district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId/teachers"
+          path="district/:districtNodeId/block/:blockNodeId/cluster/:clusterNodeId/institution/:institutionNodeId/teachers"
           component={Teachers}
         />
         <Route

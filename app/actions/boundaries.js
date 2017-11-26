@@ -10,63 +10,70 @@ import {
 } from './index';
 import { SET_BOUNDARIES } from './types';
 
-export const setBoundaries = data => ({
-  type: SET_BOUNDARIES,
-  payload: data,
-});
-
-export const getEntity = (parentEntityId, moreIds) => (dispatch, getState) => {
-  const state = getState();
-  const entity = state.boundaries.boundaryDetails[parentEntityId];
-
-  switch (entity.depth) {
-    case 2:
-      return dispatch(fetchInstitutionDetails(entity.id, moreIds));
-    case 3:
-      return dispatch(fetchStudentGroup(entity.id, moreIds));
-    case 4:
-      return dispatch(fetchStudents(entity.id, moreIds));
-    default:
-      return dispatch(fetchBoundaries(entity.id, moreIds));
-  }
+export const setBoundaries = (data) => {
+  return {
+    type: SET_BOUNDARIES,
+    payload: data,
+  };
 };
 
-export const getEntities = Ids => dispatch => {
-  const Id = Ids[0];
-  const filterIds = Ids.slice(1);
+export const getEntity = (parentEntityId, moreIds) => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const entity = state.boundaries.boundaryDetails[parentEntityId];
 
-  dispatch(showBoundaryLoading());
-  dispatch(openNode(Id));
-  dispatch(getEntity(Id, filterIds));
+    switch (entity.depth) {
+      case 2:
+        return dispatch(fetchInstitutionDetails(entity.id, moreIds));
+      case 3:
+        return dispatch(fetchStudentGroup(entity.id, moreIds));
+      case 4:
+        return dispatch(fetchStudents(entity.id, moreIds));
+      default:
+        return dispatch(fetchBoundaries(entity.id, moreIds));
+    }
+  };
 };
 
-export const fetchBoundaries = (parentId, moreIds) => dispatch => {
+export const getEntities = (Ids) => {
+  return (dispatch) => {
+    const Id = Ids[0];
+    const filterIds = Ids.slice(1);
+
+    dispatch(showBoundaryLoading());
+    dispatch(openNode(Id));
+    dispatch(getEntity(Id, filterIds));
+  };
+};
+
+export const fetchBoundaries = (parentId, moreIds) => {
+  return (dispatch) => {
   // const state = getState();
   // const type = state.schoolSelection.primarySchool ? 'primary' : 'pre';
 
-  get(
-    `${SERVER_API_BASE}boundaries/?parent=${parentId}&limit=500&state=${STATE_CODE}`,
-  ).then(response => {
-    if (response) {
-      dispatch(setBoundaries(response));
-      if (moreIds && moreIds.length) {
-        dispatch(getEntities(moreIds));
-      } else {
-        dispatch(closeBoundaryLoading());
+    get(`${SERVER_API_BASE}boundaries/?parent=${parentId}&limit=500&state=${STATE_CODE}`).then((response) => {
+      if (response) {
+        dispatch(setBoundaries(response));
+        if (moreIds && moreIds.length) {
+          dispatch(getEntities(moreIds));
+        } else {
+          dispatch(closeBoundaryLoading());
+        }
       }
-    }
-  });
+    });
+  };
 };
 
-export const modifyBoundary = (boundaryId, name) => dispatch => {
-  console.log(boundaryId, name);
-  patch(`${SERVER_API_BASE}boundaries/${boundaryId}/`, { name })
-    .then(response => {
-      dispatch(setBoundaries({ results: [response] }));
-    })
-    .catch(error => {
-      console.log('request failed', error);
-    });
+export const modifyBoundary = (boundaryId, name) => {
+  return (dispatch) => {
+    patch(`${SERVER_API_BASE}boundaries/${boundaryId}/`, { name })
+      .then((response) => {
+        dispatch(setBoundaries({ results: [response] }));
+      })
+      .catch((error) => {
+        console.log('request failed', error);
+      });
+  };
 };
 
 // function dispatchToggleModal(modalType) {

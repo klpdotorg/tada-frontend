@@ -6,21 +6,30 @@ import { DEFAULT_PARENT_NODE_ID } from 'config';
 
 import { TeacherScreen } from '../../components/Teachers';
 import { TOGGLE_MODAL } from '../../actions/types';
-import { getEntities } from '../../actions';
+import { getEntities, getTeachers, getLanguages } from '../../actions';
 
 class GetTeachers extends Component {
-  conponentDidMount() {
-    const { params, teacherIds } = this.props;
+  componentDidMount() {
+    const { params, institution } = this.props;
 
-    const { blockNodeId, districtNodeId, clusterNodeId, institutionNodeId } = params;
-    if (isEmpty(teacherIds)) {
-      this.props.getEntities([
-        DEFAULT_PARENT_NODE_ID,
-        districtNodeId,
-        blockNodeId,
-        clusterNodeId,
-        institutionNodeId,
-      ]);
+    const { blockNodeId, districtNodeId, clusterNodeId } = params;
+
+    this.props.getLanguages();
+
+    if (isEmpty(institution)) {
+      this.props.getEntities([DEFAULT_PARENT_NODE_ID, districtNodeId, blockNodeId, clusterNodeId]);
+    }
+
+    if (!isEmpty(institution)) {
+      this.props.getTeachers(institution.id);
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.institution !== this.props.institution) {
+      if (!isEmpty(nextProps.institution)) {
+        this.props.getTeachers(nextProps.institution.id);
+      }
     }
   }
 
@@ -37,13 +46,17 @@ const mapStateToProps = (state, ownProps) => {
     block: get(state.boundaries.boundaryDetails, blockNodeId, {}),
     cluster: get(state.boundaries.boundaryDetails, clusterNodeId, {}),
     institution: get(state.boundaries.boundaryDetails, institutionNodeId, {}),
-    teachersIds: state.teachers[ownProps.institutionId],
+    teacherIds: state.teachers.teachers.map((teacher) => {
+      return teacher.id;
+    }),
+    isLoading: state.appstate.loadingBoundary,
+    teacherLoading: state.teachers.loading,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    showAddTeacherPop: () => {
+    showAddTeacherPopup: () => {
       dispatch({
         type: TOGGLE_MODAL,
         modal: 'createTeacher',
@@ -52,13 +65,22 @@ const mapDispatchToProps = (dispatch) => {
     getEntities: (entities) => {
       dispatch(getEntities(entities));
     },
+    getTeachers: (institutionId) => {
+      dispatch(getTeachers(institutionId));
+    },
+    getLanguages: () => {
+      dispatch(getLanguages());
+    },
   };
 };
 
 GetTeachers.propTypes = {
   teacherIds: PropTypes.array,
   params: PropTypes.object,
+  institution: PropTypes.object,
   getEntities: PropTypes.func,
+  getTeachers: PropTypes.func,
+  getLanguages: PropTypes.func,
 };
 
 const Teachers = connect(mapStateToProps, mapDispatchToProps)(GetTeachers);

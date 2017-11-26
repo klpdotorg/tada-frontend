@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { get } from 'lodash';
 
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
@@ -49,7 +50,9 @@ class EditTeacherForm extends Component {
           onValidSubmit={this.submitForm}
           onValid={this.props.enableSubmitForm}
           onInvalid={this.props.disableSubmitForm}
-          ref={(ref) => { return (this.myform = ref); }}
+          ref={(ref) => {
+            return (this.myform = ref);
+          }}
         >
           <Input
             name="first_name"
@@ -170,6 +173,7 @@ const mapStateToProps = (state) => {
   return {
     isOpen: state.modal.createInstitution,
     canSubmit: state.appstate.enableSubmitForm,
+    teacher: get(state.teachers.teachers, state.teachers.editTeacherId, {}),
   };
 };
 

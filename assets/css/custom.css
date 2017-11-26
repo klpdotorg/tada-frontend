@@ -624,7 +624,9 @@ table.table-fixedwidth td, .table-fixedwidth th {
   padding-top: 5px;
   padding-bottom: 5px;
 }
-.assessment-table {
+.border-table {
   border: 1px solid royalblue;
 }
+
+
 

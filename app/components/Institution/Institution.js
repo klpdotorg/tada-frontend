@@ -34,7 +34,13 @@ const InstitutionView = (props) => {
       </ol>
       <div>
         <PermissionMessages canModify={canModify} />
-        <InstitutionActions canModify={canModify} toggleClassModal={props.toggleClassModal} />
+        <InstitutionActions
+          canModify={canModify}
+          toggleClassModal={props.toggleClassModal}
+          showTeachers={() => {
+            props.showTeachers(institution.path);
+          }}
+        />
         <div className="border-base" />
         <div className="base-spacing-sm" />
         <EditInstitution
@@ -54,6 +60,7 @@ InstitutionView.propTypes = {
   block: PropTypes.object,
   cluster: PropTypes.object,
   institution: PropTypes.object,
+  showTeachers: PropTypes.func,
   params: PropTypes.object,
   toggleClassModal: PropTypes.func,
 };
