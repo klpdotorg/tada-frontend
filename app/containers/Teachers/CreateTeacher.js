@@ -6,6 +6,7 @@ import FRC from 'formsy-react-components';
 import { get } from 'lodash';
 
 import { Modal } from '../../components/Modal';
+import { getStaffTypes } from './utils';
 
 import { saveNewTeacher, enableSubmitForm, disableSubmitForm } from '../../actions';
 
@@ -29,7 +30,7 @@ class CreateTeacherForm extends Component {
       doj: myform.doj,
       gender: myform.gender,
       mt: myform.mt,
-      staff_type: 2,
+      staff_type: myform.staffType,
       status: 'AC',
     };
 
@@ -37,7 +38,7 @@ class CreateTeacherForm extends Component {
   }
 
   render() {
-    const { languages, canSubmit, isOpen } = this.props;
+    const { languages, canSubmit, isOpen, staffTypes } = this.props;
     const gender = [
       {
         label: 'Male',
@@ -95,7 +96,7 @@ class CreateTeacherForm extends Component {
             name="doj"
             id="doj"
             value=""
-            label="Date of Birth"
+            label="Date of Join"
             type="date"
             validations="minLength:1"
           />
@@ -114,6 +115,12 @@ class CreateTeacherForm extends Component {
             value={get(languages[0], 'value')}
             options={languages}
           />
+          <Select
+            name="staffType"
+            label="Staff Type"
+            value={get(staffTypes[0], 'value')}
+            options={staffTypes}
+          />
         </Formsy.Form>
       </Modal>
     );
@@ -124,6 +131,7 @@ CreateTeacherForm.propTypes = {
   isOpen: PropTypes.bool,
   canSubmit: PropTypes.bool,
   languages: PropTypes.array,
+  staffTypes: PropTypes.array,
   closeConfirmModal: PropTypes.func,
   institution: PropTypes.number,
   save: PropTypes.func,
@@ -136,6 +144,7 @@ const mapStateToProps = (state) => {
     isOpen: state.modal.createTeacher,
     canSubmit: state.appstate.enableSubmitForm,
     languages: state.languages.languages,
+    staffTypes: getStaffTypes(state.schoolSelection.primarySchool),
   };
 };
 

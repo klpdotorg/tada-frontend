@@ -46,6 +46,7 @@ const TeacherList = ({ teacherIds, showAddTeacherPopup, loading }) => {
               <th>Middle Name</th>
               <th>Last Name</th>
               <th>School ID</th>
+              <th>Date of Join</th>
               <th>Gender</th>
               <th>Language</th>
               <th>Staff Type</th>

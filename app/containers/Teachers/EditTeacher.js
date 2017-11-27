@@ -7,9 +7,10 @@ import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
 
 import { Modal } from '../../components/Modal';
+import { getStaffTypes } from './utils';
 import { editTeacher, enableSubmitForm, disableSubmitForm } from '../../actions';
 
-const { Input } = FRC;
+const { Input, Select } = FRC;
 
 class EditTeacherForm extends Component {
   getValue(value) {
@@ -17,32 +18,42 @@ class EditTeacherForm extends Component {
   }
 
   submitForm = () => {
-    const teacher = this.myform.getModel();
-    this.props.save(teacher);
+    const myform = this.myform.getModel();
+    const teacher = {
+      first_name: myform.firstName,
+      middle_name: myform.middleName,
+      last_name: myform.lastName,
+      uid: myform.uid,
+      institution: this.props.institution,
+      doj: myform.doj,
+      gender: myform.gender,
+      mt: myform.mt,
+      staff_type: myform.staffType,
+    };
+
+    this.props.save(teacher, this.props.teacher.id);
   };
 
   render() {
-    const { institutionId, teacher, isOpen, canSubmit } = this.props;
-    const {
-      first_name,
-      last_name,
-      middle_name,
-      contact_no,
-      qualification,
-      total_work_experience_years,
-      total_work_experience_months,
-      subject,
-      address,
-      area,
-      pincode,
-    } = teacher;
+    const { languages, staffTypes, teacher, isOpen, canSubmit } = this.props;
+    const genderOptions = [
+      {
+        label: 'Male',
+        value: 'male',
+      },
+      {
+        label: 'Female',
+        value: 'female',
+      },
+    ];
+    const { first_name, last_name, middle_name, uid, mt, doj, gender, staff_type } = teacher;
 
     return (
       <Modal
-        title="Edit Teacher"
-        contentLabel="Edit Teacher"
+        title="Create Teacher"
+        contentLabel="Create Teacher"
         isOpen={isOpen}
-        onCloseModal={this.props.onCloseModal}
+        onCloseModal={this.props.closeConfirmModal}
         canSubmit={canSubmit}
         submitForm={this.submitForm}
       >
@@ -55,103 +66,58 @@ class EditTeacherForm extends Component {
           }}
         >
           <Input
-            name="first_name"
-            id="first_name"
+            name="firstName"
+            id="firstName"
+            value={this.getValue(first_name)}
             label="First Name"
             type="text"
-            value={this.getValue(first_name)}
             required
             validations="minLength:1"
           />
           <Input
-            name="middle_name"
-            id="middle_name"
+            name="middleName"
+            id="middleName"
+            value={this.getValue(middle_name)}
             label="Middle Name"
             type="text"
-            value={this.getValue(middle_name)}
             validations="minLength:1"
           />
           <Input
-            name="last_name"
-            id="last_name"
+            name="lastName"
+            id="lastName"
+            value={this.getValue(last_name)}
             label="Last Name"
             type="text"
-            value={this.getValue(last_name)}
             validations="minLength:1"
           />
           <Input
-            name="contact_no"
-            id="contact_no"
-            label="Contact No"
-            type="number"
-            value={this.getValue(contact_no)}
+            name="doj"
+            id="doj"
+            value={this.getValue(doj)}
+            label="Date of Join"
+            type="date"
             validations="minLength:1"
           />
           <Input
-            name="qualification"
-            id="qualification"
-            label="Qualification"
+            name="uid"
+            id="uid"
+            value={this.getValue(uid)}
+            label="UID/Addaar No."
             type="text"
-            value={this.getValue(qualification)}
             validations="minLength:1"
           />
-          <Input
-            name="total_work_experience_years"
-            id="total_work_experience_years"
-            label="Total Work Experience Years"
-            type="number"
-            value={this.getValue(total_work_experience_years)}
-            validations="minLength:1"
-            required
+          <Select
+            name="gender"
+            label="Gender"
+            value={this.getValue(gender)}
+            options={genderOptions}
           />
-          <Input
-            name="total_work_experience_months"
-            id="total_work_experience_months"
-            label="Total Work Experience Months"
-            type="number"
-            value={this.getValue(total_work_experience_months)}
-            validations="minLength:1"
-            required
-          />
-          <Input
-            name="subject"
-            id="subject"
-            label="Subject"
-            type="text"
-            value={this.getValue(subject)}
-            validations="minLength:1"
-          />
-          <Input
-            name="institution"
-            id="institutionId"
-            label="School ID"
-            type="text"
-            value={this.getValue(institutionId)}
-            validations="minLength:1"
-          />
-          <Input
-            name="address"
-            id="address"
-            label="Address"
-            type="text"
-            value={this.getValue(address)}
-            validations="minLength:1"
-          />
-          <Input
-            name="area"
-            id="area"
-            label="Area"
-            type="text"
-            value={this.getValue(area)}
-            validations="minLength:1"
-          />
-          <Input
-            name="pincode"
-            id="pincode"
-            label="Pincode"
-            type="text"
-            value={this.getValue(pincode)}
-            validations="minLength:1"
+          <Select name="mt" label="Language" value={this.getValue(mt)} options={languages} />
+          <Select
+            name="staffType"
+            label="Staff Type"
+            value={this.getValue(staff_type)}
+            options={staffTypes}
           />
         </Formsy.Form>
       </Modal>
@@ -161,8 +127,11 @@ class EditTeacherForm extends Component {
 
 EditTeacherForm.propTypes = {
   isOpen: PropTypes.bool,
-  onCloseModal: PropTypes.func,
-  institutionId: PropTypes.number,
+  canSubmit: PropTypes.bool,
+  closeConfirmModal: PropTypes.func,
+  institution: PropTypes.number,
+  staffTypes: PropTypes.array,
+  languages: PropTypes.array,
   teacher: PropTypes.object,
   save: PropTypes.func,
   enableSubmitForm: PropTypes.func,
@@ -170,17 +139,23 @@ EditTeacherForm.propTypes = {
 };
 
 const mapStateToProps = (state) => {
+  const teacherVal = state.teachers.teachers.find((teacher) => {
+    return state.teachers.editTeacherId === teacher.id;
+  });
+
   return {
-    isOpen: state.modal.createInstitution,
+    isOpen: state.modal.editTeacher,
     canSubmit: state.appstate.enableSubmitForm,
-    teacher: get(state.teachers.teachers, state.teachers.editTeacherId, {}),
+    teacher: teacherVal || {},
+    languages: state.languages.languages,
+    staffTypes: getStaffTypes(state.schoolSelection.primarySchool),
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    save: (form) => {
-      dispatch(editTeacher(form));
+    save: (form, id) => {
+      dispatch(editTeacher(form, id));
     },
     enableSubmitForm: () => {
       dispatch(enableSubmitForm());

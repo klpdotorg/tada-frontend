@@ -1,12 +1,5 @@
-import Notifications from 'react-notification-system-redux';
 import { SERVER_API_BASE as serverApiBase } from 'config';
-import { get, post } from './requests';
-import {
-  teacherUpdated,
-  teacherDeleted,
-  teacherNotDeleted,
-  teacherNotUpdated,
-} from './notifications';
+import { get, post, patch } from './requests';
 import {
   TEACHER_FETCHED,
   TOGGLE_MODAL,
@@ -29,6 +22,7 @@ export const closeTeacherLoading = () => {
 
 export const setEditTeacherId = (value) => {
   return (dispatch) => {
+    console.log(value);
     dispatch({
       type: TOGGLE_MODAL,
       modal: 'editTeacher',
@@ -68,24 +62,17 @@ export const saveNewTeacher = (teacher) => {
   };
 };
 
-export const updateTeacher = (teacher, id, deleteRequest) => {
+export const editTeacher = (teacher, Id) => {
   return (dispatch) => {
-    post(`${serverApiBase}teacher/${id}`, teacher)
-      .then(checkStatus)
-      .then((res) => {
-        if (!res) {
-          if (deleteRequest) {
-            dispatch(Notifications.error(teacherNotDeleted));
-          } else {
-            dispatch(Notifications.error(teacherNotUpdated));
-          }
-        }
-        if (deleteRequest) {
-          dispatch(Notifications.success(teacherDeleted));
-        } else {
-          dispatch(Notifications.success(teacherUpdated));
-        }
-        dispatch(getTeachers(teacher.institution));
+    dispatch(showTeacherLoading());
+
+    const createTeacherURL = `${serverApiBase}teachers/${Id}/`;
+    patch(createTeacherURL, teacher).then(() => {
+      dispatch({
+        type: TOGGLE_MODAL,
+        modal: 'editTeacher',
       });
+      dispatch(getTeachers(teacher.institution));
+    });
   };
 };
