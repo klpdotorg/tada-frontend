@@ -1,4 +1,4 @@
-import { SET_QUESTIONS, SHOW_QUESTION_LOADING, CLOSE_QUESTION_LOADING } from '../actions/types';
+import { SET_QUESTIONS, SHOW_QUESTION_LOADING, HIDE_QUESTION_LOADING } from '../actions/types';
 import { changeArrayToObject } from './utils';
 
 const INITIAL_STATE = {
@@ -18,7 +18,7 @@ const Questions = (state = INITIAL_STATE, action) => {
         ...state,
         loading: true,
       };
-    case CLOSE_QUESTION_LOADING:
+    case HIDE_QUESTION_LOADING:
       return {
         ...state,
         loading: false,

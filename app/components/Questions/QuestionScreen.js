@@ -1,10 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { Loading } from '../common';
 import { ProgramDetails, QuestionList, CreateQuestion } from '../../containers/Questions';
 
-const QuestionScreen = ({ params }) => {
+const QuestionScreen = ({ params, loading }) => {
   const { assessmentId, programId } = params;
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <div className="container-fluid">
@@ -14,7 +19,7 @@ const QuestionScreen = ({ params }) => {
       <ProgramDetails programId={programId} assessmentId={assessmentId} />
       <br />
       <div>
-        <h4 className="text-primary text-center"> Questions in this assessment</h4>
+        <h4 className="text-primary text-center"> Questions in this Assessment</h4>
       </div>
       <QuestionList />
       <CreateQuestion assessmentId={assessmentId} />
@@ -24,6 +29,7 @@ const QuestionScreen = ({ params }) => {
 
 QuestionScreen.propTypes = {
   params: PropTypes.object,
+  loading: PropTypes.bool,
 };
 
 export { QuestionScreen };

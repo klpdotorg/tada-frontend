@@ -1,10 +1,13 @@
 import { connect } from 'react-redux';
+import { get } from 'lodash';
+
 import { ProgramDetailsView } from '../../components/Questions';
 
 const mapStateToProps = (state, ownProps) => {
+  console.log(state.programs.programs);
   return {
-    program: state.programs.programs[ownProps.programId],
-    assessment: state.assessments.assessments[ownProps.assessmentId],
+    program: get(state.programs.programs, ownProps.programId, {}),
+    assessment: get(state.assessments.assessments, ownProps.assessmentId, {}),
   };
 };
 

@@ -2,6 +2,9 @@ import { applyMiddleware, compose, combineReducers, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import { browserHistory } from 'react-router';
 import { routerMiddleware, routerReducer } from 'react-router-redux';
+import promiseMiddleware from 'redux-promise-middleware';
+import { reducer as notifications } from 'react-notification-system-redux';
+
 import {
   SchoolSelection,
   Login,
@@ -19,9 +22,8 @@ import {
   AddStudents,
   Students,
   Languages,
+  Questions,
 } from './reducers';
-import promiseMiddleware from 'redux-promise-middleware';
-import { reducer as notifications } from 'react-notification-system-redux';
 
 const reducer = combineReducers({
   schoolSelection: SchoolSelection,
@@ -42,6 +44,7 @@ const reducer = combineReducers({
   addStudents: AddStudents,
   students: Students,
   languages: Languages,
+  questions: Questions,
 });
 
 const middleware = compose(

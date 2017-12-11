@@ -3,6 +3,7 @@ const ReactDataGrid = require('react-data-grid');
 // const exampleWrapper = require('../components/exampleWrapper');
 const React = require('react');
 const { Editors, Toolbar, Formatters } = require('react-data-grid-addons');
+
 const { AutoComplete: AutoCompleteEditor, DropDownEditor } = Editors;
 const { ImageFormatter } = Formatters;
 import {
@@ -15,6 +16,7 @@ import {
 } from '../actions';
 import _ from 'underscore';
 import lodash from 'lodash';
+
 faker.locale = 'en_GB';
 import Notifications from 'react-notification-system-redux';
 import Bootstrap from 'bootstrap';
@@ -26,18 +28,16 @@ export default class AssessmentEntry extends React.Component {
   saveEntry = (studentId, answers) => {
     this.hideDangerAlert();
     this.props
-      .dispatch(
-        postAnswerForStudent(
-          this.props.selectedProgramAssess.programId,
-          this.props.selectedProgramAssess.assessmentId,
-          studentId,
-          answers,
-        ),
-      )
+      .dispatch(postAnswerForStudent(
+        this.props.selectedProgramAssess.programId,
+        this.props.selectedProgramAssess.assessmentId,
+        studentId,
+        answers,
+      ))
       .then(() => {
         this.props.dispatch(Notifications.success(answersSaved));
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
         this.props.dispatch(Notifications.error(answersNotSaved));
       });
@@ -72,8 +72,8 @@ export default class AssessmentEntry extends React.Component {
     if (!this.state.answers[student]) {
       this._answers[student] = [];
     } else {
-      //Check if answer for a qn already exists and then omit it, we only need to push the new answer..
-      this._answers[student] = _.reject(this._answers[student], function(answer) {
+      // Check if answer for a qn already exists and then omit it, we only need to push the new answer..
+      this._answers[student] = _.reject(this._answers[student], (answer) => {
         return (answer.question = question);
       });
     }
@@ -96,30 +96,26 @@ export default class AssessmentEntry extends React.Component {
     if (!_.isEqual(nextProps.selectedProgramAssess, this.props.selectedProgramAssess)) {
       this.props
         .dispatch(fetchStudentsByGroupId(nextProps.selectedProgramAssess.studentgroupId))
-        .then(data => {
-          //fetch answers for entire class.
-          this.props.dispatch(
-            getAnswersForStudents(
-              nextProps.selectedProgramAssess.programId,
-              nextProps.selectedProgramAssess.assessmentId,
-              data,
-            ),
-          );
+        .then((data) => {
+          // fetch answers for entire class.
+          this.props.dispatch(getAnswersForStudents(
+            nextProps.selectedProgramAssess.programId,
+            nextProps.selectedProgramAssess.assessmentId,
+            data,
+          ));
         });
     }
     if (
       this.props.selectedProgramAssess.assessmentId != nextProps.selectedProgramAssess.assessmentId
     ) {
       console.log('Next props assess id is: ', nextProps.selectedProgramAssess.assessmentId);
-      //Issue a call to go get questions for the assessment and then count the result.
+      // Issue a call to go get questions for the assessment and then count the result.
       this.props
-        .dispatch(
-          fetchQuestionsForAssessment(
-            nextProps.selectedProgramAssess.programId,
-            nextProps.selectedProgramAssess.assessmentId,
-          ),
-        )
-        .then(data => {
+        .dispatch(fetchQuestionsForAssessment(
+          nextProps.selectedProgramAssess.programId,
+          nextProps.selectedProgramAssess.assessmentId,
+        ))
+        .then((data) => {
           console.log('Fetched questions ', data);
         });
     }
@@ -140,12 +136,16 @@ export default class AssessmentEntry extends React.Component {
     let html = '';
     if (questions && questions.length > 0) {
       html = questions.map((id, index) => {
-        return <td><span>{index + 1}</span></td>;
+        return (
+          <td>
+            <span>{index + 1}</span>
+          </td>
+        );
       });
     }
     let studentDetailsArray = [];
     if (students && students.length > 0) {
-      students.map(id => {
+      students.map((id) => {
         if (this.props.boundaryDetails[id]) {
           studentDetailsArray.push(this.props.boundaryDetails[id]);
         }
@@ -153,7 +153,7 @@ export default class AssessmentEntry extends React.Component {
       studentDetailsArray = this.sortStudentsAlpha(studentDetailsArray);
     }
     if (studentDetailsArray && studentDetailsArray.length > 0) {
-      studentsList = studentDetailsArray.map(student => {
+      studentsList = studentDetailsArray.map((student) => {
         // let studentDetails = this.props.boundaryDetails[id];
         let result = '';
         if (studentDetailsArray) {
@@ -173,7 +173,7 @@ export default class AssessmentEntry extends React.Component {
       });
     }
 
-    /*return (
+    /* return (
       <div>
         <div className="row">
           <h4> Assessment Entry </h4>
@@ -189,7 +189,7 @@ export default class AssessmentEntry extends React.Component {
           {studentsList}
         </div>
       </div>
-    );*/
+    ); */
     let alert = (
       <div className="alert alert-danger alert-dismissible" role="alert">
         <button type="button" className="close" data-dismiss="alert" aria-label="Close">
@@ -214,13 +214,15 @@ export default class AssessmentEntry extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {this.props.isFetching
-              ? <tr colSpan="3">
-                  <td colSpan="3" style={{ 'text-align': 'center' }}>
-                    <i className="fa fa-cog fa-spin fa-3x fa-fw" />Loading...
-                  </td>
-                </tr>
-              : studentsList}
+            {this.props.isFetching ? (
+              <tr colSpan="3">
+                <td colSpan="3" style={{ 'text-align': 'center' }}>
+                  <i className="fa fa-cog fa-spin fa-3x fa-fw" />Loading...
+                </td>
+              </tr>
+            ) : (
+              studentsList
+            )}
           </tbody>
         </table>
       </div>
@@ -247,7 +249,7 @@ class InputRow extends React.Component {
   computeAnswers(answers) {
     let initialAnswers = {};
     if (answers) {
-      Object.values(answers).map(answer => {
+      Object.values(answers).map((answer) => {
         if (answer.student == this.props.student.id) {
           initialAnswers[answer.question] = answer.answer_score || answer.answer_grade;
         }
@@ -266,7 +268,7 @@ class InputRow extends React.Component {
   }
 
   handleAnswerInput(student, question, event) {
-    //Check if answer for a qn already exists and then omit it, we only need to push the new answer..
+    // Check if answer for a qn already exists and then omit it, we only need to push the new answer..
     console.log('change called');
     let qnId = question.split('_')[1];
     let newAnswer = this.state.answers;
@@ -292,9 +294,9 @@ class InputRow extends React.Component {
     let errorObj = [];
     let verifyQns = [];
     let error = false;
-    Object.keys(this.state.answers).map(questionId => {
+    Object.keys(this.state.answers).map((questionId) => {
       let answer = {};
-      let studentQnIdCombo = this.props.student.id + '_' + questionId;
+      let studentQnIdCombo = `${this.props.student.id}_${questionId}`;
       if (
         this.props.answers[studentQnIdCombo] &&
         this.props.answers[studentQnIdCombo].double_entry == 1
@@ -308,22 +310,20 @@ class InputRow extends React.Component {
             value: this.state.answers[questionId],
           };
           postAnswers.push(answer);
+        } else if (this.state.verify.indexOf(questionId) > -1) {
+          // We've checked this once already and alerted. DEO has still entered same answer again and pressed Submit. Allow them to proceed and overwrite existing answer
+          // Don't set error=true here!!
+          answer = {
+            qnId: questionId,
+            value: this.state.answers[questionId],
+          };
+          postAnswers.push(answer);
         } else {
-          if (this.state.verify.indexOf(questionId) > -1) {
-            //We've checked this once already and alerted. DEO has still entered same answer again and pressed Submit. Allow them to proceed and overwrite existing answer
-            // Don't set error=true here!!
-            answer = {
-              qnId: questionId,
-              value: this.state.answers[questionId],
-            };
-            postAnswers.push(answer);
-          } else {
-            //Answer doesn't match existing answer for double entry. Add it to the errors array
-            error = true;
-            errorObj.push(questionId);
-            //Push the entry to verify so we know this answer has already been checked once and alerted.
-            verifyQns.push(questionId);
-          }
+          // Answer doesn't match existing answer for double entry. Add it to the errors array
+          error = true;
+          errorObj.push(questionId);
+          // Push the entry to verify so we know this answer has already been checked once and alerted.
+          verifyQns.push(questionId);
         }
       } else {
         // No double entry..this is a fresh answer, send it as POST as-is.
@@ -332,12 +332,22 @@ class InputRow extends React.Component {
           value: this.state.answers[questionId],
         };
         postAnswers.push(answer);
+        [
+          {
+            qnId: questionId,
+            value,
+          },
+          {
+            qnId: questionId,
+            value,
+          },
+        ];
       }
     });
 
     if (!error) {
       this.props.hideAlert();
-      //post answers here
+      // post answers here
       console.log('POSTING ANSWERS');
       this.setState({
         errors: [],
@@ -346,7 +356,7 @@ class InputRow extends React.Component {
       this.props.saveEntry(this.props.student.id, postAnswers);
     } else {
       this.props.showAlert();
-      //Set state for errors..
+      // Set state for errors..
       this.setState({
         errors: errorObj,
         verify: verifyQns,
@@ -358,14 +368,14 @@ class InputRow extends React.Component {
     let name = '';
     let id;
     if (this.props.student) {
-      name = this.props.student.first_name + ' ' + this.props.student.last_name;
+      name = `${this.props.student.first_name} ${this.props.student.last_name}`;
       id = this.props.student.id;
     }
     let html = '';
     let answers = this.props.answers;
     if (this.props.questions && this.props.questions.length > 0) {
       html = this.props.questions.map((questionid, index) => {
-        let qnId = id + '_' + questionid;
+        let qnId = `${id}_${questionid}`;
         let value = answers[qnId];
         let disabled = false;
         let displayValue = this.getAnswerForQn(qnId);
@@ -375,8 +385,8 @@ class InputRow extends React.Component {
             value.history.created_by != parseInt(sessionStorage.getItem('userid')) &&
             value.double_entry == 1
           ) {
-            //In this case, this current user is about to verify the assessment answer by double entry. Hence, don't show the
-            //existing answer in the UI
+            // In this case, this current user is about to verify the assessment answer by double entry. Hence, don't show the
+            // existing answer in the UI
             displayValue = '';
           } else {
             disabled = value.double_entry == 2;
@@ -430,7 +440,7 @@ class InputRow extends React.Component {
         </td>
         <td>
           <button
-            id={'save_' + id}
+            id={`save_${id}`}
             onClick={this.saveAnswers.bind(this)}
             className="btn btn-primary"
           >

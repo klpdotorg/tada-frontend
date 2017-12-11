@@ -52,7 +52,9 @@ class CreateQuestionForm extends Component {
           onValidSubmit={this.submitForm}
           onValid={this.props.enableSubmitForm}
           onInvalid={this.props.disableSubmitForm}
-          ref={(ref) => { return (this.myform = ref); }}
+          ref={(ref) => {
+            return (this.myform = ref);
+          }}
         >
           <Input
             name="questionNo"
@@ -92,7 +94,7 @@ class CreateQuestionForm extends Component {
             required
             // onChange={this.questionTypeChanged.bind(this)}
           />
-          <Input name="grade" label="Grade" type="text" disabled={!this.state.isGradeType} />
+          {/* <Input name="grade" label="Grade" type="text" disabled={!this.state.isGradeType} />
           <Row layout="horizontal">
             <Input
               elementWrapperClassName="col-md-2"
@@ -111,6 +113,7 @@ class CreateQuestionForm extends Component {
               disabled={this.state.isGradeType}
             />
           </Row>
+        */}
         </Formsy.Form>
       </Modal>
     );
