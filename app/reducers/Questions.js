@@ -11,7 +11,7 @@ const Questions = (state = INITIAL_STATE, action) => {
     case SET_QUESTIONS:
       return {
         ...state,
-        questions: changeArrayToObject(action.value, 'id'),
+        questions: changeArrayToObject(action.value, 'question_details.id'),
       };
     case SHOW_QUESTION_LOADING:
       return {

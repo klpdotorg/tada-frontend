@@ -10,7 +10,6 @@ class GetQuestions extends Component {
   componentDidMount() {
     const { params, fetchPrograms } = this.props;
     const { programId, assessmentId } = params;
-    console.log(fetchPrograms);
     if (fetchPrograms) {
       this.props.getQuestionParentEntities(programId, assessmentId);
     } else {

@@ -8,7 +8,7 @@ const AssessmentRow = (props) => {
   const { assessment, url } = props;
 
   return (
-    <tr key={assessment.id} id={assessment.id}>
+    <tr key={assessment.id}>
       <td>{assessment.name}</td>
       <td>{dateParser(assessment.start_date)}</td>
       <td>{dateParser(assessment.end_date)}</td>

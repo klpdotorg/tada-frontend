@@ -50,11 +50,13 @@ export const getEntityType = (entity) => {
 };
 
 export const getBoundaryType = (boundary) => {
-  return boundary.boundary_type ||
-  boundary.institution_type ||
-  (boundary.type && boundary.type.id) ||
-  boundary.group_type ||
-  'student';
+  return (
+    boundary.boundary_type ||
+    boundary.institution_type ||
+    (boundary.type && boundary.type.id) ||
+    boundary.group_type ||
+    'student'
+  );
 };
 /*
 Method computes the router path for an entity and returns it
@@ -148,7 +150,9 @@ export const nodeDepth = (node) => {
 };
 
 export const processStudents = (students, groupId, boundariesByParent, boundaryDetails) => {
-  const studentIds = students.map((student) => { return student.id; });
+  const studentIds = students.map((student) => {
+    return student.id;
+  });
   let details = students.reduce((soFar, current) => {
     current = computeRouterPathForEntity(current, boundaryDetails, groupId);
     current = nodeDepth(current);
@@ -172,7 +176,8 @@ export const processStudents = (students, groupId, boundariesByParent, boundaryD
 
 export const changeArrayToObject = (array, fieldName) => {
   return array.reduce((soFar, item) => {
-    soFar[item[fieldName]] = item;
+    const itemVal = _.get(item, fieldName);
+    soFar[itemVal] = item;
 
     return soFar;
   }, {});

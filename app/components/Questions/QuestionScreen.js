@@ -22,7 +22,7 @@ const QuestionScreen = ({ params, loading }) => {
         <h4 className="text-primary text-center"> Questions in this Assessment</h4>
       </div>
       <QuestionList />
-      <CreateQuestion assessmentId={assessmentId} />
+      <CreateQuestion assessmentId={Number(assessmentId)} programId={Number(programId)} />
     </div>
   );
 };

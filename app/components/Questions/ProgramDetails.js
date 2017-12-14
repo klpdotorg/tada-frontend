@@ -26,7 +26,7 @@ const ProgramDetailsView = (props) => {
         <button type="button" className="btn btn-primary" onClick={props.openCreateQuestionModal}>
           Add Question
         </button>
-        <Link to="/programs" className="btn btn-info padded-btn">
+        <Link to="/programmes" className="btn btn-info padded-btn">
           Back to Program
         </Link>
       </div>

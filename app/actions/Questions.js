@@ -1,7 +1,14 @@
 import { SERVER_API_BASE } from 'config';
-import { get } from './requests';
-import { SET_QUESTIONS, SHOW_QUESTION_LOADING, HIDE_QUESTION_LOADING } from './types';
+import { get, post } from './requests';
+import { SET_QUESTIONS, SHOW_QUESTION_LOADING, HIDE_QUESTION_LOADING, TOGGLE_MODAL } from './types';
 import { setPrograms, selectProgram, setAssessments } from './index';
+
+export const openCreateQuestionModal = () => {
+  return {
+    type: TOGGLE_MODAL,
+    modal: 'createQuestion',
+  };
+};
 
 export const setQuestions = (value, assessmentId) => {
   return {
@@ -42,7 +49,6 @@ export const getQuestionParentEntities = (programId, assessmentId) => {
     const fetchProgramsUrl = `${SERVER_API_BASE}surveys/`;
 
     get(fetchProgramsUrl).then((programResponse) => {
-      console.log(programResponse);
       dispatch(setPrograms(programResponse.results));
       dispatch(selectProgram(programId));
 
@@ -52,6 +58,21 @@ export const getQuestionParentEntities = (programId, assessmentId) => {
         dispatch(getQuestions(programId, assessmentId));
         dispatch(hideQuestionLoading());
       });
+    });
+  };
+};
+
+export const createNewQuestion = (data, programId, assessmentId) => {
+  return (dispatch) => {
+    dispatch({
+      type: TOGGLE_MODAL,
+      modal: 'createQuestion',
+    });
+
+    dispatch(showQuestionLoading());
+    const createQuestionURL = `${SERVER_API_BASE}surveys/${programId}/questiongroup/${assessmentId}/questions/`;
+    post(createQuestionURL, data).then(() => {
+      dispatch(getQuestions(programId, assessmentId));
     });
   };
 };

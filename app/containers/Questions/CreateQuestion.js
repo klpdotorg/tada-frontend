@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
-import { saveNewQuestion, enableSubmitForm, disableSubmitForm } from '../../actions';
+import { createNewQuestion, enableSubmitForm, disableSubmitForm } from '../../actions';
+import { QuestionTypes } from '../../Data';
 
 import { Modal } from '../../components/Modal';
 
-const { Input, Textarea, Select, Row } = FRC;
+const { Input, Textarea, Select } = FRC;
 
 class CreateQuestionForm extends Component {
   constructor(props) {
@@ -16,25 +17,34 @@ class CreateQuestionForm extends Component {
     this.submitForm = this.submitForm.bind(this);
   }
 
-  submitForm() {
-    const myform = this.myform.getModel();
+  getQuestionTypes() {
+    return QuestionTypes.map((type) => {
+      return {
+        value: type.id,
+        label: `${type.display} (${type.type})`,
+      };
+    });
+  }
 
-    this.props.save(
-      myform.questionNo,
-      myform.qnOrder,
-      myform.qnText,
-      myform.type,
-      myform.grade,
-      myform.minMarks,
-      myform.maxMarks,
-      2,
-    );
+  submitForm() {
+    const { programId, assessmentId } = this.props;
+    const myform = this.myform.getModel();
+    const question = {
+      question_details: {
+        question_text: myform.qnText,
+        display_text: myform.displayText,
+        key: myform.key,
+        question_type: myform.type,
+        is_featured: true,
+        status: 'AC',
+      },
+    };
+
+    this.props.save(question, programId, assessmentId);
   }
 
   render() {
     const { isOpen, canSubmit } = this.props;
-
-    const typeOptions = [{ value: '1', label: 'Marks' }, { value: '2', label: 'Grade' }];
 
     return (
       <Modal
@@ -53,32 +63,14 @@ class CreateQuestionForm extends Component {
           onValid={this.props.enableSubmitForm}
           onInvalid={this.props.disableSubmitForm}
           ref={(ref) => {
-            return (this.myform = ref);
+            this.myform = ref;
           }}
         >
-          <Input
-            name="questionNo"
-            id="questionNo"
-            value=""
-            label="Question #"
-            type="text"
-            placeholder="Please enter the qn number"
-            required
-            validations="isNumeric"
-          />
-          <Input
-            type="text"
-            required
-            label="Question Order"
-            name="qnOrder"
-            validations="isNumeric"
-            placeholder="Please select the order you'd like the question at"
-          />
           <Textarea
             rows={2}
             cols={60}
             name="qnText"
-            label="Text"
+            label="Question Text"
             placeholder="Please enter the question text"
             validations="minLength:10"
             validationErrors={{
@@ -86,34 +78,24 @@ class CreateQuestionForm extends Component {
             }}
             required
           />
-          <Select
-            name="type"
-            label="Type"
-            options={typeOptions}
-            value="1"
+          <Input
+            name="displayText"
+            id="displayText"
+            value=""
+            label="Display Text"
+            type="text"
+            placeholder="Please enter the display text"
             required
-            // onChange={this.questionTypeChanged.bind(this)}
           />
-          {/* <Input name="grade" label="Grade" type="text" disabled={!this.state.isGradeType} />
-          <Row layout="horizontal">
-            <Input
-              elementWrapperClassName="col-md-2"
-              name="minMarks"
-              label="Min Score"
-              type="text"
-              validations="isFloat"
-              disabled={this.state.isGradeType}
-            />
-            <Input
-              elementWrapperClassName="col-md-2"
-              name="maxMarks"
-              label="Max Score"
-              type="text"
-              validations="isFloat"
-              disabled={this.state.isGradeType}
-            />
-          </Row>
-        */}
+          <Select name="type" label="Type" options={this.getQuestionTypes()} value="1" required />
+          <Input
+            name="key"
+            id="key"
+            value="ivrss-grade"
+            label="Key"
+            type="text"
+            placeholder="Enter key"
+          />
         </Formsy.Form>
       </Modal>
     );
@@ -123,6 +105,8 @@ class CreateQuestionForm extends Component {
 CreateQuestionForm.propTypes = {
   isOpen: PropTypes.bool,
   canSubmit: PropTypes.bool,
+  programId: PropTypes.number,
+  assessmentId: PropTypes.number,
   save: PropTypes.func,
   enableSubmitForm: PropTypes.func,
   disableSubmitForm: PropTypes.func,
@@ -139,8 +123,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    save: (form) => {
-      dispatch(saveNewQuestion(form));
+    save: (form, programId, assessmentId) => {
+      dispatch(createNewQuestion(form, programId, assessmentId));
     },
     enableSubmitForm: () => {
       dispatch(enableSubmitForm());
@@ -151,7 +135,7 @@ const mapDispatchToProps = (dispatch) => {
     onCloseModal: () => {
       dispatch({
         type: 'TOGGLE_MODAL',
-        modal: 'CreateQuestion',
+        modal: 'createQuestion',
       });
     },
   };

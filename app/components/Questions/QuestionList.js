@@ -10,16 +10,13 @@ const QuestionListView = ({ questions }) => {
         <tbody>
           <tr className="info">
             <th>Question #</th>
-            <th>Order</th>
             <th>Text</th>
             <th>Type</th>
-            <th>Min Mk</th>
-            <th>Max Mk</th>
-            <th>Grade Set</th>
+            <th>Key</th>
             <th>Actions</th>
           </tr>
           {questions.map((id) => {
-            return <Question id={id} />;
+            return <Question id={id} key={id} />;
           })}
         </tbody>
       </table>

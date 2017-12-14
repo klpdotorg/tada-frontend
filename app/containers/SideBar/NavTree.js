@@ -31,9 +31,7 @@ class NavTree extends Component {
 
     return (
       <Link key={boundary.name || boundary.id} to={boundary.path}>
-        <span className="node">
-          {label}
-        </span>
+        <span className="node">{label}</span>
       </Link>
     );
   }
@@ -50,7 +48,7 @@ class NavTree extends Component {
         const label = this.renderLabel(boundary, depth);
         let newDepth = depth;
         if (children && children.length) {
-          newDepth = newDepth + 1;
+          newDepth += 1;
         }
 
         return (
@@ -62,9 +60,8 @@ class NavTree extends Component {
             nodeLabel={label}
             collapsed={boundary.collapsed}
           >
-            {children && children.map((child) => (
-              this.renderSubTree(child, boundaryHierarchy, visitedBoundaries, newDepth)
-            ))}
+            {children &&
+              children.map((child) => { return this.renderSubTree(child, boundaryHierarchy, visitedBoundaries, newDepth); })}
           </TreeView>
         );
       }
@@ -73,15 +70,12 @@ class NavTree extends Component {
     return null;
   }
 
-  //boundaryDetails={this.state.boundaryDetails} boundaryParentChildMap={this.state.childrenByParentId}
   render() {
     const visitedBoundaries = [];
     const { boundariesByParentId, boundaryDetails } = this.props;
     return (
       <div>
-        {alphabeticalOrder(boundariesByParentId, boundaryDetails).map(element => (
-          this.renderSubTree(element, boundariesByParentId, visitedBoundaries, 0)
-        ))}
+        {alphabeticalOrder(boundariesByParentId, boundaryDetails).map((element) => { return this.renderSubTree(element, boundariesByParentId, visitedBoundaries, 0); })}
       </div>
     );
   }
@@ -90,15 +84,18 @@ class NavTree extends Component {
 const filterBoundaries = (type, boundariesByParentId, boundaryDetails) => {
   const boundaryIds = _.clone(boundariesByParentId);
 
-  boundaryIds[DEFAULT_PARENT_NODE_ID] = _.filter(boundariesByParentId[DEFAULT_PARENT_NODE_ID], key => {
-    const boundaryType = boundaryDetails[key].type;
-    return boundaryType === type;
-  });
+  boundaryIds[DEFAULT_PARENT_NODE_ID] = _.filter(
+    boundariesByParentId[DEFAULT_PARENT_NODE_ID],
+    (key) => {
+      const boundaryType = boundaryDetails[key].type;
+      return boundaryType === type;
+    },
+  );
 
   return boundaryIds;
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const { boundaryDetails, boundariesByParentId } = state.boundaries;
   const selectedSchoolType = state.schoolSelection.primarySchool ? 'primary' : 'pre';
 
@@ -106,19 +103,21 @@ const mapStateToProps = state => {
     boundariesByParentId: filterBoundaries(
       selectedSchoolType,
       boundariesByParentId,
-      boundaryDetails
+      boundaryDetails,
     ),
     boundaryDetails: state.boundaries.boundaryDetails,
   };
 };
 
-const mapDispatchToProps = dispatch => ({
-  onBoundaryClick: (id, depth) => {
-    dispatch(toggleNode(id));
-    dispatch(getEntity(id));
-    dispatch(closePeerNodes(id, depth));
-  },
-});
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onBoundaryClick: (id, depth) => {
+      dispatch(toggleNode(id));
+      dispatch(getEntity(id));
+      dispatch(closePeerNodes(id, depth));
+    },
+  };
+};
 
 NavTree.propTypes = {
   boundariesByParentId: PropTypes.object,
