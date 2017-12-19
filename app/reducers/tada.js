@@ -10,12 +10,10 @@ import {
   INSTITUTION,
   STUDENT,
   BOUNDARY,
-  getBoundaryType
+  getBoundaryType,
 } from './utils';
 import store from '../store';
-import {
-  SET_PARENT_NODE
-} from '../actions/types';
+import { SET_PARENT_NODE, RESET_NAV_TREE } from '../actions/types';
 
 /**
  + * Classes need to have a label that's a combination of name and section. This method
@@ -43,11 +41,11 @@ function processBoundaryDetails(data, boundariesByParentId, boundaryDetails, par
     if (soFar.details[boundaryId] == undefined) {
       boundary.collapsed = true;
     }
-    boundary = { ...boundary, parentNode }
+    boundary = { ...boundary, parentNode };
     boundary = computeRouterPathForEntity(boundary, boundaryDetails);
     boundary = {
       ...boundary,
-      depth: nodeDepth(boundary)
+      depth: nodeDepth(boundary),
     };
     boundary = createLabelForClass(boundary);
 
@@ -61,44 +59,42 @@ function processBoundaryDetails(data, boundariesByParentId, boundaryDetails, par
   };
 }
 
-export function boundaries(
-  state = {
-    boundariesByParentId: {},
-    boundaryDetails: {
-      [DEFAULT_PARENT_NODE_ID]: {
-        depth: 0,
-        id: DEFAULT_PARENT_ID
-      },
+const INITIAL_STATE = {
+  boundariesByParentId: {},
+  boundaryDetails: {
+    [DEFAULT_PARENT_NODE_ID]: {
+      depth: 0,
+      id: DEFAULT_PARENT_ID,
     },
-    parentNode: DEFAULT_PARENT_NODE_ID
   },
-  action,
-) {
+  parentNode: DEFAULT_PARENT_NODE_ID,
+};
+
+export function boundaries(state = INITIAL_STATE, action) {
   switch (action.type) {
     case SET_PARENT_NODE:
-      console.log(action.value, 'Calling set block');
       return {
         ...state,
-        parentNode: action.value
-      }
+        parentNode: action.value,
+      };
     case 'BOUNDARIES_FULFILLED':
       if (action.payload.results.length > 0) {
         const boundaryDetails = processBoundaryDetails(
           action.payload.results,
           state.boundariesByParentId,
           state.boundaryDetails,
-          state.parentNode
+          state.parentNode,
         );
 
         return {
           ...state,
-          ...boundaryDetails
+          ...boundaryDetails,
         };
       }
       return state;
 
     case 'STUDENTS_FULFILLED':
-      //console.log(action.payload)
+      // console.log(action.payload)
       let merged = processStudents(
         action.payload.students.results,
         action.payload.groupId,
@@ -133,14 +129,14 @@ export function boundaries(
 
       const updatedBoundary = {
         ...existingBoundary,
-        collapsed: action.open ? !action.open : !existingBoundary.collapsed
+        collapsed: action.open ? !action.open : !existingBoundary.collapsed,
       };
       const boundaryType = getBoundaryType(updatedBoundary);
       let parentNode;
       if (updatedBoundary.id === DEFAULT_PARENT_ID) {
-        parentNode = DEFAULT_PARENT_NODE_ID
+        parentNode = DEFAULT_PARENT_NODE_ID;
       } else {
-        parentNode = `${updatedBoundary.id}${boundaryType}`
+        parentNode = `${updatedBoundary.id}${boundaryType}`;
       }
 
       const details = {
@@ -151,7 +147,7 @@ export function boundaries(
         ...state,
         ...{
           boundaryDetails: details,
-          parentNode
+          parentNode,
         },
       };
       return val;
@@ -171,7 +167,7 @@ export function boundaries(
         let index = copyBoundariesByParentId[action.parentId].indexOf(parseInt(action.id));
         copyBoundariesByParentId[action.parentId].splice(index, 1);
       } else {
-        //This is a district. Therefore remove it from the parent "1"
+        // This is a district. Therefore remove it from the parent "1"
         let index = copyBoundariesByParentId[1].indexOf(parseInt(action.id));
         copyBoundariesByParentId[1].splice(index, 1);
       }
@@ -186,7 +182,7 @@ export function boundaries(
     case 'CLOSE_PEER_NODES':
       let boundaryDetails = _.clone(state.boundaryDetails);
       let openNodes = _.forEach(boundaryDetails, (value, key) => {
-        const parentNode = `${value.id}${getBoundaryType(value)}`
+        const parentNode = `${value.id}${getBoundaryType(value)}`;
         if (!value.collapsed) {
           if (value.depth === action.depth && parentNode !== action.id) {
             value.collapsed = true;
@@ -196,9 +192,10 @@ export function boundaries(
 
       return {
         ...state,
-        ...{ boundaryDetails: boundaryDetails },
+        ...{ boundaryDetails },
       };
-
+    case RESET_NAV_TREE:
+      return INITIAL_STATE;
     default:
       return state;
   }

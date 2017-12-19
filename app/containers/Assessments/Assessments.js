@@ -30,7 +30,6 @@ GetAssessments.propTypes = {
 
 const mapStateToProps = (state) => {
   const programId = state.programs.selectedProgram;
-  console.log(state.assessments.assessments, programId);
   const assessments = map(state.assessments.assessments, (assessment) => {
     return assessment.id;
   });

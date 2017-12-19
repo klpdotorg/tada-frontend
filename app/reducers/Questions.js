@@ -1,8 +1,7 @@
 import { SET_QUESTIONS, SHOW_QUESTION_LOADING, HIDE_QUESTION_LOADING } from '../actions/types';
-import { changeArrayToObject } from './utils';
 
 const INITIAL_STATE = {
-  questions: {},
+  questions: [],
   loading: false,
 };
 
@@ -11,7 +10,7 @@ const Questions = (state = INITIAL_STATE, action) => {
     case SET_QUESTIONS:
       return {
         ...state,
-        questions: changeArrayToObject(action.value, 'question_details.id'),
+        questions: action.value,
       };
     case SHOW_QUESTION_LOADING:
       return {

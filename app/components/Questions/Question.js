@@ -1,10 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 
-const QuestionView = (props) => {
-  const { question_details } = props.question;
-  const { question_text, display_text, key, question_type } = question_details;
+const Question = (props) => {
+  const { question_text, display_text, key, question_type } = props.question;
 
   return (
     <tr>
@@ -27,17 +24,5 @@ const QuestionView = (props) => {
     </tr>
   );
 };
-
-QuestionView.propTypes = {
-  question: PropTypes.object,
-};
-
-const mapStateToProps = (state, ownProps) => {
-  return {
-    question: state.questions.questions[ownProps.id],
-  };
-};
-
-const Question = connect(mapStateToProps)(QuestionView);
 
 export { Question };

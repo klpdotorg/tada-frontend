@@ -16,13 +16,6 @@ const AssessmentRow = (props) => {
       <td>{assessment.double_entry}</td>
       <td>{assessment.academic_year}</td>
       <td>
-        <input
-          type="checkbox"
-          // onChange={selectAssessment}
-          checked
-        />
-      </td>
-      <td>
         <button
           className="btn btn-primary padded-btn"
           data-toggle="tooltip"

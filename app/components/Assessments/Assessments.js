@@ -25,7 +25,6 @@ const AssessmentTable = (props) => {
               <th>Type</th>
               <th>Double Entry</th>
               <th>Flexi-type</th>
-              <th>Select</th>
               <th>Actions</th>
             </tr>
             {assessments.map((id) => {

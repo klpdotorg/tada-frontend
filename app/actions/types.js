@@ -48,3 +48,4 @@ export const SHOW_TEACHER_LOADING = 'show_teacher_loading';
 export const CLOSE_TEACHER_LOADING = 'clsoe_teacher_loading';
 export const SHOW_QUESTION_LOADING = 'show_question_loading';
 export const HIDE_QUESTION_LOADING = 'hide_question_loading';
+export const RESET_NAV_TREE = 'reset_nav_tree';

@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Question } from '../../containers/Questions';
+import { Message } from '../common';
+import { Question } from './index';
 
 const QuestionListView = ({ questions }) => {
   return (
-    <div>
-      <table className="table table-bordered table-striped">
+    <div className="border-table">
+      <table className="table table-striped" style={{ marginBottom: 0 }}>
         <tbody>
           <tr className="info">
             <th>Question #</th>
@@ -15,11 +16,18 @@ const QuestionListView = ({ questions }) => {
             <th>Key</th>
             <th>Actions</th>
           </tr>
-          {questions.map((id) => {
-            return <Question id={id} key={id} />;
+          {questions.map((question, i) => {
+            return <Question question={question} key={i} />;
           })}
         </tbody>
       </table>
+      {!questions.length ? (
+        <div className="base-spacing">
+          <Message message="No Assessments Found!" />
+        </div>
+      ) : (
+        <div />
+      )}
     </div>
   );
 };

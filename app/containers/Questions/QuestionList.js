@@ -1,13 +1,11 @@
 import { connect } from 'react-redux';
-import { keys } from 'lodash';
+import { get } from 'lodash';
 
 import { QuestionListView } from '../../components/Questions';
 
 const mapStateToProps = (state) => {
-  const questions = keys(state.questions.questions);
-
   return {
-    questions,
+    questions: get(state.questions, 'questions', []),
   };
 };
 
