@@ -182,3 +182,11 @@ export const changeArrayToObject = (array, fieldName) => {
     return soFar;
   }, {});
 };
+
+export const mergeInArrayWithId = (array, value) => {
+  const newArray = array.filter((item) => {
+    return item.id !== value.id;
+  });
+
+  return [...newArray, value];
+};

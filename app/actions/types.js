@@ -49,3 +49,5 @@ export const CLOSE_TEACHER_LOADING = 'clsoe_teacher_loading';
 export const SHOW_QUESTION_LOADING = 'show_question_loading';
 export const HIDE_QUESTION_LOADING = 'hide_question_loading';
 export const RESET_NAV_TREE = 'reset_nav_tree';
+export const SET_STUDENTS = 'set_students';
+export const SET_STUDENT = 'set_student';

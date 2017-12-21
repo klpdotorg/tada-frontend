@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { get } from 'lodash';
+import { get, keys } from 'lodash';
 import { connect } from 'react-redux';
 import { DEFAULT_PARENT_NODE_ID } from 'config';
 
-import { getEntities } from '../../actions';
+import { getEntities, fetchStudents } from '../../actions';
 import { ViewStudentsCont } from '../../components/ViewStudents';
 
 class FetchStudents extends Component {
   componentDidMount() {
-    const { params, studentIds } = this.props;
+    const { params, studentIds, studentGroup } = this.props;
 
     const {
       blockNodeId,
@@ -18,8 +18,8 @@ class FetchStudents extends Component {
       institutionNodeId,
       studentGroupNodeId,
     } = params;
-
-    if (!studentIds) {
+    console.log(params, studentIds, 'printing student Ids');
+    if (!studentIds.length) {
       this.props.getEntities([
         DEFAULT_PARENT_NODE_ID,
         districtNodeId,
@@ -28,6 +28,12 @@ class FetchStudents extends Component {
         institutionNodeId,
         studentGroupNodeId,
       ]);
+    }
+
+    const studentGroupId = get(this.props.studentGroup, 'id');
+
+    if (studentGroupId) {
+      this.props.fetchStudents(studentGroupId);
     }
   }
 
@@ -51,7 +57,7 @@ const mapStateToProps = (state, ownProps) => {
     studentGroupNodeId,
   } = ownProps.params;
 
-  const studentIds = state.boundaries.boundariesByParentId[studentGroupNodeId];
+  const studentIds = keys(state.students.students);
 
   return {
     district: get(state.boundaries.boundaryDetails, districtNodeId, {}),
@@ -72,6 +78,6 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-const ViewStudents = connect(mapStateToProps, mapDispatchToProps)(FetchStudents);
+const ViewStudents = connect(mapStateToProps, { getEntities, fetchStudents })(FetchStudents);
 
 export { ViewStudents };

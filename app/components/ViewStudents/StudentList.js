@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 import { Student } from '../../containers/ViewStudents';
 
 const StudentList = ({ studentIds }) => {
-  if (!studentIds) {
+  if (!studentIds.length) {
     return <div>No Students Found!</div>;
   }
 
-  return <tbody>{studentIds.map((id, i) => <Student id={id} key={i} />)}</tbody>;
+  return <tbody>{studentIds.map((id, i) => { return <Student id={id} key={i} />; })}</tbody>;
 };
 
 StudentList.propTypes = {

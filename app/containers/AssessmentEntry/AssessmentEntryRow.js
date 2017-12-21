@@ -24,7 +24,6 @@ class AssessmentEntryRowView extends Component {
             <td id={question.id} className={inputClassName}>
               <input
                 id={question.id}
-                // disabled={disabled}
                 value={answers[question.id]}
                 type="text"
                 required
@@ -57,6 +56,16 @@ class AssessmentEntryRowView extends Component {
   }
 }
 
-const AssessmentEntryRow = connect()(AssessmentEntryRowView);
+const mapStateToProps = (state, ownProps) => {
+  const student = state.students.students[ownProps.id];
+  console.log('Printing student ', student);
+  return {
+    questions: [],
+    id: student.id,
+    name: student.first_name,
+  };
+};
+
+const AssessmentEntryRow = connect(mapStateToProps)(AssessmentEntryRowView);
 
 export { AssessmentEntryRow };

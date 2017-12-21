@@ -79,7 +79,9 @@ class AddStudentsFormView extends Component {
   renderRows() {
     const rows = Array.from(Array(this.props.rows).keys());
 
-    return rows.map((row, index) => { return <AddStudentsInputRow key={index} index={index} />; });
+    return rows.map((row, index) => {
+      return <AddStudentsInputRow key={index} index={index} />;
+    });
   }
 
   render() {
@@ -96,6 +98,7 @@ class AddStudentsFormView extends Component {
                 <th>Government student ID{this.setRequiredField('uid')}</th>
                 <th>Gender{this.setRequiredField('gender')}</th>
                 <th>Mother Tongue{this.setRequiredField('mt')}</th>
+                <th>Academic Year{this.setRequiredField('academic_year')}</th>
                 <th>Date of Birth{this.setRequiredField('dob')}</th>
                 <th>Father First Name{this.setRequiredField('fatherFirstName')}</th>
                 <th>Father Middle Name{this.setRequiredField('fatherMiddleName')}</th>

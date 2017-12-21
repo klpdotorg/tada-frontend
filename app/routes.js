@@ -20,7 +20,7 @@ import { App } from './containers/Dashboard';
 import UserRegContainer from './containers/UserRegContainer';
 import { Programs } from './containers/Programs';
 import { Questions } from './containers/Questions';
-import AnswersContainer from './containers/AnswersContainer';
+import { AssessmentEntry } from './containers/AssessmentEntry';
 import ResetPassword from './components/ResetPassword';
 import SetNewPassword from './components/SetNewPassword';
 import Users from './containers/UsersContainer';
@@ -57,7 +57,8 @@ export const routes = (
         <IndexRoute component={Dashboard} onEnter={isUserAuthenticated} />
         <Route path="dashboard" component={Dashboard} />
         <Route path="programmes" component={Programs} />
-        <Route path="filterprograms" component={AnswersContainer} />
+        <Route path="filterprograms" component={AssessmentEntry} />
+        <Route path="filterprograms/:entityType/:entityId" component={AssessmentEntry} />
         <Route path="reports" component={Reports} />
         <Route path="revert-entity/:entityName" component={RevertEntity} />
         <Route path="programs/:programId" component={Programs} />

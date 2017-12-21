@@ -11,7 +11,7 @@ import { changeArrayToObject } from './utils';
 const INITIAL_STATE = {
   programs: {},
   editProgramId: null,
-  selectedProgram: null,
+  selectedProgram: '',
   loading: false,
 };
 

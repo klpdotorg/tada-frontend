@@ -39,7 +39,6 @@ export const getEntities = (Ids) => {
   return (dispatch) => {
     const Id = Ids[0];
     const filterIds = Ids.slice(1);
-
     dispatch(showBoundaryLoading());
     dispatch(openNode(Id));
     dispatch(getEntity(Id, filterIds));
@@ -48,9 +47,6 @@ export const getEntities = (Ids) => {
 
 export const fetchBoundaries = (parentId, moreIds) => {
   return (dispatch) => {
-  // const state = getState();
-  // const type = state.schoolSelection.primarySchool ? 'primary' : 'pre';
-
     get(`${SERVER_API_BASE}boundaries/?parent=${parentId}&limit=500&state=${STATE_CODE}`).then((response) => {
       if (response) {
         dispatch(setBoundaries(response));

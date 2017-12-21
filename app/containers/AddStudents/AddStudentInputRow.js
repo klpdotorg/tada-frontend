@@ -104,12 +104,12 @@ class AddStudentsInputRowForm extends Component {
             id="gender"
           >
             {languages.map((lang, i) => {
- return (
-   <option key={i} value={lang.value}>
-     {_.startCase(lang.label)}
-   </option>
-            );
-})}
+              return (
+                <option key={i} value={lang.value}>
+                  {_.startCase(lang.label)}
+                </option>
+              );
+            })}
           </select>
         </td>
         <td>
@@ -122,12 +122,12 @@ class AddStudentsInputRowForm extends Component {
             id="gender"
           >
             {lastVerifiedYears.map((year, i) => {
-return (
-  <option key={i} value={year.value}>
-    {_.startCase(year.label)}
-  </option>
-            );
-})}
+              return (
+                <option key={i} value={year.value}>
+                  {_.startCase(year.label)}
+                </option>
+              );
+            })}
           </select>
         </td>
         <td>

@@ -30,12 +30,16 @@ export const hideQuestionLoading = () => {
   };
 };
 
+export const fetchQuestions = (getQuestionsURL) => {
+  return get(getQuestionsURL);
+};
+
 export const getQuestions = (programId, assessmentId) => {
   return (dispatch) => {
     dispatch(showQuestionLoading());
 
     const getQuestionsURL = `${SERVER_API_BASE}surveys/${programId}/questiongroup/${assessmentId}/questions/`;
-    get(getQuestionsURL).then((response) => {
+    fetchQuestions(getQuestionsURL).then((response) => {
       dispatch(setQuestions(response.results, assessmentId));
       dispatch(hideQuestionLoading());
     });

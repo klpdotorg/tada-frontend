@@ -19,3 +19,4 @@ export * from './AddStudents';
 export * from './languages';
 export * from './AddTeacher';
 export * from './Questions';
+export * from './AssessmentEntry';
