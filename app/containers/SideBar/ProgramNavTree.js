@@ -7,7 +7,7 @@ import { Link } from 'react-router';
 import { DEFAULT_PARENT_NODE_ID } from 'config';
 
 import { alphabeticalOrder, capitalize, getEntityType } from '../../utils';
-import { getEntity, toggleNode, closePeerNodes } from '../../actions/';
+import { getEntity, toggleNode, closePeerNodes, collapsedProgramEntity } from '../../actions/';
 
 class NavTree extends Component {
   renderLabel(boundary, depth) {
@@ -34,49 +34,44 @@ class NavTree extends Component {
     return <span className="node">{label}</span>;
   }
 
-  renderSubTree(node, boundaryHierarchy, visitedBoundaries, depth) {
-    const { boundaryDetails, onBoundaryClick } = this.props;
+  getTreeNodes(node) {
+    const childNodes = node.boundaries || node.institutions || node.assessments;
 
-    if (boundaryDetails[node].depth === depth && depth < 5) {
-      if (node && $.inArray(node, visitedBoundaries) < 0) {
-        const children = boundaryHierarchy[node];
-        visitedBoundaries.push(node);
-
-        const boundary = boundaryDetails[node];
-        const label = this.renderLabel(boundary, depth);
-        let newDepth = depth;
-        if (children && children.length) {
-          newDepth += 1;
-        }
-
-        return (
-          <TreeView
-            key={node}
-            onClick={() => {
-              onBoundaryClick(node, newDepth);
-            }}
-            nodeLabel={label}
-            collapsed={boundary.collapsed}
-          >
-            {children &&
-              children.map((child) => {
-                return this.renderSubTree(child, boundaryHierarchy, visitedBoundaries, newDepth);
-              })}
-          </TreeView>
-        );
-      }
+    if (childNodes) {
+      return Object.values(childNodes);
     }
 
-    return null;
+    return [];
+  }
+
+  renderSubTree(node, i) {
+    console.log(!this.props.uncollapsed.includes(node.id), node.id, this.props.uncollapsed);
+
+    const treeNodes = this.getTreeNodes(node);
+
+    return (
+      <TreeView
+        key={i}
+        onClick={() => {
+          this.props.collapsedEntity(node.id);
+        }}
+        nodeLabel={node.name || i}
+        collapsed={!this.props.uncollapsed.includes(node.id)}
+      >
+        {treeNodes.map((child, index) => {
+          return this.renderSubTree(child, index + 1);
+        })}
+      </TreeView>
+    );
   }
 
   render() {
     const visitedBoundaries = [];
-    const { boundariesByParentId, boundaryDetails } = this.props;
+    const { boundaries } = this.props;
     return (
       <div>
-        {alphabeticalOrder(boundariesByParentId, boundaryDetails).map((element) => {
-          return this.renderSubTree(element, boundariesByParentId, visitedBoundaries, 0);
+        {Object.values(boundaries).map((element, i) => {
+          return this.renderSubTree(element, i);
         })}
       </div>
     );
@@ -98,33 +93,24 @@ const filterBoundaries = (type, boundariesByParentId, boundaryDetails) => {
 };
 
 const mapStateToProps = (state) => {
-  const { boundaryDetails, boundariesByParentId } = state.boundaries;
-  const selectedSchoolType = state.schoolSelection.primarySchool ? 'primary' : 'pre';
-
   return {
-    boundariesByParentId: filterBoundaries(
-      selectedSchoolType,
-      boundariesByParentId,
-      boundaryDetails,
-    ),
-    boundaryDetails: state.boundaries.boundaryDetails,
+    boundaries: state.programDetails.programDetails,
+    uncollapsed: state.programDetails.uncollapsedEntities,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onBoundaryClick: (id, depth) => {
-      dispatch(toggleNode(id));
-      dispatch(getEntity(id));
-      dispatch(closePeerNodes(id, depth));
+    collapsedEntity: (id) => {
+      console.log(id, 'Sending this IDDD');
+      dispatch(collapsedProgramEntity(id));
     },
   };
 };
 
 NavTree.propTypes = {
-  boundariesByParentId: PropTypes.object,
-  boundaryDetails: PropTypes.object,
-  onBoundaryClick: PropTypes.func,
+  collapsedEntity: PropTypes.func,
+  uncollapsed: PropTypes.object,
 };
 
 const ProgramNavTree = connect(mapStateToProps, mapDispatchToProps)(NavTree);

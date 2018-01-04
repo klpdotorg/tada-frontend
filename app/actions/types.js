@@ -51,3 +51,5 @@ export const HIDE_QUESTION_LOADING = 'hide_question_loading';
 export const RESET_NAV_TREE = 'reset_nav_tree';
 export const SET_STUDENTS = 'set_students';
 export const SET_STUDENT = 'set_student';
+export const COLLAPSED_PROGRAM_ENTITY = 'collapsed_program_entity';
+export const UNCOLLAPSED_PROGRAM_ENTITY = 'uncollapsed_program_entity';

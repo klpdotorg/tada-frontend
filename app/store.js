@@ -23,6 +23,7 @@ import {
   Students,
   Languages,
   Questions,
+  ProgramDetails,
 } from './reducers';
 
 const reducer = combineReducers({
@@ -45,6 +46,7 @@ const reducer = combineReducers({
   students: Students,
   languages: Languages,
   questions: Questions,
+  programDetails: ProgramDetails,
 });
 
 const middleware = compose(

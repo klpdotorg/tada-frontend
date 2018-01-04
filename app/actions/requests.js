@@ -31,21 +31,22 @@ export const checkStatusNoJSON = (response) => {
   throw error;
 };
 
-export const get = url =>
-  fetch(url, {
+export const get = (url) => {
+  return fetch(url, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: 'Token 47d78a3b3a324896999a8caa0f153c2cda39f8a6',
+    // Authorization: 'Token 70b0eb043ca0d71d3434ad8cd395c79db140ef6a',
     },
   })
     .then(checkStatus)
     .catch((e) => {
       store.dispatch(Notifications.error(syncError(e)));
     });
+};
 
-export const deleteRequest = url =>
-  fetch(url, {
+export const deleteRequest = (url) => {
+  return fetch(url, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
@@ -54,9 +55,10 @@ export const deleteRequest = url =>
   }).catch((e) => {
     store.dispatch(Notifications.error(syncError(e)));
   });
+};
 
-export const post = (url, body) =>
-  fetch(url, {
+export const post = (url, body) => {
+  return fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -69,9 +71,10 @@ export const post = (url, body) =>
       store.dispatch(Notifications.error(syncError(e)));
       throw e;
     });
+};
 
-export const patch = (url, body) =>
-  fetch(url, {
+export const patch = (url, body) => {
+  return fetch(url, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
@@ -85,3 +88,4 @@ export const patch = (url, body) =>
       store.dispatch(Notifications.error(syncError(e)));
       throw e;
     });
+};

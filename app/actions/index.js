@@ -20,3 +20,4 @@ export * from './languages';
 export * from './AddTeacher';
 export * from './Questions';
 export * from './AssessmentEntry';
+export * from './ProgramDetails';
