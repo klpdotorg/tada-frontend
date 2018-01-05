@@ -13,9 +13,13 @@ class Header extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  username: state.login.username,
-});
+const mapStateToProps = () => {
+  const user = JSON.parse(sessionStorage.getItem('user'));
+
+  return {
+    username: `${user.firstName} ${user.lastName}`,
+  };
+};
 
 const MainHeader = connect(mapStateToProps, {
   logoutUser,

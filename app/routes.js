@@ -1,6 +1,7 @@
 import React from 'react';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
+import { get } from 'lodash';
 
 import { Dashboard } from './components/Dashboard';
 import { PrimaryDistrict } from './containers/PrimaryDistrict';
@@ -34,15 +35,16 @@ import { syncHistoryWithStore } from 'react-router-redux';
 const history = syncHistoryWithStore(browserHistory, tadastore);
 
 const isUserAuthenticated = (nextState, replace) => {
-  let token = sessionStorage.getItem('token');
-  // if (!token) {
-  //   // redirect to login and set next location
-  //   console.log(nextState, replace);
-  //   if (nextState.location && nextState.location.pathname) {
-  //     sessionStorage.setItem('nextUrl', nextState.location.pathname);
-  //   }
-  //   replace('/login');
-  // }
+  const user = JSON.parse(sessionStorage.getItem('user'));
+
+  if (!get(user, 'token')) {
+    // redirect to login and set next location
+    console.log(nextState, replace);
+    if (nextState.location && nextState.location.pathname) {
+      sessionStorage.setItem('nextUrl', nextState.location.pathname);
+    }
+    replace('/login');
+  }
 };
 
 export const routes = (

@@ -129,29 +129,6 @@ function requestLogout() {
   };
 }
 
-export function logoutUser() {
-  return function (dispatch, getState) {
-    return fetch(Urls.LOGOUT, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Token ${sessionStorage.token}`,
-      },
-    })
-      .then((response) => {
-        if (response.status >= 200 && response.status < 300) {
-          sessionStorage.removeItem('token');
-          sessionStorage.removeItem('isAdmin');
-          sessionStorage.removeItem('userid');
-          dispatch(push('/logout'));
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-}
-
 function userDataFetched(data) {
   return {
     type: 'USER_DATA_FETCHED',
@@ -374,49 +351,6 @@ export const toggleModal = (modalType) => {
     modal: `${modalType}`,
   };
 };
-
-export function sendLoginToServer(email, pass) {
-  return function (dispatch, getState) {
-    // sessionStorage.setItem('token', data.auth_token);
-    // sessionStorage.setItem('userid', data.user_id);
-    // dispatch(loginSuccess(data));
-    dispatch(fetchUserData(sessionStorage.token));
-    dispatch(push('/'));
-    // return fetch(Urls.LOGIN, {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({
-    //     username: email,
-    //     password: pass,
-    //   }),
-    // })
-    //   .then(response => {
-    //     if (response.status >= 200 && response.status < 300) {
-    //       return response.json();
-    //     } else {
-    //       const error = new Error(response.statusText);
-    //       error.response = response;
-    //       throw error;
-    //     }
-    //   })
-    //   .then(data => {
-
-    //     let nextUrl = sessionStorage.getItem('nextUrl');
-    //     if (nextUrl) {
-    //       sessionStorage.removeItem('nextUrl');
-    //       dispatch(push(nextUrl));
-    //     } else {
-    //       dispatch(push('/'));
-    //     }
-    //   })
-    //   .catch(error => {
-    //     dispatch(loginError(error));
-    //     console.error('request failed', error);
-    //   });
-  };
-}
 
 export function deleteBoundary(boundaryid, parentId) {
   return function (dispatch, getState) {

@@ -32,11 +32,13 @@ export const checkStatusNoJSON = (response) => {
 };
 
 export const get = (url) => {
+  const user = JSON.parse(sessionStorage.getItem('user'));
+
   return fetch(url, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-    // Authorization: 'Token 70b0eb043ca0d71d3434ad8cd395c79db140ef6a',
+      Authorization: `Token ${user.token}`,
     },
   })
     .then(checkStatus)
@@ -46,11 +48,13 @@ export const get = (url) => {
 };
 
 export const deleteRequest = (url) => {
+  const user = JSON.parse(sessionStorage.getItem('user'));
+
   return fetch(url, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: 'Token 47d78a3b3a324896999a8caa0f153c2cda39f8a6',
+      Authorization: `Token ${user.token}`,
     },
   }).catch((e) => {
     store.dispatch(Notifications.error(syncError(e)));
@@ -58,11 +62,13 @@ export const deleteRequest = (url) => {
 };
 
 export const post = (url, body) => {
+  const user = JSON.parse(sessionStorage.getItem('user'));
+
   return fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: 'Token 47d78a3b3a324896999a8caa0f153c2cda39f8a6',
+      Authorization: `Token ${user.token}`,
     },
     body: JSON.stringify(body),
   })
@@ -74,11 +80,13 @@ export const post = (url, body) => {
 };
 
 export const patch = (url, body) => {
+  const user = JSON.parse(sessionStorage.getItem('user'));
+
   return fetch(url, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: 'Token 47d78a3b3a324896999a8caa0f153c2cda39f8a6',
+      Authorization: `Token ${user.token}`,
     },
     body: JSON.stringify(body),
   })
