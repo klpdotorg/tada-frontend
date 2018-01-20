@@ -38,7 +38,7 @@ export const get = (url) => {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Token ${user.token}`,
+      // Authorization: `Token ${user.token}`,
     },
   })
     .then(checkStatus)
@@ -92,7 +92,6 @@ export const patch = (url, body) => {
   })
     .then(checkStatus)
     .catch((e) => {
-      console.log(e);
       store.dispatch(Notifications.error(syncError(e)));
       throw e;
     });

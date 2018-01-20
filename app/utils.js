@@ -54,6 +54,19 @@ export const capitalize = (string) => {
   return null;
 };
 
-export const getNodeId = (id) => { return id.split('-').join(''); };
+export const getNodeId = (id) => {
+  return id.split('-').join('');
+};
 
-export const dateParser = (date) => { return moment(date).format('DD-MM-YYYY'); };
+export const dateParser = (date) => {
+  return moment(date).format('DD-MM-YYYY');
+};
+
+export const convertEntitiesToObject = (entities) => {
+  return entities.reduce((soFar, entity) => {
+    const entityType = getEntityType(entity);
+    soFar[`${entity.id}${entityType}`] = entity;
+
+    return soFar;
+  }, {});
+};

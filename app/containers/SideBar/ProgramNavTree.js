@@ -1,15 +1,29 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import _ from 'lodash';
 import TreeView from 'react-treeview';
 import { Link } from 'react-router';
-import { DEFAULT_PARENT_NODE_ID } from 'config';
 
-import { alphabeticalOrder, capitalize, getEntityType } from '../../utils';
-import { getEntity, toggleNode, closePeerNodes, collapsedProgramEntity } from '../../actions/';
+import { capitalize, getEntityType } from '../../utils';
+import { collapsedProgramEntity, getFilterByProgramEntites } from '../../actions/';
 
 class NavTree extends Component {
+  componentDidMount() {
+    this.props.getFilterByProgramEntites({ depth: 0 });
+  }
+
+  getTreeNodes(index) {
+    const nodes = this.props.entitiesByParentId[index];
+
+    if (nodes) {
+      return nodes.map((node) => {
+        return this.props.entities[node];
+      });
+    }
+
+    return [];
+  }
+
   renderLabel(boundary, depth) {
     const label =
       capitalize(boundary.label) || capitalize(boundary.name) || capitalize(boundary.first_name);
@@ -34,85 +48,58 @@ class NavTree extends Component {
     return <span className="node">{label}</span>;
   }
 
-  getTreeNodes(node) {
-    const childNodes = node.boundaries || node.institutions || node.assessments;
+  renderSubTree(node, index, depth) {
+    const newDepth = depth + 1;
+    // console.log(!this.props.uncollapsed.includes(node.id), node.id, this.props.uncollapsed);
 
-    if (childNodes) {
-      return Object.values(childNodes);
-    }
-
-    return [];
-  }
-
-  renderSubTree(node, i) {
-    console.log(!this.props.uncollapsed.includes(node.id), node.id, this.props.uncollapsed);
-
-    const treeNodes = this.getTreeNodes(node);
-
+    const treeNodes = this.getTreeNodes(newDepth);
+    const collapsed = this.props.uncollapsed[newDepth] === node.id;
     return (
       <TreeView
-        key={i}
+        key={index}
         onClick={() => {
-          this.props.collapsedEntity(node.id);
+          // this.props.collapsedProgramEntity(node.id);
+          this.props.getFilterByProgramEntites({ id: node.id, depth: newDepth });
         }}
-        nodeLabel={node.name || i}
-        collapsed={!this.props.uncollapsed.includes(node.id)}
+        nodeLabel={node.name || index}
+        collapsed={!collapsed}
       >
-        {treeNodes.map((child, index) => {
-          return this.renderSubTree(child, index + 1);
+        {treeNodes.map((child, i) => {
+          return this.renderSubTree(child, i + 1, newDepth);
         })}
       </TreeView>
     );
   }
 
   render() {
-    const visitedBoundaries = [];
-    const { boundaries } = this.props;
     return (
       <div>
-        {Object.values(boundaries).map((element, i) => {
-          return this.renderSubTree(element, i);
+        {this.getTreeNodes(0).map((element, i) => {
+          return this.renderSubTree(element, i, 0);
         })}
       </div>
     );
   }
 }
 
-const filterBoundaries = (type, boundariesByParentId, boundaryDetails) => {
-  const boundaryIds = _.clone(boundariesByParentId);
-
-  boundaryIds[DEFAULT_PARENT_NODE_ID] = _.filter(
-    boundariesByParentId[DEFAULT_PARENT_NODE_ID],
-    (key) => {
-      const boundaryType = boundaryDetails[key].type;
-      return boundaryType === type;
-    },
-  );
-
-  return boundaryIds;
-};
-
 const mapStateToProps = (state) => {
   return {
-    boundaries: state.programDetails.programDetails,
+    entities: state.programDetails.programDetails,
+    entitiesByParentId: state.programDetails.entitiesByParentId,
     uncollapsed: state.programDetails.uncollapsedEntities,
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    collapsedEntity: (id) => {
-      console.log(id, 'Sending this IDDD');
-      dispatch(collapsedProgramEntity(id));
-    },
-  };
-};
-
 NavTree.propTypes = {
-  collapsedEntity: PropTypes.func,
+  getFilterByProgramEntites: PropTypes.func,
   uncollapsed: PropTypes.object,
+  entitiesByParentId: PropTypes.object,
+  entities: PropTypes.object,
 };
 
-const ProgramNavTree = connect(mapStateToProps, mapDispatchToProps)(NavTree);
+const ProgramNavTree = connect(mapStateToProps, {
+  collapsedProgramEntity,
+  getFilterByProgramEntites,
+})(NavTree);
 
 export { ProgramNavTree };

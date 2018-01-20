@@ -42,7 +42,9 @@ GetAnswerSheet.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    studentIds: keys(state.students.students),
+    studentIds: state.assessmentEntry.students.map((student) => {
+      return student.id;
+    }),
     selectedProgram: state.programs.selectedProgram,
   };
 };

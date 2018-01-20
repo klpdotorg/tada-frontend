@@ -24,6 +24,7 @@ import {
   Languages,
   Questions,
   ProgramDetails,
+  AssessmentEntry,
 } from './reducers';
 
 const reducer = combineReducers({
@@ -47,6 +48,7 @@ const reducer = combineReducers({
   languages: Languages,
   questions: Questions,
   programDetails: ProgramDetails,
+  assessmentEntry: AssessmentEntry,
 });
 
 const middleware = compose(

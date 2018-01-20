@@ -53,3 +53,5 @@ export const SET_STUDENTS = 'set_students';
 export const SET_STUDENT = 'set_student';
 export const COLLAPSED_PROGRAM_ENTITY = 'collapsed_program_entity';
 export const UNCOLLAPSED_PROGRAM_ENTITY = 'uncollapsed_program_entity';
+export const SET_FITLER_PROGRAM_ENTITIES = 'set_filter_program_entities';
+export const REMOVE_EXISTING_NODE = 'remove_existing_node';

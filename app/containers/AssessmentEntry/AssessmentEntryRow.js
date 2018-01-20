@@ -21,7 +21,7 @@ class AssessmentEntryRowView extends Component {
         </td>
         {questions.map((question) => {
           return (
-            <td id={question.id} className={inputClassName}>
+            <td key={question.id}>
               <input
                 id={question.id}
                 value={answers[question.id]}
@@ -57,12 +57,15 @@ class AssessmentEntryRowView extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  const student = state.students.students[ownProps.id];
-  console.log('Printing student ', student);
+  const student = state.assessmentEntry.students.find((value) => {
+    return value.id === ownProps.id;
+  });
+
   return {
-    questions: [],
+    questions: state.assessmentEntry.questions,
     id: student.id,
     name: student.first_name,
+    answers: state.assessmentEntry.answers,
   };
 };
 

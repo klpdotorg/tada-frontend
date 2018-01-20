@@ -22,7 +22,7 @@ AssessmentEntryColHeaderView.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    questions: state.questions.questions,
+    questions: state.assessmentEntry.questions,
   };
 };
 

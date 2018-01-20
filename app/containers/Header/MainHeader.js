@@ -14,7 +14,7 @@ class Header extends Component {
 }
 
 const mapStateToProps = () => {
-  const user = JSON.parse(sessionStorage.getItem('user'));
+  const user = { firstName: 'Pankaj', lastName: 'Thakur' }; // JSON.parse(sessionStorage.getItem('user')); ||
 
   return {
     username: `${user.firstName} ${user.lastName}`,

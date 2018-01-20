@@ -37,14 +37,14 @@ const history = syncHistoryWithStore(browserHistory, tadastore);
 const isUserAuthenticated = (nextState, replace) => {
   const user = JSON.parse(sessionStorage.getItem('user'));
 
-  if (!get(user, 'token')) {
-    // redirect to login and set next location
-    console.log(nextState, replace);
-    if (nextState.location && nextState.location.pathname) {
-      sessionStorage.setItem('nextUrl', nextState.location.pathname);
-    }
-    replace('/login');
-  }
+  // if (!get(user, 'token')) {
+  //   // redirect to login and set next location
+  //   console.log(nextState, replace);
+  //   if (nextState.location && nextState.location.pathname) {
+  //     sessionStorage.setItem('nextUrl', nextState.location.pathname);
+  //   }
+  //   replace('/login');
+  // }
 };
 
 export const routes = (
