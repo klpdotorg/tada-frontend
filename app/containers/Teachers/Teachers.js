@@ -6,7 +6,7 @@ import { DEFAULT_PARENT_NODE_ID } from 'config';
 
 import { TeacherScreen } from '../../components/Teachers';
 import { TOGGLE_MODAL } from '../../actions/types';
-import { getEntities, getTeachers, getLanguages } from '../../actions';
+import { getBoundariesEntities, getTeachers, getLanguages } from '../../actions';
 
 class GetTeachers extends Component {
   componentDidMount() {
@@ -17,7 +17,16 @@ class GetTeachers extends Component {
     this.props.getLanguages();
 
     if (isEmpty(institution)) {
-      this.props.getEntities([DEFAULT_PARENT_NODE_ID, districtNodeId, blockNodeId, clusterNodeId]);
+      const entities = [
+        DEFAULT_PARENT_NODE_ID,
+        districtNodeId,
+        blockNodeId,
+        clusterNodeId,
+      ].map((id, i) => {
+        return { depth: i, uniqueId: id };
+      });
+
+      this.props.getBoundariesEntities(entities);
     }
 
     if (!isEmpty(institution)) {
@@ -62,8 +71,8 @@ const mapDispatchToProps = (dispatch) => {
         modal: 'createTeacher',
       });
     },
-    getEntities: (entities) => {
-      dispatch(getEntities(entities));
+    getBoundariesEntities: (entities) => {
+      dispatch(getBoundariesEntities(entities));
     },
     getTeachers: (institutionId) => {
       dispatch(getTeachers(institutionId));
@@ -78,7 +87,7 @@ GetTeachers.propTypes = {
   teacherIds: PropTypes.array,
   params: PropTypes.object,
   institution: PropTypes.object,
-  getEntities: PropTypes.func,
+  getBoundariesEntities: PropTypes.func,
   getTeachers: PropTypes.func,
   getLanguages: PropTypes.func,
 };

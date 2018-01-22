@@ -38,7 +38,7 @@ const InstitutionView = (props) => {
           canModify={canModify}
           toggleClassModal={props.toggleClassModal}
           showTeachers={() => {
-            props.showTeachers(institution.path);
+            props.showTeachers(params.institutionNodeId, props.depth);
           }}
         />
         <div className="border-base" />
@@ -63,6 +63,7 @@ InstitutionView.propTypes = {
   showTeachers: PropTypes.func,
   params: PropTypes.object,
   toggleClassModal: PropTypes.func,
+  depth: PropTypes.number,
 };
 
 export { InstitutionView };

@@ -5,9 +5,7 @@ import { isEmpty } from 'lodash';
 
 import { DEFAULT_PARENT_NODE_ID } from 'config';
 import { PreschoolProjectView } from '../../components/PreschoolProject';
-import {
-  getEntities,
-} from '../../actions';
+import { getBoundariesEntities } from '../../actions';
 
 class FetchProjectEntity extends Component {
   constructor() {
@@ -21,7 +19,11 @@ class FetchProjectEntity extends Component {
     const { districtNodeId, projectNodeId } = params;
 
     if (isEmpty(project)) {
-      this.props.getEntities([DEFAULT_PARENT_NODE_ID, districtNodeId, projectNodeId]);
+      const entities = [DEFAULT_PARENT_NODE_ID, districtNodeId, projectNodeId].map((id, i) => {
+        return { depth: i, uniqueId: id };
+      });
+
+      this.props.getBoundariesEntities(entities);
     }
   }
 
@@ -33,7 +35,7 @@ class FetchProjectEntity extends Component {
 FetchProjectEntity.propTypes = {
   params: PropTypes.object,
   project: PropTypes.object,
-  getEntities: PropTypes.func,
+  getBoundariesEntities: PropTypes.func,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -46,6 +48,6 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const PreschoolProject = connect(mapStateToProps, { getEntities })(FetchProjectEntity);
+const PreschoolProject = connect(mapStateToProps, { getBoundariesEntities })(FetchProjectEntity);
 
 export { PreschoolProject };

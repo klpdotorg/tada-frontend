@@ -5,7 +5,7 @@ import { get, isEmpty } from 'lodash';
 
 import { DEFAULT_PARENT_NODE_ID } from 'config';
 import {
-  getEntities,
+  getBoundariesEntities,
   getInstitutionCategories,
   getLanguages,
   getManagements,
@@ -18,8 +18,18 @@ class FetchClusterEntity extends Component {
     const { districtNodeId, blockNodeId, clusterNodeId } = params;
 
     if (isEmpty(cluster)) {
-      this.props.getEntities([DEFAULT_PARENT_NODE_ID, districtNodeId, blockNodeId, clusterNodeId]);
+      const entities = [
+        DEFAULT_PARENT_NODE_ID,
+        districtNodeId,
+        blockNodeId,
+        clusterNodeId,
+      ].map((id, i) => {
+        return { depth: i, uniqueId: id };
+      });
+
+      this.props.getBoundariesEntities(entities);
     }
+
     this.props.getInstitutionCategories();
     this.props.getLanguages();
     this.props.getManagements();
@@ -33,7 +43,7 @@ class FetchClusterEntity extends Component {
 FetchClusterEntity.propTypes = {
   params: PropTypes.object,
   cluster: PropTypes.object,
-  getEntities: PropTypes.func,
+  getBoundariesEntities: PropTypes.func,
   getInstitutionCategories: PropTypes.func,
   getLanguages: PropTypes.func,
   getManagements: PropTypes.func,
@@ -51,7 +61,7 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const PrimaryCluster = connect(mapStateToProps, {
-  getEntities,
+  getBoundariesEntities,
   getLanguages,
   getInstitutionCategories,
   getManagements,

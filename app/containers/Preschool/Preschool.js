@@ -6,13 +6,12 @@ import { isEmpty } from 'lodash';
 
 import { DEFAULT_PARENT_NODE_ID } from 'config';
 import {
-  getEntities,
+  getBoundariesEntities,
   getLanguages,
   getInstitutionCategories,
   getManagements,
 } from '../../actions';
 import { PreschoolView } from '../../components/Preschool';
-
 
 class FetchPreschoolEntity extends Component {
   componentDidMount() {
@@ -20,13 +19,17 @@ class FetchPreschoolEntity extends Component {
 
     const { districtNodeId, projectNodeId, circleNodeId, institutionNodeId } = params;
     if (isEmpty(institution)) {
-      this.props.getEntities([
+      const entities = [
         DEFAULT_PARENT_NODE_ID,
         districtNodeId,
         projectNodeId,
         circleNodeId,
         institutionNodeId,
-      ]);
+      ].map((id, i) => {
+        return { depth: i, uniqueId: id };
+      });
+
+      this.props.getBoundariesEntities(entities);
     }
     this.props.getLanguages();
     this.props.getInstitutionCats();
@@ -38,11 +41,10 @@ class FetchPreschoolEntity extends Component {
   }
 }
 
-
 FetchPreschoolEntity.propTypes = {
   params: PropTypes.object,
   institution: PropTypes.object,
-  getEntities: PropTypes.func,
+  getBoundariesEntities: PropTypes.func,
   getLanguages: PropTypes.func,
   getInstitutionCats: PropTypes.func,
   getManagements: PropTypes.func,
@@ -59,29 +61,31 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  toggleClassModal: () => {
-    dispatch({
-      type: 'TOGGLE_MODAL',
-      modal: 'createClass',
-    });
-  },
-  showTeachers: (path) => {
-    dispatch(push(`${path}/teachers`));
-  },
-  getEntities: (ids) => {
-    dispatch(getEntities(ids));
-  },
-  getLanguages: () => {
-    dispatch(getLanguages());
-  },
-  getInstitutionCats: () => {
-    dispatch(getInstitutionCategories());
-  },
-  getManagements: () => {
-    dispatch(getManagements());
-  },
-});
+const mapDispatchToProps = (dispatch) => {
+  return {
+    toggleClassModal: () => {
+      dispatch({
+        type: 'TOGGLE_MODAL',
+        modal: 'createClass',
+      });
+    },
+    showTeachers: (path) => {
+      dispatch(push(`${path}/teachers`));
+    },
+    getBoundariesEntities: (ids) => {
+      dispatch(getBoundariesEntities(ids));
+    },
+    getLanguages: () => {
+      dispatch(getLanguages());
+    },
+    getInstitutionCats: () => {
+      dispatch(getInstitutionCategories());
+    },
+    getManagements: () => {
+      dispatch(getManagements());
+    },
+  };
+};
 
 const Preschool = connect(mapStateToProps, mapDispatchToProps)(FetchPreschoolEntity);
 

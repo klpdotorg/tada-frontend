@@ -5,9 +5,7 @@ import { isEmpty } from 'lodash';
 
 import { DEFAULT_PARENT_NODE_ID } from 'config';
 import { PrimaryBlockView } from '../../components/PrimaryBlock';
-import {
-  getEntities,
-} from '../../actions';
+import { getBoundariesEntities } from '../../actions';
 
 class FetchBlockEntity extends Component {
   constructor() {
@@ -21,7 +19,11 @@ class FetchBlockEntity extends Component {
     const { districtNodeId, blockNodeId } = params;
 
     if (isEmpty(block)) {
-      this.props.getEntities([DEFAULT_PARENT_NODE_ID, districtNodeId, blockNodeId]);
+      const entities = [DEFAULT_PARENT_NODE_ID, districtNodeId, blockNodeId].map((id, i) => {
+        return { depth: i, uniqueId: id };
+      });
+
+      this.props.getBoundariesEntities(entities);
     }
   }
 
@@ -33,7 +35,7 @@ class FetchBlockEntity extends Component {
 FetchBlockEntity.propTypes = {
   params: PropTypes.object,
   block: PropTypes.object,
-  getEntities: PropTypes.func,
+  getBoundariesEntities: PropTypes.func,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -45,6 +47,6 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const PrimaryBlock = connect(mapStateToProps, { getEntities })(FetchBlockEntity);
+const PrimaryBlock = connect(mapStateToProps, { getBoundariesEntities })(FetchBlockEntity);
 
 export { PrimaryBlock };

@@ -7,7 +7,7 @@ import { push } from 'react-router-redux';
 import { DEFAULT_PARENT_NODE_ID } from 'config';
 import { userHasPermissions } from '../../components/utils';
 import { StudentGroupView } from '../../components/StudentGroup';
-import { getEntities } from '../../actions';
+import { getBoundariesEntities, openViewStudents, openAddStudents } from '../../actions';
 
 class FetchStudentGroupEntity extends Component {
   constructor(props) {
@@ -28,14 +28,18 @@ class FetchStudentGroupEntity extends Component {
     } = params;
 
     if (isEmpty(studentGroup)) {
-      this.props.getEntities([
+      const entities = [
         DEFAULT_PARENT_NODE_ID,
         districtNodeId,
         blockNodeId,
         clusterNodeId,
         institutionNodeId,
         studentGroupNodeId,
-      ]);
+      ].map((id, i) => {
+        return { depth: i, uniqueId: id };
+      });
+
+      this.props.getBoundariesEntities(entities);
     }
   }
 
@@ -44,14 +48,30 @@ class FetchStudentGroupEntity extends Component {
   }
 
   render() {
-    return <StudentGroupView {...this.props} hasPermissions={this.hasPermissions} />;
+    const {
+      blockNodeId,
+      districtNodeId,
+      clusterNodeId,
+      institutionNodeId,
+      studentGroupNodeId,
+    } = this.props.params;
+    const path = [
+      districtNodeId,
+      blockNodeId,
+      clusterNodeId,
+      institutionNodeId,
+      studentGroupNodeId,
+    ];
+    return (
+      <StudentGroupView {...this.props} hasPermissions={this.hasPermissions} depth={path.length} />
+    );
   }
 }
 
 FetchStudentGroupEntity.propTypes = {
   params: PropTypes.object,
   studentGroup: PropTypes.object,
-  getEntities: PropTypes.func,
+  getBoundariesEntities: PropTypes.func,
   permissions: PropTypes.object,
 };
 
@@ -76,23 +96,25 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const mapDispatchToProps = dispatch => ({
-  toggleStudentModal: () => {
-    dispatch({
-      type: 'TOGGLE_MODAL',
-      modal: 'createClass',
-    });
-  },
-  viewStudent: (path) => {
-    dispatch(push(`${path}/students`));
-  },
-  getEntities: (entityIds) => {
-    dispatch(getEntities(entityIds));
-  },
-  showBulkAdd: (path) => {
-    dispatch(push(`${path}/addStudents`));
-  },
-});
+const mapDispatchToProps = (dispatch) => {
+  return {
+    toggleStudentModal: () => {
+      dispatch({
+        type: 'TOGGLE_MODAL',
+        modal: 'createClass',
+      });
+    },
+    viewStudent: (id, depth) => {
+      dispatch(openViewStudents(id, depth));
+    },
+    getBoundariesEntities: (entityIds) => {
+      dispatch(getBoundariesEntities(entityIds));
+    },
+    showBulkAdd: (id, depth) => {
+      dispatch(openAddStudents(id, depth));
+    },
+  };
+};
 
 const StudentGroup = connect(mapStateToProps, mapDispatchToProps)(FetchStudentGroupEntity);
 

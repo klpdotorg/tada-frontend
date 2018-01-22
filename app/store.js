@@ -14,7 +14,7 @@ import {
   Assessments,
   PasswordReset,
   users,
-  boundaries,
+  // boundaries,
   AppState,
   Teachers,
   Header,
@@ -25,6 +25,7 @@ import {
   Questions,
   ProgramDetails,
   AssessmentEntry,
+  BoundariesNavTree,
 } from './reducers';
 
 const reducer = combineReducers({
@@ -39,7 +40,7 @@ const reducer = combineReducers({
   assessments: Assessments,
   teachers: Teachers,
   passwordreset: PasswordReset,
-  boundaries,
+  boundaries: BoundariesNavTree,
   appstate: AppState,
   header: Header,
   institution: Institution,

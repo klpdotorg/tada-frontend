@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { DEFAULT_PARENT_NODE_ID } from 'config';
 
 import { AddStudentsView } from '../../components/AddStudents';
-import { getEntities, getLanguages } from '../../actions';
+import { getBoundariesEntities, getLanguages } from '../../actions';
 
 class FetchAddStudentResources extends Component {
   componentDidMount() {
@@ -21,27 +21,45 @@ class FetchAddStudentResources extends Component {
     } = params;
 
     if (isEmpty(studentGroup)) {
-      this.props.getEntities([
+      const entities = [
         DEFAULT_PARENT_NODE_ID,
         districtNodeId,
         blockNodeId,
         clusterNodeId,
         institutionNodeId,
         studentGroupNodeId,
-      ]);
+      ].map((id, i) => {
+        return { depth: i, uniqueId: id };
+      });
+
+      this.props.getBoundariesEntities(entities);
     }
     this.props.getLanguages();
   }
 
   render() {
-    return <AddStudentsView {...this.props} />;
+    const {
+      blockNodeId,
+      districtNodeId,
+      clusterNodeId,
+      institutionNodeId,
+      studentGroupNodeId,
+    } = this.props.params;
+    const path = [
+      districtNodeId,
+      blockNodeId,
+      clusterNodeId,
+      institutionNodeId,
+      studentGroupNodeId,
+    ];
+    return <AddStudentsView {...this.props} depth={path.length} />;
   }
 }
 
 FetchAddStudentResources.propTypes = {
   params: PropTypes.object,
   studentGroup: PropTypes.object,
-  getEntities: PropTypes.func,
+  getBoundariesEntities: PropTypes.func,
   getLanguages: PropTypes.func,
 };
 
@@ -65,7 +83,7 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const AddStudents = connect(mapStateToProps, {
-  getEntities,
+  getBoundariesEntities,
   getLanguages,
 })(FetchAddStudentResources);
 

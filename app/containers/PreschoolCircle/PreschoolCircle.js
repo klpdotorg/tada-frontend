@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { get, isEmpty } from 'lodash';
 
 import { DEFAULT_PARENT_NODE_ID } from 'config';
-import { getEntities } from '../../actions';
+import { getBoundariesEntities } from '../../actions';
 import { PreschoolCircleView } from '../../components/PreschoolCircle';
 
 class FetchCircleEntity extends Component {
@@ -13,7 +13,16 @@ class FetchCircleEntity extends Component {
     const { districtNodeId, projectNodeId, circleNodeId } = params;
 
     if (isEmpty(circle)) {
-      this.props.getEntities([DEFAULT_PARENT_NODE_ID, districtNodeId, projectNodeId, circleNodeId]);
+      const entities = [
+        DEFAULT_PARENT_NODE_ID,
+        districtNodeId,
+        projectNodeId,
+        circleNodeId,
+      ].map((id, i) => {
+        return { depth: i, uniqueId: id };
+      });
+
+      this.props.getBoundariesEntities(entities);
     }
   }
 
@@ -25,7 +34,7 @@ class FetchCircleEntity extends Component {
 FetchCircleEntity.propTypes = {
   params: PropTypes.object,
   circle: PropTypes.object,
-  getEntities: PropTypes.func,
+  getBoundariesEntities: PropTypes.func,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -39,6 +48,6 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const PreschoolCircle = connect(mapStateToProps, { getEntities })(FetchCircleEntity);
+const PreschoolCircle = connect(mapStateToProps, { getBoundariesEntities })(FetchCircleEntity);
 
 export { PreschoolCircle };

@@ -1,6 +1,6 @@
 {
-	"SERVER_API_BASE": "http://dev.ilp.org.in/api/v1/",
-	"SERVER_AUTH_BASE": "http://tadadev.klp.org.in/",
+	"SERVER_API_BASE": "https://dev.ilp.org.in/api/v1/",
+	"SERVER_AUTH_BASE": "https://tadadev.klp.org.in/",
 	"REPORTS_EMAIL": "subha@klp.org.in",
 	"DEFAULT_PARENT_ID": 2,
 	"STATE_CODE": "ka",

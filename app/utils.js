@@ -6,6 +6,8 @@ import { getBoundaryType } from './reducers/utils';
 export const getEntityType = (boundary) => {
   const boundaryType = getBoundaryType(boundary);
   switch (boundaryType) {
+    case 'PD':
+      return 'district';
     case 'SD':
       return 'district';
     case 'SB':
@@ -21,9 +23,9 @@ export const getEntityType = (boundary) => {
     case 'pre':
       return 'institution';
     case 'class':
-      return 'class';
+      return 'studentgroup';
     case 'student':
-      return 'student';
+      return 'students';
     default:
       return null;
   }
@@ -69,4 +71,22 @@ export const convertEntitiesToObject = (entities) => {
 
     return soFar;
   }, {});
+};
+
+export const getPath = (state, uniqueId, depth) => {
+  let path = '';
+
+  _.forEach(state.boundaries.uncollapsedEntities, (id, entityDepth) => {
+    if (Number(entityDepth) <= depth) {
+      const entity = state.boundaries.boundaryDetails[id];
+      const entityType = getEntityType(entity);
+      path += `/${entityType}/${id}`;
+    }
+  });
+
+  const openEntity = state.boundaries.boundaryDetails[uniqueId];
+  const type = getEntityType(openEntity);
+  path += `/${type}/${uniqueId}`;
+
+  return path;
 };

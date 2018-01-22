@@ -6,14 +6,18 @@ import { isEmpty } from 'lodash';
 import { DEFAULT_PARENT_NODE_ID } from 'config';
 
 import { PrimaryDistrictView } from '../../components/PrimaryDistrict';
-import { getEntities } from '../../actions';
+import { getBoundariesEntities } from '../../actions';
 
 class GetEntity extends Component {
   componentDidMount() {
     const { district, districtNodeId } = this.props;
 
     if (isEmpty(district)) {
-      this.props.getEntities([DEFAULT_PARENT_NODE_ID, districtNodeId]);
+      const entities = [DEFAULT_PARENT_NODE_ID, districtNodeId].map((id, i) => {
+        return { depth: i, uniqueId: id };
+      });
+
+      this.props.getBoundariesEntities(entities);
     }
   }
 
@@ -25,7 +29,7 @@ class GetEntity extends Component {
 GetEntity.propTypes = {
   district: PropTypes.object,
   districtNodeId: PropTypes.number,
-  getEntities: PropTypes.func,
+  getBoundariesEntities: PropTypes.func,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -37,6 +41,6 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const PrimaryDistrict = connect(mapStateToProps, { getEntities })(PrimaryDistrictView);
+const PrimaryDistrict = connect(mapStateToProps, { getBoundariesEntities })(PrimaryDistrictView);
 
 export { PrimaryDistrict };

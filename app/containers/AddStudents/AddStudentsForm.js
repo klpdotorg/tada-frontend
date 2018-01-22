@@ -44,7 +44,7 @@ class AddStudentsFormView extends Component {
   }
 
   validate() {
-    const { values, studentGroupId, studentGroupNodeId, institutionId, path } = this.props;
+    const { values, studentGroupId, studentGroupNodeId, institutionId, depth } = this.props;
 
     const errorList = [];
     _.values(values).forEach((value) => {
@@ -57,7 +57,7 @@ class AddStudentsFormView extends Component {
 
     this.props.setAddStudentFormErrors(errorList);
     if (_.isEmpty(errorList)) {
-      this.props.addStudents(studentGroupNodeId, studentGroupId, institutionId, path);
+      this.props.addStudents(studentGroupNodeId, studentGroupId, institutionId, depth);
     }
   }
 
@@ -141,6 +141,7 @@ AddStudentsFormView.propTypes = {
   values: PropTypes.object,
   setAddStudentFormErrors: PropTypes.func,
   addStudents: PropTypes.func,
+  depth: PropTypes.number,
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -151,9 +152,9 @@ const mapDispatchToProps = (dispatch) => {
     setAddStudentFormErrors: (errors) => {
       dispatch(setAddStudentsFormErrors(errors));
     },
-    addStudents: (studentGroupNodeId, studentGroupId, institutionId, path) => {
+    addStudents: (studentGroupNodeId, studentGroupId, institutionId, depth) => {
       dispatch(openNode(studentGroupNodeId));
-      dispatch(addStudents(studentGroupId, institutionId, path));
+      dispatch(addStudents(studentGroupId, institutionId, depth, studentGroupNodeId));
     },
   };
 };

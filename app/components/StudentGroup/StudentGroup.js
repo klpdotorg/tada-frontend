@@ -17,6 +17,7 @@ const StudentGroupView = (props) => {
     institution,
     studentGroup,
     params,
+    depth,
   } = props;
   const canModify = props.hasPermissions(institution.id);
 
@@ -51,8 +52,8 @@ const StudentGroupView = (props) => {
         <StudentGroupActions
           isPrimary={isPrimary}
           canModify={canModify}
-          viewStudent={() => props.viewStudent(studentGroup.path)}
-          showBulkAdd={() => props.showBulkAdd(studentGroup.path)}
+          viewStudent={() => { return props.viewStudent(params.studentGroupNodeId, depth); }}
+          showBulkAdd={() => { return props.showBulkAdd(params.studentGroupNodeId, depth); }}
         />
       </div>
       <div className="base-spacing-mid border-base" />
@@ -77,6 +78,7 @@ StudentGroupView.propTypes = {
   viewStudent: PropTypes.func,
   hasPermissions: PropTypes.func,
   params: PropTypes.object,
+  depth: PropTypes.number,
 };
 
 export { StudentGroupView };

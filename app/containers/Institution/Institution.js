@@ -2,25 +2,35 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { get, isEmpty } from 'lodash';
-import { push } from 'react-router-redux';
 
 import { DEFAULT_PARENT_NODE_ID } from 'config';
 import { InstitutionView } from '../../components/Institution';
-import { getEntities, getLanguages, getInstitutionCategories, getManagements } from '../../actions';
+import {
+  getBoundariesEntities,
+  getLanguages,
+  getInstitutionCategories,
+  getManagements,
+  openTeachers,
+} from '../../actions';
 
 class FetchInstitutionEntity extends Component {
   componentDidMount() {
     const { params, institution } = this.props;
-
     const { blockNodeId, districtNodeId, clusterNodeId, institutionNodeId } = params;
+    const path = [
+      DEFAULT_PARENT_NODE_ID,
+      districtNodeId,
+      blockNodeId,
+      clusterNodeId,
+      institutionNodeId,
+    ];
+
     if (isEmpty(institution)) {
-      this.props.getEntities([
-        DEFAULT_PARENT_NODE_ID,
-        districtNodeId,
-        blockNodeId,
-        clusterNodeId,
-        institutionNodeId,
-      ]);
+      const entities = path.map((id, i) => {
+        return { depth: i, uniqueId: id };
+      });
+
+      this.props.getBoundariesEntities(entities);
     }
     this.props.getLanguages();
     this.props.getInstitutionCats();
@@ -28,14 +38,18 @@ class FetchInstitutionEntity extends Component {
   }
 
   render() {
-    return <InstitutionView {...this.props} />;
+    const { params } = this.props;
+    const { blockNodeId, districtNodeId, clusterNodeId, institutionNodeId } = params;
+    const path = [districtNodeId, blockNodeId, clusterNodeId, institutionNodeId];
+
+    return <InstitutionView {...this.props} depth={path.length} />;
   }
 }
 
 FetchInstitutionEntity.propTypes = {
   params: PropTypes.object,
   institution: PropTypes.object,
-  getEntities: PropTypes.func,
+  getBoundariesEntities: PropTypes.func,
   getLanguages: PropTypes.func,
   getInstitutionCats: PropTypes.func,
   getManagements: PropTypes.func,
@@ -61,8 +75,8 @@ const mapDispatchToProps = (dispatch) => {
         modal: 'createClass',
       });
     },
-    getEntities: (ids) => {
-      dispatch(getEntities(ids));
+    getBoundariesEntities: (ids) => {
+      dispatch(getBoundariesEntities(ids));
     },
     getLanguages: () => {
       dispatch(getLanguages());
@@ -73,8 +87,8 @@ const mapDispatchToProps = (dispatch) => {
     getManagements: () => {
       dispatch(getManagements());
     },
-    showTeachers: (path) => {
-      dispatch(push(`${path}/teachers`));
+    showTeachers: (id, depth) => {
+      dispatch(openTeachers(id, depth));
     },
   };
 };

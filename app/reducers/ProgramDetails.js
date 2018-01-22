@@ -1,5 +1,3 @@
-// import { without } from 'lodash';
-
 import {
   UNCOLLAPSED_PROGRAM_ENTITY,
   SET_FITLER_PROGRAM_ENTITIES,
