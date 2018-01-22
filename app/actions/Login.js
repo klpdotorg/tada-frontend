@@ -5,7 +5,7 @@ export const sendLoginToServer = (email, pass) => {
   return (dispatch) => {
     const loginUrl = `${SERVER_API_BASE}users/login/`;
     const body = {
-      email,
+      username: email,
       password: pass,
     };
 
@@ -20,6 +20,10 @@ export const sendLoginToServer = (email, pass) => {
         if (response.status === 200) {
           return response.json();
         }
+        dispatch({
+          type: 'LOGIN_FAILED',
+          authenticated: false,
+        });
         return {};
       })
       .then((result) => {
@@ -27,6 +31,12 @@ export const sendLoginToServer = (email, pass) => {
           sessionStorage.setItem('user', JSON.stringify(result));
           dispatch(push('/'));
         }
+      })
+      .catch(() => {
+        dispatch({
+          type: 'LOGIN_FAILED',
+          authenticated: false,
+        });
       });
   };
 };
