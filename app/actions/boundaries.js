@@ -1,14 +1,20 @@
 import { SERVER_API_BASE, STATE_CODE } from 'config';
+import { push } from 'react-router-redux';
+import _ from 'lodash';
+
 import { get, patch } from './requests';
-import {
-  fetchInstitutionDetails,
-  fetchStudentGroup,
-  fetchStudents,
-  showBoundaryLoading,
-  closeBoundaryLoading,
-  openNode,
-} from './index';
-import { SET_BOUNDARIES } from './types';
+import { convertEntitiesToObject, getPath } from '../utils';
+import { SET_BOUNDARIES, REMOVE_EXISTING_BOUNDARIES_NODE, UNCOLLAPSED_BOUNDARIES } from './types';
+import { showBoundaryLoading, closeBoundaryLoading } from './index';
+
+export const openBoundary = (uniqueId, depth) => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const path = getPath(state, uniqueId, depth);
+
+    dispatch(push(path));
+  };
+};
 
 export const setBoundaries = (data) => {
   return {
@@ -17,48 +23,150 @@ export const setBoundaries = (data) => {
   };
 };
 
-export const getEntity = (parentEntityId, moreIds) => {
+const getUrlForBoundary = (entity) => {
+  if (entity.depth < 3) {
+    return `${SERVER_API_BASE}boundaries/?parent=${entity.id}&limit=500&state=${STATE_CODE}`;
+  }
+
+  switch (entity.depth) {
+    case 3:
+      return `${SERVER_API_BASE}institutions/?admin3=${entity.id}`;
+    case 4:
+      return `${SERVER_API_BASE}institutions/${entity.id}/studentgroups/`;
+    case 5:
+      return `${SERVER_API_BASE}studentgroups/${entity.id}/students/`;
+    default:
+      return null;
+  }
+};
+
+export const fetchBoundary = (entity, moreEntities) => {
   return (dispatch, getState) => {
     const state = getState();
-    const entity = state.boundaries.boundaryDetails[parentEntityId];
+    const boundary = state.boundaries.boundaryDetails[entity.uniqueId];
 
-    switch (entity.depth) {
-      case 2:
-        return dispatch(fetchInstitutionDetails(entity.id, moreIds));
-      case 3:
-        return dispatch(fetchStudentGroup(entity.id, moreIds));
-      case 4:
-        return dispatch(fetchStudents(entity.id, moreIds));
-      default:
-        return dispatch(fetchBoundaries(entity.id, moreIds));
-    }
-  };
-};
+    const url = getUrlForBoundary({
+      depth: entity.depth,
+      id: boundary.id,
+    });
 
-export const getEntities = (Ids) => {
-  return (dispatch) => {
-    const Id = Ids[0];
-    const filterIds = Ids.slice(1);
-    dispatch(showBoundaryLoading());
-    dispatch(openNode(Id));
-    dispatch(getEntity(Id, filterIds));
-  };
-};
+    get(url).then((res) => {
+      const entities = convertEntitiesToObject(res.results);
 
-export const fetchBoundaries = (parentId, moreIds) => {
-  return (dispatch) => {
-    get(`${SERVER_API_BASE}boundaries/?parent=${parentId}&limit=500&state=${STATE_CODE}`).then((response) => {
-      if (response) {
-        dispatch(setBoundaries(response));
-        if (moreIds && moreIds.length) {
-          dispatch(getEntities(moreIds));
-        } else {
-          dispatch(closeBoundaryLoading());
-        }
+      dispatch({
+        type: SET_BOUNDARIES,
+        boundaryDetails: entities,
+        boundariesByParentId: { [entity.depth]: Object.keys(entities) },
+      });
+
+      if (moreEntities && moreEntities.length) {
+        dispatch(fetchBoundaries(moreEntities));
+      } else {
+        dispatch(closeBoundaryLoading());
       }
     });
   };
 };
+
+const fetchBoundaries = (Ids) => {
+  return (dispatch, getState) => {
+    if (Ids.length) {
+      const state = getState();
+      const entity = Ids[0];
+      const entities = Ids.slice(1);
+      const { uncollapsedEntities } = state.boundaries;
+      const currentNode = _.get(uncollapsedEntities, entity.depth);
+      const existing = currentNode === entity.uniqueId;
+
+      if (!existing && entity.depth <= 5) {
+        dispatch(fetchBoundary(entity, entities));
+      } else {
+        dispatch(closeBoundaryLoading());
+      }
+
+      if (entity.depth > 0) {
+        const depths = Object.keys(uncollapsedEntities).filter((depth) => {
+          return !(depth >= entity.depth);
+        });
+
+        if (!existing) {
+          depths.push(entity.depth);
+        }
+
+        const newUnCollapsedEntities = depths.reduce((soFar, depth) => {
+          const value = uncollapsedEntities[depth];
+
+          if (!value || depth === entity.depth) {
+            soFar[depth] = entity.uniqueId;
+          } else {
+            soFar[depth] = value;
+          }
+
+          return soFar;
+        }, {});
+
+        dispatch({
+          type: UNCOLLAPSED_BOUNDARIES,
+          value: newUnCollapsedEntities,
+        });
+        dispatch({
+          type: REMOVE_EXISTING_BOUNDARIES_NODE,
+          value: entity.depth,
+        });
+      }
+    }
+  };
+};
+
+export const getBoundariesEntities = (Ids) => {
+  return (dispatch) => {
+    dispatch(showBoundaryLoading());
+    dispatch(fetchBoundaries(Ids));
+  };
+};
+
+// export const getEntity = (parentEntityId, moreIds) => {
+//   return (dispatch, getState) => {
+//     const state = getState();
+//     const entity = state.boundaries.boundaryDetails[parentEntityId];
+
+//     switch (entity.depth) {
+//       case 2:
+//         return dispatch(fetchInstitutionDetails(entity.id, moreIds));
+//       case 3:
+//         return dispatch(fetchStudentGroup(entity.id, moreIds));
+//       case 4:
+//         return dispatch(fetchStudents(entity.id, moreIds));
+//       default:
+//         return dispatch(fetchBoundaries(entity.id, moreIds));
+//     }
+//   };
+// };
+
+// export const getEntities = (Ids) => {
+//   return (dispatch) => {
+//     const Id = Ids[0];
+//     const filterIds = Ids.slice(1);
+//     dispatch(showBoundaryLoading());
+//     dispatch(openNode(Id));
+//     dispatch(getEntity(Id, filterIds));
+//   };
+// };
+
+// export const fetchBoundaries = (parentId, moreIds) => {
+//   return (dispatch) => {
+//     get(`${SERVER_API_BASE}boundaries/?parent=${parentId}&limit=500&state=${STATE_CODE}`).then((response) => {
+//       if (response) {
+//         dispatch(setBoundaries(response));
+//         if (moreIds && moreIds.length) {
+//           dispatch(getEntities(moreIds));
+//         } else {
+//           dispatch(closeBoundaryLoading());
+//         }
+//       }
+//     });
+//   };
+// };
 
 export const modifyBoundary = (boundaryId, name) => {
   return (dispatch) => {

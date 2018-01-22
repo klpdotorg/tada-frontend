@@ -2,6 +2,7 @@ import { push } from 'react-router-redux';
 
 import { SERVER_API_BASE as serverApiBase } from 'config';
 import { get, post, patch, deleteRequest } from './requests';
+import { getPath } from '../utils';
 import { getBoundaryType } from '../reducers/utils';
 import { SET_INSTITUTION_CATS, SET_INSTITUTION_MANAGEMENTS } from './types';
 import {
@@ -14,103 +15,131 @@ import {
   removeBoundary,
 } from './index';
 
-export const setInstitutionCats = value => ({
-  type: SET_INSTITUTION_CATS,
-  value,
-});
+export const openTeachers = (id, depth) => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const path = getPath(state, id, depth);
 
-export const setInstitutionManagements = value => ({
-  type: SET_INSTITUTION_MANAGEMENTS,
-  value,
-});
+    dispatch(push(`${path}/teachers`));
+  };
+};
 
-export const fetchInstitutionDetails = (parentBoundaryId, moreIds) => (dispatch) => {
-  const institutionsUrl = `${serverApiBase}institutions/?`;
-  return get(`${institutionsUrl}admin3=${parentBoundaryId}`)
-    .then((data) => {
-      dispatch(responseReceivedFromServer(data));
-      if (moreIds && moreIds.length) {
-        dispatch(getEntities(moreIds));
-      } else {
-        dispatch(closeBoundaryLoading());
-      }
-    })
-    .catch((error) => {
-      dispatch(requestFailed(error));
+export const setInstitutionCats = (value) => {
+  return {
+    type: SET_INSTITUTION_CATS,
+    value,
+  };
+};
+
+export const setInstitutionManagements = (value) => {
+  return {
+    type: SET_INSTITUTION_MANAGEMENTS,
+    value,
+  };
+};
+
+export const fetchInstitutionDetails = (parentBoundaryId, moreIds) => {
+  return (dispatch) => {
+    const institutionsUrl = `${serverApiBase}institutions/?`;
+    return get(`${institutionsUrl}admin3=${parentBoundaryId}`)
+      .then((data) => {
+        dispatch(responseReceivedFromServer(data));
+        if (moreIds && moreIds.length) {
+          dispatch(getEntities(moreIds));
+        } else {
+          dispatch(closeBoundaryLoading());
+        }
+      })
+      .catch((error) => {
+        dispatch(requestFailed(error));
+      });
+  };
+};
+
+export const getManagements = () => {
+  return (dispatch) => {
+    get(`${serverApiBase}institution/managements`)
+      .then((managements) => {
+        const mnmts = managements.results.map((management) => {
+          return {
+            value: management.id,
+            label: management.name,
+          };
+        });
+        dispatch(setInstitutionManagements(mnmts));
+      })
+      .catch((error) => {
+        console.log('request failed', error);
+      });
+  };
+};
+
+export const getInstitutionCategories = () => {
+  return (dispatch) => {
+    get(`${serverApiBase}institution/categories`)
+      .then((categories) => {
+        const filterCats = categories.results
+          .filter((cat) => { return cat.type.id === 'primary'; })
+          .map((category) => {
+            return {
+              value: category.id,
+              label: category.name,
+            };
+          });
+        dispatch(setInstitutionCats(filterCats));
+      })
+      .catch((error) => {
+        console.log('request failed', error);
+      });
+  };
+};
+
+export const modifyInstitution = (options, Id) => {
+  return (dispatch, getState) => {
+    const boundaryType = getState().schoolSelection.primarySchool ? 'primary' : 'pre';
+    const newOptions = { ...options, institution_type: boundaryType };
+
+    patch(`${serverApiBase}institutions/${Id}/`, newOptions).then((response) => {
+      dispatch(responseReceivedFromServer({ results: [response] }));
     });
+  };
 };
 
-export const getManagements = () => (dispatch) => {
-  get(`${serverApiBase}institution/managements`)
-    .then((managements) => {
-      const mnmts = managements.results.map(management => ({
-        value: management.id,
-        label: management.name,
-      }));
-      dispatch(setInstitutionManagements(mnmts));
-    })
-    .catch((error) => {
-      console.log('request failed', error);
+export const saveNewInstitution = (options) => {
+  return (dispatch, getState) => {
+    const boundaryType = getState().schoolSelection.primarySchool ? 'primary' : 'pre';
+    const newOptions = { ...options, institution_type: boundaryType };
+
+    post(`${serverApiBase}institutions/`, newOptions).then((response) => {
+      const type = getBoundaryType(response);
+      dispatch(responseReceivedFromServer({ results: [response] }));
+      dispatch(toggleModal('createInstitution'));
+      dispatch(openNode(response.id));
+
+      // fetching entity from store
+      const boundaryDetails = getState().boundaries.boundaryDetails;
+      const boundary = boundaryDetails[`${response.id}${type}`];
+      dispatch(push(boundary.path));
     });
+  };
 };
 
-export const getInstitutionCategories = () => (dispatch) => {
-  get(`${serverApiBase}institution/categories`)
-    .then((categories) => {
-      const filterCats = categories.results
-        .filter(cat => cat.type.id === 'primary')
-        .map(category => ({
-          value: category.id,
-          label: category.name,
-        }));
-      dispatch(setInstitutionCats(filterCats));
-    })
-    .catch((error) => {
-      console.log('request failed', error);
-    });
+export const deleteInstitution = (parentId, instiId) => {
+  return (dispatch) => {
+    return deleteRequest(`${serverApiBase}institutions/${instiId}`)
+      .then((response) => {
+        if (response.status >= 200 && response.status < 300) {
+          dispatch(removeBoundary(instiId, parentId));
+          // Route the user to the home dashboard page since the page they were on will be deleted
+          dispatch(push('/'));
+        } else {
+          const error = new Error(response.statusText);
+          error.response = response;
+          throw error;
+        }
+      })
+      .catch((error) => {
+        console.log('request failed', error);
+      });
+  };
 };
-
-export const modifyInstitution = (options, Id) => (dispatch, getState) => {
-  console.log(JSON.stringify(options));
-  const boundaryType = getState().schoolSelection.primarySchool ? 'primary' : 'pre';
-  const newOptions = { ...options, institution_type: boundaryType };
-
-  patch(`${serverApiBase}institutions/${Id}/`, newOptions).then((response) => {
-    dispatch(responseReceivedFromServer({ results: [response] }));
-  });
-};
-
-export const saveNewInstitution = options => (dispatch, getState) => {
-  const boundaryType = getState().schoolSelection.primarySchool ? 'primary' : 'pre';
-  const newOptions = { ...options, institution_type: boundaryType };
-
-  post(`${serverApiBase}institutions/`, newOptions).then((response) => {
-    const type = getBoundaryType(response);
-    dispatch(responseReceivedFromServer({ results: [response] }));
-    dispatch(toggleModal('createInstitution'));
-    dispatch(openNode(response.id));
-
-    // fetching entity from store
-    const boundaryDetails = getState().boundaries.boundaryDetails;
-    const boundary = boundaryDetails[`${response.id}${type}`];
-    console.log(boundary, response);
-    dispatch(push(boundary.path));
-  });
-};
-
-export const deleteInstitution = (parentId, instiId) => dispatch =>
-  deleteRequest(`${serverApiBase}institutions/${instiId}`)
-    .then((response) => {
-      if (response.status >= 200 && response.status < 300) {
-        dispatch(removeBoundary(instiId, parentId));
-        // Route the user to the home dashboard page since the page they were on will be deleted
-        dispatch(push('/'));
-      } else {
-        const error = new Error(response.statusText);
-        error.response = response;
-        throw error;
-      }
-    })
-    .catch((error) => {
-      console.log('request failed', error);
-    });

@@ -16,8 +16,8 @@ class SideBar extends Component {
   }
 
   componentDidMount() {
-    this.props.getEntity(DEFAULT_PARENT_NODE_ID);
-    this.props.setParentNode(DEFAULT_PARENT_NODE_ID);
+    // this.props.getEntity(DEFAULT_PARENT_NODE_ID);
+    // this.props.setParentNode(DEFAULT_PARENT_NODE_ID);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -58,10 +58,12 @@ SideBar.propTypes = {
   setParentNode: PropTypes.func,
 };
 
-const mapStateToProps = (state, ownProps) => ({
-  location: ownProps.location,
-  selectedPrimarySchool: state.schoolSelection.primarySchool,
-});
+const mapStateToProps = (state, ownProps) => {
+  return {
+    location: ownProps.location,
+    selectedPrimarySchool: state.schoolSelection.primarySchool,
+  };
+};
 
 const SideBarContainer = connect(mapStateToProps, { getEntity, setParentNode })(SideBar);
 

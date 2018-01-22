@@ -38,7 +38,7 @@ export const get = (url) => {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      // Authorization: `Token ${user.token}`,
+      Authorization: `Token ${user.token}`,
     },
   })
     .then(checkStatus)

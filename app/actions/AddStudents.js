@@ -8,7 +8,13 @@ import {
   ADD_STUDENTS_FORM_VALUE_CHANGED,
 } from './types';
 import { post } from './requests';
-import { showBoundaryLoading, closeBoundaryLoading, setBoundaries, setStudent } from './index';
+import {
+  showBoundaryLoading,
+  closeBoundaryLoading,
+  setBoundaries,
+  setStudent,
+  openViewStudents,
+} from './index';
 
 export const setAddStudentsFormErrors = (value) => {
   return {
@@ -33,11 +39,11 @@ export const addStudentsFormValueChanged = (value, rowNumber) => {
 };
 
 export const addStudent = (params) => {
-  const { groupId, values, institutionId, dispatch, path } = params;
+  const { groupId, values, institutionId, dispatch, depth, groupNodeId } = params;
 
   if (!values.length) {
     dispatch(closeBoundaryLoading());
-    dispatch(push(`${path}/students`));
+    dispatch(openViewStudents(groupNodeId, depth));
     return;
   }
 
@@ -55,14 +61,15 @@ export const addStudent = (params) => {
       values: newValues,
       institutionId,
       dispatch,
-      path,
+      depth,
+      groupNodeId,
     };
 
     addStudent(newParams);
   });
 };
 
-export const addStudents = (groupId, institutionId, path) => {
+export const addStudents = (groupId, institutionId, depth, groupNodeId) => {
   return (dispatch, getState) => {
     const state = getState();
     const { values } = state.addStudents;
@@ -74,7 +81,8 @@ export const addStudents = (groupId, institutionId, path) => {
       values: newValues,
       institutionId,
       dispatch,
-      path,
+      depth,
+      groupNodeId,
     };
 
     addStudent(params);

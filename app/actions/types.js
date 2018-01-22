@@ -55,3 +55,5 @@ export const COLLAPSED_PROGRAM_ENTITY = 'collapsed_program_entity';
 export const UNCOLLAPSED_PROGRAM_ENTITY = 'uncollapsed_program_entity';
 export const SET_FITLER_PROGRAM_ENTITIES = 'set_filter_program_entities';
 export const REMOVE_EXISTING_NODE = 'remove_existing_node';
+export const REMOVE_EXISTING_BOUNDARIES_NODE = 'remove_existing_boundaries_node';
+export const UNCOLLAPSED_BOUNDARIES = 'uncollapsed_boundaries_entity';
