@@ -8,7 +8,7 @@ import { CreateDistrict } from '../../containers/Header';
 
 const AsyncTypeahead = asyncContainer(Typeahead);
 
-const SecondaryNavBar = props => {
+const SecondaryNavBar = (props) => {
   const {
     suggestionResults,
     handleSubmit,
@@ -21,6 +21,7 @@ const SecondaryNavBar = props => {
     manageRevertEntity,
     manageProgramFilter,
     goHome,
+    mapAssessments,
   } = props;
 
   let displayelement;
@@ -71,6 +72,7 @@ const SecondaryNavBar = props => {
           data-toggle="tooltip"
           data-placement="bottom"
           title="Map Assessments"
+          onClick={mapAssessments}
         >
           <span className="fa fa-database" />
         </button>
@@ -144,6 +146,7 @@ SecondaryNavBar.propTypes = {
   manageRevertEntity: PropTypes.func,
   manageProgramFilter: PropTypes.func,
   goHome: PropTypes.func,
+  mapAssessments: PropTypes.func,
 };
 
 export { SecondaryNavBar };

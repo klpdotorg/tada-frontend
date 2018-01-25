@@ -15,21 +15,21 @@ import {
 } from '../../actions';
 import _ from 'lodash';
 
-export default class NavTree extends React.Component {
+class NavTree extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
   }
 
   componentDidMount() {
-    getBoundaries(1).then(res => {
+    getBoundaries(1).then((res) => {
       this.props.dispatch(setMapAssessmentsBoundaries(res));
     });
   }
 
-  componentWillReceiveProps = nextProps => {
+  componentWillReceiveProps = (nextProps) => {
     if (nextProps.primarySelected != this.props.primarySelected) {
-      getBoundaries(1).then(res => {
+      getBoundaries(1).then((res) => {
         this.props.dispatch(setMapAssessmentsBoundaries(res));
       });
     }
@@ -37,7 +37,7 @@ export default class NavTree extends React.Component {
 
   toggleBoundaryLevel(boundary, depth) {
     this.props.dispatch(toggleMapAssessmentsNode(boundary.id));
-    getBoundaries(boundary.id).then(res => {
+    getBoundaries(boundary.id).then((res) => {
       this.props.dispatch(setMapAssessmentsBoundaries(res));
     });
   }
@@ -47,12 +47,12 @@ export default class NavTree extends React.Component {
     this.props.dispatch(selectMABoundaryCategory(boundary.boundary_category));
     if (depth === 1) {
       this.props.dispatch(fetchingMAClusters());
-      getBoundaries(boundary.id).then(res => {
+      getBoundaries(boundary.id).then((res) => {
         this.props.dispatch(setMapAssessmentsClusters(res));
       });
     } else {
       this.props.dispatch(fetchingMAInstitutions());
-      getInstitutions(boundary.id).then(res => {
+      getInstitutions(boundary.id).then((res) => {
         this.props.dispatch(setMAInstitutions(res));
       });
     }
@@ -67,19 +67,23 @@ export default class NavTree extends React.Component {
 
         var boundary = this.props.boundaryDetails[node];
         const label =
-          depth === 0
-            ? <span className="node">
-                {' '}{_.capitalize(boundary.label) ||
+          depth === 0 ? (
+            <span className="node">
+              {' '}
+              {_.capitalize(boundary.label) ||
+                _.capitalize(boundary.name) ||
+                _.capitalize(boundary.first_name)}{' '}
+            </span>
+          ) : (
+            <span className="node">
+              <a href="#" onClick={this.onBoundaryClick.bind(this, boundary, depth)}>
+                {' '}
+                {_.capitalize(boundary.label) ||
                   _.capitalize(boundary.name) ||
                   _.capitalize(boundary.first_name)}{' '}
-              </span>
-            : <span className="node">
-                <a href="#" onClick={this.onBoundaryClick.bind(this, boundary, depth)}>
-                  {' '}{_.capitalize(boundary.label) ||
-                    _.capitalize(boundary.name) ||
-                    _.capitalize(boundary.first_name)}{' '}
-                </a>
-              </span>;
+              </a>
+            </span>
+          );
         return (
           <TreeView
             key={node}
@@ -118,12 +122,12 @@ export default class NavTree extends React.Component {
 
     return (
       <div>
-        {alphabeticalOrder(boundariesByParentId, boundaryDetails).map(
-          function(element, i) {
+        {alphabeticalOrder(boundariesByParentId, boundaryDetails).map((element, i) => {
             return this.renderSubTree(element, boundariesByParentId, visitedBoundaries, 0);
-          }.bind(this),
-        )}
+          })}
       </div>
     );
   }
 }
+
+export { NavTree };

@@ -2,6 +2,7 @@ import React from 'react';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
 import { get } from 'lodash';
+import { syncHistoryWithStore } from 'react-router-redux';
 
 import { Dashboard } from './components/Dashboard';
 import { PrimaryDistrict } from './containers/PrimaryDistrict';
@@ -30,20 +31,20 @@ import Reports from './components/Reports';
 import { Teachers } from './containers/Teachers';
 import tadastore from './store';
 import RevertEntity from './containers/RevertEntity';
-import { syncHistoryWithStore } from 'react-router-redux';
+import { MapAssessments } from './containers/MapAssessments';
 
 const history = syncHistoryWithStore(browserHistory, tadastore);
 
 const isUserAuthenticated = (nextState, replace) => {
   const user = JSON.parse(sessionStorage.getItem('user'));
 
-  if (!get(user, 'token')) {
-    // redirect to login and set next location
-    if (nextState.location && nextState.location.pathname) {
-      sessionStorage.setItem('nextUrl', nextState.location.pathname);
-    }
-    replace('/login');
-  }
+  // if (!get(user, 'token')) {
+  //   // redirect to login and set next location
+  //   if (nextState.location && nextState.location.pathname) {
+  //     sessionStorage.setItem('nextUrl', nextState.location.pathname);
+  //   }
+  //   replace('/login');
+  // }
 };
 
 export const routes = (
@@ -60,6 +61,7 @@ export const routes = (
         <Route path="programmes" component={Programs} />
         <Route path="filterprograms" component={AssessmentEntry} />
         <Route path="filterprograms/:entityType/:entityId" component={AssessmentEntry} />
+        <Route path="mapassessments" component={MapAssessments} />
         <Route path="reports" component={Reports} />
         <Route path="revert-entity/:entityName" component={RevertEntity} />
         <Route path="programs/:programId" component={Programs} />
