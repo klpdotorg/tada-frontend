@@ -628,5 +628,16 @@ table.table-fixedwidth td, .table-fixedwidth th {
   border: 1px solid royalblue;
 }
 
+.mapAssessment-cluster-cont {
+  padding-right: 0px;
+}
 
-
+.mapAssessment-institution-cont {
+  padding-left: 4px;
+}
+.ma-boundary-heading {
+  display: flex;
+}
+.ma-boundary-title {
+  flex: 1;
+}

@@ -8,45 +8,41 @@ const ShowClustersView = (props) => {
   // TODO Add loading for clusters
 
   return (
-    <div className="row center-block">
-      <div className="col-md-12">
-        <div className="panel panel-primary">
-          <div className="panel-heading ma-boundary-heading">
-            <h3 className="panel-title ma-boundary-title">Boundary</h3>
-            <span className="ma-boundary-selectAll">
-              All{' '}
-              <input
-                type="checkbox"
-                className="ma-boundary-checkbox"
-                checked={selectedAllClusters}
-                onChange={props.selectAllClusters}
-              />
-            </span>
-          </div>
-          <ul className="list-group" style={{ overflowY: 'auto', maxHeight: '500px' }}>
-            {clusters.map((cluster) => {
-              const checked = includes(selectedClusters, cluster.id);
-
-              return (
-                <li className="list-group-item" key={cluster.id}>
-                  {capitalize(cluster.name)}
-                  <div className="pull-right">
-                    <input
-                      type="checkbox"
-                      aria-label="..."
-                      checked={checked}
-                      value={checked}
-                      onChange={() => {
-                        props.selectCluster(cluster.id);
-                      }}
-                    />
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
+    <div className="panel panel-primary">
+      <div className="panel-heading ma-boundary-heading">
+        <h3 className="panel-title ma-boundary-title">Boundary</h3>
+        <span className="ma-boundary-selectAll">
+          All{' '}
+          <input
+            type="checkbox"
+            className="ma-boundary-checkbox"
+            checked={selectedAllClusters}
+            onChange={props.selectAllClusters}
+          />
+        </span>
       </div>
+      <ul className="list-group" style={{ overflowY: 'auto', maxHeight: '500px' }}>
+        {clusters.map((cluster) => {
+          const checked = includes(selectedClusters, cluster.id);
+
+          return (
+            <li className="list-group-item" key={cluster.id}>
+              {capitalize(cluster.name)}
+              <div className="pull-right">
+                <input
+                  type="checkbox"
+                  aria-label="..."
+                  checked={checked}
+                  value={checked}
+                  onChange={() => {
+                    props.selectCluster(cluster.id);
+                  }}
+                />
+              </div>
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 };
