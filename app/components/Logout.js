@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Link } from 'react-router';
 
 let klplogo = require('../../assets/images/KLP_logo.png');

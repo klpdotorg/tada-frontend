@@ -16,7 +16,7 @@ class Entity extends Component {
     this.fetchEntities(1, this.state.entityName);
   };
 
-  componentWillReceiveProps = nextProps => {
+  componentWillReceiveProps = (nextProps) => {
     if (nextProps.entityName !== this.props.entityName) {
       this.setState({
         entityName: nextProps.entityName,
@@ -26,7 +26,7 @@ class Entity extends Component {
     }
   };
 
-  getFrom = currentPage => {
+  getFrom = (currentPage) => {
     const from = currentPage - 1;
     return from * 20;
   };
@@ -36,7 +36,7 @@ class Entity extends Component {
       isLoading: true,
     });
 
-    getInactiveEntities(entityName, this.getFrom(currentPage)).then(response => {
+    getInactiveEntities(entityName, this.getFrom(currentPage)).then((response) => {
       this.setState({
         entities: response.results,
         isLoading: false,
@@ -45,7 +45,7 @@ class Entity extends Component {
     });
   };
 
-  handleProgramEntity = entity => {
+  handleProgramEntity = (entity) => {
     const { entityName, dispatch } = this.props;
     if (entityName == 'users') {
       entity.is_active = true;
@@ -58,14 +58,14 @@ class Entity extends Component {
     });
   };
 
-  getPageNumbers = totalEntities => {
+  getPageNumbers = (totalEntities) => {
     const numPages = Math.ceil(totalEntities / 20);
     const pageArray = pagination(this.state.currentPage, numPages);
 
     return pageArray;
   };
 
-  handlePage = currentPage => {
+  handlePage = (currentPage) => {
     this.setState({
       currentPage,
     });
@@ -73,31 +73,33 @@ class Entity extends Component {
     this.fetchEntities(currentPage, this.state.entityName);
   };
 
-  renderEntity = entity =>
-    <tr key={entity.id}>
-      <td>
-        {entity.id}
-      </td>
-      <td>
-        {entity.name || entity.username || `${entity.first_name} ${entity.last_name}`}
-      </td>
-      <td>
-        <button
-          className="btn btn-primary padded-btn"
-          data-toggle="tooltip"
-          title="Revert"
-          onClick={this.handleProgramEntity.bind(null, entity)}
-        >
-          <i className="fa fa-undo" />
-        </button>
-      </td>
-    </tr>;
+  renderEntity = (entity) => {
+    return (
+      <tr key={entity.id}>
+        <td>{entity.id}</td>
+        <td>{entity.name || entity.username || `${entity.first_name} ${entity.last_name}`}</td>
+        <td>
+          <button
+            className="btn btn-primary padded-btn"
+            data-toggle="tooltip"
+            title="Revert"
+            onClick={this.handleProgramEntity.bind(null, entity)}
+          >
+            <i className="fa fa-undo" />
+          </button>
+        </td>
+      </tr>
+    );
+  };
 
-  renderLoading = () =>
-    <div className="text-center" style={{ marginTop: 30 }}>
-      <i className="fa fa-cog fa-spin fa-lg fa-fw" />
-      <span className="text-muted">Loading...</span>
-    </div>;
+  renderLoading = () => {
+    return (
+      <div className="text-center" style={{ marginTop: 30 }}>
+        <i className="fa fa-cog fa-spin fa-lg fa-fw" />
+        <span className="text-muted">Loading...</span>
+      </div>
+    );
+  };
 
   render() {
     if (this.state.isLoading) {
@@ -114,16 +116,14 @@ class Entity extends Component {
               <th>Revert</th>
             </tr>
           </thead>
-          <tbody>
-            {this.state.entities.map(entity => this.renderEntity(entity))}
-          </tbody>
+          <tbody>{this.state.entities.map((entity) => { return this.renderEntity(entity); })}</tbody>
         </table>
-        {this.state.pageNumbers &&
+        {this.state.pageNumbers && (
           <nav aria-label="Page navigation" className="text-center">
             <ul className="pagination">
               <li>
                 <a
-                  onClick={() => this.handlePage(this.state.currentPage - 1)}
+                  onClick={() => { return this.handlePage(this.state.currentPage - 1); }}
                   aria-label="Previous"
                 >
                   <span aria-hidden="true">&laquo;</span>
@@ -133,31 +133,28 @@ class Entity extends Component {
                 if (item === '...') {
                   return (
                     <li key={i}>
-                      <a>
-                        {item}
-                      </a>
+                      <a>{item}</a>
                     </li>
                   );
                 }
 
                 return (
                   <li key={i}>
-                    <a onClick={() => this.handlePage(item)}>
-                      {item}
-                    </a>
+                    <a onClick={() => { return this.handlePage(item); }}>{item}</a>
                   </li>
                 );
               })}
               <li>
-                <a onClick={() => this.handlePage(this.state.currentPage + 1)} aria-label="Next">
+                <a onClick={() => { return this.handlePage(this.state.currentPage + 1); }} aria-label="Next">
                   <span aria-hidden="true">&raquo;</span>
                 </a>
               </li>
             </ul>
-          </nav>}
+          </nav>
+        )}
       </div>
     );
   }
 }
 
-export default Entity;
+export { Entity };
