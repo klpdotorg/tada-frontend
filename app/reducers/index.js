@@ -17,3 +17,4 @@ export * from './Questions';
 export * from './AssessmentEntry';
 export * from './ProgramDetails';
 export * from './BoundariesNavTree';
+export * from './MapAssessments';

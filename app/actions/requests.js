@@ -1,6 +1,5 @@
 import Notifications from 'react-notification-system-redux';
 
-import { STATE_CODE } from 'config';
 import store from '../store';
 import { syncError } from './notifications';
 

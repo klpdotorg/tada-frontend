@@ -26,6 +26,7 @@ import {
   ProgramDetails,
   AssessmentEntry,
   BoundariesNavTree,
+  MapAssessments,
 } from './reducers';
 
 const reducer = combineReducers({
@@ -50,6 +51,7 @@ const reducer = combineReducers({
   questions: Questions,
   programDetails: ProgramDetails,
   assessmentEntry: AssessmentEntry,
+  mapAssessments: MapAssessments,
 });
 
 const middleware = compose(

@@ -1,11 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { capitalize, includes } from 'lodash';
+import { capitalize, includes, isEqual } from 'lodash';
+
+import { Loading } from '../common';
 
 const ShowInstitutionsView = (props) => {
-  const { institutions, selectedInstitutions, selectedAllInstitutions } = props;
+  const { institutions, selectedInstitutions, loading } = props;
+  const Ids = institutions.map((institution) => {
+    return institution.value.id;
+  });
 
-  // TODO add loading in institutions
+  const selectedAllInstitutions = isEqual(Ids, selectedInstitutions);
 
   return (
     <div className="panel panel-primary">
@@ -16,32 +21,42 @@ const ShowInstitutionsView = (props) => {
             type="checkbox"
             className="ma-boundary-checkbox"
             checked={selectedAllInstitutions}
-            onChange={props.selectAllInstitutions}
+            onChange={() => {
+              props.selectAllInstitutions(Ids);
+            }}
           />
         </span>
       </div>
-      <ul className="list-group" style={{ overflowY: 'auto', maxHeight: 500 }}>
-        {institutions.map((institution) => {
-          const checked = includes(selectedInstitutions, institution.id);
+      {loading ? (
+        <div className="base-spacing" style={{ paddingLeft: 10 }}>
+          <Loading />
+        </div>
+      ) : (
+        <ul className="list-group" style={{ overflowY: 'auto', maxHeight: 500 }}>
+          {institutions.map((institution) => {
+            const checked = includes(selectedInstitutions, institution.value.id);
 
-          return (
-            <li className="list-group-item" key={institution.id}>
-              <div className="pull-left">{institution.id}</div>
-              <span className="margin-left">{capitalize(institution.name)}</span>
-              <div className="pull-right">
-                <input
-                  type="checkbox"
-                  aria-label="..."
-                  checked={checked}
-                  onChange={() => {
-                    props.selectInstitution(institution.id);
-                  }}
-                />
-              </div>
-            </li>
-          );
-        })}
-      </ul>
+            return (
+              <li className="list-group-item" key={institution.uniqueId}>
+                <div className="pull-left">{institution.value.id}</div>
+                <span className="margin-left">{capitalize(institution.value.name)}</span>
+                <div className="pull-right">
+                  <input
+                    type="checkbox"
+                    aria-label="..."
+                    checked={checked}
+                    onChange={() => {
+                      props.selectInstitution({
+                        id: institution.value.id,
+                      });
+                    }}
+                  />
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      )}
     </div>
   );
 };
@@ -49,9 +64,10 @@ const ShowInstitutionsView = (props) => {
 ShowInstitutionsView.propTypes = {
   selectInstitution: PropTypes.func,
   selectedAllInstitutions: PropTypes.bool,
-  selectedInstitutions: PropTypes.selectedInstitutions,
-  institutions: PropTypes.institutions,
+  selectedInstitutions: PropTypes.array,
+  institutions: PropTypes.array,
   selectAllInstitutions: PropTypes.func,
+  loading: PropTypes.bool,
 };
 
 export { ShowInstitutionsView };

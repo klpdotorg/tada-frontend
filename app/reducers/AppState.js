@@ -5,6 +5,10 @@ import {
   DISABLE_SUBMIT_FORM,
   SHOW_BOUNDARY_LOADING,
   CLOSE_BOUNDARY_LOADING,
+  SHOW_INSTITUTION_LOADING_IN_MA,
+  CLOSE_INSTITUTION_LOADING_IN_MA,
+  SHOW_CLASSES_LOADING_IN_MA,
+  CLOSE_CLASSES_LOADING_IN_MA,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -14,6 +18,8 @@ const INITIAL_STATE = {
   loadingBoundary: false,
   blockConfirmModal: false,
   enableSubmitForm: false,
+  loadingInstitutionInMA: false,
+  loadingStudentgroupInMA: false,
 };
 
 const AppState = (state = INITIAL_STATE, action) => {
@@ -57,6 +63,26 @@ const AppState = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         enableSubmitForm: false,
+      };
+    case SHOW_INSTITUTION_LOADING_IN_MA:
+      return {
+        ...state,
+        loadingInstitutionInMA: true,
+      };
+    case CLOSE_INSTITUTION_LOADING_IN_MA:
+      return {
+        ...state,
+        loadingInstitutionInMA: false,
+      };
+    case SHOW_CLASSES_LOADING_IN_MA:
+      return {
+        ...state,
+        loadingStudentgroupInMa: true,
+      };
+    case CLOSE_CLASSES_LOADING_IN_MA:
+      return {
+        ...state,
+        loadingStudentgroupInMa: false,
       };
     default:
       return state;

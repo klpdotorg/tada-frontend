@@ -45,8 +45,10 @@ const getUrlForFilterProgram = (entity, surveyId) => {
 };
 
 const fetchAdmins = (entity) => {
-  return (dispatch) => {
-    const url = getUrlForFilterProgram(entity, 1);
+  return (dispatch, getState) => {
+    const state = getState();
+    const { selectedProgram } = state.programs;
+    const url = getUrlForFilterProgram(entity, selectedProgram);
 
     get(url).then((res) => {
       const entities = convertEntitiesToObject(res.results);

@@ -1,18 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { includes } from 'lodash';
+import { Loading } from '../common';
 
 const ShowAssessmentsView = (props) => {
-  const { assessments, selectedAssessments } = props;
+  const { assessments, selectedAssessments, loading } = props;
 
   return (
     <div className="row center-block">
-      <div className="col-md-12">
+      <div className="col-md-12" style={{ marginTop: 10 }}>
         <div className="panel panel-primary">
           <div className="panel-heading">
             <h3 className="panel-title">Assessments</h3>
           </div>
-          {/* TODO ADD LOADING */}
+          {loading ? <Loading /> : <div />}
           <ul className="list-group" style={{ maxHeight: 200, overflowY: 'auto' }}>
             {assessments.map((assessment) => {
               const checked = includes(selectedAssessments, assessment.id);
@@ -25,8 +26,8 @@ const ShowAssessmentsView = (props) => {
                       type="checkbox"
                       aria-label="..."
                       checked={checked}
-                      onChange={(e) => {
-                        props.selectAssessment(assessment.id, e.target.checked);
+                      onChange={() => {
+                        props.selectAssessment(assessment.id);
                       }}
                     />
                   </div>
@@ -44,6 +45,7 @@ ShowAssessmentsView.propTypes = {
   assessments: PropTypes.array,
   selectedAssessments: PropTypes.array,
   selectAssessment: PropTypes.func,
+  loading: PropTypes.bool,
 };
 
 export { ShowAssessmentsView };

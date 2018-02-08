@@ -641,3 +641,11 @@ table.table-fixedwidth td, .table-fixedwidth th {
 .ma-boundary-title {
   flex: 1;
 }
+
+.marginBottom: {
+  margin-bottom: 10px;
+}
+
+.marginTop: {
+  margin-top: 10px;
+}

@@ -1,7 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { Loading } from '../common';
+
 const ShowClassesView = (props) => {
+  console.log(props.loading);
+
   return (
     <div className="row center-block">
       <div className="col-md-12">
@@ -19,9 +23,11 @@ const ShowClassesView = (props) => {
 };
 
 const RenderClasses = (props) => {
-  const { classes, selectedClasses } = props;
+  const { classes, selectedClasses, loading } = props;
 
-  // TODO add loading for classes
+  if (loading) {
+    return <Loading />;
+  }
 
   if (!classes.length) {
     return <span>No Classes</span>;
@@ -40,8 +46,10 @@ const RenderClasses = (props) => {
                 type="checkbox"
                 aria-label="..."
                 checked={checked}
-                onChange={(status) => {
-                  props.selectClass(value.id, status);
+                onChange={() => {
+                  props.selectClass({
+                    id: value.id,
+                  });
                 }}
               />
             </div>
@@ -56,6 +64,7 @@ RenderClasses.propTypes = {
   classes: PropTypes.array,
   selectedClasses: PropTypes.array,
   selectClass: PropTypes.func,
+  loading: PropTypes.bool,
 };
 
 export { ShowClassesView };

@@ -13,7 +13,9 @@ const ShowProgramsView = (props) => {
         <select
           className="form-control"
           id="selectProgram"
-          onChange={props.changeProgram}
+          onChange={(e) => {
+            props.selectProgram(e.target.value);
+          }}
           value={selectedProgram}
         >
           {programs.map((program) => {
@@ -32,7 +34,7 @@ const ShowProgramsView = (props) => {
 ShowProgramsView.propTypes = {
   programs: PropTypes.array,
   selectedProgram: PropTypes.number,
-  changeProgram: PropTypes.func,
+  selectProgram: PropTypes.func,
 };
 
 export { ShowProgramsView };

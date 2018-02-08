@@ -8,7 +8,7 @@ export const studentStudentGroupMap = {
   message: 'Students Successfully Modified',
 };
 
-export const syncError = error => {
+export const syncError = (error) => {
   return {
     ...baseNotification,
     title: 'Sync failed!',
@@ -123,4 +123,16 @@ export const entityNotActivated = {
   ...baseNotification,
   title: 'Error!',
   message: 'Entity not activated!',
+};
+
+export const mapAssessmentsDone = {
+  ...baseNotification,
+  title: 'Map Assessments',
+  message: 'Assessments are successfully linked to boundaries.',
+};
+
+export const mapAssessmentsFailed = {
+  ...baseNotification,
+  title: 'Error!',
+  message: 'Please check your assessments and boundaries',
 };

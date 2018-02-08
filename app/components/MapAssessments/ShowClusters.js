@@ -1,11 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { capitalize, includes } from 'lodash';
+import { capitalize, includes, isEqual } from 'lodash';
+
+import { Loading } from '../common';
 
 const ShowClustersView = (props) => {
-  const { clusters, selectedClusters, selectedAllClusters } = props;
+  const { clusters, selectedClusters, loading } = props;
+  const Ids = clusters.map((cluster) => {
+    return cluster.uniqueId;
+  });
 
-  // TODO Add loading for clusters
+  const selectedAllClusters = isEqual(Ids, selectedClusters);
 
   return (
     <div className="panel panel-primary">
@@ -17,32 +22,50 @@ const ShowClustersView = (props) => {
             type="checkbox"
             className="ma-boundary-checkbox"
             checked={selectedAllClusters}
-            onChange={props.selectAllClusters}
+            onChange={() => {
+              const entities = clusters.map((cluster) => {
+                return {
+                  id: cluster.value.id,
+                  uniqueId: cluster.uniqueId,
+                };
+              });
+              props.selectAllClusters(entities);
+            }}
           />
         </span>
       </div>
-      <ul className="list-group" style={{ overflowY: 'auto', maxHeight: '500px' }}>
-        {clusters.map((cluster) => {
-          const checked = includes(selectedClusters, cluster.id);
+      {loading ? (
+        <div className="base-spacing" style={{ paddingLeft: 10 }}>
+          <Loading />
+        </div>
+      ) : (
+        <ul className="list-group" style={{ overflowY: 'auto', maxHeight: '500px' }}>
+          {clusters.map((cluster) => {
+            const checked = includes(selectedClusters, cluster.uniqueId);
 
-          return (
-            <li className="list-group-item" key={cluster.id}>
-              {capitalize(cluster.name)}
-              <div className="pull-right">
-                <input
-                  type="checkbox"
-                  aria-label="..."
-                  checked={checked}
-                  value={checked}
-                  onChange={() => {
-                    props.selectCluster(cluster.id);
-                  }}
-                />
-              </div>
-            </li>
-          );
-        })}
-      </ul>
+            return (
+              <li className="list-group-item" key={cluster.uniqueId}>
+                {capitalize(cluster.value.name)}
+                <div className="pull-right">
+                  <input
+                    type="checkbox"
+                    aria-label="..."
+                    checked={checked}
+                    value={checked}
+                    onChange={() => {
+                      props.selectCluster({
+                        id: cluster.value.id,
+                        uniqueId: cluster.uniqueId,
+                        depth: 3,
+                      });
+                    }}
+                  />
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      )}
     </div>
   );
 };
@@ -53,6 +76,7 @@ ShowClustersView.propTypes = {
   selectAllClusters: PropTypes.func,
   selectCluster: PropTypes.func,
   selectedAllClusters: PropTypes.bool,
+  loading: PropTypes.bool,
 };
 
 export { ShowClustersView };

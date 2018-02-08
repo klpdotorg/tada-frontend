@@ -1,4 +1,4 @@
-import { SERVER_API_BASE, STATE_CODE } from 'config';
+import { SERVER_API_BASE, STATE_CODE, PER_PAGE } from 'config';
 import { push } from 'react-router-redux';
 import _ from 'lodash';
 
@@ -25,12 +25,12 @@ export const setBoundaries = (data) => {
 
 const getUrlForBoundary = (entity) => {
   if (entity.depth < 3) {
-    return `${SERVER_API_BASE}boundaries/?parent=${entity.id}&limit=500&state=${STATE_CODE}`;
+    return `${SERVER_API_BASE}boundaries/?parent=${entity.id}&state=${STATE_CODE}&per_page=${PER_PAGE}`;
   }
 
   switch (entity.depth) {
     case 3:
-      return `${SERVER_API_BASE}institutions/?admin3=${entity.id}`;
+      return `${SERVER_API_BASE}institutions/?admin3=${entity.id}&per_page=${PER_PAGE}`;
     case 4:
       return `${SERVER_API_BASE}institutions/${entity.id}/studentgroups/`;
     case 5:

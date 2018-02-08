@@ -23,3 +23,4 @@ export * from './AssessmentEntry';
 export * from './ProgramDetails';
 export * from './Login';
 export * from './Logout';
+export * from './MapAssessments';

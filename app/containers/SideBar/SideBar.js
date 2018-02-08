@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import $ from 'jquery';
 
 import { SideBarWrapper } from '../../components/SideBar';
-import { SchoolsNavTree, PermissionsNavTree, ProgramNavTree } from './index';
+import { SchoolsNavTree, PermissionsNavTree, ProgramNavTree, MapAssessmentTree } from './index';
 import { getEntity, setParentNode } from '../../actions';
 import { DEFAULT_PARENT_NODE_ID } from 'config';
 
@@ -41,6 +41,10 @@ class SideBar extends Component {
 
     if (location.pathname.includes('filterprograms')) {
       return <ProgramNavTree />;
+    }
+
+    if (location.pathname.includes('mapassessments')) {
+      return <MapAssessmentTree />;
     }
 
     return <SchoolsNavTree />;
