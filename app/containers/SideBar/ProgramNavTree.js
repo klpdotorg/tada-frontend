@@ -5,11 +5,24 @@ import TreeView from 'react-treeview';
 import { Link } from 'react-router';
 
 import { capitalize, getEntityType } from '../../utils';
-import { collapsedProgramEntity, getFilterByProgramEntites } from '../../actions/';
+import {
+  collapsedProgramEntity,
+  getFilterByProgramEntites,
+  resetProgramNavTree,
+} from '../../actions/';
 
 class NavTree extends Component {
   componentDidMount() {
-    this.props.getFilterByProgramEntites({ depth: 0 });
+    if (this.props.selectedProgram) {
+      this.props.getFilterByProgramEntites({ depth: 0 });
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.selectedProgram !== this.props.selectedProgram) {
+      this.props.resetProgramNavTree();
+      this.props.getFilterByProgramEntites({ depth: 0, id: 1 });
+    }
   }
 
   getTreeNodes(index) {
@@ -87,6 +100,7 @@ const mapStateToProps = (state) => {
     entities: state.programDetails.programDetails,
     entitiesByParentId: state.programDetails.entitiesByParentId,
     uncollapsed: state.programDetails.uncollapsedEntities,
+    selectedProgram: Number(state.programs.selectedProgram),
   };
 };
 
@@ -95,11 +109,14 @@ NavTree.propTypes = {
   uncollapsed: PropTypes.object,
   entitiesByParentId: PropTypes.object,
   entities: PropTypes.object,
+  selectedProgram: PropTypes.number,
+  resetProgramNavTree: PropTypes.func,
 };
 
 const ProgramNavTree = connect(mapStateToProps, {
   collapsedProgramEntity,
   getFilterByProgramEntites,
+  resetProgramNavTree,
 })(NavTree);
 
 export { ProgramNavTree };

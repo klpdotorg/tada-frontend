@@ -2,6 +2,7 @@ import {
   SET_BOUNDARIES,
   REMOVE_EXISTING_BOUNDARIES_NODE,
   UNCOLLAPSED_BOUNDARIES,
+  RESET_BOUNDARY_NAV_TREE,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -42,6 +43,12 @@ const BoundariesNavTree = (state = INITIAL_STATE, action) => {
             [action.value]: [],
           },
         },
+      };
+    case RESET_BOUNDARY_NAV_TREE:
+      return {
+        ...state,
+        uncollapsedEntities: {},
+        boundariesByParentId: {},
       };
     default:
       return state;

@@ -74,3 +74,5 @@ export const SELECT_CLASS_OF_MA = 'select_class_of_ma';
 export const RESET_MAP_ASSESSMENTS = 'reset_map_assessments';
 export const RESET_STUDENTGROUPS_OF_MA = 'reset_studentgroups_of_ma';
 export const RESET_INSTITUTIONS_OF_MA = 'reset_institutions_of_ma';
+export const RESET_BOUNDARY_NAV_TREE = 'reset_boundary_nav_tree';
+export const RESET_PROGRAM_NAV_TREE = 'reset_program_nav_tree';

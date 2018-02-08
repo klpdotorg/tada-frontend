@@ -1,42 +1,49 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { map, get } from 'lodash';
+import { map } from 'lodash';
 
-import { selectProgram } from '../../actions';
+import { selectProgram, fetchAllPrograms } from '../../actions';
 
-const ProgramDropdownView = (props) => {
-  const { selectedProgram, programs } = props;
+class ProgramDropdownView extends Component {
+  componentDidMount() {
+    this.props.fetchAllPrograms();
+  }
 
-  return (
-    <div className="row form-inline base-spacing">
-      <h5 className="text-primary col-md-1" htmlFor="sel1">
-        Programs:{' '}
-      </h5>
-      <select
-        className="form-control col-md-11"
-        id="sel1"
-        onChange={(e) => {
-          props.selectProgram(e.target.value);
-        }}
-        value={selectedProgram}
-      >
-        {map(programs, (program) => {
-          return (
-            <option key={program.id} value={program.id}>
-              {program.name}
-            </option>
-          );
-        })}
-      </select>
-    </div>
-  );
-};
+  render() {
+    const { selectedProgram, programs } = this.props;
+
+    return (
+      <div className="row form-inline base-spacing">
+        <h5 className="text-primary col-md-1" htmlFor="sel1">
+          Programs:{' '}
+        </h5>
+        <select
+          className="form-control col-md-11"
+          id="sel1"
+          onChange={(e) => {
+            this.props.selectProgram(e.target.value);
+          }}
+          value={selectedProgram}
+        >
+          {map(programs, (program) => {
+            return (
+              <option key={program.id} value={program.id}>
+                {program.name}
+              </option>
+            );
+          })}
+        </select>
+      </div>
+    );
+  }
+}
 
 ProgramDropdownView.propTypes = {
   selectedProgram: PropTypes.string,
   programs: PropTypes.object,
   selectProgram: PropTypes.func,
+  fetchAllPrograms: PropTypes.func,
 };
 
 const mapStateToProps = (state) => {
@@ -46,6 +53,9 @@ const mapStateToProps = (state) => {
   };
 };
 
-const ProgramDropdown = connect(mapStateToProps, { selectProgram })(ProgramDropdownView);
+const ProgramDropdown = connect(mapStateToProps, {
+  selectProgram,
+  fetchAllPrograms,
+})(ProgramDropdownView);
 
 export { ProgramDropdown };

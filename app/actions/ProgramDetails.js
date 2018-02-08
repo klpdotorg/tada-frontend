@@ -1,4 +1,5 @@
 import { SERVER_API_BASE } from 'config';
+import _ from 'lodash';
 
 import { get } from './requests';
 import {
@@ -65,19 +66,23 @@ const fetchAdmins = (entity) => {
 export const getFilterByProgramEntites = (entity) => {
   return (dispatch, getState) => {
     const state = getState();
-    const selectedProgramId = 1;
+    const { selectedProgram } = state.programs;
+    const { uncollapsedEntities } = state.programDetails;
 
-    if (entity.depth <= 5) {
-      dispatch(fetchAdmins(entity, selectedProgramId));
+    const currentNode = _.get(uncollapsedEntities, entity.depth);
+    const existing = currentNode === entity.id;
+    if (!existing && entity.depth <= 5) {
+      dispatch(fetchAdmins(entity, selectedProgram));
     }
 
     if (entity.depth > 0) {
-      const { uncollapsedEntities } = state.programDetails;
       const depths = Object.keys(uncollapsedEntities).filter((depth) => {
         return !(depth >= entity.depth);
       });
 
-      depths.push(entity.depth);
+      if (!existing) {
+        depths.push(entity.depth);
+      }
 
       const newUnCollapsedEntities = depths.reduce((soFar, depth) => {
         const value = uncollapsedEntities[depth];

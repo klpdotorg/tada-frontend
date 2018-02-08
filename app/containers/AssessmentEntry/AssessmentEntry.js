@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { keys } from 'lodash';
 
 import { fetchStudentsAndPrograms, fetchAnswersAndQuestion } from '../../actions';
 import { AnswersSheet } from '../../components/AssessmentEntry';
@@ -34,7 +33,7 @@ class GetAnswerSheet extends Component {
 
 GetAnswerSheet.propTypes = {
   params: PropTypes.object,
-  selectedProgram: PropTypes.string,
+  selectedProgram: PropTypes.number,
   fetchStudents: PropTypes.func,
   fetchAnswersAndQuestion: PropTypes.func,
   fetchStudentsAndPrograms: PropTypes.func,
@@ -45,7 +44,7 @@ const mapStateToProps = (state) => {
     studentIds: state.assessmentEntry.students.map((student) => {
       return student.id;
     }),
-    selectedProgram: state.programs.selectedProgram,
+    selectedProgram: Number(state.programs.selectedProgram),
   };
 };
 

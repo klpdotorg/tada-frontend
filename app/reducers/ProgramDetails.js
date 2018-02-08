@@ -2,6 +2,7 @@ import {
   UNCOLLAPSED_PROGRAM_ENTITY,
   SET_FITLER_PROGRAM_ENTITIES,
   REMOVE_EXISTING_NODE,
+  RESET_PROGRAM_NAV_TREE,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -38,6 +39,12 @@ const ProgramDetails = (state = INITIAL_STATE, action) => {
             [action.value]: [],
           },
         },
+      };
+    case RESET_PROGRAM_NAV_TREE:
+      return {
+        ...state,
+        entitiesByParentId: {},
+        uncollapsedEntities: {},
       };
     default:
       return state;
