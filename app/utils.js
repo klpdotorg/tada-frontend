@@ -26,6 +26,10 @@ export const getEntityType = (boundary) => {
       return 'studentgroup';
     case 'student':
       return 'students';
+    case 'monitor':
+      return 'assessment';
+    case 'assessment':
+      return 'assessment';
     default:
       return null;
   }

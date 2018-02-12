@@ -37,15 +37,19 @@ class NavTree extends Component {
     return [];
   }
 
-  renderLabel(boundary, depth) {
-    const label =
-      capitalize(boundary.label) || capitalize(boundary.name) || capitalize(boundary.first_name);
-    if (depth >= 3) {
-      const type = getEntityType(boundary);
-      const path = `/filterprograms/${type}/${boundary.id}`;
+  renderSubTree(node, index, depth) {
+    const newDepth = depth + 1;
+
+    const type = getEntityType(node);
+    const treeNodes = this.getTreeNodes(newDepth);
+    const collapsed = this.props.uncollapsed[newDepth] === node.id;
+    const label = capitalize(node.label) || capitalize(node.name) || capitalize(node.first_name);
+
+    if (type === 'assessment') {
+      const path = `/filterprograms/${type}/${node.id}`;
 
       return (
-        <Link key={boundary.name || boundary.id} to={path}>
+        <Link key={node.name || node.id} to={path}>
           <span
             className="node"
             onClick={() => {
@@ -58,15 +62,6 @@ class NavTree extends Component {
       );
     }
 
-    return <span className="node">{label}</span>;
-  }
-
-  renderSubTree(node, index, depth) {
-    const newDepth = depth + 1;
-    // console.log(!this.props.uncollapsed.includes(node.id), node.id, this.props.uncollapsed);
-
-    const treeNodes = this.getTreeNodes(newDepth);
-    const collapsed = this.props.uncollapsed[newDepth] === node.id;
     return (
       <TreeView
         key={index}
@@ -74,7 +69,7 @@ class NavTree extends Component {
           // this.props.collapsedProgramEntity(node.id);
           this.props.getFilterByProgramEntites({ id: node.id, depth: newDepth });
         }}
-        nodeLabel={node.name || index}
+        nodeLabel={label}
         collapsed={!collapsed}
       >
         {treeNodes.map((child, i) => {

@@ -53,6 +53,7 @@ export const getBoundaryType = (boundary) => {
   return (
     boundary.boundary_type ||
     boundary.institution_type ||
+    boundary.type ||
     (boundary.type && boundary.type.id) ||
     boundary.group_type ||
     'student'

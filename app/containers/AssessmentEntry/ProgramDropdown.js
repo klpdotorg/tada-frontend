@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { map } from 'lodash';
+import { map, isEmpty } from 'lodash';
 
 import { selectProgram, fetchAllPrograms } from '../../actions';
 
 class ProgramDropdownView extends Component {
   componentDidMount() {
-    this.props.fetchAllPrograms();
+    const { programs } = this.props;
+
+    if (isEmpty(programs)) {
+      this.props.fetchAllPrograms();
+    }
   }
 
   render() {

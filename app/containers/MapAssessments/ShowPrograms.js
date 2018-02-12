@@ -1,12 +1,18 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { isEmpty } from 'lodash';
+
 import { ShowProgramsView } from '../../components/MapAssessments';
 import { fetchAllPrograms, selectProgram } from '../../actions';
 
 class GetAllPrograms extends Component {
   componentDidMount = () => {
-    this.props.fetchAllPrograms();
+    const { programs } = this.props;
+
+    if (isEmpty(programs)) {
+      this.props.fetchAllPrograms();
+    }
   };
 
   render() {
@@ -23,6 +29,7 @@ const mapStateToProps = (state) => {
 
 GetAllPrograms.propTypes = {
   fetchAllPrograms: PropTypes.func,
+  programs: PropTypes.array,
 };
 
 const ShowPrograms = connect(mapStateToProps, {
