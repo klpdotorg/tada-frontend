@@ -1,4 +1,4 @@
-import { SERVER_API_BASE } from 'config';
+import { SERVER_API_BASE, PER_PAGE } from 'config';
 import _ from 'lodash';
 
 import { get } from './requests';
@@ -37,7 +37,7 @@ const getUrlForFilterProgram = (entity, surveyId) => {
     case 2:
       return `${SERVER_API_BASE}boundary/admin2/${entity.id}/admin3/?survey_id=${surveyId}`;
     case 3:
-      return `${SERVER_API_BASE}institutions/?admin3=${entity.id}&survey_id=${surveyId}`;
+      return `${SERVER_API_BASE}institutions/?admin3=${entity.id}&survey_id=${surveyId}&per_page=${PER_PAGE}`;
     case 4:
       return `${SERVER_API_BASE}survey/institution/detail/?survey_id=${surveyId}&institution_id=${entity.id}`;
     default:
@@ -68,9 +68,8 @@ export const getFilterByProgramEntites = (entity) => {
     const state = getState();
     const { selectedProgram } = state.programs;
     const { uncollapsedEntities } = state.programDetails;
-
     const currentNode = _.get(uncollapsedEntities, entity.depth);
-    const existing = currentNode === entity.id;
+    const existing = currentNode === entity.uniqueId;
     if (!existing && entity.depth <= 5) {
       dispatch(fetchAdmins(entity, selectedProgram));
     }
@@ -88,7 +87,7 @@ export const getFilterByProgramEntites = (entity) => {
         const value = uncollapsedEntities[depth];
 
         if (!value || depth === entity.depth) {
-          soFar[depth] = entity.id;
+          soFar[depth] = entity.uniqueId;
         } else {
           soFar[depth] = value;
         }

@@ -42,7 +42,6 @@ class NavTree extends Component {
 
     return (
       <Link
-        key={entity.name || entity.id}
         tabIndex="0"
         onClick={() => {
           this.props.fetchBoundariesOfMA({
@@ -71,7 +70,7 @@ class NavTree extends Component {
 
     return (
       <TreeView
-        key={index}
+        key={node.uniqueId}
         onClick={() => {
           this.props.getBoundariesEntities([
             {

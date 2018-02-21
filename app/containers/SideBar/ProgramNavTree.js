@@ -9,19 +9,20 @@ import {
   collapsedProgramEntity,
   getFilterByProgramEntites,
   resetProgramNavTree,
+  selectProgramAssessment,
 } from '../../actions/';
 
 class NavTree extends Component {
   componentDidMount() {
     if (this.props.selectedProgram) {
-      this.props.getFilterByProgramEntites({ depth: 0 });
+      this.props.getFilterByProgramEntites({ depth: 0, uniqueId: 1 });
     }
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.selectedProgram !== this.props.selectedProgram) {
       this.props.resetProgramNavTree();
-      this.props.getFilterByProgramEntites({ depth: 0, id: 1 });
+      this.props.getFilterByProgramEntites({ depth: 0, uniqueId: 1 });
     }
   }
 
@@ -30,7 +31,7 @@ class NavTree extends Component {
 
     if (nodes) {
       return nodes.map((node) => {
-        return this.props.entities[node];
+        return { entity: this.props.entities[node], uniqueId: node };
       });
     }
 
@@ -38,22 +39,21 @@ class NavTree extends Component {
   }
 
   renderSubTree(node, index, depth) {
+    const { entity } = node;
     const newDepth = depth + 1;
-
-    const type = getEntityType(node);
+    const type = getEntityType(entity);
     const treeNodes = this.getTreeNodes(newDepth);
-    const collapsed = this.props.uncollapsed[newDepth] === node.id;
-    const label = capitalize(node.label) || capitalize(node.name) || capitalize(node.first_name);
+    const collapsed = this.props.uncollapsed[newDepth] === node.uniqueId;
+    const label =
+      capitalize(entity.label) || capitalize(entity.name) || capitalize(entity.first_name);
 
     if (type === 'assessment') {
-      const path = `/filterprograms/${type}/${node.id}`;
-
       return (
-        <Link key={node.name || node.id} to={path}>
+        <Link key={node.uniqueId}>
           <span
             className="node"
             onClick={() => {
-              // this.props.onBoundaryClick(boundary, depth);
+              this.props.selectProgramAssessment(entity.id, depth);
             }}
           >
             {label}
@@ -66,8 +66,11 @@ class NavTree extends Component {
       <TreeView
         key={index}
         onClick={() => {
-          // this.props.collapsedProgramEntity(node.id);
-          this.props.getFilterByProgramEntites({ id: node.id, depth: newDepth });
+          this.props.getFilterByProgramEntites({
+            id: entity.id,
+            depth: newDepth,
+            uniqueId: node.uniqueId,
+          });
         }}
         nodeLabel={label}
         collapsed={!collapsed}
@@ -106,12 +109,14 @@ NavTree.propTypes = {
   entities: PropTypes.object,
   selectedProgram: PropTypes.number,
   resetProgramNavTree: PropTypes.func,
+  selectProgramAssessment: PropTypes.func,
 };
 
 const ProgramNavTree = connect(mapStateToProps, {
   collapsedProgramEntity,
   getFilterByProgramEntites,
   resetProgramNavTree,
+  selectProgramAssessment,
 })(NavTree);
 
 export { ProgramNavTree };

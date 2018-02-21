@@ -76,3 +76,7 @@ export const RESET_STUDENTGROUPS_OF_MA = 'reset_studentgroups_of_ma';
 export const RESET_INSTITUTIONS_OF_MA = 'reset_institutions_of_ma';
 export const RESET_BOUNDARY_NAV_TREE = 'reset_boundary_nav_tree';
 export const RESET_PROGRAM_NAV_TREE = 'reset_program_nav_tree';
+export const SELECT_PROGRAM_ASSESSMENT = 'select_program_assessment';
+export const SET_ASSESSMENT_ENTRY_BOUNDARIES = 'set_assessment_entry_boundaries';
+export const SET_ASSESSMENT_ENTRY_QUESTIONS = 'set_assessment_entry_questions';
+export const SET_ASSESSMENT_ENTRY_ANSWERS = 'set_assessment_entry_answers';

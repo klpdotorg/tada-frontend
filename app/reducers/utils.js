@@ -50,14 +50,23 @@ export const getEntityType = (entity) => {
 };
 
 export const getBoundaryType = (boundary) => {
-  return (
-    boundary.boundary_type ||
-    boundary.institution_type ||
-    boundary.type ||
-    (boundary.type && boundary.type.id) ||
-    boundary.group_type ||
-    'student'
-  );
+  if (boundary.boundary_type) {
+    return boundary.boundary_type;
+  }
+
+  if (boundary.group_type) {
+    return boundary.group_type;
+  }
+
+  if (typeof boundary.type === 'string') {
+    return boundary.type;
+  }
+
+  if (typeof boundary.type === 'object') {
+    return boundary.type.id;
+  }
+
+  return 'student';
 };
 /*
 Method computes the router path for an entity and returns it
