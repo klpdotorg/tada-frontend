@@ -6,6 +6,7 @@ import {
   SET_ASSESSMENT_ENTRY_BOUNDARIES,
   SET_BOUNDARIES,
   SET_ASSESSMENT_ENTRY_ANSWERS,
+  CHANGE_ASSESSMENT_ENTRY_ANSWERS,
 } from './types';
 import { get } from './requests';
 import { fetchStudents, fetchAllPrograms, fetchQuestions, setQuestions } from './index';
@@ -13,7 +14,7 @@ import { getEntityType, convertEntitiesToObject } from '../utils';
 
 export const onChangeAssessmentEntry = (value, id) => {
   return {
-    type: SET_ASSESSMENT_ENTRY_ANSWERS,
+    type: CHANGE_ASSESSMENT_ENTRY_ANSWERS,
     id,
     value,
   };
@@ -102,8 +103,32 @@ export const fetchStudentsAndPrograms = (entityId, entityType) => {
   };
 };
 
+const filterAnswers = (answers) => {
+  return answers.reduce((soFar, ans) => {
+    const result = soFar;
+    result[ans.question] = { value: ans.answer };
+
+    return result;
+  }, {});
+};
+
 export const fetchAnswers = () => {
-  get();
+  return (dispatch, getState) => {
+    const state = getState();
+    const { selectedProgramAssess } = state.assessmentEntry;
+    const { selectedProgram } = state.programs;
+    const url = `${SERVER_API_BASE}surveys/${selectedProgram}/qgroup/${selectedProgramAssess.assessmentId}/institution/${selectedProgramAssess.boundaryId}/answers/`;
+    get(url).then((res) => {
+      const answers = filterAnswers(res.results);
+
+      dispatch({
+        type: SET_ASSESSMENT_ENTRY_ANSWERS,
+        value: {
+          [selectedProgramAssess.boundaryId]: answers,
+        },
+      });
+    });
+  };
 };
 
 export const fetchAnswersAndQuestion = (programId) => {

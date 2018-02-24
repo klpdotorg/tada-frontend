@@ -12,6 +12,7 @@ import {
   openBoundaryOfMa,
   fetchBoundariesOfMA,
 } from '../../actions/';
+import { Loading } from '../../components/common';
 
 class NavTree extends Component {
   componentDidMount() {
@@ -88,6 +89,7 @@ class NavTree extends Component {
               return this.renderSubTree(child, i + 1, newDepth);
             })
           : []}
+        {!treeNodes.length && this.props.loading ? <Loading /> : <span />}
       </TreeView>
     );
   }
@@ -108,6 +110,7 @@ const mapStateToProps = (state) => {
     entities: state.boundaries.boundaryDetails,
     entitiesByParentId: state.boundaries.boundariesByParentId,
     uncollapsed: state.boundaries.uncollapsedEntities,
+    loading: state.appstate.loadingBoundary,
   };
 };
 
@@ -118,6 +121,7 @@ NavTree.propTypes = {
   entities: PropTypes.object,
   openBoundaryOfMa: PropTypes.func,
   fetchBoundariesOfMA: PropTypes.func,
+  loading: PropTypes.func,
 };
 
 const MapAssessmentTree = connect(mapStateToProps, {

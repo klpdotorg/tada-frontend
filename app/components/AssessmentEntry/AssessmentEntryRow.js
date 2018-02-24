@@ -4,7 +4,6 @@ import { get } from 'lodash';
 
 const AssessmentEntryRowView = (props) => {
   const { id, name, answers, questions } = props;
-
   return (
     <tr>
       <td>{id}</td>
@@ -19,8 +18,8 @@ const AssessmentEntryRowView = (props) => {
         {name}
       </td>
       {questions.map((question) => {
+        console.log(answers, question.id);
         const currentVal = get(answers, [id, question.id, 'value'], '');
-        console.log(currentVal);
         return (
           <td key={question.id}>
             <input

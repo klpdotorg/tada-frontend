@@ -80,3 +80,4 @@ export const SELECT_PROGRAM_ASSESSMENT = 'select_program_assessment';
 export const SET_ASSESSMENT_ENTRY_BOUNDARIES = 'set_assessment_entry_boundaries';
 export const SET_ASSESSMENT_ENTRY_QUESTIONS = 'set_assessment_entry_questions';
 export const SET_ASSESSMENT_ENTRY_ANSWERS = 'set_assessment_entry_answers';
+export const CHANGE_ASSESSMENT_ENTRY_ANSWERS = 'change_assessment_entry_answers';

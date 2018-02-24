@@ -4,6 +4,7 @@ import {
   SET_ASSESSMENT_ENTRY_ANSWERS,
   RESET_ASSESSMENTR_ENTRY,
   SELECT_PROGRAM_ASSESSMENT,
+  CHANGE_ASSESSMENT_ENTRY_ANSWERS,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -24,7 +25,12 @@ const AssessmentEntry = (state = INITIAL_STATE, action) => {
         ...state,
         questions: action.value,
       };
-    case SET_ASSESSMENT_ENTRY_ANSWERS: {
+    case SET_ASSESSMENT_ENTRY_ANSWERS:
+      return {
+        ...state,
+        answers: action.value,
+      };
+    case CHANGE_ASSESSMENT_ENTRY_ANSWERS: {
       const answers = state.answers[action.id];
 
       return {

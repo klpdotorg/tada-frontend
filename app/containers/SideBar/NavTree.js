@@ -7,6 +7,7 @@ import { DEFAULT_PARENT_NODE_ID } from 'config';
 
 import { capitalize } from '../../utils';
 import { collapsedProgramEntity, getBoundariesEntities, openBoundary } from '../../actions/';
+import { Loading } from '../../components/common';
 
 class NavTree extends Component {
   componentDidMount() {
@@ -66,11 +67,14 @@ class NavTree extends Component {
         nodeLabel={name}
         collapsed={!collapsed}
       >
-        {depth <= 3
-          ? treeNodes.map((child, i) => {
-              return this.renderSubTree(child, i + 1, newDepth);
-            })
-          : []}
+        {depth <= 3 ? (
+          treeNodes.map((child, i) => {
+            return this.renderSubTree(child, i + 1, newDepth);
+          })
+        ) : (
+          <div />
+        )}
+        {!treeNodes.length && this.props.loading ? <Loading /> : <span />}
       </TreeView>
     );
   }
@@ -91,6 +95,7 @@ const mapStateToProps = (state) => {
     entities: state.boundaries.boundaryDetails,
     entitiesByParentId: state.boundaries.boundariesByParentId,
     uncollapsed: state.boundaries.uncollapsedEntities,
+    loading: state.appstate.loadingBoundary,
   };
 };
 
@@ -100,6 +105,7 @@ NavTree.propTypes = {
   entitiesByParentId: PropTypes.object,
   entities: PropTypes.object,
   openBoundary: PropTypes.func,
+  loading: PropTypes.bool,
 };
 
 const SchoolsNavTree = connect(mapStateToProps, {

@@ -11,6 +11,7 @@ import {
   resetProgramNavTree,
   selectProgramAssessment,
 } from '../../actions/';
+import { Loading } from '../../components/common';
 
 class NavTree extends Component {
   componentDidMount() {
@@ -78,6 +79,7 @@ class NavTree extends Component {
         {treeNodes.map((child, i) => {
           return this.renderSubTree(child, i + 1, newDepth);
         })}
+        {!treeNodes.length && this.props.loading ? <Loading /> : <span />}
       </TreeView>
     );
   }
@@ -99,6 +101,7 @@ const mapStateToProps = (state) => {
     entitiesByParentId: state.programDetails.entitiesByParentId,
     uncollapsed: state.programDetails.uncollapsedEntities,
     selectedProgram: Number(state.programs.selectedProgram),
+    loading: state.appstate.loadingBoundary,
   };
 };
 
@@ -110,6 +113,7 @@ NavTree.propTypes = {
   selectedProgram: PropTypes.number,
   resetProgramNavTree: PropTypes.func,
   selectProgramAssessment: PropTypes.func,
+  loading: PropTypes.bool,
 };
 
 const ProgramNavTree = connect(mapStateToProps, {

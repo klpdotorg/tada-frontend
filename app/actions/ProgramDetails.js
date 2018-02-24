@@ -9,6 +9,7 @@ import {
   REMOVE_EXISTING_NODE,
 } from './types';
 import { convertEntitiesToObject } from '../utils';
+import { showBoundaryLoading, closeBoundaryLoading } from './index';
 
 export const collapsedProgramEntity = (value) => {
   return (dispatch, getState) => {
@@ -59,6 +60,7 @@ const fetchAdmins = (entity) => {
         programDetails: entities,
         entitiesByParentId: { [entity.depth]: Object.keys(entities) },
       });
+      dispatch(closeBoundaryLoading());
     });
   };
 };
@@ -66,6 +68,7 @@ const fetchAdmins = (entity) => {
 export const getFilterByProgramEntites = (entity) => {
   return (dispatch, getState) => {
     const state = getState();
+    dispatch(showBoundaryLoading());
     const { selectedProgram } = state.programs;
     const { uncollapsedEntities } = state.programDetails;
     const currentNode = _.get(uncollapsedEntities, entity.depth);
