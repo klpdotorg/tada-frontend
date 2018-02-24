@@ -5,13 +5,14 @@ import TreeView from 'react-treeview';
 import { Link } from 'react-router';
 
 import { capitalize, getEntityType } from '../../utils';
+import { filterBoundaries } from './utils';
 import {
   collapsedProgramEntity,
   getFilterByProgramEntites,
   resetProgramNavTree,
   selectProgramAssessment,
 } from '../../actions/';
-import { Loading } from '../../components/common';
+import { Loading, Message } from '../../components/common';
 
 class NavTree extends Component {
   componentDidMount() {
@@ -31,9 +32,16 @@ class NavTree extends Component {
     const nodes = this.props.entitiesByParentId[index];
 
     if (nodes) {
-      return nodes.map((node) => {
+      const updatedNodes = nodes.map((node) => {
         return { entity: this.props.entities[node], uniqueId: node };
       });
+
+      if (index !== 0) {
+        return updatedNodes;
+      }
+
+      const filterEntities = filterBoundaries(updatedNodes, this.props.selectedPrimary);
+      return filterEntities;
     }
 
     return [];
@@ -84,6 +92,18 @@ class NavTree extends Component {
     );
   }
 
+  renderBoundariesState(length) {
+    if (this.props.loading && length) {
+      return <Loading />;
+    }
+
+    if (!length) {
+      return <Message message="No Boundaries Found" />;
+    }
+
+    return <span />;
+  }
+
   render() {
     const nodes = this.getTreeNodes(0);
 
@@ -92,7 +112,7 @@ class NavTree extends Component {
         {nodes.map((element, i) => {
           return this.renderSubTree(element, i, 0);
         })}
-        {!nodes.length && this.props.loading ? <Loading /> : <span />}
+        {this.renderBoundariesState(nodes.length)}
       </div>
     );
   }
@@ -105,6 +125,7 @@ const mapStateToProps = (state) => {
     uncollapsed: state.programDetails.uncollapsedEntities,
     selectedProgram: Number(state.programs.selectedProgram),
     loading: state.appstate.loadingBoundary,
+    selectedPrimary: state.schoolSelection.primarySchool,
   };
 };
 
@@ -117,6 +138,7 @@ NavTree.propTypes = {
   resetProgramNavTree: PropTypes.func,
   selectProgramAssessment: PropTypes.func,
   loading: PropTypes.bool,
+  selectedPrimary: PropTypes.bool,
 };
 
 const ProgramNavTree = connect(mapStateToProps, {

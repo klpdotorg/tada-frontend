@@ -6,8 +6,9 @@ import { Link } from 'react-router';
 import { DEFAULT_PARENT_NODE_ID } from 'config';
 
 import { capitalize } from '../../utils';
+import { filterBoundaries } from './utils';
 import { collapsedProgramEntity, getBoundariesEntities, openBoundary } from '../../actions/';
-import { Loading } from '../../components/common';
+import { Loading, Message } from '../../components/common';
 
 class NavTree extends Component {
   componentDidMount() {
@@ -18,9 +19,17 @@ class NavTree extends Component {
     const nodes = this.props.entitiesByParentId[index];
 
     if (nodes) {
-      return nodes.map((node) => {
+      const updatedNodes = nodes.map((node) => {
         return { entity: this.props.entities[node], uniqueId: node };
       });
+
+      if (index !== 0) {
+        return updatedNodes;
+      }
+
+      const filterEntities = filterBoundaries(updatedNodes, this.props.selectedPrimary);
+
+      return filterEntities;
     }
 
     return [];
@@ -79,6 +88,18 @@ class NavTree extends Component {
     );
   }
 
+  renderBoundariesState(length) {
+    if (this.props.loading && length) {
+      return <Loading />;
+    }
+
+    if (!length) {
+      return <Message message="No Boundaries Found" />;
+    }
+
+    return <span />;
+  }
+
   render() {
     const nodes = this.getTreeNodes(0);
 
@@ -87,7 +108,7 @@ class NavTree extends Component {
         {nodes.map((element, i) => {
           return this.renderSubTree(element, i, 0);
         })}
-        {!nodes.length && this.props.loading ? <Loading /> : <span />}
+        {this.renderBoundariesState(nodes.length)}
       </div>
     );
   }
@@ -99,6 +120,7 @@ const mapStateToProps = (state) => {
     entitiesByParentId: state.boundaries.boundariesByParentId,
     uncollapsed: state.boundaries.uncollapsedEntities,
     loading: state.appstate.loadingBoundary,
+    selectedPrimary: state.schoolSelection.primarySchool,
   };
 };
 
@@ -109,6 +131,7 @@ NavTree.propTypes = {
   entities: PropTypes.object,
   openBoundary: PropTypes.func,
   loading: PropTypes.bool,
+  selectedPrimary: PropTypes.bool,
 };
 
 const SchoolsNavTree = connect(mapStateToProps, {

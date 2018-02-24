@@ -21,10 +21,10 @@ class SideBar extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.selectedPrimarySchool !== nextProps.selectedPrimarySchool) {
-      this.props.getEntity(DEFAULT_PARENT_NODE_ID);
-      this.props.setParentNode(DEFAULT_PARENT_NODE_ID);
-    }
+    // if (this.props.selectedPrimarySchool !== nextProps.selectedPrimarySchool) {
+    //   this.props.getEntity(DEFAULT_PARENT_NODE_ID);
+    //   this.props.setParentNode(DEFAULT_PARENT_NODE_ID);
+    // }
   }
 
   toggleTree(e) {
