@@ -70,7 +70,7 @@ class EditPreschoolForm extends Component {
         onValidSubmit={this.saveInsti}
         onValid={this.props.enableSubmitForm}
         onInvalid={this.props.disableSubmitForm}
-        ref={ref => (this.myform = ref)}
+        ref={(ref) => { return (this.myform = ref); }}
       >
         <div className="form-group">
           <div className="col-sm-12">
@@ -192,11 +192,7 @@ class EditPreschoolForm extends Component {
           </div>
         </div>
         <div className="col-md-12">
-          <button
-            type="submit"
-            className="btn btn-primary padded-btn"
-            disabled={!canSubmit}
-          >
+          <button type="submit" className="btn btn-primary padded-btn" disabled={!canSubmit}>
             Save
           </button>
           <button
@@ -246,32 +242,34 @@ const mapStateToProps = (state, ownProps) => {
     openConfirmModal: state.appstate.confirmModal,
     institution: state.boundaries.boundaryDetails[institutionNodeId],
     canSubmit: state.appstate.enableSubmitForm,
-    languages: state.institution.languages,
+    languages: state.languages.languages,
     managements: state.institution.managements,
     institutionCategories: state.institution.institutionCats,
   };
 };
 
-const mapDispatchToProps = dispatch => ({
-  saveInstitution: institution => {
-    dispatch(saveInstitution(institution));
-  },
-  deleteInstitution: (clusterId, institutionId) => {
-    dispatch(deleteInstitution(clusterId, institutionId));
-  },
-  enableSubmitForm: () => {
-    dispatch(enableSubmitForm());
-  },
-  disableSubmitForm: () => {
-    dispatch(disableSubmitForm());
-  },
-  showConfirmModal: () => {
-    dispatch(showConfirmModal());
-  },
-  closeConfirmModal: () => {
-    dispatch(closeConfirmModal());
-  },
-});
+const mapDispatchToProps = (dispatch) => {
+  return {
+    saveInstitution: (institution) => {
+      dispatch(saveInstitution(institution));
+    },
+    deleteInstitution: (clusterId, institutionId) => {
+      dispatch(deleteInstitution(clusterId, institutionId));
+    },
+    enableSubmitForm: () => {
+      dispatch(enableSubmitForm());
+    },
+    disableSubmitForm: () => {
+      dispatch(disableSubmitForm());
+    },
+    showConfirmModal: () => {
+      dispatch(showConfirmModal());
+    },
+    closeConfirmModal: () => {
+      dispatch(closeConfirmModal());
+    },
+  };
+};
 
 const EditPreschool = connect(mapStateToProps, mapDispatchToProps)(EditPreschoolForm);
 

@@ -7,9 +7,10 @@ import { PermissionView, PreschoolActions } from './index';
 import { EditPreschool } from '../../containers/Preschool';
 import { Loading } from '../common';
 
-const PreschoolView = props => {
+const PreschoolView = (props) => {
   const { isLoading, district, project, circle, institution, params } = props;
-  console.log(isLoading)
+  const canModify = !isEmpty(sessionStorage.getItem('isAdmin'));
+
   if (isLoading || isEmpty(institution)) {
     return <Loading />;
   }
@@ -18,38 +19,28 @@ const PreschoolView = props => {
     <div>
       <ol className="breadcrumb">
         <li>
-          <Link to={district.path}>
-            {district.name}
-          </Link>
+          <Link to={district.path}>{district.name}</Link>
         </li>
         <li>
-          {' '}<Link to={project.path}> {project.name}</Link>
+          {' '}
+          <Link to={project.path}> {project.name}</Link>
         </li>
         <li>
-          {' '}<Link to={circle.path}> {circle.name}</Link>
+          {' '}
+          <Link to={circle.path}> {circle.name}</Link>
         </li>
-        <li className="active">
-          {' '}{institution.name}
-        </li>
+        <li className="active"> {institution.name}</li>
       </ol>
       <div>
-        {sessionStorage.getItem('isAdmin') ?
-          <div className="row">
-            <PreschoolActions
-              toggleClassModal={props.toggleClassModal}
-              showTeachers={() => props.showTeachers(institution.path)}
-            />
-            <div className="base-spacing-mid border-base" />
-            <EditPreschool
-              circleId={circle.id}
-              institutionNodeId={params.institutionNodeId}
-            />
-          </div>
-          :
-          <PermissionView
-            institution={institution}
-          />
-        }
+        <PermissionView institution={institution} canModify={canModify} />
+        <PreschoolActions
+          canModify={canModify}
+          toggleClassModal={props.toggleClassModal}
+          showTeachers={() => { return props.showTeachers(institution.path); }}
+        />
+        <div className="border-base" />
+        <div className="base-spacing-sm" />
+        <EditPreschool circleId={circle.id} institutionNodeId={params.institutionNodeId} />
       </div>
     </div>
   );

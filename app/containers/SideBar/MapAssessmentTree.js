@@ -103,7 +103,7 @@ class NavTree extends Component {
   }
 
   renderBoundariesState(length) {
-    if (this.props.loading && length) {
+    if (this.props.loading && !length) {
       return <Loading />;
     }
 
