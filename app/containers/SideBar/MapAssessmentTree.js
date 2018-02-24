@@ -95,11 +95,13 @@ class NavTree extends Component {
   }
 
   render() {
+    const nodes = this.getTreeNodes(0);
     return (
       <div>
-        {this.getTreeNodes(0).map((element, i) => {
+        {nodes.map((element, i) => {
           return this.renderSubTree(element, i, 0);
         })}
+        {!nodes.length && this.props.loading ? <Loading /> : <span />}
       </div>
     );
   }
@@ -121,7 +123,7 @@ NavTree.propTypes = {
   entities: PropTypes.object,
   openBoundaryOfMa: PropTypes.func,
   fetchBoundariesOfMA: PropTypes.func,
-  loading: PropTypes.func,
+  loading: PropTypes.bool,
 };
 
 const MapAssessmentTree = connect(mapStateToProps, {
