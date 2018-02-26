@@ -3,6 +3,34 @@ import moment from 'moment';
 import { DEFAULT_PARENT_ID } from 'config';
 import { getBoundaryType } from './reducers/utils';
 
+export const getEntityDepth = (boundary) => {
+  const boundaryType = getBoundaryType(boundary);
+  switch (boundaryType) {
+    case 'PD':
+      return 1;
+    case 'SD':
+      return 1;
+    case 'SB':
+      return 2;
+    case 'SC':
+      return 3;
+    case 'PP':
+      return 2;
+    case 'PC':
+      return 3;
+    case 'primary':
+      return 4;
+    case 'pre':
+      return 4;
+    case 'class':
+      return 5;
+    case 'student':
+      return 6;
+    default:
+      return null;
+  }
+};
+
 export const getEntityType = (boundary) => {
   const boundaryType = getBoundaryType(boundary);
   switch (boundaryType) {
@@ -79,18 +107,27 @@ export const convertEntitiesToObject = (entities) => {
 
 export const getPath = (state, uniqueId, depth) => {
   let path = '';
+  const { uncollapsedEntities, boundaryDetails } = state.boundaries;
 
-  _.forEach(state.boundaries.uncollapsedEntities, (id, entityDepth) => {
-    if (Number(entityDepth) <= depth) {
-      const entity = state.boundaries.boundaryDetails[id];
+  _.forEach(uncollapsedEntities, (id, entityDepth) => {
+    if (Number(entityDepth) < depth) {
+      const entity = boundaryDetails[id];
       const entityType = getEntityType(entity);
       path += `/${entityType}/${id}`;
     }
   });
 
-  const openEntity = state.boundaries.boundaryDetails[uniqueId];
-  const type = getEntityType(openEntity);
-  path += `/${type}/${uniqueId}`;
+  if (typeof uniqueId === 'object') {
+    if (!path.includes(uniqueId.uniqueId)) {
+      path += `/${uniqueId.type}/${uniqueId.uniqueId}`;
+    }
+  }
+
+  if (typeof uniqueId === 'string' && !path.includes(uniqueId)) {
+    const openEntity = boundaryDetails[uniqueId];
+    const type = getEntityType(openEntity);
+    path += `/${type}/${uniqueId}`;
+  }
 
   return path;
 };

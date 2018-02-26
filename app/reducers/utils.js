@@ -58,6 +58,10 @@ export const getBoundaryType = (boundary) => {
     return boundary.group_type;
   }
 
+  if (boundary.institution_type) {
+    return boundary.institution_type;
+  }
+
   if (typeof boundary.type === 'string') {
     return boundary.type;
   }

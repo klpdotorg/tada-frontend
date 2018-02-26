@@ -68,6 +68,61 @@ export const fetchBoundary = (entity, moreEntities) => {
   };
 };
 
+export const uncollapsedBoundaries = (entity) => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const { uncollapsedEntities } = state.boundaries;
+    const currentNode = _.get(uncollapsedEntities, entity.depth);
+    const existing = currentNode === entity.uniqueId;
+
+    if (entity.depth > 0) {
+      const depths = Object.keys(uncollapsedEntities).filter((depth) => {
+        return !(depth >= entity.depth);
+      });
+
+      if (!existing) {
+        depths.push(entity.depth);
+      }
+
+      const newUnCollapsedEntities = depths.reduce((soFar, depth) => {
+        const result = soFar;
+        const value = uncollapsedEntities[depth];
+
+        if (!value || depth === entity.depth) {
+          result[depth] = entity.uniqueId;
+        } else {
+          result[depth] = value;
+        }
+
+        return result;
+      }, {});
+
+      dispatch({
+        type: UNCOLLAPSED_BOUNDARIES,
+        value: newUnCollapsedEntities,
+      });
+      dispatch({
+        type: REMOVE_EXISTING_BOUNDARIES_NODE,
+        value: entity.depth,
+      });
+    }
+  };
+};
+
+export const openEntity = (entity) => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const existingParentIds = state.boundaries.boundariesByParentId[entity.depth - 1];
+
+    existingParentIds.push(entity.uniqueId);
+    dispatch({
+      type: SET_BOUNDARIES,
+      boundariesByParentId: { [entity.depth - 1]: existingParentIds },
+    });
+    dispatch(uncollapsedBoundaries(entity));
+  };
+};
+
 const fetchBoundaries = (Ids) => {
   return (dispatch, getState) => {
     if (Ids.length) {
@@ -84,37 +139,7 @@ const fetchBoundaries = (Ids) => {
         dispatch(closeBoundaryLoading());
       }
 
-      if (entity.depth > 0) {
-        const depths = Object.keys(uncollapsedEntities).filter((depth) => {
-          return !(depth >= entity.depth);
-        });
-
-        if (!existing) {
-          depths.push(entity.depth);
-        }
-
-        const newUnCollapsedEntities = depths.reduce((soFar, depth) => {
-          const result = soFar;
-          const value = uncollapsedEntities[depth];
-
-          if (!value || depth === entity.depth) {
-            result[depth] = entity.uniqueId;
-          } else {
-            result[depth] = value;
-          }
-
-          return result;
-        }, {});
-
-        dispatch({
-          type: UNCOLLAPSED_BOUNDARIES,
-          value: newUnCollapsedEntities,
-        });
-        dispatch({
-          type: REMOVE_EXISTING_BOUNDARIES_NODE,
-          value: entity.depth,
-        });
-      }
+      dispatch(uncollapsedBoundaries(entity));
     }
   };
 };

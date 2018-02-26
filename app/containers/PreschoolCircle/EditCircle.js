@@ -40,16 +40,14 @@ class EditCircleForm extends Component {
 
     return (
       <div>
-        {hasSchools
-          ?
+        {hasSchools ? (
           <div className="alert alert-info">
-            <i className="fa fa-info-circle fa-lg" aria-hidden="true" />
-              {' '}
-              You cannot delete this boundary until its children are deleted
+            <i className="fa fa-info-circle fa-lg" aria-hidden="true" /> You cannot delete this
+            boundary until its children are deleted
           </div>
-          :
+        ) : (
           <div />
-        }
+        )}
         <h4 className="text-primary col-md-10">Modify Details</h4>
         <button
           className="btn btn-green pull-right"
@@ -63,7 +61,7 @@ class EditCircleForm extends Component {
           onValidSubmit={this.saveCircle}
           onValid={this.props.enableSubmitForm}
           onInvalid={this.props.disableSubmitForm}
-          ref={ref => (this.myform = ref)}
+          ref={(ref) => { return (this.myform = ref); }}
         >
           <Input
             name="circleName"
@@ -131,32 +129,34 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const mapDispatchToProps = dispatch => ({
-  toggleSchoolModal: () => {
-    dispatch({
-      type: 'TOGGLE_MODAL',
-      modal: 'createInstitution',
-    });
-  },
-  saveCircle: (circleId, circleName) => {
-    dispatch(modifyBoundary(circleId, circleName));
-  },
-  deleteCircle: (circleId, projectId) => {
-    dispatch(deleteBoundary(circleId, projectId));
-  },
-  enableSubmitForm: () => {
-    dispatch(enableSubmitForm());
-  },
-  disableSubmitForm: () => {
-    dispatch(disableSubmitForm());
-  },
-  showConfirmModal: () => {
-    dispatch(showConfirmModal());
-  },
-  closeConfirmModal: () => {
-    dispatch(closeConfirmModal());
-  },
-});
+const mapDispatchToProps = (dispatch) => {
+  return {
+    toggleSchoolModal: () => {
+      dispatch({
+        type: 'TOGGLE_MODAL',
+        modal: 'createPreschool',
+      });
+    },
+    saveCircle: (circleId, circleName) => {
+      dispatch(modifyBoundary(circleId, circleName));
+    },
+    deleteCircle: (circleId, projectId) => {
+      dispatch(deleteBoundary(circleId, projectId));
+    },
+    enableSubmitForm: () => {
+      dispatch(enableSubmitForm());
+    },
+    disableSubmitForm: () => {
+      dispatch(disableSubmitForm());
+    },
+    showConfirmModal: () => {
+      dispatch(showConfirmModal());
+    },
+    closeConfirmModal: () => {
+      dispatch(closeConfirmModal());
+    },
+  };
+};
 
 const EditCircle = connect(mapStateToProps, mapDispatchToProps)(EditCircleForm);
 

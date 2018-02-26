@@ -2,25 +2,36 @@ import { push } from 'react-router-redux';
 
 import { SERVER_API_BASE as serverApiBase } from 'config';
 import { get, post, patch, deleteRequest } from './requests';
-import { getPath } from '../utils';
-import { getBoundaryType } from '../reducers/utils';
-import { SET_INSTITUTION_CATS, SET_INSTITUTION_MANAGEMENTS } from './types';
+import { getPath, getEntityDepth, convertEntitiesToObject, getEntityType } from '../utils';
+import {
+  SET_INSTITUTION_CATS,
+  SET_INSTITUTION_MANAGEMENTS,
+  TOGGLE_MODAL,
+  SET_BOUNDARIES,
+} from './types';
 import {
   responseReceivedFromServer,
   requestFailed,
-  openNode,
   toggleModal,
   getEntities,
   closeBoundaryLoading,
   removeBoundary,
+  openEntity,
 } from './index';
+
+export const toggleClassModal = () => {
+  return {
+    type: TOGGLE_MODAL,
+    modal: 'createClass',
+  };
+};
 
 export const openTeachers = (id, depth) => {
   return (dispatch, getState) => {
     const state = getState();
     const path = getPath(state, id, depth);
 
-    dispatch(push(`${path}/teachers`));
+    dispatch(push(`${path}/teachers/`));
   };
 };
 
@@ -79,7 +90,9 @@ export const getInstitutionCategories = () => {
     get(`${serverApiBase}institution/categories`)
       .then((categories) => {
         const filterCats = categories.results
-          .filter((cat) => { return cat.type.id === 'primary'; })
+          .filter((cat) => {
+            return cat.type.id === 'primary';
+          })
           .map((category) => {
             return {
               value: category.id,
@@ -107,19 +120,24 @@ export const modifyInstitution = (options, Id) => {
 
 export const saveNewInstitution = (options) => {
   return (dispatch, getState) => {
-    const boundaryType = getState().schoolSelection.primarySchool ? 'primary' : 'pre';
+    const state = getState();
+    const boundaryType = state.schoolSelection.primarySchool ? 'primary' : 'pre';
     const newOptions = { ...options, institution_type: boundaryType };
 
     post(`${serverApiBase}institutions/`, newOptions).then((response) => {
-      const type = getBoundaryType(response);
-      dispatch(responseReceivedFromServer({ results: [response] }));
+      const entities = convertEntitiesToObject([response]);
+      dispatch({
+        type: SET_BOUNDARIES,
+        boundaryDetails: entities,
+      });
       dispatch(toggleModal('createInstitution'));
-      dispatch(openNode(response.id));
 
-      // fetching entity from store
-      const boundaryDetails = getState().boundaries.boundaryDetails;
-      const boundary = boundaryDetails[`${response.id}${type}`];
-      dispatch(push(boundary.path));
+      const type = getEntityType(response);
+      const depth = getEntityDepth(response);
+      const path = getPath(state, { uniqueId: `${response.id}${type}`, type }, depth);
+
+      dispatch(openEntity({ depth, uniqueId: `${response.id}${type}` }));
+      dispatch(push(path));
     });
   };
 };

@@ -8,6 +8,13 @@ import {
   CLOSE_TEACHER_LOADING,
 } from './types';
 
+export const showAddTeacherPopup = () => {
+  return {
+    type: TOGGLE_MODAL,
+    value: 'createTeacher',
+  };
+};
+
 export const showTeacherLoading = () => {
   return {
     type: SHOW_TEACHER_LOADING,
@@ -22,7 +29,6 @@ export const closeTeacherLoading = () => {
 
 export const setEditTeacherId = (value) => {
   return (dispatch) => {
-    console.log(value);
     dispatch({
       type: TOGGLE_MODAL,
       modal: 'editTeacher',

@@ -2,17 +2,16 @@ import { push } from 'react-router-redux';
 
 import { SERVER_API_BASE } from 'config';
 import { get, post, patch } from './requests';
-import { getBoundaryType } from '../reducers/utils';
 import {
   setBoundaries,
   getEntities,
   closeBoundaryLoading,
   requestFailed,
-  responseReceivedFromServer,
   toggleModal,
-  openNode,
+  openEntity,
 } from './index';
-import { getPath } from '../utils';
+import { SET_BOUNDARIES } from './types';
+import { getPath, getEntityType, getEntityDepth, convertEntitiesToObject } from '../utils';
 
 export const openViewStudents = (id, depth) => {
   return (dispatch, getState) => {
@@ -61,14 +60,20 @@ export const modifyStudentGroup = (studentGroup, studentGroupId) => {
 export const saveNewClass = (options) => {
   return (dispatch, getState) => {
     post(`${SERVER_API_BASE}studentgroups/`, options).then((response) => {
-      const type = getBoundaryType(response);
-      dispatch(responseReceivedFromServer({ results: [response] }));
+      const state = getState();
+      const entities = convertEntitiesToObject([response]);
+      dispatch({
+        type: SET_BOUNDARIES,
+        boundaryDetails: entities,
+      });
       dispatch(toggleModal('createClass'));
-      dispatch(openNode(response.id));
 
-      const boundaryDetails = getState().boundaries.boundaryDetails;
-      const boundary = boundaryDetails[`${response.id}${type}`];
-      dispatch(push(boundary.path));
+      const type = getEntityType(response);
+      const depth = getEntityDepth(response);
+      const path = getPath(state, { uniqueId: `${response.id}${type}`, type }, depth);
+
+      dispatch(openEntity({ depth, uniqueId: `${response.id}${type}` }));
+      dispatch(push(path));
     });
   };
 };

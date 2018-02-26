@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { isEmpty } from 'lodash';
 
-import { CreateInstitution } from '../../containers/Institution';
+import { CreatePreschool } from '../../containers/Preschool';
 import { EditCircle } from '../../containers/PreschoolCircle';
 import { NoPermissionView } from './index';
 
@@ -20,14 +20,20 @@ const PreschoolCircleView = ({ isLoading, district, project, circle, params }) =
   return (
     <div>
       <ol className="breadcrumb">
-        <li><Link to={district.path}>{district.name}</Link></li>
-        <li><Link to={project.path}>{project.name}</Link></li>
+        <li>
+          <Link to={district.path}>{district.name}</Link>
+        </li>
+        <li>
+          <Link to={project.path}>{project.name}</Link>
+        </li>
         <li className="active">{circle.name}</li>
       </ol>
-      {sessionStorage.getItem('isAdmin')
-        ? <EditCircle circleNodeId={params.circleNodeId} projectId={project.id} />
-        : <NoPermissionView />}
-      <CreateInstitution parent={circle.id} />
+      {sessionStorage.getItem('isAdmin') ? (
+        <EditCircle circleNodeId={params.circleNodeId} projectId={project.id} />
+      ) : (
+        <NoPermissionView />
+      )}
+      <CreatePreschool parent={circle.id} parentNodeId={params.circleNodeId} />
     </div>
   );
 };

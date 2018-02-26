@@ -4,7 +4,12 @@ import { connect } from 'react-redux';
 import { get, isEmpty } from 'lodash';
 
 import { DEFAULT_PARENT_NODE_ID } from 'config';
-import { getBoundariesEntities } from '../../actions';
+import {
+  getBoundariesEntities,
+  getInstitutionCategories,
+  getLanguages,
+  getManagements,
+} from '../../actions';
 import { PreschoolCircleView } from '../../components/PreschoolCircle';
 
 class FetchCircleEntity extends Component {
@@ -24,6 +29,10 @@ class FetchCircleEntity extends Component {
 
       this.props.getBoundariesEntities(entities);
     }
+
+    this.props.getInstitutionCategories();
+    this.props.getLanguages();
+    this.props.getManagements();
   }
 
   render() {
@@ -35,6 +44,9 @@ FetchCircleEntity.propTypes = {
   params: PropTypes.object,
   circle: PropTypes.object,
   getBoundariesEntities: PropTypes.func,
+  getInstitutionCategories: PropTypes.func,
+  getLanguages: PropTypes.func,
+  getManagements: PropTypes.func,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -48,6 +60,11 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const PreschoolCircle = connect(mapStateToProps, { getBoundariesEntities })(FetchCircleEntity);
+const PreschoolCircle = connect(mapStateToProps, {
+  getBoundariesEntities,
+  getInstitutionCategories,
+  getLanguages,
+  getManagements,
+})(FetchCircleEntity);
 
 export { PreschoolCircle };

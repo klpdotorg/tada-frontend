@@ -84,7 +84,7 @@ export const routes = (
           component={Preschool}
         />
         <Route
-          path="district/:districtId/project/:projectId/circle/:circleId/institution/:institutionId/teachers"
+          path="district/:districtNodeId/project/:blockNodeId/circle/:clusterNodeId/institution/:institutionNodeId/teachers"
           component={Teachers}
         />
         <Route

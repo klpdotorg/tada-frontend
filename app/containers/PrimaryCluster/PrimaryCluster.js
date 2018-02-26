@@ -16,7 +16,6 @@ class FetchClusterEntity extends Component {
   componentWillMount() {
     const { params, cluster } = this.props;
     const { districtNodeId, blockNodeId, clusterNodeId } = params;
-
     if (isEmpty(cluster)) {
       const entities = [
         DEFAULT_PARENT_NODE_ID,
