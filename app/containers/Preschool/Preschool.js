@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
 import { isEmpty } from 'lodash';
 
 import { DEFAULT_PARENT_NODE_ID } from 'config';
@@ -10,6 +9,8 @@ import {
   getLanguages,
   getInstitutionCategories,
   getManagements,
+  openTeachers,
+  toggleClassModal,
 } from '../../actions';
 import { PreschoolView } from '../../components/Preschool';
 
@@ -37,7 +38,11 @@ class FetchPreschoolEntity extends Component {
   }
 
   render() {
-    return <PreschoolView {...this.props} />;
+    const { params } = this.props;
+    const { blockNodeId, districtNodeId, clusterNodeId, institutionNodeId } = params;
+    const path = [districtNodeId, blockNodeId, clusterNodeId, institutionNodeId];
+
+    return <PreschoolView {...this.props} depth={path.length} />;
   }
 }
 
@@ -61,32 +66,13 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    toggleClassModal: () => {
-      dispatch({
-        type: 'TOGGLE_MODAL',
-        modal: 'createClass',
-      });
-    },
-    showTeachers: (path) => {
-      dispatch(push(`${path}/teachers`));
-    },
-    getBoundariesEntities: (ids) => {
-      dispatch(getBoundariesEntities(ids));
-    },
-    getLanguages: () => {
-      dispatch(getLanguages());
-    },
-    getInstitutionCats: () => {
-      dispatch(getInstitutionCategories());
-    },
-    getManagements: () => {
-      dispatch(getManagements());
-    },
-  };
-};
-
-const Preschool = connect(mapStateToProps, mapDispatchToProps)(FetchPreschoolEntity);
+const Preschool = connect(mapStateToProps, {
+  toggleClassModal,
+  showTeachers: openTeachers,
+  getBoundariesEntities,
+  getLanguages,
+  getInstitutionCats: getInstitutionCategories,
+  getManagements,
+})(FetchPreschoolEntity);
 
 export { Preschool };

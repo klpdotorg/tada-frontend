@@ -7,10 +7,10 @@ const PreschoolActions = ({ toggleClassModal, showTeachers, canModify }) => {
       <h4 className="text-primary col-md-9">{canModify ? 'Modify Details' : 'View Details'}</h4>
       <div className="col-md-3 text-right">
         <button className="btn btn-green" title="Add Class" onClick={toggleClassModal}>
-        Add Class
+          Add Class
         </button>
         <button className="btn btn-green padded-btn" title="View Teachers" onClick={showTeachers}>
-        View Teachers
+          View Teachers
         </button>
       </div>
     </div>
@@ -20,6 +20,7 @@ const PreschoolActions = ({ toggleClassModal, showTeachers, canModify }) => {
 PreschoolActions.propTypes = {
   toggleClassModal: PropTypes.func,
   showTeachers: PropTypes.func,
+  canModify: PropTypes.bool,
 };
 
 export { PreschoolActions };

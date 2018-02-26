@@ -6,6 +6,7 @@ const INITIAL_STATE = {
   createCircle: false,
   createInstitution: false,
   createClass: false,
+  createPreschool: false,
 };
 
 const Modal = (state = INITIAL_STATE, action) => {

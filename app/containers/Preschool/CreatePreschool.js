@@ -5,8 +5,8 @@ import { saveNewInstitution, enableSubmitForm, disableSubmitForm, openNode } fro
 
 const mapStateToProps = (state) => {
   return {
-    title: 'Create New Institution',
-    isOpen: state.modal.createInstitution,
+    title: 'Create New Preschool',
+    isOpen: state.modal.createPreschool,
     canSubmit: state.appstate.enableSubmitForm,
     languages: state.languages.languages,
     managements: state.institution.managements,
@@ -30,12 +30,12 @@ const mapDispatchToProps = (dispatch) => {
     closeConfirmModal: () => {
       dispatch({
         type: 'TOGGLE_MODAL',
-        modal: 'createInstitution',
+        modal: 'createPreschool',
       });
     },
   };
 };
 
-const CreateInstitution = connect(mapStateToProps, mapDispatchToProps)(CreateInstitutionForm);
+const CreatePreschool = connect(mapStateToProps, mapDispatchToProps)(CreateInstitutionForm);
 
-export { CreateInstitution };
+export { CreatePreschool };

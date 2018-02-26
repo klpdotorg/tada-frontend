@@ -11,6 +11,7 @@ import {
   getInstitutionCategories,
   getManagements,
   openTeachers,
+  toggleClassModal,
 } from '../../actions';
 
 class FetchInstitutionEntity extends Component {
@@ -67,32 +68,13 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    toggleClassModal: () => {
-      dispatch({
-        type: 'TOGGLE_MODAL',
-        modal: 'createClass',
-      });
-    },
-    getBoundariesEntities: (ids) => {
-      dispatch(getBoundariesEntities(ids));
-    },
-    getLanguages: () => {
-      dispatch(getLanguages());
-    },
-    getInstitutionCats: () => {
-      dispatch(getInstitutionCategories());
-    },
-    getManagements: () => {
-      dispatch(getManagements());
-    },
-    showTeachers: (id, depth) => {
-      dispatch(openTeachers(id, depth));
-    },
-  };
-};
-
-const Institution = connect(mapStateToProps, mapDispatchToProps)(FetchInstitutionEntity);
+const Institution = connect(mapStateToProps, {
+  toggleClassModal,
+  getBoundariesEntities,
+  getLanguages,
+  getInstitutionCats: getInstitutionCategories,
+  getManagements,
+  showTeachers: openTeachers,
+})(FetchInstitutionEntity);
 
 export { Institution };

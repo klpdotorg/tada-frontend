@@ -5,6 +5,7 @@ import { isEmpty } from 'lodash';
 
 import { PermissionView, PreschoolActions } from './index';
 import { EditPreschool } from '../../containers/Preschool';
+import { CreateClass } from '../../containers/StudentGroup';
 import { Loading } from '../common';
 
 const PreschoolView = (props) => {
@@ -36,17 +37,21 @@ const PreschoolView = (props) => {
         <PreschoolActions
           canModify={canModify}
           toggleClassModal={props.toggleClassModal}
-          showTeachers={() => { return props.showTeachers(institution.path); }}
+          showTeachers={() => {
+            props.showTeachers(params.institutionNodeId, props.depth);
+          }}
         />
         <div className="border-base" />
         <div className="base-spacing-sm" />
         <EditPreschool circleId={circle.id} institutionNodeId={params.institutionNodeId} />
       </div>
+      <CreateClass institutionId={institution.id} institutionNodeId={params.institutionNodeId} />
     </div>
   );
 };
 
 PreschoolView.propTypes = {
+  depth: PropTypes.number,
   isLoading: PropTypes.bool,
   district: PropTypes.object,
   project: PropTypes.object,
