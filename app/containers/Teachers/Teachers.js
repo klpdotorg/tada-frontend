@@ -5,26 +5,28 @@ import { get, isEmpty } from 'lodash';
 import { DEFAULT_PARENT_NODE_ID } from 'config';
 
 import { TeacherScreen } from '../../components/Teachers';
-import { TOGGLE_MODAL } from '../../actions/types';
-import { getBoundariesEntities, getTeachers, getLanguages } from '../../actions';
+import {
+  getBoundariesEntities,
+  getTeachers,
+  getLanguages,
+  showAddTeacherPopup,
+  showTeacherLoading,
+} from '../../actions';
 
 class GetTeachers extends Component {
+  constructor(props) {
+    super(props);
+
+    this.getEntities = this.getEntities.bind(this);
+  }
+
   componentDidMount() {
-    const { params, institution } = this.props;
-
-    const { blockNodeId, districtNodeId, clusterNodeId } = params;
-
+    const { institution } = this.props;
     this.props.getLanguages();
+    this.props.showTeacherLoading();
 
     if (isEmpty(institution)) {
-      const entities = [
-        DEFAULT_PARENT_NODE_ID,
-        districtNodeId,
-        blockNodeId,
-        clusterNodeId,
-      ].map((id, i) => {
-        return { depth: i, uniqueId: id };
-      });
+      const entities = this.getEntities();
 
       this.props.getBoundariesEntities(entities);
     }
@@ -40,6 +42,15 @@ class GetTeachers extends Component {
         this.props.getTeachers(nextProps.institution.id);
       }
     }
+  }
+
+  getEntities() {
+    const { params } = this.props;
+    const { blockNodeId, districtNodeId, clusterNodeId } = params;
+
+    return [DEFAULT_PARENT_NODE_ID, districtNodeId, blockNodeId, clusterNodeId].map((id, i) => {
+      return { depth: i, uniqueId: id };
+    });
   }
 
   render() {
@@ -63,26 +74,6 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    showAddTeacherPopup: () => {
-      dispatch({
-        type: TOGGLE_MODAL,
-        modal: 'createTeacher',
-      });
-    },
-    getBoundariesEntities: (entities) => {
-      dispatch(getBoundariesEntities(entities));
-    },
-    getTeachers: (institutionId) => {
-      dispatch(getTeachers(institutionId));
-    },
-    getLanguages: () => {
-      dispatch(getLanguages());
-    },
-  };
-};
-
 GetTeachers.propTypes = {
   teacherIds: PropTypes.array,
   params: PropTypes.object,
@@ -90,8 +81,16 @@ GetTeachers.propTypes = {
   getBoundariesEntities: PropTypes.func,
   getTeachers: PropTypes.func,
   getLanguages: PropTypes.func,
+  primary: PropTypes.bool,
+  showTeacherLoading: PropTypes.func,
 };
 
-const Teachers = connect(mapStateToProps, mapDispatchToProps)(GetTeachers);
+const Teachers = connect(mapStateToProps, {
+  getBoundariesEntities,
+  getTeachers,
+  getLanguages,
+  showAddTeacherPopup,
+  showTeacherLoading,
+})(GetTeachers);
 
 export { Teachers };

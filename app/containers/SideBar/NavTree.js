@@ -57,7 +57,7 @@ class NavTree extends Component {
   renderSubTree(node, index, depth) {
     const newDepth = depth + 1;
     const { entity } = node;
-    const name = this.renderLabel(node, depth);
+    const name = this.renderLabel(node, newDepth);
     const treeNodes = this.getTreeNodes(newDepth);
     const collapsed = this.props.uncollapsed[newDepth] === node.uniqueId;
 
