@@ -1,13 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { StaffTypes } from '../../Data/StaffTypes';
+
 const TeacherView = (props) => {
-  const { teacher, languages, staffTypes } = props;
+  const { teacher, languages } = props;
   const language = languages.find((lang) => {
     return lang.value === teacher.mt;
   });
-  const staffType = staffTypes.find((type) => {
-    return type.value === teacher.staff_type;
+
+  const staffType = StaffTypes.find((type) => {
+    return type.id === teacher.staff_type;
   });
 
   return (
@@ -19,7 +22,7 @@ const TeacherView = (props) => {
       <td>{teacher.doj}</td>
       <td>{teacher.gender}</td>
       <td>{language.label}</td>
-      <td>{staffType.label}</td>
+      <td>{staffType.staff_type}</td>
       <td>{teacher.uid}</td>
       <td>
         <button

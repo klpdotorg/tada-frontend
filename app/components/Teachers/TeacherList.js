@@ -4,21 +4,6 @@ import PropTypes from 'prop-types';
 import { Loading, Message } from '../common';
 import { Teacher } from '../../containers/Teachers';
 
-// const DATA = {
-//   first_name: 'Pankaj',
-//   middle_name: '',
-//   last_name: 'Thakur',
-//   contact_no: '8627019381',
-//   qualification: '10th',
-//   total_work_experience_years: 3,
-//   total_work_experience_months: 12,
-//   subject: 'Math',
-//   school_id: 12,
-//   address: 'Benglore',
-//   area: 'Sundernager',
-//   pincode: '175036',
-// };
-
 const TeacherList = ({ teacherIds, showAddTeacherPopup, loading }) => {
   if (loading) {
     return <Loading />;
