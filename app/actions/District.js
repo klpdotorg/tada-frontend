@@ -1,10 +1,24 @@
 import { push } from 'react-router-redux';
 
+import { TOGGLE_MODAL, SET_BOUNDARIES } from './types';
 import { post } from './requests';
 import { toggleModal, openEntity } from './index';
 import { getEntityType, getEntityDepth, convertEntitiesToObject, getPath } from '../utils';
-import { SET_BOUNDARIES } from './types';
 import { SERVER_API_BASE as serverApiBase } from 'config';
+
+export const toggleProjectModal = () => {
+  return {
+    type: TOGGLE_MODAL,
+    modal: 'createProject',
+  };
+};
+
+export const toggleBlockModal = () => {
+  return {
+    type: TOGGLE_MODAL,
+    modal: 'createBlock',
+  };
+};
 
 export const saveNewDistrict = (name) => {
   return (dispatch, getState) => {

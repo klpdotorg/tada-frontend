@@ -2,18 +2,25 @@ import { push } from 'react-router-redux';
 import { SERVER_API_BASE as serverApiBase } from 'config';
 
 import { post } from './requests';
-import { toggleModal, openEntity } from './index';
+import { openEntity } from './index';
 import { getEntityDepth, getEntityType, getPath, convertEntitiesToObject } from '../utils';
-import { SET_BOUNDARIES } from './types';
+import { SET_BOUNDARIES, TOGGLE_MODAL } from './types';
 
-export const saveNewBlock = (name, districtId) => {
+export const closeCreateCircleModal = () => {
+  return {
+    type: TOGGLE_MODAL,
+    modal: 'createCircle',
+  };
+};
+
+export const saveNewCircle = (name, projectId) => {
   return (dispatch, getState) => {
     const state = getState();
     const options = {
       name,
-      parent: districtId,
-      boundary_type: 'SB',
-      type: 'primary',
+      parent: projectId,
+      type: 'pre',
+      boundary_type: 'PC',
       status: 'AC',
     };
 
@@ -23,7 +30,7 @@ export const saveNewBlock = (name, districtId) => {
         type: SET_BOUNDARIES,
         boundaryDetails: entities,
       });
-      dispatch(toggleModal('createBlock'));
+      dispatch(closeCreateCircleModal());
 
       const type = getEntityType(response);
       const depth = getEntityDepth(response);

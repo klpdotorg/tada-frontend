@@ -250,36 +250,6 @@ export function fetchStudentsByGroupId(groupId) {
   };
 }
 
-// export function fetchStudents(institutionId, groupId) {
-//   return function(dispatch, getState) {
-//     const state = getState();
-//     var url = serverApiBase + `institutions/${institutionId}/studentgroups/${groupId}/students/`;
-//
-//     return fetch(url, {
-//       method: 'GET',
-//       headers: {
-//         'Content-Type': 'application/json',
-//         Authorization: 'Token ' + sessionStorage.token,
-//       },
-//     })
-//       .then(checkStatus)
-//       .then(data => {
-//         dispatch({
-//           type: 'STUDENTS_FULFILLED',
-//           payload: { students: data, groupId },
-//         });
-//       })
-//       .catch(error => {
-//         console.log(error);
-//         dispatch(requestFailed(error));
-//       });
-//   };
-// }
-
-/*
-This function decides whether we need to go to the boundaries endpoint or the institutions endpoint or studentgroup/students endpoint for data.
-Everything is just one big nav tree in the UI.
-*/
 export function fetchEntitiesFromServer(parentBoundaryId) {
   return function (dispatch, getState) {
     const state = getState();
@@ -391,32 +361,4 @@ export const newBoundaryFetch = (options) => {
   }).catch((error) => {
     console.log('request failed', error);
   });
-};
-
-export const saveNewProject = (options) => {
-  return (dispatch, getState) => {
-    return newBoundaryFetch(options)
-      .then(checkStatus)
-      .then((response) => {
-        dispatch(responseReceivedFromServer({ results: [response] }));
-        dispatch(toggleModal('createProject'));
-        dispatch(openNode(response.id));
-        var boundary = computeRouterPathForEntity(response, getState().boundaries.boundaryDetails);
-        dispatch(push(boundary.path));
-      });
-  };
-};
-
-export const saveNewCircle = (options) => {
-  return (dispatch, getState) => {
-    return newBoundaryFetch(options)
-      .then(checkStatus)
-      .then((response) => {
-        dispatch(responseReceivedFromServer({ results: [response] }));
-        dispatch(toggleModal('createCircle'));
-        dispatch(openNode(response.id));
-        var boundary = computeRouterPathForEntity(response, getState().boundaries.boundaryDetails);
-        dispatch(push(boundary.path));
-      });
-  };
 };
