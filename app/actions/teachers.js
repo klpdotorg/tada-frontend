@@ -11,7 +11,7 @@ import {
 export const showAddTeacherPopup = () => {
   return {
     type: TOGGLE_MODAL,
-    value: 'createTeacher',
+    modal: 'createTeacher',
   };
 };
 

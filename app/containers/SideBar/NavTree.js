@@ -35,7 +35,7 @@ class NavTree extends Component {
     return [];
   }
 
-  renderLabel(node, depth) {
+  renderLabel(node, depth, collapsed) {
     const { entity } = node;
 
     const label =
@@ -46,6 +46,15 @@ class NavTree extends Component {
         key={entity.name || entity.id}
         tabIndex="0"
         onClick={() => {
+          if (!collapsed) {
+            this.props.getBoundariesEntities([
+              {
+                id: entity.id,
+                depth,
+                uniqueId: node.uniqueId,
+              },
+            ]);
+          }
           this.props.openBoundary(node.uniqueId, depth);
         }}
       >
@@ -57,9 +66,9 @@ class NavTree extends Component {
   renderSubTree(node, index, depth) {
     const newDepth = depth + 1;
     const { entity } = node;
-    const name = this.renderLabel(node, newDepth);
     const treeNodes = this.getTreeNodes(newDepth);
     const collapsed = this.props.uncollapsed[newDepth] === node.uniqueId;
+    const name = this.renderLabel(node, newDepth, collapsed);
 
     return (
       <TreeView
