@@ -50,7 +50,7 @@ class EditInstitutionForm extends Component {
       last_verified_year: myform.lastVerifiedYear,
     };
 
-    this.props.saveInstitution(this.props.clusterNodeId, this.props.institution.id, institution);
+    this.props.save(this.props.institution.id, institution);
   }
 
   render() {
@@ -76,7 +76,8 @@ class EditInstitutionForm extends Component {
         onValidSubmit={this.saveInsti}
         onValid={this.props.enableSubmitForm}
         onInvalid={this.props.disableSubmitForm}
-        ref={ref => (this.myform = ref)}
+        ref={(ref) => { return (this.myform = ref); }}
+        canSubmit={canSubmit}
       >
         <div className="form-group">
           <div className="col-sm-12">
@@ -236,14 +237,13 @@ EditInstitutionForm.propTypes = {
   canSubmit: PropTypes.bool,
   openConfirmModal: PropTypes.bool,
   clusterId: PropTypes.number,
-  clusterNodeId: PropTypes.string,
   institution: PropTypes.object,
   hasClasses: PropTypes.bool,
   languages: PropTypes.array,
   managements: PropTypes.array,
   lastVerifiedYears: PropTypes.array,
   institutionCategories: PropTypes.array,
-  saveInstitution: PropTypes.func,
+  save: PropTypes.func,
   deleteInstitution: PropTypes.func,
   showConfirmModal: PropTypes.func,
   closeConfirmModal: PropTypes.func,
@@ -268,28 +268,13 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const mapDispatchToProps = dispatch => ({
-  saveInstitution: (clusterNodeId, institutionId, institution) => {
-    dispatch(setParentNode(clusterNodeId));
-    dispatch(modifyInstitution(institution, institutionId));
-  },
-  deleteInstitution: (clusterId, institutionId) => {
-    dispatch(deleteInstitution(clusterId, institutionId));
-  },
-  enableSubmitForm: () => {
-    dispatch(enableSubmitForm());
-  },
-  disableSubmitForm: () => {
-    dispatch(disableSubmitForm());
-  },
-  showConfirmModal: () => {
-    dispatch(showConfirmModal());
-  },
-  closeConfirmModal: () => {
-    dispatch(closeConfirmModal());
-  },
-});
-
-const EditInstitution = connect(mapStateToProps, mapDispatchToProps)(EditInstitutionForm);
+const EditInstitution = connect(mapStateToProps, {
+  save: modifyInstitution,
+  deleteInstitution,
+  enableSubmitForm,
+  disableSubmitForm,
+  showConfirmModal,
+  closeConfirmModal,
+})(EditInstitutionForm);
 
 export { EditInstitution };

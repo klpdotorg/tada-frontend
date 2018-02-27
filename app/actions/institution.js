@@ -113,7 +113,12 @@ export const modifyInstitution = (options, Id) => {
     const newOptions = { ...options, institution_type: boundaryType };
 
     patch(`${serverApiBase}institutions/${Id}/`, newOptions).then((response) => {
-      dispatch(responseReceivedFromServer({ results: [response] }));
+      const entities = convertEntitiesToObject([response]);
+
+      dispatch({
+        type: SET_BOUNDARIES,
+        boundaryDetails: entities,
+      });
     });
   };
 };
