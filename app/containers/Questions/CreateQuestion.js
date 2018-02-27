@@ -34,7 +34,7 @@ class CreateQuestionForm extends Component {
         question_text: myform.qnText,
         display_text: myform.displayText,
         key: myform.key,
-        question_type: myform.type,
+        question_type_id: myform.type,
         is_featured: true,
         status: 'AC',
       },
