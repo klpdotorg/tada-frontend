@@ -98,7 +98,7 @@ export const saveAssessment = (options) => {
     const editAssessmentURL = `${serverApiBase}surveys/${selectedProgram}/questiongroup/${editAssessmentId}/`;
 
     patch(editAssessmentURL, options).then((response) => {
-      dispatch(assessmentCreated([response], selectedProgram));
+      dispatch(assessmentCreated(response));
       dispatch({
         type: TOGGLE_MODAL,
         modal: 'editAssessment',

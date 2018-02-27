@@ -57,21 +57,23 @@ class EditAssessmentForm extends Component {
 
     return (
       <Modal
-        title="Create Assessment"
-        contentLabel="Create Assessment"
+        title="Edit Assessment"
+        contentLabel="Edit Assessment"
         isOpen={isOpen}
         onCloseModal={this.props.closeConfirmModal}
         canSubmit={canSubmit}
         submitForm={this.submitForm}
         cancelBtnLabel="Cancel"
-        submitBtnLabel="Create"
+        submitBtnLabel="Save"
       >
         <Formsy.Form
-          id="createAssessment"
+          id="editAssessment"
           onValidSubmit={this.submitForm}
           onValid={this.props.enableSubmitForm}
           onInvalid={this.props.disabledSubmitForm}
-          ref={(ref) => { return (this.myform = ref); }}
+          ref={(ref) => {
+            return (this.myform = ref);
+          }}
         >
           <Input
             name="assessmentName"
@@ -142,7 +144,7 @@ const mapStateToProps = (state) => {
     isOpen: state.modal.editAssessment,
     canSubmit: state.appstate.enableSubmitForm,
     programId: Number(selectedProgram),
-    assessment: get(state.assessments.assessments, `[${selectedProgram}][${editAssessmentId}]`, {}),
+    assessment: get(state.assessments.assessments, editAssessmentId, {}),
   };
 };
 
@@ -151,10 +153,10 @@ const mapDispatchToProps = (dispatch) => {
     save: (form) => {
       dispatch(saveAssessment(form));
     },
-    enableSubmitForm: () => {
+    enableSubmitForm: (err) => {
       dispatch(enableSubmitForm());
     },
-    disableSubmitForm: () => {
+    disableSubmitForm: (err) => {
       dispatch(disableSubmitForm());
     },
     closeConfirmModal: () => {
