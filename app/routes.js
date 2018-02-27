@@ -88,15 +88,15 @@ export const routes = (
           component={Teachers}
         />
         <Route
-          path="district/:districtNodeId/project/:projectNodeId/circle/:circleNodeId/institution/:institutionNodeId/studentgroup/:studentGroupNodeId"
+          path="district/:districtNodeId/project/:blockNodeId/circle/:clusterNodeId/institution/:institutionNodeId/studentgroup/:studentGroupNodeId"
           component={StudentGroup}
         />
         <Route
-          path="district/:districtId/project/:projectId/circle/:circleId/institution/:institutionId/studentgroup/:groupId/students"
+          path="district/:districtNodeId/project/:blockNodeId/circle/:clusterNodeId/institution/:institutionNodeId/studentgroup/:studentGroupNodeId/students"
           component={ViewStudents}
         />
         <Route
-          path="district/:districtId/project/:projectId/circle/:circleId/institution/:institutionId/studentgroup/:groupId/addStudents"
+          path="district/:districtNodeId/project/:blockNodeId/circle/:clusterNodeId/institution/:institutionNodeId/studentgroup/:studentGroupNodeId/addStudents"
           component={AddStudents}
         />
         <Route path="district/:districtNodeId" component={PrimaryDistrict} />

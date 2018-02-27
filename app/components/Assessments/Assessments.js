@@ -10,7 +10,6 @@ const AssessmentTable = (props) => {
   if (loading) {
     return <Loading />;
   }
-
   return (
     <div>
       <h4 className="text-primary text-center">Assessments in this Programme</h4>

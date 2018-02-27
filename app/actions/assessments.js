@@ -23,11 +23,10 @@ export const closeAssessmentLoading = () => {
   };
 };
 
-export const assessmentCreated = (value, programId) => {
+export const assessmentCreated = (value) => {
   return {
     type: SET_ASSESSMENT,
     value,
-    programId,
   };
 };
 
@@ -79,7 +78,7 @@ export const saveNewAssessment = (options) => {
     const createAssessmentURL = `${serverApiBase}surveys/${programId}/questiongroup/`;
 
     post(createAssessmentURL, options).then((response) => {
-      dispatch(assessmentCreated([response], programId));
+      dispatch(assessmentCreated(response));
       dispatch({
         type: TOGGLE_MODAL,
         modal: 'createAssessment',

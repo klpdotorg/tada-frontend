@@ -31,17 +31,12 @@ const Assessments = (state = INITIAL_STATE, action) => {
         loading: false,
       };
     case SET_ASSESSMENT: {
-      const existingAssessments = state.assessments[action.programId];
-      const newAssessment = changeArrayToObject(action.value, 'id');
-      const assessments = {
-        ...existingAssessments,
-        ...newAssessment,
-      };
-
+      const newAssessment = { [action.value.id]: action.value };
       return {
         ...state,
         assessments: {
-          [action.programId]: assessments,
+          ...state.assessments,
+          ...newAssessment,
         },
       };
     }

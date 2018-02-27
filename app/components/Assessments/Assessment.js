@@ -6,7 +6,6 @@ import { dateParser } from '../../utils';
 
 const AssessmentRow = (props) => {
   const { assessment, url } = props;
-
   return (
     <tr key={assessment.id}>
       <td>{assessment.name}</td>
