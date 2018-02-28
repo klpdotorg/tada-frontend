@@ -1,38 +1,15 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { get } from 'lodash';
 
-import { editQuestion } from '../../actions';
+import { QuestionView } from '../../components/Questions';
+import { openEditQuestionForm } from '../../actions';
 
-const QuestionView = (props) => {
-  const { question_text, display_text, key, question_type } = props.question;
-
-  return (
-    <tr>
-      <td>{question_text}</td>
-      <td>{display_text}</td>
-      <td>{question_type}</td>
-      <td>{key}</td>
-      <td>
-        <button
-          className="btn btn-primary padded-btn"
-          data-toggle="tooltip"
-          title="Edit Question"
-          onClick={() => {
-            // props.openEditAssessmentModal(assessment.id);
-          }}
-        >
-          <span className="fa fa-pencil-square-o" />
-        </button>
-      </td>
-    </tr>
-  );
+const mapStateToProps = (state, ownProps) => {
+  return {
+    question: get(state.questions.questions, ownProps.id, {}),
+  };
 };
 
-QuestionView.propTypes = {
-  question: PropTypes.object,
-};
-
-const Question = connect(null, { editQuestion })(QuestionView);
+const Question = connect(mapStateToProps, { editQuestion: openEditQuestionForm })(QuestionView);
 
 export { Question };

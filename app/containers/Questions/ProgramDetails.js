@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { get } from 'lodash';
 
 import { ProgramDetailsView } from '../../components/Questions';
-import { openCreateQuestionModal } from '../../actions';
+import { toggleCreateQuestionModal } from '../../actions';
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -11,6 +11,6 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const ProgramDetails = connect(mapStateToProps, { openCreateQuestionModal })(ProgramDetailsView);
+const ProgramDetails = connect(mapStateToProps, { toggleCreateQuestionModal })(ProgramDetailsView);
 
 export { ProgramDetails };

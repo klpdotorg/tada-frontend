@@ -1,7 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const Question = (props) => {
-  const { question_text, display_text, key, question_type } = props.question;
+const QuestionView = (props) => {
+  const { question_text, display_text, key, question_type, id } = props.question;
 
   return (
     <tr>
@@ -15,7 +16,7 @@ const Question = (props) => {
           data-toggle="tooltip"
           title="Edit Question"
           onClick={() => {
-            // props.openEditAssessmentModal(assessment.id);
+            props.editQuestion(id);
           }}
         >
           <span className="fa fa-pencil-square-o" />
@@ -25,4 +26,9 @@ const Question = (props) => {
   );
 };
 
-export { Question };
+QuestionView.propTypes = {
+  question: PropTypes.object,
+  editQuestion: PropTypes.func,
+};
+
+export { QuestionView };

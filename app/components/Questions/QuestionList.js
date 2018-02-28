@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Message } from '../common';
-import { Question } from './index';
+import { Question } from '../../containers/Questions';
 
 const QuestionListView = ({ questions }) => {
   return (
@@ -16,8 +16,8 @@ const QuestionListView = ({ questions }) => {
             <th>Key</th>
             <th>Actions</th>
           </tr>
-          {questions.map((question, i) => {
-            return <Question question={question} key={i} />;
+          {questions.map((id) => {
+            return <Question id={id} key={id} />;
           })}
         </tbody>
       </table>

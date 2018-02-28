@@ -2,7 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Loading } from '../common';
-import { ProgramDetails, QuestionList, CreateQuestion } from '../../containers/Questions';
+import {
+  ProgramDetails,
+  QuestionList,
+  CreateQuestion,
+  EditQuestion,
+} from '../../containers/Questions';
 
 const QuestionScreen = ({ params, loading }) => {
   const { assessmentId, programId } = params;
@@ -23,6 +28,7 @@ const QuestionScreen = ({ params, loading }) => {
       </div>
       <QuestionList />
       <CreateQuestion assessmentId={Number(assessmentId)} programId={Number(programId)} />
+      <EditQuestion assessmentId={Number(assessmentId)} programId={Number(programId)} />
     </div>
   );
 };

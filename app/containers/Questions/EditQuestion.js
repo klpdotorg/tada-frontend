@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { get } from 'lodash';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
 import {
-  createNewQuestion,
+  saveQuestion,
   enableSubmitForm,
   disableSubmitForm,
-  toggleCreateQuestionModal,
+  toggleEditQuestionModal,
 } from '../../actions';
 import { QuestionTypes } from '../../Data';
 
@@ -15,11 +16,12 @@ import { Modal } from '../../components/Modal';
 
 const { Input, Textarea, Select } = FRC;
 
-class CreateQuestionForm extends Component {
+class EditQuestionForm extends Component {
   constructor(props) {
     super(props);
 
     this.submitForm = this.submitForm.bind(this);
+    this.getValue = this.getValue.bind(this);
   }
 
   getQuestionTypes() {
@@ -31,8 +33,12 @@ class CreateQuestionForm extends Component {
     });
   }
 
+  getValue(field) {
+    return get(this.props.question, field, '');
+  }
+
   submitForm() {
-    const { programId, assessmentId } = this.props;
+    const { programId, assessmentId, questionId } = this.props;
     const myform = this.myform.getModel();
     const question = {
       question_details: {
@@ -45,7 +51,7 @@ class CreateQuestionForm extends Component {
       },
     };
 
-    this.props.save(question, programId, assessmentId);
+    this.props.save(question, programId, assessmentId, questionId);
   }
 
   render() {
@@ -53,14 +59,14 @@ class CreateQuestionForm extends Component {
 
     return (
       <Modal
-        title="Create Question"
+        title="Edit Question"
         contentLabel="Create Question"
         onCloseModal={this.props.onCloseModal}
         isOpen={isOpen}
         canSubmit={canSubmit}
         submitForm={this.submitForm}
         cancelBtnLabel="Cancel"
-        submitBtnLabel="Save"
+        submitBtnLabel="Create"
       >
         <Formsy.Form
           id="createQuestion"
@@ -76,6 +82,7 @@ class CreateQuestionForm extends Component {
             cols={60}
             name="qnText"
             label="Question Text"
+            value={this.getValue('question_text')}
             placeholder="Please enter the question text"
             validations="minLength:10"
             validationErrors={{
@@ -86,17 +93,23 @@ class CreateQuestionForm extends Component {
           <Input
             name="displayText"
             id="displayText"
-            value=""
+            value={this.getValue('display_text')}
             label="Display Text"
             type="text"
             placeholder="Please enter the display text"
             required
           />
-          <Select name="type" label="Type" options={this.getQuestionTypes()} value="1" required />
+          <Select
+            name="type"
+            value={this.getValue('question_type')}
+            label="Type"
+            options={this.getQuestionTypes()}
+            required
+          />
           <Input
             name="key"
             id="key"
-            value="ivrss-grade"
+            value={this.getValue('key')}
             label="Key"
             type="text"
             placeholder="Enter key"
@@ -107,7 +120,7 @@ class CreateQuestionForm extends Component {
   }
 }
 
-CreateQuestionForm.propTypes = {
+EditQuestionForm.propTypes = {
   isOpen: PropTypes.bool,
   canSubmit: PropTypes.bool,
   programId: PropTypes.number,
@@ -116,21 +129,26 @@ CreateQuestionForm.propTypes = {
   enableSubmitForm: PropTypes.func,
   disableSubmitForm: PropTypes.func,
   onCloseModal: PropTypes.func,
+  question: PropTypes.object,
 };
 
 const mapStateToProps = (state, ownProps) => {
+  const { editQuestion, questions } = state.questions;
+
   return {
-    isOpen: state.modal.createQuestion,
+    isOpen: state.modal.editQuestion,
     canSubmit: state.appstate.enableSubmitForm,
     assessmentId: Number(ownProps.assessmentId),
+    question: get(questions, editQuestion),
+    questionId: editQuestion,
   };
 };
 
-const CreateQuestion = connect(mapStateToProps, {
-  save: createNewQuestion,
+const EditQuestion = connect(mapStateToProps, {
+  save: saveQuestion,
   enableSubmitForm,
   disableSubmitForm,
-  onCloseModal: toggleCreateQuestionModal,
-})(CreateQuestionForm);
+  onCloseModal: toggleEditQuestionModal,
+})(EditQuestionForm);
 
-export { CreateQuestion };
+export { EditQuestion };

@@ -1,14 +1,16 @@
 import { connect } from 'react-redux';
-import { get } from 'lodash';
 
 import { QuestionListView } from '../../components/Questions';
+import { openEditQuestionForm } from '../../actions';
 
 const mapStateToProps = (state) => {
   return {
-    questions: get(state.questions, 'questions', []),
+    questions: Object.keys(state.questions.questions),
   };
 };
 
-const QuestionList = connect(mapStateToProps)(QuestionListView);
+const QuestionList = connect(mapStateToProps, {
+  editQuestion: openEditQuestionForm,
+})(QuestionListView);
 
 export { QuestionList };

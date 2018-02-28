@@ -23,7 +23,7 @@ const ProgramDetailsView = (props) => {
       </div>
 
       <div className="col-md-4 pull-right">
-        <button type="button" className="btn btn-primary" onClick={props.openCreateQuestionModal}>
+        <button type="button" className="btn btn-primary" onClick={props.toggleCreateQuestionModal}>
           Add Question
         </button>
         <Link to="/programmes" className="btn btn-info padded-btn">
@@ -37,7 +37,7 @@ const ProgramDetailsView = (props) => {
 ProgramDetailsView.propTypes = {
   program: PropTypes.object,
   assessment: PropTypes.object,
-  openCreateQuestionModal: PropTypes.func,
+  toggleCreateQuestionModal: PropTypes.func,
 };
 
 export { ProgramDetailsView };
