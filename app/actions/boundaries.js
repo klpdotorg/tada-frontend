@@ -155,7 +155,12 @@ export const modifyBoundary = (boundaryId, name) => {
   return (dispatch) => {
     patch(`${SERVER_API_BASE}boundaries/${boundaryId}/`, { name })
       .then((response) => {
-        dispatch(setBoundaries({ results: [response] }));
+        const entities = convertEntitiesToObject([response]);
+
+        dispatch({
+          type: SET_BOUNDARIES,
+          boundaryDetails: entities,
+        });
       })
       .catch((error) => {
         console.log('request failed', error);

@@ -41,6 +41,7 @@ class NavTree extends Component {
       }
 
       const filterEntities = filterBoundaries(updatedNodes, this.props.selectedPrimary);
+
       return filterEntities;
     }
 
@@ -59,14 +60,14 @@ class NavTree extends Component {
     if (type === 'assessment') {
       return (
         <Link key={node.uniqueId}>
-          <span
+          <div
             className="node"
             onClick={() => {
               this.props.selectProgramAssessment(entity.id, depth);
             }}
           >
-            {label}
-          </span>
+            <span>{label}</span>
+          </div>
         </Link>
       );
     }

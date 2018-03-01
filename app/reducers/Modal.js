@@ -7,6 +7,7 @@ const INITIAL_STATE = {
   createInstitution: false,
   createClass: false,
   createPreschool: false,
+  editQuestion: false,
 };
 
 const Modal = (state = INITIAL_STATE, action) => {

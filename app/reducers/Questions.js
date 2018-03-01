@@ -1,7 +1,14 @@
-import { SET_QUESTIONS, SHOW_QUESTION_LOADING, HIDE_QUESTION_LOADING } from '../actions/types';
+import {
+  SET_QUESTION,
+  SET_QUESTIONS,
+  SHOW_QUESTION_LOADING,
+  HIDE_QUESTION_LOADING,
+  SET_EDIT_QUESTION_ID,
+} from '../actions/types';
 
 const INITIAL_STATE = {
-  questions: [],
+  questions: {},
+  editQuestion: '',
   loading: false,
 };
 
@@ -12,6 +19,14 @@ const Questions = (state = INITIAL_STATE, action) => {
         ...state,
         questions: action.value,
       };
+    case SET_QUESTION:
+      return {
+        ...state,
+        questions: {
+          ...state.questions,
+          ...action.value,
+        },
+      };
     case SHOW_QUESTION_LOADING:
       return {
         ...state,
@@ -21,6 +36,11 @@ const Questions = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         loading: false,
+      };
+    case SET_EDIT_QUESTION_ID:
+      return {
+        ...state,
+        editQuestion: action.value,
       };
     default:
       return state;

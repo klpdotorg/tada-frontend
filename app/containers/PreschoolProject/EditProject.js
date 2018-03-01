@@ -17,6 +17,12 @@ import {
 const { Input } = FRC;
 
 class EditProjectForm extends Component {
+  constructor() {
+    super();
+
+    this.saveProject = this.saveProject.bind(this);
+    this.deleteProject = this.deleteProject.bind(this);
+  }
 
   saveProject() {
     const myform = this.myform.getModel();
@@ -32,16 +38,14 @@ class EditProjectForm extends Component {
 
     return (
       <div>
-        {hasCircles
-          ?
+        {hasCircles ? (
           <div className="alert alert-info">
-            <i className="fa fa-info-circle fa-lg" aria-hidden="true" />
-              {' '}
-              You cannot delete this boundary until its children are deleted
+            <i className="fa fa-info-circle fa-lg" aria-hidden="true" /> You cannot delete this
+            boundary until its children are deleted
           </div>
-          :
+        ) : (
           <div />
-        }
+        )}
         <h4 className="text-primary col-md-10">Modify Details</h4>
         <button
           className="btn btn-green pull-right"
@@ -56,7 +60,7 @@ class EditProjectForm extends Component {
           onValidSubmit={this.saveProject}
           onValid={this.props.enableSubmitForm}
           onInvalid={this.props.disableSubmitForm}
-          ref={ref => (this.myform = ref)}
+          ref={(ref) => { return (this.myform = ref); }}
         >
           <Input
             name="ProjectName"
@@ -126,32 +130,34 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const mapDispatchToProps = dispatch => ({
-  toggleCircleModal: () => {
-    dispatch({
-      type: 'TOGGLE_MODAL',
-      modal: 'createCircle',
-    });
-  },
-  saveProject: (projectId, projectName) => {
-    dispatch(modifyBoundary(projectId, projectName));
-  },
-  deleteProject: (projectId, districtId) => {
-    dispatch(deleteBoundary(projectId, districtId));
-  },
-  enableSubmitForm: () => {
-    dispatch(enableSubmitForm());
-  },
-  disableSubmitForm: () => {
-    dispatch(disableSubmitForm());
-  },
-  showConfirmModal: () => {
-    dispatch(showConfirmModal());
-  },
-  closeConfirmModal: () => {
-    dispatch(closeConfirmModal());
-  },
-});
+const mapDispatchToProps = (dispatch) => {
+  return {
+    toggleCircleModal: () => {
+      dispatch({
+        type: 'TOGGLE_MODAL',
+        modal: 'createCircle',
+      });
+    },
+    saveProject: (projectId, projectName) => {
+      dispatch(modifyBoundary(projectId, projectName));
+    },
+    deleteProject: (projectId, districtId) => {
+      dispatch(deleteBoundary(projectId, districtId));
+    },
+    enableSubmitForm: () => {
+      dispatch(enableSubmitForm());
+    },
+    disableSubmitForm: () => {
+      dispatch(disableSubmitForm());
+    },
+    showConfirmModal: () => {
+      dispatch(showConfirmModal());
+    },
+    closeConfirmModal: () => {
+      dispatch(closeConfirmModal());
+    },
+  };
+};
 
 const EditProject = connect(mapStateToProps, mapDispatchToProps)(EditProjectForm);
 

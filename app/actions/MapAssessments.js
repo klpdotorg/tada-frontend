@@ -33,7 +33,7 @@ import { get, post } from './requests';
 const fetchStudentGroupOfMA = (entity) => {
   return (dispatch) => {
     dispatch(showClassesLoadingInMA());
-    const url = `${SERVER_API_BASE}institutions/${entity.id}/studentgroups&per_page=${PER_PAGE}/`;
+    const url = `${SERVER_API_BASE}institutions/${entity.id}/studentgroups/?&per_page=${PER_PAGE}`;
 
     get(url).then((res) => {
       const entities = convertEntitiesToObject(res.results);
@@ -284,21 +284,28 @@ export const openBoundaryOfMa = (Id, depth) => {
 export const mapBoundariesToAssessments = () => {
   return (dispatch, getState) => {
     const state = getState();
-    const { selectedInstitutions, selectedAssessments } = state.mapAssessments;
+    const { selectedInstitutions, selectedAssessments, selectedClasses } = state.mapAssessments;
     const url = `${SERVER_API_BASE}questiongroupinstitutionmap/`;
 
-    post(url, {
-      institution_ids: selectedInstitutions.join(','),
-      questiongroup_ids: selectedAssessments.join(','),
-    })
-      .then(() => {
-        dispatch(Notifications.success(mapAssessmentsDone));
-        dispatch({
-          type: RESET_MAP_ASSESSMENTS,
-        });
-      })
-      .catch(() => {
-        dispatch(Notifications.error(mapAssessmentsFailed));
-      });
+    console.log(
+      selectedClasses,
+      selectedInstitutions,
+      selectedAssessments,
+      'Printing all the ids over here',
+    );
+
+    // post(url, {
+    //   studentgroup_ids: selectedClasses.join(','),
+    //   questiongroup_ids: selectedAssessments.join(','),
+    // })
+    //   .then(() => {
+    //     dispatch(Notifications.success(mapAssessmentsDone));
+    //     dispatch({
+    //       type: RESET_MAP_ASSESSMENTS,
+    //     });
+    //   })
+    //   .catch(() => {
+    //     dispatch(Notifications.error(mapAssessmentsFailed));
+    //   });
   };
 };

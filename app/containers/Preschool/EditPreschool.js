@@ -6,7 +6,7 @@ import FRC from 'formsy-react-components';
 
 import {
   deleteInstitution,
-  saveInstitution,
+  modifyInstitution,
   enableSubmitForm,
   disableSubmitForm,
   showConfirmModal,
@@ -29,7 +29,7 @@ class EditPreschoolForm extends Component {
     const institution = {
       dise_code: myform.institutionDise_code,
       institution_gender: myform.institutionGender,
-      name: myform.name,
+      name: myform.institutionName,
       address: myform.institutionAddress,
       area: myform.institutionArea,
       landmark: myform.institutionLandmark,
@@ -40,7 +40,7 @@ class EditPreschoolForm extends Component {
       id: this.props.institution.id,
     };
 
-    this.props.saveInstitution(institution);
+    this.props.save(institution, this.props.institution.id);
   }
 
   deleteInstitution() {
@@ -70,7 +70,9 @@ class EditPreschoolForm extends Component {
         onValidSubmit={this.saveInsti}
         onValid={this.props.enableSubmitForm}
         onInvalid={this.props.disableSubmitForm}
-        ref={(ref) => { return (this.myform = ref); }}
+        ref={(ref) => {
+          return (this.myform = ref);
+        }}
       >
         <div className="form-group">
           <div className="col-sm-12">
@@ -224,7 +226,7 @@ EditPreschoolForm.propTypes = {
   languages: PropTypes.array,
   managements: PropTypes.array,
   institutionCategories: PropTypes.array,
-  saveInstitution: PropTypes.func,
+  save: PropTypes.func,
   deleteInstitution: PropTypes.func,
   showConfirmModal: PropTypes.func,
   closeConfirmModal: PropTypes.func,
@@ -248,29 +250,13 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    saveInstitution: (institution) => {
-      dispatch(saveInstitution(institution));
-    },
-    deleteInstitution: (clusterId, institutionId) => {
-      dispatch(deleteInstitution(clusterId, institutionId));
-    },
-    enableSubmitForm: () => {
-      dispatch(enableSubmitForm());
-    },
-    disableSubmitForm: () => {
-      dispatch(disableSubmitForm());
-    },
-    showConfirmModal: () => {
-      dispatch(showConfirmModal());
-    },
-    closeConfirmModal: () => {
-      dispatch(closeConfirmModal());
-    },
-  };
-};
-
-const EditPreschool = connect(mapStateToProps, mapDispatchToProps)(EditPreschoolForm);
+const EditPreschool = connect(mapStateToProps, {
+  save: modifyInstitution,
+  deleteInstitution,
+  enableSubmitForm,
+  disableSubmitForm,
+  showConfirmModal,
+  closeConfirmModal,
+})(EditPreschoolForm);
 
 export { EditPreschool };

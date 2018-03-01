@@ -1,20 +1,32 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { pickBy, get } from 'lodash';
+import { pickBy } from 'lodash';
 import PropTypes from 'prop-types';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
+import { DEFAULT_PARENT_ID } from 'config';
 
 import { Modal } from '../../components/Modal';
 import { saveNewProgram, enableSubmitForm, disableSubmitForm } from '../../actions';
+import { SurveyOns } from '../../Data';
 
-const { Input } = FRC;
+const { Input, Select } = FRC;
 
 class CreateProgramForm extends Component {
   constructor(props) {
     super(props);
 
     this.submitForm = this.submitForm.bind(this);
+    this.getSurveyOns = this.getSurveyOns.bind(this);
+  }
+
+  getSurveyOns() {
+    return SurveyOns.map((survey) => {
+      return {
+        value: survey.id,
+        label: survey.label,
+      };
+    });
   }
 
   submitForm() {
@@ -23,6 +35,8 @@ class CreateProgramForm extends Component {
       name: myform.programName,
       description: myform.description,
       status: 'AC',
+      survey_on: myform.survey_on,
+      admin0: DEFAULT_PARENT_ID,
     };
     this.props.save(pickBy(program));
   }
@@ -45,7 +59,9 @@ class CreateProgramForm extends Component {
           onValidSubmit={this.submitForm}
           onValid={this.props.enableSubmitForm}
           onInvalid={this.props.disableSubmitForm}
-          ref={(ref) => { return (this.myform = ref); }}
+          ref={(ref) => {
+            return (this.myform = ref);
+          }}
         >
           <Input
             name="programName"
@@ -66,32 +82,13 @@ class CreateProgramForm extends Component {
             type="text"
             placeholder="Please enter the program description (Optional)"
           />
-          {/* <Input
-                      name="startDate"
-                      id="startDate"
-                      type="date"
-                      label="Start Date"
-                      value={this.setStartDate()}
-                      placeholder="Please select the start date of the program"
-                      required
-                    />
-                    <Input
-                      name="endDate"
-                      id="endDate"
-                      type="date"
-                      label="End Date"
-                      value={this.setEndDate()}
-                      placeholder="Please select the end date of the program"
-                      required
-                    />
-                    <RadioGroup
-                      name="programmeInstCat"
-                      type="inline"
-                      label="Institution Type"
-                      help="Select institution type"
-                      options={instType}
-                      required
-                    /> */}
+          <Select
+            name="survey_on"
+            label="Survey On"
+            options={this.getSurveyOns()}
+            value="1"
+            required
+          />
         </Formsy.Form>
       </Modal>
     );

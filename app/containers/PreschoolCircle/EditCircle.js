@@ -26,7 +26,7 @@ class EditCircleForm extends Component {
 
   saveCircle() {
     const myform = this.myform.getModel();
-    this.props.saveCircle(this.props.circle.id, myform.ClusterName);
+    this.props.saveCircle(this.props.circle.id, myform.circleName);
   }
 
   deleteCircle() {
@@ -61,7 +61,9 @@ class EditCircleForm extends Component {
           onValidSubmit={this.saveCircle}
           onValid={this.props.enableSubmitForm}
           onInvalid={this.props.disableSubmitForm}
-          ref={(ref) => { return (this.myform = ref); }}
+          ref={(ref) => {
+            return (this.myform = ref);
+          }}
         >
           <Input
             name="circleName"

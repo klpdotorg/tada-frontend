@@ -77,8 +77,6 @@ export const fetchSelectedAssessmentQuestions = () => {
     const { selectedProgramAssess } = state.assessmentEntry;
     const { selectedProgram } = state.programs;
 
-    console.log(selectedProgramAssess);
-
     const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${selectedProgramAssess.assessmentId}/questions/`;
 
     get(url).then((response) => {

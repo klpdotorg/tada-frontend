@@ -1,20 +1,43 @@
 import { SERVER_API_BASE } from 'config';
-import { get, post } from './requests';
-import { SET_QUESTIONS, SHOW_QUESTION_LOADING, HIDE_QUESTION_LOADING, TOGGLE_MODAL } from './types';
+import { get, post, patch } from './requests';
+import {
+  SET_QUESTION,
+  SET_QUESTIONS,
+  SHOW_QUESTION_LOADING,
+  HIDE_QUESTION_LOADING,
+  TOGGLE_MODAL,
+  SET_EDIT_QUESTION_ID,
+} from './types';
 import { setPrograms, selectProgram, setAssessments } from './index';
 
-export const openCreateQuestionModal = () => {
+export const toggleEditQuestionModal = () => {
+  return {
+    type: TOGGLE_MODAL,
+    modal: 'editQuestion',
+  };
+};
+
+export const openEditQuestionForm = (value) => {
+  return (dispatch) => {
+    dispatch({
+      type: SET_EDIT_QUESTION_ID,
+      value,
+    });
+    dispatch(toggleEditQuestionModal());
+  };
+};
+
+export const toggleCreateQuestionModal = () => {
   return {
     type: TOGGLE_MODAL,
     modal: 'createQuestion',
   };
 };
 
-export const setQuestions = (value, assessmentId) => {
+export const setQuestions = (value) => {
   return {
     type: SET_QUESTIONS,
     value,
-    assessmentId,
   };
 };
 
@@ -40,7 +63,14 @@ export const getQuestions = (programId, assessmentId) => {
 
     const getQuestionsURL = `${SERVER_API_BASE}surveys/${programId}/questiongroup/${assessmentId}/questions/`;
     fetchQuestions(getQuestionsURL).then((response) => {
-      dispatch(setQuestions(response.results, assessmentId));
+      const entities = response.results.reduce((soFar, entity) => {
+        const result = soFar;
+        result[entity.id] = entity;
+
+        return result;
+      }, {});
+
+      dispatch(setQuestions(entities));
       dispatch(hideQuestionLoading());
     });
   };
@@ -75,8 +105,32 @@ export const createNewQuestion = (data, programId, assessmentId) => {
 
     dispatch(showQuestionLoading());
     const createQuestionURL = `${SERVER_API_BASE}surveys/${programId}/questiongroup/${assessmentId}/questions/`;
-    post(createQuestionURL, data).then(() => {
-      dispatch(getQuestions(programId, assessmentId));
+    post(createQuestionURL, data).then((response) => {
+      const { question_details } = response;
+      dispatch({
+        type: SET_QUESTION,
+        value: { [question_details.id]: question_details },
+      });
+      dispatch(hideQuestionLoading());
+    });
+  };
+};
+
+export const saveQuestion = (data, programId, assessmentId, questionId) => {
+  return (dispatch) => {
+    dispatch({
+      type: TOGGLE_MODAL,
+      modal: 'editQuestion',
+    });
+
+    dispatch(showQuestionLoading());
+    const editQuestionURL = `${SERVER_API_BASE}surveys/${programId}/questiongroup/${assessmentId}/questions/${questionId}/`;
+    patch(editQuestionURL, data).then((response) => {
+      dispatch({
+        type: SET_QUESTION,
+        value: { [response.id]: response },
+      });
+      dispatch(hideQuestionLoading());
     });
   };
 };
