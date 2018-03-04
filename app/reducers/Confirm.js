@@ -17,10 +17,7 @@ const Confirm = (state = INITIAL_STATE, action) => {
         ...action.value,
       };
     case CLOSE_CONFIRM_MODAL:
-      return {
-        ...state,
-        isOpen: false,
-      };
+      return INITIAL_STATE;
     default:
       return state;
   }

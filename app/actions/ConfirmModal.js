@@ -28,6 +28,20 @@ export const openDeleteBoundaryModal = (name) => {
   };
 };
 
+export const openDeactivateProgramModal = (name) => {
+  return {
+    type: OPEN_CONFIRM_MODAL,
+    value: {
+      deactivateProgram: true,
+      message: `Are you sure you want to delete this ${name}`,
+      title: 'Deactivate Program?',
+      description: 'Deactivate Program?',
+      yesButtonTxt: 'Yes',
+      noButtonTxt: 'no',
+    },
+  };
+};
+
 export const closeConfirmModal = () => {
   return {
     type: CLOSE_CONFIRM_MODAL,

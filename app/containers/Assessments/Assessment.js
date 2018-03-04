@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { get } from 'lodash';
 
 import { AssessmentRow } from '../../components/Assessments';
 import { openEditAssessmentModal } from '../../actions';
@@ -6,7 +7,7 @@ import { openEditAssessmentModal } from '../../actions';
 const mapStateToProps = (state, ownProps) => {
   const selectedProgramId = state.programs.selectedProgram;
   return {
-    assessment: state.assessments.assessments[ownProps.id],
+    assessment: get(state.assessments.assessments, ownProps.id, {}),
     url: `programs/${selectedProgramId}/assessments/${ownProps.id}/questions`,
   };
 };

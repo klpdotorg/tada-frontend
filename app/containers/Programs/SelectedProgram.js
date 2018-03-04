@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { get } from 'lodash';
 
 import { ViewSelectedProgram } from '../../components/Programs';
-import { openEditProgramModal } from '../../actions';
+import { openEditProgramModal, deactivateProgram, openDeactivateProgramModal } from '../../actions';
 
 const mapStateToProps = (state) => {
   const selectedProgramId = state.programs.selectedProgram;
@@ -11,6 +11,10 @@ const mapStateToProps = (state) => {
   };
 };
 
-const SelectedProgram = connect(mapStateToProps, { openEditProgramModal })(ViewSelectedProgram);
+const SelectedProgram = connect(mapStateToProps, {
+  openEditProgramModal,
+  showDeactivateModal: openDeactivateProgramModal,
+  deactivateProgram,
+})(ViewSelectedProgram);
 
 export { SelectedProgram };
