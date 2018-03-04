@@ -5,15 +5,14 @@ import { connect } from 'react-redux';
 import FRC from 'formsy-react-components';
 import Formsy from 'formsy-react';
 
-import ConfirmModal from '../../components/Modals/Confirm';
+import { Confirm } from '../Modal';
 import {
   modifyBoundary,
   enableSubmitForm,
   disableSubmitForm,
   deleteBoundary,
-  showConfirmModal,
-  closeConfirmModal,
-  setParentNode
+  openDeleteBoundaryModal,
+  toggleCreateClusterModal,
 } from '../../actions';
 
 const { Input } = FRC;
@@ -40,15 +39,14 @@ class EditBlockForm extends Component {
 
     return (
       <div>
-        {hasClusters
-          ?
+        {hasClusters ? (
           <div className="alert alert-info">
             <i className="fa fa-info-circle fa-lg" aria-hidden="true" /> You cannot delete this
             boundary until its children are deleted
           </div>
-          :
+        ) : (
           <div />
-        }
+        )}
         <h4 className="text-primary col-md-10">Modify Details</h4>
         <button
           className="btn btn-orange pull-right"
@@ -62,7 +60,7 @@ class EditBlockForm extends Component {
           onValidSubmit={this.onClickSaveBlock}
           onValid={this.props.enableSubmitForm}
           onInvalid={this.props.disableSubmitForm}
-          ref={ref => (this.myform = ref)}
+          ref={(ref) => { return (this.myform = ref); }}
         >
           <Input
             name="BlockName"
@@ -90,17 +88,12 @@ class EditBlockForm extends Component {
             className="btn btn-primary padded-btn"
             disabled={hasClusters}
             onClick={() => {
-              this.props.showConfirmModal();
+              this.props.showConfirmModal(block.name);
             }}
           >
             Delete
           </button>
-          <ConfirmModal
-            isOpen={this.props.openConfirmModal}
-            onAgree={this.onClickDeleteBlock}
-            onCloseModal={this.props.closeConfirmModal}
-            entity={block.name}
-          />
+          <Confirm onYes={this.onClickDeleteBlock} />
         </div>
       </div>
     );
@@ -112,14 +105,12 @@ EditBlockForm.propTypes = {
   districtId: PropTypes.number,
   districtNodeId: PropTypes.string,
   hasClusters: PropTypes.bool,
-  openConfirmModal: PropTypes.bool,
   canSubmit: PropTypes.bool,
   saveBlock: PropTypes.func,
   toggleClusterModal: PropTypes.func,
   deleteBlock: PropTypes.func,
   enableSubmitForm: PropTypes.func,
   disableSubmitForm: PropTypes.func,
-  closeConfirmModal: PropTypes.func,
   showConfirmModal: PropTypes.func,
 };
 
@@ -135,34 +126,13 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const mapDispatchToProps = dispatch => ({
-  toggleClusterModal: () => {
-    dispatch({
-      type: 'TOGGLE_MODAL',
-      modal: 'createCluster',
-    });
-  },
-  saveBlock: (districtNodeId, blockId, blockName) => {
-    dispatch(setParentNode(districtNodeId));
-    dispatch(modifyBoundary(blockId, blockName));
-  },
-  deleteBlock: (blockId, districtId) => {
-    dispatch(deleteBoundary(blockId, districtId));
-  },
-  enableSubmitForm: () => {
-    dispatch(enableSubmitForm());
-  },
-  disableSubmitForm: () => {
-    dispatch(disableSubmitForm());
-  },
-  showConfirmModal: () => {
-    dispatch(showConfirmModal());
-  },
-  closeConfirmModal: () => {
-    dispatch(closeConfirmModal());
-  },
-});
-
-const EditBlock = connect(mapStateToProps, mapDispatchToProps)(EditBlockForm);
+const EditBlock = connect(mapStateToProps, {
+  toggleClusterModal: toggleCreateClusterModal,
+  saveBlock: modifyBoundary,
+  deleteBlock: deleteBoundary,
+  enableSubmitForm,
+  disableSubmitForm,
+  showConfirmModal: openDeleteBoundaryModal,
+})(EditBlockForm);
 
 export { EditBlock };

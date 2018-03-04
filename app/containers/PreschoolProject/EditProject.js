@@ -4,14 +4,14 @@ import { connect } from 'react-redux';
 import FRC from 'formsy-react-components';
 import Formsy from 'formsy-react';
 
-import ConfirmModal from '../../components/Modals/Confirm';
+import { Confirm } from '../Modal';
 import {
   modifyBoundary,
   enableSubmitForm,
   disableSubmitForm,
   deleteBoundary,
-  showConfirmModal,
-  closeConfirmModal,
+  toggleCreateCircleModal,
+  openDeleteBoundaryModal,
 } from '../../actions';
 
 const { Input } = FRC;
@@ -34,7 +34,7 @@ class EditProjectForm extends Component {
   }
 
   render() {
-    const { hasCircles, project, openConfirmModal, canSubmit } = this.props;
+    const { hasCircles, project, canSubmit } = this.props;
 
     return (
       <div>
@@ -60,7 +60,9 @@ class EditProjectForm extends Component {
           onValidSubmit={this.saveProject}
           onValid={this.props.enableSubmitForm}
           onInvalid={this.props.disableSubmitForm}
-          ref={(ref) => { return (this.myform = ref); }}
+          ref={(ref) => {
+            return (this.myform = ref);
+          }}
         >
           <Input
             name="ProjectName"
@@ -85,16 +87,13 @@ class EditProjectForm extends Component {
           <button
             type="submit"
             className="btn btn-primary padded-btn"
-            onClick={this.props.showConfirmModal}
+            onClick={() => {
+              this.props.showConfirmModal(project.name);
+            }}
           >
             Delete
           </button>
-          <ConfirmModal
-            isOpen={openConfirmModal}
-            onAgree={this.deleteProject}
-            onCloseModal={this.props.closeConfirmModal}
-            entity={project.name}
-          />
+          <Confirm onYes={this.deleteProject} />
         </div>
       </div>
     );
@@ -103,17 +102,14 @@ class EditProjectForm extends Component {
 
 EditProjectForm.propTypes = {
   project: PropTypes.object,
-  projectId: PropTypes.number,
   districtId: PropTypes.number,
   hasCircles: PropTypes.bool,
-  openConfirmModal: PropTypes.bool,
   canSubmit: PropTypes.bool,
   saveProject: PropTypes.func,
   toggleCircleModal: PropTypes.func,
   deleteProject: PropTypes.func,
   enableSubmitForm: PropTypes.func,
   disableSubmitForm: PropTypes.func,
-  closeConfirmModal: PropTypes.func,
   showConfirmModal: PropTypes.func,
 };
 
@@ -130,35 +126,13 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    toggleCircleModal: () => {
-      dispatch({
-        type: 'TOGGLE_MODAL',
-        modal: 'createCircle',
-      });
-    },
-    saveProject: (projectId, projectName) => {
-      dispatch(modifyBoundary(projectId, projectName));
-    },
-    deleteProject: (projectId, districtId) => {
-      dispatch(deleteBoundary(projectId, districtId));
-    },
-    enableSubmitForm: () => {
-      dispatch(enableSubmitForm());
-    },
-    disableSubmitForm: () => {
-      dispatch(disableSubmitForm());
-    },
-    showConfirmModal: () => {
-      dispatch(showConfirmModal());
-    },
-    closeConfirmModal: () => {
-      dispatch(closeConfirmModal());
-    },
-  };
-};
-
-const EditProject = connect(mapStateToProps, mapDispatchToProps)(EditProjectForm);
+const EditProject = connect(mapStateToProps, {
+  toggleCircleModal: toggleCreateCircleModal,
+  saveProject: modifyBoundary,
+  deleteProject: deleteBoundary,
+  enableSubmitForm,
+  disableSubmitForm,
+  showConfirmModal: openDeleteBoundaryModal,
+})(EditProjectForm);
 
 export { EditProject };

@@ -1,11 +1,12 @@
 import React from 'react';
 import * as actions from '../actions/';
-import CreateUser from './Modals/CreateUser';
-import EditUser from './Modals/EditUser';
-import ResetPassword from './Modals/ResetPassword';
-import GenericDialog from './Modals/GenericDialog';
-import ConfirmDialog from './Modals/ConfirmDialog';
+// import CreateUser from './Modals/CreateUser';
+// import EditUser from './Modals/EditUser';
+// import ResetPassword from './Modals/ResetPassword';
+// import GenericDialog from './Modals/GenericDialog';
+// import ConfirmDialog from './Modals/ConfirmDialog';
 import { roles as ROLES } from '../constants';
+
 export default class ManageUsers extends React.Component {
   constructor(props) {
     super(props);
@@ -34,7 +35,9 @@ export default class ManageUsers extends React.Component {
     // console.log("Received update in ManageUsers");
   }
   openEditUserModal(e) {
-    var trId = $(e.currentTarget).closest('tr').prop('id');
+    var trId = $(e.currentTarget)
+      .closest('tr')
+      .prop('id');
     var selectedUser = this.props.usersById[trId];
     this.setState({
       isEditUserModalOpen: true,
@@ -49,7 +52,9 @@ export default class ManageUsers extends React.Component {
   }
 
   openResetPasswordModal(e) {
-    var trId = $(e.currentTarget).closest('tr').prop('id');
+    var trId = $(e.currentTarget)
+      .closest('tr')
+      .prop('id');
     var selectedUser = this.props.usersById[trId];
     this.setState({
       isResetPasswordModalOpen: true,
@@ -121,7 +126,7 @@ export default class ManageUsers extends React.Component {
       .then(() => {
         // show generic dialog that confirms user creation success.
 
-        var message = 'User <b>' + username + '</b> created successfully';
+        var message = `User <b>${username}</b> created successfully`;
         this.setState({
           showDialog: true,
           dialogTitle: 'User Created!',
@@ -136,7 +141,9 @@ export default class ManageUsers extends React.Component {
   }
 
   selectUser(e) {
-    var userId = $(e.currentTarget).closest('tr').prop('id');
+    var userId = $(e.currentTarget)
+      .closest('tr')
+      .prop('id');
     var newSelectedUsers = this.state.selectedUserIds.slice();
     if (e.currentTarget.checked && jQuery.inArray(userId, this.state.selectedUserIds) == -1) {
       newSelectedUsers.push(userId);
@@ -184,15 +191,15 @@ export default class ManageUsers extends React.Component {
         this.setState({
           showDialog: true,
           dialogTitle: 'Password reset successful',
-          dialogMessage: 'Password has been reset successfully for user ' + user.username,
+          dialogMessage: `Password has been reset successfully for user ${user.username}`,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({
           showDialog: true,
           dialogTitle: 'Password reset failed',
           dialogMessage:
-            'Password could not be reset for user ' + user.username + '. Please try again later!',
+            `Password could not be reset for user ${user.username}. Please try again later!`,
         });
       });
   }
@@ -203,16 +210,20 @@ export default class ManageUsers extends React.Component {
     var userCount = this.props.userCount;
     var pages = this.getPageNumbers(userCount);
 
-    var paginationList = pages.map(page => {
+    var paginationList = pages.map((page) => {
       return (
-        <li key={page}><a href="#" onClick={this.handlePageClick.bind(null, page)}>{page}</a></li>
+        <li key={page}>
+          <a href="#" onClick={this.handlePageClick.bind(null, page)}>
+            {page}
+          </a>
+        </li>
       );
     });
     var usersList;
     if (usersByPage) {
       usersList = Object.values(usersByPage.ids).map((id, i) => {
         var user = this.props.usersById[id];
-        var fullName = user.first_name + ' ' + user.last_name;
+        var fullName = `${user.first_name} ${user.last_name}`;
         var userRole = 'N/A';
         if (user.groups && user.groups.length > 0) {
           user.groups.map((item, index) => {
@@ -224,7 +235,9 @@ export default class ManageUsers extends React.Component {
             <td>{fullName}</td>
             <td>{user.username}</td>
             <td>{userRole}</td>
-            <td><input type="checkbox" className="btn" onClick={this.selectUser.bind(this)} /></td>
+            <td>
+              <input type="checkbox" className="btn" onClick={this.selectUser.bind(this)} />
+            </td>
             <td>
               <button
                 className="btn btn-primary fa fa-pencil-square-o"
@@ -310,7 +323,7 @@ export default class ManageUsers extends React.Component {
             </ul>
           </nav>
         </div>
-        <CreateUser
+        {/* <CreateUser
           isOpen={this.state.isCreateUserModalOpen}
           onCloseModal={this.closeCreateUserModal.bind(this)}
           handleSubmit={this.createUser.bind(this)}
@@ -339,7 +352,7 @@ export default class ManageUsers extends React.Component {
           isOpen={this.state.isResetPasswordModalOpen}
           onCloseModal={this.closeResetPasswordModal.bind(this)}
           handleSubmit={this.resetPassword.bind(this)}
-        />
+        /> */}
       </div>
     );
   }

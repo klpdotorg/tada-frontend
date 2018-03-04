@@ -9,11 +9,11 @@ import {
   deleteBoundary,
   enableSubmitForm,
   disableSubmitForm,
-  showConfirmModal,
-  closeConfirmModal,
-  setParentNode,
+  toggleCreateInstitutionModal,
+  openDeleteBoundaryModal,
 } from '../../actions';
-import ConfirmModal from '../../components/Modals/Confirm';
+
+import { Confirm } from '../Modal';
 
 const { Input } = FRC;
 
@@ -41,15 +41,14 @@ class EditClusterView extends Component {
 
     return (
       <div>
-        {hasSchools
-          ?
+        {hasSchools ? (
           <div className="alert alert-info">
             <i className="fa fa-info-circle fa-lg" aria-hidden="true" /> You cannot delete this
             boundary until its children are deleted
           </div>
-          :
+        ) : (
           <div />
-        }
+        )}
         <h4 className="text-primary col-md-10">Modify Details</h4>
         <button
           className="btn btn-orange pull-right"
@@ -63,7 +62,7 @@ class EditClusterView extends Component {
           onValidSubmit={this.saveCluster}
           onValid={this.props.enableSubmitForm}
           onInvalid={this.props.disableSubmitForm}
-          ref={ref => (this.myform = ref)}
+          ref={(ref) => { return (this.myform = ref); }}
         >
           <Input
             name="ClusterName"
@@ -89,16 +88,13 @@ class EditClusterView extends Component {
             type="submit"
             className="btn btn-primary padded-btn"
             disabled={hasSchools}
-            onClick={this.props.showConfirmModal}
+            onClick={() => {
+              this.props.showConfirmModal(cluster.name);
+            }}
           >
             Delete
           </button>
-          <ConfirmModal
-            isOpen={this.props.openConfirmModal}
-            onAgree={this.deleteCluster}
-            onCloseModal={this.props.closeConfirmModal}
-            entity={cluster.name}
-          />
+          <Confirm onYes={this.deleteCluster} />
         </div>
       </div>
     );
@@ -108,7 +104,6 @@ class EditClusterView extends Component {
 EditClusterView.propTypes = {
   hasSchools: PropTypes.bool,
   canSubmit: PropTypes.bool,
-  openConfirmModal: PropTypes.bool,
   cluster: PropTypes.object,
   blockId: PropTypes.number,
   blockNodeId: PropTypes.string,
@@ -118,7 +113,6 @@ EditClusterView.propTypes = {
   toggleSchoolModal: PropTypes.func,
   disableSubmitForm: PropTypes.func,
   showConfirmModal: PropTypes.func,
-  closeConfirmModal: PropTypes.func,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -133,34 +127,13 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const mapDispatchToProps = dispatch => ({
-  toggleSchoolModal: () => {
-    dispatch({
-      type: 'TOGGLE_MODAL',
-      modal: 'createInstitution',
-    });
-  },
-  saveCluster: (blockNodeId, clusterId, clusterName) => {
-    dispatch(setParentNode(blockNodeId));
-    dispatch(modifyBoundary(clusterId, clusterName));
-  },
-  deleteCluster: (clusterId, blockId) => {
-    dispatch(deleteBoundary(clusterId, blockId));
-  },
-  enableSubmitForm: () => {
-    dispatch(enableSubmitForm());
-  },
-  disableSubmitForm: () => {
-    dispatch(disableSubmitForm());
-  },
-  showConfirmModal: () => {
-    dispatch(showConfirmModal());
-  },
-  closeConfirmModal: () => {
-    dispatch(closeConfirmModal());
-  },
-});
-
-const EditCluster = connect(mapStateToProps, mapDispatchToProps)(EditClusterView);
+const EditCluster = connect(mapStateToProps, {
+  toggleSchoolModal: toggleCreateInstitutionModal,
+  saveCluster: modifyBoundary,
+  deleteCluster: deleteBoundary,
+  enableSubmitForm,
+  disableSubmitForm,
+  showConfirmModal: openDeleteBoundaryModal,
+})(EditClusterView);
 
 export { EditCluster };

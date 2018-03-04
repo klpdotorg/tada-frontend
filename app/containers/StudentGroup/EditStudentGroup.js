@@ -9,12 +9,10 @@ import {
   modifyStudentGroup,
   enableSubmitForm,
   disableSubmitForm,
-  showConfirmModal,
-  closeConfirmModal,
-  setParentNode,
+  openDeleteBoundaryModal,
 } from '../../actions';
 
-import ConfirmModal from '../../components/Modals/Confirm';
+import { Confirm } from '../Modal';
 
 const { Input, Select } = FRC;
 
@@ -35,11 +33,7 @@ class EditStudentGroupForm extends Component {
       group_type: myform.groupType,
     };
 
-    this.props.saveStudentGroup(
-      this.props.institutionNodeId,
-      this.props.studentGroup.id,
-      studentGroup,
-    );
+    this.props.saveStudentGroup(studentGroup, this.props.studentGroup.id);
   }
 
   deleteStudentGroup() {
@@ -52,14 +46,14 @@ class EditStudentGroupForm extends Component {
       { label: 'Center', value: 'center' },
     ];
 
-    const { canSubmit, openConfirmModal, studentGroup, hasStudents } = this.props;
+    const { studentGroup, hasStudents } = this.props;
 
     return (
       <Formsy.Form
         onValidSubmit={this.saveStudentGroup}
         onValid={this.props.enableSubmitForm}
         onInvalid={this.props.disableSubmitForm}
-        ref={ref => (this.myform = ref)}
+        ref={(ref) => { return (this.myform = ref); }}
       >
         <div className="form-group">
           <div className="col-sm-12">
@@ -111,16 +105,13 @@ class EditStudentGroupForm extends Component {
             type="button"
             className="btn btn-primary padded-btn"
             disabled={hasStudents}
-            onClick={this.props.showConfirmModal}
+            onClick={() => {
+              this.props.showConfirmModal(studentGroup.name);
+            }}
           >
             Delete
           </button>
-          <ConfirmModal
-            isOpen={openConfirmModal}
-            onAgree={this.deleteStudentGroup}
-            onCloseModal={this.props.closeConfirmModal}
-            entity={studentGroup.name}
-          />
+          <Confirm onYes={this.deleteStudentGroup} />
         </div>
       </Formsy.Form>
     );
@@ -128,15 +119,10 @@ class EditStudentGroupForm extends Component {
 }
 
 EditStudentGroupForm.propTypes = {
-  canSubmit: PropTypes.bool,
-  openConfirmModal: PropTypes.bool,
   studentGroup: PropTypes.object,
   hasStudents: PropTypes.bool,
   saveStudentGroup: PropTypes.func,
-  institutionNodeId: PropTypes.string,
-  deleteStudentGroup: PropTypes.func,
   showConfirmModal: PropTypes.func,
-  closeConfirmModal: PropTypes.func,
   enableSubmitForm: PropTypes.func,
   disableSubmitForm: PropTypes.func,
 };
@@ -155,28 +141,12 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const mapDispatchToProps = dispatch => ({
-  saveStudentGroup: (institutionNodeId, studentGroupId, studentGroup) => {
-    dispatch(setParentNode(institutionNodeId));
-    dispatch(modifyStudentGroup(studentGroup, studentGroupId));
-  },
-  deleteStudentGroup: (institutionId, studentGroupId) => {
-    dispatch(deleteStudentGroup(institutionId, studentGroupId));
-  },
-  enableSubmitForm: () => {
-    dispatch(enableSubmitForm());
-  },
-  disableSubmitForm: () => {
-    dispatch(disableSubmitForm());
-  },
-  showConfirmModal: () => {
-    dispatch(showConfirmModal());
-  },
-  closeConfirmModal: () => {
-    dispatch(closeConfirmModal());
-  },
-});
-
-const EditStudentGroup = connect(mapStateToProps, mapDispatchToProps)(EditStudentGroupForm);
+const EditStudentGroup = connect(mapStateToProps, {
+  saveStudentGroup: modifyStudentGroup,
+  deleteStudentGroup,
+  enableSubmitForm,
+  disableSubmitForm,
+  showConfirmModal: openDeleteBoundaryModal,
+})(EditStudentGroupForm);
 
 export { EditStudentGroup };

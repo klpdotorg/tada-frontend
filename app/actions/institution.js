@@ -19,6 +19,13 @@ import {
   openEntity,
 } from './index';
 
+export const toggleCreateInstitutionModal = () => {
+  return {
+    type: TOGGLE_MODAL,
+    modal: 'createInstitution',
+  };
+};
+
 export const toggleClassModal = () => {
   return {
     type: TOGGLE_MODAL,

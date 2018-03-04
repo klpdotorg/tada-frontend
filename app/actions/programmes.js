@@ -113,3 +113,24 @@ export const saveProgram = (options) => {
     });
   };
 };
+
+export const deactivateProgram = (Id) => {
+  return (dispatch, getState) => {
+    dispatch(showProgramLoading());
+
+    const state = getState();
+    const program = state.programs.programs[Id];
+
+    // changing status of program
+    program.status = 'IA';
+
+    const programURL = `${serverApiBase}surveys/${Id}/`;
+    patch(programURL, program)
+      .then(() => {
+        dispatch(fetchAllPrograms());
+      })
+      .catch(() => {
+        dispatch(closeProgramLoading());
+      });
+  };
+};

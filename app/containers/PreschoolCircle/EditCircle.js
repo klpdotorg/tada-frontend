@@ -9,10 +9,10 @@ import {
   deleteBoundary,
   enableSubmitForm,
   disableSubmitForm,
-  showConfirmModal,
-  closeConfirmModal,
+  toggleCreateCircleModal,
+  openDeleteBoundaryModal,
 } from '../../actions';
-import ConfirmModal from '../../components/Modals/Confirm';
+import { Confirm } from '../Modal';
 
 const { Input } = FRC;
 
@@ -36,7 +36,7 @@ class EditCircleForm extends Component {
   }
 
   render() {
-    const { hasSchools, circle, canSubmit, openConfirmModal } = this.props;
+    const { hasSchools, circle, canSubmit } = this.props;
 
     return (
       <div>
@@ -81,7 +81,9 @@ class EditCircleForm extends Component {
             type="submit"
             disabled={!canSubmit}
             className="btn btn-primary padded-btn"
-            onClick={this.saveCircle}
+            onClick={() => {
+              this.saveCircle(circle.name);
+            }}
           >
             Save
           </button>
@@ -92,12 +94,7 @@ class EditCircleForm extends Component {
           >
             Delete
           </button>
-          <ConfirmModal
-            isOpen={openConfirmModal}
-            onAgree={this.deleteCircle}
-            onCloseModal={this.props.closeConfirmModal}
-            entity={circle.name}
-          />
+          <Confirm onYes={this.deleteCircle} />
         </div>
       </div>
     );
@@ -107,7 +104,6 @@ class EditCircleForm extends Component {
 EditCircleForm.propTypes = {
   hasSchools: PropTypes.bool,
   canSubmit: PropTypes.bool,
-  openConfirmModal: PropTypes.bool,
   circle: PropTypes.object,
   projectId: PropTypes.number,
   saveCircle: PropTypes.func,
@@ -116,7 +112,6 @@ EditCircleForm.propTypes = {
   toggleSchoolModal: PropTypes.func,
   disableSubmitForm: PropTypes.func,
   showConfirmModal: PropTypes.func,
-  closeConfirmModal: PropTypes.func,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -131,35 +126,13 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    toggleSchoolModal: () => {
-      dispatch({
-        type: 'TOGGLE_MODAL',
-        modal: 'createPreschool',
-      });
-    },
-    saveCircle: (circleId, circleName) => {
-      dispatch(modifyBoundary(circleId, circleName));
-    },
-    deleteCircle: (circleId, projectId) => {
-      dispatch(deleteBoundary(circleId, projectId));
-    },
-    enableSubmitForm: () => {
-      dispatch(enableSubmitForm());
-    },
-    disableSubmitForm: () => {
-      dispatch(disableSubmitForm());
-    },
-    showConfirmModal: () => {
-      dispatch(showConfirmModal());
-    },
-    closeConfirmModal: () => {
-      dispatch(closeConfirmModal());
-    },
-  };
-};
-
-const EditCircle = connect(mapStateToProps, mapDispatchToProps)(EditCircleForm);
+const EditCircle = connect(mapStateToProps, {
+  toggleSchoolModal: toggleCreateCircleModal,
+  saveCircle: modifyBoundary,
+  deleteCircle: deleteBoundary,
+  enableSubmitForm,
+  disableSubmitForm,
+  showConfirmModal: openDeleteBoundaryModal,
+})(EditCircleForm);
 
 export { EditCircle };

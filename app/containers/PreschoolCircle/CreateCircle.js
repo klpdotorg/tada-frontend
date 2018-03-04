@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { saveNewCircle, closeCreateCircleModal } from '../../actions';
 
-import CreateBoundary from '../../components/Modals/CreateBoundary';
+import { CreateBoundary } from '../../components/Modals';
 
 const mapStateToProps = (state) => {
   return {

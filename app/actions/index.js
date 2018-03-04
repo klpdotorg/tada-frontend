@@ -27,3 +27,4 @@ export * from './MapAssessments';
 export * from './NavTree';
 export * from './PreschoolProject';
 export * from './PreschoolCircle';
+export * from './ConfirmModal';

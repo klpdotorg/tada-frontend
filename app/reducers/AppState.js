@@ -1,6 +1,4 @@
 import {
-  SHOW_CONFIRM_MODAL,
-  CLOSE_CONFIRM_MODAL,
   ENABLE_SUBMIT_FORM,
   DISABLE_SUBMIT_FORM,
   SHOW_BOUNDARY_LOADING,
@@ -33,16 +31,6 @@ const AppState = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         selectedBoundary: action.boundary,
-      };
-    case SHOW_CONFIRM_MODAL:
-      return {
-        ...state,
-        confirmModal: true,
-      };
-    case CLOSE_CONFIRM_MODAL:
-      return {
-        ...state,
-        confirmModal: false,
       };
     case SHOW_BOUNDARY_LOADING:
       return {

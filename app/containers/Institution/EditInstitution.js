@@ -9,12 +9,10 @@ import {
   modifyInstitution,
   enableSubmitForm,
   disableSubmitForm,
-  showConfirmModal,
-  closeConfirmModal,
-  setParentNode,
+  openDeleteBoundaryModal,
 } from '../../actions';
 
-import ConfirmModal from '../../components/Modals/Confirm';
+import { Confirm } from '../Modal';
 
 const { Input, Textarea, Select } = FRC;
 
@@ -68,7 +66,6 @@ class EditInstitutionForm extends Component {
       languages,
       institutionCategories,
       managements,
-      openConfirmModal,
       lastVerifiedYears,
     } = this.props;
     return (
@@ -76,7 +73,9 @@ class EditInstitutionForm extends Component {
         onValidSubmit={this.saveInsti}
         onValid={this.props.enableSubmitForm}
         onInvalid={this.props.disableSubmitForm}
-        ref={(ref) => { return (this.myform = ref); }}
+        ref={(ref) => {
+          return (this.myform = ref);
+        }}
         canSubmit={canSubmit}
       >
         <div className="form-group">
@@ -217,16 +216,13 @@ class EditInstitutionForm extends Component {
             type="button"
             className="btn btn-primary padded-btn"
             disabled={hasClasses}
-            onClick={this.props.showConfirmModal}
+            onClick={() => {
+              this.props.showConfirmModal(institution.name);
+            }}
           >
             Delete
           </button>
-          <ConfirmModal
-            isOpen={openConfirmModal}
-            onAgree={this.deleteInstitution}
-            onCloseModal={this.props.closeConfirmModal}
-            entity={institution.name}
-          />
+          <Confirm onYes={this.deleteInstitution} />
         </div>
       </Formsy.Form>
     );
@@ -235,7 +231,6 @@ class EditInstitutionForm extends Component {
 
 EditInstitutionForm.propTypes = {
   canSubmit: PropTypes.bool,
-  openConfirmModal: PropTypes.bool,
   clusterId: PropTypes.number,
   institution: PropTypes.object,
   hasClasses: PropTypes.bool,
@@ -246,7 +241,6 @@ EditInstitutionForm.propTypes = {
   save: PropTypes.func,
   deleteInstitution: PropTypes.func,
   showConfirmModal: PropTypes.func,
-  closeConfirmModal: PropTypes.func,
   enableSubmitForm: PropTypes.func,
   disableSubmitForm: PropTypes.func,
 };
@@ -273,8 +267,7 @@ const EditInstitution = connect(mapStateToProps, {
   deleteInstitution,
   enableSubmitForm,
   disableSubmitForm,
-  showConfirmModal,
-  closeConfirmModal,
+  showConfirmModal: openDeleteBoundaryModal,
 })(EditInstitutionForm);
 
 export { EditInstitution };

@@ -6,10 +6,9 @@ import {
   disableSubmitForm,
   modifyBoundary,
   deleteBoundary,
-  showConfirmModal,
-  closeConfirmModal,
   toggleProjectModal,
   toggleBlockModal,
+  openDeleteBoundaryModal,
 } from '../../actions';
 
 const mapStateToProps = (state, ownProps) => {
@@ -27,8 +26,7 @@ const mapStateToProps = (state, ownProps) => {
 const EditDistrict = connect(mapStateToProps, {
   toggleProjectModal,
   toggleBlockModal,
-  showConfirmModal,
-  closeConfirmModal,
+  showConfirmModal: openDeleteBoundaryModal,
   enableSubmitForm,
   disableSubmitForm,
   saveDistrict: modifyBoundary,

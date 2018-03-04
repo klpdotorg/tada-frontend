@@ -4,7 +4,7 @@ import Formsy from 'formsy-react';
 import PropTypes from 'prop-types';
 import { DEFAULT_PARENT_ID } from 'config';
 
-import ConfirmModal from '../../components/Modals/Confirm';
+import { Confirm } from '../Modal';
 
 const { Input } = FRC;
 
@@ -61,7 +61,9 @@ class EditDistrictForm extends Component {
           onValidSubmit={this.saveDistrict}
           onValid={this.props.enableSubmitForm}
           onInvalid={this.props.disableSubmitForm}
-          ref={(ref) => { return (this.myform = ref); }}
+          ref={(ref) => {
+            return (this.myform = ref);
+          }}
         >
           <div className="base-spacing-sm" />
           <Input
@@ -93,18 +95,13 @@ class EditDistrictForm extends Component {
             type="submit"
             className="btn btn-primary padded-btn"
             onClick={() => {
-              this.props.showConfirmModal();
+              this.props.showConfirmModal(boundary.name);
             }}
             disabled={hasBlocks}
           >
             Delete
           </button>
-          <ConfirmModal
-            isOpen={this.props.confirmModal}
-            onAgree={this.deleteDistrict}
-            onCloseModal={this.props.closeConfirmModal}
-            entity={boundary.name}
-          />
+          <Confirm onYes={this.deleteDistrict} />
         </div>
       </div>
     );
@@ -115,11 +112,9 @@ EditDistrictForm.propTypes = {
   canSubmit: PropTypes.bool,
   boundary: PropTypes.object,
   hasBlocks: PropTypes.bool,
-  confirmModal: PropTypes.bool,
   toggleBlockModal: PropTypes.func,
   toggleProjectModal: PropTypes.func,
   showConfirmModal: PropTypes.func,
-  closeConfirmModal: PropTypes.func,
   enableSubmitForm: PropTypes.func,
   disableSubmitForm: PropTypes.func,
   saveDistrict: PropTypes.func,

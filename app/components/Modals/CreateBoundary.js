@@ -1,20 +1,20 @@
 import React, { Component } from 'react';
-import Modal from './ModalTemplate';
+import PropTypes from 'prop-types';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
-import { modalStyle as customStyles } from '../../styles.js';
+
+import { Modal } from '../Modal';
 
 const { Input } = FRC;
 
-export default class CreateDistrict extends Component {
+class CreateBoundary extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: '',
       disabled: false,
       canSubmit: false,
     };
-    this.handleChange = this.handleChange.bind(this);
+
     this.enableSubmitButton = this.enableSubmitButton.bind(this);
     this.disableSubmitButton = this.disableSubmitButton.bind(this);
     this.submitForm = this.submitForm.bind(this);
@@ -33,25 +33,24 @@ export default class CreateDistrict extends Component {
   }
 
   submitForm() {
-    var myform = this.myform.getModel();
+    const { parent, parentNodeId } = this.props;
 
-    this.props.save(myform.entityName, this.props.parent, this.props.parentNodeId);
-  }
+    const myform = this.myform.getModel();
 
-  handleChange(e) {
-    this.setState({
-      value: e.target.value,
-    });
+    this.props.save(myform.entityName, parent, parentNodeId);
   }
 
   render() {
+    const { canSubmit } = this.state;
+    const { title, isOpen, placeHolder } = this.props;
+
     return (
       <Modal
-        title={this.props.title}
+        title={title}
         contentLabel="Create Boundary"
-        isOpen={this.props.isOpen}
+        isOpen={isOpen}
         onCloseModal={this.props.onCloseModal}
-        canSubmit={this.state.canSubmit}
+        canSubmit={canSubmit}
         submitForm={this.submitForm}
         cancelBtnLabel="Cancel"
         submitBtnLabel="Create"
@@ -61,15 +60,15 @@ export default class CreateDistrict extends Component {
           onValid={this.enableSubmitButton}
           onInvalid={this.disableSubmitButton}
           disabled={this.state.disabled}
-          ref={ref => (this.myform = ref)}
+          ref={(ref) => { return (this.myform = ref); }}
         >
           <Input
             name="entityName"
             id="entityName"
             value=""
-            label={this.props.placeHolder}
+            label={placeHolder}
             type="text"
-            placeholder={this.props.placeHolder}
+            placeholder={placeHolder}
             help="Enter the name of the entity to be created"
             required
             validations="minLength:1"
@@ -79,3 +78,15 @@ export default class CreateDistrict extends Component {
     );
   }
 }
+
+CreateBoundary.propTypes = {
+  title: PropTypes.string,
+  isOpen: PropTypes.bool,
+  placeHolder: PropTypes.string,
+  parent: PropTypes.number,
+  parentNodeId: PropTypes.string,
+  onCloseModal: PropTypes.func,
+  save: PropTypes.func,
+};
+
+export { CreateBoundary };

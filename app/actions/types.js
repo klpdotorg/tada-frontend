@@ -83,3 +83,4 @@ export const SET_ASSESSMENT_ENTRY_QUESTIONS = 'set_assessment_entry_questions';
 export const SET_ASSESSMENT_ENTRY_ANSWERS = 'set_assessment_entry_answers';
 export const CHANGE_ASSESSMENT_ENTRY_ANSWERS = 'change_assessment_entry_answers';
 export const SET_EDIT_QUESTION_ID = 'set_edit_question_id';
+export const OPEN_CONFIRM_MODAL = 'open_confirm_modal';

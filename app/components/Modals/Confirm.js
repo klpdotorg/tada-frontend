@@ -1,40 +1,45 @@
-import React, { Component } from 'react';
-import Modal from './ModalTemplate';
-import { modalStyle as customStyles } from '../../styles.js';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-export default class Confirm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: '',
-    };
-    this.handleChange = this.handleChange.bind(this);
-  }
+import { Modal } from '../Modal';
 
-  handleChange(e) {
-    this.setState({
-      value: e.target.value,
-    });
-  }
+const ConfirmModal = (props) => {
+  const {
+    isOpen,
+    title,
+    description,
+    message,
+    onCloseModal,
+    onYes,
+    yesButtonTxt,
+    noButtonTxt,
+  } = props;
 
-  render() {
-    return (
-      <Modal
-        title="Delete?"
-        contentLabel="Confirm Delete Modal"
-        isOpen={this.props.isOpen}
-        onCloseModal={this.props.onCloseModal}
-        canSubmit
-        submitForm={() => {
-          this.props.onAgree(this.state.value);
-        }}
-        cancelBtnLabel="No"
-        submitBtnLabel="Yes"
-      >
-        <p className="text-warning">
-          Are you sure you want to delete: <b> {this.props.entity}</b>?
-        </p>
-      </Modal>
-    );
-  }
-}
+  return (
+    <Modal
+      title={title}
+      contentLabel={description}
+      isOpen={isOpen}
+      onCloseModal={onCloseModal}
+      canSubmit
+      submitForm={onYes}
+      cancelBtnLabel={noButtonTxt}
+      submitBtnLabel={yesButtonTxt}
+    >
+      <p className="text-warning">{message}</p>
+    </Modal>
+  );
+};
+
+ConfirmModal.propTypes = {
+  isOpen: PropTypes.bool,
+  title: PropTypes.string,
+  description: PropTypes.string,
+  message: PropTypes.any,
+  onCloseModal: PropTypes.func,
+  onYes: PropTypes.func,
+  yesButtonTxt: PropTypes.string,
+  noButtonTxt: PropTypes.string,
+};
+
+export { ConfirmModal };
