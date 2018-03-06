@@ -1,0 +1,23 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ubuntu/tada-frontend
+permissions:
+  - object: /home/ubuntu/tada-frontend
+    owner: ubuntu
+    group: www-data
+hooks:
+  ApplicationStop:
+    - location: scripts/application_stop.sh
+      timeout: 180
+  BeforeInstall:
+    - location: scripts/before_install.sh
+      timeout: 180
+  AfterInstall:
+    - location: scripts/after_install.sh
+      timeout: 180
+      runas: ubuntu
+  ApplicationStart:
+    - location: scripts/application_start.sh
+      timeout: 180
