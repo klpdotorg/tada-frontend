@@ -2,7 +2,11 @@ import { connect } from 'react-redux';
 import { get } from 'lodash';
 
 import { AssessmentRow } from '../../components/Assessments';
-import { openEditAssessmentModal } from '../../actions';
+import {
+  openEditAssessmentModal,
+  openDeactivateAssessmentModal,
+  deactivateAssessment,
+} from '../../actions';
 
 const mapStateToProps = (state, ownProps) => {
   const selectedProgramId = state.programs.selectedProgram;
@@ -12,6 +16,10 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const Assessment = connect(mapStateToProps, { openEditAssessmentModal })(AssessmentRow);
+const Assessment = connect(mapStateToProps, {
+  openEditAssessmentModal,
+  showDeactivateModal: openDeactivateAssessmentModal,
+  deactivateAssessment,
+})(AssessmentRow);
 
 export { Assessment };

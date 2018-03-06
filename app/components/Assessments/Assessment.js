@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 
+import { DeactivateEntity } from '../../containers/Modal';
 import { dateParser } from '../../utils';
 
 const AssessmentRow = (props) => {
@@ -33,15 +34,33 @@ const AssessmentRow = (props) => {
         >
           <i className="fa fa-question" />
         </Link>
+        <button
+          className="btn btn-primary padded-btn"
+          data-toggle="tooltip"
+          title="Edit Question"
+          onClick={() => {
+            props.showDeactivateModal(assessment.name, assessment.id);
+          }}
+        >
+          <span className="fa fa-ban" />
+        </button>
       </td>
+      <DeactivateEntity
+        uniqueId={assessment.id}
+        onYes={() => {
+          props.deactivateAssessment(assessment.id);
+        }}
+      />
     </tr>
   );
 };
 
 AssessmentRow.propTypes = {
   assessment: PropTypes.object,
-  openEditAssessmentModal: PropTypes.func,
   url: PropTypes.string,
+  openEditAssessmentModal: PropTypes.func,
+  showDeactivateModal: PropTypes.func,
+  deactivateAssessment: PropTypes.func,
 };
 
 export { AssessmentRow };

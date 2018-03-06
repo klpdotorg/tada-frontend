@@ -7,8 +7,9 @@ const mapStateToProps = (state) => {
   const {
     title,
     description,
+    uniqueId,
     message,
-    deactivateProgram,
+    deactivateEntity,
     yesButtonTxt,
     noButtonTxt,
   } = state.confirm;
@@ -16,15 +17,16 @@ const mapStateToProps = (state) => {
   return {
     title,
     description,
+    id: uniqueId,
     message,
-    isOpen: deactivateProgram,
+    isOpen: deactivateEntity,
     yesButtonTxt,
     noButtonTxt,
   };
 };
 
-const DeactivateProgram = connect(mapStateToProps, {
+const DeactivateEntity = connect(mapStateToProps, {
   onCloseModal: closeConfirmModal,
 })(ConfirmModal);
 
-export { DeactivateProgram };
+export { DeactivateEntity };

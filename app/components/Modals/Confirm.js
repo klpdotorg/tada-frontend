@@ -7,6 +7,8 @@ const ConfirmModal = (props) => {
   const {
     isOpen,
     title,
+    id,
+    uniqueId,
     description,
     message,
     onCloseModal,
@@ -14,12 +16,13 @@ const ConfirmModal = (props) => {
     yesButtonTxt,
     noButtonTxt,
   } = props;
+  const openModal = isOpen && id === uniqueId;
 
   return (
     <Modal
       title={title}
       contentLabel={description}
-      isOpen={isOpen}
+      isOpen={openModal}
       onCloseModal={onCloseModal}
       canSubmit
       submitForm={onYes}
@@ -34,6 +37,8 @@ const ConfirmModal = (props) => {
 ConfirmModal.propTypes = {
   isOpen: PropTypes.bool,
   title: PropTypes.string,
+  id: PropTypes.number,
+  uniqueId: PropTypes.number,
   description: PropTypes.string,
   message: PropTypes.any,
   onCloseModal: PropTypes.func,

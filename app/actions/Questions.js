@@ -1,5 +1,5 @@
 import { SERVER_API_BASE } from 'config';
-import { get, post, patch } from './requests';
+import { get, post, patch, put } from './requests';
 import {
   SET_QUESTION,
   SET_QUESTIONS,
@@ -125,7 +125,7 @@ export const saveQuestion = (data, programId, assessmentId, questionId) => {
 
     dispatch(showQuestionLoading());
     const editQuestionURL = `${SERVER_API_BASE}surveys/${programId}/questiongroup/${assessmentId}/questions/${questionId}/`;
-    patch(editQuestionURL, data).then((response) => {
+    put(editQuestionURL, data).then((response) => {
       dispatch({
         type: SET_QUESTION,
         value: { [response.id]: response },

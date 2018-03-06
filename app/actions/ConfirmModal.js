@@ -28,16 +28,32 @@ export const openDeleteBoundaryModal = (name) => {
   };
 };
 
-export const openDeactivateProgramModal = (name) => {
+export const openDeactivateProgramModal = (name, uniqueId) => {
   return {
     type: OPEN_CONFIRM_MODAL,
     value: {
-      deactivateProgram: true,
-      message: `Are you sure you want to delete this ${name}`,
+      deactivateEntity: true,
+      uniqueId,
+      message: `Are you sure you want to deactivate this ${name}`,
       title: 'Deactivate Program?',
       description: 'Deactivate Program?',
       yesButtonTxt: 'Yes',
       noButtonTxt: 'no',
+    },
+  };
+};
+
+export const openDeactivateAssessmentModal = (name, uniqueId) => {
+  return {
+    type: OPEN_CONFIRM_MODAL,
+    value: {
+      deactivateEntity: true,
+      uniqueId,
+      message: `Are you sure you want to deactivate this ${name}`,
+      title: 'Deactivate Assessment?',
+      description: 'Deactivate Assessment?',
+      yesButtonTxt: 'Yes',
+      noButtonTxt: 'No',
     },
   };
 };
