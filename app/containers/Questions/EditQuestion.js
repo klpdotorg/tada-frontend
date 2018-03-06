@@ -60,7 +60,6 @@ class EditQuestionForm extends Component {
 
   render() {
     const { isOpen, canSubmit, question } = this.props;
-    console.log(this.props.question, 'question...');
     const type = this.getQuestionTypeId(get(question, 'question_type', '')) || {};
 
     return (
@@ -136,6 +135,7 @@ EditQuestionForm.propTypes = {
   disableSubmitForm: PropTypes.func,
   onCloseModal: PropTypes.func,
   question: PropTypes.object,
+  questionId: PropTypes.number,
 };
 
 const mapStateToProps = (state, ownProps) => {
