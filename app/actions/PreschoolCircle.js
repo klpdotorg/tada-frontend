@@ -6,7 +6,7 @@ import { openEntity } from './index';
 import { getEntityDepth, getEntityType, getPath, convertEntitiesToObject } from '../utils';
 import { SET_BOUNDARIES, TOGGLE_MODAL } from './types';
 
-export const closeCreateCircleModal = () => {
+export const toggleCreateCircleModal = () => {
   return {
     type: TOGGLE_MODAL,
     modal: 'createCircle',
@@ -30,7 +30,7 @@ export const saveNewCircle = (name, projectId) => {
         type: SET_BOUNDARIES,
         boundaryDetails: entities,
       });
-      dispatch(closeCreateCircleModal());
+      dispatch(toggleCreateCircleModal());
 
       const type = getEntityType(response);
       const depth = getEntityDepth(response);

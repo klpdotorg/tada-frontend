@@ -2,7 +2,6 @@ import {
   ENABLE_SUBMIT_FORM,
   DISABLE_SUBMIT_FORM,
   SHOW_CONFIRM_MODAL,
-  CLOSE_CONFIRM_MODAL,
   SHOW_BOUNDARY_LOADING,
   CLOSE_BOUNDARY_LOADING,
   SHOW_INSTITUTION_LOADING_IN_MA,
@@ -35,12 +34,6 @@ export const boundaryClicked = (bound) => {
 export const showConfirmModal = () => {
   return {
     type: SHOW_CONFIRM_MODAL,
-  };
-};
-
-export const closeConfirmModal = () => {
-  return {
-    type: CLOSE_CONFIRM_MODAL,
   };
 };
 

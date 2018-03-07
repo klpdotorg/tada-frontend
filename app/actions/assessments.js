@@ -10,6 +10,7 @@ import {
   SET_ASSESSMENT,
   SET_EDIT_ASSESSMENT_ID,
 } from './types';
+import { closeConfirmModal } from './index';
 
 export const showAssessmentLoading = () => {
   return {
@@ -104,6 +105,23 @@ export const saveAssessment = (options) => {
         modal: 'editAssessment',
       });
       dispatch(closeAssessmentLoading());
+    });
+  };
+};
+
+export const deactivateAssessment = (id) => {
+  return (dispatch, getState) => {
+    dispatch(showAssessmentLoading());
+    dispatch(closeConfirmModal());
+
+    const state = getState();
+    const { selectedProgram } = state.programs;
+    const url = `${serverApiBase}surveys/${selectedProgram}/questiongroup/${id}/`;
+
+    patch(url, {
+      status: 'IA',
+    }).then(() => {
+      dispatch(getAssessments(selectedProgram));
     });
   };
 };

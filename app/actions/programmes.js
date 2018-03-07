@@ -9,6 +9,7 @@ import {
   SHOW_PROGRAMS_LOADING,
   CLOSE_PROGRAMS_LOADING,
 } from './types';
+import { closeConfirmModal } from './index';
 
 export const showProgramLoading = () => {
   return {
@@ -111,5 +112,28 @@ export const saveProgram = (options) => {
       });
       dispatch(closeProgramLoading());
     });
+  };
+};
+
+export const deactivateProgram = (Id) => {
+  return (dispatch, getState) => {
+    dispatch(showProgramLoading());
+    dispatch(closeConfirmModal());
+
+    const state = getState();
+    const program = state.programs.programs[Id];
+    const newProgram = {
+      name: program.name,
+      status: 'IA',
+    };
+
+    const programURL = `${serverApiBase}surveys/${Id}/`;
+    patch(programURL, newProgram)
+      .then(() => {
+        dispatch(fetchAllPrograms());
+      })
+      .catch(() => {
+        dispatch(closeProgramLoading());
+      });
   };
 };

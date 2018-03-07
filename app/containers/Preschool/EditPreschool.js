@@ -9,10 +9,9 @@ import {
   modifyInstitution,
   enableSubmitForm,
   disableSubmitForm,
-  showConfirmModal,
-  closeConfirmModal,
+  openDeleteBoundaryModal,
 } from '../../actions';
-import ConfirmModal from '../../components/Modals/Confirm';
+import { Confirm } from '../Modal';
 
 const { Input, Textarea, Select } = FRC;
 
@@ -62,7 +61,6 @@ class EditPreschoolForm extends Component {
       languages,
       institutionCategories,
       managements,
-      openConfirmModal,
     } = this.props;
 
     return (
@@ -201,16 +199,13 @@ class EditPreschoolForm extends Component {
             type="button"
             className="btn btn-primary padded-btn"
             disabled={hasClasses}
-            onClick={this.props.showConfirmModal}
+            onClick={() => {
+              this.props.showConfirmModal(institution.name);
+            }}
           >
             Delete
           </button>
-          <ConfirmModal
-            isOpen={openConfirmModal}
-            onAgree={this.deleteInstitution}
-            onCloseModal={this.props.closeConfirmModal}
-            entity={institution.name}
-          />
+          <Confirm onYes={this.deleteInstitution} />
         </div>
       </Formsy.Form>
     );
@@ -219,7 +214,6 @@ class EditPreschoolForm extends Component {
 
 EditPreschoolForm.propTypes = {
   canSubmit: PropTypes.bool,
-  openConfirmModal: PropTypes.bool,
   clusterId: PropTypes.number,
   institution: PropTypes.object,
   hasClasses: PropTypes.bool,
@@ -229,7 +223,6 @@ EditPreschoolForm.propTypes = {
   save: PropTypes.func,
   deleteInstitution: PropTypes.func,
   showConfirmModal: PropTypes.func,
-  closeConfirmModal: PropTypes.func,
   enableSubmitForm: PropTypes.func,
   disableSubmitForm: PropTypes.func,
 };
@@ -255,8 +248,7 @@ const EditPreschool = connect(mapStateToProps, {
   deleteInstitution,
   enableSubmitForm,
   disableSubmitForm,
-  showConfirmModal,
-  closeConfirmModal,
+  showConfirmModal: openDeleteBoundaryModal,
 })(EditPreschoolForm);
 
 export { EditPreschool };

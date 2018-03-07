@@ -33,6 +33,12 @@ class EditQuestionForm extends Component {
     });
   }
 
+  getQuestionTypeId(typeText) {
+    return QuestionTypes.find((type) => {
+      return type.display === typeText;
+    });
+  }
+
   getValue(field) {
     return get(this.props.question, field, '');
   }
@@ -41,21 +47,20 @@ class EditQuestionForm extends Component {
     const { programId, assessmentId, questionId } = this.props;
     const myform = this.myform.getModel();
     const question = {
-      question_details: {
-        question_text: myform.qnText,
-        display_text: myform.displayText,
-        key: myform.key,
-        question_type_id: myform.type,
-        is_featured: true,
-        status: 'AC',
-      },
+      question_text: myform.qnText,
+      display_text: myform.displayText,
+      key: myform.key,
+      question_type_id: myform.type,
+      is_featured: true,
+      status: 'AC',
     };
 
     this.props.save(question, programId, assessmentId, questionId);
   }
 
   render() {
-    const { isOpen, canSubmit } = this.props;
+    const { isOpen, canSubmit, question } = this.props;
+    const type = this.getQuestionTypeId(get(question, 'question_type', '')) || {};
 
     return (
       <Modal
@@ -66,7 +71,7 @@ class EditQuestionForm extends Component {
         canSubmit={canSubmit}
         submitForm={this.submitForm}
         cancelBtnLabel="Cancel"
-        submitBtnLabel="Create"
+        submitBtnLabel="Edit"
       >
         <Formsy.Form
           id="createQuestion"
@@ -101,7 +106,7 @@ class EditQuestionForm extends Component {
           />
           <Select
             name="type"
-            value={this.getValue('question_type')}
+            value={type.id}
             label="Type"
             options={this.getQuestionTypes()}
             required
@@ -130,6 +135,7 @@ EditQuestionForm.propTypes = {
   disableSubmitForm: PropTypes.func,
   onCloseModal: PropTypes.func,
   question: PropTypes.object,
+  questionId: PropTypes.number,
 };
 
 const mapStateToProps = (state, ownProps) => {

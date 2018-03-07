@@ -1,11 +1,18 @@
 import { push } from 'react-router-redux';
 
 import { post } from './requests';
-import { toggleModal, openEntity } from './index';
+import { openEntity } from './index';
 import { convertEntitiesToObject, getEntityType, getEntityDepth, getPath } from '../utils';
-import { SET_BOUNDARIES } from './types';
+import { SET_BOUNDARIES, TOGGLE_MODAL } from './types';
 
 import { SERVER_API_BASE as serverApiBase } from 'config';
+
+export const toggleCreateClusterModal = () => {
+  return {
+    type: TOGGLE_MODAL,
+    modal: 'createCluster',
+  };
+};
 
 export const saveNewCluster = (name, blockId) => {
   return (dispatch, getState) => {
@@ -25,7 +32,7 @@ export const saveNewCluster = (name, blockId) => {
         type: SET_BOUNDARIES,
         boundaryDetails: entities,
       });
-      dispatch(toggleModal('createBlock'));
+      dispatch(toggleCreateClusterModal());
 
       const type = getEntityType(response);
       const depth = getEntityDepth(response);

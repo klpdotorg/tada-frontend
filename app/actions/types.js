@@ -89,3 +89,4 @@ export const LOGIN_SUCCESS = 'login_success';
 export const USER_DATA_FETCHED = 'user_data_fetched';
 export const SELF_MODIFIED = 'self_modified';
 export const USER_LOGOUT = 'user_logout';
+export const OPEN_CONFIRM_MODAL = 'open_confirm_modal';

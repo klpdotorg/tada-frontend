@@ -95,3 +95,21 @@ export const patch = (url, body) => {
       throw e;
     });
 };
+
+export const put = (url, body) => {
+  const user = JSON.parse(sessionStorage.getItem('user'));
+
+  return fetch(url, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Token ${user.token}`,
+    },
+    body: JSON.stringify(body),
+  })
+    .then(checkStatus)
+    .catch((e) => {
+      store.dispatch(Notifications.error(syncError(e)));
+      throw e;
+    });
+};
