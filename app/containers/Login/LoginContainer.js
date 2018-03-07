@@ -17,15 +17,17 @@ class Login extends Component {
   handleSubmit(event) {
     event.preventDefault();
 
-    const email = this.refs.email.value;
-    const pass = this.refs.pass.value;
+    const email = this.email.value;
+    const pass = this.pass.value;
 
     this.props.sendLoginToServer(email, pass);
   }
 
   render() {
+    const { loginIn, error } = this.props;
+
     return (
-      <LoginPageWrapper error={this.props.error}>
+      <LoginPageWrapper error={error}>
         <div className="row">
           <div className="col-sm-12 col-md-10 col-md-offset-1">
             <form id="loginForm">
@@ -34,8 +36,9 @@ class Login extends Component {
                   <i className="glyphicon glyphicon-user" />
                 </span>
                 <input
-                  autoFocus
-                  ref="email"
+                  ref={(input) => {
+                    this.email = input;
+                  }}
                   className="form-control"
                   type="text"
                   name="email"
@@ -48,13 +51,23 @@ class Login extends Component {
                   <i className="glyphicon glyphicon-lock" />
                 </span>
                 <input
-                  ref="pass"
+                  ref={(input) => {
+                    this.pass = input;
+                  }}
                   className="form-control"
                   type="password"
                   name="password"
                   placeholder="(HINT: tada)"
                 />
               </div>
+              {loginIn ? (
+                <div className="text-center">
+                  <i className="fa fa-cog fa-spin fa-lg fa-fw" />
+                  <span>Logging...</span>
+                </div>
+              ) : (
+                <div />
+              )}
               <div className="form-group text-center">
                 <button type="submit" className="btn btn-primary" onClick={this.handleSubmit}>
                   Submit
@@ -71,12 +84,16 @@ class Login extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  error: state.login.error,
-});
+const mapStateToProps = (state) => {
+  return {
+    error: state.login.error,
+    loginIn: state.login.isLoggingIn,
+  };
+};
 
 Login.propTypes = {
   error: PropTypes.bool.isRequired,
+  loginIn: PropTypes.bool,
   sendLoginToServer: PropTypes.func,
 };
 

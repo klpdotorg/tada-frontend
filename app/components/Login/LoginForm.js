@@ -10,7 +10,7 @@ const LoginPageWrapper = ({ error, children }) => {
         <div id="header" className="container-fluid">
           <div className="navbar-header">
             <a className="navbar-brand" href="/">
-              <img role="presentation" src={klplogo} />
+              <img alt="presentation" src={klplogo} />
             </a>
           </div>
           <div id="navbar" className="navbar-collapse collapse">
@@ -23,10 +23,10 @@ const LoginPageWrapper = ({ error, children }) => {
       </nav>
       <div className="container-fluid absolute-center is-responsive">
         {error && (
-        <p className="bg-danger text-danger">
-          Bad login information. Recheck the username and/or password.
-        </p>
-      )}
+          <div className="alert alert-warning">
+            <strong>Warning!</strong> Bad login information. Recheck the username and/or password.
+          </div>
+        )}
         {children}
       </div>
     </div>

@@ -1,3 +1,12 @@
+import {
+  REQUEST_LOGIN,
+  LOGIN_FAILED,
+  USER_LOGOUT,
+  LOGIN_SUCCESS,
+  SELF_MODIFIED,
+  USER_DATA_FETCHED,
+} from '../actions/types';
+
 const INITIAL_STATE = {
   authenticated: false,
   isLoggingIn: false,
@@ -12,20 +21,20 @@ const INITIAL_STATE = {
 
 const Login = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case 'REQUEST_LOGIN':
+    case REQUEST_LOGIN:
       return {
         ...state,
         authenticated: false,
         isLoggingIn: true,
       };
-    case 'LOGIN_FAILED':
+    case LOGIN_FAILED:
       return {
         ...state,
         authenticated: action.authenticated,
         isLoggingIn: false,
         error: true,
       };
-    case 'LOGIN_SUCCESS':
+    case LOGIN_SUCCESS:
       return {
         ...state,
         authenticated: action.authenticated,
@@ -34,7 +43,7 @@ const Login = (state = INITIAL_STATE, action) => {
         error: false,
         id: action.id,
       };
-    case 'USER_DATA_FETCHED':
+    case USER_DATA_FETCHED:
       return {
         ...state,
         username: action.username,
@@ -46,14 +55,14 @@ const Login = (state = INITIAL_STATE, action) => {
         permissions: action.permissions,
       };
 
-    case 'SELF_MODIFIED':
+    case SELF_MODIFIED:
       return {
         ...state,
         email: action.email,
         first_name: action.first_name,
         last_name: action.last_name,
       };
-    case 'LOGOUT':
+    case USER_LOGOUT:
       return {
         authenticated: false,
         isLoggingIn: false,
