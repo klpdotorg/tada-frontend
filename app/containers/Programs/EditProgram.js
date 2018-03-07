@@ -8,6 +8,7 @@ import FRC from 'formsy-react-components';
 import { Loading } from '../../components/common';
 import { Modal } from '../../components/Modal';
 import { saveProgram, enableSubmitForm, disableSubmitForm } from '../../actions';
+import { SurveyOns } from '../../Data';
 
 const { Input } = FRC;
 
@@ -20,6 +21,15 @@ class EditProgramForm extends Component {
 
   getValue(value) {
     return value || '';
+  }
+
+  getSurveyOns() {
+    return SurveyOns.map((survey) => {
+      return {
+        value: survey.id,
+        label: survey.label,
+      };
+    });
   }
 
   submitForm() {
@@ -59,7 +69,9 @@ class EditProgramForm extends Component {
           onValidSubmit={this.submitForm}
           onValid={this.props.enableSubmitForm}
           onInvalid={this.props.disableSubmitForm}
-          ref={(ref) => { return (this.myform = ref); }}
+          ref={(ref) => {
+            this.myform = ref;
+          }}
         >
           <Input
             name="programName"
@@ -80,33 +92,6 @@ class EditProgramForm extends Component {
             type="text"
             placeholder="Please enter the program description (Optional)"
           />
-          {/* <Input
-                      name="startDate"
-                      id="startDate"
-                      type="date"
-                      label="Start Date"
-                      value={this.getValue(program.start_date)}
-                      placeholder="Please select the start date of the program"
-                      required
-                    />
-                    <Input
-                      name="endDate"
-                      id="endDate"
-                      type="date"
-                      label="End Date"
-                      value={this.getValue(program.end_date)}
-                      placeholder="Please select the end date of the program"
-                      required
-                    />
-                    <RadioGroup
-                      name="programmeInstCat"
-                      type="inline"
-                      label="Institution Type"
-                      value={this.getValue(program.inst_type)}
-                      help="Select institution type"
-                      options={instType}
-                      required
-                    /> */}
         </Formsy.Form>
       </Modal>
     );

@@ -60,7 +60,7 @@ class CreateProgramForm extends Component {
           onValid={this.props.enableSubmitForm}
           onInvalid={this.props.disableSubmitForm}
           ref={(ref) => {
-            return (this.myform = ref);
+            this.myform = ref;
           }}
         >
           <Input
@@ -86,7 +86,7 @@ class CreateProgramForm extends Component {
             name="survey_on"
             label="Survey On"
             options={this.getSurveyOns()}
-            value="1"
+            value="institution"
             required
           />
         </Formsy.Form>
