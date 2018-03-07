@@ -322,34 +322,34 @@ export const toggleModal = (modalType) => {
   };
 };
 
-export function deleteBoundary(boundaryid, parentId) {
-  return function (dispatch, getState) {
-    return fetch(`${serverApiBase}boundaries/${boundaryid}/`, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Token ${sessionStorage.token}`,
-      },
-    })
-      .then((response) => {
-        if (response.status >= 200 && response.status < 300) {
-          if (parentId == 1) {
-            dispatch(push('/'));
-          } else {
-            let parent = getState().boundaries.boundaryDetails[parentId];
-            dispatch(push(parent.path));
-          }
-          dispatch(removeBoundary(boundaryid, parentId));
-        } else {
-          const error = new Error(response.statusText);
-          error.response = response;
-          throw error;
-        }
-      })
-      .catch((error) => {
-        console.log('request failed', error);
-      });
-  };
-}
+// export function deleteBoundary(boundaryid, parentId) {
+//   return function (dispatch, getState) {
+//     return fetch(`${serverApiBase}boundaries/${boundaryid}/`, {
+//       method: 'DELETE',
+//       headers: {
+//         Authorization: `Token ${sessionStorage.token}`,
+//       },
+//     })
+//       .then((response) => {
+//         if (response.status >= 200 && response.status < 300) {
+//           if (parentId == 1) {
+//             dispatch(push('/'));
+//           } else {
+//             let parent = getState().boundaries.boundaryDetails[parentId];
+//             dispatch(push(parent.path));
+//           }
+//           dispatch(removeBoundary(boundaryid, parentId));
+//         } else {
+//           const error = new Error(response.statusText);
+//           error.response = response;
+//           throw error;
+//         }
+//       })
+//       .catch((error) => {
+//         console.log('request failed', error);
+//       });
+//   };
+// }
 
 export const newBoundaryFetch = (options) => {
   return fetch(`${serverApiBase}boundaries/`, {

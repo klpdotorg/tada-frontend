@@ -2,7 +2,7 @@ import { SERVER_API_BASE, STATE_CODE, PER_PAGE } from 'config';
 import { push } from 'react-router-redux';
 import _ from 'lodash';
 
-import { get, patch } from './requests';
+import { get, patch, deleteRequest } from './requests';
 import { convertEntitiesToObject, getPath } from '../utils';
 import { SET_BOUNDARIES, REMOVE_EXISTING_BOUNDARIES_NODE, UNCOLLAPSED_BOUNDARIES } from './types';
 import { showBoundaryLoading, closeBoundaryLoading } from './index';
@@ -153,6 +153,8 @@ export const getBoundariesEntities = (Ids) => {
 
 export const modifyBoundary = (boundaryId, name) => {
   return (dispatch) => {
+    dispatch(showBoundaryLoading());
+
     patch(`${SERVER_API_BASE}boundaries/${boundaryId}/`, { name })
       .then((response) => {
         const entities = convertEntitiesToObject([response]);
@@ -161,9 +163,20 @@ export const modifyBoundary = (boundaryId, name) => {
           type: SET_BOUNDARIES,
           boundaryDetails: entities,
         });
+        dispatch(closeBoundaryLoading());
       })
-      .catch((error) => {
-        console.log('request failed', error);
-      });
+      .catch((error) => {});
+  };
+};
+
+export const deleteBoundary = (boundaryId, parentId) => {
+  return (dispatch) => {
+    dispatch(showBoundaryLoading());
+
+    const url = `${SERVER_API_BASE}boundaries/${boundaryId}/`;
+
+    deleteRequest(url).then((response) => {
+      console.log(response, 'printing server response');
+    });
   };
 };

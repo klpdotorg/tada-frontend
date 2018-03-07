@@ -38,6 +38,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     district: state.boundaries.boundaryDetails[districtNodeId],
     districtNodeId,
+    isLoading: state.appstate.loadingBoundary,
   };
 };
 

@@ -27,7 +27,7 @@ class EditClusterView extends Component {
 
   saveCluster() {
     const myform = this.myform.getModel();
-    this.props.saveCluster(this.props.blockNodeId, this.props.cluster.id, myform.ClusterName);
+    this.props.saveCluster(this.props.cluster.id, myform.ClusterName);
   }
 
   deleteCluster() {
@@ -63,7 +63,7 @@ class EditClusterView extends Component {
           onValid={this.props.enableSubmitForm}
           onInvalid={this.props.disableSubmitForm}
           ref={(ref) => {
-            return (this.myform = ref);
+            this.myform = ref;
           }}
         >
           <Input

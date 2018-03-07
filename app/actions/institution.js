@@ -17,6 +17,7 @@ import {
   closeBoundaryLoading,
   removeBoundary,
   openEntity,
+  showBoundaryLoading,
 } from './index';
 
 export const toggleCreateInstitutionModal = () => {
@@ -114,18 +115,20 @@ export const getInstitutionCategories = () => {
   };
 };
 
-export const modifyInstitution = (options, Id) => {
+export const modifyInstitution = (id, options) => {
   return (dispatch, getState) => {
+    dispatch(showBoundaryLoading());
     const boundaryType = getState().schoolSelection.primarySchool ? 'primary' : 'pre';
     const newOptions = { ...options, institution_type: boundaryType };
 
-    patch(`${serverApiBase}institutions/${Id}/`, newOptions).then((response) => {
+    patch(`${serverApiBase}institutions/${id}/`, newOptions).then((response) => {
       const entities = convertEntitiesToObject([response]);
 
       dispatch({
         type: SET_BOUNDARIES,
         boundaryDetails: entities,
       });
+      dispatch(closeBoundaryLoading());
     });
   };
 };

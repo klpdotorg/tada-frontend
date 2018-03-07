@@ -27,7 +27,7 @@ class EditBlockForm extends Component {
 
   onClickSaveBlock() {
     const myform = this.myform.getModel();
-    this.props.saveBlock(this.props.districtNodeId, this.props.block.id, myform.BlockName);
+    this.props.saveBlock(this.props.block.id, myform.BlockName);
   }
 
   onClickDeleteBlock() {
@@ -61,7 +61,7 @@ class EditBlockForm extends Component {
           onValid={this.props.enableSubmitForm}
           onInvalid={this.props.disableSubmitForm}
           ref={(ref) => {
-            return (this.myform = ref);
+            this.myform = ref;
           }}
         >
           <Input
@@ -105,7 +105,6 @@ class EditBlockForm extends Component {
 EditBlockForm.propTypes = {
   block: PropTypes.object,
   districtId: PropTypes.number,
-  districtNodeId: PropTypes.string,
   hasClusters: PropTypes.bool,
   canSubmit: PropTypes.bool,
   saveBlock: PropTypes.func,

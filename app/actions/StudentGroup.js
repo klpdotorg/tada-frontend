@@ -6,6 +6,7 @@ import {
   setBoundaries,
   getEntities,
   closeBoundaryLoading,
+  showBoundaryLoading,
   requestFailed,
   toggleModal,
   openEntity,
@@ -51,8 +52,16 @@ export const fetchStudentGroup = (parentBoundaryId, moreIds) => {
 
 export const modifyStudentGroup = (studentGroup, studentGroupId) => {
   return (dispatch) => {
+    dispatch(showBoundaryLoading());
+
     patch(`${SERVER_API_BASE}studentgroups/${studentGroupId}/`, studentGroup).then((response) => {
-      dispatch(setBoundaries({ results: [response] }));
+      const entities = convertEntitiesToObject([response]);
+
+      dispatch({
+        type: SET_BOUNDARIES,
+        boundaryDetails: entities,
+      });
+      dispatch(closeBoundaryLoading());
     });
   };
 };

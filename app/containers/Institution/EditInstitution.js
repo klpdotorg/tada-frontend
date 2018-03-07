@@ -43,7 +43,7 @@ class EditInstitutionForm extends Component {
       landmark: myform.institutionLandmark,
       pincode: myform.institutionPincode,
       category: myform.institutionCat,
-      languages: myform.institutionLang,
+      institution_languages: myform.institutionLang,
       management: myform.institutionMgmt,
       last_verified_year: myform.lastVerifiedYear,
     };
@@ -61,22 +61,21 @@ class EditInstitutionForm extends Component {
     const singleSelectOptions = [{ value: '', label: 'Please select…' }, ...selectOptions];
     const {
       institution,
-      canSubmit,
       hasClasses,
       languages,
       institutionCategories,
       managements,
       lastVerifiedYears,
     } = this.props;
+
     return (
       <Formsy.Form
         onValidSubmit={this.saveInsti}
         onValid={this.props.enableSubmitForm}
         onInvalid={this.props.disableSubmitForm}
         ref={(ref) => {
-          return (this.myform = ref);
+          this.myform = ref;
         }}
-        canSubmit={canSubmit}
       >
         <div className="form-group">
           <div className="col-sm-12">
@@ -157,7 +156,7 @@ class EditInstitutionForm extends Component {
               multiple
               name="institutionLang"
               label="Medium:"
-              value={this.getValue(institution.languages)}
+              value={this.getValue(institution.institution_languages)}
               options={languages}
               required
             />
@@ -190,7 +189,7 @@ class EditInstitutionForm extends Component {
             <Input
               name="institutionDise_code"
               id="institutionDise_code"
-              value={this.getValue(institution.dise_code)}
+              value={this.getValue(institution.dise)}
               label="DISE Code:"
               type="text"
               className="form-control"
