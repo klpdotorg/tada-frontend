@@ -8,7 +8,7 @@ import { changeArrayToObject } from './utils';
 
 const INITIAL_STATE = {
   selectedStudents: [],
-  students: {},
+  students: [],
   editStudentId: null,
 };
 

@@ -6,8 +6,10 @@ import {
   SET_EDIT_STUDENT_ID,
   SET_STUDENTS,
   SET_STUDENT,
+  SET_BOUNDARIES,
 } from './types';
 import { getEntities, closeBoundaryLoading, requestFailed } from './index';
+import { convertEntitiesToObject } from '../utils';
 
 export const selectStudent = (value) => {
   return {
@@ -35,7 +37,14 @@ export const fetchStudents = (parentBoundaryId, moreIds) => {
     const getStudentURL = `${SERVER_API_BASE}studentgroups/${parentBoundaryId}/students/`;
     get(getStudentURL)
       .then((data) => {
-        dispatch(setStudents(data.results));
+        const entities = convertEntitiesToObject([data.results]);
+        dispatch({
+          type: SET_BOUNDARIES,
+          boundaryDetails: entities,
+        });
+
+        dispatch(setStudents(Object.keys(entities)));
+
         if (moreIds && moreIds.length) {
           dispatch(getEntities(moreIds));
         } else {
@@ -43,7 +52,6 @@ export const fetchStudents = (parentBoundaryId, moreIds) => {
         }
       })
       .catch((error) => {
-        console.log(error);
         dispatch(requestFailed(error));
       });
   };

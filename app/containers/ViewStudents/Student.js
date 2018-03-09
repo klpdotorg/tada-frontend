@@ -6,7 +6,7 @@ import { selectStudent, openEditStudentModal } from '../../actions';
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    student: get(state.students.students, ownProps.id, {}),
+    student: get(state.boundaries.boundaryDetails, ownProps.id, {}),
     selectedStudents: state.students.selectedStudents,
   };
 };

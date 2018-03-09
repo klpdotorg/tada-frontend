@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { get, keys } from 'lodash';
+import { get } from 'lodash';
 import { connect } from 'react-redux';
 import { DEFAULT_PARENT_NODE_ID } from 'config';
 
@@ -18,6 +18,7 @@ class FetchStudents extends Component {
       institutionNodeId,
       studentGroupNodeId,
     } = params;
+
     if (!studentIds.length) {
       const entities = [
         DEFAULT_PARENT_NODE_ID,
@@ -33,7 +34,7 @@ class FetchStudents extends Component {
       this.props.getBoundariesEntities(entities);
     }
 
-    const studentGroupId = get(this.props.studentGroup, 'id');
+    const studentGroupId = get(studentGroup, 'id');
 
     if (studentGroupId) {
       this.props.fetchStudents(studentGroupId);
@@ -49,6 +50,8 @@ FetchStudents.propTypes = {
   getBoundariesEntities: PropTypes.func,
   params: PropTypes.object,
   studentIds: PropTypes.array,
+  studentGroup: PropTypes.object,
+  fetchStudents: PropTypes.func,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -60,19 +63,20 @@ const mapStateToProps = (state, ownProps) => {
     studentGroupNodeId,
   } = ownProps.params;
 
-  const studentIds = keys(state.students.students);
-
   return {
     district: get(state.boundaries.boundaryDetails, districtNodeId, {}),
     block: get(state.boundaries.boundaryDetails, blockNodeId, {}),
     cluster: get(state.boundaries.boundaryDetails, clusterNodeId, {}),
     institution: get(state.boundaries.boundaryDetails, institutionNodeId, {}),
     studentGroup: get(state.boundaries.boundaryDetails, studentGroupNodeId, {}),
-    studentIds,
+    studentIds: get(state.boundaries.boundariesByParentId, 5, []),
     isLoading: state.appstate.loadingBoundary,
   };
 };
 
-const ViewStudents = connect(mapStateToProps, { getBoundariesEntities, fetchStudents })(FetchStudents);
+const ViewStudents = connect(mapStateToProps, {
+  getBoundariesEntities,
+  fetchStudents,
+})(FetchStudents);
 
 export { ViewStudents };
