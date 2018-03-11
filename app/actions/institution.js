@@ -15,9 +15,10 @@ import {
   toggleModal,
   getEntities,
   closeBoundaryLoading,
-  removeBoundary,
+  removeEntity,
   openEntity,
   showBoundaryLoading,
+  closeConfirmModal,
 } from './index';
 
 export const toggleCreateInstitutionModal = () => {
@@ -157,22 +158,27 @@ export const saveNewInstitution = (options) => {
   };
 };
 
-export const deleteInstitution = (parentId, instiId) => {
+export const deleteInstitution = (params) => {
   return (dispatch) => {
-    return deleteRequest(`${serverApiBase}institutions/${instiId}`)
-      .then((response) => {
-        if (response.status >= 200 && response.status < 300) {
-          dispatch(removeBoundary(instiId, parentId));
-          // Route the user to the home dashboard page since the page they were on will be deleted
-          dispatch(push('/'));
-        } else {
-          const error = new Error(response.statusText);
-          error.response = response;
-          throw error;
-        }
-      })
-      .catch((error) => {
-        console.log('request failed', error);
-      });
+    dispatch(showBoundaryLoading());
+    dispatch(closeConfirmModal());
+
+    dispatch(removeEntity(params));
+
+    // return deleteRequest(`${serverApiBase}institutions/${instiId}`)
+    //   .then((response) => {
+    //     if (response.status >= 200 && response.status < 300) {
+    //       dispatch(removeBoundary(instiId, parentId));
+    //       // Route the user to the home dashboard page since the page they were on will be deleted
+    //       dispatch(push('/'));
+    //     } else {
+    //       const error = new Error(response.statusText);
+    //       error.response = response;
+    //       throw error;
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.log('request failed', error);
+    //   });
   };
 };

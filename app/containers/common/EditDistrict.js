@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import FRC from 'formsy-react-components';
 import Formsy from 'formsy-react';
 import PropTypes from 'prop-types';
-import { DEFAULT_PARENT_ID } from 'config';
+import { DEFAULT_PARENT_NODE_ID } from 'config';
 
 import { Confirm } from '../Modal';
 
@@ -22,7 +22,14 @@ class EditDistrictForm extends Component {
   }
 
   deleteDistrict() {
-    this.props.deleteDistrict(this.props.boundary.id, DEFAULT_PARENT_ID);
+    const { districtNodeId, boundary } = this.props;
+
+    const params = {
+      boundaryNodeId: districtNodeId,
+      boundaryId: boundary.id,
+      parentId: DEFAULT_PARENT_NODE_ID,
+    };
+    this.props.deleteDistrict(params);
   }
 
   render() {
@@ -114,6 +121,7 @@ EditDistrictForm.propTypes = {
   hasBlocks: PropTypes.bool,
   toggleBlockModal: PropTypes.func,
   toggleProjectModal: PropTypes.func,
+  districtNodeId: PropTypes.string,
   showConfirmModal: PropTypes.func,
   enableSubmitForm: PropTypes.func,
   disableSubmitForm: PropTypes.func,

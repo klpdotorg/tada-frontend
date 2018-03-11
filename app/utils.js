@@ -6,6 +6,8 @@ import { getBoundaryType } from './reducers/utils';
 export const getEntityDepth = (boundary) => {
   const boundaryType = getBoundaryType(boundary);
   switch (boundaryType) {
+    case 'ST':
+      return 0;
     case 'PD':
       return 1;
     case 'SD':
@@ -34,6 +36,8 @@ export const getEntityDepth = (boundary) => {
 export const getEntityType = (boundary) => {
   const boundaryType = getBoundaryType(boundary);
   switch (boundaryType) {
+    case 'ST':
+      return 'state';
     case 'PD':
       return 'district';
     case 'SD':
@@ -108,6 +112,10 @@ export const convertEntitiesToObject = (entities) => {
 export const getPath = (state, uniqueId, depth) => {
   let path = '';
   const { uncollapsedEntities, boundaryDetails } = state.boundaries;
+
+  if (_.includes(uniqueId, 'state')) {
+    return '/';
+  }
 
   _.forEach(uncollapsedEntities, (id, entityDepth) => {
     if (Number(entityDepth) < depth) {

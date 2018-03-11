@@ -29,7 +29,15 @@ class EditInstitutionForm extends Component {
   }
 
   deleteInstitution() {
-    this.props.deleteInstitution(Number(this.props.clusterId), Number(this.props.institution.id));
+    const { institution, clusterNodeId, institutionNodeId } = this.props;
+
+    const params = {
+      boundaryNodeId: institutionNodeId,
+      boundaryId: institution.id,
+      parentId: clusterNodeId,
+    };
+
+    this.props.deleteInstitution(params);
   }
 
   saveInsti() {
@@ -229,7 +237,8 @@ class EditInstitutionForm extends Component {
 }
 
 EditInstitutionForm.propTypes = {
-  canSubmit: PropTypes.bool,
+  institutionNodeId: PropTypes.string,
+  clusterNodeId: PropTypes.string,
   clusterId: PropTypes.number,
   institution: PropTypes.object,
   hasClasses: PropTypes.bool,

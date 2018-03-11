@@ -43,7 +43,15 @@ class EditPreschoolForm extends Component {
   }
 
   deleteInstitution() {
-    this.props.deleteInstitution(Number(this.props.clusterId), Number(this.props.institution.id));
+    const { institution, circleNodeId, institutionNodeId } = this.props;
+
+    const params = {
+      boundaryNodeId: institutionNodeId,
+      boundaryId: institution.id,
+      parentId: circleNodeId,
+    };
+
+    this.props.deleteInstitution(params);
   }
 
   render() {
@@ -69,7 +77,7 @@ class EditPreschoolForm extends Component {
         onValid={this.props.enableSubmitForm}
         onInvalid={this.props.disableSubmitForm}
         ref={(ref) => {
-          return (this.myform = ref);
+          this.myform = ref;
         }}
       >
         <div className="form-group">
@@ -214,7 +222,8 @@ class EditPreschoolForm extends Component {
 
 EditPreschoolForm.propTypes = {
   canSubmit: PropTypes.bool,
-  clusterId: PropTypes.number,
+  circleNodeId: PropTypes.string,
+  institutionNodeId: PropTypes.string,
   institution: PropTypes.object,
   hasClasses: PropTypes.bool,
   languages: PropTypes.array,

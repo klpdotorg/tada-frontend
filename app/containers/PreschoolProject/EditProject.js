@@ -30,7 +30,15 @@ class EditProjectForm extends Component {
   }
 
   deleteProject() {
-    this.props.deleteProject(this.props.project.id, this.props.districtId);
+    const { projectNodeId, project, districtNodeId } = this.props;
+
+    const params = {
+      boundaryNodeId: projectNodeId,
+      boundaryId: project.id,
+      parentId: districtNodeId,
+    };
+
+    this.props.deleteProject(params);
   }
 
   render() {
@@ -61,7 +69,7 @@ class EditProjectForm extends Component {
           onValid={this.props.enableSubmitForm}
           onInvalid={this.props.disableSubmitForm}
           ref={(ref) => {
-            return (this.myform = ref);
+            this.myform = ref;
           }}
         >
           <Input
@@ -102,7 +110,8 @@ class EditProjectForm extends Component {
 
 EditProjectForm.propTypes = {
   project: PropTypes.object,
-  districtId: PropTypes.number,
+  projectNodeId: PropTypes.string,
+  districtNodeId: PropTypes.string,
   hasCircles: PropTypes.bool,
   canSubmit: PropTypes.bool,
   saveProject: PropTypes.func,

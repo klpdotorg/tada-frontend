@@ -31,9 +31,14 @@ class EditClusterView extends Component {
   }
 
   deleteCluster() {
-    const { cluster, blockId, deleteCluster } = this.props;
+    const { cluster, blockNodeId, clusterNodeId } = this.props;
 
-    deleteCluster(cluster.id, blockId);
+    const params = {
+      boundaryNodeId: clusterNodeId,
+      boundaryId: cluster.id,
+      parentId: blockNodeId,
+    };
+    this.props.deleteCluster(params);
   }
 
   render() {
@@ -107,7 +112,7 @@ EditClusterView.propTypes = {
   hasSchools: PropTypes.bool,
   canSubmit: PropTypes.bool,
   cluster: PropTypes.object,
-  blockId: PropTypes.number,
+  clusterNodeId: PropTypes.string,
   blockNodeId: PropTypes.string,
   saveCluster: PropTypes.func,
   deleteCluster: PropTypes.func,

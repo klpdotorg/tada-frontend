@@ -10,6 +10,8 @@ import {
   requestFailed,
   toggleModal,
   openEntity,
+  removeEntity,
+  closeConfirmModal,
 } from './index';
 import { SET_BOUNDARIES } from './types';
 import { getPath, getEntityType, getEntityDepth, convertEntitiesToObject } from '../utils';
@@ -84,5 +86,13 @@ export const saveNewClass = (options) => {
       dispatch(openEntity({ depth, uniqueId: `${response.id}${type}` }));
       dispatch(push(path));
     });
+  };
+};
+
+export const deleteStudentGroup = (params) => {
+  return (dispatch) => {
+    dispatch(showBoundaryLoading());
+    dispatch(closeConfirmModal());
+    dispatch(removeEntity(params));
   };
 };

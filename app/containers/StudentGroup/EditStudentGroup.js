@@ -37,7 +37,15 @@ class EditStudentGroupForm extends Component {
   }
 
   deleteStudentGroup() {
-    console.log('Delete student group');
+    const { studentGroup, studentGroupNodeId, institutionNodeId } = this.props;
+
+    const params = {
+      boundaryNodeId: studentGroupNodeId,
+      boundaryId: studentGroup.id,
+      parentId: institutionNodeId,
+    };
+
+    this.props.delete(params);
   }
 
   render() {
@@ -54,7 +62,7 @@ class EditStudentGroupForm extends Component {
         onValid={this.props.enableSubmitForm}
         onInvalid={this.props.disableSubmitForm}
         ref={(ref) => {
-          return (this.myform = ref);
+          this.myform = ref;
         }}
       >
         <div className="form-group">
@@ -123,7 +131,10 @@ class EditStudentGroupForm extends Component {
 EditStudentGroupForm.propTypes = {
   studentGroup: PropTypes.object,
   hasStudents: PropTypes.bool,
+  studentGroupNodeId: PropTypes.string,
+  institutionNodeId: PropTypes.string,
   saveStudentGroup: PropTypes.func,
+  delete: PropTypes.func,
   showConfirmModal: PropTypes.func,
   enableSubmitForm: PropTypes.func,
   disableSubmitForm: PropTypes.func,
@@ -145,7 +156,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const EditStudentGroup = connect(mapStateToProps, {
   saveStudentGroup: modifyStudentGroup,
-  deleteStudentGroup,
+  delete: deleteStudentGroup,
   enableSubmitForm,
   disableSubmitForm,
   showConfirmModal: openDeleteBoundaryModal,

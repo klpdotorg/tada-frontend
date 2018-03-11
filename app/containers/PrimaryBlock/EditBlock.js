@@ -31,7 +31,14 @@ class EditBlockForm extends Component {
   }
 
   onClickDeleteBlock() {
-    this.props.deleteBlock(this.props.block.id, this.props.districtId);
+    const { blockNodeId, block, districtNodeId } = this.props;
+
+    const params = {
+      boundaryNodeId: blockNodeId,
+      boundaryId: block.id,
+      parentId: districtNodeId,
+    };
+    this.props.deleteBlock(params);
   }
 
   render() {
@@ -104,7 +111,8 @@ class EditBlockForm extends Component {
 
 EditBlockForm.propTypes = {
   block: PropTypes.object,
-  districtId: PropTypes.number,
+  districtNodeId: PropTypes.string,
+  blockNodeId: PropTypes.string,
   hasClusters: PropTypes.bool,
   canSubmit: PropTypes.bool,
   saveBlock: PropTypes.func,

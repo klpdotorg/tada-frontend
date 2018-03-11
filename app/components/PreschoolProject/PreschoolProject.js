@@ -19,12 +19,16 @@ const PreschoolProjectView = ({ isLoading, district, project, params }) => {
   return (
     <div>
       <ol className="breadcrumb">
-        <li><Link to={district.path}>{district.name}</Link></li>
+        <li>
+          <Link to={district.path}>{district.name}</Link>
+        </li>
         <li className="active">{project.name}</li>
       </ol>
-      {sessionStorage.getItem('isAdmin')
-        ? <EditProject projectNodeId={params.projectNodeId} districtId={district.id} />
-        : <NoPermissionView />}
+      {sessionStorage.getItem('isAdmin') ? (
+        <EditProject projectNodeId={params.projectNodeId} districtNodeId={params.districtNodeId} />
+      ) : (
+        <NoPermissionView />
+      )}
       <CreateCircle parent={project.id} />
     </div>
   );

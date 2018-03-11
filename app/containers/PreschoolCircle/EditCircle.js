@@ -30,9 +30,15 @@ class EditCircleForm extends Component {
   }
 
   deleteCircle() {
-    const { circle, projectId, deleteCircle } = this.props;
+    const { circleNodeId, circle, projectNodeId } = this.props;
 
-    deleteCircle(circle.id, projectId);
+    const params = {
+      boundaryNodeId: circleNodeId,
+      boundaryId: circle.id,
+      parentId: projectNodeId,
+    };
+
+    this.props.deleteCircle(params);
   }
 
   render() {
@@ -62,7 +68,7 @@ class EditCircleForm extends Component {
           onValid={this.props.enableSubmitForm}
           onInvalid={this.props.disableSubmitForm}
           ref={(ref) => {
-            return (this.myform = ref);
+            this.myform = ref;
           }}
         >
           <Input
@@ -105,7 +111,8 @@ EditCircleForm.propTypes = {
   hasSchools: PropTypes.bool,
   canSubmit: PropTypes.bool,
   circle: PropTypes.object,
-  projectId: PropTypes.number,
+  projectNodeId: PropTypes.string,
+  circleNodeId: PropTypes.string,
   saveCircle: PropTypes.func,
   deleteCircle: PropTypes.func,
   enableSubmitForm: PropTypes.func,
