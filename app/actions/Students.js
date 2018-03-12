@@ -1,7 +1,7 @@
 import { SERVER_API_BASE } from 'config';
 import _ from 'lodash';
 
-import { get, patch } from './requests';
+import { get, patch, deleteRequest } from './requests';
 import {
   SELECT_STUDENT_IN_VIEW_STUDENTS,
   TOGGLE_MODAL,
@@ -107,29 +107,36 @@ export const deleteStudent = (params) => {
     dispatch(showBoundaryLoading());
     dispatch(closeConfirmModal());
 
-    const { parentId, boundaryNodeId } = params;
-    const state = getState();
-    const parentEntity = state.boundaries.boundaryDetails[parentId];
-    const parentDepth = getEntityDepth(parentEntity);
+    deleteRequest(`${SERVER_API_BASE}students/${params.boundaryId}/`).then((response) => {
+      if (response.status >= 200 && response.status < 300) {
+        const { parentId, boundaryNodeId } = params;
+        const state = getState();
+        const parentEntity = state.boundaries.boundaryDetails[parentId];
+        const parentDepth = getEntityDepth(parentEntity);
 
-    const boundariesByParentId = {
-      ...state.boundaries.boundariesByParentId,
-      [parentDepth]: _.pull(state.boundaries.boundariesByParentId[parentDepth], boundaryNodeId),
-    };
-    const newUnCollapsedEntities = _.omit(state.boundaries.uncollapsedEntities, parentDepth + 1);
+        const boundariesByParentId = {
+          ...state.boundaries.boundariesByParentId,
+          [parentDepth]: _.pull(state.boundaries.boundariesByParentId[parentDepth], boundaryNodeId),
+        };
+        const newUnCollapsedEntities = _.omit(
+          state.boundaries.uncollapsedEntities,
+          parentDepth + 1,
+        );
 
-    dispatch({
-      type: SET_BOUNDARIES,
-      boundariesByParentId,
+        dispatch({
+          type: SET_BOUNDARIES,
+          boundariesByParentId,
+        });
+        dispatch({
+          type: UNCOLLAPSED_BOUNDARIES,
+          value: newUnCollapsedEntities,
+        });
+        dispatch({
+          type: DELETE_BOUNDARY_NODE,
+          value: boundaryNodeId,
+        });
+        dispatch(closeBoundaryLoading());
+      }
     });
-    dispatch({
-      type: UNCOLLAPSED_BOUNDARIES,
-      value: newUnCollapsedEntities,
-    });
-    dispatch({
-      type: DELETE_BOUNDARY_NODE,
-      value: boundaryNodeId,
-    });
-    dispatch(closeBoundaryLoading());
   };
 };

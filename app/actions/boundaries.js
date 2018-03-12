@@ -205,21 +205,21 @@ export const modifyBoundary = (boundaryId, name) => {
 };
 
 export const deleteBoundary = (params) => {
-  return (dispatch, getState) => {
+  return (dispatch) => {
     const { boundaryId } = params;
     dispatch(showBoundaryLoading());
     dispatch(closeConfirmModal());
 
     const url = `${SERVER_API_BASE}boundaries/${boundaryId}/`;
 
-    dispatch(removeEntity(params));
-    // deleteRequest(url)
-    //   .then((response) => {
-    //     if (response.status === 403) {
-    //              }
-    //   })
-    //   .catch((err) => {
-    //     console.log(err)
-    //   });
+    deleteRequest(url)
+      .then((response) => {
+        if (response.status === 204) {
+          dispatch(removeEntity(params));
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 };

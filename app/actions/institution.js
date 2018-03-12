@@ -163,22 +163,18 @@ export const deleteInstitution = (params) => {
     dispatch(showBoundaryLoading());
     dispatch(closeConfirmModal());
 
-    dispatch(removeEntity(params));
-
-    // return deleteRequest(`${serverApiBase}institutions/${instiId}`)
-    //   .then((response) => {
-    //     if (response.status >= 200 && response.status < 300) {
-    //       dispatch(removeBoundary(instiId, parentId));
-    //       // Route the user to the home dashboard page since the page they were on will be deleted
-    //       dispatch(push('/'));
-    //     } else {
-    //       const error = new Error(response.statusText);
-    //       error.response = response;
-    //       throw error;
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.log('request failed', error);
-    //   });
+    return deleteRequest(`${serverApiBase}institutions/${params.boundaryId}/`)
+      .then((response) => {
+        if (response.status >= 200 && response.status < 300) {
+          dispatch(removeEntity(params));
+        } else {
+          const error = new Error(response.statusText);
+          error.response = response;
+          throw error;
+        }
+      })
+      .catch((error) => {
+        console.log('request failed', error);
+      });
   };
 };

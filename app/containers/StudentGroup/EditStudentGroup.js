@@ -37,12 +37,13 @@ class EditStudentGroupForm extends Component {
   }
 
   deleteStudentGroup() {
-    const { studentGroup, studentGroupNodeId, institutionNodeId } = this.props;
+    const { studentGroup, studentGroupNodeId, institutionNodeId, institutionId } = this.props;
 
     const params = {
       boundaryNodeId: studentGroupNodeId,
       boundaryId: studentGroup.id,
-      parentId: institutionNodeId,
+      parentNodeId: institutionNodeId,
+      parentId: institutionId,
     };
 
     this.props.delete(params);
@@ -133,6 +134,7 @@ EditStudentGroupForm.propTypes = {
   hasStudents: PropTypes.bool,
   studentGroupNodeId: PropTypes.string,
   institutionNodeId: PropTypes.string,
+  institutionId: PropTypes.number,
   saveStudentGroup: PropTypes.func,
   delete: PropTypes.func,
   showConfirmModal: PropTypes.func,

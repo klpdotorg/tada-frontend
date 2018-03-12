@@ -78,7 +78,9 @@ class CreateInstitutionForm extends Component {
           onValidSubmit={this.submitForm}
           onValid={this.props.enableSubmitForm}
           onInvalid={this.props.disableSubmitForm}
-          ref={(ref) => { return (this.myform = ref); }}
+          ref={(ref) => {
+            this.myform = ref;
+          }}
         >
           <Input
             name="name"
@@ -158,6 +160,7 @@ class CreateInstitutionForm extends Component {
             label="DISE Code:"
             type="text"
             className="form-control"
+            required
           />
           <Select
             name="last_verified_year"
