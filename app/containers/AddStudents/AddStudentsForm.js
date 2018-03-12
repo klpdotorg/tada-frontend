@@ -80,7 +80,9 @@ class AddStudentsFormView extends Component {
     const rows = Array.from(Array(this.props.rows).keys());
 
     return rows.map((row, index) => {
-      return <AddStudentsInputRow key={index} index={index} />;
+      return (
+        <AddStudentsInputRow key={index} index={index} institutionId={this.props.institutionId} />
+      );
     });
   }
 
@@ -136,7 +138,6 @@ AddStudentsFormView.propTypes = {
   studentGroupNodeId: PropTypes.string,
   institutionId: PropTypes.number,
   studentGroupId: PropTypes.number,
-  path: PropTypes.string,
   rows: PropTypes.number,
   values: PropTypes.object,
   setAddStudentFormErrors: PropTypes.func,

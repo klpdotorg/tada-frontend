@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { get, isEmpty } from 'lodash';
-import { push } from 'react-router-redux';
 
 import { DEFAULT_PARENT_NODE_ID } from 'config';
 import { userHasPermissions } from '../../components/utils';

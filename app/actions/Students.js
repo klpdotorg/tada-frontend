@@ -42,6 +42,32 @@ export const setStudent = (value) => {
   };
 };
 
+export const fetchStudentBoundaries = (parentId) => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const parentEntity = state.boundaries.boundaryDetails[parentId];
+    const parentDepth = getEntityDepth(parentEntity);
+    const getStudentURL = `${SERVER_API_BASE}studentgroups/${parentEntity.id}/students/`;
+
+    get(getStudentURL)
+      .then((data) => {
+        const entities = convertEntitiesToObject(data.results);
+        dispatch({
+          type: SET_BOUNDARIES,
+          boundaryDetails: entities,
+          boundariesByParentId: {
+            [parentDepth]: Object.keys(entities),
+          },
+        });
+
+        dispatch(closeBoundaryLoading());
+      })
+      .catch((error) => {
+        dispatch(requestFailed(error));
+      });
+  };
+};
+
 export const fetchStudents = (parentBoundaryId, moreIds) => {
   return (dispatch) => {
     const getStudentURL = `${SERVER_API_BASE}studentgroups/${parentBoundaryId}/students/`;

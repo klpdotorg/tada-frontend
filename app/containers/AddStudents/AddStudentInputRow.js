@@ -31,7 +31,16 @@ class AddStudentsInputRowForm extends Component {
     const obj = {};
     obj[key] = e.target.value;
     this.setState(obj, () => {
-      this.props.updateValue(this.state, this.props.index);
+      this.props.updateValue(
+        {
+          ...this.state,
+          ...{
+            institution: this.props.institutionId,
+            status: 'AC',
+          },
+        },
+        this.props.index,
+      );
     });
   }
 
@@ -229,6 +238,7 @@ AddStudentsInputRowForm.propTypes = {
   languages: PropTypes.array,
   index: PropTypes.number,
   updateValue: PropTypes.func,
+  institutionId: PropTypes.number,
 };
 
 const AddStudentsInputRow = connect(mapStateToProps, mapDispatchToProps)(AddStudentsInputRowForm);
