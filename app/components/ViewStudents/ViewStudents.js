@@ -3,20 +3,11 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 
 import { Loading } from '../common';
-import { StudentList } from './index';
+import { StudentList } from '../../containers/ViewStudents';
 import { EditStudent } from '../../containers/EditStudent';
 
 const ViewStudentsCont = (props) => {
-  const {
-    district,
-    block,
-    cluster,
-    institution,
-    studentGroup,
-    studentIds,
-    params,
-    isLoading,
-  } = props;
+  const { district, block, cluster, institution, studentGroup, params, isLoading } = props;
 
   if (isLoading) {
     return <Loading />;
@@ -58,7 +49,7 @@ const ViewStudentsCont = (props) => {
               <th />
             </tr>
           </thead>
-          <StudentList studentIds={studentIds} />
+          <StudentList studentGroupNodeId={params.studentGroupNodeId} />
         </table>
         <div className="row base-spacing-mid">
           {/* <div className="col-md-4">

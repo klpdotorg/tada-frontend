@@ -1,4 +1,6 @@
 import { SERVER_API_BASE } from 'config';
+import _ from 'lodash';
+
 import { get, patch } from './requests';
 import {
   SELECT_STUDENT_IN_VIEW_STUDENTS,
@@ -7,9 +9,17 @@ import {
   SET_STUDENTS,
   SET_STUDENT,
   SET_BOUNDARIES,
+  UNCOLLAPSED_BOUNDARIES,
+  DELETE_BOUNDARY_NODE,
 } from './types';
-import { getEntities, closeBoundaryLoading, requestFailed } from './index';
-import { convertEntitiesToObject } from '../utils';
+import {
+  getEntities,
+  closeBoundaryLoading,
+  requestFailed,
+  showBoundaryLoading,
+  closeConfirmModal,
+} from './index';
+import { convertEntitiesToObject, getEntityDepth } from '../utils';
 
 export const selectStudent = (value) => {
   return {
@@ -72,14 +82,54 @@ export const openEditStudentModal = (value) => {
 
 export const modifyStudent = (studentId, options) => {
   return (dispatch) => {
+    dispatch(showBoundaryLoading());
+    dispatch({
+      type: TOGGLE_MODAL,
+      modal: 'editStudent',
+    });
+
     const editStudentURL = `${SERVER_API_BASE}students/${studentId}/`;
 
     patch(editStudentURL, options).then((response) => {
-      dispatch(setStudent(response));
+      const entities = convertEntitiesToObject([response]);
+
       dispatch({
-        type: TOGGLE_MODAL,
-        modal: 'editStudent',
+        type: SET_BOUNDARIES,
+        boundaryDetails: entities,
       });
+      dispatch(closeBoundaryLoading());
     });
+  };
+};
+
+export const deleteStudent = (params) => {
+  return (dispatch, getState) => {
+    dispatch(showBoundaryLoading());
+    dispatch(closeConfirmModal());
+
+    const { parentId, boundaryNodeId } = params;
+    const state = getState();
+    const parentEntity = state.boundaries.boundaryDetails[parentId];
+    const parentDepth = getEntityDepth(parentEntity);
+
+    const boundariesByParentId = {
+      ...state.boundaries.boundariesByParentId,
+      [parentDepth]: _.pull(state.boundaries.boundariesByParentId[parentDepth], boundaryNodeId),
+    };
+    const newUnCollapsedEntities = _.omit(state.boundaries.uncollapsedEntities, parentDepth + 1);
+
+    dispatch({
+      type: SET_BOUNDARIES,
+      boundariesByParentId,
+    });
+    dispatch({
+      type: UNCOLLAPSED_BOUNDARIES,
+      value: newUnCollapsedEntities,
+    });
+    dispatch({
+      type: DELETE_BOUNDARY_NODE,
+      value: boundaryNodeId,
+    });
+    dispatch(closeBoundaryLoading());
   };
 };

@@ -1,11 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { isEmpty } from 'lodash';
+
 import { dateParser } from '../../utils';
 
 const StudentView = (props) => {
   const { student, selectedStudents } = props;
   const { id, first_name, last_name, uid, gender, dob, langVal } = student;
   const checked = selectedStudents.includes(id);
+
+  if (isEmpty(student)) {
+    return <div />;
+  }
+
   return (
     <tr>
       <td>
@@ -30,7 +37,7 @@ const StudentView = (props) => {
       <td>
         <button
           onClick={() => {
-            props.openEditStudentModal(props.id);
+            props.openEditStudentModal(props.studentNodeId);
           }}
           className="btn btn-primary padded-btn"
           data-toggle="tooltip"
@@ -40,7 +47,12 @@ const StudentView = (props) => {
         </button>
         <button
           onClick={() => {
-            // props.deleteStudent({ ...props });
+            const params = {
+              boundaryNodeId: props.studentNodeId,
+              boundaryId: student.id,
+              parentId: props.studentGroupNodeId,
+            };
+            props.deleteStudent(params);
           }}
           className="btn btn-primary"
           data-toggle="tooltip"
@@ -58,6 +70,9 @@ StudentView.propTypes = {
   selectedStudents: PropTypes.array,
   openEditStudentModal: PropTypes.func,
   selectStudent: PropTypes.func,
+  deleteStudent: PropTypes.func,
+  studentGroupNodeId: PropTypes.string,
+  studentNodeId: PropTypes.string,
 };
 
 export { StudentView };

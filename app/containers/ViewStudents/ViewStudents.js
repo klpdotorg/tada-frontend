@@ -9,7 +9,7 @@ import { ViewStudentsCont } from '../../components/ViewStudents';
 
 class FetchStudents extends Component {
   componentDidMount() {
-    const { params, studentIds, studentGroup } = this.props;
+    const { params, studentIds } = this.props;
 
     const {
       blockNodeId,
@@ -32,12 +32,6 @@ class FetchStudents extends Component {
       });
 
       this.props.getBoundariesEntities(entities);
-    }
-
-    const studentGroupId = get(studentGroup, 'id');
-
-    if (studentGroupId) {
-      this.props.fetchStudents(studentGroupId);
     }
   }
 
