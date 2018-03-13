@@ -14,6 +14,7 @@ import { PreschoolCircle } from './containers/PreschoolCircle';
 import { Preschool } from './containers/Preschool';
 import { StudentGroup } from './containers/StudentGroup';
 import { AddStudents } from './containers/AddStudents';
+import { EditStudents } from './containers/EditStudents';
 import { ViewStudents } from './containers/ViewStudents';
 import Student from './components/Student';
 import { LoginContainer } from './containers/Login';
@@ -99,6 +100,10 @@ export const routes = (
           path="district/:districtNodeId/project/:blockNodeId/circle/:clusterNodeId/institution/:institutionNodeId/studentgroup/:studentGroupNodeId/addStudents"
           component={AddStudents}
         />
+        <Route
+          path="district/:districtNodeId/project/:blockNodeId/circle/:clusterNodeId/institution/:institutionNodeId/studentgroup/:studentGroupNodeId/editStudents"
+          component={EditStudents}
+        />
         <Route path="district/:districtNodeId" component={PrimaryDistrict} />
         <Route path="district/:districtNodeId/block/:blockNodeId" component={PrimaryBlock} />
         <Route
@@ -124,6 +129,10 @@ export const routes = (
         <Route
           path="district/:districtNodeId/block/:blockNodeId/cluster/:clusterNodeId/institution/:institutionNodeId/studentgroup/:studentGroupNodeId/addStudents"
           component={AddStudents}
+        />
+        <Route
+          path="district/:districtNodeId/block/:blockNodeId/cluster/:clusterNodeId/institution/:institutionNodeId/studentgroup/:studentGroupNodeId/editStudents"
+          component={EditStudents}
         />
         <Route
           path="district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId/studentgroups/:groupId/students/:studentId"

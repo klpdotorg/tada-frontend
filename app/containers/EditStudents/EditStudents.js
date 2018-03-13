@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { get } from 'lodash';
+import { get, isEmpty } from 'lodash';
 import { connect } from 'react-redux';
+
 import { DEFAULT_PARENT_NODE_ID } from 'config';
 
-import { getBoundariesEntities, fetchStudentBoundaries, openEditStudentsForm } from '../../actions';
-import { ViewStudentsCont } from '../../components/ViewStudents';
+import { EditStudentsView } from '../../components/EditStudents';
+import { getBoundariesEntities, getLanguages } from '../../actions';
 
-class FetchStudents extends Component {
+class FetchAddStudentResources extends Component {
   componentDidMount() {
-    const { params, studentIds } = this.props;
+    const { params, studentGroup } = this.props;
 
     const {
       blockNodeId,
@@ -19,7 +20,7 @@ class FetchStudents extends Component {
       studentGroupNodeId,
     } = params;
 
-    if (!studentIds.length) {
+    if (isEmpty(studentGroup)) {
       const entities = [
         DEFAULT_PARENT_NODE_ID,
         districtNodeId,
@@ -34,30 +35,39 @@ class FetchStudents extends Component {
       this.props.getBoundariesEntities(entities);
     }
 
-    const studentGroupId = get(this.props.studentGroup, 'id');
-
-    if (studentGroupId) {
-      this.props.fetchStudentBoundaries(studentGroupNodeId);
-    }
+    this.props.getLanguages();
   }
 
   render() {
-    return <ViewStudentsCont {...this.props} />;
+    const {
+      blockNodeId,
+      districtNodeId,
+      clusterNodeId,
+      institutionNodeId,
+      studentGroupNodeId,
+    } = this.props.params;
+    const path = [
+      districtNodeId,
+      blockNodeId,
+      clusterNodeId,
+      institutionNodeId,
+      studentGroupNodeId,
+    ];
+    return <EditStudentsView {...this.props} depth={path.length} />;
   }
 }
 
-FetchStudents.propTypes = {
-  getBoundariesEntities: PropTypes.func,
+FetchAddStudentResources.propTypes = {
   params: PropTypes.object,
-  studentIds: PropTypes.array,
   studentGroup: PropTypes.object,
-  fetchStudentBoundaries: PropTypes.func,
+  getBoundariesEntities: PropTypes.func,
+  getLanguages: PropTypes.func,
 };
 
 const mapStateToProps = (state, ownProps) => {
   const {
-    districtNodeId,
     blockNodeId,
+    districtNodeId,
     clusterNodeId,
     institutionNodeId,
     studentGroupNodeId,
@@ -74,10 +84,9 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const ViewStudents = connect(mapStateToProps, {
+const EditStudents = connect(mapStateToProps, {
   getBoundariesEntities,
-  fetchStudentBoundaries,
-  openEditStudentsForm,
-})(FetchStudents);
+  getLanguages,
+})(FetchAddStudentResources);
 
-export { ViewStudents };
+export { EditStudents };

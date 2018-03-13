@@ -31,7 +31,20 @@ const ViewStudentsCont = (props) => {
         <li>{studentGroup.name}</li>
       </ol>
       <div className="table-responsive">
-        <h4 className="text-primary">Student Details</h4>
+        <div className="row">
+          <h4 className="text-primary col-md-10">Student Details</h4>
+          <div className="col-md-2 text-center">
+            <button
+              type="submit"
+              className="btn btn-primary"
+              onClick={() => {
+                props.openEditStudentsForm(params.studentGroupNodeId);
+              }}
+            >
+              Edit Students
+            </button>
+          </div>
+        </div>
         <div className="base-spacing-mid border-base" />
         <div className="base-spacing-sm" />
         <table className="table table-condensed table-fixedwidth">
@@ -52,18 +65,6 @@ const ViewStudentsCont = (props) => {
           <StudentList studentGroupNodeId={params.studentGroupNodeId} />
         </table>
         <div className="row base-spacing-mid">
-          {/* <div className="col-md-4">
-            <select
-              onChange={e => {
-                this.setState({ mapToCentre: e.target.value });
-              }}
-              value={this.state.mapToCentre}
-              className="form-control"
-              id="gender"
-            >
-              {studentGroups}
-            </select>
-          </div> */}
           <div className="col-md-8">
             <button type="submit" className="btn btn-primary">
               Map to Center
@@ -82,7 +83,7 @@ ViewStudentsCont.propTypes = {
   cluster: PropTypes.object,
   institution: PropTypes.object,
   studentGroup: PropTypes.object,
-  studentIds: PropTypes.array,
+  openEditStudentsForm: PropTypes.func,
   params: PropTypes.object,
   isLoading: PropTypes.bool,
 };

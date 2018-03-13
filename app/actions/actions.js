@@ -1,18 +1,16 @@
 import fetch from 'isomorphic-fetch';
-import { push } from 'react-router-redux';
-import { checkStatus, get } from './requests';
+import { SERVER_API_BASE as serverApiBase } from 'config';
 
-import {
-  SERVER_API_BASE as serverApiBase,
-  SERVER_AUTH_BASE as authApiBase,
-  REPORTS_EMAIL as reportsEmail,
-  DEFAULT_PARENT_ID,
-} from 'config';
-import { urls as Urls, roles as ROLES } from '../constants';
-import _ from 'lodash';
-import { boundaryType, genUrl } from './utils';
-import { computeRouterPathForEntity } from '../reducers/utils';
+import { checkStatus, get } from './requests';
+import { urls as Urls } from '../constants';
+import { boundaryType } from './utils';
 import { SET_PARENT_NODE } from './types';
+
+export const goBack = () => {
+  return {
+    type: 'pop',
+  };
+};
 
 export const setParentNode = (value) => {
   return {

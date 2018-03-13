@@ -91,3 +91,6 @@ export const SELF_MODIFIED = 'self_modified';
 export const USER_LOGOUT = 'user_logout';
 export const OPEN_CONFIRM_MODAL = 'open_confirm_modal';
 export const DELETE_BOUNDARY_NODE = 'delete_boundary_node';
+export const SET_EDIT_STUDENTS_FORM_ERRORS = 'set_edit_students_form_errors';
+export const SET_LANGUAGES_FOR_EDIT_STUDENTS_FORM = 'set_languages_for_edit_students_form';
+export const EDIT_STUDENTS_FORM_VALUE_CHANGED = 'edit_students_form_value_changed';
