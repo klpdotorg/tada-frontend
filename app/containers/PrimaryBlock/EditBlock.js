@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { get } from 'lodash';
 
 import FRC from 'formsy-react-components';
 import Formsy from 'formsy-react';
@@ -14,6 +15,7 @@ import {
   openDeleteBoundaryModal,
   toggleCreateClusterModal,
 } from '../../actions';
+import { hasChildren } from '../../utils';
 
 const { Input } = FRC;
 
@@ -42,11 +44,11 @@ class EditBlockForm extends Component {
   }
 
   render() {
-    const { hasClusters, block } = this.props;
+    const { canDelete, block } = this.props;
 
     return (
       <div>
-        {hasClusters ? (
+        {!canDelete ? (
           <div className="alert alert-info">
             <i className="fa fa-info-circle fa-lg" aria-hidden="true" /> You cannot delete this
             boundary until its children are deleted
@@ -95,7 +97,7 @@ class EditBlockForm extends Component {
           <button
             type="submit"
             className="btn btn-primary padded-btn"
-            disabled={hasClusters}
+            disabled={!canDelete}
             onClick={() => {
               this.props.showConfirmModal(block.name);
             }}
@@ -113,7 +115,7 @@ EditBlockForm.propTypes = {
   block: PropTypes.object,
   districtNodeId: PropTypes.string,
   blockNodeId: PropTypes.string,
-  hasClusters: PropTypes.bool,
+  canDelete: PropTypes.bool,
   canSubmit: PropTypes.bool,
   saveBlock: PropTypes.func,
   toggleClusterModal: PropTypes.func,
@@ -125,11 +127,11 @@ EditBlockForm.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const { blockNodeId } = ownProps;
-  const clusterIds = state.boundaries.boundariesByParentId[blockNodeId];
-  const hasClusters = clusterIds && clusterIds.length > 0;
+  const { boundaries } = state;
+
   return {
-    block: state.boundaries.boundaryDetails[blockNodeId] || {},
-    hasClusters,
+    block: get(boundaries.boundaryDetails, blockNodeId, {}),
+    canDelete: hasChildren(blockNodeId, boundaries),
     openConfirmModal: state.appstate.confirmModal,
     canSubmit: state.appstate.enableSubmitForm,
   };

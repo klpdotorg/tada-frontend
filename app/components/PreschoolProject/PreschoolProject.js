@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
+import { isEmpty } from 'lodash';
 
 import { CreateCircle } from '../../containers/PreschoolCircle';
 import { EditProject } from '../../containers/PreschoolProject';
 import { NoPermissionView } from './index';
 
 const PreschoolProjectView = ({ isLoading, district, project, params }) => {
-  if (isLoading || !project) {
+  if (isLoading || isEmpty(project)) {
     return (
       <div>
         <i className="fa fa-cog fa-spin fa-lg fa-fw" />

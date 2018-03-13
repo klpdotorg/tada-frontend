@@ -139,9 +139,7 @@ EditTeacherForm.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-  const teacherVal = state.teachers.teachers.find((teacher) => {
-    return state.teachers.editTeacherId === teacher.id;
-  });
+  const teacherVal = get(state.teachers.teachers, state.teachers.editTeacherId, {});
 
   return {
     isOpen: state.modal.editTeacher,

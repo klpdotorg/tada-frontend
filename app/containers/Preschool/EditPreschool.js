@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
+import { get } from 'lodash';
 
 import {
   deleteInstitution,
@@ -12,6 +13,7 @@ import {
   openDeleteBoundaryModal,
 } from '../../actions';
 import { Confirm } from '../Modal';
+import { hasChildren } from '../../utils';
 
 const { Input, Textarea, Select } = FRC;
 
@@ -39,7 +41,7 @@ class EditPreschoolForm extends Component {
       id: this.props.institution.id,
     };
 
-    this.props.save(institution, this.props.institution.id);
+    this.props.save(this.props.institution.id, institution);
   }
 
   deleteInstitution() {
@@ -65,7 +67,7 @@ class EditPreschoolForm extends Component {
     const {
       institution,
       canSubmit,
-      hasClasses,
+      canDelete,
       languages,
       institutionCategories,
       managements,
@@ -192,7 +194,7 @@ class EditPreschoolForm extends Component {
             <Input
               name="institutionDise_code"
               id="institutionDise_code"
-              value={institution.dise_code}
+              value={institution.dise}
               label="DISE Code:"
               type="text"
               className="form-control"
@@ -206,7 +208,7 @@ class EditPreschoolForm extends Component {
           <button
             type="button"
             className="btn btn-primary padded-btn"
-            disabled={hasClasses}
+            disabled={!canDelete}
             onClick={() => {
               this.props.showConfirmModal(institution.name);
             }}
@@ -225,7 +227,7 @@ EditPreschoolForm.propTypes = {
   circleNodeId: PropTypes.string,
   institutionNodeId: PropTypes.string,
   institution: PropTypes.object,
-  hasClasses: PropTypes.bool,
+  canDelete: PropTypes.bool,
   languages: PropTypes.array,
   managements: PropTypes.array,
   institutionCategories: PropTypes.array,
@@ -238,13 +240,12 @@ EditPreschoolForm.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const { institutionNodeId } = ownProps;
-  const classesIds = state.boundaries.boundariesByParentId[institutionNodeId];
-  const hasClasses = classesIds && classesIds.length > 0;
+  const { boundaries } = state;
 
   return {
-    hasClasses,
+    canDelete: hasChildren(institutionNodeId, boundaries),
     openConfirmModal: state.appstate.confirmModal,
-    institution: state.boundaries.boundaryDetails[institutionNodeId],
+    institution: get(boundaries.boundaryDetails, institutionNodeId, {}),
     canSubmit: state.appstate.enableSubmitForm,
     languages: state.languages.languages,
     managements: state.institution.managements,

@@ -45,7 +45,7 @@ class CreateInstitutionForm extends Component {
       {},
     );
 
-    this.props.save(this.props.parentNodeId, filterInstitution);
+    this.props.save(filterInstitution);
   }
 
   render() {

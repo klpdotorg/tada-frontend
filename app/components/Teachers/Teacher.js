@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { get } from 'lodash';
 
 import { StaffTypes } from '../../Data/StaffTypes';
 
@@ -21,8 +22,8 @@ const TeacherView = (props) => {
       <td>{teacher.institution}</td>
       <td>{teacher.doj}</td>
       <td>{teacher.gender}</td>
-      <td>{language.label}</td>
-      <td>{staffType.staff_type}</td>
+      <td>{get(language, 'label')}</td>
+      <td>{get(staffType, 'staff_type')}</td>
       <td>{teacher.uid}</td>
       <td>
         <button

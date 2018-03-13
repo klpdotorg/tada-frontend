@@ -33,6 +33,15 @@ export const getEntityDepth = (boundary) => {
   }
 };
 
+export const hasChildren = (entityId, boundaries) => {
+  const { boundaryDetails, boundariesByParentId } = boundaries;
+  const boundary = boundaryDetails[entityId];
+  const depth = getEntityDepth(boundary);
+  const hasChilds = _.get(boundariesByParentId, depth, []);
+
+  return _.isEmpty(hasChilds);
+};
+
 export const getEntityType = (boundary) => {
   const boundaryType = getBoundaryType(boundary);
   switch (boundaryType) {

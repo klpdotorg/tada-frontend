@@ -7,7 +7,7 @@ import { StudentList } from '../../containers/ViewStudents';
 import { EditStudent } from '../../containers/EditStudent';
 
 const ViewStudentsCont = (props) => {
-  const { district, block, cluster, institution, studentGroup, params, isLoading } = props;
+  const { district, block, cluster, institution, studentGroup, params, canEdit, isLoading } = props;
 
   if (isLoading) {
     return <Loading />;
@@ -40,6 +40,7 @@ const ViewStudentsCont = (props) => {
               onClick={() => {
                 props.openEditStudentsForm(params.studentGroupNodeId);
               }}
+              disabled={canEdit}
             >
               Edit Students
             </button>
@@ -83,6 +84,7 @@ ViewStudentsCont.propTypes = {
   cluster: PropTypes.object,
   institution: PropTypes.object,
   studentGroup: PropTypes.object,
+  canEdit: PropTypes.bool,
   openEditStudentsForm: PropTypes.func,
   params: PropTypes.object,
   isLoading: PropTypes.bool,

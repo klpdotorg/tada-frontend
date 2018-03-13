@@ -3,16 +3,18 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import FRC from 'formsy-react-components';
 import Formsy from 'formsy-react';
+import { get } from 'lodash';
 
 import {
   modifyBoundary,
   deleteBoundary,
   enableSubmitForm,
   disableSubmitForm,
-  toggleCreateCircleModal,
+  toggleCreatePreschoolModal,
   openDeleteBoundaryModal,
 } from '../../actions';
 import { Confirm } from '../Modal';
+import { hasChildren } from '../../utils';
 
 const { Input } = FRC;
 
@@ -42,11 +44,11 @@ class EditCircleForm extends Component {
   }
 
   render() {
-    const { hasSchools, circle, canSubmit } = this.props;
+    const { canDelete, circle, canSubmit } = this.props;
 
     return (
       <div>
-        {hasSchools ? (
+        {!canDelete ? (
           <div className="alert alert-info">
             <i className="fa fa-info-circle fa-lg" aria-hidden="true" /> You cannot delete this
             boundary until its children are deleted
@@ -97,6 +99,7 @@ class EditCircleForm extends Component {
             type="submit"
             className="btn btn-primary padded-btn"
             onClick={this.props.showConfirmModal}
+            disabled={!canDelete}
           >
             Delete
           </button>
@@ -108,7 +111,7 @@ class EditCircleForm extends Component {
 }
 
 EditCircleForm.propTypes = {
-  hasSchools: PropTypes.bool,
+  canDelete: PropTypes.bool,
   canSubmit: PropTypes.bool,
   circle: PropTypes.object,
   projectNodeId: PropTypes.string,
@@ -123,18 +126,18 @@ EditCircleForm.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const { circleNodeId } = ownProps;
-  const institutionIds = state.boundaries.boundariesByParentId[circleNodeId];
-  const hasSchools = institutionIds && institutionIds.length > 0;
+  const { boundaries } = state;
+
   return {
-    hasSchools,
+    canDelete: hasChildren(circleNodeId, boundaries),
     openConfirmModal: state.appstate.confirmModal,
     canSubmit: state.appstate.enableSubmitForm,
-    circle: state.boundaries.boundaryDetails[circleNodeId],
+    circle: get(boundaries.boundaryDetails, circleNodeId, {}),
   };
 };
 
 const EditCircle = connect(mapStateToProps, {
-  toggleSchoolModal: toggleCreateCircleModal,
+  toggleSchoolModal: toggleCreatePreschoolModal,
   saveCircle: modifyBoundary,
   deleteCircle: deleteBoundary,
   enableSubmitForm,

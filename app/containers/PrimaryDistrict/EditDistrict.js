@@ -10,14 +10,16 @@ import {
   toggleBlockModal,
   openDeleteBoundaryModal,
 } from '../../actions';
+import { hasChildren } from '../../utils';
 
 const mapStateToProps = (state, ownProps) => {
   const { districtNodeId } = ownProps;
+  const { boundaries } = state;
 
   return {
     canSubmit: state.appstate.enableSubmitForm,
-    boundary: state.boundaries.boundaryDetails[districtNodeId],
-    hasBlocks: state.boundaries[districtNodeId] && state.boundaries[districtNodeId].length,
+    boundary: boundaries.boundaryDetails[districtNodeId],
+    canDelete: hasChildren(districtNodeId, boundaries),
     confirmModal: state.appstate.confirmModal,
     primary: state.schoolSelection.primarySchool,
   };

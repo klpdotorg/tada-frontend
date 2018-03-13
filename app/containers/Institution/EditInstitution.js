@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
+import { get } from 'lodash';
 
 import {
   deleteInstitution,
@@ -13,6 +14,7 @@ import {
 } from '../../actions';
 
 import { Confirm } from '../Modal';
+import { hasChildren } from '../../utils';
 
 const { Input, Textarea, Select } = FRC;
 
@@ -69,7 +71,7 @@ class EditInstitutionForm extends Component {
     const singleSelectOptions = [{ value: '', label: 'Please select…' }, ...selectOptions];
     const {
       institution,
-      hasClasses,
+      canDelete,
       languages,
       institutionCategories,
       managements,
@@ -222,7 +224,7 @@ class EditInstitutionForm extends Component {
           <button
             type="button"
             className="btn btn-primary padded-btn"
-            disabled={hasClasses}
+            disabled={!canDelete}
             onClick={() => {
               this.props.showConfirmModal(institution.name);
             }}
@@ -239,9 +241,8 @@ class EditInstitutionForm extends Component {
 EditInstitutionForm.propTypes = {
   institutionNodeId: PropTypes.string,
   clusterNodeId: PropTypes.string,
-  clusterId: PropTypes.number,
   institution: PropTypes.object,
-  hasClasses: PropTypes.bool,
+  canDelete: PropTypes.bool,
   languages: PropTypes.array,
   managements: PropTypes.array,
   lastVerifiedYears: PropTypes.array,
@@ -255,13 +256,12 @@ EditInstitutionForm.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const { institutionNodeId } = ownProps;
-  const classesIds = state.boundaries.boundariesByParentId[institutionNodeId];
-  const hasClasses = classesIds && classesIds.length > 0;
+  const { boundaries } = state;
 
   return {
-    hasClasses,
+    canDelete: hasChildren(institutionNodeId, boundaries),
     openConfirmModal: state.appstate.confirmModal,
-    institution: state.boundaries.boundaryDetails[institutionNodeId],
+    institution: get(boundaries.boundaryDetails, institutionNodeId, {}),
     canSubmit: state.appstate.enableSubmitForm,
     languages: state.languages.languages,
     managements: state.institution.managements,

@@ -33,7 +33,7 @@ export const addStudentsFormValueChanged = (value, rowNumber) => {
   };
 };
 
-export const addStudents = (groupId, institutionId, depth, groupNodeId) => {
+export const addStudents = (groupNodeId, groupId, institutionId, depth) => {
   return (dispatch, getState) => {
     const state = getState();
     const { values } = state.addStudents;

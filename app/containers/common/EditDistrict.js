@@ -33,11 +33,11 @@ class EditDistrictForm extends Component {
   }
 
   render() {
-    const { boundary, hasBlocks, primary } = this.props;
+    const { boundary, primary, canDelete } = this.props;
 
     return (
       <div>
-        {hasBlocks ? (
+        {!canDelete ? (
           <div className="alert alert-info">
             <i className="fa fa-info-circle fa-lg" aria-hidden="true" /> You cannot delete this
             boundary until its children are deleted
@@ -69,7 +69,7 @@ class EditDistrictForm extends Component {
           onValid={this.props.enableSubmitForm}
           onInvalid={this.props.disableSubmitForm}
           ref={(ref) => {
-            return (this.myform = ref);
+            this.myform = ref;
           }}
         >
           <div className="base-spacing-sm" />
@@ -104,7 +104,7 @@ class EditDistrictForm extends Component {
             onClick={() => {
               this.props.showConfirmModal(boundary.name);
             }}
-            disabled={hasBlocks}
+            disabled={!canDelete}
           >
             Delete
           </button>
@@ -118,7 +118,7 @@ class EditDistrictForm extends Component {
 EditDistrictForm.propTypes = {
   canSubmit: PropTypes.bool,
   boundary: PropTypes.object,
-  hasBlocks: PropTypes.bool,
+  canDelete: PropTypes.bool,
   toggleBlockModal: PropTypes.func,
   toggleProjectModal: PropTypes.func,
   districtNodeId: PropTypes.string,

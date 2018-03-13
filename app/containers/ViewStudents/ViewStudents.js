@@ -62,6 +62,7 @@ const mapStateToProps = (state, ownProps) => {
     institutionNodeId,
     studentGroupNodeId,
   } = ownProps.params;
+  const studentIds = get(state.boundaries.boundariesByParentId, '5', []);
 
   return {
     district: get(state.boundaries.boundaryDetails, districtNodeId, {}),
@@ -69,7 +70,8 @@ const mapStateToProps = (state, ownProps) => {
     cluster: get(state.boundaries.boundaryDetails, clusterNodeId, {}),
     institution: get(state.boundaries.boundaryDetails, institutionNodeId, {}),
     studentGroup: get(state.boundaries.boundaryDetails, studentGroupNodeId, {}),
-    studentIds: get(state.boundaries.boundariesByParentId, '5', []),
+    studentIds,
+    canEdit: !studentIds.length,
     isLoading: state.appstate.loadingBoundary,
   };
 };
