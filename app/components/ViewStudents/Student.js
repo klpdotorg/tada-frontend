@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { isEmpty } from 'lodash';
+import { isEmpty, includes } from 'lodash';
 
 import { dateParser } from '../../utils';
 
 const StudentView = (props) => {
   const { student, selectedStudents } = props;
   const { id, first_name, last_name, uid, gender, dob, langVal } = student;
-  const checked = selectedStudents.includes(id);
+  const checked = includes(selectedStudents, props.studentNodeId);
 
   if (isEmpty(student)) {
     return <div />;
@@ -16,7 +16,13 @@ const StudentView = (props) => {
   return (
     <tr>
       <td>
-        <input checked={checked} onChange={props.selectStudent} type="checkbox" />
+        <input
+          checked={checked}
+          onChange={() => {
+            props.selectStudent(props.studentNodeId);
+          }}
+          type="checkbox"
+        />
       </td>
       <td>{id}</td>
       <td>

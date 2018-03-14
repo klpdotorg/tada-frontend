@@ -1,10 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { get } from 'lodash';
+import { get, isEmpty } from 'lodash';
 import { connect } from 'react-redux';
 import { DEFAULT_PARENT_NODE_ID } from 'config';
 
-import { getBoundariesEntities, fetchStudentBoundaries, openEditStudentsForm } from '../../actions';
+import {
+  getBoundariesEntities,
+  fetchStudentBoundaries,
+  openEditStudentsForm,
+  fetchCenters,
+  selectCenter,
+  mapStudentsWithCenter,
+} from '../../actions';
 import { ViewStudentsCont } from '../../components/ViewStudents';
 
 class FetchStudents extends Component {
@@ -63,6 +70,8 @@ const mapStateToProps = (state, ownProps) => {
     studentGroupNodeId,
   } = ownProps.params;
   const studentIds = get(state.boundaries.boundariesByParentId, '5', []);
+  const { centers, selectedCenter } = state.centers;
+  const { selectedStudents } = state.students;
 
   return {
     district: get(state.boundaries.boundaryDetails, districtNodeId, {}),
@@ -71,8 +80,16 @@ const mapStateToProps = (state, ownProps) => {
     institution: get(state.boundaries.boundaryDetails, institutionNodeId, {}),
     studentGroup: get(state.boundaries.boundaryDetails, studentGroupNodeId, {}),
     studentIds,
+    centers: centers.map((center) => {
+      return {
+        value: center.id,
+        label: center.name,
+      };
+    }),
+    selectedCenter,
     canEdit: !studentIds.length,
     isLoading: state.appstate.loadingBoundary,
+    canMapStudents: !isEmpty(selectedStudents) && !isEmpty(centers),
   };
 };
 
@@ -80,6 +97,9 @@ const ViewStudents = connect(mapStateToProps, {
   getBoundariesEntities,
   fetchStudentBoundaries,
   openEditStudentsForm,
+  fetchCenters,
+  selectCenter,
+  mapStudentsWithCenter,
 })(FetchStudents);
 
 export { ViewStudents };

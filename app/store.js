@@ -29,6 +29,7 @@ import {
   MapAssessments,
   Confirm,
   EditStudents,
+  Centers,
 } from './reducers';
 
 const reducer = combineReducers({
@@ -56,6 +57,7 @@ const reducer = combineReducers({
   mapAssessments: MapAssessments,
   confirm: Confirm,
   editStudents: EditStudents,
+  centers: Centers,
 });
 
 const middleware = compose(

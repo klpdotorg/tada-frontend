@@ -1,5 +1,5 @@
 import { SERVER_API_BASE } from 'config';
-import _ from 'lodash';
+import { pull, omit, remove } from 'lodash';
 
 import { get, patch, deleteRequest } from './requests';
 import {
@@ -21,10 +21,31 @@ import {
 } from './index';
 import { convertEntitiesToObject, getEntityDepth } from '../utils';
 
-export const selectStudent = (value) => {
+export const resetSelectedStudents = () => {
   return {
     type: SELECT_STUDENT_IN_VIEW_STUDENTS,
-    value,
+    value: [],
+  };
+};
+
+export const selectStudent = (value) => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const { selectedStudents } = state.students;
+
+    if (selectedStudents.includes(value)) {
+      dispatch({
+        type: SELECT_STUDENT_IN_VIEW_STUDENTS,
+        value: remove(selectedStudents, (val) => {
+          return val !== value;
+        }),
+      });
+    } else {
+      dispatch({
+        type: SELECT_STUDENT_IN_VIEW_STUDENTS,
+        value: [...selectedStudents, value],
+      });
+    }
   };
 };
 
@@ -142,12 +163,9 @@ export const deleteStudent = (params) => {
 
         const boundariesByParentId = {
           ...state.boundaries.boundariesByParentId,
-          [parentDepth]: _.pull(state.boundaries.boundariesByParentId[parentDepth], boundaryNodeId),
+          [parentDepth]: pull(state.boundaries.boundariesByParentId[parentDepth], boundaryNodeId),
         };
-        const newUnCollapsedEntities = _.omit(
-          state.boundaries.uncollapsedEntities,
-          parentDepth + 1,
-        );
+        const newUnCollapsedEntities = omit(state.boundaries.uncollapsedEntities, parentDepth + 1);
 
         dispatch({
           type: SET_BOUNDARIES,

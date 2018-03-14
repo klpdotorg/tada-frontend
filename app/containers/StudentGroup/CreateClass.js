@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Modal } from '../../components/Modal';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
+
+import { Modal } from '../../components/Modal';
 import { openNode, saveNewClass, enableSubmitForm, disableSubmitForm } from '../../actions';
 
 const { Input, Select } = FRC;
@@ -21,7 +22,7 @@ class CreateClassForm extends Component {
     const studentGroup = {
       name: myform.class,
       section: myform.section,
-      group_type: myform.role,
+      group_type: myform.group_type,
       status: 'AC',
       institution: this.props.institutionId,
     };
@@ -31,7 +32,7 @@ class CreateClassForm extends Component {
 
   render() {
     const { isOpen, canSubmit } = this.props;
-    const role = [{ value: 'Class', label: 'Class' }, { value: 'Center', label: 'Center' }];
+    const role = [{ value: 'class', label: 'Class' }, { value: 'center', label: 'Center' }];
 
     return (
       <Modal
@@ -46,7 +47,7 @@ class CreateClassForm extends Component {
           onValidSubmit={this.submitForm}
           onValid={this.props.enableSubmitForm}
           onInvalid={this.props.disableSubmitForm}
-          ref={ref => {
+          ref={(ref) => {
             this.myform = ref;
           }}
         >
@@ -70,7 +71,7 @@ class CreateClassForm extends Component {
             placeholder="Please enter the section"
             validations="isAlphanumeric,minLength:1"
           />
-          <Select name="group_type" label="Type" options={role} value="Class" required />
+          <Select name="group_type" label="Type" options={role} value="class" required />
         </Formsy.Form>
       </Modal>
     );
@@ -88,29 +89,33 @@ CreateClassForm.propTypes = {
   disableSubmitForm: PropTypes.func,
 };
 
-const mapStateToProps = state => ({
-  isOpen: state.modal.createClass,
-  canSubmit: state.appstate.enableSubmitForm,
-});
+const mapStateToProps = (state) => {
+  return {
+    isOpen: state.modal.createClass,
+    canSubmit: state.appstate.enableSubmitForm,
+  };
+};
 
-const mapDispatchToProps = dispatch => ({
-  save: (form, institutionNodeId) => {
-    dispatch(openNode(institutionNodeId));
-    dispatch(saveNewClass(form));
-  },
-  enableSubmitForm: () => {
-    dispatch(enableSubmitForm());
-  },
-  disableSubmitForm: () => {
-    dispatch(disableSubmitForm());
-  },
-  onCloseModal: () => {
-    dispatch({
-      type: 'TOGGLE_MODAL',
-      modal: 'createClass',
-    });
-  },
-});
+const mapDispatchToProps = (dispatch) => {
+  return {
+    save: (form, institutionNodeId) => {
+      dispatch(openNode(institutionNodeId));
+      dispatch(saveNewClass(form));
+    },
+    enableSubmitForm: () => {
+      dispatch(enableSubmitForm());
+    },
+    disableSubmitForm: () => {
+      dispatch(disableSubmitForm());
+    },
+    onCloseModal: () => {
+      dispatch({
+        type: 'TOGGLE_MODAL',
+        modal: 'createClass',
+      });
+    },
+  };
+};
 
 const CreateClass = connect(mapStateToProps, mapDispatchToProps)(CreateClassForm);
 

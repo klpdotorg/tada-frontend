@@ -96,3 +96,5 @@ export const SET_LANGUAGES_FOR_EDIT_STUDENTS_FORM = 'set_languages_for_edit_stud
 export const EDIT_STUDENTS_FORM_VALUE_CHANGED = 'edit_students_form_value_changed';
 export const SET_TEACHER = 'set_teacher';
 export const DELETE_TEACHER = 'delete_teacher';
+export const SET_CENTERS = 'set_centers';
+export const SELECT_CENTER = 'select_center';

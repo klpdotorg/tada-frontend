@@ -1,15 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
+import { isEmpty } from 'lodash';
 
 import { Loading } from '../common';
 import { StudentList } from '../../containers/ViewStudents';
 import { EditStudent } from '../../containers/EditStudent';
 
 const ViewStudentsCont = (props) => {
-  const { district, block, cluster, institution, studentGroup, params, canEdit, isLoading } = props;
+  const {
+    district,
+    block,
+    cluster,
+    institution,
+    studentGroup,
+    params,
+    canEdit,
+    centers,
+    isLoading,
+    selectedCenter,
+    canMapStudents,
+  } = props;
 
-  if (isLoading) {
+  if (isLoading || isEmpty(studentGroup)) {
     return <Loading />;
   }
 
@@ -63,11 +76,40 @@ const ViewStudentsCont = (props) => {
               <th />
             </tr>
           </thead>
-          <StudentList studentGroupNodeId={params.studentGroupNodeId} />
+          <StudentList
+            studentGroupNodeId={params.studentGroupNodeId}
+            institutionId={institution.id}
+          />
         </table>
         <div className="row base-spacing-mid">
-          <div className="col-md-8">
-            <button type="submit" className="btn btn-primary">
+          <div className="col-md-4 centers-select-box">
+            <h5 className="text-primary" htmlFor="sel1">
+              Centers:
+            </h5>
+            <select
+              className="form-control"
+              id="sel1"
+              onChange={(e) => {
+                props.selectCenter(e.target.value);
+              }}
+              value={selectedCenter}
+            >
+              {centers.map((center, i) => {
+                return (
+                  <option key={i} value={center.id}>
+                    {center.label}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+          <div className="col-md-4">
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={!canMapStudents}
+              onClick={props.mapStudentsWithCenter}
+            >
               Map to Center
             </button>
           </div>
@@ -87,7 +129,12 @@ ViewStudentsCont.propTypes = {
   canEdit: PropTypes.bool,
   openEditStudentsForm: PropTypes.func,
   params: PropTypes.object,
+  centers: PropTypes.array,
+  selectedCenter: PropTypes.any,
+  selectCenter: PropTypes.func,
   isLoading: PropTypes.bool,
+  canMapStudents: PropTypes.bool,
+  mapStudentsWithCenter: PropTypes.func,
 };
 
 export { ViewStudentsCont };

@@ -30,7 +30,10 @@ const Students = (state = INITIAL_STATE, action) => {
         },
       };
     case SELECT_STUDENT_IN_VIEW_STUDENTS:
-      return { ...state, selectedStudents: [...state.selectedStudents, action.value] };
+      return {
+        ...state,
+        ...{ selectedStudents: action.value },
+      };
     case SET_EDIT_STUDENT_ID:
       return { ...state, editStudentId: action.value };
     default:

@@ -649,3 +649,9 @@ table.table-fixedwidth td, .table-fixedwidth th {
 .marginTop: {
   margin-top: 10px;
 }
+
+.centers-select-box: {
+  display: flex;
+  flex-direction: row;
+  margin-left: 20;
+}
