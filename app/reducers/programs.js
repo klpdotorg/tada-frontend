@@ -1,3 +1,4 @@
+import { omit } from 'lodash';
 import {
   SET_PROGRAMS,
   SET_PROGRAM,
@@ -5,6 +6,7 @@ import {
   SET_EDIT_PROGRAM_ID,
   SHOW_PROGRAMS_LOADING,
   CLOSE_PROGRAMS_LOADING,
+  DELETE_PROGRAM,
 } from '../actions/types';
 import { changeArrayToObject } from './utils';
 
@@ -46,6 +48,11 @@ const Programs = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         loading: false,
+      };
+    case DELETE_PROGRAM:
+      return {
+        ...state,
+        programs: omit(state.programs, action.value),
       };
     default:
       return state;

@@ -1,6 +1,6 @@
 import { SERVER_API_BASE as serverApiBase } from 'config';
 
-import { get, post, patch } from './requests';
+import { get, post, patch, deleteRequest } from './requests';
 import {
   SET_PROGRAMS,
   SET_PROGRAM,
@@ -8,6 +8,7 @@ import {
   SELECT_PROGRAM,
   SHOW_PROGRAMS_LOADING,
   CLOSE_PROGRAMS_LOADING,
+  DELETE_PROGRAM,
 } from './types';
 import { closeConfirmModal } from './index';
 
@@ -135,5 +136,25 @@ export const deactivateProgram = (Id) => {
       .catch(() => {
         dispatch(closeProgramLoading());
       });
+  };
+};
+
+export const deleteProgram = (Id) => {
+  return (dispatch, getState) => {
+    dispatch(showProgramLoading());
+    dispatch(closeConfirmModal());
+
+    const state = getState();
+    const url = `${serverApiBase}surveys/${Id}/`;
+
+    deleteRequest(url).then(() => {
+      dispatch({
+        type: DELETE_PROGRAM,
+        value: Id,
+      });
+      const values = Object.values(state.programs.programs);
+      dispatch(selectProgram(values[0].id));
+      dispatch(closeProgramLoading());
+    });
   };
 };

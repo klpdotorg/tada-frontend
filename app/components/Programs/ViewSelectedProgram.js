@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Loading } from '../common';
-import { DeactivateEntity } from '../../containers/Modal';
+import { DeactivateEntity, Confirm } from '../../containers/Modal';
 
 const ViewSelectedProgram = (props) => {
   const { selectedProgram } = props;
@@ -56,7 +56,9 @@ const ViewSelectedProgram = (props) => {
           <button
             type="button"
             className="btn btn-info padded-btn"
-            onClick={props.showDeleteModal}
+            onClick={() => {
+              props.showDeleteModal(selectedProgram.name);
+            }}
             disabled={false}
           >
             <span className="fa fa-trash-o" /> Delete
@@ -66,6 +68,11 @@ const ViewSelectedProgram = (props) => {
           uniqueId={selectedProgram.id}
           onYes={() => {
             props.deactivateProgram(selectedProgram.id);
+          }}
+        />
+        <Confirm
+          onYes={() => {
+            props.deleteProgram(selectedProgram.id);
           }}
         />
       </div>
@@ -79,6 +86,7 @@ ViewSelectedProgram.propTypes = {
   selectedProgram: PropTypes.object,
   showDeactivateModal: PropTypes.func,
   deactivateProgram: PropTypes.func,
+  deleteProgram: PropTypes.func,
 };
 
 export { ViewSelectedProgram };
