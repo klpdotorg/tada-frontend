@@ -3,6 +3,7 @@ import _ from 'lodash';
 
 import { get, post } from './requests';
 import { SET_CENTERS, SELECT_CENTER } from './types';
+import { resetSelectedStudents, showBoundaryLoading, closeBoundaryLoading } from './index';
 
 export const selectCenter = (Id) => {
   return {
@@ -28,6 +29,7 @@ export const fetchCenters = (institutionId) => {
 
 export const mapStudentsWithCenter = () => {
   return (dispatch, getState) => {
+    dispatch(showBoundaryLoading());
     const state = getState();
     const { boundaryDetails } = state.boundaries;
     const { selectedStudents } = state.students;
@@ -37,8 +39,9 @@ export const mapStudentsWithCenter = () => {
       return { ...boundaryDetails[Id], academic_year: '0607' };
     });
 
-    post(`${SERVER_API_BASE}studentgroups/${selectedCenter}/students/`, values).then((res) => {
-      console.log(res);
+    post(`${SERVER_API_BASE}studentgroups/${selectedCenter}/students/`, values).then(() => {
+      dispatch(resetSelectedStudents());
+      dispatch(closeBoundaryLoading());
     });
   };
 };
