@@ -1,15 +1,22 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { get, keys } from 'lodash';
+import { get, isEmpty } from 'lodash';
 import { connect } from 'react-redux';
 import { DEFAULT_PARENT_NODE_ID } from 'config';
 
-import { getBoundariesEntities, fetchStudents } from '../../actions';
+import {
+  getBoundariesEntities,
+  fetchStudentBoundaries,
+  openEditStudentsForm,
+  fetchCenters,
+  selectCenter,
+  mapStudentsWithCenter,
+} from '../../actions';
 import { ViewStudentsCont } from '../../components/ViewStudents';
 
 class FetchStudents extends Component {
   componentDidMount() {
-    const { params, studentIds, studentGroup } = this.props;
+    const { params, studentIds } = this.props;
 
     const {
       blockNodeId,
@@ -18,6 +25,7 @@ class FetchStudents extends Component {
       institutionNodeId,
       studentGroupNodeId,
     } = params;
+
     if (!studentIds.length) {
       const entities = [
         DEFAULT_PARENT_NODE_ID,
@@ -36,7 +44,7 @@ class FetchStudents extends Component {
     const studentGroupId = get(this.props.studentGroup, 'id');
 
     if (studentGroupId) {
-      this.props.fetchStudents(studentGroupId);
+      this.props.fetchStudentBoundaries(studentGroupNodeId);
     }
   }
 
@@ -49,6 +57,8 @@ FetchStudents.propTypes = {
   getBoundariesEntities: PropTypes.func,
   params: PropTypes.object,
   studentIds: PropTypes.array,
+  studentGroup: PropTypes.object,
+  fetchStudentBoundaries: PropTypes.func,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -59,8 +69,9 @@ const mapStateToProps = (state, ownProps) => {
     institutionNodeId,
     studentGroupNodeId,
   } = ownProps.params;
-
-  const studentIds = keys(state.students.students);
+  const studentIds = get(state.boundaries.boundariesByParentId, '5', []);
+  const { centers, selectedCenter } = state.centers;
+  const { selectedStudents } = state.students;
 
   return {
     district: get(state.boundaries.boundaryDetails, districtNodeId, {}),
@@ -69,10 +80,26 @@ const mapStateToProps = (state, ownProps) => {
     institution: get(state.boundaries.boundaryDetails, institutionNodeId, {}),
     studentGroup: get(state.boundaries.boundaryDetails, studentGroupNodeId, {}),
     studentIds,
+    centers: centers.map((center) => {
+      return {
+        value: center.id,
+        label: center.name,
+      };
+    }),
+    selectedCenter,
+    canEdit: !studentIds.length,
     isLoading: state.appstate.loadingBoundary,
+    canMapStudents: !isEmpty(selectedStudents) && !isEmpty(centers),
   };
 };
 
-const ViewStudents = connect(mapStateToProps, { getBoundariesEntities, fetchStudents })(FetchStudents);
+const ViewStudents = connect(mapStateToProps, {
+  getBoundariesEntities,
+  fetchStudentBoundaries,
+  openEditStudentsForm,
+  fetchCenters,
+  selectCenter,
+  mapStudentsWithCenter,
+})(FetchStudents);
 
 export { ViewStudents };

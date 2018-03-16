@@ -1,20 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { get, isEmpty } from 'lodash';
+import { connect } from 'react-redux';
 
 import { DEFAULT_PARENT_NODE_ID } from 'config';
-import { userHasPermissions } from '../../components/utils';
-import { StudentGroupView } from '../../components/StudentGroup';
-import { getBoundariesEntities, openViewStudents, openAddStudents } from '../../actions';
 
-class FetchStudentGroupEntity extends Component {
-  constructor(props) {
-    super(props);
+import { EditStudentsView } from '../../components/EditStudents';
+import { getBoundariesEntities, getLanguages } from '../../actions';
 
-    this.hasPermissions = this.hasPermissions.bind(this);
-  }
-
+class FetchAddStudentResources extends Component {
   componentDidMount() {
     const { params, studentGroup } = this.props;
 
@@ -40,10 +34,8 @@ class FetchStudentGroupEntity extends Component {
 
       this.props.getBoundariesEntities(entities);
     }
-  }
 
-  hasPermissions(institutionId) {
-    return true || userHasPermissions(this.props.permissions, institutionId);
+    this.props.getLanguages();
   }
 
   render() {
@@ -61,17 +53,15 @@ class FetchStudentGroupEntity extends Component {
       institutionNodeId,
       studentGroupNodeId,
     ];
-    return (
-      <StudentGroupView {...this.props} hasPermissions={this.hasPermissions} depth={path.length} />
-    );
+    return <EditStudentsView {...this.props} depth={path.length} />;
   }
 }
 
-FetchStudentGroupEntity.propTypes = {
+FetchAddStudentResources.propTypes = {
   params: PropTypes.object,
   studentGroup: PropTypes.object,
   getBoundariesEntities: PropTypes.func,
-  permissions: PropTypes.object,
+  getLanguages: PropTypes.func,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -89,32 +79,14 @@ const mapStateToProps = (state, ownProps) => {
     cluster: get(state.boundaries.boundaryDetails, clusterNodeId, {}),
     institution: get(state.boundaries.boundaryDetails, institutionNodeId, {}),
     studentGroup: get(state.boundaries.boundaryDetails, studentGroupNodeId, {}),
+    studentIds: get(state.boundaries.boundariesByParentId, '5', []),
     isLoading: state.appstate.loadingBoundary,
-    isPrimary: state.schoolSelection.primarySchool,
-    permissions: state.login.permissions,
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    toggleStudentModal: () => {
-      dispatch({
-        type: 'TOGGLE_MODAL',
-        modal: 'createClass',
-      });
-    },
-    viewStudent: (id, depth) => {
-      dispatch(openViewStudents(id, depth));
-    },
-    getBoundariesEntities: (entityIds) => {
-      dispatch(getBoundariesEntities(entityIds));
-    },
-    showBulkAdd: (id, depth) => {
-      dispatch(openAddStudents(id, depth));
-    },
-  };
-};
+const EditStudents = connect(mapStateToProps, {
+  getBoundariesEntities,
+  getLanguages,
+})(FetchAddStudentResources);
 
-const StudentGroup = connect(mapStateToProps, mapDispatchToProps)(FetchStudentGroupEntity);
-
-export { StudentGroup };
+export { EditStudents };

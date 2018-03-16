@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
+import { isEmpty } from 'lodash';
 
 import { Loading } from '../common';
-import { StudentList } from './index';
+import { StudentList } from '../../containers/ViewStudents';
 import { EditStudent } from '../../containers/EditStudent';
 
 const ViewStudentsCont = (props) => {
@@ -13,12 +14,15 @@ const ViewStudentsCont = (props) => {
     cluster,
     institution,
     studentGroup,
-    studentIds,
     params,
+    canEdit,
+    centers,
     isLoading,
+    selectedCenter,
+    canMapStudents,
   } = props;
 
-  if (isLoading) {
+  if (isLoading || isEmpty(studentGroup)) {
     return <Loading />;
   }
 
@@ -40,7 +44,21 @@ const ViewStudentsCont = (props) => {
         <li>{studentGroup.name}</li>
       </ol>
       <div className="table-responsive">
-        <h4 className="text-primary">Student Details</h4>
+        <div className="row">
+          <h4 className="text-primary col-md-10">Student Details</h4>
+          <div className="col-md-2 text-center">
+            <button
+              type="submit"
+              className="btn btn-primary"
+              onClick={() => {
+                props.openEditStudentsForm(params.studentGroupNodeId);
+              }}
+              disabled={canEdit}
+            >
+              Edit Students
+            </button>
+          </div>
+        </div>
         <div className="base-spacing-mid border-base" />
         <div className="base-spacing-sm" />
         <table className="table table-condensed table-fixedwidth">
@@ -58,23 +76,40 @@ const ViewStudentsCont = (props) => {
               <th />
             </tr>
           </thead>
-          <StudentList studentIds={studentIds} />
+          <StudentList
+            studentGroupNodeId={params.studentGroupNodeId}
+            institutionId={institution.id}
+          />
         </table>
         <div className="row base-spacing-mid">
-          {/* <div className="col-md-4">
+          <div className="col-md-4 centers-select-box">
+            <h5 className="text-primary" htmlFor="sel1">
+              Centers:
+            </h5>
             <select
-              onChange={e => {
-                this.setState({ mapToCentre: e.target.value });
-              }}
-              value={this.state.mapToCentre}
               className="form-control"
-              id="gender"
+              id="sel1"
+              onChange={(e) => {
+                props.selectCenter(e.target.value);
+              }}
+              value={selectedCenter}
             >
-              {studentGroups}
+              {centers.map((center, i) => {
+                return (
+                  <option key={i} value={center.id}>
+                    {center.label}
+                  </option>
+                );
+              })}
             </select>
-          </div> */}
-          <div className="col-md-8">
-            <button type="submit" className="btn btn-primary">
+          </div>
+          <div className="col-md-4">
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={!canMapStudents}
+              onClick={props.mapStudentsWithCenter}
+            >
               Map to Center
             </button>
           </div>
@@ -91,9 +126,15 @@ ViewStudentsCont.propTypes = {
   cluster: PropTypes.object,
   institution: PropTypes.object,
   studentGroup: PropTypes.object,
-  studentIds: PropTypes.array,
+  canEdit: PropTypes.bool,
+  openEditStudentsForm: PropTypes.func,
   params: PropTypes.object,
+  centers: PropTypes.array,
+  selectedCenter: PropTypes.any,
+  selectCenter: PropTypes.func,
   isLoading: PropTypes.bool,
+  canMapStudents: PropTypes.bool,
+  mapStudentsWithCenter: PropTypes.func,
 };
 
 export { ViewStudentsCont };

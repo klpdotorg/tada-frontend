@@ -1,18 +1,16 @@
 import fetch from 'isomorphic-fetch';
-import { push } from 'react-router-redux';
-import { checkStatus, get } from './requests';
+import { SERVER_API_BASE as serverApiBase } from 'config';
 
-import {
-  SERVER_API_BASE as serverApiBase,
-  SERVER_AUTH_BASE as authApiBase,
-  REPORTS_EMAIL as reportsEmail,
-  DEFAULT_PARENT_ID,
-} from 'config';
-import { urls as Urls, roles as ROLES } from '../constants';
-import _ from 'lodash';
-import { boundaryType, genUrl } from './utils';
-import { computeRouterPathForEntity } from '../reducers/utils';
+import { checkStatus, get } from './requests';
+import { urls as Urls } from '../constants';
+import { boundaryType } from './utils';
 import { SET_PARENT_NODE } from './types';
+
+export const goBack = () => {
+  return {
+    type: 'pop',
+  };
+};
 
 export const setParentNode = (value) => {
   return {
@@ -322,34 +320,34 @@ export const toggleModal = (modalType) => {
   };
 };
 
-export function deleteBoundary(boundaryid, parentId) {
-  return function (dispatch, getState) {
-    return fetch(`${serverApiBase}boundaries/${boundaryid}/`, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Token ${sessionStorage.token}`,
-      },
-    })
-      .then((response) => {
-        if (response.status >= 200 && response.status < 300) {
-          if (parentId == 1) {
-            dispatch(push('/'));
-          } else {
-            let parent = getState().boundaries.boundaryDetails[parentId];
-            dispatch(push(parent.path));
-          }
-          dispatch(removeBoundary(boundaryid, parentId));
-        } else {
-          const error = new Error(response.statusText);
-          error.response = response;
-          throw error;
-        }
-      })
-      .catch((error) => {
-        console.log('request failed', error);
-      });
-  };
-}
+// export function deleteBoundary(boundaryid, parentId) {
+//   return function (dispatch, getState) {
+//     return fetch(`${serverApiBase}boundaries/${boundaryid}/`, {
+//       method: 'DELETE',
+//       headers: {
+//         Authorization: `Token ${sessionStorage.token}`,
+//       },
+//     })
+//       .then((response) => {
+//         if (response.status >= 200 && response.status < 300) {
+//           if (parentId == 1) {
+//             dispatch(push('/'));
+//           } else {
+//             let parent = getState().boundaries.boundaryDetails[parentId];
+//             dispatch(push(parent.path));
+//           }
+//           dispatch(removeBoundary(boundaryid, parentId));
+//         } else {
+//           const error = new Error(response.statusText);
+//           error.response = response;
+//           throw error;
+//         }
+//       })
+//       .catch((error) => {
+//         console.log('request failed', error);
+//       });
+//   };
+// }
 
 export const newBoundaryFetch = (options) => {
   return fetch(`${serverApiBase}boundaries/`, {

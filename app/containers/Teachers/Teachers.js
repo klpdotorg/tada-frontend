@@ -66,9 +66,7 @@ const mapStateToProps = (state, ownProps) => {
     block: get(state.boundaries.boundaryDetails, blockNodeId, {}),
     cluster: get(state.boundaries.boundaryDetails, clusterNodeId, {}),
     institution: get(state.boundaries.boundaryDetails, institutionNodeId, {}),
-    teacherIds: state.teachers.teachers.map((teacher) => {
-      return teacher.id;
-    }),
+    teacherIds: Object.keys(state.teachers.teachers),
     isLoading: state.appstate.loadingBoundary,
     teacherLoading: state.teachers.loading,
   };

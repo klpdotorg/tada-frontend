@@ -43,7 +43,10 @@ const PreschoolView = (props) => {
         />
         <div className="border-base" />
         <div className="base-spacing-sm" />
-        <EditPreschool circleId={circle.id} institutionNodeId={params.institutionNodeId} />
+        <EditPreschool
+          circleNodeId={params.circleNodeId}
+          institutionNodeId={params.institutionNodeId}
+        />
       </div>
       <CreateClass institutionId={institution.id} institutionNodeId={params.institutionNodeId} />
     </div>

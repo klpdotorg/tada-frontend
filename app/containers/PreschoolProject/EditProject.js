@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import FRC from 'formsy-react-components';
 import Formsy from 'formsy-react';
+import { get } from 'lodash';
 
 import { Confirm } from '../Modal';
 import {
@@ -13,6 +14,7 @@ import {
   toggleCreateCircleModal,
   openDeleteBoundaryModal,
 } from '../../actions';
+import { hasChildren } from '../../utils';
 
 const { Input } = FRC;
 
@@ -30,15 +32,23 @@ class EditProjectForm extends Component {
   }
 
   deleteProject() {
-    this.props.deleteProject(this.props.project.id, this.props.districtId);
+    const { projectNodeId, project, districtNodeId } = this.props;
+
+    const params = {
+      boundaryNodeId: projectNodeId,
+      boundaryId: project.id,
+      parentId: districtNodeId,
+    };
+
+    this.props.deleteProject(params);
   }
 
   render() {
-    const { hasCircles, project, canSubmit } = this.props;
+    const { canDelete, project, canSubmit } = this.props;
 
     return (
       <div>
-        {hasCircles ? (
+        {!canDelete ? (
           <div className="alert alert-info">
             <i className="fa fa-info-circle fa-lg" aria-hidden="true" /> You cannot delete this
             boundary until its children are deleted
@@ -61,7 +71,7 @@ class EditProjectForm extends Component {
           onValid={this.props.enableSubmitForm}
           onInvalid={this.props.disableSubmitForm}
           ref={(ref) => {
-            return (this.myform = ref);
+            this.myform = ref;
           }}
         >
           <Input
@@ -90,6 +100,7 @@ class EditProjectForm extends Component {
             onClick={() => {
               this.props.showConfirmModal(project.name);
             }}
+            disabled={!canDelete}
           >
             Delete
           </button>
@@ -102,8 +113,9 @@ class EditProjectForm extends Component {
 
 EditProjectForm.propTypes = {
   project: PropTypes.object,
-  districtId: PropTypes.number,
-  hasCircles: PropTypes.bool,
+  projectNodeId: PropTypes.string,
+  districtNodeId: PropTypes.string,
+  canDelete: PropTypes.bool,
   canSubmit: PropTypes.bool,
   saveProject: PropTypes.func,
   toggleCircleModal: PropTypes.func,
@@ -115,12 +127,11 @@ EditProjectForm.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const { projectNodeId } = ownProps;
-  const circleIds = state.boundaries.boundariesByParentId[projectNodeId];
-  const hasCircles = circleIds && circleIds.length > 0;
+  const { boundaries } = state;
 
   return {
-    project: state.boundaries.boundaryDetails[projectNodeId] || {},
-    hasCircles,
+    project: get(boundaries.boundaryDetails, projectNodeId, {}),
+    canDelete: hasChildren(projectNodeId, boundaries),
     openConfirmModal: state.appstate.confirmModal,
     canSubmit: state.appstate.enableSubmitForm,
   };

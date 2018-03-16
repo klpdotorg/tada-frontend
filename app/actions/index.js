@@ -28,3 +28,6 @@ export * from './NavTree';
 export * from './PreschoolProject';
 export * from './PreschoolCircle';
 export * from './ConfirmModal';
+export * from './EditStudents';
+export * from './Preschool';
+export * from './Centers';

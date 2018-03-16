@@ -6,9 +6,7 @@ import { getStaffTypes } from './utils';
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    teacher: state.teachers.teachers.find((teacher) => {
-      return teacher.id === ownProps.id;
-    }),
+    teacher: state.teachers.teachers[ownProps.id],
     languages: state.languages.languages,
     staffTypes: getStaffTypes(state.schoolSelection.primarySchool),
   };

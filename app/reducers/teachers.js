@@ -1,14 +1,18 @@
+import { omit } from 'lodash';
+
 import {
   TEACHER_FETCHED,
   SET_EDIT_TEACHER_ID,
   SHOW_TEACHER_LOADING,
   CLOSE_TEACHER_LOADING,
+  SET_TEACHER,
+  DELETE_TEACHER,
 } from '../actions/types';
 
 const INITIAL_STATE = {
   editTeacherId: null,
   loading: false,
-  teachers: [],
+  teachers: {},
 };
 
 const Teachers = (state = INITIAL_STATE, action) => {
@@ -35,7 +39,19 @@ const Teachers = (state = INITIAL_STATE, action) => {
         editTeacherId: action.value,
       };
     }
-
+    case DELETE_TEACHER:
+      return {
+        ...state,
+        teachers: omit(state.teachers, action.value),
+      };
+    case SET_TEACHER:
+      return {
+        ...state,
+        teachers: {
+          ...state.teachers,
+          ...action.value,
+        },
+      };
     default:
       return state;
   }

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
+import { get } from 'lodash';
 
 import {
   deleteInstitution,
@@ -13,6 +14,7 @@ import {
 } from '../../actions';
 
 import { Confirm } from '../Modal';
+import { hasChildren } from '../../utils';
 
 const { Input, Textarea, Select } = FRC;
 
@@ -29,7 +31,15 @@ class EditInstitutionForm extends Component {
   }
 
   deleteInstitution() {
-    this.props.deleteInstitution(Number(this.props.clusterId), Number(this.props.institution.id));
+    const { institution, clusterNodeId, institutionNodeId } = this.props;
+
+    const params = {
+      boundaryNodeId: institutionNodeId,
+      boundaryId: institution.id,
+      parentId: clusterNodeId,
+    };
+
+    this.props.deleteInstitution(params);
   }
 
   saveInsti() {
@@ -43,7 +53,7 @@ class EditInstitutionForm extends Component {
       landmark: myform.institutionLandmark,
       pincode: myform.institutionPincode,
       category: myform.institutionCat,
-      languages: myform.institutionLang,
+      institution_languages: myform.institutionLang,
       management: myform.institutionMgmt,
       last_verified_year: myform.lastVerifiedYear,
     };
@@ -61,22 +71,21 @@ class EditInstitutionForm extends Component {
     const singleSelectOptions = [{ value: '', label: 'Please select…' }, ...selectOptions];
     const {
       institution,
-      canSubmit,
-      hasClasses,
+      canDelete,
       languages,
       institutionCategories,
       managements,
       lastVerifiedYears,
     } = this.props;
+
     return (
       <Formsy.Form
         onValidSubmit={this.saveInsti}
         onValid={this.props.enableSubmitForm}
         onInvalid={this.props.disableSubmitForm}
         ref={(ref) => {
-          return (this.myform = ref);
+          this.myform = ref;
         }}
-        canSubmit={canSubmit}
       >
         <div className="form-group">
           <div className="col-sm-12">
@@ -157,7 +166,7 @@ class EditInstitutionForm extends Component {
               multiple
               name="institutionLang"
               label="Medium:"
-              value={this.getValue(institution.languages)}
+              value={this.getValue(institution.institution_languages)}
               options={languages}
               required
             />
@@ -190,7 +199,7 @@ class EditInstitutionForm extends Component {
             <Input
               name="institutionDise_code"
               id="institutionDise_code"
-              value={this.getValue(institution.dise_code)}
+              value={this.getValue(institution.dise)}
               label="DISE Code:"
               type="text"
               className="form-control"
@@ -215,7 +224,7 @@ class EditInstitutionForm extends Component {
           <button
             type="button"
             className="btn btn-primary padded-btn"
-            disabled={hasClasses}
+            disabled={!canDelete}
             onClick={() => {
               this.props.showConfirmModal(institution.name);
             }}
@@ -230,10 +239,10 @@ class EditInstitutionForm extends Component {
 }
 
 EditInstitutionForm.propTypes = {
-  canSubmit: PropTypes.bool,
-  clusterId: PropTypes.number,
+  institutionNodeId: PropTypes.string,
+  clusterNodeId: PropTypes.string,
   institution: PropTypes.object,
-  hasClasses: PropTypes.bool,
+  canDelete: PropTypes.bool,
   languages: PropTypes.array,
   managements: PropTypes.array,
   lastVerifiedYears: PropTypes.array,
@@ -247,13 +256,12 @@ EditInstitutionForm.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const { institutionNodeId } = ownProps;
-  const classesIds = state.boundaries.boundariesByParentId[institutionNodeId];
-  const hasClasses = classesIds && classesIds.length > 0;
+  const { boundaries } = state;
 
   return {
-    hasClasses,
+    canDelete: hasChildren(institutionNodeId, boundaries),
     openConfirmModal: state.appstate.confirmModal,
-    institution: state.boundaries.boundaryDetails[institutionNodeId],
+    institution: get(boundaries.boundaryDetails, institutionNodeId, {}),
     canSubmit: state.appstate.enableSubmitForm,
     languages: state.languages.languages,
     managements: state.institution.managements,

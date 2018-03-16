@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
+import { get } from 'lodash';
 
 import {
   deleteStudentGroup,
@@ -13,6 +14,7 @@ import {
 } from '../../actions';
 
 import { Confirm } from '../Modal';
+import { hasChildren } from '../../utils';
 
 const { Input, Select } = FRC;
 
@@ -37,7 +39,16 @@ class EditStudentGroupForm extends Component {
   }
 
   deleteStudentGroup() {
-    console.log('Delete student group');
+    const { studentGroup, studentGroupNodeId, institutionNodeId, institutionId } = this.props;
+
+    const params = {
+      boundaryNodeId: studentGroupNodeId,
+      boundaryId: studentGroup.id,
+      parentNodeId: institutionNodeId,
+      parentId: institutionId,
+    };
+
+    this.props.delete(params);
   }
 
   render() {
@@ -46,7 +57,7 @@ class EditStudentGroupForm extends Component {
       { label: 'Center', value: 'center' },
     ];
 
-    const { studentGroup, hasStudents } = this.props;
+    const { studentGroup, canDelete } = this.props;
 
     return (
       <Formsy.Form
@@ -54,7 +65,7 @@ class EditStudentGroupForm extends Component {
         onValid={this.props.enableSubmitForm}
         onInvalid={this.props.disableSubmitForm}
         ref={(ref) => {
-          return (this.myform = ref);
+          this.myform = ref;
         }}
       >
         <div className="form-group">
@@ -106,7 +117,7 @@ class EditStudentGroupForm extends Component {
           <button
             type="button"
             className="btn btn-primary padded-btn"
-            disabled={hasStudents}
+            disabled={!canDelete}
             onClick={() => {
               this.props.showConfirmModal(studentGroup.name);
             }}
@@ -122,8 +133,12 @@ class EditStudentGroupForm extends Component {
 
 EditStudentGroupForm.propTypes = {
   studentGroup: PropTypes.object,
-  hasStudents: PropTypes.bool,
+  canDelete: PropTypes.bool,
+  studentGroupNodeId: PropTypes.string,
+  institutionNodeId: PropTypes.string,
+  institutionId: PropTypes.number,
   saveStudentGroup: PropTypes.func,
+  delete: PropTypes.func,
   showConfirmModal: PropTypes.func,
   enableSubmitForm: PropTypes.func,
   disableSubmitForm: PropTypes.func,
@@ -131,13 +146,12 @@ EditStudentGroupForm.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const { studentGroupNodeId } = ownProps;
-  const studentIds = state.boundaries.boundariesByParentId[studentGroupNodeId];
-  const hasStudents = studentIds && studentIds.length > 0;
+  const { boundaries } = state;
 
   return {
-    hasStudents,
+    canDelete: hasChildren(studentGroupNodeId, boundaries),
     openConfirmModal: state.appstate.confirmModal,
-    studentGroup: state.boundaries.boundaryDetails[studentGroupNodeId],
+    studentGroup: get(state.boundaries.boundaryDetails, studentGroupNodeId, {}),
     canSubmit: state.appstate.enableSubmitForm,
     institutionCategories: state.institution.institutionCats,
   };
@@ -145,7 +159,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const EditStudentGroup = connect(mapStateToProps, {
   saveStudentGroup: modifyStudentGroup,
-  deleteStudentGroup,
+  delete: deleteStudentGroup,
   enableSubmitForm,
   disableSubmitForm,
   showConfirmModal: openDeleteBoundaryModal,

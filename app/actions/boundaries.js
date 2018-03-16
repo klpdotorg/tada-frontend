@@ -2,10 +2,45 @@ import { SERVER_API_BASE, STATE_CODE, PER_PAGE } from 'config';
 import { push } from 'react-router-redux';
 import _ from 'lodash';
 
-import { get, patch } from './requests';
-import { convertEntitiesToObject, getPath } from '../utils';
-import { SET_BOUNDARIES, REMOVE_EXISTING_BOUNDARIES_NODE, UNCOLLAPSED_BOUNDARIES } from './types';
-import { showBoundaryLoading, closeBoundaryLoading } from './index';
+import { get, patch, deleteRequest } from './requests';
+import { convertEntitiesToObject, getPath, getEntityDepth } from '../utils';
+import {
+  SET_BOUNDARIES,
+  REMOVE_EXISTING_BOUNDARIES_NODE,
+  UNCOLLAPSED_BOUNDARIES,
+  DELETE_BOUNDARY_NODE,
+} from './types';
+import { showBoundaryLoading, closeBoundaryLoading, closeConfirmModal } from './index';
+
+export const removeEntity = (params) => {
+  return (dispatch, getState) => {
+    const { parentId, boundaryNodeId } = params;
+    const state = getState();
+    const parentEntity = state.boundaries.boundaryDetails[parentId];
+    const parentDepth = getEntityDepth(parentEntity);
+    const path = getPath(state, parentId, parentDepth);
+
+    const boundariesByParentId = {
+      ...state.boundaries.boundariesByParentId,
+      [parentDepth]: _.pull(state.boundaries.boundariesByParentId[parentDepth], boundaryNodeId),
+    };
+    const newUnCollapsedEntities = _.omit(state.boundaries.uncollapsedEntities, parentDepth + 1);
+    dispatch({
+      type: SET_BOUNDARIES,
+      boundariesByParentId,
+    });
+    dispatch({
+      type: UNCOLLAPSED_BOUNDARIES,
+      value: newUnCollapsedEntities,
+    });
+    dispatch({
+      type: DELETE_BOUNDARY_NODE,
+      value: boundaryNodeId,
+    });
+    dispatch(closeBoundaryLoading());
+    dispatch(push(path));
+  };
+};
 
 export const openBoundary = (uniqueId, depth) => {
   return (dispatch, getState) => {
@@ -153,6 +188,8 @@ export const getBoundariesEntities = (Ids) => {
 
 export const modifyBoundary = (boundaryId, name) => {
   return (dispatch) => {
+    dispatch(showBoundaryLoading());
+
     patch(`${SERVER_API_BASE}boundaries/${boundaryId}/`, { name })
       .then((response) => {
         const entities = convertEntitiesToObject([response]);
@@ -161,9 +198,28 @@ export const modifyBoundary = (boundaryId, name) => {
           type: SET_BOUNDARIES,
           boundaryDetails: entities,
         });
+        dispatch(closeBoundaryLoading());
       })
-      .catch((error) => {
-        console.log('request failed', error);
+      .catch((error) => {});
+  };
+};
+
+export const deleteBoundary = (params) => {
+  return (dispatch) => {
+    const { boundaryId } = params;
+    dispatch(showBoundaryLoading());
+    dispatch(closeConfirmModal());
+
+    const url = `${SERVER_API_BASE}boundaries/${boundaryId}/`;
+
+    deleteRequest(url)
+      .then((response) => {
+        if (response.status === 204) {
+          dispatch(removeEntity(params));
+        }
+      })
+      .catch((err) => {
+        console.log(err);
       });
   };
 };

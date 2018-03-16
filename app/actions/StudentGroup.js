@@ -1,14 +1,17 @@
 import { push } from 'react-router-redux';
 
 import { SERVER_API_BASE } from 'config';
-import { get, post, patch } from './requests';
+import { get, post, patch, deleteRequest } from './requests';
 import {
   setBoundaries,
   getEntities,
   closeBoundaryLoading,
+  showBoundaryLoading,
   requestFailed,
   toggleModal,
   openEntity,
+  removeEntity,
+  closeConfirmModal,
 } from './index';
 import { SET_BOUNDARIES } from './types';
 import { getPath, getEntityType, getEntityDepth, convertEntitiesToObject } from '../utils';
@@ -51,8 +54,16 @@ export const fetchStudentGroup = (parentBoundaryId, moreIds) => {
 
 export const modifyStudentGroup = (studentGroup, studentGroupId) => {
   return (dispatch) => {
+    dispatch(showBoundaryLoading());
+
     patch(`${SERVER_API_BASE}studentgroups/${studentGroupId}/`, studentGroup).then((response) => {
-      dispatch(setBoundaries({ results: [response] }));
+      const entities = convertEntitiesToObject([response]);
+
+      dispatch({
+        type: SET_BOUNDARIES,
+        boundaryDetails: entities,
+      });
+      dispatch(closeBoundaryLoading());
     });
   };
 };
@@ -75,5 +86,30 @@ export const saveNewClass = (options) => {
       dispatch(openEntity({ depth, uniqueId: `${response.id}${type}` }));
       dispatch(push(path));
     });
+  };
+};
+
+export const deleteStudentGroup = (params) => {
+  return (dispatch) => {
+    dispatch(showBoundaryLoading());
+    dispatch(closeConfirmModal());
+
+    return deleteRequest(`${SERVER_API_BASE}institutions/${params.parentId}/studentgroups/${params.boundaryId}/`)
+      .then((response) => {
+        if (response.status >= 200 && response.status < 300) {
+          dispatch(removeEntity({
+            boundaryId: params.boundaryId,
+            boundaryNodeId: params.boundaryNodeId,
+            parentId: params.parentNodeId,
+          }));
+        } else {
+          const error = new Error(response.statusText);
+          error.response = response;
+          throw error;
+        }
+      })
+      .catch((error) => {
+        console.log('request failed', error);
+      });
   };
 };

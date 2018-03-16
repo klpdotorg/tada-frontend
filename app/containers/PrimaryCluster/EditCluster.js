@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import FRC from 'formsy-react-components';
 import Formsy from 'formsy-react';
+import { get } from 'lodash';
 
 import {
   modifyBoundary,
@@ -14,6 +15,7 @@ import {
 } from '../../actions';
 
 import { Confirm } from '../Modal';
+import { hasChildren } from '../../utils';
 
 const { Input } = FRC;
 
@@ -27,21 +29,26 @@ class EditClusterView extends Component {
 
   saveCluster() {
     const myform = this.myform.getModel();
-    this.props.saveCluster(this.props.blockNodeId, this.props.cluster.id, myform.ClusterName);
+    this.props.saveCluster(this.props.cluster.id, myform.ClusterName);
   }
 
   deleteCluster() {
-    const { cluster, blockId, deleteCluster } = this.props;
+    const { cluster, blockNodeId, clusterNodeId } = this.props;
 
-    deleteCluster(cluster.id, blockId);
+    const params = {
+      boundaryNodeId: clusterNodeId,
+      boundaryId: cluster.id,
+      parentId: blockNodeId,
+    };
+    this.props.deleteCluster(params);
   }
 
   render() {
-    const { hasSchools, cluster } = this.props;
+    const { canDelete, cluster } = this.props;
 
     return (
       <div>
-        {hasSchools ? (
+        {!canDelete ? (
           <div className="alert alert-info">
             <i className="fa fa-info-circle fa-lg" aria-hidden="true" /> You cannot delete this
             boundary until its children are deleted
@@ -63,7 +70,7 @@ class EditClusterView extends Component {
           onValid={this.props.enableSubmitForm}
           onInvalid={this.props.disableSubmitForm}
           ref={(ref) => {
-            return (this.myform = ref);
+            this.myform = ref;
           }}
         >
           <Input
@@ -89,7 +96,7 @@ class EditClusterView extends Component {
           <button
             type="submit"
             className="btn btn-primary padded-btn"
-            disabled={hasSchools}
+            disabled={!canDelete}
             onClick={() => {
               this.props.showConfirmModal(cluster.name);
             }}
@@ -104,10 +111,10 @@ class EditClusterView extends Component {
 }
 
 EditClusterView.propTypes = {
-  hasSchools: PropTypes.bool,
+  canDelete: PropTypes.bool,
   canSubmit: PropTypes.bool,
   cluster: PropTypes.object,
-  blockId: PropTypes.number,
+  clusterNodeId: PropTypes.string,
   blockNodeId: PropTypes.string,
   saveCluster: PropTypes.func,
   deleteCluster: PropTypes.func,
@@ -119,13 +126,13 @@ EditClusterView.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const { clusterNodeId } = ownProps;
-  const institutionIds = state.boundaries.boundariesByParentId[clusterNodeId];
-  const hasSchools = institutionIds && institutionIds.length > 0;
+  const { boundaries } = state;
+
   return {
-    hasSchools,
+    canDelete: hasChildren(clusterNodeId, boundaries),
     openConfirmModal: state.appstate.confirmModal,
     canSubmit: state.appstate.enableSubmitForm,
-    cluster: state.boundaries.boundaryDetails[clusterNodeId],
+    cluster: get(boundaries.boundaryDetails, clusterNodeId, {}),
   };
 };
 

@@ -1,14 +1,17 @@
+import { omit } from 'lodash';
 import {
   SET_BOUNDARIES,
   REMOVE_EXISTING_BOUNDARIES_NODE,
   UNCOLLAPSED_BOUNDARIES,
   RESET_BOUNDARY_NAV_TREE,
+  DELETE_BOUNDARY_NODE,
 } from '../actions/types';
 
 const INITIAL_STATE = {
   boundaryDetails: {
     '2state': {
       id: 2,
+      boundary_type: 'ST',
     },
   },
   boundariesByParentId: {},
@@ -49,6 +52,12 @@ const BoundariesNavTree = (state = INITIAL_STATE, action) => {
         ...state,
         uncollapsedEntities: {},
         boundariesByParentId: {},
+      };
+    case DELETE_BOUNDARY_NODE:
+      return {
+        ...state,
+        boundaryDetails: omit(state.boundaryDetails, action.value),
+        boundariesByParentId: omit(state.boundariesByParentId, action.value),
       };
     default:
       return state;

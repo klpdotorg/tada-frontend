@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
-import { AddStudentInputRow } from './index';
-import { goBack, setAddStudentsFormErrors, addStudents } from '../../actions';
+import { EditStudentInputRow } from './index';
+import { setEditStudentsFormErrors, editStudents, goBack, setEditStudents } from '../../actions';
 
 const REQUIRED_FIELDS = [
   {
@@ -21,13 +21,17 @@ const REQUIRED_FIELDS = [
   },
 ];
 
-class AddStudentsFormView extends Component {
+class EditStudentsFormView extends Component {
   constructor() {
     super();
 
     this.renderErrors = this.renderErrors.bind(this);
     this.renderRows = this.renderRows.bind(this);
     this.validate = this.validate.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.setEditStudents(this.props.depth);
   }
 
   setRequiredField(field) {
@@ -54,9 +58,9 @@ class AddStudentsFormView extends Component {
       });
     });
 
-    this.props.setAddStudentsFormErrors(errorList);
+    this.props.setEditStudentsFormErrors(errorList);
     if (_.isEmpty(errorList)) {
-      this.props.addStudents(studentGroupNodeId, studentGroupId, institutionId, depth);
+      this.props.editStudents(studentGroupNodeId, studentGroupId, institutionId, depth);
     }
   }
 
@@ -76,11 +80,11 @@ class AddStudentsFormView extends Component {
   }
 
   renderRows() {
-    const rows = Array.from(Array(this.props.rows).keys());
+    const rows = Object.keys(this.props.values);
 
-    return rows.map((row, index) => {
+    return rows.map((id) => {
       return (
-        <AddStudentInputRow key={index} index={index} institutionId={this.props.institutionId} />
+        <EditStudentInputRow key={id} id={id} index={id} institutionId={this.props.institutionId} />
       );
     });
   }
@@ -128,32 +132,32 @@ class AddStudentsFormView extends Component {
   }
 }
 
-AddStudentsFormView.propTypes = {
+EditStudentsFormView.propTypes = {
   goBack: PropTypes.func,
   formErrors: PropTypes.array,
   studentGroupNodeId: PropTypes.string,
   institutionId: PropTypes.number,
   studentGroupId: PropTypes.number,
-  rows: PropTypes.number,
   values: PropTypes.object,
-  setAddStudentsFormErrors: PropTypes.func,
-  addStudents: PropTypes.func,
+  setEditStudentsFormErrors: PropTypes.func,
+  editStudents: PropTypes.func,
   depth: PropTypes.number,
+  setEditStudents: PropTypes.func,
 };
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    formErrors: state.addStudents.formErrors,
-    rows: state.addStudents.rows,
-    values: state.addStudents.values,
+    formErrors: state.editStudents.formErrors,
+    values: state.editStudents.values,
     path: _.get(state.boundaries.boundaryDetails, `[${ownProps.studentGroupNodeId}].path`),
   };
 };
 
-const AddStudentsForm = connect(mapStateToProps, {
+const EditStudentsForm = connect(mapStateToProps, {
   goBack,
-  setAddStudentsFormErrors,
-  addStudents,
-})(AddStudentsFormView);
+  setEditStudentsFormErrors,
+  editStudents,
+  setEditStudents,
+})(EditStudentsFormView);
 
-export { AddStudentsForm };
+export { EditStudentsForm };

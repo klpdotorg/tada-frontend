@@ -29,7 +29,7 @@ const PreschoolCircleView = ({ isLoading, district, project, circle, params }) =
         <li className="active">{circle.name}</li>
       </ol>
       {sessionStorage.getItem('isAdmin') ? (
-        <EditCircle circleNodeId={params.circleNodeId} projectId={project.id} />
+        <EditCircle circleNodeId={params.circleNodeId} projectNodeId={params.projectNodeId} />
       ) : (
         <NoPermissionView />
       )}

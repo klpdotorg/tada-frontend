@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { get } from 'lodash';
 
 import FRC from 'formsy-react-components';
 import Formsy from 'formsy-react';
@@ -14,6 +15,7 @@ import {
   openDeleteBoundaryModal,
   toggleCreateClusterModal,
 } from '../../actions';
+import { hasChildren } from '../../utils';
 
 const { Input } = FRC;
 
@@ -27,19 +29,26 @@ class EditBlockForm extends Component {
 
   onClickSaveBlock() {
     const myform = this.myform.getModel();
-    this.props.saveBlock(this.props.districtNodeId, this.props.block.id, myform.BlockName);
+    this.props.saveBlock(this.props.block.id, myform.BlockName);
   }
 
   onClickDeleteBlock() {
-    this.props.deleteBlock(this.props.block.id, this.props.districtId);
+    const { blockNodeId, block, districtNodeId } = this.props;
+
+    const params = {
+      boundaryNodeId: blockNodeId,
+      boundaryId: block.id,
+      parentId: districtNodeId,
+    };
+    this.props.deleteBlock(params);
   }
 
   render() {
-    const { hasClusters, block } = this.props;
+    const { canDelete, block } = this.props;
 
     return (
       <div>
-        {hasClusters ? (
+        {!canDelete ? (
           <div className="alert alert-info">
             <i className="fa fa-info-circle fa-lg" aria-hidden="true" /> You cannot delete this
             boundary until its children are deleted
@@ -61,7 +70,7 @@ class EditBlockForm extends Component {
           onValid={this.props.enableSubmitForm}
           onInvalid={this.props.disableSubmitForm}
           ref={(ref) => {
-            return (this.myform = ref);
+            this.myform = ref;
           }}
         >
           <Input
@@ -88,7 +97,7 @@ class EditBlockForm extends Component {
           <button
             type="submit"
             className="btn btn-primary padded-btn"
-            disabled={hasClusters}
+            disabled={!canDelete}
             onClick={() => {
               this.props.showConfirmModal(block.name);
             }}
@@ -104,9 +113,9 @@ class EditBlockForm extends Component {
 
 EditBlockForm.propTypes = {
   block: PropTypes.object,
-  districtId: PropTypes.number,
   districtNodeId: PropTypes.string,
-  hasClusters: PropTypes.bool,
+  blockNodeId: PropTypes.string,
+  canDelete: PropTypes.bool,
   canSubmit: PropTypes.bool,
   saveBlock: PropTypes.func,
   toggleClusterModal: PropTypes.func,
@@ -118,11 +127,11 @@ EditBlockForm.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const { blockNodeId } = ownProps;
-  const clusterIds = state.boundaries.boundariesByParentId[blockNodeId];
-  const hasClusters = clusterIds && clusterIds.length > 0;
+  const { boundaries } = state;
+
   return {
-    block: state.boundaries.boundaryDetails[blockNodeId] || {},
-    hasClusters,
+    block: get(boundaries.boundaryDetails, blockNodeId, {}),
+    canDelete: hasChildren(blockNodeId, boundaries),
     openConfirmModal: state.appstate.confirmModal,
     canSubmit: state.appstate.enableSubmitForm,
   };

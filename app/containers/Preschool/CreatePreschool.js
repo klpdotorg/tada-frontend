@@ -1,7 +1,12 @@
 import { connect } from 'react-redux';
 
 import { CreateInstitutionForm } from '../common';
-import { saveNewInstitution, enableSubmitForm, disableSubmitForm, openNode } from '../../actions';
+import {
+  saveNewInstitution,
+  enableSubmitForm,
+  disableSubmitForm,
+  toggleCreatePreschoolModal,
+} from '../../actions';
 
 const mapStateToProps = (state) => {
   return {
@@ -15,27 +20,11 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    save: (clusterNodeId, form) => {
-      dispatch(openNode(clusterNodeId));
-      dispatch(saveNewInstitution(form));
-    },
-    enableSubmitForm: () => {
-      dispatch(enableSubmitForm());
-    },
-    disableSubmitForm: () => {
-      dispatch(disableSubmitForm());
-    },
-    closeConfirmModal: () => {
-      dispatch({
-        type: 'TOGGLE_MODAL',
-        modal: 'createPreschool',
-      });
-    },
-  };
-};
-
-const CreatePreschool = connect(mapStateToProps, mapDispatchToProps)(CreateInstitutionForm);
+const CreatePreschool = connect(mapStateToProps, {
+  save: saveNewInstitution,
+  enableSubmitForm,
+  disableSubmitForm,
+  closeConfirmModal: toggleCreatePreschoolModal,
+})(CreateInstitutionForm);
 
 export { CreatePreschool };

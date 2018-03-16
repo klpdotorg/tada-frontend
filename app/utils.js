@@ -6,6 +6,8 @@ import { getBoundaryType } from './reducers/utils';
 export const getEntityDepth = (boundary) => {
   const boundaryType = getBoundaryType(boundary);
   switch (boundaryType) {
+    case 'ST':
+      return 0;
     case 'PD':
       return 1;
     case 'SD':
@@ -24,6 +26,8 @@ export const getEntityDepth = (boundary) => {
       return 4;
     case 'class':
       return 5;
+    case 'center':
+      return 5;
     case 'student':
       return 6;
     default:
@@ -31,9 +35,20 @@ export const getEntityDepth = (boundary) => {
   }
 };
 
+export const hasChildren = (entityId, boundaries) => {
+  const { boundaryDetails, boundariesByParentId } = boundaries;
+  const boundary = boundaryDetails[entityId];
+  const depth = getEntityDepth(boundary);
+  const hasChilds = _.get(boundariesByParentId, depth, []);
+
+  return _.isEmpty(hasChilds);
+};
+
 export const getEntityType = (boundary) => {
   const boundaryType = getBoundaryType(boundary);
   switch (boundaryType) {
+    case 'ST':
+      return 'state';
     case 'PD':
       return 'district';
     case 'SD':
@@ -50,6 +65,8 @@ export const getEntityType = (boundary) => {
       return 'institution';
     case 'pre':
       return 'institution';
+    case 'center':
+      return 'studentgroup';
     case 'class':
       return 'studentgroup';
     case 'student':
@@ -108,6 +125,10 @@ export const convertEntitiesToObject = (entities) => {
 export const getPath = (state, uniqueId, depth) => {
   let path = '';
   const { uncollapsedEntities, boundaryDetails } = state.boundaries;
+
+  if (_.includes(uniqueId, 'state')) {
+    return '/';
+  }
 
   _.forEach(uncollapsedEntities, (id, entityDepth) => {
     if (Number(entityDepth) < depth) {
