@@ -16,6 +16,7 @@ const ConfirmModal = (props) => {
     yesButtonTxt,
     noButtonTxt,
   } = props;
+
   const openModal = isOpen && id === uniqueId;
 
   return (
@@ -37,8 +38,8 @@ const ConfirmModal = (props) => {
 ConfirmModal.propTypes = {
   isOpen: PropTypes.bool,
   title: PropTypes.string,
-  id: PropTypes.number,
-  uniqueId: PropTypes.number,
+  id: PropTypes.any,
+  uniqueId: PropTypes.any,
   description: PropTypes.string,
   message: PropTypes.any,
   onCloseModal: PropTypes.func,

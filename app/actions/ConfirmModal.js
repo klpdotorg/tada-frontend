@@ -1,10 +1,11 @@
 import { OPEN_CONFIRM_MODAL, CLOSE_CONFIRM_MODAL } from './types';
 
-export const openDeleteProgramModal = (name) => {
+export const openDeleteProgramModal = (name, uniqueId) => {
   return {
     type: OPEN_CONFIRM_MODAL,
     value: {
       isOpen: true,
+      uniqueId,
       message: `Are you sure you want to delete this <b> ${name} </b>`,
       title: 'Delete Program?',
       description: 'Delete Program?',
@@ -32,7 +33,7 @@ export const openDeactivateProgramModal = (name, uniqueId) => {
   return {
     type: OPEN_CONFIRM_MODAL,
     value: {
-      deactivateEntity: true,
+      isOpen: true,
       uniqueId,
       message: `Are you sure you want to deactivate this ${name}`,
       title: 'Deactivate Program?',
@@ -43,15 +44,30 @@ export const openDeactivateProgramModal = (name, uniqueId) => {
   };
 };
 
-export const openDeactivateAssessmentModal = (name, uniqueId) => {
+export const openDeactivateAssessmentsModal = (uniqueId) => {
   return {
     type: OPEN_CONFIRM_MODAL,
     value: {
-      deactivateEntity: true,
+      isOpen: true,
       uniqueId,
-      message: `Are you sure you want to deactivate this ${name}`,
+      message: 'Are you sure you want to deactivate these entities?',
       title: 'Deactivate Assessment?',
       description: 'Deactivate Assessment?',
+      yesButtonTxt: 'Yes',
+      noButtonTxt: 'No',
+    },
+  };
+};
+
+export const openDeleteAssessmentModal = (name, uniqueId) => {
+  return {
+    type: OPEN_CONFIRM_MODAL,
+    value: {
+      isOpen: true,
+      message: `Are you sure you want to delete this "${name}": `,
+      uniqueId,
+      title: 'Delete Assessment?',
+      description: 'Delete Assessment?',
       yesButtonTxt: 'Yes',
       noButtonTxt: 'No',
     },
