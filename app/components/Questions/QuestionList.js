@@ -23,7 +23,7 @@ const QuestionListView = ({ questions }) => {
       </table>
       {!questions.length ? (
         <div className="base-spacing">
-          <Message message="No Assessments Found!" />
+          <Message message="No questions Found!" />
         </div>
       ) : (
         <div />

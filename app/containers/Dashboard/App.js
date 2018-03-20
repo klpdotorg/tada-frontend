@@ -36,7 +36,7 @@ class TadaContentContainer extends Component {
         <TreeTogglerSpacing />
         <MainNavBar />
         <SecondaryNavBarCont />
-        <div id="wrapper" className="main__wrapper">
+        <div className="main__wrapper">
           <SideBarContainer location={location} />
           <MainContentArea>{children}</MainContentArea>
         </div>

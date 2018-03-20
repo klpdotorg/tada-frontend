@@ -4,6 +4,7 @@ import {
   CLOSE_ASSESSMENT_LOADING,
   SET_ASSESSMENT,
   SET_EDIT_ASSESSMENT_ID,
+  SELECT_ASSESSMENT,
 } from '../actions/types';
 import { changeArrayToObject } from './utils';
 
@@ -11,6 +12,7 @@ const INITIAL_STATE = {
   assessments: {},
   editAssessmentId: null,
   loading: false,
+  selectedAssessments: [],
 };
 
 const Assessments = (state = INITIAL_STATE, action) => {
@@ -44,6 +46,11 @@ const Assessments = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         editAssessmentId: action.value,
+      };
+    case SELECT_ASSESSMENT:
+      return {
+        ...state,
+        selectedAssessments: action.value,
       };
     default:
       return state;

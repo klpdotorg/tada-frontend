@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { HeaderBar } from '../../components/Header';
-import { logoutUser, openChangeUserInforModal, openChangePasswordModal } from '../../actions';
+import { logoutUser, openChangeUserInfoModal, openChangePasswordModal } from '../../actions';
 
 class Header extends Component {
   componentDidMount() {
@@ -23,7 +23,7 @@ const mapStateToProps = () => {
 
 const MainHeader = connect(mapStateToProps, {
   logoutUser,
-  openChangeUserInforModal,
+  openChangeUserInfoModal,
   openChangePasswordModal,
 })(Header);
 

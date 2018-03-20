@@ -92,7 +92,7 @@ ChangeUserInfoScreen.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    isOpen: state.header.changeUserInfoModal,
+    isOpen: state.header.changeUserModal,
     email: state.login.email,
     firstName: state.login.firstName,
     lastName: state.login.lastName,
