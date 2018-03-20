@@ -18,7 +18,7 @@ const ProgramView = (props) => {
   }
 
   return (
-    <div className="container">
+    <div>
       <div className="row center-block">
         <div className="col-md-8 form-inline">
           <h4 className="text-primary" htmlFor="sel1">

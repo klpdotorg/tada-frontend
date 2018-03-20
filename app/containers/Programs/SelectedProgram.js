@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { get } from 'lodash';
+import { get, isEmpty } from 'lodash';
 
 import { ViewSelectedProgram } from '../../components/Programs';
 import {
@@ -12,8 +12,10 @@ import {
 
 const mapStateToProps = (state) => {
   const selectedProgramId = state.programs.selectedProgram;
+
   return {
     selectedProgram: get(state.programs.programs, selectedProgramId, {}),
+    canDelete: isEmpty(state.assessments.assessments),
   };
 };
 

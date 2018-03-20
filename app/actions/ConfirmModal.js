@@ -50,7 +50,7 @@ export const openDeactivateAssessmentsModal = (uniqueId) => {
     value: {
       isOpen: true,
       uniqueId,
-      message: 'Are you sure you want to deactivate these entities?',
+      message: 'Are you sure you want to deactivate selected Entities?',
       title: 'Deactivate Assessment?',
       description: 'Deactivate Assessment?',
       yesButtonTxt: 'Yes',
@@ -59,12 +59,12 @@ export const openDeactivateAssessmentsModal = (uniqueId) => {
   };
 };
 
-export const openDeleteAssessmentModal = (name, uniqueId) => {
+export const openDeleteAssessmentsModal = (uniqueId) => {
   return {
     type: OPEN_CONFIRM_MODAL,
     value: {
       isOpen: true,
-      message: `Are you sure you want to delete this "${name}": `,
+      message: 'Are you sure you want to delete selected Entities?:',
       uniqueId,
       title: 'Delete Assessment?',
       description: 'Delete Assessment?',

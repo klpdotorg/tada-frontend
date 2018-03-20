@@ -6,3 +6,10 @@ export const logoutUser = () => {
     dispatch(push('/logout'));
   };
 };
+
+export const tokenExpired = () => {
+  return (dispatch) => {
+    sessionStorage.removeItem('user');
+    dispatch(push('login'));
+  };
+};

@@ -99,3 +99,4 @@ export const DELETE_TEACHER = 'delete_teacher';
 export const SET_CENTERS = 'set_centers';
 export const SELECT_CENTER = 'select_center';
 export const DELETE_PROGRAM = 'delete_program';
+export const SELECT_ASSESSMENT = 'select_assessment';

@@ -57,20 +57,21 @@ const ViewSelectedProgram = (props) => {
             type="button"
             className="btn btn-info padded-btn"
             onClick={() => {
-              props.showDeleteModal(selectedProgram.name);
+              props.showDeleteModal(selectedProgram.name, `${selectedProgram.id}deleteProgram`);
             }}
-            disabled={false}
+            disabled={!props.canDelete}
           >
             <span className="fa fa-trash-o" /> Delete
           </button>
         </div>
-        <DeactivateEntity
+        <Confirm
           uniqueId={selectedProgram.id}
           onYes={() => {
             props.deactivateProgram(selectedProgram.id);
           }}
         />
         <Confirm
+          uniqueId={`${selectedProgram.id}deleteProgram`}
           onYes={() => {
             props.deleteProgram(selectedProgram.id);
           }}
@@ -81,6 +82,7 @@ const ViewSelectedProgram = (props) => {
 };
 
 ViewSelectedProgram.propTypes = {
+  canDelete: PropTypes.bool,
   showDeleteModal: PropTypes.func,
   openEditProgramModal: PropTypes.func,
   selectedProgram: PropTypes.object,

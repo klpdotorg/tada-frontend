@@ -1,3 +1,5 @@
+import { push } from 'react-router-redux';
+
 import {
   ENABLE_SUBMIT_FORM,
   DISABLE_SUBMIT_FORM,
@@ -9,6 +11,12 @@ import {
   SHOW_CLASSES_LOADING_IN_MA,
   CLOSE_CLASSES_LOADING_IN_MA,
 } from './types';
+
+export const redirect = (url) => {
+  return (dispatch) => {
+    dispatch(push(url));
+  };
+};
 
 export const enableNavTreeSingleSelect = (singleSelMode) => {
   return {

@@ -2,13 +2,16 @@ import Notifications from 'react-notification-system-redux';
 
 import store from '../store';
 import { syncError } from './notifications';
+import { tokenExpired, logoutUser } from './index';
 
 export const checkStatus = (response) => {
   if (response.status >= 200 && response.status < 300) {
     return response.json();
   } else if (response.status === 401) {
-    // store.dispatch(logoutUser());
-    // store.dispatch(push('/login'));
+    store.dispatch(logoutUser());
+    return null;
+  } else if (response.status === 403) {
+    store.dispatch(Notifications.error("You don't permission to do it."));
     return null;
   }
 
@@ -22,7 +25,6 @@ export const checkStatusNoJSON = (response) => {
     return response;
   } else if (response.status === 401) {
     store.dispatch(logoutUser());
-    store.dispatch(push('/login'));
     return null;
   }
   const error = new Error(response.statusText);
@@ -31,18 +33,18 @@ export const checkStatusNoJSON = (response) => {
 };
 
 export const get = (url) => {
-  const user = JSON.parse(sessionStorage.getItem('user'));
-
+  // const user = JSON.parse(sessionStorage.getItem('user'));
   return fetch(url, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      // Authorization: `Token ${user.token}`,
+      // Authorization: `Token 232323324sf233`, //`Token ${user.token}`,
     },
   })
     .then(checkStatus)
     .catch((e) => {
       store.dispatch(Notifications.error(syncError(e)));
+      store.dispatch(tokenExpired());
     });
 };
 
@@ -57,6 +59,7 @@ export const deleteRequest = (url) => {
     },
   }).catch((e) => {
     store.dispatch(Notifications.error(syncError(e)));
+    store.dispatch(tokenExpired());
   });
 };
 
@@ -74,7 +77,7 @@ export const post = (url, body) => {
     .then(checkStatus)
     .catch((e) => {
       store.dispatch(Notifications.error(syncError(e)));
-      throw e;
+      store.dispatch(tokenExpired());
     });
 };
 
@@ -92,7 +95,7 @@ export const patch = (url, body) => {
     .then(checkStatus)
     .catch((e) => {
       store.dispatch(Notifications.error(syncError(e)));
-      throw e;
+      store.dispatch(tokenExpired());
     });
 };
 
@@ -110,6 +113,6 @@ export const put = (url, body) => {
     .then(checkStatus)
     .catch((e) => {
       store.dispatch(Notifications.error(syncError(e)));
-      throw e;
+      store.dispatch(tokenExpired());
     });
 };

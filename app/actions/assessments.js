@@ -1,6 +1,6 @@
 import { SERVER_API_BASE as serverApiBase } from 'config';
 
-import { get, post, patch } from './requests';
+import { get, post, patch, deleteRequest } from './requests';
 
 import {
   TOGGLE_MODAL,
@@ -9,6 +9,7 @@ import {
   CLOSE_ASSESSMENT_LOADING,
   SET_ASSESSMENT,
   SET_EDIT_ASSESSMENT_ID,
+  SELECT_ASSESSMENT,
 } from './types';
 import { closeConfirmModal } from './index';
 
@@ -21,6 +22,28 @@ export const showAssessmentLoading = () => {
 export const closeAssessmentLoading = () => {
   return {
     type: CLOSE_ASSESSMENT_LOADING,
+  };
+};
+
+export const selectAssessment = (id) => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const { selectedAssessments } = state.assessments;
+    const exist = selectedAssessments.includes(id);
+
+    if (exist) {
+      dispatch({
+        type: SELECT_ASSESSMENT,
+        value: selectedAssessments.filter((ass) => {
+          return ass !== id;
+        }),
+      });
+    } else {
+      dispatch({
+        type: SELECT_ASSESSMENT,
+        value: [...selectedAssessments, id],
+      });
+    }
   };
 };
 
@@ -109,19 +132,49 @@ export const saveAssessment = (options) => {
   };
 };
 
-export const deactivateAssessment = (id) => {
+export const deactivateAssessments = () => {
   return (dispatch, getState) => {
     dispatch(showAssessmentLoading());
     dispatch(closeConfirmModal());
 
     const state = getState();
     const { selectedProgram } = state.programs;
-    const url = `${serverApiBase}surveys/${selectedProgram}/questiongroup/${id}/`;
+    const { selectedAssessments } = state.assessments;
+    const promises = selectedAssessments.map((id) => {
+      const url = `${serverApiBase}surveys/${selectedProgram}/questiongroup/${id}/`;
+      return patch(url, {
+        status: 'IA',
+      });
+    });
 
-    patch(url, {
-      status: 'IA',
-    }).then(() => {
+    Promise.all(promises).then(() => {
+      dispatch({
+        type: SELECT_ASSESSMENT,
+        value: [],
+      });
       dispatch(getAssessments(selectedProgram));
     });
+  };
+};
+
+export const deleteAssessments = () => {
+  return (dispatch, getState) => {
+    dispatch(showAssessmentLoading());
+    dispatch(closeConfirmModal());
+
+    const state = getState();
+    const { selectedProgram } = state.programs;
+    const { selectedAssessments } = state.assessments;
+    const promises = selectedAssessments.map((id) => {
+      const url = `${serverApiBase}surveys/${selectedProgram}/questiongroup/${id}/`;
+      return deleteRequest(url);
+    });
+
+    console.log(promises, 'printing these nature laws');
+
+    // Promise.all(promises).then(() => {
+    //   dispatch(getAssessments());
+    //   dispatch(closeAssessmentLoading());
+    // });
   };
 };
