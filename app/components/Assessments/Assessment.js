@@ -1,14 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router';
 
-import { DeactivateEntity } from '../../containers/Modal';
 import { dateParser } from '../../utils';
 
 const AssessmentRow = (props) => {
-  const { assessment, url } = props;
+  const { assessment, url, selectedAssessments } = props;
+  const checked = selectedAssessments.includes(assessment.id);
+
   return (
     <tr key={assessment.id}>
+      <td>
+        <input
+          checked={checked}
+          onChange={() => {
+            props.selectAssessment(assessment.id);
+          }}
+          type="checkbox"
+        />
+      </td>
       <td>{assessment.name}</td>
       <td>{dateParser(assessment.start_date)}</td>
       <td>{dateParser(assessment.end_date)}</td>
@@ -26,31 +35,19 @@ const AssessmentRow = (props) => {
         >
           <span className="fa fa-pencil-square-o" />
         </button>
-        <Link
-          className="btn btn-primary padded-btn"
-          to={url}
-          data-toggle="tooltip"
-          title="View Questions"
-        >
-          <i className="fa fa-question" />
-        </Link>
+      </td>
+      <td>
         <button
           className="btn btn-primary padded-btn"
           data-toggle="tooltip"
-          title="Edit Question"
+          title="View Questions"
           onClick={() => {
-            props.showDeactivateModal(assessment.name, assessment.id);
+            props.redirect(url);
           }}
         >
-          <span className="fa fa-ban" />
+          <i className="fa fa-question" />
         </button>
       </td>
-      <DeactivateEntity
-        uniqueId={assessment.id}
-        onYes={() => {
-          props.deactivateAssessment(assessment.id);
-        }}
-      />
     </tr>
   );
 };
@@ -59,8 +56,9 @@ AssessmentRow.propTypes = {
   assessment: PropTypes.object,
   url: PropTypes.string,
   openEditAssessmentModal: PropTypes.func,
-  showDeactivateModal: PropTypes.func,
-  deactivateAssessment: PropTypes.func,
+  selectAssessment: PropTypes.func,
+  selectedAssessments: PropTypes.array,
+  redirect: PropTypes.func,
 };
 
 export { AssessmentRow };

@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { map } from 'lodash';
+import { map, isEmpty } from 'lodash';
 
 import { AssessmentTable } from '../../components/Assessments';
-import { getAssessments } from '../../actions';
+import {
+  getAssessments,
+  openDeactivateAssessmentsModal,
+  deactivateAssessments,
+  openDeleteAssessmentsModal,
+  deleteAssessments,
+} from '../../actions';
 
 class GetAssessments extends Component {
   componentDidMount() {
@@ -29,6 +35,7 @@ GetAssessments.propTypes = {
 };
 
 const mapStateToProps = (state) => {
+  const { selectedAssessments } = state.assessments;
   const programId = state.programs.selectedProgram;
   const assessments = map(state.assessments.assessments, (assessment) => {
     return assessment.id;
@@ -37,9 +44,16 @@ const mapStateToProps = (state) => {
   return {
     programId: Number(programId),
     assessments,
+    canEdit: isEmpty(selectedAssessments),
   };
 };
 
-const Assessments = connect(mapStateToProps, { getAssessments })(GetAssessments);
+const Assessments = connect(mapStateToProps, {
+  getAssessments,
+  openDeactivateAssessmentsModal,
+  deactivateAssessments,
+  openDeleteAssessmentsModal,
+  deleteAssessments,
+})(GetAssessments);
 
 export { Assessments };
