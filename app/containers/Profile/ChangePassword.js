@@ -5,10 +5,10 @@ import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
 
 import {
-  closeChangePasswordModal,
-  changePwd,
-  enableChangePasswordForm,
-  disableChangePasswordForm,
+  toggleModal,
+  handleChangePassword,
+  enableSubmitForm,
+  disableSubmitForm,
 } from '../../actions';
 
 import { Modal } from '../../components/Modal';
@@ -34,16 +34,18 @@ class ChangePasswordScreen extends Component {
         title="Change Password"
         contentLabel="Change Password"
         isOpen={this.props.isOpen}
-        onCloseModal={this.props.closeChangePasswordModal}
+        onCloseModal={() => {
+          this.props.closeModal('changePasswordModal');
+        }}
         canSubmit={this.props.canSubmit}
         submitForm={this.submitForm}
         cancelBtnLabel="Cancel"
       >
         <Formsy.Form
           onValidSubmit={this.submitForm}
-          onValid={this.props.enableChangePasswordForm}
-          onInvalid={this.props.disableChangePasswordForm}
-          ref={ref => {
+          onValid={this.props.enableSubmitForm}
+          onInvalid={this.props.disableSubmitForm}
+          ref={(ref) => {
             this.myform = ref;
           }}
         >
@@ -62,8 +64,9 @@ class ChangePasswordScreen extends Component {
             label="Re-type Password"
             required
             validations={{
-              doPasswordsMatch: (values, value) =>
-                values.password === value ? true : 'Passwords do not match',
+              doPasswordsMatch: (values, value) => {
+                return values.password === value ? true : 'Passwords do not match';
+              },
             }}
           />
         </Formsy.Form>
@@ -75,22 +78,24 @@ class ChangePasswordScreen extends Component {
 ChangePasswordScreen.propTypes = {
   isOpen: PropTypes.bool,
   canSubmit: PropTypes.bool,
-  closeChangePasswordModal: PropTypes.func,
+  closeModal: PropTypes.func,
   changePwd: PropTypes.func,
-  enableChangePasswordForm: PropTypes.func,
-  disableChangePasswordForm: PropTypes.func,
+  enableSubmitForm: PropTypes.func,
+  disableSubmitForm: PropTypes.func,
 };
 
-const mapStateToProps = state => ({
-  isOpen: state.header.changePasswordModal,
-  canSubmit: state.header.enableChangePasswordForm,
-});
+const mapStateToProps = (state) => {
+  return {
+    isOpen: state.modal.changePasswordModal,
+    canSubmit: state.appstate.enableSubmitForm,
+  };
+};
 
 const ChangePassword = connect(mapStateToProps, {
-  closeChangePasswordModal,
-  changePwd,
-  enableChangePasswordForm,
-  disableChangePasswordForm,
+  closeModal: toggleModal,
+  changePwd: handleChangePassword,
+  enableSubmitForm,
+  disableSubmitForm,
 })(ChangePasswordScreen);
 
 export { ChangePassword };

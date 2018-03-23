@@ -21,3 +21,6 @@ export * from './MapAssessments';
 export * from './Confirm';
 export * from './EditStudents';
 export * from './Centers';
+export * from './OTP';
+export * from './Profile';
+export * from './ChangePassword';

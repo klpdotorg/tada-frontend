@@ -8,6 +8,10 @@ const INITIAL_STATE = {
   createClass: false,
   createPreschool: false,
   editQuestion: false,
+  currentPasswordModal: false,
+  changePasswordModal: false,
+  changeUserModal: false,
+  changeOTP: false,
 };
 
 const Modal = (state = INITIAL_STATE, action) => {

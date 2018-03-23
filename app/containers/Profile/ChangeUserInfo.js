@@ -4,12 +4,7 @@ import { connect } from 'react-redux';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
 
-import {
-  closeChangeUserInfoModal,
-  enableChangeUserInfoForm,
-  disableChangeUserInfoForm,
-  changeUserInfo,
-} from '../../actions';
+import { toggleModal, enableSubmitForm, disableSubmitForm, changeUserInfo } from '../../actions';
 
 import { Modal } from '../../components/Modal';
 
@@ -24,25 +19,35 @@ class ChangeUserInfoScreen extends Component {
 
   submitForm() {
     const myform = this.myform.getModel();
+    const newUser = {
+      email: myform.email,
+      last_name: myform.lastName,
+      first_name: myform.firstName,
+      mobile_no: myform.phone,
+    };
 
-    this.props.changeUserInfo(myform.password);
+    this.props.changeUserInfo(newUser);
   }
 
   render() {
+    const { email, firstName, lastName, mobileNo } = this.props;
+
     return (
       <Modal
         title="Change Profile"
         contentLabel="Change Profile"
         isOpen={this.props.isOpen}
-        onCloseModal={this.props.closeChangeUserInfoModal}
+        onCloseModal={() => {
+          this.props.toggleModal('changeUserModal');
+        }}
         canSubmit={this.props.canSubmit}
         submitForm={this.submitForm}
         cancelBtnLabel="Cancel.."
       >
         <Formsy.Form
           onValidSubmit={this.submitForm}
-          onValid={this.props.enableChangeUserInfoForm}
-          onInvalid={this.props.disableChangeUserInfoForm}
+          onValid={this.props.enableSubmitForm}
+          onInvalid={this.props.disableSubmitForm}
           ref={(ref) => {
             this.myform = ref;
           }}
@@ -53,7 +58,7 @@ class ChangeUserInfoScreen extends Component {
             type="text"
             label="E-mail"
             validations="isEmail,minLength:1"
-            defaultValue={this.props.email}
+            value={email}
           />
           <Input
             name="firstName"
@@ -61,7 +66,7 @@ class ChangeUserInfoScreen extends Component {
             type="text"
             label="First Name"
             validations="isAlpha"
-            defaultValue={this.props.firstname}
+            value={firstName}
           />
           <Input
             name="lastName"
@@ -69,9 +74,16 @@ class ChangeUserInfoScreen extends Component {
             type="text"
             label="Last Name"
             validations="isAlpha"
-            defaultValue={this.props.lastname}
+            value={lastName}
           />
-          <Input name="phone" id="phone" type="text" label="Mobile" validations="isNumeric" />
+          <Input
+            name="phone"
+            id="phone"
+            type="text"
+            label="Mobile"
+            validations="isNumeric"
+            value={mobileNo}
+          />
         </Formsy.Form>
       </Modal>
     );
@@ -82,28 +94,31 @@ ChangeUserInfoScreen.propTypes = {
   isOpen: PropTypes.bool,
   canSubmit: PropTypes.bool,
   email: PropTypes.string,
-  firstname: PropTypes.string,
-  lastname: PropTypes.string,
-  closeChangeUserInfoModal: PropTypes.func,
-  enableChangeUserInfoForm: PropTypes.func,
-  disableChangeUserInfoForm: PropTypes.func,
+  firstName: PropTypes.string,
+  lastName: PropTypes.string,
+  toggleModal: PropTypes.func,
+  enableSubmitForm: PropTypes.func,
+  disableSubmitForm: PropTypes.func,
   changeUserInfo: PropTypes.func,
+  mobileNo: PropTypes.number,
 };
 
 const mapStateToProps = (state) => {
+  const { email, firstName, lastName, mobileNo } = state.profile;
   return {
-    isOpen: state.header.changeUserModal,
-    email: state.login.email,
-    firstName: state.login.firstName,
-    lastName: state.login.lastName,
-    canSubmit: state.header.enableChangeUserInfoForm,
+    isOpen: state.modal.changeUserModal,
+    email,
+    firstName,
+    lastName,
+    mobileNo: Number(mobileNo),
+    canSubmit: state.appstate.enableSubmitForm,
   };
 };
 
 const ChangeUserInfo = connect(mapStateToProps, {
-  closeChangeUserInfoModal,
-  enableChangeUserInfoForm,
-  disableChangeUserInfoForm,
+  toggleModal,
+  enableSubmitForm,
+  disableSubmitForm,
   changeUserInfo,
 })(ChangeUserInfoScreen);
 

@@ -4,12 +4,7 @@ import { connect } from 'react-redux';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
 
-import {
-  closeConfirmPasswordModal,
-  enableConfirmPasswordForm,
-  disableConfirmPasswordForm,
-  confirmCurrentPwd,
-} from '../../actions';
+import { toggleModal, enableSubmitForm, disableSubmitForm, confirmCurrentPwd } from '../../actions';
 
 import { Modal } from '../../components/Modal';
 
@@ -34,7 +29,9 @@ class ConfirmPasswordScreen extends Component {
         title="Current Password"
         contentLabel="Current Password"
         isOpen={this.props.isOpen}
-        onCloseModal={this.props.closeConfirmPasswordModal}
+        onCloseModal={() => {
+          this.props.toggleModal('changeConfirmModal');
+        }}
         canSubmit={this.props.canSubmit}
         submitForm={this.submitForm}
         submitBtnLabel="Continue"
@@ -42,9 +39,11 @@ class ConfirmPasswordScreen extends Component {
       >
         <Formsy.Form
           onValidSubmit={this.submitForm}
-          onValid={this.props.enableConfirmPasswordForm}
-          onInvalid={this.props.disableConfirmPasswordForm}
-          ref={(ref) => { return (this.myform = ref); }}
+          onValid={this.props.enableSubmitForm}
+          onInvalid={this.props.disableSubmitForm}
+          ref={(ref) => {
+            this.myform = ref;
+          }}
         >
           <Input
             name="password"
@@ -63,23 +62,23 @@ class ConfirmPasswordScreen extends Component {
 ConfirmPasswordScreen.propTypes = {
   isOpen: PropTypes.bool,
   canSubmit: PropTypes.bool,
-  closeConfirmPasswordModal: PropTypes.func,
+  toggleModal: PropTypes.func,
   confirmCurrentPwd: PropTypes.func,
-  enableConfirmPasswordForm: PropTypes.func,
-  disableConfirmPasswordForm: PropTypes.func,
+  enableSubmitForm: PropTypes.func,
+  disableSubmitForm: PropTypes.func,
 };
 
 const mapStateToProps = (state) => {
   return {
     isOpen: state.modal.changeConfirmModal,
-    canSubmit: state.header.enableConfirmPasswordForm,
+    canSubmit: state.appstate.enableSubmitForm,
   };
 };
 
 const ConfirmPassword = connect(mapStateToProps, {
-  closeConfirmPasswordModal,
-  enableConfirmPasswordForm,
-  disableConfirmPasswordForm,
+  toggleModal,
+  enableSubmitForm,
+  disableSubmitForm,
   confirmCurrentPwd,
 })(ConfirmPasswordScreen);
 

@@ -12,7 +12,7 @@ import {
   userregistration,
   Programs,
   Assessments,
-  PasswordReset,
+  // PasswordReset,
   users,
   // boundaries,
   AppState,
@@ -30,6 +30,9 @@ import {
   Confirm,
   EditStudents,
   Centers,
+  OTP,
+  Profile,
+  ChangePassword,
 } from './reducers';
 
 const reducer = combineReducers({
@@ -43,7 +46,7 @@ const reducer = combineReducers({
   programs: Programs,
   assessments: Assessments,
   teachers: Teachers,
-  passwordreset: PasswordReset,
+  // passwordreset: PasswordReset,
   boundaries: BoundariesNavTree,
   appstate: AppState,
   header: Header,
@@ -58,6 +61,9 @@ const reducer = combineReducers({
   confirm: Confirm,
   editStudents: EditStudents,
   centers: Centers,
+  otp: OTP,
+  profile: Profile,
+  changePassword: ChangePassword,
 });
 
 const middleware = compose(

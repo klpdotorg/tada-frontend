@@ -6,7 +6,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 
-import { ConfirmPassword, ChangePassword, ChangeUserInfo } from '../../containers/Header';
+import { ChangePassword, ChangeUserInfo, ConfirmPassword, GetOTP } from '../../containers/Profile';
 
 import klplogo from '../../../assets/images/KLP_logo.png';
 
@@ -55,6 +55,7 @@ const HeaderBar = ({ username, openChangePasswordModal, openChangeUserInfoModal,
       <ConfirmPassword />
       <ChangePassword />
       <ChangeUserInfo />
+      <GetOTP />
     </nav>
   );
 };

@@ -16,9 +16,6 @@ import {
 } from '../actions/types';
 
 const INITIAL_STATE = {
-  currentPasswordModal: false,
-  changePasswordModal: false,
-  changeUserModal: false,
   currentPassword: '',
   enableConfirmPasswordForm: false,
   enableChangePasswordForm: false,

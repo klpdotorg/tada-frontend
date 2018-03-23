@@ -44,7 +44,7 @@ export const get = (url) => {
     .then(checkStatus)
     .catch((e) => {
       store.dispatch(Notifications.error(syncError(e)));
-      store.dispatch(tokenExpired());
+      // store.dispatch(tokenExpired());
     });
 };
 
@@ -59,7 +59,7 @@ export const deleteRequest = (url) => {
     },
   }).catch((e) => {
     store.dispatch(Notifications.error(syncError(e)));
-    store.dispatch(tokenExpired());
+    // store.dispatch(tokenExpired());
   });
 };
 
@@ -77,7 +77,7 @@ export const post = (url, body) => {
     .then(checkStatus)
     .catch((e) => {
       store.dispatch(Notifications.error(syncError(e)));
-      store.dispatch(tokenExpired());
+      // store.dispatch(tokenExpired());
     });
 };
 
@@ -95,7 +95,7 @@ export const patch = (url, body) => {
     .then(checkStatus)
     .catch((e) => {
       store.dispatch(Notifications.error(syncError(e)));
-      store.dispatch(tokenExpired());
+      // store.dispatch(tokenExpired());
     });
 };
 
@@ -113,6 +113,6 @@ export const put = (url, body) => {
     .then(checkStatus)
     .catch((e) => {
       store.dispatch(Notifications.error(syncError(e)));
-      store.dispatch(tokenExpired());
+      // store.dispatch(tokenExpired());
     });
 };

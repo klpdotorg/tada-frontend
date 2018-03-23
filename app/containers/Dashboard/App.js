@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Notifications from 'react-notification-system-redux';
 import { connect } from 'react-redux';
 
-import { fetchUserData } from '../../actions/';
+import { setUserProfile } from '../../actions/';
 import { MainHeader, MainNavBar, SecondaryNavBarCont } from '../Header';
 import { SideBarContainer } from '../SideBar';
 import { MainContentArea, TreeTogglerSpacing } from '../../components/Dashboard';
@@ -14,17 +14,9 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    fetchUserData() {
-      return dispatch(fetchUserData(sessionStorage.token));
-    },
-  };
-};
-
 class TadaContentContainer extends Component {
   componentWillMount() {
-    this.props.fetchUserData();
+    this.props.setUserProfile();
   }
 
   render() {
@@ -49,10 +41,10 @@ class TadaContentContainer extends Component {
 TadaContentContainer.propTypes = {
   children: PropTypes.element,
   notifications: PropTypes.array,
-  fetchUserData: PropTypes.func,
+  setUserProfile: PropTypes.func,
   location: PropTypes.object,
 };
 
-const App = connect(mapStateToProps, mapDispatchToProps)(TadaContentContainer);
+const App = connect(mapStateToProps, { setUserProfile })(TadaContentContainer);
 
 export { App };
