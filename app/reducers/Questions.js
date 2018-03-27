@@ -1,9 +1,11 @@
+import { omit } from 'lodash';
 import {
   SET_QUESTION,
   SET_QUESTIONS,
   SHOW_QUESTION_LOADING,
   HIDE_QUESTION_LOADING,
   SET_EDIT_QUESTION_ID,
+  DELETE_QUESTION,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -41,6 +43,11 @@ const Questions = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         editQuestion: action.value,
+      };
+    case DELETE_QUESTION:
+      return {
+        ...state,
+        questions: omit(state.questions, action.value),
       };
     default:
       return state;

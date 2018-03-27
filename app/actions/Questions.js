@@ -1,5 +1,5 @@
 import { SERVER_API_BASE } from 'config';
-import { get, post, patch, put } from './requests';
+import { get, post, put, deleteRequest } from './requests';
 import {
   SET_QUESTION,
   SET_QUESTIONS,
@@ -7,6 +7,7 @@ import {
   HIDE_QUESTION_LOADING,
   TOGGLE_MODAL,
   SET_EDIT_QUESTION_ID,
+  DELETE_QUESTION,
 } from './types';
 import { setPrograms, selectProgram, setAssessments } from './index';
 
@@ -129,6 +130,23 @@ export const saveQuestion = (data, programId, assessmentId, questionId) => {
       dispatch({
         type: SET_QUESTION,
         value: { [response.id]: response },
+      });
+      dispatch(hideQuestionLoading());
+    });
+  };
+};
+
+export const deleteQuestion = (assessmentId, questionId) => {
+  return (dispatch, getState) => {
+    dispatch(showQuestionLoading());
+    const state = getState();
+    const { selectedProgram } = state.programs;
+
+    const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${assessmentId}/questions/${questionId}/`;
+    deleteRequest(url).then(() => {
+      dispatch({
+        type: DELETE_QUESTION,
+        value: questionId,
       });
       dispatch(hideQuestionLoading());
     });

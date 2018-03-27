@@ -26,7 +26,7 @@ const QuestionScreen = ({ params, loading }) => {
       <div>
         <h4 className="text-primary text-center"> Questions in this Assessment</h4>
       </div>
-      <QuestionList />
+      <QuestionList assessmentId={assessmentId} />
       <CreateQuestion assessmentId={Number(assessmentId)} programId={Number(programId)} />
       <EditQuestion assessmentId={Number(assessmentId)} programId={Number(programId)} />
     </div>

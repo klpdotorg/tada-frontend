@@ -22,6 +22,18 @@ const QuestionView = (props) => {
           <span className="fa fa-pencil-square-o" />
         </button>
       </td>
+      <td>
+        <button
+          className="btn btn-primary padded-btn"
+          data-toggle="tooltip"
+          title="Delete Question"
+          onClick={() => {
+            props.deleteQuestion(props.assessmentId, id);
+          }}
+        >
+          <span className="fa fa-trash" />
+        </button>
+      </td>
     </tr>
   );
 };
@@ -29,6 +41,8 @@ const QuestionView = (props) => {
 QuestionView.propTypes = {
   question: PropTypes.object,
   editQuestion: PropTypes.func,
+  deleteQuestion: PropTypes.func,
+  assessmentId: PropTypes.any,
 };
 
 export { QuestionView };

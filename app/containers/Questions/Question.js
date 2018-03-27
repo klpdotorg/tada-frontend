@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { get } from 'lodash';
 
 import { QuestionView } from '../../components/Questions';
-import { openEditQuestionForm } from '../../actions';
+import { openEditQuestionForm, deleteQuestion } from '../../actions';
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -10,6 +10,6 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const Question = connect(mapStateToProps, { editQuestion: openEditQuestionForm })(QuestionView);
+const Question = connect(mapStateToProps, { editQuestion: openEditQuestionForm, deleteQuestion })(QuestionView);
 
 export { Question };

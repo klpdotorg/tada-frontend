@@ -135,7 +135,7 @@ EditQuestionForm.propTypes = {
   disableSubmitForm: PropTypes.func,
   onCloseModal: PropTypes.func,
   question: PropTypes.object,
-  questionId: PropTypes.number,
+  questionId: PropTypes.any,
 };
 
 const mapStateToProps = (state, ownProps) => {

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Message } from '../common';
 import { Question } from '../../containers/Questions';
 
-const QuestionListView = ({ questions }) => {
+const QuestionListView = ({ questions, assessmentId }) => {
   return (
     <div className="border-table">
       <table className="table table-striped" style={{ marginBottom: 0 }}>
@@ -14,10 +14,11 @@ const QuestionListView = ({ questions }) => {
             <th>Text</th>
             <th>Type</th>
             <th>Key</th>
-            <th>Actions</th>
+            <th>Edit</th>
+            <th>Delete</th>
           </tr>
           {questions.map((id) => {
-            return <Question id={id} key={id} />;
+            return <Question id={id} key={id} assessmentId={assessmentId} />;
           })}
         </tbody>
       </table>
@@ -34,6 +35,7 @@ const QuestionListView = ({ questions }) => {
 
 QuestionListView.propTypes = {
   questions: PropTypes.array,
+  assessmentId: PropTypes.any,
 };
 
 export { QuestionListView };
