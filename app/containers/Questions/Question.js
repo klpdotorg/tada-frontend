@@ -10,6 +10,9 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const Question = connect(mapStateToProps, { editQuestion: openEditQuestionForm, deleteQuestion })(QuestionView);
+const Question = connect(mapStateToProps, {
+  editQuestion: openEditQuestionForm,
+  deleteQuestion,
+})(QuestionView);
 
 export { Question };
