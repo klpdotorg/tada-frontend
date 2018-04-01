@@ -89,6 +89,7 @@ export const saveNewProgram = (options) => {
 
     post(createProgramURL, options).then((response) => {
       dispatch(programCreated({ [response.id]: response }));
+      dispatch(selectProgram(response.id));
       dispatch({
         type: TOGGLE_MODAL,
         modal: 'createProgram',
