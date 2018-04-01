@@ -7,7 +7,7 @@ import { CreateBlock } from '../../containers/PrimaryBlock';
 import { CreateProject } from '../../containers/PreschoolProject';
 import { EditDistrict } from '../../containers/PrimaryDistrict';
 
-const PrimaryDistrictView = ({ isLoading, district, districtNodeId }) => {
+const PrimaryDistrictView = ({ isAdmin, isLoading, district, districtNodeId }) => {
   if (isLoading || isEmpty(district)) {
     return (
       <div>
@@ -20,13 +20,13 @@ const PrimaryDistrictView = ({ isLoading, district, districtNodeId }) => {
   return (
     <div>
       <ol className="breadcrumb">
-        <li className="active">
-          {district.name}
-        </li>
+        <li className="active">{district.name}</li>
       </ol>
-      {sessionStorage.getItem('isAdmin')
-        ? <EditDistrict districtNodeId={districtNodeId} />
-        : <NoPermissionDistrictView name={district.name} />}
+      {isAdmin ? (
+        <EditDistrict districtNodeId={districtNodeId} />
+      ) : (
+        <NoPermissionDistrictView name={district.name} />
+      )}
       <CreateBlock parent={district.id} parentNodeId={districtNodeId} />
       <CreateProject parent={district.id} parentNodeId={districtNodeId} />
     </div>
@@ -35,6 +35,7 @@ const PrimaryDistrictView = ({ isLoading, district, districtNodeId }) => {
 
 PrimaryDistrictView.propTypes = {
   isLoading: PropTypes.bool,
+  isAdmin: PropTypes.bool,
   districtNodeId: PropTypes.string,
   district: PropTypes.object,
 };

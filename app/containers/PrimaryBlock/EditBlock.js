@@ -45,7 +45,6 @@ class EditBlockForm extends Component {
 
   render() {
     const { canDelete, block } = this.props;
-
     return (
       <div>
         {!canDelete ? (

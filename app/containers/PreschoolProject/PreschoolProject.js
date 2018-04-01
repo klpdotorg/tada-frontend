@@ -40,11 +40,13 @@ FetchProjectEntity.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const { projectNodeId, districtNodeId } = ownProps.params;
+  const { isAdmin } = state.profile;
 
   return {
     project: state.boundaries.boundaryDetails[projectNodeId] || {},
     district: state.boundaries.boundaryDetails[districtNodeId] || {},
     isLoading: state.appstate.loadingBoundary,
+    isAdmin,
   };
 };
 

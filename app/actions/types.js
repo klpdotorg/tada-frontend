@@ -91,3 +91,4 @@ export const SELECT_ASSESSMENT = 'select_assessment';
 export const CHANGE_OTP = 'change_otp';
 export const SET_USER_PROFILE = 'set_user_profile';
 export const CHANGE_USER_PASSWORD = 'change_user_password';
+export const DELETE_QUESTION = 'delete_question';

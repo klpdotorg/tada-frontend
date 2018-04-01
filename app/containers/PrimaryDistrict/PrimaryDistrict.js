@@ -34,11 +34,13 @@ GetEntity.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const { districtNodeId } = ownProps.params;
+  const { isAdmin } = state.profile;
 
   return {
     district: state.boundaries.boundaryDetails[districtNodeId],
     districtNodeId,
     isLoading: state.appstate.loadingBoundary,
+    isAdmin,
   };
 };
 

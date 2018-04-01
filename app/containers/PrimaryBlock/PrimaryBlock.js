@@ -40,10 +40,13 @@ FetchBlockEntity.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const { blockNodeId, districtNodeId } = ownProps.params;
+  const { isAdmin } = state.profile;
+
   return {
     block: state.boundaries.boundaryDetails[blockNodeId] || {},
     district: state.boundaries.boundaryDetails[districtNodeId] || {},
     isLoading: state.appstate.loadingBoundary,
+    isAdmin,
   };
 };
 

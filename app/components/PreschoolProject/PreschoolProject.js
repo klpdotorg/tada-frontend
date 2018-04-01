@@ -7,7 +7,7 @@ import { CreateCircle } from '../../containers/PreschoolCircle';
 import { EditProject } from '../../containers/PreschoolProject';
 import { NoPermissionView } from './index';
 
-const PreschoolProjectView = ({ isLoading, district, project, params }) => {
+const PreschoolProjectView = ({ isAdmin, isLoading, district, project, params }) => {
   if (isLoading || isEmpty(project)) {
     return (
       <div>
@@ -25,7 +25,7 @@ const PreschoolProjectView = ({ isLoading, district, project, params }) => {
         </li>
         <li className="active">{project.name}</li>
       </ol>
-      {sessionStorage.getItem('isAdmin') ? (
+      {isAdmin ? (
         <EditProject projectNodeId={params.projectNodeId} districtNodeId={params.districtNodeId} />
       ) : (
         <NoPermissionView />
@@ -36,6 +36,7 @@ const PreschoolProjectView = ({ isLoading, district, project, params }) => {
 };
 
 PreschoolProjectView.propTypes = {
+  isAdmin: PropTypes.bool,
   isLoading: PropTypes.bool,
   district: PropTypes.object,
   project: PropTypes.object,

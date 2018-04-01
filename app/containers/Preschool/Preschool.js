@@ -57,12 +57,15 @@ FetchPreschoolEntity.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const { districtNodeId, projectNodeId, circleNodeId, institutionNodeId } = ownProps.params;
+  const { isAdmin } = state.profile;
+
   return {
     district: state.boundaries.boundaryDetails[districtNodeId],
     project: state.boundaries.boundaryDetails[projectNodeId],
     circle: state.boundaries.boundaryDetails[circleNodeId],
     institution: state.boundaries.boundaryDetails[institutionNodeId],
     isLoading: state.appstate.loadingBoundary,
+    isAdmin,
   };
 };
 

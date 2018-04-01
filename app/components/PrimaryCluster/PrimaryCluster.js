@@ -6,7 +6,7 @@ import { Loading } from '../common';
 import { CheckPermissions } from './index';
 import { CreateInstitution } from '../../containers/Institution';
 
-const PrimaryClusterView = ({ isLoading, district, block, cluster, params }) => {
+const PrimaryClusterView = ({ isAdmin, isLoading, district, block, cluster, params }) => {
   if (isLoading || !Object.keys(cluster).length) {
     return <Loading />;
   }
@@ -15,33 +15,26 @@ const PrimaryClusterView = ({ isLoading, district, block, cluster, params }) => 
     <div>
       <ol className="breadcrumb">
         <li>
-          <Link to={district.path}>
-            {district.name}
-          </Link>
+          <Link to={district.path}>{district.name}</Link>
         </li>
         <li>
-          <Link to={block.path}>
-            {block.name}
-          </Link>
+          <Link to={block.path}>{block.name}</Link>
         </li>
-        <li className="active">
-          {cluster.name}
-        </li>
+        <li className="active">{cluster.name}</li>
       </ol>
       <CheckPermissions
         clusterNodeId={params.clusterNodeId}
         blockNodeId={params.blockNodeId}
         blockId={block.id}
+        isAdmin={isAdmin}
       />
-      <CreateInstitution
-        parent={cluster.id}
-        clusterNodeId={params.clusterNodeId}
-      />
+      <CreateInstitution parent={cluster.id} clusterNodeId={params.clusterNodeId} />
     </div>
   );
 };
 
 PrimaryClusterView.propTypes = {
+  isAdmin: PropTypes.bool,
   isLoading: PropTypes.bool,
   district: PropTypes.object,
   block: PropTypes.object,

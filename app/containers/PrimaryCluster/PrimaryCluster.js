@@ -50,12 +50,14 @@ FetchClusterEntity.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const { blockNodeId, districtNodeId, clusterNodeId } = ownProps.params;
+  const { isAdmin } = state.profile;
 
   return {
     cluster: get(state.boundaries.boundaryDetails, clusterNodeId, {}),
     block: get(state.boundaries.boundaryDetails, blockNodeId, {}),
     district: get(state.boundaries.boundaryDetails, districtNodeId, {}),
     isLoading: state.appstate.loadingBoundary,
+    isAdmin,
   };
 };
 

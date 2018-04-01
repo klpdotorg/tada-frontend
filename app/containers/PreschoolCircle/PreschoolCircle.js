@@ -51,12 +51,14 @@ FetchCircleEntity.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const { projectNodeId, districtNodeId, circleNodeId } = ownProps.params;
+  const { isAdmin } = state.profile;
 
   return {
     circle: get(state.boundaries.boundaryDetails, circleNodeId, {}),
     project: get(state.boundaries.boundaryDetails, projectNodeId, {}),
     district: get(state.boundaries.boundaryDetails, districtNodeId, {}),
     isLoading: state.appstate.loadingBoundary,
+    isAdmin,
   };
 };
 

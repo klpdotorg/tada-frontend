@@ -5,14 +5,10 @@ import { EditCluster } from '../../containers/PrimaryCluster';
 
 import { LimitedPermissionsView, NoPermissionClusterView } from './index';
 
-const CheckPermissions = ({ canModify, clusterNodeId, blockNodeId, blockId }) => {
-  if (sessionStorage.getItem('isAdmin')) {
+const CheckPermissions = ({ isAdmin, canModify, clusterNodeId, blockNodeId, blockId }) => {
+  if (isAdmin) {
     return (
-      <EditCluster
-        clusterNodeId={clusterNodeId}
-        blockNodeId={blockNodeId}
-        blockId={blockId}
-      />
+      <EditCluster clusterNodeId={clusterNodeId} blockNodeId={blockNodeId} blockId={blockId} />
     );
   }
 
@@ -24,6 +20,7 @@ const CheckPermissions = ({ canModify, clusterNodeId, blockNodeId, blockId }) =>
 };
 
 CheckPermissions.propTypes = {
+  isAdmin: PropTypes.bool,
   canModify: PropTypes.bool,
   clusterNodeId: PropTypes.string,
   blockId: PropTypes.number,
