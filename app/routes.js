@@ -26,13 +26,14 @@ import { Questions } from './containers/Questions';
 import { AssessmentEntry } from './containers/AssessmentEntry';
 import ResetPassword from './components/ResetPassword';
 import SetNewPassword from './components/SetNewPassword';
-import Users from './containers/UsersContainer';
+// import Users from './containers/UsersContainer';
 import PermissionsContainer from './containers/PermissionsContainer';
 import Reports from './components/Reports';
 import { Teachers } from './containers/Teachers';
 import tadastore from './store';
 import RevertEntity from './containers/RevertEntity';
 import { MapAssessments } from './containers/MapAssessments';
+import { ManageUsers } from './containers/Users';
 
 const history = syncHistoryWithStore(browserHistory, tadastore);
 
@@ -70,7 +71,7 @@ export const routes = (
           path="programs/:programId/assessments/:assessmentId/questions"
           component={Questions}
         />
-        <Route path="users" component={Users} />
+        <Route path="users" component={ManageUsers} />
         <Route path="permissions" component={PermissionsContainer} />
         <Route
           path="district/:districtNodeId/project/:projectNodeId"

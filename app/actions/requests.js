@@ -33,12 +33,13 @@ export const checkStatusNoJSON = (response) => {
 };
 
 export const get = (url) => {
-  // const user = JSON.parse(sessionStorage.getItem('user'));
+  const user = JSON.parse(sessionStorage.getItem('user'));
+
   return fetch(url, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      // Authorization: `Token 232323324sf233`, //`Token ${user.token}`,
+      Authorization: `Token ${user.token}`,
     },
   })
     .then(checkStatus)
@@ -83,9 +84,8 @@ export const post = (url, body) => {
 
 export const patch = (url, body) => {
   const user = JSON.parse(sessionStorage.getItem('user'));
-
   return fetch(url, {
-    method: 'PATCH',
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Token ${user.token}`,

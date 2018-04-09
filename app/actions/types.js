@@ -92,3 +92,7 @@ export const CHANGE_OTP = 'change_otp';
 export const SET_USER_PROFILE = 'set_user_profile';
 export const CHANGE_USER_PASSWORD = 'change_user_password';
 export const DELETE_QUESTION = 'delete_question';
+export const SET_USERS = 'set_users';
+export const SHOW_USERS_LOADING = 'show_users_loading';
+export const HIDE_USERS_LOADING = 'hide_users_loading';
+export const ADD_USER_TO_USERS = 'add_user_to_users';

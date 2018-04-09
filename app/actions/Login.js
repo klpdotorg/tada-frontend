@@ -1,7 +1,37 @@
 import { SERVER_API_BASE } from 'config';
 import { push } from 'react-router-redux';
 import { isEmpty } from 'lodash';
-import { REQUEST_LOGIN, LOGIN_FAILED, LOGIN_SUCCESS } from './types';
+import { REQUEST_LOGIN, LOGIN_FAILED, LOGIN_SUCCESS, SET_USER_PROFILE } from './types';
+
+export const getDataFromLocalstorage = () => {
+  const data = sessionStorage.getItem('user');
+
+  if (!data) {
+    return {};
+  }
+
+  return JSON.parse(data);
+};
+
+export const setDataInLocalStorage = (user) => {
+  return (dispatch) => {
+    const newUser = {
+      email: user.email,
+      firstName: user.first_name || '',
+      lastName: user.last_name || '',
+      mobileNo: user.mobile_no,
+    };
+
+    dispatch({
+      type: SET_USER_PROFILE,
+      value: newUser,
+    });
+
+    const existingData = getDataFromLocalstorage();
+
+    sessionStorage.setItem('user', JSON.stringify({ ...existingData, ...user }));
+  };
+};
 
 export const sendLoginToServer = (email, pass) => {
   return (dispatch) => {
@@ -27,7 +57,6 @@ export const sendLoginToServer = (email, pass) => {
           return response.json();
         }
 
-        console.log(response.status, 'Failed status');
         dispatch({
           type: LOGIN_FAILED,
           authenticated: false,
@@ -46,7 +75,7 @@ export const sendLoginToServer = (email, pass) => {
           });
 
           // Setting data in local storage
-          sessionStorage.setItem('user', JSON.stringify(result));
+          dispatch(setDataInLocalStorage(result));
           dispatch(push('/'));
         }
       })

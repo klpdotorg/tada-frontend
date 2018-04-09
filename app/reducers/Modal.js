@@ -12,6 +12,7 @@ const INITIAL_STATE = {
   changePasswordModal: false,
   changeUserModal: false,
   changeOTP: false,
+  createUser: false,
 };
 
 const Modal = (state = INITIAL_STATE, action) => {

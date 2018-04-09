@@ -1,5 +1,5 @@
-export * from './tada.js';
-export * from './UserAuth.js';
+export * from './tada';
+export * from './Users';
 export * from './programs';
 export * from './assessments';
 export * from './AppState';

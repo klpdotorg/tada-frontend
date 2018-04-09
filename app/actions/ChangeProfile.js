@@ -1,10 +1,13 @@
 import Notifications from 'react-notification-system-redux';
+import { SERVER_API_BASE } from 'config';
+import { isEmpty } from 'lodash';
 import { TOGGLE_MODAL, SET_USER_PROFILE } from './types';
-import { baseNotification, modifySelf, toggleModal } from './index';
+import { baseNotification, setDataInLocalStorage, getDataFromLocalstorage } from './index';
+import { put } from './requests';
 
 export const setUserProfile = () => {
   return (dispatch) => {
-    const user = JSON.parse(sessionStorage.getItem('user'));
+    const user = getDataFromLocalstorage();
 
     const newUser = {
       email: user.email,
@@ -27,23 +30,26 @@ export const openChangeUserInfoModal = () => {
   };
 };
 
-export const changeUserInfo = (email, firstname, lastname) => {
+export const changeUserInfo = (data) => {
   return (dispatch) => {
-    dispatch(toggleModal('changeUserModal'));
-    dispatch(modifySelf(email, firstname, lastname))
-      .then(() => {
+    dispatch(openChangeUserInfoModal());
+
+    const url = `${SERVER_API_BASE}users/profile`;
+    put(url, data).then((res) => {
+      if (!isEmpty(res)) {
+        dispatch(setDataInLocalStorage(res));
         dispatch(Notifications.success({
           ...baseNotification,
-          title: 'User profile modified',
-          message: 'User profile modified successfully!',
+          title: 'Profile updated!',
+          message: 'Profile updated successfully.',
         }));
-      })
-      .catch((error) => {
+      } else {
         dispatch(Notifications.error({
           ...baseNotification,
-          title: 'Error',
-          message: `Could not modify user profile. ERROR: ${error}`,
+          title: 'Profile not updated!',
+          message: 'Please check your form values.',
         }));
-      });
+      }
+    });
   };
 };

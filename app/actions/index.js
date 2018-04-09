@@ -1,7 +1,7 @@
 export * from './actions.js';
 export * from './programmes.js';
 export * from './assessments.js';
-export * from './userauth.js';
+// export * from './userauth.js';
 export * from './boundaries.js';
 export * from './appState';
 export * from './permissions.js';
@@ -34,3 +34,5 @@ export * from './GetOTP';
 export * from './ChangePassword';
 export * from './ConfirmModal';
 export * from './ChangeProfile';
+export * from './Users';
+export * from './AddUser';

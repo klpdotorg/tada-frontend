@@ -31,7 +31,7 @@ function processPage(users, pages, page) {
   var copyOfPages = Object.assign({}, pages);
   var listOfUsers = [];
   if (users && users.length > 0) {
-    users.map(user => {
+    users.map((user) => {
       listOfUsers.push(user.id);
     });
   }
@@ -67,7 +67,7 @@ export function users(
     usersById: [],
     userCount: 0,
     currentPage: 1,
-    pages: [], //pages: { 1: {ids:[23,45,45], fetched: true}},
+    pages: [], // pages: { 1: {ids:[23,45,45], fetched: true}},
     fetchingUsers: false,
   },
   action,
@@ -143,11 +143,11 @@ export function users(
 function processUsers(data, existingUsersById) {
   var newUsersById = {};
   if (data && data.length > 0) {
-    data.map(user => {
+    data.map((user) => {
       newUsersById[user.id] = user;
     });
   }
-  //Merge existing program details with new info from server. This will eliminate dupes.
+  // Merge existing program details with new info from server. This will eliminate dupes.
   var mergedUserDetails = {};
   Object.assign(mergedUserDetails, existingUsersById, newUsersById);
   return {

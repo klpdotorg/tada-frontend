@@ -43,8 +43,10 @@ class EditInstitutionForm extends Component {
   }
 
   saveInsti() {
+    const { institution } = this.props;
+
     const myform = this.myform.getModel();
-    const institution = {
+    const updatedInstitution = {
       dise: myform.institutionDise_code,
       gender: myform.institutionGender,
       name: myform.institutionName,
@@ -56,9 +58,11 @@ class EditInstitutionForm extends Component {
       institution_languages: myform.institutionLang,
       management: myform.institutionMgmt,
       last_verified_year: myform.lastVerifiedYear,
+      admin3: institution.boundary.id,
+      status: 'AC',
     };
 
-    this.props.save(this.props.institution.id, institution);
+    this.props.save(this.props.institution.id, updatedInstitution);
   }
 
   render() {

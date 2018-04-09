@@ -105,6 +105,7 @@ ChangeUserInfoScreen.propTypes = {
 
 const mapStateToProps = (state) => {
   const { email, firstName, lastName, mobileNo } = state.profile;
+
   return {
     isOpen: state.modal.changeUserModal,
     email,
