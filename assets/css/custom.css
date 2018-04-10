@@ -676,3 +676,61 @@ table.table-fixedwidth td, .table-fixedwidth th {
 .margin-right-btn {
   margin-right: 20px;
 }
+
+.users-thead {
+  background-color: #d9edf7;
+}
+
+.content-rigth {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.user-page-header {
+  padding-right: 10px;
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+
+.users-table-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.users-underline {
+  width: 59px;
+  margin-top: 0;
+  height: 3px;
+}
+
+.users-header-text {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #3379b7;
+}
+
+.users-cont {
+  border: 1px solid #ddd;
+}
+
+.users-table {
+  margin-bottom: 0px;
+}
+
+.users-loading {
+  padding: 10px;
+}
+
+.delete-users-button {
+  margin-right: 20px;
+}
+
+.users-actions {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
