@@ -113,6 +113,15 @@ export const dateParser = (date) => {
   return moment(date).format('DD-MM-YYYY');
 };
 
+export const convertArrayToObject = (entities) => {
+  return entities.reduce((soFar, entity) => {
+    const result = soFar;
+    result[entity.id] = entity;
+
+    return result;
+  }, {});
+};
+
 export const convertEntitiesToObject = (entities) => {
   return entities.reduce((soFar, entity) => {
     const entityType = getEntityType(entity);

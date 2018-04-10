@@ -1,13 +1,15 @@
 import { connect } from 'react-redux';
 import { UsersView } from '../../components/Users';
+import { openEditUserModal, selectUser } from '../../actions';
 
 const mapStateToProps = (state) => {
-  const { users } = state.users;
+  const { users, selectedUsers } = state.users;
   return {
-    users,
+    users: Object.values(users),
+    selectedUsers,
   };
 };
 
-const Users = connect(mapStateToProps)(UsersView);
+const Users = connect(mapStateToProps, { editUser: openEditUserModal, selectUser })(UsersView);
 
 export { Users };

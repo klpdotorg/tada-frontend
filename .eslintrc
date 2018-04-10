@@ -9,5 +9,6 @@
     "object-curly-newline": "off",
     "class-methods-use-this": "off",
     "arrow-body-style": ["error", "always"],
+    "camelcase": "off",
   }
 }

@@ -96,3 +96,7 @@ export const SET_USERS = 'set_users';
 export const SHOW_USERS_LOADING = 'show_users_loading';
 export const HIDE_USERS_LOADING = 'hide_users_loading';
 export const ADD_USER_TO_USERS = 'add_user_to_users';
+export const SET_EDIT_USER_ID = 'set_edit_user_id';
+export const UPDATE_USER_OF_USERS = 'update_user_of_users';
+export const SELECT_USER = 'select_user';
+export const DELETE_USERS = 'delete_users';

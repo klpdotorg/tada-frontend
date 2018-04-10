@@ -3,19 +3,15 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
+import { get } from 'lodash';
 
 import { Modal } from '../../components/Modal';
 import { roles } from '../../Data';
-import {
-  saveNewUser,
-  enableSubmitForm,
-  disableSubmitForm,
-  toggleAddUserModal,
-} from '../../actions';
+import { saveUser, enableSubmitForm, disableSubmitForm, toggleEditUserModal } from '../../actions';
 
 const { Input, Select } = FRC;
 
-class AddUserView extends Component {
+class EditUserView extends Component {
   constructor(props) {
     super(props);
 
@@ -25,6 +21,7 @@ class AddUserView extends Component {
   submitForm() {
     const myform = this.myform.getModel();
     const user = {
+      id: this.props.id,
       first_name: myform.firstName,
       last_name: myform.lastName,
       mobile_no: myform.mobileno,
@@ -36,12 +33,12 @@ class AddUserView extends Component {
   }
 
   render() {
-    const { isOpen, canSubmit } = this.props;
+    const { first_name, last_name, email, mobile_no, groups, isOpen, canSubmit } = this.props;
 
     return (
       <Modal
-        title="Create User"
-        contentLabel="Create User"
+        title="Edit User"
+        contentLabel="Edit User"
         isOpen={isOpen}
         onCloseModal={this.props.closeConfirmModal}
         canSubmit={canSubmit}
@@ -58,7 +55,7 @@ class AddUserView extends Component {
           <Input
             name="firstName"
             id="firstName"
-            value=""
+            value={first_name}
             label="First Name"
             type="text"
             required
@@ -67,7 +64,7 @@ class AddUserView extends Component {
           <Input
             name="lastName"
             id="lastName"
-            value=""
+            value={last_name}
             label="Last Name"
             type="text"
             validations="minLength:1"
@@ -76,7 +73,7 @@ class AddUserView extends Component {
           <Input
             name="mobileno"
             id="mobileno"
-            value=""
+            value={mobile_no}
             label="Mobile No."
             type="number"
             validations="minLength:1"
@@ -85,20 +82,26 @@ class AddUserView extends Component {
           <Input
             name="email"
             id="email"
-            value=""
+            value={email}
             label="Email"
             type="email"
             validations="minLength:1"
             required
           />
-          <Select multiple name="role" label="Role" options={roles} value={['tada_deo']} required />
+          <Select multiple name="role" label="Role" options={roles} value={groups} required />
         </Formsy.Form>
       </Modal>
     );
   }
 }
 
-AddUserView.propTypes = {
+EditUserView.propTypes = {
+  id: PropTypes.any,
+  first_name: PropTypes.string,
+  last_name: PropTypes.string,
+  mobile_no: PropTypes.string,
+  groups: PropTypes.array,
+  email: PropTypes.string,
   canSubmit: PropTypes.bool,
   isOpen: PropTypes.bool,
   enableSubmitForm: PropTypes.func,
@@ -108,17 +111,26 @@ AddUserView.propTypes = {
 };
 
 const mapStateToProps = (state) => {
+  const { editUser, users } = state.users;
+  const { first_name, last_name, email, mobile_no, groups } = get(users, editUser, {});
+
   return {
-    isOpen: state.modal.createUser,
+    id: editUser,
+    isOpen: state.modal.editUser,
     canSubmit: state.appstate.enableSubmitForm,
+    first_name,
+    last_name,
+    email,
+    mobile_no,
+    groups,
   };
 };
 
-const AddUser = connect(mapStateToProps, {
-  save: saveNewUser,
+const EditUser = connect(mapStateToProps, {
+  save: saveUser,
   enableSubmitForm,
   disableSubmitForm,
-  closeConfirmModal: toggleAddUserModal,
-})(AddUserView);
+  closeConfirmModal: toggleEditUserModal,
+})(EditUserView);
 
-export { AddUser };
+export { EditUser };

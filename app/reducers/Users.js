@@ -1,13 +1,20 @@
+import { omit } from 'lodash';
 import {
   SET_USERS,
   SHOW_USERS_LOADING,
   HIDE_USERS_LOADING,
   ADD_USER_TO_USERS,
+  SET_EDIT_USER_ID,
+  SELECT_USER,
+  UPDATE_USER_OF_USERS,
+  DELETE_USERS,
 } from '../actions/types';
 
 const INITIAL_STATE = {
   loading: false,
-  users: [],
+  users: {},
+  editUser: null,
+  selectedUsers: [],
 };
 
 const Users = (state = INITIAL_STATE, action) => {
@@ -30,7 +37,33 @@ const Users = (state = INITIAL_STATE, action) => {
     case ADD_USER_TO_USERS:
       return {
         ...state,
-        users: [...state.users, action.value],
+        users: {
+          ...state.users,
+          [action.value.id]: action.value,
+        },
+      };
+    case UPDATE_USER_OF_USERS:
+      return {
+        ...state,
+        users: {
+          ...state.users,
+          [action.value.id]: action.value,
+        },
+      };
+    case SET_EDIT_USER_ID:
+      return {
+        ...state,
+        editUser: action.value,
+      };
+    case DELETE_USERS:
+      return {
+        ...state,
+        users: omit(state.users, action.value),
+      };
+    case SELECT_USER:
+      return {
+        ...state,
+        selectedUsers: action.value,
       };
     default:
       return state;

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Users, Actions, AddUser } from '../../containers/Users';
+import { Users, Actions, AddUser, EditUser } from '../../containers/Users';
 import { Header } from './index';
 import { Loading } from '../common';
 
@@ -20,7 +20,7 @@ const ManageUsersView = ({ loading, showAddUserModal }) => {
             <tr>
               <th scope="col">Full Name</th>
               <th scope="col">UserID</th>
-              <th scope="col">User Type</th>
+              <th scope="col">User Roles</th>
               <th scope="col">Select</th>
               <th scope="col">Edit</th>
             </tr>
@@ -31,6 +31,7 @@ const ManageUsersView = ({ loading, showAddUserModal }) => {
       </div>
       <Actions />
       <AddUser />
+      <EditUser />
     </div>
   );
 };
