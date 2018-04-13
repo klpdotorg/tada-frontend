@@ -24,3 +24,4 @@ export * from './Centers';
 export * from './OTP';
 export * from './Profile';
 export * from './ChangePassword';
+export * from './Pagination';

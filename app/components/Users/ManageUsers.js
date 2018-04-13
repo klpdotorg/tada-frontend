@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Users, Actions, AddUser, EditUser } from '../../containers/Users';
+import { Users, Actions, AddUser, EditUser, Pagination } from '../../containers/Users';
 import { Header } from './index';
 import { Loading } from '../common';
 
@@ -25,11 +25,20 @@ const ManageUsersView = ({ loading, showAddUserModal }) => {
               <th scope="col">Edit</th>
             </tr>
           </thead>
-          <Users />
+          {loading ? <span /> : <Users />}
         </table>
-        <div className="text-center users-loading">{loading ? <Loading /> : <span />}</div>
+        {loading ? (
+          <div className="text-center users-loading">
+            <Loading />
+          </div>
+        ) : (
+          <span />
+        )}
       </div>
-      <Actions />
+      <div className="users-actions">
+        <Pagination />
+        <Actions />
+      </div>
       <AddUser />
       <EditUser />
     </div>

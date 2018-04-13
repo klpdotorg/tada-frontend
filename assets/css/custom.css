@@ -731,6 +731,11 @@ table.table-fixedwidth td, .table-fixedwidth th {
 }
 
 .users-actions {
-  padding-top: 20px;
-  padding-bottom: 20px;
+  display: flex;
+  align-items: center;
 }
+
+.user-pagination {
+  flex: 1;
+}
+

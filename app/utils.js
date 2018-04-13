@@ -161,3 +161,61 @@ export const getPath = (state, uniqueId, depth) => {
 
   return path;
 };
+
+// export const generatePagination = (current, max, step) => {
+//   let result = [];
+
+//   if (max < 9) {
+//     return _.range(1, max + 1);
+//   }
+
+//   if (current <= step) {
+//     const values = _.range(1, step);
+//     result = [...result, ...values];
+//   } else {
+//     const values = _.range(current, current + step);
+
+//     result = [...result, ...values];
+//   }
+
+//   result.push('...');
+//   const newValues = _.range(max - (step - 1), max + 1);
+//   result = [...result, ...newValues];
+
+//   return result;
+// };
+
+const add = (a, b) => {
+  return _.range(a, b);
+};
+
+const last = (size) => {
+  return ['...', size];
+};
+
+const first = () => {
+  return ['1', '...'];
+};
+
+export const generatePagination = (page, size, step) => {
+  let result = [];
+  if (size < step * 2 + 6) {
+    const value = add(1, size + 1);
+    result = [...result, ...value];
+  } else if (page < step * 2 + 1) {
+    const value = add(1, step * 2 + 4);
+    const lastVal = last(size);
+    result = [...result, ...value, ...lastVal];
+  } else if (page > size - step * 2) {
+    const firstVal = first();
+    const value = add(size - (step * 2 - 2), size + 1);
+    result = [...result, ...firstVal, ...value];
+  } else {
+    const firstVal = first();
+    const value = add(page - step, page + step + 1);
+    const lastVal = last(size);
+    result = [...result, ...firstVal, ...value, ...lastVal];
+  }
+
+  return result;
+};

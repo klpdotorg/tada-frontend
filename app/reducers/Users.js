@@ -8,9 +8,11 @@ import {
   SELECT_USER,
   UPDATE_USER_OF_USERS,
   DELETE_USERS,
+  SET_USER_COUNT,
 } from '../actions/types';
 
 const INITIAL_STATE = {
+  count: 0,
   loading: false,
   users: {},
   editUser: null,
@@ -64,6 +66,11 @@ const Users = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         selectedUsers: action.value,
+      };
+    case SET_USER_COUNT:
+      return {
+        ...state,
+        count: action.value,
       };
     default:
       return state;

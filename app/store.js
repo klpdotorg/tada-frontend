@@ -33,6 +33,7 @@ import {
   OTP,
   Profile,
   ChangePassword,
+  Pagination,
 } from './reducers';
 
 const reducer = combineReducers({
@@ -64,6 +65,7 @@ const reducer = combineReducers({
   otp: OTP,
   profile: Profile,
   changePassword: ChangePassword,
+  pagination: Pagination,
 });
 
 const middleware = compose(

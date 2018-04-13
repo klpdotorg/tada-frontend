@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 const ActionsView = (props) => {
   return (
-    <div className="content-rigth users-actions">
+    <div>
       <button className="btn btn-primary delete-users-button" onClick={props.deleteUsers}>
         Delete
       </button>

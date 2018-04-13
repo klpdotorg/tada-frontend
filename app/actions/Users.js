@@ -9,6 +9,10 @@ import {
   UPDATE_USER_OF_USERS,
   SELECT_USER,
   DELETE_USERS,
+  GO_PAGINATION_NEXT,
+  GO_PAGINATION_BACK,
+  CHANGE_PAGINATION_CURRENT,
+  SET_PAGINATION_COUNT,
 } from './types';
 import { convertArrayToObject } from '../utils';
 
@@ -25,16 +29,45 @@ const hideUsersLoading = () => {
 };
 
 export const fetchUsers = () => {
-  return (dispatch) => {
+  return (dispatch, getState) => {
     dispatch(showUsersLoading());
-    const url = `${SERVER_API_BASE}tada/users/`;
+    const state = getState();
+    const { current } = state.pagination;
+
+    const url = `${SERVER_API_BASE}tada/users/?page=${current}`;
     get(url).then((res) => {
       dispatch({
         type: SET_USERS,
         value: convertArrayToObject(res.results),
       });
+      dispatch({
+        type: SET_PAGINATION_COUNT,
+        value: res.count,
+      });
       dispatch(hideUsersLoading());
     });
+  };
+};
+
+export const userPaginationChange = (value) => {
+  return (dispatch) => {
+    dispatch({
+      type: CHANGE_PAGINATION_CURRENT,
+      value,
+    });
+    dispatch(fetchUsers());
+  };
+};
+
+export const userPaginationNext = () => {
+  return {
+    type: GO_PAGINATION_NEXT,
+  };
+};
+
+export const userPaginationBack = () => {
+  return {
+    type: GO_PAGINATION_BACK,
   };
 };
 
