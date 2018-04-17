@@ -1,5 +1,5 @@
 import { SERVER_API_BASE, PER_PAGE } from 'config';
-import { pull, isEqual } from 'lodash';
+import { pull, isEqual, isEmpty } from 'lodash';
 import Notifications from 'react-notification-system-redux';
 
 import { mapAssessmentsDone, mapAssessmentsFailed } from './notifications';
@@ -281,31 +281,54 @@ export const openBoundaryOfMa = (Id, depth) => {
   };
 };
 
+export const mapAssessmentsToInsitutions = (assessments, institutions) => {
+  return (dispatch) => {
+    const url = `${SERVER_API_BASE}questiongroupinstitutionmap/`;
+    post(url, {
+      questiongroup_ids: assessments.join(','),
+      institution_ids: institutions.join(','),
+    })
+      .then(() => {
+        dispatch(Notifications.success(mapAssessmentsDone));
+        dispatch({
+          type: RESET_MAP_ASSESSMENTS,
+        });
+      })
+      .catch(() => {
+        dispatch(Notifications.error(mapAssessmentsFailed));
+      });
+  };
+};
+
+export const mapAssessmentsToStudentgroups = (institutions, studentgroups, assessments) => {
+  return (dispatch) => {
+    const url = `${SERVER_API_BASE}questiongroupstudentgroupmap/`;
+    post(url, {
+      questiongroup_ids: assessments.join(','),
+      institution_ids: institutions.join(','),
+      studentgroup_ids: studentgroups.join(','),
+    })
+      .then(() => {
+        dispatch(Notifications.success(mapAssessmentsDone));
+        dispatch({
+          type: RESET_MAP_ASSESSMENTS,
+        });
+      })
+      .catch(() => {
+        dispatch(Notifications.error(mapAssessmentsFailed));
+      });
+  };
+};
+
 export const mapBoundariesToAssessments = () => {
   return (dispatch, getState) => {
     const state = getState();
     const { selectedInstitutions, selectedAssessments, selectedClasses } = state.mapAssessments;
-    const url = `${SERVER_API_BASE}questiongroupinstitutionmap/`;
 
-    console.log(
-      selectedClasses,
-      selectedInstitutions,
-      selectedAssessments,
-      'Printing all the ids over here',
-    );
-
-    // post(url, {
-    //   studentgroup_ids: selectedClasses.join(','),
-    //   questiongroup_ids: selectedAssessments.join(','),
-    // })
-    //   .then(() => {
-    //     dispatch(Notifications.success(mapAssessmentsDone));
-    //     dispatch({
-    //       type: RESET_MAP_ASSESSMENTS,
-    //     });
-    //   })
-    //   .catch(() => {
-    //     dispatch(Notifications.error(mapAssessmentsFailed));
-    //   });
+    if (isEmpty(selectedClasses)) {
+      dispatch(mapAssessmentsToInsitutions(selectedAssessments, selectedInstitutions));
+    } else {
+      dispatch(mapAssessmentsToStudentgroups(selectedInstitutions, selectedClasses, selectedAssessments));
+    }
   };
 };
