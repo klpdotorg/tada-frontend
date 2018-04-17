@@ -1,7 +1,6 @@
 export * from './actions.js';
 export * from './programmes.js';
 export * from './assessments.js';
-// export * from './userauth.js';
 export * from './boundaries.js';
 export * from './appState';
 export * from './permissions.js';
@@ -17,7 +16,6 @@ export * from './StudentGroup';
 export * from './Students';
 export * from './AddStudents';
 export * from './languages';
-export * from './AddTeacher';
 export * from './Questions';
 export * from './AssessmentEntry';
 export * from './ProgramDetails';

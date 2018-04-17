@@ -29,6 +29,7 @@ class EditTeacherForm extends Component {
       gender: myform.gender,
       mt: myform.mt,
       staff_type: myform.staffType,
+      status: 'AC',
     };
 
     this.props.save(teacher, this.props.teacher.id);

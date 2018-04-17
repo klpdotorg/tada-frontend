@@ -97,7 +97,6 @@ export const editTeacher = (teacher, Id) => {
           [Id]: response,
         },
       });
-      dispatch(getTeachers(teacher.institution));
       dispatch(closeTeacherLoading());
     });
   };
