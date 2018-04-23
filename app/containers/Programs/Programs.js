@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { ProgramView } from '../../components/Programs';
 import {
-  fetchAllPrograms,
+  getPrograms,
   openCreateProgramModal,
   openAddAssessmentModal,
   selectProgram,
@@ -13,7 +13,7 @@ import {
 class GetPrograms extends Component {
   componentDidMount() {
     // Fetching all programs
-    this.props.fetchAllPrograms();
+    this.props.getPrograms();
   }
 
   render() {
@@ -22,7 +22,7 @@ class GetPrograms extends Component {
 }
 
 GetPrograms.propTypes = {
-  fetchAllPrograms: PropTypes.func,
+  getPrograms: PropTypes.func,
 };
 
 const mapStateToProps = (state) => {
@@ -34,7 +34,7 @@ const mapStateToProps = (state) => {
 };
 
 const Programs = connect(mapStateToProps, {
-  fetchAllPrograms,
+  getPrograms,
   openAddAssessmentModal,
   openCreateProgramModal,
   selectProgram,

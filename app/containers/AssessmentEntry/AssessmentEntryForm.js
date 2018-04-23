@@ -3,16 +3,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { AssessmentEntryFormView } from '../../components/AssessmentEntry';
-import {
-  fetchSelectedAssessmentBoundary,
-  fetchSelectedAssessmentQuestions,
-  fetchAnswers,
-} from '../../actions';
+import { fetchAnswers } from '../../actions';
 
 class GetSelectAssessmentBoundaries extends Component {
   componentDidMount() {
-    this.props.fetchBoundaries();
-    this.props.fetchQuestions();
     this.props.fetchAnswers();
   }
 
@@ -28,15 +22,14 @@ GetSelectAssessmentBoundaries.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-  const { boundaryIds } = state.assessmentEntry;
+  const { boundaryIds, answersLoading } = state.assessmentEntry;
   return {
     boundaries: boundaryIds,
+    loading: answersLoading,
   };
 };
 
 const AssessmentEntryForm = connect(mapStateToProps, {
-  fetchBoundaries: fetchSelectedAssessmentBoundary,
-  fetchQuestions: fetchSelectedAssessmentQuestions,
   fetchAnswers,
 })(GetSelectAssessmentBoundaries);
 

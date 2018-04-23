@@ -63,6 +63,7 @@ class NavTree extends Component {
           <div
             className="node"
             onClick={() => {
+              console.log(entity.id);
               this.props.selectProgramAssessment(entity.id, depth);
             }}
           >
