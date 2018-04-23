@@ -739,3 +739,7 @@ table.table-fixedwidth td, .table-fixedwidth th {
   flex: 1;
 }
 
+.answer-table {
+  border: 1px solid #c7c0c0;
+}
+

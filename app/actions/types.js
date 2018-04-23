@@ -105,3 +105,7 @@ export const GO_PAGINATION_NEXT = 'go_pagination_next';
 export const GO_PAGINATION_BACK = 'go_pagination_back';
 export const CHANGE_PAGINATION_CURRENT = 'change_pagination_current';
 export const SET_PAGINATION_COUNT = 'set_pagination_count';
+export const SHOW_ASSESSMENT_ENTRY_LOADING = 'show_assessment_entry_loading';
+export const HIDE_ASSESSMENT_ENTRY_LOADING = 'hide_assessment_entry_loading';
+export const SHOW_ANSWERS_LOADING = 'show_answers_loading';
+export const HIDE_ANSWERS_LOADING = 'hide_answers_loading';

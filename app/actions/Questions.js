@@ -36,9 +36,18 @@ export const toggleCreateQuestionModal = () => {
 };
 
 export const setQuestions = (value) => {
-  return {
-    type: SET_QUESTIONS,
-    value,
+  return (dispatch) => {
+    const entities = value.reduce((soFar, entity) => {
+      const result = soFar;
+      result[entity.id] = entity;
+
+      return result;
+    }, {});
+
+    dispatch({
+      type: SET_QUESTIONS,
+      value: entities,
+    });
   };
 };
 
@@ -64,14 +73,7 @@ export const getQuestions = (programId, assessmentId) => {
 
     const getQuestionsURL = `${SERVER_API_BASE}surveys/${programId}/questiongroup/${assessmentId}/questions/`;
     fetchQuestions(getQuestionsURL).then((response) => {
-      const entities = response.results.reduce((soFar, entity) => {
-        const result = soFar;
-        result[entity.id] = entity;
-
-        return result;
-      }, {});
-
-      dispatch(setQuestions(entities));
+      dispatch(setQuestions(response.results));
       dispatch(hideQuestionLoading());
     });
   };

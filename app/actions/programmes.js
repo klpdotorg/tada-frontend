@@ -52,9 +52,17 @@ export const selectProgram = (value) => {
 };
 
 export const setPrograms = (value) => {
-  return {
-    type: SET_PROGRAMS,
-    value,
+  return (dispatch) => {
+    dispatch({
+      type: SET_PROGRAMS,
+      value,
+    });
+    if (value.length) {
+      dispatch({
+        type: SELECT_PROGRAM,
+        value: value[0].id,
+      });
+    }
   };
 };
 
@@ -66,17 +74,18 @@ export const programCreated = (value) => {
 };
 
 export const fetchAllPrograms = () => {
+  const fetchProgramsUrl = `${serverApiBase}surveys/`;
+
+  return get(fetchProgramsUrl).then((response) => {
+    return response.results;
+  });
+};
+
+export const getPrograms = () => {
   return (dispatch) => {
     dispatch(showProgramLoading());
-
-    const fetchProgramsUrl = `${serverApiBase}surveys/`;
-
-    get(fetchProgramsUrl).then((response) => {
-      const { results } = response;
+    fetchAllPrograms().then((results) => {
       dispatch(setPrograms(results));
-      if (results.length) {
-        dispatch(selectProgram(results[0].id));
-      }
       dispatch(closeProgramLoading());
     });
   };
@@ -132,7 +141,7 @@ export const deactivateProgram = (Id) => {
     const programURL = `${serverApiBase}surveys/${Id}/`;
     patch(programURL, newProgram)
       .then(() => {
-        dispatch(fetchAllPrograms());
+        dispatch(getPrograms());
       })
       .catch(() => {
         dispatch(closeProgramLoading());

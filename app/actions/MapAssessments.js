@@ -304,9 +304,9 @@ export const mapAssessmentsToStudentgroups = (institutions, studentgroups, asses
   return (dispatch) => {
     const url = `${SERVER_API_BASE}questiongroupstudentgroupmap/`;
     post(url, {
-      questiongroup_ids: assessments.join(','),
-      institution_ids: institutions.join(','),
-      studentgroup_ids: studentgroups.join(','),
+      questiongroup_ids: assessments,
+      // institution_ids: institutions.join(','),
+      studentgroup_ids: studentgroups,
     })
       .then(() => {
         dispatch(Notifications.success(mapAssessmentsDone));
