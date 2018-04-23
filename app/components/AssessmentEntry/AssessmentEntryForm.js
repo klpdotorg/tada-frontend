@@ -4,31 +4,33 @@ import PropTypes from 'prop-types';
 import { Loading } from '../common';
 import { AssessmentEntryColHeader, AssessmentEntryRow } from '../../containers/AssessmentEntry';
 
-const AssessmentEntryFormView = ({ isFetching, boundaries }) => {
+const AssessmentEntryFormView = ({ loading, boundaries }) => {
   return (
-    <table className="table table-striped">
-      <thead>
-        <AssessmentEntryColHeader />
-      </thead>
-      <tbody>
-        {isFetching ? (
-          <tr colSpan="3">
-            <td colSpan="3" style={{ 'text-align': 'center' }}>
-              <Loading />
-            </td>
-          </tr>
-        ) : (
-          boundaries.map((id) => {
-            return <AssessmentEntryRow id={id} key={id} />;
-          })
-        )}
-      </tbody>
-    </table>
+    <div className="answer-table">
+      <table className="table table-striped">
+        <thead>
+          <AssessmentEntryColHeader />
+        </thead>
+        <tbody>
+          {!loading &&
+            boundaries.map((id) => {
+              return <AssessmentEntryRow id={id} key={id} />;
+            })}
+        </tbody>
+      </table>
+      {loading ? (
+        <div style={{ textAlign: 'center', paddingBottom: 10 }}>
+          <Loading />
+        </div>
+      ) : (
+        <div />
+      )}
+    </div>
   );
 };
 
 AssessmentEntryFormView.propTypes = {
-  isFetching: PropTypes.bool,
+  loading: PropTypes.bool,
   boundaries: PropTypes.array,
 };
 

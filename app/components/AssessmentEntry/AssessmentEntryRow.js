@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { get } from 'lodash';
+import { get, map } from 'lodash';
 
 const AssessmentEntryRowView = (props) => {
   const { id, name, answers, questions } = props;
@@ -17,8 +17,7 @@ const AssessmentEntryRowView = (props) => {
       >
         {name}
       </td>
-      {questions.map((question) => {
-        console.log(answers, question.id);
+      {map(questions, (question) => {
         const currentVal = get(answers, [id, question.id, 'value'], '');
         return (
           <td key={question.id}>
@@ -43,12 +42,15 @@ const AssessmentEntryRowView = (props) => {
       })}
       <td>
         <button
-          className="btn btn-primary glyphicon glyphicon-pencil"
+          className="btn btn-primary padded-btn"
+          title="Edit answer"
+          data-toggle="tooltip"
           onClick={() => {
             // console.log('Edit Button Clicked');
           }}
         >
           Edit
+          <span className="fa fa-pencil-square-o" />
         </button>
       </td>
       <td>
@@ -63,7 +65,7 @@ const AssessmentEntryRowView = (props) => {
 AssessmentEntryRowView.propTypes = {
   id: PropTypes.number,
   name: PropTypes.string,
-  questions: PropTypes.array,
+  questions: PropTypes.object,
   answers: PropTypes.object,
   saveAnswer: PropTypes.func,
 };

@@ -1,22 +1,64 @@
-import { map } from 'lodash';
+import { isEmpty } from 'lodash';
 import { SERVER_API_BASE } from 'config';
 
 import {
   SELECT_PROGRAM_ASSESSMENT,
   SET_ASSESSMENT_ENTRY_BOUNDARIES,
   SET_BOUNDARIES,
-  SET_ASSESSMENT_ENTRY_ANSWERS,
   CHANGE_ASSESSMENT_ENTRY_ANSWERS,
+  SHOW_ASSESSMENT_ENTRY_LOADING,
+  HIDE_ASSESSMENT_ENTRY_LOADING,
+  SHOW_ANSWERS_LOADING,
+  HIDE_ANSWERS_LOADING,
 } from './types';
 import { get } from './requests';
-import { fetchStudents, fetchAllPrograms, fetchQuestions, setQuestions } from './index';
+import { fetchAllPrograms, setQuestions, setPrograms } from './index';
 import { getEntityType, convertEntitiesToObject } from '../utils';
+
+export const showAssessmentEntryLoading = () => {
+  return {
+    type: SHOW_ASSESSMENT_ENTRY_LOADING,
+  };
+};
+
+export const hideAssessmentEntryLoading = () => {
+  return {
+    type: HIDE_ASSESSMENT_ENTRY_LOADING,
+  };
+};
+
+export const showAnswersLoading = () => {
+  return {
+    type: SHOW_ANSWERS_LOADING,
+  };
+};
+
+export const hideAnswersLoading = () => {
+  return {
+    type: HIDE_ANSWERS_LOADING,
+  };
+};
 
 export const onChangeAssessmentEntry = (value, id) => {
   return {
     type: CHANGE_ASSESSMENT_ENTRY_ANSWERS,
     id,
     value,
+  };
+};
+
+export const fetchAssessmentEntryResources = () => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const { programs } = state.programs;
+
+    if (isEmpty(programs)) {
+      dispatch(showAssessmentEntryLoading());
+      fetchAllPrograms().then((res) => {
+        dispatch(setPrograms(res));
+        dispatch(hideAssessmentEntryLoading());
+      });
+    }
   };
 };
 
@@ -37,6 +79,7 @@ export const selectProgramAssessment = (value, depth) => {
         boundaryType: type,
       },
     });
+    dispatch(fetchSelectedAssessmentQuestions());
   };
 };
 
@@ -49,6 +92,21 @@ const getURL = (type, boundaryId) => {
     default:
       return null;
   }
+};
+
+export const fetchSelectedAssessmentQuestions = () => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const { selectedProgramAssess } = state.assessmentEntry;
+    const { selectedProgram } = state.programs;
+
+    const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${selectedProgramAssess.assessmentId}/questions/`;
+
+    return get(url).then((response) => {
+      dispatch(setQuestions(response.results, selectedProgramAssess.assessmentId));
+      dispatch(hideAnswersLoading());
+    });
+  };
 };
 
 export const fetchSelectedAssessmentBoundary = () => {
@@ -67,77 +125,14 @@ export const fetchSelectedAssessmentBoundary = () => {
         type: SET_ASSESSMENT_ENTRY_BOUNDARIES,
         value: Object.keys(entities),
       });
+      dispatch(fetchSelectedAssessmentQuestions());
     });
   };
-};
-
-export const fetchSelectedAssessmentQuestions = () => {
-  return (dispatch, getState) => {
-    const state = getState();
-    const { selectedProgramAssess } = state.assessmentEntry;
-    const { selectedProgram } = state.programs;
-
-    const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${selectedProgramAssess.assessmentId}/questions/`;
-
-    get(url).then((response) => {
-      dispatch(setQuestions(response.results, selectedProgramAssess.assessmentId));
-    });
-  };
-};
-
-export const fetchStudentsAndPrograms = (entityId, entityType) => {
-  return (dispatch) => {
-    if (entityType === 'institution') {
-      const studentgroupUrl = `${SERVER_API_BASE}institutions/${entityId}/studentgroups/`;
-      get(studentgroupUrl).then((response) => {
-        map(response.results, (item) => {
-          console.log(item.id);
-        });
-      });
-    } else {
-      dispatch(fetchStudents(entityId));
-      dispatch(fetchAllPrograms());
-    }
-  };
-};
-
-const filterAnswers = (answers) => {
-  return answers.reduce((soFar, ans) => {
-    const result = soFar;
-    result[ans.question] = { value: ans.answer };
-
-    return result;
-  }, {});
 };
 
 export const fetchAnswers = () => {
-  return (dispatch, getState) => {
-    const state = getState();
-    const { selectedProgramAssess } = state.assessmentEntry;
-    const { selectedProgram } = state.programs;
-    const url = `${SERVER_API_BASE}surveys/${selectedProgram}/qgroup/${selectedProgramAssess.assessmentId}/institution/${selectedProgramAssess.boundaryId}/answers/`;
-    get(url).then((res) => {
-      const answers = filterAnswers(res.results);
-
-      dispatch({
-        type: SET_ASSESSMENT_ENTRY_ANSWERS,
-        value: {
-          [selectedProgramAssess.boundaryId]: answers,
-        },
-      });
-    });
-  };
-};
-
-export const fetchAnswersAndQuestion = (programId) => {
   return (dispatch) => {
-    const assessmentId = '';
-
-    fetchQuestions(programId, assessmentId).then((response) => {
-      dispatch(setQuestions(response.results, assessmentId));
-      fetchAnswers(assessmentId).then((answerResponse) => {
-        console.log(answerResponse);
-      });
-    });
+    dispatch(showAnswersLoading());
+    dispatch(fetchSelectedAssessmentBoundary());
   };
 };
