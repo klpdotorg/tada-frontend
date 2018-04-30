@@ -40,7 +40,7 @@ const getUrlForFilterProgram = (entity, surveyId) => {
     case 3:
       return `${SERVER_API_BASE}institutions/?admin3=${entity.id}&survey_id=${surveyId}&per_page=${PER_PAGE}`;
     case 4:
-      return `${SERVER_API_BASE}survey/questiongroupmap/?survey_id=${surveyId}&institution_id=${entity.id}`;
+      return `${SERVER_API_BASE}surveys/${surveyId}/questiongroups/mappings/?institution_id=${entity.id}`;
     default:
       return null;
   }

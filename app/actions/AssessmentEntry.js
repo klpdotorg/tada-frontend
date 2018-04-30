@@ -100,7 +100,7 @@ export const fetchSelectedAssessmentQuestions = () => {
     const { selectedProgramAssess } = state.assessmentEntry;
     const { selectedProgram } = state.programs;
 
-    const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${selectedProgramAssess.assessmentId}/questions/`;
+    const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroups/${selectedProgramAssess.assessmentId}/questions/`;
 
     return get(url).then((response) => {
       dispatch(setQuestions(response.results, selectedProgramAssess.assessmentId));

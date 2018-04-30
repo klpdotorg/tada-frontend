@@ -4,12 +4,14 @@ import { connect } from 'react-redux';
 import { map } from 'lodash';
 
 const AssessmentEntryColHeaderView = ({ questions }) => {
+  const values = Object.keys(questions);
+
   return (
     <tr className="bg-info">
       <td>UID</td>
       <td colSpan="2">Name</td>
-      {map(questions, (question, i) => {
-        return <td key={question.id}>{i + 1}</td>;
+      {map(values, (id, i) => {
+        return <td key={id}>{i + 1}</td>;
       })}
       <td>Edit</td>
       <td>Save</td>

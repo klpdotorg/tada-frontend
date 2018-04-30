@@ -63,9 +63,11 @@ export const setAssessments = (value) => {
 
 export const getAssessments = (programId) => {
   return (dispatch) => {
-    const fetchAssessmentsURL = `${serverApiBase}surveys/${programId}/questiongroup/`;
+    dispatch(showAssessmentLoading());
+    const fetchAssessmentsURL = `${serverApiBase}surveys/${programId}/questiongroups/`;
     get(fetchAssessmentsURL).then((response) => {
       dispatch(setAssessments(response.results));
+      dispatch(closeAssessmentLoading());
     });
   };
 };
@@ -99,7 +101,7 @@ export const saveNewAssessment = (options) => {
 
     const state = getState();
     const programId = state.programs.selectedProgram;
-    const createAssessmentURL = `${serverApiBase}surveys/${programId}/questiongroup/`;
+    const createAssessmentURL = `${serverApiBase}surveys/${programId}/questiongroups/`;
 
     post(createAssessmentURL, options).then((response) => {
       dispatch(assessmentCreated(response));
@@ -119,7 +121,7 @@ export const saveAssessment = (options) => {
     const state = getState();
     const { selectedProgram } = state.programs;
     const { editAssessmentId } = state.assessments;
-    const editAssessmentURL = `${serverApiBase}surveys/${selectedProgram}/questiongroup/${editAssessmentId}/`;
+    const editAssessmentURL = `${serverApiBase}surveys/${selectedProgram}/questiongroups/${editAssessmentId}/`;
 
     patch(editAssessmentURL, options).then((response) => {
       dispatch(assessmentCreated(response));
@@ -141,7 +143,7 @@ export const deactivateAssessments = () => {
     const { selectedProgram } = state.programs;
     const { selectedAssessments } = state.assessments;
     const promises = selectedAssessments.map((id) => {
-      const url = `${serverApiBase}surveys/${selectedProgram}/questiongroup/${id}/`;
+      const url = `${serverApiBase}surveys/${selectedProgram}/questiongroups/${id}/`;
       return patch(url, {
         status: 'IA',
       });
@@ -166,15 +168,13 @@ export const deleteAssessments = () => {
     const { selectedProgram } = state.programs;
     const { selectedAssessments } = state.assessments;
     const promises = selectedAssessments.map((id) => {
-      const url = `${serverApiBase}surveys/${selectedProgram}/questiongroup/${id}/`;
+      const url = `${serverApiBase}surveys/${selectedProgram}/questiongroups/${id}/`;
       return deleteRequest(url);
     });
 
-    console.log(promises, 'printing these nature laws');
-
-    // Promise.all(promises).then(() => {
-    //   dispatch(getAssessments());
-    //   dispatch(closeAssessmentLoading());
-    // });
+    Promise.all(promises).then(() => {
+      dispatch(getAssessments());
+      dispatch(closeAssessmentLoading());
+    });
   };
 };

@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import TreeView from 'react-treeview';
 import { Link } from 'react-router';
+import { has } from 'lodash';
 
-import { capitalize, getEntityType } from '../../utils';
+import { capitalize } from '../../utils';
 import { filterBoundaries } from './utils';
 import {
   collapsedProgramEntity,
@@ -51,19 +52,19 @@ class NavTree extends Component {
   renderSubTree(node, index, depth) {
     const { entity } = node;
     const newDepth = depth + 1;
-    const type = getEntityType(entity);
     const treeNodes = this.getTreeNodes(newDepth);
     const collapsed = this.props.uncollapsed[newDepth] === node.uniqueId;
     const label =
       capitalize(entity.label) || capitalize(entity.name) || capitalize(entity.first_name);
 
-    if (type === 'assessment') {
+    const contain = has(entity, ['assessment-type']);
+
+    if (contain) {
       return (
         <Link key={node.uniqueId}>
           <div
             className="node"
             onClick={() => {
-              console.log(entity.id);
               this.props.selectProgramAssessment(entity.id, depth);
             }}
           >

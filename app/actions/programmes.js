@@ -1,4 +1,4 @@
-import { SERVER_API_BASE as serverApiBase } from 'config';
+import { SERVER_API_BASE as serverApiBase, PER_PAGE } from 'config';
 
 import { get, post, patch, deleteRequest } from './requests';
 import {
@@ -74,7 +74,7 @@ export const programCreated = (value) => {
 };
 
 export const fetchAllPrograms = () => {
-  const fetchProgramsUrl = `${serverApiBase}surveys/`;
+  const fetchProgramsUrl = `${serverApiBase}surveys/?per_page=${PER_PAGE}`;
 
   return get(fetchProgramsUrl).then((response) => {
     return response.results;

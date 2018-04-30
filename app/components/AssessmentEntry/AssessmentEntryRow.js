@@ -54,7 +54,13 @@ const AssessmentEntryRowView = (props) => {
         </button>
       </td>
       <td>
-        <button id={`save_${id}`} onClick={props.saveAnswer} className="btn btn-primary">
+        <button
+          id={`save_${id}`}
+          onClick={() => {
+            props.onSave(id);
+          }}
+          className="btn btn-primary"
+        >
           Save
         </button>
       </td>
@@ -67,7 +73,7 @@ AssessmentEntryRowView.propTypes = {
   name: PropTypes.string,
   questions: PropTypes.object,
   answers: PropTypes.object,
-  saveAnswer: PropTypes.func,
+  onSave: PropTypes.func,
 };
 
 export { AssessmentEntryRowView };

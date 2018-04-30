@@ -13,28 +13,38 @@ const ShowAssessmentsView = (props) => {
           <div className="panel-heading">
             <h3 className="panel-title">Assessments</h3>
           </div>
-          {loading ? <Loading /> : <div />}
-          <ul className="list-group" style={{ maxHeight: 200, overflowY: 'auto' }}>
-            {assessments.map((assessment) => {
-              const checked = includes(selectedAssessments, assessment.id);
+          {loading ? (
+            <div className="loading-cont">
+              <Loading />
+            </div>
+          ) : (
+            <div />
+          )}
+          {!loading ? (
+            <ul className="list-group" style={{ maxHeight: 200, overflowY: 'auto' }}>
+              {assessments.map((assessment) => {
+                const checked = includes(selectedAssessments, assessment.id);
 
-              return (
-                <li className="list-group-item" key={assessment.id}>
-                  {assessment.name}
-                  <div className="pull-right">
-                    <input
-                      type="checkbox"
-                      aria-label="..."
-                      checked={checked}
-                      onChange={() => {
-                        props.selectAssessment(assessment.id);
-                      }}
-                    />
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
+                return (
+                  <li className="list-group-item" key={assessment.id}>
+                    {assessment.name}
+                    <div className="pull-right">
+                      <input
+                        type="checkbox"
+                        aria-label="..."
+                        checked={checked}
+                        onChange={() => {
+                          props.selectAssessment(assessment.id);
+                        }}
+                      />
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          ) : (
+            <div />
+          )}
         </div>
       </div>
     </div>

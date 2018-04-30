@@ -20,13 +20,11 @@ import Student from './components/Student';
 import { LoginContainer } from './containers/Login';
 import Logout from './components/Logout';
 import { App } from './containers/Dashboard';
-import UserRegContainer from './containers/UserRegContainer';
 import { Programs } from './containers/Programs';
 import { Questions } from './containers/Questions';
 import { AssessmentEntry } from './containers/AssessmentEntry';
 import ResetPassword from './components/ResetPassword';
 import SetNewPassword from './components/SetNewPassword';
-// import Users from './containers/UsersContainer';
 import PermissionsContainer from './containers/PermissionsContainer';
 import Reports from './components/Reports';
 import { Teachers } from './containers/Teachers';
@@ -56,7 +54,6 @@ export const routes = (
       <Route path="logout" component={Logout} />
       <Route path="password/reset" component={ResetPassword} />
       <Route path="password/reset/confirm/:uid/:token" component={SetNewPassword} />
-      <Route path="register" component={UserRegContainer} />
       <Route path="/" component={App} onEnter={isUserAuthenticated}>
         <IndexRoute component={Dashboard} onEnter={isUserAuthenticated} />
         <Route path="dashboard" component={Dashboard} />

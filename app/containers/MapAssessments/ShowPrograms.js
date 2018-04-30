@@ -21,9 +21,12 @@ class GetAllPrograms extends Component {
 }
 
 const mapStateToProps = (state) => {
+  const { programs, selectedProgram, loading } = state.programs;
+
   return {
-    programs: Object.values(state.programs.programs),
-    selectedProgram: Number(state.programs.selectedProgram),
+    programs: Object.values(programs),
+    selectedProgram: Number(selectedProgram),
+    loading,
   };
 };
 

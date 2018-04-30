@@ -281,12 +281,13 @@ export const openBoundaryOfMa = (Id, depth) => {
   };
 };
 
-export const mapAssessmentsToInsitutions = (assessments, institutions) => {
+export const mapAssessmentsToInsitutions = (surveyId, assessments, institutions) => {
   return (dispatch) => {
-    const url = `${SERVER_API_BASE}questiongroupinstitutionmap/`;
+    const url = `${SERVER_API_BASE}surveys/${surveyId}/questiongroups/map-institution/`;
+
     post(url, {
-      questiongroup_ids: assessments.join(','),
-      institution_ids: institutions.join(','),
+      questiongroup_ids: assessments,
+      institution_ids: institutions,
     })
       .then(() => {
         dispatch(Notifications.success(mapAssessmentsDone));
@@ -300,12 +301,16 @@ export const mapAssessmentsToInsitutions = (assessments, institutions) => {
   };
 };
 
-export const mapAssessmentsToStudentgroups = (institutions, studentgroups, assessments) => {
+export const mapAssessmentsToStudentgroups = (
+  surveyId,
+  institutions,
+  studentgroups,
+  assessments,
+) => {
   return (dispatch) => {
-    const url = `${SERVER_API_BASE}questiongroupstudentgroupmap/`;
+    const url = `${SERVER_API_BASE}surveys/${surveyId}/questiongroups/map-studentgroup/`;
     post(url, {
       questiongroup_ids: assessments,
-      // institution_ids: institutions.join(','),
       studentgroup_ids: studentgroups,
     })
       .then(() => {
@@ -323,12 +328,18 @@ export const mapAssessmentsToStudentgroups = (institutions, studentgroups, asses
 export const mapBoundariesToAssessments = () => {
   return (dispatch, getState) => {
     const state = getState();
+    const { selectedProgram } = state.programs;
     const { selectedInstitutions, selectedAssessments, selectedClasses } = state.mapAssessments;
 
     if (isEmpty(selectedClasses)) {
-      dispatch(mapAssessmentsToInsitutions(selectedAssessments, selectedInstitutions));
+      dispatch(mapAssessmentsToInsitutions(selectedProgram, selectedAssessments, selectedInstitutions));
     } else {
-      dispatch(mapAssessmentsToStudentgroups(selectedInstitutions, selectedClasses, selectedAssessments));
+      dispatch(mapAssessmentsToStudentgroups(
+        selectedProgram,
+        selectedInstitutions,
+        selectedClasses,
+        selectedAssessments,
+      ));
     }
   };
 };

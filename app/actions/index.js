@@ -34,3 +34,4 @@ export * from './ConfirmModal';
 export * from './ChangeProfile';
 export * from './Users';
 export * from './AddUser';
+export * from './Answers';

@@ -26,9 +26,10 @@ GetAssessments.propTypes = {
 };
 
 const mapStateToProps = (state) => {
+  const { assessments, loading } = state.assessments;
   return {
-    assessments: Object.values(state.assessments.assessments),
-    loading: state.assessments.loading,
+    assessments: Object.values(assessments),
+    loading,
     selectedAssessments: state.mapAssessments.selectedAssessments,
     programId: Number(state.programs.selectedProgram),
     programLength: Object.values(state.programs.programs).length,
