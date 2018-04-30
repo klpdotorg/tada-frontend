@@ -743,3 +743,12 @@ table.table-fixedwidth td, .table-fixedwidth th {
   border: 1px solid #c7c0c0;
 }
 
+.loading-cont {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
