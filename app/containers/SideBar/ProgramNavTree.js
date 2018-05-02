@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import TreeView from 'react-treeview';
 import { Link } from 'react-router';
-import { has } from 'lodash';
+import { has, map } from 'lodash';
 
 import { capitalize } from '../../utils';
 import { filterBoundaries } from './utils';
@@ -12,11 +12,14 @@ import {
   getFilterByProgramEntites,
   resetProgramNavTree,
   selectProgramAssessment,
+  getPrograms,
+  selectProgram,
 } from '../../actions/';
 import { Loading, Message } from '../../components/common';
 
 class NavTree extends Component {
   componentDidMount() {
+    this.props.getPrograms();
     if (this.props.selectedProgram) {
       this.props.getFilterByProgramEntites({ depth: 0, uniqueId: 1 });
     }
@@ -60,16 +63,10 @@ class NavTree extends Component {
     const contain = has(entity, ['assessment-type']);
 
     if (contain) {
+      const path = '/filterprograms/questiongroup/';
       return (
-        <Link key={node.uniqueId}>
-          <div
-            className="node"
-            onClick={() => {
-              this.props.selectProgramAssessment(entity.id, depth);
-            }}
-          >
-            <span>{label}</span>
-          </div>
+        <Link key={node.uniqueId} to={path}>
+          <span>{label}</span>
         </Link>
       );
     }
@@ -109,9 +106,31 @@ class NavTree extends Component {
 
   render() {
     const nodes = this.getTreeNodes(0);
+    const { programLoading, selectedProgram, programs } = this.props;
+
+    if (programLoading) {
+      return <Loading />;
+    }
 
     return (
       <div>
+        <div className="form-group">
+          <select
+            className="form-control"
+            onChange={(e) => {
+              this.props.selectProgram(e.target.value);
+            }}
+            value={selectedProgram}
+          >
+            {map(programs, (program) => {
+              return (
+                <option key={program.id} value={program.id}>
+                  {program.name}
+                </option>
+              );
+            })}
+          </select>
+        </div>
         {nodes.map((element, i) => {
           return this.renderSubTree(element, i, 0);
         })}
@@ -122,6 +141,7 @@ class NavTree extends Component {
 }
 
 const mapStateToProps = (state) => {
+  const { programs, loading } = state.programs;
   return {
     entities: state.programDetails.programDetails,
     entitiesByParentId: state.programDetails.entitiesByParentId,
@@ -129,6 +149,8 @@ const mapStateToProps = (state) => {
     selectedProgram: Number(state.programs.selectedProgram),
     loading: state.appstate.loadingBoundary,
     selectedPrimary: state.schoolSelection.primarySchool,
+    programs,
+    programLoading: loading,
   };
 };
 
@@ -140,8 +162,12 @@ NavTree.propTypes = {
   selectedProgram: PropTypes.number,
   resetProgramNavTree: PropTypes.func,
   selectProgramAssessment: PropTypes.func,
+  getPrograms: PropTypes.func,
   loading: PropTypes.bool,
   selectedPrimary: PropTypes.bool,
+  programLoading: PropTypes.bool,
+  programs: PropTypes.object,
+  selectProgram: PropTypes.func,
 };
 
 const ProgramNavTree = connect(mapStateToProps, {
@@ -149,6 +175,8 @@ const ProgramNavTree = connect(mapStateToProps, {
   getFilterByProgramEntites,
   resetProgramNavTree,
   selectProgramAssessment,
+  getPrograms,
+  selectProgram,
 })(NavTree);
 
 export { ProgramNavTree };

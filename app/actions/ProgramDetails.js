@@ -1,4 +1,4 @@
-import { SERVER_API_BASE, PER_PAGE } from 'config';
+import { SERVER_API_BASE } from 'config';
 import _ from 'lodash';
 
 import { get } from './requests';
@@ -29,18 +29,27 @@ export const collapsedProgramEntity = (value) => {
   };
 };
 
-const getUrlForFilterProgram = (entity, surveyId) => {
-  switch (entity.depth) {
-    case 0:
-      return `${SERVER_API_BASE}boundary/admin1s/?survey_id=${surveyId}`;
-    case 1:
-      return `${SERVER_API_BASE}boundary/admin1/${entity.id}/admin2/?survey_id=${surveyId}`;
-    case 2:
-      return `${SERVER_API_BASE}boundary/admin2/${entity.id}/admin3/?survey_id=${surveyId}`;
-    case 3:
-      return `${SERVER_API_BASE}institutions/?admin3=${entity.id}&survey_id=${surveyId}&per_page=${PER_PAGE}`;
-    case 4:
-      return `${SERVER_API_BASE}surveys/${surveyId}/questiongroups/mappings/?institution_id=${entity.id}`;
+const getUrlForFilterProgram = (entity, surveyId, surveyOn) => {
+  if (entity.depth <= 2) {
+    switch (entity.depth) {
+      case 0:
+        return `${SERVER_API_BASE}boundary/admin1s/?survey_id=${surveyId}`;
+      case 1:
+        return `${SERVER_API_BASE}boundary/admin1/${entity.id}/admin2/?survey_id=${surveyId}`;
+      case 2:
+        return `${SERVER_API_BASE}boundary/admin2/${entity.id}/admin3/?survey_id=${surveyId}`;
+      default:
+        return null;
+    }
+  }
+
+  switch (surveyOn) {
+    case 'institution':
+      return `${SERVER_API_BASE}surveys/${surveyId}/questiongroups/mappings/?boundary_id=${entity.id}`;
+    case 'studentgroup':
+      return `${SERVER_API_BASE}survey/questiongroupmap/?survey_id=${surveyId}&institution_id=${entity.id}`;
+    case 'student':
+      return `${SERVER_API_BASE}survey/questiongroupmap/?survey_id=${surveyId}&institution_id=${entity.id}`;
     default:
       return null;
   }
@@ -49,8 +58,9 @@ const getUrlForFilterProgram = (entity, surveyId) => {
 const fetchAdmins = (entity) => {
   return (dispatch, getState) => {
     const state = getState();
-    const { selectedProgram } = state.programs;
-    const url = getUrlForFilterProgram(entity, selectedProgram);
+    const { selectedProgram, programs } = state.programs;
+    const programInfo = _.get(programs, selectedProgram);
+    const url = getUrlForFilterProgram(entity, selectedProgram, programInfo.survey_on);
 
     get(url).then((res) => {
       const entities = convertEntitiesToObject(res.results);

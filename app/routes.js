@@ -22,7 +22,6 @@ import Logout from './components/Logout';
 import { App } from './containers/Dashboard';
 import { Programs } from './containers/Programs';
 import { Questions } from './containers/Questions';
-import { AssessmentEntry } from './containers/AssessmentEntry';
 import ResetPassword from './components/ResetPassword';
 import SetNewPassword from './components/SetNewPassword';
 import PermissionsContainer from './containers/PermissionsContainer';
@@ -32,6 +31,12 @@ import tadastore from './store';
 import RevertEntity from './containers/RevertEntity';
 import { MapAssessments } from './containers/MapAssessments';
 import { ManageUsers } from './containers/Users';
+import {
+  InstitutionAnswersSheet,
+  StudentsAnswersSheet,
+  StudentGroupAnswersSheet,
+} from './containers/AssessmentEntry';
+import { DefaultMessage } from './components/AssessmentEntry';
 
 const history = syncHistoryWithStore(browserHistory, tadastore);
 
@@ -58,8 +63,19 @@ export const routes = (
         <IndexRoute component={Dashboard} onEnter={isUserAuthenticated} />
         <Route path="dashboard" component={Dashboard} />
         <Route path="programmes" component={Programs} />
-        <Route path="filterprograms" component={AssessmentEntry} />
-        <Route path="filterprograms/:entityType/:entityId" component={AssessmentEntry} />
+        <Route path="filterprograms" component={DefaultMessage} />
+        <Route
+          path="filterprograms/questiongroup/:questionGroupId/institution/:institutionId"
+          component={InstitutionAnswersSheet}
+        />
+        <Route
+          path="filterprograms/questiongroup/:questionGroupId/studentgroup/:studentGroupId"
+          component={StudentGroupAnswersSheet}
+        />
+        <Route
+          path="filterprograms/questiongroup/:questionGroupId/students/:studentGroupId"
+          component={StudentsAnswersSheet}
+        />
         <Route path="mapassessments" component={MapAssessments} />
         <Route path="reports" component={Reports} />
         <Route path="revert-entity/:entityName" component={RevertEntity} />
