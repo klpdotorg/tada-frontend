@@ -6,25 +6,12 @@ import $ from 'jquery';
 import { SideBarWrapper } from '../../components/SideBar';
 import { SchoolsNavTree, PermissionsNavTree, ProgramNavTree, MapAssessmentTree } from './index';
 import { getEntity, setParentNode } from '../../actions';
-import { DEFAULT_PARENT_NODE_ID } from 'config';
 
 class SideBar extends Component {
   constructor() {
     super();
 
     this.renderNavTree = this.renderNavTree.bind(this);
-  }
-
-  componentDidMount() {
-    // this.props.getEntity(DEFAULT_PARENT_NODE_ID);
-    // this.props.setParentNode(DEFAULT_PARENT_NODE_ID);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    // if (this.props.selectedPrimarySchool !== nextProps.selectedPrimarySchool) {
-    //   this.props.getEntity(DEFAULT_PARENT_NODE_ID);
-    //   this.props.setParentNode(DEFAULT_PARENT_NODE_ID);
-    // }
   }
 
   toggleTree(e) {
@@ -57,9 +44,6 @@ class SideBar extends Component {
 
 SideBar.propTypes = {
   location: PropTypes.object,
-  selectedPrimarySchool: PropTypes.bool,
-  getEntity: PropTypes.func,
-  setParentNode: PropTypes.func,
 };
 
 const mapStateToProps = (state, ownProps) => {

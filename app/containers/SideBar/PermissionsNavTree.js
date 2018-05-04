@@ -1,83 +1,152 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import TreeView from 'react-treeview';
 import { Link } from 'react-router';
-import { alphabeticalOrder } from '../../utils';
-import _ from 'lodash';
-import { fetchBoundaryDetails, boundaryClicked } from '../../actions/';
-import { getEntityType, getBoundaryType, CLUSTER } from '../../reducers/utils';
+import { DEFAULT_PARENT_NODE_ID } from 'config';
 
-class PermissionsNavTree extends React.Component {
-  onBoundarySelection(boundary) {
-    this.props.dispatch(fetchBoundaryDetails(boundary.id)).then(() => {
-      //If it is a cluster, you don't want to wait till they expand the node to fetch children.
-      if (getBoundaryType(boundary) == CLUSTER) {
-        this.props.onBoundaryClick(boundary);
-      }
-      this.props.dispatch(boundaryClicked(boundary));
-    });
+import { capitalize, getEntityType } from '../../utils';
+import { filterBoundaries } from './utils';
+import {
+  collapsedProgramEntity,
+  getBoundariesEntities,
+  openPermissionBoundary,
+} from '../../actions/';
+import { Loading, Message } from '../../components/common';
+
+class NavTree extends Component {
+  componentDidMount() {
+    this.props.getBoundariesEntities([{ depth: 0, uniqueId: DEFAULT_PARENT_NODE_ID }]);
   }
 
-  renderSubTree(node, boundaryHierarchy, visitedBoundaries, depth) {
-    const boundaryDetails = this.props.boundaryDetails;
-    //if boundary details not defined for node, most likely we don't want it rendered in this filtered tree..
-    if (!boundaryDetails[node]) {
-      console.log('Boundary details undefined for node', node);
-      return null;
-    }
-    if (boundaryDetails[node].depth == depth && depth < 5) {
-      if (node && $.inArray(node, visitedBoundaries) < 0) {
-        var children = boundaryHierarchy[node];
-        visitedBoundaries.push(node);
+  getTreeNodes(index) {
+    const nodes = this.props.entitiesByParentId[index];
 
-        var boundary = this.props.boundaryDetails[node];
+    if (nodes) {
+      const updatedNodes = nodes.map((node) => {
+        return { entity: this.props.entities[node], uniqueId: node };
+      });
 
-        const label = (
-          <a onClick={this.onBoundarySelection.bind(this, boundary)}>
-            <span className="node" onClick={this.onBoundarySelection.bind(this, boundary)}>
-              {' '}{_.capitalize(boundary.label) ||
-                _.capitalize(boundary.name) ||
-                _.capitalize(boundary.first_name)}{' '}
-            </span>
-          </a>
-        );
-        return (
-          <TreeView
-            key={node}
-            onClick={this.props.onBoundaryClick.bind(this, boundary)}
-            nodeLabel={label}
-            collapsed={boundary.collapsed}
-          >
-            {(() => {
-              if (children && children.length > 0) {
-                ++depth;
-                return children.map((child, i) => {
-                  return this.renderSubTree(child, boundaryHierarchy, visitedBoundaries, depth);
-                });
-              }
-            })()}
-          </TreeView>
-        );
+      if (index !== 0) {
+        return updatedNodes;
       }
+
+      const filterEntities = filterBoundaries(updatedNodes, this.props.selectedPrimary);
+
+      return filterEntities;
     }
 
-    return null;
+    return [];
   }
 
-  //boundaryDetails={this.state.boundaryDetails} boundaryParentChildMap={this.state.childrenByParentId}
+  renderLabel(node, depth, collapsed) {
+    const { entity } = node;
+    const type = getEntityType(entity);
+
+    const label =
+      capitalize(entity.label) || capitalize(entity.name) || capitalize(entity.first_name);
+
+    return (
+      <Link
+        key={entity.name || entity.id}
+        tabIndex="0"
+        onClick={() => {
+          this.props.openBoundary(node.uniqueId, type);
+        }}
+      >
+        <span>{label}</span>
+      </Link>
+    );
+  }
+
+  renderSubTree(node, index, depth) {
+    const newDepth = depth + 1;
+    const { entity } = node;
+    const treeNodes = this.getTreeNodes(newDepth);
+    const collapsed = this.props.uncollapsed[newDepth] === node.uniqueId;
+    const name = this.renderLabel(node, newDepth, collapsed);
+
+    if (depth >= 2) {
+      return <span key={index} />;
+    }
+
+    return (
+      <TreeView
+        key={index}
+        onClick={() => {
+          this.props.getBoundariesEntities([
+            {
+              id: entity.id,
+              depth: newDepth,
+              uniqueId: node.uniqueId,
+            },
+          ]);
+        }}
+        nodeLabel={name}
+        collapsed={!collapsed}
+      >
+        {depth <= 2 ? (
+          treeNodes.map((child, i) => {
+            return this.renderSubTree(child, i + 1, newDepth);
+          })
+        ) : (
+          <div />
+        )}
+        {!treeNodes.length && this.props.loading ? <Loading /> : <span />}
+      </TreeView>
+    );
+  }
+
+  renderBoundariesState(length) {
+    if (this.props.loading && !length) {
+      return <Loading />;
+    }
+
+    if (!length) {
+      return <Message message="No Boundaries Found" />;
+    }
+
+    return <span />;
+  }
+
   render() {
-    var visitedBoundaries = [];
-    const { boundariesByParentId, boundaryDetails } = this.props;
+    const nodes = this.getTreeNodes(0);
 
     return (
       <div>
-        {alphabeticalOrder(boundariesByParentId, boundaryDetails).map(
-          function(element, i) {
-            return this.renderSubTree(element, boundariesByParentId, visitedBoundaries, 0);
-          }.bind(this),
-        )}
+        {nodes.map((element, i) => {
+          return this.renderSubTree(element, i, 0);
+        })}
+        {this.renderBoundariesState(nodes.length)}
       </div>
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    entities: state.boundaries.boundaryDetails,
+    entitiesByParentId: state.boundaries.boundariesByParentId,
+    uncollapsed: state.boundaries.uncollapsedEntities,
+    loading: state.appstate.loadingBoundary,
+    selectedPrimary: state.schoolSelection.primarySchool,
+  };
+};
+
+NavTree.propTypes = {
+  getBoundariesEntities: PropTypes.func,
+  uncollapsed: PropTypes.object,
+  entitiesByParentId: PropTypes.object,
+  entities: PropTypes.object,
+  openBoundary: PropTypes.func,
+  loading: PropTypes.bool,
+  selectedPrimary: PropTypes.bool,
+};
+
+const PermissionsNavTree = connect(mapStateToProps, {
+  collapsedProgramEntity,
+  getBoundariesEntities,
+  openBoundary: openPermissionBoundary,
+})(NavTree);
 
 export { PermissionsNavTree };

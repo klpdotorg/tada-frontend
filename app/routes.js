@@ -24,9 +24,9 @@ import { Programs } from './containers/Programs';
 import { Questions } from './containers/Questions';
 import ResetPassword from './components/ResetPassword';
 import SetNewPassword from './components/SetNewPassword';
-import PermissionsContainer from './containers/PermissionsContainer';
 import Reports from './components/Reports';
 import { Teachers } from './containers/Teachers';
+import { Permissions } from './containers/Permissions';
 import tadastore from './store';
 import RevertEntity from './containers/RevertEntity';
 import { MapAssessments } from './containers/MapAssessments';
@@ -85,7 +85,8 @@ export const routes = (
           component={Questions}
         />
         <Route path="users" component={ManageUsers} />
-        <Route path="permissions" component={PermissionsContainer} />
+        <Route path="permissions" component={Permissions} />
+        <Route path="permissions/:boundaryType/:boundaryId" component={Permissions} />
         <Route
           path="district/:districtNodeId/project/:projectNodeId"
           component={PreschoolProject}
