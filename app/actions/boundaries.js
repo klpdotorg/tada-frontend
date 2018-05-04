@@ -87,7 +87,6 @@ export const fetchBoundary = (entity, moreEntities) => {
 
     get(url).then((res) => {
       const entities = convertEntitiesToObject(res.results);
-
       dispatch({
         type: SET_BOUNDARIES,
         boundaryDetails: entities,
