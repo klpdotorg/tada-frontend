@@ -60,13 +60,15 @@ class NavTree extends Component {
     const label =
       capitalize(entity.label) || capitalize(entity.name) || capitalize(entity.first_name);
 
-    const contain = has(entity, ['assessment-type']);
-
+    const contain = has(entity, ['assessment']);
     if (contain) {
-      const path = '/filterprograms/questiongroup/';
+      const path = `/filterprograms/questiongroups/${entity.assessment
+        .id}/institutions/${node.uniqueId}`;
+
       return (
         <Link key={node.uniqueId} to={path}>
           <span>{label}</span>
+          <br />
         </Link>
       );
     }

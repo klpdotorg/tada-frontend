@@ -2,17 +2,15 @@ import { connect } from 'react-redux';
 import { get } from 'lodash';
 
 import { AssessmentEntryRowView } from '../../components/AssessmentEntry';
-import { onChangeAssessmentEntry, saveAnswer } from '../../actions';
+import { onChangeAssessmentEntry, createAnswerGroup } from '../../actions';
 
 const mapStateToProps = (state, ownProps) => {
-  const { boundaryIds } = state.assessmentEntry;
-  const boundaries = boundaryIds.map((id) => {
-    return { uniqueId: id, boundary: state.boundaries.boundaryDetails[id] };
-  });
+  const { id } = ownProps;
 
-  const boundary = boundaries.find((value) => {
-    return value.uniqueId === ownProps.id;
-  });
+  const boundary = {
+    uniqueId: id,
+    boundary: state.programDetails.programDetails[id],
+  };
 
   return {
     questions: state.questions.questions,
@@ -24,7 +22,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const AssessmentEntryRow = connect(mapStateToProps, {
   onChange: onChangeAssessmentEntry,
-  onSave: saveAnswer,
+  onSave: createAnswerGroup,
 })(AssessmentEntryRowView);
 
 export { AssessmentEntryRow };

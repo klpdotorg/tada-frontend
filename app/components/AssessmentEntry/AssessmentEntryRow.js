@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { get, map } from 'lodash';
 
 const AssessmentEntryRowView = (props) => {
-  const { id, name, answers, questions } = props;
+  const { id, name, answers, questions, assessmentId } = props;
   return (
     <tr>
       <td>{id}</td>
@@ -57,7 +57,10 @@ const AssessmentEntryRowView = (props) => {
         <button
           id={`save_${id}`}
           onClick={() => {
-            props.onSave(id);
+            props.onSave({
+              assessmentId,
+              boundaryId: id,
+            });
           }}
           className="btn btn-primary"
         >
@@ -74,6 +77,7 @@ AssessmentEntryRowView.propTypes = {
   questions: PropTypes.object,
   answers: PropTypes.object,
   onSave: PropTypes.func,
+  assessmentId: PropTypes.any,
 };
 
 export { AssessmentEntryRowView };

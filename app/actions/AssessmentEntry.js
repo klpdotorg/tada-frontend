@@ -94,16 +94,15 @@ const getURL = (type, boundaryId) => {
   }
 };
 
-export const fetchSelectedAssessmentQuestions = () => {
+export const fetchSelectedAssessmentQuestions = (assessmentId) => {
   return (dispatch, getState) => {
     const state = getState();
-    const { selectedProgramAssess } = state.assessmentEntry;
     const { selectedProgram } = state.programs;
 
-    const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroups/${selectedProgramAssess.assessmentId}/questions/`;
+    const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroups/${assessmentId}/questions/`;
 
     return get(url).then((response) => {
-      dispatch(setQuestions(response.results, selectedProgramAssess.assessmentId));
+      dispatch(setQuestions(response.results, assessmentId));
       dispatch(hideAnswersLoading());
     });
   };
@@ -130,9 +129,9 @@ export const fetchSelectedAssessmentBoundary = () => {
   };
 };
 
-export const fetchAnswers = () => {
+export const fetchAnswers = (assessmentId) => {
   return (dispatch) => {
     dispatch(showAnswersLoading());
-    dispatch(fetchSelectedAssessmentBoundary());
+    dispatch(fetchSelectedAssessmentQuestions(assessmentId));
   };
 };

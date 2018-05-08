@@ -7,7 +7,8 @@ import { fetchAnswers } from '../../actions';
 
 class FetchAnswersAndQuestions extends Component {
   componentDidMount() {
-    this.props.fetchAnswers();
+    const { questionGroupId } = this.props.params;
+    this.props.fetchAnswers(questionGroupId);
   }
 
   render() {
@@ -19,12 +20,16 @@ FetchAnswersAndQuestions.propTypes = {
   fetchBoundaries: PropTypes.func,
   fetchQuestions: PropTypes.func,
   fetchAnswers: PropTypes.func,
+  params: PropTypes.object,
 };
 
-const mapStateToProps = (state) => {
-  const { boundaryIds, answersLoading } = state.assessmentEntry;
+const mapStateToProps = (state, ownProps) => {
+  const { institutionId } = ownProps.params;
+
+  const { answersLoading } = state.assessmentEntry;
+
   return {
-    boundaries: boundaryIds,
+    boundaries: [institutionId],
     loading: answersLoading,
   };
 };

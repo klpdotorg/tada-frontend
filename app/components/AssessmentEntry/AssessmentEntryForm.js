@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Loading } from '../common';
 import { AssessmentEntryColHeader, AssessmentEntryRow } from '../../containers/AssessmentEntry';
 
-const AssessmentEntryFormView = ({ loading, boundaries }) => {
+const AssessmentEntryFormView = ({ loading, boundaries, params }) => {
   return (
     <div className="answer-table">
       <table className="table table-striped">
@@ -14,7 +14,7 @@ const AssessmentEntryFormView = ({ loading, boundaries }) => {
         <tbody>
           {!loading &&
             boundaries.map((id) => {
-              return <AssessmentEntryRow id={id} key={id} />;
+              return <AssessmentEntryRow id={id} key={id} assessmentId={params.questionGroupId} />;
             })}
         </tbody>
       </table>
@@ -32,6 +32,7 @@ const AssessmentEntryFormView = ({ loading, boundaries }) => {
 AssessmentEntryFormView.propTypes = {
   loading: PropTypes.bool,
   boundaries: PropTypes.array,
+  params: PropTypes.object,
 };
 
 export { AssessmentEntryFormView };
