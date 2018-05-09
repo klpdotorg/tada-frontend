@@ -12,7 +12,7 @@ import {
 import { Loading } from '../common';
 
 const PermissionsView = (props) => {
-  const { params, loading } = props;
+  const { boundaryId, boundaryType, loading } = props;
 
   if (loading) {
     return <Loading />;
@@ -20,14 +20,14 @@ const PermissionsView = (props) => {
 
   return (
     <div>
-      <Header params={params} />
+      <Header boundaryId={boundaryId} boundaryType={boundaryType} />
       <div>
         <div className="row">
           <div className="permissions-cont col-md-8">
             <p className="subheader-text">Assign Permissions</p>
             <hr />
             <div className="row left-view">
-              <BoundaryList boundaryId={params.boundaryId} boundaryType={params.boundaryType} />
+              <BoundaryList boundaryId={boundaryId} boundaryType={boundaryType} />
               <UserList />
             </div>
           </div>
@@ -40,7 +40,8 @@ const PermissionsView = (props) => {
 };
 
 PermissionsView.propTypes = {
-  params: PropTypes.object,
+  boundaryId: PropTypes.any,
+  boundaryType: PropTypes.string,
   loading: PropTypes.bool,
 };
 

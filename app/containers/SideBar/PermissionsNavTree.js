@@ -51,7 +51,7 @@ class NavTree extends Component {
         key={entity.name || entity.id}
         tabIndex="0"
         onClick={() => {
-          this.props.openBoundary(node.uniqueId, type);
+          this.props.openBoundary(node.uniqueId, depth);
         }}
       >
         <span>{label}</span>

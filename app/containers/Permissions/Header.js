@@ -4,7 +4,7 @@ import { get } from 'lodash';
 import { HeaderView } from '../../components/Permissions';
 
 const mapStateToProps = (state, ownProps) => {
-  const { boundaryId, boundaryType } = ownProps.params;
+  const { boundaryId, boundaryType } = ownProps;
   const { boundaryDetails, uncollapsedEntities } = state.boundaries;
   const boundary = get(boundaryDetails, boundaryId, {});
 

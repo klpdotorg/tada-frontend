@@ -34,6 +34,7 @@ import {
   Profile,
   ChangePassword,
   Pagination,
+  Permissions,
 } from './reducers';
 
 const reducer = combineReducers({
@@ -66,6 +67,7 @@ const reducer = combineReducers({
   profile: Profile,
   changePassword: ChangePassword,
   pagination: Pagination,
+  permissions: Permissions,
 });
 
 const middleware = compose(

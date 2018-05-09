@@ -34,7 +34,8 @@ export const fetchUsers = () => {
     const state = getState();
     const { current } = state.pagination;
 
-    const url = `${SERVER_API_BASE}tada/users/?page=${current}`;
+    const url = `${SERVER_API_BASE}tada/users/?per_page=10&page=${current}`;
+    console.log(url, 'printing the url');
     get(url).then((res) => {
       dispatch({
         type: SET_USERS,

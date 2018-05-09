@@ -26,7 +26,7 @@ import ResetPassword from './components/ResetPassword';
 import SetNewPassword from './components/SetNewPassword';
 import Reports from './components/Reports';
 import { Teachers } from './containers/Teachers';
-import { Permissions } from './containers/Permissions';
+import { DistrictPermissions, BlockPermissions } from './containers/Permissions';
 import tadastore from './store';
 import RevertEntity from './containers/RevertEntity';
 import { MapAssessments } from './containers/MapAssessments';
@@ -37,6 +37,7 @@ import {
   StudentGroupAnswersSheet,
 } from './containers/AssessmentEntry';
 import { DefaultMessage } from './components/AssessmentEntry';
+import { AssignPermissionMessage } from './components/Permissions';
 
 const history = syncHistoryWithStore(browserHistory, tadastore);
 
@@ -65,15 +66,15 @@ export const routes = (
         <Route path="programmes" component={Programs} />
         <Route path="filterprograms" component={DefaultMessage} />
         <Route
-          path="filterprograms/questiongroup/:questionGroupId/institution/:institutionId"
+          path="filterprograms/questiongroups/:questionGroupId/institutions/:institutionId"
           component={InstitutionAnswersSheet}
         />
         <Route
-          path="filterprograms/questiongroup/:questionGroupId/studentgroup/:studentGroupId"
+          path="filterprograms/questiongroups/:questionGroupId/studentgroups/:studentGroupId"
           component={StudentGroupAnswersSheet}
         />
         <Route
-          path="filterprograms/questiongroup/:questionGroupId/students/:studentGroupId"
+          path="filterprograms/questiongroups/:questionGroupId/students/:studentGroupId"
           component={StudentsAnswersSheet}
         />
         <Route path="mapassessments" component={MapAssessments} />
@@ -85,8 +86,12 @@ export const routes = (
           component={Questions}
         />
         <Route path="users" component={ManageUsers} />
-        <Route path="permissions" component={Permissions} />
-        <Route path="permissions/:boundaryType/:boundaryId" component={Permissions} />
+        <Route path="permissions" component={AssignPermissionMessage} />
+        <Route path="permissions/district/:districtId" component={DistrictPermissions} />
+        <Route
+          path="permissions/district/:districtId/block/:blockId"
+          component={BlockPermissions}
+        />
         <Route
           path="district/:districtNodeId/project/:projectNodeId"
           component={PreschoolProject}

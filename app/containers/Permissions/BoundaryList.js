@@ -18,13 +18,13 @@ class FetchBoundaries extends Component {
   }
 
   fetchResources = (boundary) => {
-    const { boundaryType, boundaryId } = this.props;
+    const { district, boundaryId } = this.props;
 
     if (!isEmpty(boundary)) {
       this.props.fetchBoundary(
         {
           id: boundary.id,
-          depth: boundaryType === 'district' ? 1 : 2,
+          depth: district ? 1 : 2,
           uniqueId: boundaryId,
         },
         [],
@@ -38,6 +38,7 @@ class FetchBoundaries extends Component {
 }
 
 FetchBoundaries.propTypes = {
+  district: PropTypes.bool,
   boundary: PropTypes.object,
   boundaryType: PropTypes.string,
   boundaryId: PropTypes.any,
@@ -46,9 +47,10 @@ FetchBoundaries.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const { boundaryId, boundaryType } = ownProps;
+  const district = boundaryType === 'district';
   const { boundaryDetails, boundariesByParentId } = state.boundaries;
   const boundary = get(boundaryDetails, boundaryId, {});
-  const depth = boundaryType === 'district' ? 1 : 2;
+  const depth = district ? 1 : 2;
   const Ids = get(boundariesByParentId, depth, []);
 
   return {
@@ -61,6 +63,7 @@ const mapStateToProps = (state, ownProps) => {
     selectedBoundaries: [],
     loading: state.appstate.loadingBoundary,
     boundary,
+    district,
   };
 };
 

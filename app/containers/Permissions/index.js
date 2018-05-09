@@ -4,3 +4,5 @@ export * from './BoundaryList';
 export * from './UserList';
 export * from './Header';
 export * from './Actions';
+export * from './DistrictPermissions';
+export * from './BlockPermissions';

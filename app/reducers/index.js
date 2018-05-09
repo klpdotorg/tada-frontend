@@ -25,3 +25,4 @@ export * from './OTP';
 export * from './Profile';
 export * from './ChangePassword';
 export * from './Pagination';
+export * from './Permissions';

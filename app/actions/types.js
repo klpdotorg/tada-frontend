@@ -109,3 +109,7 @@ export const SHOW_ASSESSMENT_ENTRY_LOADING = 'show_assessment_entry_loading';
 export const HIDE_ASSESSMENT_ENTRY_LOADING = 'hide_assessment_entry_loading';
 export const SHOW_ANSWERS_LOADING = 'show_answers_loading';
 export const HIDE_ANSWERS_LOADING = 'hide_answers_loading';
+export const SELECT_PERMISSIONS_BOUNDARY = 'select_permissions_boundary';
+export const UNSELECT_PERMISSIONS_BOUNDARY = 'unselect_permissions_boundary';
+export const SELECT_PERMISSIONS_USER = 'select_permissions_user';
+export const UNSELECT_PERMISSIONS_USER = 'unselect_permissions_user';
