@@ -786,9 +786,12 @@ table.table-fixedwidth td, .table-fixedwidth th {
   font-weight: 400;
 }
 .permissions-cont .permission-item-table {
-  border: 1px solid #f0f0f0;
   margin: 0;
   padding: 0;
+}
+
+.permissions-cont table {
+  table-layout: fixed;
 }
 
 .permissions-cont .table {

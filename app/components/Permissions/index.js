@@ -5,3 +5,4 @@ export * from './Header';
 export * from './AssessmentList';
 export * from './Actions';
 export * from './DefaultMessage';
+export * from './UserAndBoundaryList';
