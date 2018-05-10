@@ -7,6 +7,7 @@ import {
   UserList,
   BoundaryAssessmentList,
   Actions,
+  UserAndBoundaryList,
 } from '../../containers/Permissions';
 
 import { Loading } from '../common';
@@ -27,8 +28,7 @@ const PermissionsView = (props) => {
             <p className="subheader-text">Assign Permissions</p>
             <hr />
             <div className="row left-view">
-              <BoundaryList boundaryId={boundaryId} boundaryType={boundaryType} />
-              <UserList />
+              <UserAndBoundaryList boundaryId={boundaryId} boundaryType={boundaryType} />
             </div>
           </div>
           <BoundaryAssessmentList />

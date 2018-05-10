@@ -21,11 +21,12 @@ GetUsers.propTypes = {
 
 const mapStateToProps = (state) => {
   const { users, loading } = state.users;
+  const { selectedUsers } = state.permissions;
 
   return {
-    users: [],
-    selectedUsers: [],
-    loading: false,
+    users: Object.values(users),
+    selectedUsers,
+    loading,
   };
 };
 

@@ -28,7 +28,7 @@ export const selectPermissionsBoundary = (id) => {
   return (dispatch, getState) => {
     const state = getState();
     const { selectedBoundaries } = state.permissions;
-    if (selectedBoundaries.includes(id)) {
+    if (!selectedBoundaries.includes(id)) {
       dispatch({
         type: SELECT_PERMISSIONS_BOUNDARY,
         value: [...selectedBoundaries, id],
@@ -48,7 +48,7 @@ export const selectPermissionsUser = (id) => {
   return (dispatch, getState) => {
     const state = getState();
     const { selectedUsers } = state.permissions;
-    if (selectedUsers.includes(id)) {
+    if (!selectedUsers.includes(id)) {
       dispatch({
         type: SELECT_PERMISSIONS_USER,
         value: [...selectedUsers, id],
