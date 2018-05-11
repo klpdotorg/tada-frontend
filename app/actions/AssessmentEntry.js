@@ -96,6 +96,8 @@ const getURL = (type, boundaryId) => {
 
 export const fetchSelectedAssessmentQuestions = (assessmentId) => {
   return (dispatch, getState) => {
+    dispatch(showAnswersLoading());
+
     const state = getState();
     const { selectedProgram } = state.programs;
 
@@ -129,9 +131,9 @@ export const fetchSelectedAssessmentBoundary = () => {
   };
 };
 
-export const fetchAnswers = (assessmentId) => {
-  return (dispatch) => {
-    dispatch(showAnswersLoading());
-    dispatch(fetchSelectedAssessmentQuestions(assessmentId));
-  };
-};
+// export const fetchAnswers = (assessmentId) => {
+//   return (dispatch) => {
+//     dispatch(showAnswersLoading());
+//     dispatch(fetchSelectedAssessmentQuestions(assessmentId));
+//   };
+// };

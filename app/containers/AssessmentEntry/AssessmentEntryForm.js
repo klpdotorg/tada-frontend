@@ -7,6 +7,7 @@ import { fetchAnswers } from '../../actions';
 
 class GetSelectAssessmentBoundaries extends Component {
   componentDidMount() {
+    // this.props.fetchAnswerGroups();
     this.props.fetchAnswers();
   }
 

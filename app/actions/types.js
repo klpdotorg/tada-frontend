@@ -113,3 +113,7 @@ export const SELECT_PERMISSIONS_BOUNDARY = 'select_permissions_boundary';
 export const UNSELECT_PERMISSIONS_BOUNDARY = 'unselect_permissions_boundary';
 export const SELECT_PERMISSIONS_USER = 'select_permissions_user';
 export const UNSELECT_PERMISSIONS_USER = 'unselect_permissions_user';
+export const FETCHING_ANSWER_GROUPS = 'fetching_answer_groups';
+export const SET_ANSWER_GROUPS = 'set_answer_groups';
+export const SET_ANSWERS = 'set_answers';
+export const FECHING_ANSWERS = 'fetching_answers';

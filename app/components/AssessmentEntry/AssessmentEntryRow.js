@@ -18,12 +18,15 @@ const AssessmentEntryRowView = (props) => {
         {name}
       </td>
       {map(questions, (question) => {
-        const currentVal = get(answers, [id, question.id, 'value'], '');
+        const currentVal = answers.find((answer) => {
+          return answer.question === question.id;
+        });
+
         return (
           <td key={question.id}>
             <input
               id={question.id}
-              value={currentVal}
+              value={get(currentVal, 'answer', '')}
               type="text"
               required
               className="form-control"
