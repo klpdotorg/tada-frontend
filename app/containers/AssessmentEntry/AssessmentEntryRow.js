@@ -5,18 +5,19 @@ import { AssessmentEntryRowView } from '../../components/AssessmentEntry';
 import { onChangeAssessmentEntry, createAnswerGroup } from '../../actions';
 
 const mapStateToProps = (state, ownProps) => {
-  const { id } = ownProps;
-
-  const boundary = {
-    uniqueId: id,
-    boundary: state.programDetails.programDetails[id],
-  };
+  const { rowId } = ownProps;
+  const { answergroups } = state.answergroups;
+  const row = get(answergroups, rowId, {});
+  const boundary = get(state.programDetails.programDetails, ownProps.uniqueId, {});
+  const answers = get(state.answers.answers, rowId, []);
 
   return {
+    groupValue: row.group_value,
+    dateOfVisit: row.date_of_visit,
     questions: state.questions.questions,
-    id: get(boundary, 'boundary.id', ''),
-    name: get(boundary, 'boundary.name', ''),
-    answers: state.assessmentEntry.answers,
+    id: get(boundary, 'id', ''),
+    name: get(boundary, 'name', ''),
+    answers,
   };
 };
 

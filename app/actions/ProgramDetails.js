@@ -30,26 +30,50 @@ export const collapsedProgramEntity = (value) => {
 };
 
 const getUrlForFilterProgram = (entity, surveyId, surveyOn) => {
-  if (entity.depth <= 2) {
+  const admin1 = `${SERVER_API_BASE}boundary/admin1s/?survey_id=${surveyId}`;
+  const admin2 = `${SERVER_API_BASE}boundary/admin1/${entity.id}/admin2/?survey_id=${surveyId}`;
+  const admin3 = `${SERVER_API_BASE}institutions/?admin3=${entity.id}&survey_id=${surveyId}`;
+  const institutionMapping = `${SERVER_API_BASE}surveys/${surveyId}/questiongroups/mappings/?boundary_id=${entity.id}`;
+  const studentgroupMapping = `${SERVER_API_BASE}surveys/${surveyId}/questiongroups/mappings/?institution_id=${entity.id}`;
+  const studentMapping = `${SERVER_API_BASE}surveys/${surveyId}/questiongroups/mappings/?institution_id=${entity.id}`;
+
+  if (surveyOn === 'institution') {
     switch (entity.depth) {
       case 0:
-        return `${SERVER_API_BASE}boundary/admin1s/?survey_id=${surveyId}`;
+        return admin1;
       case 1:
-        return `${SERVER_API_BASE}boundary/admin1/${entity.id}/admin2/?survey_id=${surveyId}`;
-      case 2:
-        return `${SERVER_API_BASE}boundary/admin2/${entity.id}/admin3/?survey_id=${surveyId}`;
+        return admin2;
+      case 3:
+        return institutionMapping;
       default:
         return null;
     }
   }
 
-  switch (surveyOn) {
-    case 'institution':
-      return `${SERVER_API_BASE}surveys/${surveyId}/questiongroups/mappings/?boundary_id=${entity.id}`;
-    case 'studentgroup':
-      return `${SERVER_API_BASE}survey/questiongroupmap/?survey_id=${surveyId}&institution_id=${entity.id}`;
-    case 'student':
-      return `${SERVER_API_BASE}survey/questiongroupmap/?survey_id=${surveyId}&institution_id=${entity.id}`;
+  if (surveyOn === 'studentgroup') {
+    switch (entity.depth) {
+      case 0:
+        return admin1;
+      case 1:
+        return admin2;
+      case 2:
+        return admin3;
+      case 3:
+        return studentgroupMapping;
+      default:
+        return null;
+    }
+  }
+
+  switch (entity.depth) {
+    case 0:
+      return admin1;
+    case 1:
+      return admin2;
+    case 2:
+      return admin3;
+    case 3:
+      return studentMapping;
     default:
       return null;
   }

@@ -67,7 +67,9 @@ class NavTree extends Component {
 
       return (
         <Link key={node.uniqueId} to={path}>
-          <span>{label}</span>
+          <span>
+            {label} ({entity.assessment.name})
+          </span>
           <br />
         </Link>
       );

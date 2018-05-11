@@ -1,10 +1,42 @@
 import { SERVER_API_BASE } from 'config';
 
 import { map } from 'lodash';
-import { post } from './requests';
+import { post, get } from './requests';
+import { SET_ANSWERS } from './types';
 
 export const createAnswergroup = (url, body) => {
   return post(url, body);
+};
+
+export const fetchAnswers = (assessmentId) => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const { answergroups } = state.answergroups;
+    const { selectedProgram } = state.programs;
+
+    const Ids = Object.keys(answergroups);
+    const promises = Ids.map((Id) => {
+      const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroups/${assessmentId}/answergroups/${Id}/answers/`;
+      return get(url).then((res) => {
+        return {
+          id: Id,
+          value: res.results,
+        };
+      });
+    });
+
+    Promise.all(promises).then((response) => {
+      dispatch({
+        type: SET_ANSWERS,
+        value: response.reduce((soFar, value) => {
+          const result = soFar;
+          result[value.id] = value.value;
+
+          return result;
+        }, {}),
+      });
+    });
+  };
 };
 
 const filterAnswers = (answers) => {
@@ -52,7 +84,6 @@ export const createAnswerGroup = (params) => {
       institution: boundaryId,
       status: 'AC',
     }).then((res) => {
-      console.log(res, 'printing the response in createAnswergroup function');
       dispatch(saveAnswer({ ...params, answergroupId: res.id }));
     });
   };
