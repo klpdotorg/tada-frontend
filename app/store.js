@@ -35,6 +35,9 @@ import {
   ChangePassword,
   Pagination,
   Permissions,
+  Answergroups,
+  Answers,
+  UserPermissions,
 } from './reducers';
 
 const reducer = combineReducers({
@@ -68,6 +71,9 @@ const reducer = combineReducers({
   changePassword: ChangePassword,
   pagination: Pagination,
   permissions: Permissions,
+  answergroups: Answergroups,
+  answers: Answers,
+  userPermissions: UserPermissions,
 });
 
 const middleware = compose(

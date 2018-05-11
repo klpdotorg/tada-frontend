@@ -8,17 +8,9 @@ import { put } from './requests';
 export const setUserProfile = () => {
   return (dispatch) => {
     const user = getDataFromLocalstorage();
-
-    const newUser = {
-      email: user.email,
-      firstName: user.first_name || '',
-      lastName: user.last_name || '',
-      mobileNo: user.mobile_no,
-    };
-
     dispatch({
       type: SET_USER_PROFILE,
-      value: newUser,
+      value: user,
     });
   };
 };

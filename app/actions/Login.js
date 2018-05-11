@@ -16,10 +16,13 @@ export const getDataFromLocalstorage = () => {
 export const setDataInLocalStorage = (user) => {
   return (dispatch) => {
     const newUser = {
+      id: user.id,
       email: user.email,
       firstName: user.first_name || '',
       lastName: user.last_name || '',
       mobileNo: user.mobile_no,
+      isAdmin: user.is_superuser,
+      token: user.token,
     };
 
     dispatch({
@@ -29,7 +32,7 @@ export const setDataInLocalStorage = (user) => {
 
     const existingData = getDataFromLocalstorage();
 
-    sessionStorage.setItem('user', JSON.stringify({ ...existingData, ...user }));
+    sessionStorage.setItem('user', JSON.stringify({ ...existingData, ...newUser }));
   };
 };
 

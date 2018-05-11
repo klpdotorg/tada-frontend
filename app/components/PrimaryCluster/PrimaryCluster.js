@@ -27,6 +27,7 @@ const PrimaryClusterView = ({ isAdmin, isLoading, district, block, cluster, para
         blockNodeId={params.blockNodeId}
         blockId={block.id}
         isAdmin={isAdmin}
+        cluster={cluster}
       />
       <CreateInstitution parent={cluster.id} clusterNodeId={params.clusterNodeId} />
     </div>

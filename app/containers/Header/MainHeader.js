@@ -13,11 +13,11 @@ class Header extends Component {
   }
 }
 
-const mapStateToProps = () => {
-  const user = { firstName: 'Pankaj', lastName: 'Thakur' }; // JSON.parse(sessionStorage.getItem('user')); ||
+const mapStateToProps = (state) => {
+  const { firstName, lastName } = state.profile;
 
   return {
-    username: `${user.firstName} ${user.lastName}`,
+    username: `${firstName} ${lastName}`,
   };
 };
 
