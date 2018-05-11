@@ -29,6 +29,7 @@ class AddUserView extends Component {
       last_name: myform.lastName,
       mobile_no: myform.mobileno,
       email: myform.email,
+      password: myform.password,
       groups: myform.role,
     };
 
@@ -90,6 +91,15 @@ class AddUserView extends Component {
             type="email"
             validations="minLength:1"
             required
+          />
+          <Input
+            name="password"
+            id="password"
+            value=""
+            label="Password"
+            type="password"
+            required
+            validations="minLength:5"
           />
           <Select multiple name="role" label="Role" options={roles} value={['tada_deo']} required />
         </Formsy.Form>
