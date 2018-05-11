@@ -1,3 +1,4 @@
+import { SERVER_API_BASE } from 'config';
 import { push } from 'react-router-redux';
 
 import { fetchBoundary, showBoundaryLoading } from './index';
@@ -7,7 +8,9 @@ import {
   UNSELECT_PERMISSIONS_BOUNDARY,
   SELECT_PERMISSIONS_USER,
   UNSELECT_PERMISSIONS_USER,
+  SET_USER_PERMISSIONS,
 } from './types';
+import { get } from './requests';
 
 export const openPermissionBoundary = (id, depth) => {
   return (dispatch, getState) => {
@@ -61,5 +64,19 @@ export const selectPermissionsUser = (id) => {
         }),
       });
     }
+  };
+};
+
+export const fetchUserPermissions = () => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const { id } = state.profile;
+    const url = `${SERVER_API_BASE}users/${id}/permissions/`;
+    get(url).then((res) => {
+      dispatch({
+        type: SET_USER_PERMISSIONS,
+        value: res,
+      });
+    });
   };
 };

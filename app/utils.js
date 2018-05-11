@@ -219,3 +219,21 @@ export const generatePagination = (page, size, step) => {
 
   return result;
 };
+
+export const checkPermissions = (isAdmin, permissions, boundaryId) => {
+  const { boundaries, institutions } = permissions;
+
+  if (isAdmin) {
+    return true;
+  }
+
+  if (boundaries.includes(boundaryId)) {
+    return true;
+  }
+
+  if (institutions.includes(boundaryId)) {
+    return true;
+  }
+
+  return false;
+};

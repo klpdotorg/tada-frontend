@@ -15,7 +15,7 @@ import {
 } from '../../actions';
 
 import { Confirm } from '../Modal';
-import { hasChildren } from '../../utils';
+import { hasChildren, checkPermissions } from '../../utils';
 
 const { Input } = FRC;
 
@@ -44,10 +44,18 @@ class EditClusterView extends Component {
   }
 
   render() {
-    const { canDelete, cluster } = this.props;
+    const { canDelete, cluster, hasPermissions } = this.props;
 
     return (
       <div>
+        {!hasPermissions ? (
+          <div className="alert alert-danger">
+            <i className="fa fa-lock fa-lg" aria-hidden="true" />
+            Insufficient Privileges. Only administrators can modify boundary details.
+          </div>
+        ) : (
+          <div />
+        )}
         {!canDelete ? (
           <div className="alert alert-info">
             <i className="fa fa-info-circle fa-lg" aria-hidden="true" /> You cannot delete this
@@ -61,6 +69,7 @@ class EditClusterView extends Component {
           className="btn btn-orange pull-right"
           title="Add School"
           onClick={this.props.toggleSchoolModal}
+          disabled={!hasPermissions}
         >
           Add School
         </button>
@@ -82,12 +91,13 @@ class EditClusterView extends Component {
             className="form-control"
             required
             validations="minLength:1"
+            disabled={!hasPermissions}
           />
         </Formsy.Form>
         <div className="col-md-8">
           <button
             type="submit"
-            disabled={!this.props.canSubmit}
+            disabled={!hasPermissions || !this.props.canSubmit}
             className="btn btn-primary padded-btn"
             onClick={this.saveCluster}
           >
@@ -111,6 +121,7 @@ class EditClusterView extends Component {
 }
 
 EditClusterView.propTypes = {
+  hasPermissions: PropTypes.bool,
   canDelete: PropTypes.bool,
   canSubmit: PropTypes.bool,
   cluster: PropTypes.object,
@@ -127,12 +138,16 @@ EditClusterView.propTypes = {
 const mapStateToProps = (state, ownProps) => {
   const { clusterNodeId } = ownProps;
   const { boundaries } = state;
+  const { isAdmin } = state.profile;
+  const cluster = get(boundaries.boundaryDetails, clusterNodeId, {});
+  const hasPermissions = checkPermissions(isAdmin, state.userPermissions, cluster.id);
 
   return {
-    canDelete: hasChildren(clusterNodeId, boundaries),
+    canDelete: isAdmin || hasChildren(clusterNodeId, boundaries),
     openConfirmModal: state.appstate.confirmModal,
     canSubmit: state.appstate.enableSubmitForm,
-    cluster: get(boundaries.boundaryDetails, clusterNodeId, {}),
+    cluster,
+    hasPermissions,
   };
 };
 

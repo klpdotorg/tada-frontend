@@ -1,51 +1,55 @@
 import { checkStatus } from '../actions/utils';
 import { SERVER_API_BASE as serverApiBase } from 'config';
 import { mapValues, get } from 'lodash';
+
 export const getManagement = () => {
-  return fetch(serverApiBase + 'institutionmanagements/', {
+  return fetch(`${serverApiBase}institutionmanagements/`, {
     headers: {
       'Content-Type': 'application/json',
-      Authorization: 'Token ' + sessionStorage.token,
+      Authorization: `Token ${sessionStorage.token}`,
     },
   })
     .then(checkStatus)
-    .catch(error => {
+    .catch((error) => {
       console.log('request failed', error);
     });
 };
 
 export const getLanguages = () => {
-  return fetch(serverApiBase + 'languages/', {
+  return fetch(`${serverApiBase}languages/`, {
     headers: {
       'Content-Type': 'application/json',
-      Authorization: 'Token ' + sessionStorage.token,
+      Authorization: `Token ${sessionStorage.token}`,
     },
   })
     .then(checkStatus)
-    .catch(error => {
+    .catch((error) => {
       console.log('request failed', error);
     });
 };
 
 export const getInstitutionCategories = () => {
-  return fetch(serverApiBase + 'institutioncategories/', {
+  return fetch(`${serverApiBase}institutioncategories/`, {
     headers: {
       'Content-Type': 'application/json',
-      Authorization: 'Token ' + sessionStorage.token,
+      Authorization: `Token ${sessionStorage.token}`,
     },
   })
     .then(checkStatus)
-    .catch(error => {
+    .catch((error) => {
       console.log('request failed', error);
     });
 };
 
-export const replaceNull = obj => {
-  return mapValues(obj, val => (val ? val : ''));
+export const replaceNull = (obj) => {
+  return mapValues(obj, (val) => { return (val || ''); });
 };
 
-export const displayFullName = person => {
-  return `${get(person, 'first_name') || ''} ${get(person, 'middle_name') || ''} ${get(person, 'last_name') || ''}`;
+export const displayFullName = (person) => {
+  return `${get(person, 'first_name') || ''} ${get(person, 'middle_name') || ''} ${get(
+    person,
+    'last_name',
+  ) || ''}`;
 };
 
 export const userHasPermissions = (permissions, institutionId) => {
@@ -55,8 +59,7 @@ export const userHasPermissions = (permissions, institutionId) => {
   if (
     institutions.indexOf(parseInt(institutionId, 10)) > -1 ||
     boundaries.indexOf(parseInt(institutionId, 10)) > -1
-  )
-    hasPermissions = true;
+  ) { hasPermissions = true; }
   return hasPermissions;
 };
 
