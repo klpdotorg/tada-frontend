@@ -18,8 +18,8 @@ const StudentGroupView = (props) => {
     studentGroup,
     params,
     depth,
+    hasPermissions,
   } = props;
-  const canModify = props.hasPermissions(institution.id);
 
   if (isLoading || isEmpty(studentGroup)) {
     return <Loading />;
@@ -44,16 +44,20 @@ const StudentGroupView = (props) => {
           <Link className="active">{studentGroup.name}</Link>
         </li>
       </ol>
-      <NoPermissionView canModify={canModify} />
+      <NoPermissionView hasPermissions={hasPermissions} />
       <div className="row">
         <div className="col-md-8">
-          <h4 className="text-primary">{canModify ? 'Modify Details' : 'View Details'}</h4>
+          <h4 className="text-primary">{!hasPermissions ? 'Modify Details' : 'View Details'}</h4>
         </div>
         <StudentGroupActions
           isPrimary={isPrimary}
-          canModify={canModify}
-          viewStudent={() => { return props.viewStudent(params.studentGroupNodeId, depth); }}
-          showBulkAdd={() => { return props.showBulkAdd(params.studentGroupNodeId, depth); }}
+          hasPermissions={hasPermissions}
+          viewStudent={() => {
+            return props.viewStudent(params.studentGroupNodeId, depth);
+          }}
+          showBulkAdd={() => {
+            return props.showBulkAdd(params.studentGroupNodeId, depth);
+          }}
         />
       </div>
       <div className="base-spacing-mid border-base" />
@@ -61,6 +65,7 @@ const StudentGroupView = (props) => {
         institutionId={institution.id}
         institutionNodeId={params.institutionNodeId}
         studentGroupNodeId={params.studentGroupNodeId}
+        hasPermissions={hasPermissions}
       />
     </div>
   );
@@ -76,7 +81,7 @@ StudentGroupView.propTypes = {
   studentGroup: PropTypes.object,
   showBulkAdd: PropTypes.func,
   viewStudent: PropTypes.func,
-  hasPermissions: PropTypes.func,
+  hasPermissions: PropTypes.bool,
   params: PropTypes.object,
   depth: PropTypes.number,
 };

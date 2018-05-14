@@ -7,14 +7,9 @@ import { DEFAULT_PARENT_NODE_ID } from 'config';
 import { userHasPermissions } from '../../components/utils';
 import { StudentGroupView } from '../../components/StudentGroup';
 import { getBoundariesEntities, openViewStudents, openAddStudents } from '../../actions';
+import { checkPermissions } from '../../utils';
 
 class FetchStudentGroupEntity extends Component {
-  constructor(props) {
-    super(props);
-
-    this.hasPermissions = this.hasPermissions.bind(this);
-  }
-
   componentDidMount() {
     const { params, studentGroup } = this.props;
 
@@ -42,10 +37,6 @@ class FetchStudentGroupEntity extends Component {
     }
   }
 
-  hasPermissions(institutionId) {
-    return true || userHasPermissions(this.props.permissions, institutionId);
-  }
-
   render() {
     const {
       blockNodeId,
@@ -61,9 +52,7 @@ class FetchStudentGroupEntity extends Component {
       institutionNodeId,
       studentGroupNodeId,
     ];
-    return (
-      <StudentGroupView {...this.props} hasPermissions={this.hasPermissions} depth={path.length} />
-    );
+    return <StudentGroupView {...this.props} depth={path.length} />;
   }
 }
 
@@ -82,16 +71,28 @@ const mapStateToProps = (state, ownProps) => {
     institutionNodeId,
     studentGroupNodeId,
   } = ownProps.params;
+  const { isAdmin } = state.profile;
+  const studentGroup = get(state.boundaries.boundaryDetails, studentGroupNodeId, {});
+  const district = get(state.boundaries.boundaryDetails, districtNodeId, {});
+  const block = get(state.boundaries.boundaryDetails, blockNodeId, {});
+  const cluster = get(state.boundaries.boundaryDetails, clusterNodeId, {});
+  const institution = get(state.boundaries.boundaryDetails, institutionNodeId, {});
+  const hasPermissions = checkPermissions(
+    isAdmin,
+    state.userPermissions,
+    [district.id, block.id, cluster.id],
+    institution.id,
+  );
 
   return {
-    district: get(state.boundaries.boundaryDetails, districtNodeId, {}),
-    block: get(state.boundaries.boundaryDetails, blockNodeId, {}),
-    cluster: get(state.boundaries.boundaryDetails, clusterNodeId, {}),
-    institution: get(state.boundaries.boundaryDetails, institutionNodeId, {}),
-    studentGroup: get(state.boundaries.boundaryDetails, studentGroupNodeId, {}),
+    district,
+    block,
+    cluster,
+    institution,
+    studentGroup,
     isLoading: state.appstate.loadingBoundary,
     isPrimary: state.schoolSelection.primarySchool,
-    permissions: state.login.permissions,
+    hasPermissions,
   };
 };
 

@@ -17,6 +17,7 @@ const EditStudentsView = (props) => {
     params,
     depth,
     studentIds,
+    hasPermissions,
   } = props;
 
   if (isLoading || isEmpty(studentIds)) {
@@ -47,6 +48,7 @@ const EditStudentsView = (props) => {
         studentGroupId={studentGroup.id}
         institutionId={institution.id}
         depth={depth}
+        hasPermissions={hasPermissions}
       />
     </div>
   );
@@ -62,6 +64,7 @@ EditStudentsView.propTypes = {
   isLoading: PropTypes.bool,
   studentIds: PropTypes.array,
   depth: PropTypes.number,
+  hasPermissions: PropTypes.bool,
 };
 
 export { EditStudentsView };

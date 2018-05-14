@@ -12,6 +12,7 @@ import {
   showAddTeacherPopup,
   showTeacherLoading,
 } from '../../actions';
+import { checkPermissions } from '../../utils';
 
 class GetTeachers extends Component {
   constructor(props) {
@@ -60,15 +61,27 @@ class GetTeachers extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   const { blockNodeId, districtNodeId, clusterNodeId, institutionNodeId } = ownProps.params;
+  const district = get(state.boundaries.boundaryDetails, districtNodeId, {});
+  const block = get(state.boundaries.boundaryDetails, blockNodeId, {});
+  const cluster = get(state.boundaries.boundaryDetails, clusterNodeId, {});
+  const institution = get(state.boundaries.boundaryDetails, institutionNodeId, {});
+  const { isAdmin } = state.profile;
+  const hasPermissions = checkPermissions(
+    isAdmin,
+    state.userPermissions,
+    [district.id, block.id, cluster.id],
+    institution.id,
+  );
 
   return {
-    district: get(state.boundaries.boundaryDetails, districtNodeId, {}),
-    block: get(state.boundaries.boundaryDetails, blockNodeId, {}),
-    cluster: get(state.boundaries.boundaryDetails, clusterNodeId, {}),
-    institution: get(state.boundaries.boundaryDetails, institutionNodeId, {}),
+    district,
+    block,
+    cluster,
+    institution,
     teacherIds: Object.keys(state.teachers.teachers),
     isLoading: state.appstate.loadingBoundary,
     teacherLoading: state.teachers.loading,
+    hasPermissions,
   };
 };
 

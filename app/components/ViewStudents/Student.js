@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { isEmpty, includes } from 'lodash';
 
-import { dateParser } from '../../utils';
+import { dateParser, hasChildren } from '../../utils';
 
 const StudentView = (props) => {
-  const { student, selectedStudents } = props;
+  const { student, selectedStudents, hasPermissions, canDelete } = props;
   const { id, first_name, last_name, uid, gender, dob, langVal } = student;
   const checked = includes(selectedStudents, props.studentNodeId);
 
@@ -48,6 +48,7 @@ const StudentView = (props) => {
           className="btn btn-primary padded-btn"
           data-toggle="tooltip"
           title="Edit"
+          disabled={!hasPermissions}
         >
           <i className="fa fa-pencil-square-o" />
         </button>
@@ -63,6 +64,7 @@ const StudentView = (props) => {
           className="btn btn-primary"
           data-toggle="tooltip"
           title="Delete"
+          disabled={!canDelete}
         >
           <i className="fa fa-trash-o" />
         </button>
@@ -72,6 +74,8 @@ const StudentView = (props) => {
 };
 
 StudentView.propTypes = {
+  hasPermissions: PropTypes.bool,
+  canDelete: PropTypes.bool,
   student: PropTypes.object,
   selectedStudents: PropTypes.array,
   openEditStudentModal: PropTypes.func,

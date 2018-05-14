@@ -220,18 +220,29 @@ export const generatePagination = (page, size, step) => {
   return result;
 };
 
-export const checkPermissions = (isAdmin, permissions, boundaryId) => {
+export const checkPermissions = (isAdmin, permissions, boundaryId, institutionId) => {
   const { boundaries, institutions } = permissions;
 
   if (isAdmin) {
     return true;
   }
 
-  if (boundaries.includes(boundaryId)) {
+  if (boundaryId.length) {
+    let find = false;
+    boundaryId.forEach((id) => {
+      if (boundaries.includes(id)) {
+        find = true;
+      }
+    });
+
+    return find;
+  }
+
+  if (typeof boundaryId === 'string' && boundaries.includes(boundaryId)) {
     return true;
   }
 
-  if (institutions.includes(boundaryId)) {
+  if (institutions.includes(institutionId)) {
     return true;
   }
 

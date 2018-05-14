@@ -1,27 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const InstitutionActions = ({ canModify, toggleClassModal, showTeachers }) => {
+const InstitutionActions = ({ hasPermissions, toggleClassModal, showTeachers }) => {
   return (
     <div className="row">
-      <h4 className="text-primary col-md-9">{canModify ? 'Modify Details' : 'View Details'}</h4>
+      <h4 className="text-primary col-md-9">
+        {!hasPermissions ? 'Modify Details' : 'View Details'}
+      </h4>
       <div className="col-md-3 text-right">
-        {!canModify ? null : (
-          <button
-            className="btn btn-orange"
-            title="Add Class"
-            onClick={toggleClassModal}
-            disabled={!canModify}
-          >
-            Add Class
-          </button>
-        )}
         <button
-          className="btn btn-orange padded-btn"
-          title="View Teachers"
-          onClick={showTeachers}
-          disabled={!canModify}
+          className="btn btn-orange"
+          title="Add Class"
+          onClick={toggleClassModal}
+          disabled={!hasPermissions}
         >
+          Add Class
+        </button>
+        <button className="btn btn-orange padded-btn" title="View Teachers" onClick={showTeachers}>
           View Teachers
         </button>
       </div>
@@ -30,7 +25,7 @@ const InstitutionActions = ({ canModify, toggleClassModal, showTeachers }) => {
 };
 
 InstitutionActions.propTypes = {
-  canModify: PropTypes.bool,
+  hasPermissions: PropTypes.bool,
   toggleClassModal: PropTypes.func,
   showTeachers: PropTypes.func,
 };

@@ -9,7 +9,16 @@ import { CreateClass } from '../../containers/StudentGroup';
 import { Loading } from '../common';
 
 const InstitutionView = (props) => {
-  const { isLoading, district, block, cluster, institution, params, isAdmin } = props;
+  const {
+    isLoading,
+    district,
+    block,
+    cluster,
+    institution,
+    params,
+    isAdmin,
+    hasPermissions,
+  } = props;
 
   if (isLoading || isEmpty(institution)) {
     return <Loading />;
@@ -32,9 +41,9 @@ const InstitutionView = (props) => {
         <li className="active"> {institution.name}</li>
       </ol>
       <div>
-        <PermissionMessages canModify={isAdmin} />
+        <PermissionMessages hasPermissions={hasPermissions} />
         <InstitutionActions
-          canModify={isAdmin}
+          hasPermissions={hasPermissions}
           toggleClassModal={props.toggleClassModal}
           showTeachers={() => {
             props.showTeachers(params.institutionNodeId, props.depth);
@@ -42,15 +51,12 @@ const InstitutionView = (props) => {
         />
         <div className="border-base" />
         <div className="base-spacing-sm" />
-        {isAdmin ? (
-          <EditInstitution
-            clusterId={cluster.id}
-            clusterNodeId={params.clusterNodeId}
-            institutionNodeId={params.institutionNodeId}
-          />
-        ) : (
-          <div />
-        )}
+        <EditInstitution
+          clusterId={cluster.id}
+          clusterNodeId={params.clusterNodeId}
+          institutionNodeId={params.institutionNodeId}
+          hasPermissions={hasPermissions}
+        />
         <CreateClass institutionId={institution.id} institutionNodeId={params.institutionNodeId} />
       </div>
     </div>
@@ -58,6 +64,7 @@ const InstitutionView = (props) => {
 };
 
 InstitutionView.propTypes = {
+  hasPermissions: PropTypes.bool,
   isAdmin: PropTypes.bool,
   isLoading: PropTypes.bool,
   district: PropTypes.object,

@@ -14,7 +14,7 @@ import {
   toggleCreateCircleModal,
   openDeleteBoundaryModal,
 } from '../../actions';
-import { hasChildren } from '../../utils';
+import { hasChildren, checkPermissions } from '../../utils';
 
 const { Input } = FRC;
 
@@ -44,11 +44,19 @@ class EditProjectForm extends Component {
   }
 
   render() {
-    const { canDelete, project, canSubmit } = this.props;
+    const { canDelete, project, canSubmit, hasPermissions } = this.props;
 
     return (
       <div>
-        {!canDelete ? (
+        {!hasPermissions ? (
+          <div className="alert alert-danger">
+            <i className="fa fa-lock fa-lg" aria-hidden="true" />
+            Insufficient Privileges. Only administrators can modify boundary details.
+          </div>
+        ) : (
+          <div />
+        )}
+        {hasPermissions && !canDelete ? (
           <div className="alert alert-info">
             <i className="fa fa-info-circle fa-lg" aria-hidden="true" /> You cannot delete this
             boundary until its children are deleted
@@ -61,6 +69,7 @@ class EditProjectForm extends Component {
           className="btn btn-green pull-right"
           title="Add Circle"
           onClick={this.props.toggleCircleModal}
+          disabled={!hasPermissions}
         >
           Add Circle
         </button>
@@ -73,6 +82,7 @@ class EditProjectForm extends Component {
           ref={(ref) => {
             this.myform = ref;
           }}
+          disabled={!hasPermissions}
         >
           <Input
             name="ProjectName"
@@ -88,7 +98,7 @@ class EditProjectForm extends Component {
         <div className="col-md-8">
           <button
             type="submit"
-            disabled={!canSubmit}
+            disabled={!hasPermissions || !canSubmit}
             className="btn btn-primary padded-btn"
             onClick={this.saveProject}
           >
@@ -112,6 +122,7 @@ class EditProjectForm extends Component {
 }
 
 EditProjectForm.propTypes = {
+  hasPermissions: PropTypes.bool,
   project: PropTypes.object,
   projectNodeId: PropTypes.string,
   districtNodeId: PropTypes.string,
@@ -128,12 +139,16 @@ EditProjectForm.propTypes = {
 const mapStateToProps = (state, ownProps) => {
   const { projectNodeId } = ownProps;
   const { boundaries } = state;
+  const { isAdmin } = state.profile;
+  const project = get(boundaries.boundaryDetails, projectNodeId, {});
+  const hasPermissions = checkPermissions(isAdmin, state.userPermissions, project.id);
 
   return {
-    project: get(boundaries.boundaryDetails, projectNodeId, {}),
-    canDelete: hasChildren(projectNodeId, boundaries),
+    project,
+    canDelete: isAdmin && hasChildren(projectNodeId, boundaries),
     openConfirmModal: state.appstate.confirmModal,
     canSubmit: state.appstate.enableSubmitForm,
+    hasPermissions,
   };
 };
 

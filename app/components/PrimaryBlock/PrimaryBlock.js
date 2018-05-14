@@ -25,15 +25,11 @@ const PrimaryBlockView = ({ isAdmin, isLoading, district, block, params }) => {
         </li>
         <li className="active">{block.name}</li>
       </ol>
-      {isAdmin ? (
-        <EditBlock
-          blockNodeId={params.blockNodeId}
-          districtNodeId={params.districtNodeId}
-          districtId={district.id}
-        />
-      ) : (
-        <NoPermissionBlockView />
-      )}
+      <EditBlock
+        blockNodeId={params.blockNodeId}
+        districtNodeId={params.districtNodeId}
+        districtId={district.id}
+      />
       <CreateCluster parent={block.id} parentNodeId={params.blockNodeId} />
     </div>
   );

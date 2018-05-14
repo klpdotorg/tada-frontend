@@ -33,11 +33,19 @@ class EditDistrictForm extends Component {
   }
 
   render() {
-    const { boundary, primary, canDelete } = this.props;
+    const { boundary, primary, canDelete, hasPermissions } = this.props;
 
     return (
       <div>
-        {!canDelete ? (
+        {!hasPermissions ? (
+          <div className="alert alert-danger">
+            <i className="fa fa-lock fa-lg" aria-hidden="true" />
+            Insufficient Privileges. Only administrators can modify boundary details.
+          </div>
+        ) : (
+          <div />
+        )}
+        {hasPermissions && !canDelete ? (
           <div className="alert alert-info">
             <i className="fa fa-info-circle fa-lg" aria-hidden="true" /> You cannot delete this
             boundary until its children are deleted
@@ -51,6 +59,7 @@ class EditDistrictForm extends Component {
             className="btn btn-green pull-right"
             title="Add Project"
             onClick={this.props.toggleProjectModal}
+            disabled={!hasPermissions}
           >
             Add Project
           </button>
@@ -59,6 +68,7 @@ class EditDistrictForm extends Component {
             className="btn btn-orange pull-right"
             title="Add Block"
             onClick={this.props.toggleBlockModal}
+            disabled={!hasPermissions}
           >
             Add Block
           </button>
@@ -71,6 +81,7 @@ class EditDistrictForm extends Component {
           ref={(ref) => {
             this.myform = ref;
           }}
+          disabled={!hasPermissions}
         >
           <div className="base-spacing-sm" />
           <Input
@@ -92,7 +103,7 @@ class EditDistrictForm extends Component {
         <div className="col-md-8">
           <button
             type="button"
-            disabled={!this.props.canSubmit}
+            disabled={!hasPermissions || !this.props.canSubmit}
             className="btn btn-primary padded-btn"
             onClick={this.saveDistrict}
           >
@@ -116,6 +127,7 @@ class EditDistrictForm extends Component {
 }
 
 EditDistrictForm.propTypes = {
+  hasPermissions: PropTypes.bool,
   canSubmit: PropTypes.bool,
   boundary: PropTypes.object,
   canDelete: PropTypes.bool,

@@ -1,21 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const NoPermissionView = ({ canModify }) => {
-  if (!canModify) {
-    return <div />;
+const NoPermissionView = ({ hasPermissions }) => {
+  if (!hasPermissions) {
+    return (
+      <div className="alert alert-danger">
+        <i className="fa fa-lock fa-lg" aria-hidden="true" /> Insufficient Privileges. Please
+        contact the administrator.
+      </div>
+    );
   }
 
-  return (
-    <div className="alert alert-danger">
-      <i className="fa fa-lock fa-lg" aria-hidden="true" /> Insufficient Privileges.
-      Please contact the administrator.
-    </div>
-  );
+  return <div />;
 };
 
 NoPermissionView.propTypes = {
-  canModify: PropTypes.bool,
+  hasPermissions: PropTypes.bool,
 };
 
 export { NoPermissionView };

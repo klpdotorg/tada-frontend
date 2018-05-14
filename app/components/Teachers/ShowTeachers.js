@@ -7,7 +7,16 @@ import { CreateTeacher, EditTeacher } from '../../containers/Teachers';
 import { TeacherList } from './index';
 
 const TeacherScreen = (props) => {
-  const { district, block, cluster, institution, teacherIds, isLoading, teacherLoading } = props;
+  const {
+    district,
+    block,
+    cluster,
+    institution,
+    teacherIds,
+    isLoading,
+    teacherLoading,
+    hasPermissions,
+  } = props;
 
   if (isLoading) {
     return <Loading />;
@@ -34,8 +43,9 @@ const TeacherScreen = (props) => {
         teacherIds={teacherIds}
         showAddTeacherPopup={props.showAddTeacherPopup}
         loading={teacherLoading}
+        hasPermissions={hasPermissions}
       />
-      <EditTeacher institution={institution.id} />
+      <EditTeacher institution={institution.id} hasPermissions={hasPermissions} />
       <CreateTeacher institution={institution.id} />
     </div>
   );
@@ -50,6 +60,7 @@ TeacherScreen.propTypes = {
   teacherIds: PropTypes.array,
   teacherLoading: PropTypes.bool,
   showAddTeacherPopup: PropTypes.func,
+  hasPermissions: PropTypes.bool,
 };
 
 export { TeacherScreen };

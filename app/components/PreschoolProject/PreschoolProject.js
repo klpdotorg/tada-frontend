@@ -25,11 +25,7 @@ const PreschoolProjectView = ({ isAdmin, isLoading, district, project, params })
         </li>
         <li className="active">{project.name}</li>
       </ol>
-      {isAdmin ? (
-        <EditProject projectNodeId={params.projectNodeId} districtNodeId={params.districtNodeId} />
-      ) : (
-        <NoPermissionView />
-      )}
+      <EditProject projectNodeId={params.projectNodeId} districtNodeId={params.districtNodeId} />
       <CreateCircle parent={project.id} />
     </div>
   );

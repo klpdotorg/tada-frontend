@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { isEmpty } from 'lodash';
+import { isEmpty, get } from 'lodash';
 
 import { DEFAULT_PARENT_NODE_ID } from 'config';
 import {
@@ -13,6 +13,7 @@ import {
   toggleClassModal,
 } from '../../actions';
 import { PreschoolView } from '../../components/Preschool';
+import { checkPermissions } from '../../utils';
 
 class FetchPreschoolEntity extends Component {
   componentDidMount() {
@@ -58,14 +59,25 @@ FetchPreschoolEntity.propTypes = {
 const mapStateToProps = (state, ownProps) => {
   const { districtNodeId, projectNodeId, circleNodeId, institutionNodeId } = ownProps.params;
   const { isAdmin } = state.profile;
+  const district = get(state.boundaries.boundaryDetails, districtNodeId, {});
+  const project = get(state.boundaries.boundaryDetails, projectNodeId, {});
+  const circle = get(state.boundaries.boundaryDetails, circleNodeId, {});
+  const institution = get(state.boundaries.boundaryDetails, institutionNodeId, {});
+  const hasPermissions = checkPermissions(
+    isAdmin,
+    state.userPermissions,
+    [district.id, project.id, circle.id],
+    institution.id,
+  );
 
   return {
-    district: state.boundaries.boundaryDetails[districtNodeId],
-    project: state.boundaries.boundaryDetails[projectNodeId],
-    circle: state.boundaries.boundaryDetails[circleNodeId],
-    institution: state.boundaries.boundaryDetails[institutionNodeId],
+    district,
+    project,
+    circle,
+    institution,
     isLoading: state.appstate.loadingBoundary,
     isAdmin,
+    hasPermissions,
   };
 };
 

@@ -22,11 +22,7 @@ const PrimaryDistrictView = ({ isAdmin, isLoading, district, districtNodeId }) =
       <ol className="breadcrumb">
         <li className="active">{district.name}</li>
       </ol>
-      {isAdmin ? (
-        <EditDistrict districtNodeId={districtNodeId} />
-      ) : (
-        <NoPermissionDistrictView name={district.name} />
-      )}
+      <EditDistrict districtNodeId={districtNodeId} />
       <CreateBlock parent={district.id} parentNodeId={districtNodeId} />
       <CreateProject parent={district.id} parentNodeId={districtNodeId} />
     </div>

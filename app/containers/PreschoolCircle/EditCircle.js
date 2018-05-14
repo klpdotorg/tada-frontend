@@ -14,7 +14,7 @@ import {
   openDeleteBoundaryModal,
 } from '../../actions';
 import { Confirm } from '../Modal';
-import { hasChildren } from '../../utils';
+import { hasChildren, checkPermissions } from '../../utils';
 
 const { Input } = FRC;
 
@@ -44,11 +44,19 @@ class EditCircleForm extends Component {
   }
 
   render() {
-    const { canDelete, circle, canSubmit } = this.props;
+    const { canDelete, circle, canSubmit, hasPermissions } = this.props;
 
     return (
       <div>
-        {!canDelete ? (
+        {!hasPermissions ? (
+          <div className="alert alert-danger">
+            <i className="fa fa-lock fa-lg" aria-hidden="true" />
+            Insufficient Privileges. Only administrators can modify boundary details.
+          </div>
+        ) : (
+          <div />
+        )}
+        {hasPermissions && !canDelete ? (
           <div className="alert alert-info">
             <i className="fa fa-info-circle fa-lg" aria-hidden="true" /> You cannot delete this
             boundary until its children are deleted
@@ -61,6 +69,7 @@ class EditCircleForm extends Component {
           className="btn btn-green pull-right"
           title="Add Preschool"
           onClick={this.props.toggleSchoolModal}
+          disabled={!hasPermissions}
         >
           Add Preschool
         </button>
@@ -72,6 +81,7 @@ class EditCircleForm extends Component {
           ref={(ref) => {
             this.myform = ref;
           }}
+          disabled={!hasPermissions}
         >
           <Input
             name="circleName"
@@ -87,7 +97,7 @@ class EditCircleForm extends Component {
         <div className="col-md-8">
           <button
             type="submit"
-            disabled={!canSubmit}
+            disabled={!hasPermissions || !canSubmit}
             className="btn btn-primary padded-btn"
             onClick={() => {
               this.saveCircle(circle.name);
@@ -111,6 +121,7 @@ class EditCircleForm extends Component {
 }
 
 EditCircleForm.propTypes = {
+  hasPermissions: PropTypes.bool,
   canDelete: PropTypes.bool,
   canSubmit: PropTypes.bool,
   circle: PropTypes.object,
@@ -127,12 +138,16 @@ EditCircleForm.propTypes = {
 const mapStateToProps = (state, ownProps) => {
   const { circleNodeId } = ownProps;
   const { boundaries } = state;
+  const circle = get(boundaries.boundaryDetails, circleNodeId, {});
+  const { isAdmin } = state.profile;
+  const hasPermissions = checkPermissions(isAdmin, state.userPermissions, circle.id);
 
   return {
-    canDelete: hasChildren(circleNodeId, boundaries),
+    canDelete: isAdmin && hasChildren(circleNodeId, boundaries),
     openConfirmModal: state.appstate.confirmModal,
     canSubmit: state.appstate.enableSubmitForm,
-    circle: get(boundaries.boundaryDetails, circleNodeId, {}),
+    circle,
+    hasPermissions,
   };
 };
 

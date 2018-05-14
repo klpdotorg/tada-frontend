@@ -9,7 +9,7 @@ import { CreateClass } from '../../containers/StudentGroup';
 import { Loading } from '../common';
 
 const PreschoolView = (props) => {
-  const { isLoading, district, project, circle, institution, params, isAdmin } = props;
+  const { isLoading, district, project, circle, institution, params, hasPermissions } = props;
 
   if (isLoading || isEmpty(institution)) {
     return <Loading />;
@@ -32,9 +32,9 @@ const PreschoolView = (props) => {
         <li className="active"> {institution.name}</li>
       </ol>
       <div>
-        <PermissionView institution={institution} canModify={isAdmin} />
+        <PermissionView institution={institution} hasPermissions={hasPermissions} />
         <PreschoolActions
-          canModify={isAdmin}
+          hasPermissions={hasPermissions}
           toggleClassModal={props.toggleClassModal}
           showTeachers={() => {
             props.showTeachers(params.institutionNodeId, props.depth);
@@ -42,14 +42,11 @@ const PreschoolView = (props) => {
         />
         <div className="border-base" />
         <div className="base-spacing-sm" />
-        {isAdmin ? (
-          <EditPreschool
-            circleNodeId={params.circleNodeId}
-            institutionNodeId={params.institutionNodeId}
-          />
-        ) : (
-          <div />
-        )}
+        <EditPreschool
+          circleNodeId={params.circleNodeId}
+          institutionNodeId={params.institutionNodeId}
+          hasPermissions={hasPermissions}
+        />
       </div>
       <CreateClass institutionId={institution.id} institutionNodeId={params.institutionNodeId} />
     </div>
@@ -57,6 +54,7 @@ const PreschoolView = (props) => {
 };
 
 PreschoolView.propTypes = {
+  hasPermissions: PropTypes.bool,
   isAdmin: PropTypes.bool,
   depth: PropTypes.number,
   isLoading: PropTypes.bool,

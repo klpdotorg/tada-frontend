@@ -5,7 +5,7 @@ import { get } from 'lodash';
 import { StaffTypes } from '../../Data/StaffTypes';
 
 const TeacherView = (props) => {
-  const { teacher, languages } = props;
+  const { teacher, languages, hasPermissions, canDelete } = props;
   const language = languages.find((lang) => {
     return lang.value === teacher.mt;
   });
@@ -33,6 +33,7 @@ const TeacherView = (props) => {
           className="btn btn-primary padded-btn"
           data-toggle="tooltip"
           title="Edit"
+          disabled={!hasPermissions}
         >
           <i className="fa fa-pencil-square-o" />
         </button>
@@ -43,6 +44,7 @@ const TeacherView = (props) => {
           className="btn btn-primary"
           data-toggle="tooltip"
           title="Delete"
+          disabled={!canDelete}
         >
           <i className="fa fa-trash-o" />
         </button>
@@ -56,7 +58,8 @@ TeacherView.propTypes = {
   deleteTeacher: PropTypes.func,
   teacher: PropTypes.object,
   languages: PropTypes.array,
-  staffTypes: PropTypes.array,
+  hasPermissions: PropTypes.bool,
+  canDelete: PropTypes.bool,
 };
 
 export { TeacherView };
