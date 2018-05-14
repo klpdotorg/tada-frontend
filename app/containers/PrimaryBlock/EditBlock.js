@@ -15,7 +15,7 @@ import {
   openDeleteBoundaryModal,
   toggleCreateClusterModal,
 } from '../../actions';
-import { hasChildren } from '../../utils';
+import { hasChildren, checkPermissions } from '../../utils';
 
 const { Input } = FRC;
 
@@ -44,10 +44,18 @@ class EditBlockForm extends Component {
   }
 
   render() {
-    const { canDelete, block } = this.props;
+    const { canDelete, block, hasPermissions } = this.props;
     return (
       <div>
-        {!canDelete ? (
+        {!hasPermissions ? (
+          <div className="alert alert-danger">
+            <i className="fa fa-lock fa-lg" aria-hidden="true" />
+            Insufficient Privileges. Only administrators can modify boundary details.
+          </div>
+        ) : (
+          <div />
+        )}
+        {hasPermissions && !canDelete ? (
           <div className="alert alert-info">
             <i className="fa fa-info-circle fa-lg" aria-hidden="true" /> You cannot delete this
             boundary until its children are deleted
@@ -60,6 +68,7 @@ class EditBlockForm extends Component {
           className="btn btn-orange pull-right"
           title="Add Cluster"
           onClick={this.props.toggleClusterModal}
+          disabled={!hasPermissions}
         >
           Add Cluster
         </button>
@@ -71,6 +80,7 @@ class EditBlockForm extends Component {
           ref={(ref) => {
             this.myform = ref;
           }}
+          disabled={!hasPermissions}
         >
           <Input
             name="BlockName"
@@ -87,7 +97,7 @@ class EditBlockForm extends Component {
         <div className="col-md-8">
           <button
             type="submit"
-            disabled={!this.props.canSubmit}
+            disabled={!hasPermissions || !this.props.canSubmit}
             className="btn btn-primary padded-btn"
             onClick={this.onClickSaveBlock}
           >
@@ -111,6 +121,7 @@ class EditBlockForm extends Component {
 }
 
 EditBlockForm.propTypes = {
+  hasPermissions: PropTypes.bool,
   block: PropTypes.object,
   districtNodeId: PropTypes.string,
   blockNodeId: PropTypes.string,
@@ -127,12 +138,16 @@ EditBlockForm.propTypes = {
 const mapStateToProps = (state, ownProps) => {
   const { blockNodeId } = ownProps;
   const { boundaries } = state;
+  const { isAdmin } = state.profile;
+  const block = get(boundaries.boundaryDetails, blockNodeId, {});
+  const hasPermissions = checkPermissions(isAdmin, state.userPermissions, block.id);
 
   return {
-    block: get(boundaries.boundaryDetails, blockNodeId, {}),
-    canDelete: hasChildren(blockNodeId, boundaries),
+    block,
+    canDelete: !isAdmin && hasChildren(blockNodeId, boundaries),
     openConfirmModal: state.appstate.confirmModal,
     canSubmit: state.appstate.enableSubmitForm,
+    hasPermissions,
   };
 };
 

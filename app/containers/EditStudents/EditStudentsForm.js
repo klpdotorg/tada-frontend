@@ -81,15 +81,24 @@ class EditStudentsFormView extends Component {
 
   renderRows() {
     const rows = Object.keys(this.props.values);
+    const { hasPermissions } = this.props;
 
     return rows.map((id) => {
       return (
-        <EditStudentInputRow key={id} id={id} index={id} institutionId={this.props.institutionId} />
+        <EditStudentInputRow
+          key={id}
+          id={id}
+          index={id}
+          institutionId={this.props.institutionId}
+          hasPermissions={hasPermissions}
+        />
       );
     });
   }
 
   render() {
+    const { hasPermissions } = this.props;
+
     return (
       <div>
         {this.renderErrors()}
@@ -117,7 +126,11 @@ class EditStudentsFormView extends Component {
           </table>
           <div className="row">
             <div className="col-md-4">
-              <button className="btn btn-primary" onClick={this.validate}>
+              <button
+                className="btn btn-primary"
+                onClick={this.validate}
+                disabled={!hasPermissions}
+              >
                 Save
               </button>
               <button onClick={this.props.goBack} className="btn btn-primary padded-btn">
@@ -133,6 +146,7 @@ class EditStudentsFormView extends Component {
 }
 
 EditStudentsFormView.propTypes = {
+  hasPermissions: PropTypes.bool,
   goBack: PropTypes.func,
   formErrors: PropTypes.array,
   studentGroupNodeId: PropTypes.string,

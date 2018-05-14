@@ -13,6 +13,7 @@ import {
   openTeachers,
   toggleClassModal,
 } from '../../actions';
+import { checkPermissions } from '../../utils';
 
 class FetchInstitutionEntity extends Component {
   componentDidMount() {
@@ -54,19 +55,32 @@ FetchInstitutionEntity.propTypes = {
   getLanguages: PropTypes.func,
   getInstitutionCats: PropTypes.func,
   getManagements: PropTypes.func,
+  hasPermissions: PropTypes.bool,
 };
 
 const mapStateToProps = (state, ownProps) => {
   const { blockNodeId, districtNodeId, clusterNodeId, institutionNodeId } = ownProps.params;
   const { isAdmin } = state.profile;
+  const institution = get(state.boundaries.boundaryDetails, institutionNodeId, {});
+  const district = get(state.boundaries.boundaryDetails, districtNodeId, {});
+  const block = get(state.boundaries.boundaryDetails, blockNodeId, {});
+  const cluster = get(state.boundaries.boundaryDetails, clusterNodeId, {});
+
+  const hasPermissions = checkPermissions(
+    isAdmin,
+    state.userPermissions,
+    [district.id, block.id, cluster.id],
+    institution.id,
+  );
 
   return {
-    district: get(state.boundaries.boundaryDetails, districtNodeId, {}),
-    block: get(state.boundaries.boundaryDetails, blockNodeId, {}),
-    cluster: get(state.boundaries.boundaryDetails, clusterNodeId, {}),
-    institution: get(state.boundaries.boundaryDetails, institutionNodeId, {}),
+    district,
+    block,
+    cluster,
+    institution,
     isLoading: state.appstate.loadingBoundary,
     isAdmin,
+    hasPermissions,
   };
 };
 

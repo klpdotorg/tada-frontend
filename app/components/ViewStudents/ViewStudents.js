@@ -20,6 +20,7 @@ const ViewStudentsCont = (props) => {
     isLoading,
     selectedCenter,
     canMapStudents,
+    hasPermissions,
   } = props;
 
   if (isLoading || isEmpty(studentGroup)) {
@@ -53,7 +54,7 @@ const ViewStudentsCont = (props) => {
               onClick={() => {
                 props.openEditStudentsForm(params.studentGroupNodeId);
               }}
-              disabled={canEdit}
+              disabled={canEdit && !hasPermissions}
             >
               Edit Students
             </button>
@@ -79,6 +80,7 @@ const ViewStudentsCont = (props) => {
           <StudentList
             studentGroupNodeId={params.studentGroupNodeId}
             institutionId={institution.id}
+            hasPermissions={hasPermissions}
           />
         </table>
         <div className="row base-spacing-mid">
@@ -115,12 +117,13 @@ const ViewStudentsCont = (props) => {
           </div>
         </div>
       </div>
-      <EditStudent studentGroupNodeId={params.studentGroupNodeId} />
+      <EditStudent studentGroupNodeId={params.studentGroupNodeId} hasPermissions={hasPermissions} />
     </div>
   );
 };
 
 ViewStudentsCont.propTypes = {
+  hasPermissions: PropTypes.bool,
   district: PropTypes.object,
   block: PropTypes.object,
   cluster: PropTypes.object,

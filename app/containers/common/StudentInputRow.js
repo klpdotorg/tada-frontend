@@ -31,7 +31,7 @@ class StudentInputRow extends Component {
   }
 
   render() {
-    const { formErrors, index, languages } = this.props;
+    const { formErrors, index, languages, hasPermissions } = this.props;
 
     return (
       <tr className={_.includes(formErrors, index) ? 'bg-danger' : ''}>
@@ -44,6 +44,7 @@ class StudentInputRow extends Component {
             type="text"
             className="form-control"
             required
+            disabled={!hasPermissions}
           />
         </td>
         <td>
@@ -54,6 +55,7 @@ class StudentInputRow extends Component {
             }}
             type="text"
             className="form-control"
+            disabled={!hasPermissions}
           />
         </td>
         <td>
@@ -64,6 +66,7 @@ class StudentInputRow extends Component {
             }}
             type="text"
             className="form-control"
+            disabled={!hasPermissions}
           />
         </td>
         <td>
@@ -74,6 +77,7 @@ class StudentInputRow extends Component {
             }}
             type="text"
             className="form-control"
+            disabled={!hasPermissions}
           />
         </td>
         <td>
@@ -84,6 +88,7 @@ class StudentInputRow extends Component {
             }}
             value={this.state.gender}
             id="gender"
+            disabled={!hasPermissions}
           >
             <option value="male">Male</option>
             <option value="female">Female</option>
@@ -97,6 +102,7 @@ class StudentInputRow extends Component {
             value={this.state.mt}
             className="form-control"
             id="gender"
+            disabled={!hasPermissions}
           >
             {languages.map((lang, i) => {
               return (
@@ -115,6 +121,7 @@ class StudentInputRow extends Component {
             value={this.state.academic_year}
             className="form-control"
             id="gender"
+            disabled={!hasPermissions}
           >
             {lastVerifiedYears.map((year, i) => {
               return (
@@ -133,6 +140,7 @@ class StudentInputRow extends Component {
             }}
             type="date"
             className="form-control"
+            disabled={!hasPermissions}
           />
         </td>
         <td>
@@ -143,6 +151,7 @@ class StudentInputRow extends Component {
             }}
             type="text"
             className="form-control"
+            disabled={!hasPermissions}
           />
         </td>
         <td>
@@ -153,6 +162,7 @@ class StudentInputRow extends Component {
             }}
             type="text"
             className="form-control"
+            disabled={!hasPermissions}
           />
         </td>
         <td>
@@ -163,6 +173,7 @@ class StudentInputRow extends Component {
             }}
             type="text"
             className="form-control"
+            disabled={!hasPermissions}
           />
         </td>
         <td>
@@ -173,6 +184,7 @@ class StudentInputRow extends Component {
             }}
             type="text"
             className="form-control"
+            disabled={!hasPermissions}
           />
         </td>
         <td>
@@ -183,6 +195,7 @@ class StudentInputRow extends Component {
             }}
             type="text"
             className="form-control"
+            disabled={!hasPermissions}
           />
         </td>
         <td>
@@ -193,6 +206,7 @@ class StudentInputRow extends Component {
             }}
             type="text"
             className="form-control"
+            disabled={!hasPermissions}
           />
         </td>
       </tr>
@@ -201,6 +215,7 @@ class StudentInputRow extends Component {
 }
 
 StudentInputRow.propTypes = {
+  hasPermissions: PropTypes.bool,
   formErrors: PropTypes.array,
   languages: PropTypes.array,
   index: PropTypes.any,

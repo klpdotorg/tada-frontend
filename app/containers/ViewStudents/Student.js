@@ -6,9 +6,12 @@ import { selectStudent, openEditStudentModal, deleteStudent } from '../../action
 
 const mapStateToProps = (state, ownProps) => {
   const { selectedStudents } = state.students;
+  const { isAdmin } = state.profile;
+
   return {
     student: get(state.boundaries.boundaryDetails, ownProps.studentNodeId, {}),
     selectedStudents,
+    canDelete: isAdmin,
   };
 };
 

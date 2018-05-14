@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { InsufficientPermissionMsg, DeletePermissionMsg } from './index';
 
-const PermissionMessages = ({ canModify }) => {
-  if (canModify) {
+const PermissionMessages = ({ hasPermissions }) => {
+  if (!hasPermissions) {
     return <InsufficientPermissionMsg />;
   }
 
@@ -11,7 +11,7 @@ const PermissionMessages = ({ canModify }) => {
 };
 
 PermissionMessages.propTypes = {
-  canModify: PropTypes.bool,
+  hasPermissions: PropTypes.bool,
 };
 
 export { PermissionMessages };

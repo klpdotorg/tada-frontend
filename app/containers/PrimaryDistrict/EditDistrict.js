@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { get } from 'lodash';
 
 import { EditDistrictForm } from '../common';
 import {
@@ -10,18 +11,22 @@ import {
   toggleBlockModal,
   openDeleteBoundaryModal,
 } from '../../actions';
-import { hasChildren } from '../../utils';
+import { hasChildren, checkPermissions } from '../../utils';
 
 const mapStateToProps = (state, ownProps) => {
   const { districtNodeId } = ownProps;
   const { boundaries } = state;
+  const { isAdmin } = state.profile;
+  const boundary = get(boundaries.boundaryDetails, districtNodeId, {});
+  const hasPermissions = checkPermissions(isAdmin, state.userPermissions, boundary);
 
   return {
     canSubmit: state.appstate.enableSubmitForm,
-    boundary: boundaries.boundaryDetails[districtNodeId],
-    canDelete: hasChildren(districtNodeId, boundaries),
+    boundary,
+    canDelete: !isAdmin && hasChildren(districtNodeId, boundaries),
     confirmModal: state.appstate.confirmModal,
     primary: state.schoolSelection.primarySchool,
+    hasPermissions,
   };
 };
 

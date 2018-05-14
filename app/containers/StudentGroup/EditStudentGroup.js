@@ -14,7 +14,7 @@ import {
 } from '../../actions';
 
 import { Confirm } from '../Modal';
-import { hasChildren } from '../../utils';
+import { hasChildren, checkPermissions } from '../../utils';
 
 const { Input, Select } = FRC;
 
@@ -57,7 +57,7 @@ class EditStudentGroupForm extends Component {
       { label: 'Center', value: 'center' },
     ];
 
-    const { studentGroup, canDelete } = this.props;
+    const { studentGroup, canDelete, hasPermissions } = this.props;
 
     return (
       <Formsy.Form
@@ -67,6 +67,7 @@ class EditStudentGroupForm extends Component {
         ref={(ref) => {
           this.myform = ref;
         }}
+        disabled={!hasPermissions}
       >
         <div className="form-group">
           <div className="col-sm-12">
@@ -111,6 +112,7 @@ class EditStudentGroupForm extends Component {
             type="submit"
             className="btn btn-primary padded-btn"
             onClick={this.saveStudentGroup}
+            disabled={!hasPermissions}
           >
             Save
           </button>
@@ -142,16 +144,19 @@ EditStudentGroupForm.propTypes = {
   showConfirmModal: PropTypes.func,
   enableSubmitForm: PropTypes.func,
   disableSubmitForm: PropTypes.func,
+  hasPermissions: PropTypes.bool,
 };
 
 const mapStateToProps = (state, ownProps) => {
   const { studentGroupNodeId } = ownProps;
   const { boundaries } = state;
+  const { isAdmin } = state.profile;
+  const studentGroup = get(state.boundaries.boundaryDetails, studentGroupNodeId, {});
 
   return {
-    canDelete: hasChildren(studentGroupNodeId, boundaries),
+    canDelete: !isAdmin && hasChildren(studentGroupNodeId, boundaries),
     openConfirmModal: state.appstate.confirmModal,
-    studentGroup: get(state.boundaries.boundaryDetails, studentGroupNodeId, {}),
+    studentGroup,
     canSubmit: state.appstate.enableSubmitForm,
     institutionCategories: state.institution.institutionCats,
   };

@@ -13,6 +13,7 @@ import {
   mapStudentsWithCenter,
 } from '../../actions';
 import { ViewStudentsCont } from '../../components/ViewStudents';
+import { checkPermissions } from '../../utils';
 
 class FetchStudents extends Component {
   componentDidMount() {
@@ -72,12 +73,23 @@ const mapStateToProps = (state, ownProps) => {
   const studentIds = get(state.boundaries.boundariesByParentId, '5', []);
   const { centers, selectedCenter } = state.centers;
   const { selectedStudents } = state.students;
+  const { isAdmin } = state.profile;
+  const district = get(state.boundaries.boundaryDetails, districtNodeId, {});
+  const block = get(state.boundaries.boundaryDetails, blockNodeId, {});
+  const cluster = get(state.boundaries.boundaryDetails, clusterNodeId, {});
+  const institution = get(state.boundaries.boundaryDetails, institutionNodeId, {});
+  const hasPermissions = checkPermissions(
+    isAdmin,
+    state.userPermissions,
+    [district.id, block.id, cluster.id],
+    institution.id,
+  );
 
   return {
-    district: get(state.boundaries.boundaryDetails, districtNodeId, {}),
-    block: get(state.boundaries.boundaryDetails, blockNodeId, {}),
-    cluster: get(state.boundaries.boundaryDetails, clusterNodeId, {}),
-    institution: get(state.boundaries.boundaryDetails, institutionNodeId, {}),
+    district,
+    block,
+    cluster,
+    institution,
     studentGroup: get(state.boundaries.boundaryDetails, studentGroupNodeId, {}),
     studentIds,
     centers: centers.map((center) => {
@@ -90,6 +102,7 @@ const mapStateToProps = (state, ownProps) => {
     canEdit: !studentIds.length,
     isLoading: state.appstate.loadingBoundary,
     canMapStudents: !isEmpty(selectedStudents) && !isEmpty(centers),
+    hasPermissions,
   };
 };
 

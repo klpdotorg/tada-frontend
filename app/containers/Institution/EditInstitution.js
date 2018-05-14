@@ -14,7 +14,7 @@ import {
 } from '../../actions';
 
 import { Confirm } from '../Modal';
-import { hasChildren } from '../../utils';
+import { hasChildren, checkPermissions } from '../../utils';
 
 const { Input, Textarea, Select } = FRC;
 
@@ -80,6 +80,7 @@ class EditInstitutionForm extends Component {
       institutionCategories,
       managements,
       lastVerifiedYears,
+      hasPermissions,
     } = this.props;
 
     return (
@@ -90,6 +91,7 @@ class EditInstitutionForm extends Component {
         ref={(ref) => {
           this.myform = ref;
         }}
+        disabled={!hasPermissions}
       >
         <div className="form-group">
           <div className="col-sm-12">
@@ -222,7 +224,7 @@ class EditInstitutionForm extends Component {
           </div>
         </div>
         <div className="col-md-12">
-          <button type="submit" className="btn btn-primary padded-btn">
+          <button type="submit" className="btn btn-primary padded-btn" disabled={!hasPermissions}>
             Save
           </button>
           <button
@@ -243,6 +245,7 @@ class EditInstitutionForm extends Component {
 }
 
 EditInstitutionForm.propTypes = {
+  hasPermissions: PropTypes.bool,
   institutionNodeId: PropTypes.string,
   clusterNodeId: PropTypes.string,
   institution: PropTypes.object,
@@ -261,11 +264,13 @@ EditInstitutionForm.propTypes = {
 const mapStateToProps = (state, ownProps) => {
   const { institutionNodeId } = ownProps;
   const { boundaries } = state;
+  const { isAdmin } = state.profile;
+  const institution = get(boundaries.boundaryDetails, institutionNodeId, {});
 
   return {
-    canDelete: hasChildren(institutionNodeId, boundaries),
+    canDelete: !isAdmin && hasChildren(institutionNodeId, boundaries),
     openConfirmModal: state.appstate.confirmModal,
-    institution: get(boundaries.boundaryDetails, institutionNodeId, {}),
+    institution,
     canSubmit: state.appstate.enableSubmitForm,
     languages: state.languages.languages,
     managements: state.institution.managements,

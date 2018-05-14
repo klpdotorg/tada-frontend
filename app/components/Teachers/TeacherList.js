@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Loading, Message } from '../common';
 import { Teacher } from '../../containers/Teachers';
 
-const TeacherList = ({ teacherIds, showAddTeacherPopup, loading }) => {
+const TeacherList = ({ teacherIds, showAddTeacherPopup, loading, hasPermissions }) => {
   if (loading) {
     return <Loading />;
   }
@@ -16,7 +16,12 @@ const TeacherList = ({ teacherIds, showAddTeacherPopup, loading }) => {
           <h4 className="text-primary">Teacher Details</h4>
         </div>
         <div className="col-md-4 text-right">
-          <button className="btn btn-orange" onClick={showAddTeacherPopup} title="Add Teacher">
+          <button
+            className="btn btn-orange"
+            onClick={showAddTeacherPopup}
+            title="Add Teacher"
+            disabled={!hasPermissions}
+          >
             Add Teacher
           </button>
         </div>
@@ -41,7 +46,7 @@ const TeacherList = ({ teacherIds, showAddTeacherPopup, loading }) => {
           </thead>
           <tbody>
             {teacherIds.map((id) => {
-              return <Teacher id={id} key={id} />;
+              return <Teacher id={id} key={id} hasPermissions={hasPermissions} />;
             })}
           </tbody>
         </table>
@@ -61,6 +66,7 @@ TeacherList.propTypes = {
   loading: PropTypes.bool,
   showAddTeacherPopup: PropTypes.func,
   teacherIds: PropTypes.array,
+  hasPermissions: PropTypes.bool,
 };
 
 export { TeacherList };

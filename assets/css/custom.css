@@ -368,6 +368,7 @@ div.well{
     width: 100%;
     position: absolute;
     padding: 15px;
+    max-width: 1105px;
     /*margin-left:20px;*/
 }
 

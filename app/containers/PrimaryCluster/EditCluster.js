@@ -56,7 +56,7 @@ class EditClusterView extends Component {
         ) : (
           <div />
         )}
-        {!canDelete ? (
+        {hasPermissions && !canDelete ? (
           <div className="alert alert-info">
             <i className="fa fa-info-circle fa-lg" aria-hidden="true" /> You cannot delete this
             boundary until its children are deleted
@@ -143,7 +143,7 @@ const mapStateToProps = (state, ownProps) => {
   const hasPermissions = checkPermissions(isAdmin, state.userPermissions, cluster.id);
 
   return {
-    canDelete: isAdmin || hasChildren(clusterNodeId, boundaries),
+    canDelete: !isAdmin && hasChildren(clusterNodeId, boundaries),
     openConfirmModal: state.appstate.confirmModal,
     canSubmit: state.appstate.enableSubmitForm,
     cluster,
