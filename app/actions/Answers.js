@@ -2,7 +2,7 @@ import { SERVER_API_BASE } from 'config';
 
 import { map } from 'lodash';
 import { post, get } from './requests';
-import { SET_ANSWERS } from './types';
+import { SET_ANSWERS, FETCHING_ANSWERS } from './types';
 
 export const createAnswergroup = (url, body) => {
   return post(url, body);
@@ -10,6 +10,10 @@ export const createAnswergroup = (url, body) => {
 
 export const fetchAnswers = (assessmentId) => {
   return (dispatch, getState) => {
+    dispatch({
+      type: FETCHING_ANSWERS,
+      value: true,
+    });
     const state = getState();
     const { answergroups } = state.answergroups;
     const { selectedProgram } = state.programs;
@@ -35,6 +39,10 @@ export const fetchAnswers = (assessmentId) => {
           return result;
         }, {}),
       });
+      dispatch({
+        type: FETCHING_ANSWERS,
+        value: false,
+      });
     });
   };
 };
@@ -56,13 +64,6 @@ export const saveAnswer = (params) => {
     const { selectedProgram } = state.programs;
     const filteredAnswers = filterAnswers(answers[boundaryId]);
 
-    console.log(
-      assessmentId,
-      boundaryId,
-      answergroupId,
-      JSON.stringify(filteredAnswers),
-      'printing this information',
-    );
     const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroups/${assessmentId}/answergroups/${answergroupId}/answers/`;
     post(url, filteredAnswers).then((res) => {
       console.log(res);

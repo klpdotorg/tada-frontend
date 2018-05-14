@@ -116,5 +116,5 @@ export const UNSELECT_PERMISSIONS_USER = 'unselect_permissions_user';
 export const FETCHING_ANSWER_GROUPS = 'fetching_answer_groups';
 export const SET_ANSWER_GROUPS = 'set_answer_groups';
 export const SET_ANSWERS = 'set_answers';
-export const FECHING_ANSWERS = 'fetching_answers';
+export const FETCHING_ANSWERS = 'fetching_answers';
 export const SET_USER_PERMISSIONS = 'set_user_permissions';

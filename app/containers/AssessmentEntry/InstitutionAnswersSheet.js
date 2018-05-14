@@ -36,13 +36,14 @@ const mapStateToProps = (state, ownProps) => {
   const { institutionId } = ownProps.params;
 
   const { answersLoading } = state.assessmentEntry;
-  const { answergroups } = state.answergroups;
+  const { answergroups, fetching } = state.answergroups;
+  const answereFetching = state.answers.fetching;
   const institution = get(state.programDetails.programDetails, institutionId, {});
 
   return {
     rows: Object.keys(answergroups),
     institution,
-    loading: answersLoading,
+    loading: answersLoading || fetching || answereFetching,
     uniqueId: institutionId,
   };
 };
