@@ -32,7 +32,8 @@ export const collapsedProgramEntity = (value) => {
 const getUrlForFilterProgram = (entity, surveyId, surveyOn) => {
   const admin1 = `${SERVER_API_BASE}boundary/admin1s/?survey_id=${surveyId}`;
   const admin2 = `${SERVER_API_BASE}boundary/admin1/${entity.id}/admin2/?survey_id=${surveyId}`;
-  const admin3 = `${SERVER_API_BASE}institutions/?admin3=${entity.id}&survey_id=${surveyId}`;
+  const admin3 = `${SERVER_API_BASE}boundary/admin2/${entity.id}/admin3/?survey_id=${surveyId}`;
+  const institutions = `${SERVER_API_BASE}institutions/?admin3=${entity.id}&survey_id=${surveyId}`;
   const institutionMapping = `${SERVER_API_BASE}surveys/${surveyId}/questiongroups/mappings/?boundary_id=${entity.id}`;
   const studentgroupMapping = `${SERVER_API_BASE}surveys/${surveyId}/questiongroups/mappings/?institution_id=${entity.id}`;
   const studentMapping = `${SERVER_API_BASE}surveys/${surveyId}/questiongroups/mappings/?institution_id=${entity.id}`;
@@ -43,6 +44,8 @@ const getUrlForFilterProgram = (entity, surveyId, surveyOn) => {
         return admin1;
       case 1:
         return admin2;
+      case 2:
+        return admin3;
       case 3:
         return institutionMapping;
       default:
@@ -59,6 +62,8 @@ const getUrlForFilterProgram = (entity, surveyId, surveyOn) => {
       case 2:
         return admin3;
       case 3:
+        return institutions;
+      case 4:
         return studentgroupMapping;
       default:
         return null;
@@ -73,6 +78,8 @@ const getUrlForFilterProgram = (entity, surveyId, surveyOn) => {
     case 2:
       return admin3;
     case 3:
+      return institutions;
+    case 4:
       return studentMapping;
     default:
       return null;
