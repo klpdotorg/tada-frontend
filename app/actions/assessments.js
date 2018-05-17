@@ -64,7 +64,7 @@ export const setAssessments = (value) => {
 export const getAssessments = (programId) => {
   return (dispatch) => {
     dispatch(showAssessmentLoading());
-    const fetchAssessmentsURL = `${serverApiBase}surveys/${programId}/questiongroups/`;
+    const fetchAssessmentsURL = `${serverApiBase}surveys/${programId}/questiongroup/`;
     get(fetchAssessmentsURL).then((response) => {
       dispatch(setAssessments(response.results));
       dispatch(closeAssessmentLoading());
@@ -101,7 +101,7 @@ export const saveNewAssessment = (options) => {
 
     const state = getState();
     const programId = state.programs.selectedProgram;
-    const createAssessmentURL = `${serverApiBase}surveys/${programId}/questiongroups/`;
+    const createAssessmentURL = `${serverApiBase}surveys/${programId}/questiongroup/`;
 
     post(createAssessmentURL, options).then((response) => {
       dispatch(assessmentCreated(response));
@@ -121,7 +121,7 @@ export const saveAssessment = (options) => {
     const state = getState();
     const { selectedProgram } = state.programs;
     const { editAssessmentId } = state.assessments;
-    const editAssessmentURL = `${serverApiBase}surveys/${selectedProgram}/questiongroups/${editAssessmentId}/`;
+    const editAssessmentURL = `${serverApiBase}surveys/${selectedProgram}/questiongroup/${editAssessmentId}/`;
 
     patch(editAssessmentURL, options).then((response) => {
       dispatch(assessmentCreated(response));
@@ -143,7 +143,7 @@ export const deactivateAssessments = () => {
     const { selectedProgram } = state.programs;
     const { selectedAssessments } = state.assessments;
     const promises = selectedAssessments.map((id) => {
-      const url = `${serverApiBase}surveys/${selectedProgram}/questiongroups/${id}/`;
+      const url = `${serverApiBase}surveys/${selectedProgram}/questiongroup/${id}/`;
       return patch(url, {
         status: 'IA',
       });
@@ -168,7 +168,7 @@ export const deleteAssessments = () => {
     const { selectedProgram } = state.programs;
     const { selectedAssessments } = state.assessments;
     const promises = selectedAssessments.map((id) => {
-      const url = `${serverApiBase}surveys/${selectedProgram}/questiongroups/${id}/`;
+      const url = `${serverApiBase}surveys/${selectedProgram}/questiongroup/${id}/`;
       return deleteRequest(url);
     });
 

@@ -1,4 +1,4 @@
-import { SERVER_API_BASE } from 'config';
+import { SERVER_API_BASE, DEFAULT_PARENT_ID } from 'config';
 import _ from 'lodash';
 
 import { get } from './requests';
@@ -30,13 +30,12 @@ export const collapsedProgramEntity = (value) => {
 };
 
 const getUrlForFilterProgram = (entity, surveyId, surveyOn) => {
-  const admin1 = `${SERVER_API_BASE}boundary/admin1s/?survey_id=${surveyId}`;
-  const admin2 = `${SERVER_API_BASE}boundary/admin1/${entity.id}/admin2/?survey_id=${surveyId}`;
-  const admin3 = `${SERVER_API_BASE}boundary/admin2/${entity.id}/admin3/?survey_id=${surveyId}`;
+  const admin1 = `${SERVER_API_BASE}survey/${surveyId}/boundary-associations/?boundary_id=${DEFAULT_PARENT_ID}&boundary_type=admin1`;
+  const admin2 = `${SERVER_API_BASE}survey/${surveyId}/boundary-associations/?boundary_id=${entity.id}&boundary_type=admin2`;
+  const admin3 = `${SERVER_API_BASE}survey/${surveyId}/boundary-associations/?boundary_id=${entity.id}&boundary_type=admin3`;
   const institutions = `${SERVER_API_BASE}institutions/?admin3=${entity.id}&survey_id=${surveyId}`;
-  const institutionMapping = `${SERVER_API_BASE}surveys/${surveyId}/questiongroups/mappings/?boundary_id=${entity.id}`;
-  const studentgroupMapping = `${SERVER_API_BASE}surveys/${surveyId}/questiongroups/mappings/?institution_id=${entity.id}`;
-  const studentMapping = `${SERVER_API_BASE}surveys/${surveyId}/questiongroups/mappings/?institution_id=${entity.id}`;
+  const institutionMapping = `${SERVER_API_BASE}surveys/${surveyId}/questiongroup/mappings/?boundary_id=${entity.id}`;
+  const studentgroupMapping = `${SERVER_API_BASE}surveys/${surveyId}/questiongroup/mappings/?institution_id=${entity.id}`;
 
   if (surveyOn === 'institution') {
     switch (entity.depth) {
@@ -80,7 +79,7 @@ const getUrlForFilterProgram = (entity, surveyId, surveyOn) => {
     case 3:
       return institutions;
     case 4:
-      return studentMapping;
+      return studentgroupMapping;
     default:
       return null;
   }

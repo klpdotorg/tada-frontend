@@ -101,7 +101,7 @@ export const fetchSelectedAssessmentQuestions = (assessmentId) => {
     const state = getState();
     const { selectedProgram } = state.programs;
 
-    const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroups/${assessmentId}/questions/`;
+    const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${assessmentId}/questions/`;
 
     return get(url).then((response) => {
       dispatch(setQuestions(response.results, assessmentId));

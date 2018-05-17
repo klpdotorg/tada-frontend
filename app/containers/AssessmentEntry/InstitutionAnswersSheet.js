@@ -11,9 +11,19 @@ class FetchAnswersAndQuestions extends Component {
     const { institution } = this.props;
     const { questionGroupId } = this.props.params;
     this.props.fetchSelectedAssessmentQuestions(questionGroupId);
-
     if (!isEmpty(institution)) {
       this.props.fetchAnswerGroups(questionGroupId, 'institution_id', institution.id);
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { questionGroupId } = this.props.params;
+    const nextId = get(nextProps, ['institution', 'id'], '');
+    const currentId = get(this.props, ['institution', 'id'], '');
+    if (nextId !== currentId) {
+      if (!isEmpty(nextProps.institution)) {
+        this.props.fetchAnswerGroups(questionGroupId, 'institution_id', nextId);
+      }
     }
   }
 

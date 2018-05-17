@@ -20,7 +20,7 @@ export const fetchAnswers = (assessmentId) => {
 
     const Ids = Object.keys(answergroups);
     const promises = Ids.map((Id) => {
-      const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroups/${assessmentId}/answergroups/${Id}/answers/`;
+      const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${assessmentId}/answergroups/${Id}/answers/`;
       return get(url).then((res) => {
         return {
           id: Id,
@@ -64,7 +64,7 @@ export const saveAnswer = (params) => {
     const { selectedProgram } = state.programs;
     const filteredAnswers = filterAnswers(answers[boundaryId]);
 
-    const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroups/${assessmentId}/answergroups/${answergroupId}/answers/`;
+    const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${assessmentId}/answergroups/${answergroupId}/answers/`;
     post(url, filteredAnswers).then((res) => {
       console.log(res);
     });
@@ -79,7 +79,7 @@ export const createAnswerGroup = (params) => {
     const state = getState();
     const { assessmentId, boundaryId } = params;
     const { selectedProgram } = state.programs;
-    const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroups/${assessmentId}/answergroups/`;
+    const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${assessmentId}/answergroups/`;
 
     post(url, {
       institution: boundaryId,

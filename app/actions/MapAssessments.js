@@ -283,7 +283,7 @@ export const openBoundaryOfMa = (Id, depth) => {
 
 export const mapAssessmentsToInsitutions = (surveyId, assessments, institutions, boundaryIds) => {
   return (dispatch) => {
-    const url = `${SERVER_API_BASE}surveys/${surveyId}/questiongroups/map-institution/`;
+    const url = `${SERVER_API_BASE}surveys/${surveyId}/questiongroup/map-institution/`;
 
     post(url, {
       questiongroup_ids: assessments,
@@ -309,7 +309,7 @@ export const mapAssessmentsToStudentgroups = (
   assessments,
 ) => {
   return (dispatch) => {
-    const url = `${SERVER_API_BASE}surveys/${surveyId}/questiongroups/map-studentgroup/`;
+    const url = `${SERVER_API_BASE}surveys/${surveyId}/questiongroup/map-studentgroup/`;
     post(url, {
       questiongroup_ids: assessments,
       studentgroup_ids: studentgroups,

@@ -9,7 +9,9 @@ const AssessmentEntryColHeaderView = ({ questions }) => {
   return (
     <tr className="bg-info">
       <td>UID</td>
-      <td colSpan="2">Name</td>
+      <td colSpan="2">Boundary Name</td>
+      <td>Name</td>
+      <td>Date of Visit</td>
       {map(values, (id, i) => {
         return <td key={id}>{i + 1}</td>;
       })}
