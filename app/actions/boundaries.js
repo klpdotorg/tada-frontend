@@ -60,7 +60,7 @@ export const setBoundaries = (data) => {
 
 const getUrlForBoundary = (entity) => {
   if (entity.depth < 3) {
-    return `${SERVER_API_BASE}boundaries/?parent=${entity.id}&state=${STATE_CODE}&per_page=${PER_PAGE}`;
+    return `${SERVER_API_BASE}boundaries/?parent=${entity.id}&state=${STATE_CODE}&per_page=0`;
   }
 
   switch (entity.depth) {
@@ -191,15 +191,19 @@ export const modifyBoundary = (boundaryId, name) => {
 
     patch(`${SERVER_API_BASE}boundaries/${boundaryId}/`, { name })
       .then((response) => {
-        const entities = convertEntitiesToObject([response]);
+        if (response) {
+          const entities = convertEntitiesToObject([response]);
 
-        dispatch({
-          type: SET_BOUNDARIES,
-          boundaryDetails: entities,
-        });
-        dispatch(closeBoundaryLoading());
+          dispatch({
+            type: SET_BOUNDARIES,
+            boundaryDetails: entities,
+          });
+          dispatch(closeBoundaryLoading());
+        }
       })
-      .catch((error) => {});
+      .catch((error) => {
+        console.log(error, 'Printing the error over here');
+      });
   };
 };
 
