@@ -5,6 +5,7 @@ import { syncError } from './notifications';
 import { tokenExpired, logoutUser } from './index';
 
 export const checkStatus = (response) => {
+  console.log(response.status);
   if (response.status >= 200 && response.status < 300) {
     return response.json();
   } else if (response.status === 401) {
@@ -15,9 +16,9 @@ export const checkStatus = (response) => {
     return null;
   }
 
-  const error = new Error(response.statusText);
-  error.response = response;
-  throw error;
+  // const error = new Error(response.statusText);
+  // error.response = response;
+  // throw error;
 };
 
 export const checkStatusNoJSON = (response) => {
@@ -72,6 +73,7 @@ export const post = (url, body) => {
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Token ${user.token}`,
+      Origin: 'http://tada.dev.ilp.org.in',
     },
     body: JSON.stringify(body),
   })
@@ -85,10 +87,11 @@ export const post = (url, body) => {
 export const patch = (url, body) => {
   const user = JSON.parse(sessionStorage.getItem('user'));
   return fetch(url, {
-    method: 'PUT',
+    method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Token ${user.token}`,
+      Origin: 'http://tada.dev.ilp.org.in',
     },
     body: JSON.stringify(body),
   })
@@ -107,6 +110,7 @@ export const put = (url, body) => {
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Token ${user.token}`,
+      Origin: 'http://tada.dev.ilp.org.in',
     },
     body: JSON.stringify(body),
   })
