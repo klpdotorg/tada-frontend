@@ -743,6 +743,8 @@ table.table-fixedwidth td, .table-fixedwidth th {
 
 .answer-table {
   border: 1px solid #c7c0c0;
+  width: 100%;
+  overflow-x: scroll;
 }
 
 .loading-cont {
@@ -812,4 +814,7 @@ table.table-fixedwidth td, .table-fixedwidth th {
 }
 .permission-actions .assessment-button {
   float: right;
+}
+.answer-field {
+  min-width: 70px;
 }
