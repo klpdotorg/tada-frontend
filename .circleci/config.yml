@@ -16,7 +16,7 @@ jobs:
       - checkout
       - run:
           name: Install pip
-          command: 'sudo apt-get install pip'
+          command: 'sudo apt-get update && sudo apt-get install python-pip'
       - run:
           name: Install awscli
           command: 'sudo pip install awscli'
