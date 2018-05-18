@@ -10,10 +10,13 @@ jobs:
   deploy:
     docker:
       # Python image required for AWS client
-      - image: 2.7.15-stretch-node-browsers
+      - image: 2.7-stretch
     working_directory: ~/
     steps:
       - checkout
+      - run:
+          name: Install pip
+          command: 'sudo apt-get install pip'
       - run:
           name: Install awscli
           command: 'sudo pip install awscli'
