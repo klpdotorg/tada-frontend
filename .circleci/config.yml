@@ -10,7 +10,7 @@ jobs:
   deploy:
     docker:
       # Python image required for AWS client
-      - image: 2.7-stretch
+      - image: circleci/python:2.7
     working_directory: ~/
     steps:
       - checkout
