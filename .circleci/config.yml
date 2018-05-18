@@ -1,5 +1,12 @@
 version: 2
 jobs:
+  build:
+    docker:
+      - image: circleci/node:7.10
+    working_directory: ~/
+    steps:
+      - checkout
+
   deploy:
     docker:
       # Python image required for AWS client
@@ -12,12 +19,13 @@ jobs:
           command: 'sudo pip install awscli'
       - run:
           name: Deploy using CodeDeploy
-          command: aws deploy create-deployment \
-          --application-name tadadev \
-          --deployment-config-name CodeDeployDefault.OneAtATime \
-          --deployment-group-name tadadev-group \
-          --description "TADA GitHub deployment" \
-          --github-location repository=klpdotorg/tada-frontend,commitId=${CIRCLE_SHA1}
+          command: |
+            aws deploy create-deployment \
+            --application-name tadadev \
+            --deployment-config-name CodeDeployDefault.OneAtATime \
+            --deployment-group-name tadadev-group \
+            --description 'TADA GitHub deployment' \
+            --github-location repository=klpdotorg/tada-frontend,commitId=${CIRCLE_SHA1}
 
 workflows:
   version: 2
