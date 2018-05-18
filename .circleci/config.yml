@@ -17,7 +17,7 @@ jobs:
           --deployment-config-name CodeDeployDefault.OneAtATime \
           --deployment-group-name tadadev-group \
           --description "TADA GitHub deployment" \
-          --github-location repository=klpdotorg/tada-frontend,commitId={CIRCLE_SHA1}
+          --github-location repository=klpdotorg/tada-frontend,commitId=${CIRCLE_SHA1}
 
 workflows:
   version: 2
