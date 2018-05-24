@@ -144,7 +144,7 @@ const mapStateToProps = (state, ownProps) => {
 
   return {
     block,
-    canDelete: !isAdmin && hasChildren(blockNodeId, boundaries),
+    canDelete: isAdmin && hasChildren(blockNodeId, boundaries),
     openConfirmModal: state.appstate.confirmModal,
     canSubmit: state.appstate.enableSubmitForm,
     hasPermissions,

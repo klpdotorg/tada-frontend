@@ -239,11 +239,12 @@ EditPreschoolForm.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
+  const { isAdmin } = state.profile;
   const { institutionNodeId } = ownProps;
   const { boundaries } = state;
 
   return {
-    canDelete: hasChildren(institutionNodeId, boundaries),
+    canDelete: isAdmin && hasChildren(institutionNodeId, boundaries),
     openConfirmModal: state.appstate.confirmModal,
     institution: get(boundaries.boundaryDetails, institutionNodeId, {}),
     canSubmit: state.appstate.enableSubmitForm,

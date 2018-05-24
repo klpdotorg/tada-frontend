@@ -33,4 +33,4 @@ const Logout = () => {
   );
 };
 
-module.exports = Logout;
+export default Logout;

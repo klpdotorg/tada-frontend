@@ -154,7 +154,7 @@ const mapStateToProps = (state, ownProps) => {
   const studentGroup = get(state.boundaries.boundaryDetails, studentGroupNodeId, {});
 
   return {
-    canDelete: !isAdmin && hasChildren(studentGroupNodeId, boundaries),
+    canDelete: isAdmin && hasChildren(studentGroupNodeId, boundaries),
     openConfirmModal: state.appstate.confirmModal,
     studentGroup,
     canSubmit: state.appstate.enableSubmitForm,

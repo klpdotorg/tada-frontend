@@ -23,7 +23,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     canSubmit: state.appstate.enableSubmitForm,
     boundary,
-    canDelete: !isAdmin && hasChildren(districtNodeId, boundaries),
+    canDelete: isAdmin && hasChildren(districtNodeId, boundaries),
     confirmModal: state.appstate.confirmModal,
     primary: state.schoolSelection.primarySchool,
     hasPermissions,

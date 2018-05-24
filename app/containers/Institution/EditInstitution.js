@@ -268,7 +268,7 @@ const mapStateToProps = (state, ownProps) => {
   const institution = get(boundaries.boundaryDetails, institutionNodeId, {});
 
   return {
-    canDelete: !isAdmin && hasChildren(institutionNodeId, boundaries),
+    canDelete: isAdmin && hasChildren(institutionNodeId, boundaries),
     openConfirmModal: state.appstate.confirmModal,
     institution,
     canSubmit: state.appstate.enableSubmitForm,

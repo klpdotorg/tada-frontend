@@ -143,7 +143,7 @@ const mapStateToProps = (state, ownProps) => {
   const hasPermissions = checkPermissions(isAdmin, state.userPermissions, cluster.id);
 
   return {
-    canDelete: !isAdmin && hasChildren(clusterNodeId, boundaries),
+    canDelete: isAdmin && hasChildren(clusterNodeId, boundaries),
     openConfirmModal: state.appstate.confirmModal,
     canSubmit: state.appstate.enableSubmitForm,
     cluster,

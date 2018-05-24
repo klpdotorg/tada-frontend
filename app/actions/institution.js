@@ -1,7 +1,7 @@
 import { push } from 'react-router-redux';
 
 import { SERVER_API_BASE as serverApiBase } from 'config';
-import { get, post, deleteRequest, put } from './requests';
+import { get, post, deleteRequest, patch } from './requests';
 import { getPath, getEntityDepth, convertEntitiesToObject, getEntityType } from '../utils';
 import {
   SET_INSTITUTION_CATS,
@@ -122,7 +122,7 @@ export const modifyInstitution = (id, options) => {
     const boundaryType = getState().schoolSelection.primarySchool ? 'primary' : 'pre';
     const newOptions = { ...options, institution_type: boundaryType };
 
-    put(`${serverApiBase}institutions/${id}/`, newOptions).then((response) => {
+    patch(`${serverApiBase}institutions/${id}/`, newOptions).then((response) => {
       const entities = convertEntitiesToObject([response]);
 
       dispatch({
