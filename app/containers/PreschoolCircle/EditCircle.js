@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import FRC from 'formsy-react-components';
 import Formsy from 'formsy-react';
-import { get } from 'lodash';
+import get from 'lodash.get';
 
 import {
   modifyBoundary,

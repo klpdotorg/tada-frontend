@@ -1,5 +1,5 @@
 import { SERVER_API_BASE as serverApiBase } from 'config';
-import _ from 'lodash';
+import map from 'lodash.map';
 
 import { SUGGESTION_RESULTS } from '../actions/types';
 import { capitalize } from '../utils';
@@ -14,7 +14,7 @@ export const setSuggestionResults = (results) => {
 };
 
 export const filterSearchData = (data) => {
-  const institutions = _.map(data.institutions, (item) => {
+  const institutions = map(data.institutions, (item) => {
     return {
       label: `${'Institution'} - ${item.id} - ${capitalize(item.name)}`,
       value: item.id,
@@ -23,7 +23,7 @@ export const filterSearchData = (data) => {
     };
   });
 
-  const students = _.map(data.students, (item) => {
+  const students = map(data.students, (item) => {
     const name = capitalize(`${item.first_name} ${item.last_name}`);
 
     return {

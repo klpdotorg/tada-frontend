@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { get } from 'lodash';
+import get from 'lodash.get';
 
 import { StudentView } from '../../components/ViewStudents';
 import { selectStudent, openEditStudentModal, deleteStudent } from '../../actions';

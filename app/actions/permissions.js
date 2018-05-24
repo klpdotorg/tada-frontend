@@ -10,7 +10,7 @@ import {
   UNSELECT_PERMISSIONS_USER,
   SET_USER_PERMISSIONS,
 } from './types';
-import { get } from './requests';
+import { get, post } from './requests';
 
 export const openPermissionBoundary = (id, depth) => {
   return (dispatch, getState) => {
@@ -77,6 +77,40 @@ export const fetchUserPermissions = () => {
         type: SET_USER_PERMISSIONS,
         value: res,
       });
+    });
+  };
+};
+
+export const submitBoundaryPermissions = () => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const { selectedBoundaries, selectedUsers } = state.permissions;
+    const promises = selectedUsers.map((user) => {
+      const url = `${SERVER_API_BASE}users/${user}/permissions/`;
+      return post(url, {
+        boundary_id: selectedBoundaries,
+      });
+    });
+
+    Promise.all(promises).then((response) => {
+      console.log(response);
+    });
+  };
+};
+
+export const submitAssessmentPermissions = () => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const { selectedAssessments, selectedUsers } = state.permissions;
+    const promises = selectedUsers.map((user) => {
+      const url = `${SERVER_API_BASE}users/${user}/permissions/`;
+      return post(url, {
+        assessment_id: selectedAssessments,
+      });
+    });
+
+    Promise.all(promises).then((response) => {
+      console.log(response);
     });
   };
 };

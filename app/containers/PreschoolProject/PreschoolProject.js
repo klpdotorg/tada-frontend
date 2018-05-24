@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { isEmpty } from 'lodash';
+import isEmpty from 'lodash.isempty';
 
 import { DEFAULT_PARENT_NODE_ID } from 'config';
 import { PreschoolProjectView } from '../../components/PreschoolProject';
@@ -52,4 +52,4 @@ const mapStateToProps = (state, ownProps) => {
 
 const PreschoolProject = connect(mapStateToProps, { getBoundariesEntities })(FetchProjectEntity);
 
-export { PreschoolProject };
+export default PreschoolProject;

@@ -1,6 +1,8 @@
-import { checkStatus } from '../actions/utils';
+import mapValues from 'lodash.mapvalues';
+import get from 'lodash.get';
 import { SERVER_API_BASE as serverApiBase } from 'config';
-import { mapValues, get } from 'lodash';
+
+import { checkStatus } from '../actions/utils';
 
 export const getManagement = () => {
   return fetch(`${serverApiBase}institutionmanagements/`, {
@@ -42,7 +44,9 @@ export const getInstitutionCategories = () => {
 };
 
 export const replaceNull = (obj) => {
-  return mapValues(obj, (val) => { return (val || ''); });
+  return mapValues(obj, (val) => {
+    return val || '';
+  });
 };
 
 export const displayFullName = (person) => {
@@ -59,7 +63,9 @@ export const userHasPermissions = (permissions, institutionId) => {
   if (
     institutions.indexOf(parseInt(institutionId, 10)) > -1 ||
     boundaries.indexOf(parseInt(institutionId, 10)) > -1
-  ) { hasPermissions = true; }
+  ) {
+    hasPermissions = true;
+  }
   return hasPermissions;
 };
 

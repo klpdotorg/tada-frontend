@@ -1,23 +1,24 @@
 import React from 'react';
 
-const Dashboard = () =>
-  <div>
-    <div className="col-sm-offset-2 col-sm-10">
-      <h3> Welcome back! </h3>
-      <button type="submit" className="btn btn-primary">
-        Take me back!
-      </button>
-      <p>
-        {"Here is yesterday's summary: "}
-      </p>
-      <ul>
-        <li> Number of schools created or modified: </li>
-        <li> Number of Preschools created or modified: </li>
-        <li> Number of students created or modified: </li>
-        <li> Number of assessment entries made: </li>
-      </ul>
-      <p> Thank you for all the effort! </p>
+const Dashboard = () => {
+  return (
+    <div>
+      <div className="col-sm-offset-2 col-sm-10">
+        <h3> Welcome back! </h3>
+        <button type="submit" className="btn btn-primary">
+          Take me back!
+        </button>
+        <p>Here is yesterday's summary: </p>
+        <ul>
+          <li> Number of schools created or modified: </li>
+          <li> Number of Preschools created or modified: </li>
+          <li> Number of students created or modified: </li>
+          <li> Number of assessment entries made: </li>
+        </ul>
+        <p> Thank you for all the effort! </p>
+      </div>
     </div>
-  </div>;
+  );
+};
 
-export { Dashboard };
+export default Dashboard;

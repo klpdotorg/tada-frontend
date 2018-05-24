@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { capitalize, includes, isEqual } from 'lodash';
+import capitalize from 'lodash.capitalize';
+import includes from 'lodash.includes';
+import isEqual from 'lodash.isequal';
 
 import { Loading } from '../common';
 

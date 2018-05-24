@@ -3,10 +3,10 @@
 */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { asyncContainer, Typeahead } from 'react-bootstrap-typeahead';
+// import { asyncContainer, Typeahead } from 'react-bootstrap-typeahead';
 import { CreateDistrict } from '../../containers/Header';
 
-const AsyncTypeahead = asyncContainer(Typeahead);
+// const AsyncTypeahead = asyncContainer(Typeahead);
 
 const SecondaryNavBar = (props) => {
   const {
@@ -119,12 +119,12 @@ const SecondaryNavBar = (props) => {
       </button>
       <form className="navbar-form navbar-left" role="search" onSubmit={handleSubmit}>
         <div className="form-group">
-          <AsyncTypeahead
+          {/* <AsyncTypeahead
             placeholder="Start typing KLP ID"
             onSearch={onSearch}
             onChange={handleSubmit}
             options={suggestionResults}
-          />
+          /> */}
         </div>
       </form>
       {displayelement}

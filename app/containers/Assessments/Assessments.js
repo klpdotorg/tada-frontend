@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { map, isEmpty } from 'lodash';
+import map from 'lodash.map';
+import isEmpty from 'lodash.isempty';
 
 import { AssessmentTable } from '../../components/Assessments';
 import {

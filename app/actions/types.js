@@ -118,3 +118,7 @@ export const SET_ANSWER_GROUPS = 'set_answer_groups';
 export const SET_ANSWERS = 'set_answers';
 export const FETCHING_ANSWERS = 'fetching_answers';
 export const SET_USER_PERMISSIONS = 'set_user_permissions';
+export const ON_CHANGE_ANSWER = 'on_change_answer';
+export const SET_ASSESSMENT_ENTRY_STUDENTS = 'set_assessment_entry_students';
+export const ON_CHANGE_GROUP_VALUE = 'on_change_group_value';
+export const ON_CHANGE_DATE_OF_VISITS = 'on_change_date_of_visits';

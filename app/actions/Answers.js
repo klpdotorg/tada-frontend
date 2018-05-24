@@ -1,8 +1,32 @@
 import { SERVER_API_BASE } from 'config';
 
-import { map } from 'lodash';
+import getObject from 'lodash.get';
+import map from 'lodash.map';
 import { post, get } from './requests';
-import { SET_ANSWERS, FETCHING_ANSWERS } from './types';
+import { SET_ANSWERS, FETCHING_ANSWERS, ON_CHANGE_ANSWER } from './types';
+
+export const onChangeAnswer = (answergroupId, answerId, value) => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const answergroup = getObject(state.answers.answers, [answergroupId], []);
+    const answers = answergroup.map((answer) => {
+      if (answer.id === answerId) {
+        return {
+          ...answer,
+          answer: value,
+        };
+      }
+      return answer;
+    });
+
+    dispatch({
+      type: ON_CHANGE_ANSWER,
+      value: {
+        [answergroupId]: answers,
+      },
+    });
+  };
+};
 
 export const createAnswergroup = (url, body) => {
   return post(url, body);

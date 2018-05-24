@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { get } from 'lodash';
+import get from 'lodash.get';
 import Formsy from 'formsy-react';
-import moment from 'moment';
 import FRC from 'formsy-react-components';
 import { saveAssessment, enableSubmitForm, disableSubmitForm } from '../../actions';
 
 import { Modal } from '../../components/Modal';
+import { dateFormat } from '../../utils';
 
 const { Input, RadioGroup, Checkbox } = FRC;
 
@@ -19,14 +19,13 @@ class EditAssessmentForm extends Component {
   }
 
   setStartDate() {
-    const formatteddate = moment().format('YYYY-MM-DD');
+    const formatteddate = dateFormat(new Date());
     return formatteddate;
   }
 
   setEndDate() {
-    return moment()
-      .add(1, 'years')
-      .format('YYYY-MM-DD');
+    const date = new Date();
+    return dateFormat(date.setFullYear(date.getFullYear + 1));
   }
 
   submitForm() {

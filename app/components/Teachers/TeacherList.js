@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Loading, Message } from '../common';
-import { Teacher } from '../../containers/Teachers';
+// import { Teacher } from '../../containers/Teachers';
 
 const TeacherList = ({ teacherIds, showAddTeacherPopup, loading, hasPermissions }) => {
   if (loading) {
@@ -46,7 +46,7 @@ const TeacherList = ({ teacherIds, showAddTeacherPopup, loading, hasPermissions 
           </thead>
           <tbody>
             {teacherIds.map((id) => {
-              return <Teacher id={id} key={id} hasPermissions={hasPermissions} />;
+              return <div />; // <Teacher id={id} key={id} hasPermissions={hasPermissions} />;
             })}
           </tbody>
         </table>

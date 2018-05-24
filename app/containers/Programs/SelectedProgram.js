@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import { get, isEmpty } from 'lodash';
+import get from 'lodash.get';
+import isEmpty from 'lodash.isempty';
 
 import { ViewSelectedProgram } from '../../components/Programs';
 import {

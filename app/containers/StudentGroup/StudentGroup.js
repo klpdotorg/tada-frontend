@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { get, isEmpty } from 'lodash';
+import get from 'lodash.get';
+import isEmpty from 'lodash.isempty';
 
 import { DEFAULT_PARENT_NODE_ID } from 'config';
-import { userHasPermissions } from '../../components/utils';
 import { StudentGroupView } from '../../components/StudentGroup';
 import { getBoundariesEntities, openViewStudents, openAddStudents } from '../../actions';
 import { checkPermissions } from '../../utils';
@@ -118,4 +118,4 @@ const mapDispatchToProps = (dispatch) => {
 
 const StudentGroup = connect(mapStateToProps, mapDispatchToProps)(FetchStudentGroupEntity);
 
-export { StudentGroup };
+export default StudentGroup;

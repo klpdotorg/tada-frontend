@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import _ from 'lodash';
+import map from 'lodash.map';
+import includes from 'lodash.includes';
+import isEmpty from 'lodash.isempty';
+import get from 'lodash.get';
+import uniq from 'lodash.uniq';
 
 import { EditStudentInputRow } from './index';
 import { setEditStudentsFormErrors, editStudents, goBack, setEditStudents } from '../../actions';
@@ -37,8 +41,8 @@ class EditStudentsFormView extends Component {
   setRequiredField(field) {
     let required = '';
 
-    _.map(REQUIRED_FIELDS, (requiredField) => {
-      if (_.includes(requiredField.value, field)) {
+    map(REQUIRED_FIELDS, (requiredField) => {
+      if (includes(requiredField.value, field)) {
         required = '*';
       }
     });
@@ -50,7 +54,7 @@ class EditStudentsFormView extends Component {
     const { values, studentGroupId, studentGroupNodeId, institutionId, depth } = this.props;
 
     const errorList = [];
-    _.values(values).forEach((value) => {
+    Object.values(values).forEach((value) => {
       REQUIRED_FIELDS.forEach((requiredField) => {
         if (!value[requiredField.value]) {
           errorList.push(requiredField.label);
@@ -59,7 +63,7 @@ class EditStudentsFormView extends Component {
     });
 
     this.props.setEditStudentsFormErrors(errorList);
-    if (_.isEmpty(errorList)) {
+    if (isEmpty(errorList)) {
       this.props.editStudents(studentGroupNodeId, studentGroupId, institutionId, depth);
     }
   }
@@ -74,7 +78,7 @@ class EditStudentsFormView extends Component {
     return (
       <div className="alert alert-danger">
         <strong>Error:</strong>
-        {` Please enter ${_.uniq(formErrors).join(', ')} fields value before submitting the form.`}
+        {` Please enter ${uniq(formErrors).join(', ')} fields value before submitting the form.`}
       </div>
     );
   }
@@ -163,7 +167,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     formErrors: state.editStudents.formErrors,
     values: state.editStudents.values,
-    path: _.get(state.boundaries.boundaryDetails, `[${ownProps.studentGroupNodeId}].path`),
+    path: get(state.boundaries.boundaryDetails, `[${ownProps.studentGroupNodeId}].path`),
   };
 };
 

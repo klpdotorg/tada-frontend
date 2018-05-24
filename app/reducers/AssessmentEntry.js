@@ -9,6 +9,9 @@ import {
   CHANGE_ASSESSMENT_ENTRY_ANSWERS,
   SHOW_ANSWERS_LOADING,
   HIDE_ANSWERS_LOADING,
+  SET_ASSESSMENT_ENTRY_STUDENTS,
+  ON_CHANGE_GROUP_VALUE,
+  ON_CHANGE_DATE_OF_VISITS,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -17,10 +20,34 @@ const INITIAL_STATE = {
   boundaryIds: [],
   loading: false,
   answersLoading: false,
+  students: [],
+  groupValues: {},
+  dateOfVisits: {},
 };
 
 const AssessmentEntry = (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case ON_CHANGE_DATE_OF_VISITS:
+      return {
+        ...state,
+        dateOfVisits: {
+          ...state.dateOfVisits,
+          ...action.value,
+        },
+      };
+    case ON_CHANGE_GROUP_VALUE:
+      return {
+        ...state,
+        groupValues: {
+          ...state.groupValues,
+          ...action.value,
+        },
+      };
+    case SET_ASSESSMENT_ENTRY_STUDENTS:
+      return {
+        ...state,
+        students: action.value,
+      };
     case SHOW_ANSWERS_LOADING:
       return {
         ...state,

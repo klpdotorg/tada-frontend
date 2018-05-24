@@ -1,5 +1,9 @@
-import _ from 'lodash';
-import moment from 'moment';
+import get from 'lodash.get';
+import isEmpty from 'lodash.isempty';
+import includes from 'lodash.includes';
+import forEach from 'lodash.foreach';
+import range from 'lodash.range';
+
 import { DEFAULT_PARENT_ID } from 'config';
 import { getBoundaryType } from './reducers/utils';
 
@@ -39,9 +43,9 @@ export const hasChildren = (entityId, boundaries) => {
   const { boundaryDetails, boundariesByParentId } = boundaries;
   const boundary = boundaryDetails[entityId];
   const depth = getEntityDepth(boundary);
-  const hasChilds = _.get(boundariesByParentId, depth, []);
+  const hasChilds = get(boundariesByParentId, depth, []);
 
-  return _.isEmpty(hasChilds);
+  return isEmpty(hasChilds);
 };
 
 export const getEntityType = (boundary) => {
@@ -80,10 +84,17 @@ export const getEntityType = (boundary) => {
   }
 };
 
+export const capitalize = (string) => {
+  if (string) {
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+  }
+  return null;
+};
+
 export const alphabeticalOrder = (obj, details) => {
   return obj[`${DEFAULT_PARENT_ID}state`].sort((a, b) => {
-    const aName = _.capitalize(details[a].name);
-    const bName = _.capitalize(details[b].name);
+    const aName = capitalize(details[a].name);
+    const bName = capitalize(details[b].name);
     return aName < bName ? -1 : aName > bName ? 1 : 0;
   });
 };
@@ -98,11 +109,8 @@ export const toggleSet = (set, val) => {
   return set;
 };
 
-export const capitalize = (string) => {
-  if (string) {
-    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
-  }
-  return null;
+export const dateFormat = (date) => {
+  return new Date(date).toISOString().slice(0, 10);
 };
 
 export const getNodeId = (id) => {
@@ -110,7 +118,7 @@ export const getNodeId = (id) => {
 };
 
 export const dateParser = (date) => {
-  return moment(date).format('DD-MM-YYYY');
+  return dateFormat(date);
 };
 
 export const convertArrayToObject = (entities) => {
@@ -131,17 +139,29 @@ export const convertEntitiesToObject = (entities) => {
   }, {});
 };
 
-export const getPath = (state, uniqueId, depth) => {
-  let path = '';
-  const { uncollapsedEntities, boundaryDetails } = state.boundaries;
+export const getPath = (state, uniqueId, depth, boundaryType) => {
+  let boundaries = {};
+  let uncollapsedBoundaries = {};
 
-  if (_.includes(uniqueId, 'state')) {
+  if (boundaryType === 'program') {
+    const { programDetails, uncollapsedEntities } = state.programDetails;
+    boundaries = programDetails;
+    uncollapsedBoundaries = uncollapsedEntities;
+  } else {
+    const { boundaryDetails, uncollapsedEntities } = state.boundaries;
+    boundaries = boundaryDetails;
+    uncollapsedBoundaries = uncollapsedEntities;
+  }
+
+  let path = '';
+
+  if (includes(uniqueId, 'state')) {
     return '/';
   }
 
-  _.forEach(uncollapsedEntities, (id, entityDepth) => {
+  forEach(uncollapsedBoundaries, (id, entityDepth) => {
     if (Number(entityDepth) < depth) {
-      const entity = boundaryDetails[id];
+      const entity = boundaries[id];
       const entityType = getEntityType(entity);
       path += `/${entityType}/${id}`;
     }
@@ -154,7 +174,7 @@ export const getPath = (state, uniqueId, depth) => {
   }
 
   if (typeof uniqueId === 'string' && !path.includes(uniqueId)) {
-    const openEntity = boundaryDetails[uniqueId];
+    const openEntity = boundaries[uniqueId];
     const type = getEntityType(openEntity);
     path += `/${type}/${uniqueId}`;
   }
@@ -186,7 +206,7 @@ export const getPath = (state, uniqueId, depth) => {
 // };
 
 const add = (a, b) => {
-  return _.range(a, b);
+  return range(a, b);
 };
 
 const last = (size) => {

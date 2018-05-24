@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import _ from 'lodash';
+import includes from 'lodash.includes';
+import startCase from 'lodash.startcase';
 import PropTypes from 'prop-types';
 
 import { lastVerifiedYears } from '../../Data';
@@ -34,7 +35,7 @@ class StudentInputRow extends Component {
     const { formErrors, index, languages, hasPermissions } = this.props;
 
     return (
-      <tr className={_.includes(formErrors, index) ? 'bg-danger' : ''}>
+      <tr className={includes(formErrors, index) ? 'bg-danger' : ''}>
         <td>
           <input
             value={this.state.first_name}
@@ -107,7 +108,7 @@ class StudentInputRow extends Component {
             {languages.map((lang, i) => {
               return (
                 <option key={i} value={lang.value}>
-                  {_.startCase(lang.label)}
+                  {startCase(lang.label)}
                 </option>
               );
             })}
@@ -126,7 +127,7 @@ class StudentInputRow extends Component {
             {lastVerifiedYears.map((year, i) => {
               return (
                 <option key={i} value={year.value}>
-                  {_.startCase(year.label)}
+                  {startCase(year.label)}
                 </option>
               );
             })}

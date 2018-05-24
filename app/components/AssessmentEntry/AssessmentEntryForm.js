@@ -2,28 +2,50 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Loading } from '../common';
-import { AssessmentEntryColHeader, AssessmentEntryRow } from '../../containers/AssessmentEntry';
+import {
+  AssessmentEntryColHeader,
+  AssessmentEntryRow,
+  CreateEntryForm,
+} from '../../containers/AssessmentEntry';
 
-const AssessmentEntryFormView = ({ loading, rows, params, uniqueId }) => {
+const RenderForm = (props) => {
+  const { loading, params, uniqueId, rows } = props;
+  let element = '';
+  if (loading) {
+    return <tbody />;
+  }
+
+  // if (!rows.length) {
+  return <CreateEntryForm assessmentId={params.questionGroupId} uniqueId={uniqueId} />;
+  // } else {
+  //   element = rows.map((rowId) => {
+  //     return (
+  //       <AssessmentEntryRow
+  //         rowId={rowId}
+  //         key={rowId}
+  //         assessmentId={params.questionGroupId}
+  //         uniqueId={uniqueId}
+  //       />
+  //     );
+  //   });
+  // }
+
+  // return (
+  //   <tbody>
+  //     {element}
+  //   </tbody>
+  // );
+};
+
+const AssessmentEntryFormView = (props) => {
+  const { loading } = props;
   return (
     <div className="answer-table">
       <table className="table table-striped">
         <thead>
           <AssessmentEntryColHeader />
         </thead>
-        <tbody>
-          {!loading &&
-            rows.map((rowId) => {
-              return (
-                <AssessmentEntryRow
-                  rowId={rowId}
-                  key={rowId}
-                  assessmentId={params.questionGroupId}
-                  uniqueId={uniqueId}
-                />
-              );
-            })}
-        </tbody>
+        <RenderForm {...props} />
       </table>
       {loading ? (
         <div style={{ textAlign: 'center', paddingBottom: 10 }}>
@@ -37,6 +59,10 @@ const AssessmentEntryFormView = ({ loading, rows, params, uniqueId }) => {
 };
 
 AssessmentEntryFormView.propTypes = {
+  loading: PropTypes.bool,
+};
+
+RenderForm.propTypes = {
   loading: PropTypes.bool,
   rows: PropTypes.array,
   params: PropTypes.object,

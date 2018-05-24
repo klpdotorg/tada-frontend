@@ -1,6 +1,7 @@
 import Notifications from 'react-notification-system-redux';
 import { SERVER_API_BASE } from 'config';
-import { isEmpty } from 'lodash';
+import isEmpty from 'lodash.isempty';
+
 import { TOGGLE_MODAL, SET_USER_PROFILE } from './types';
 import { baseNotification, setDataInLocalStorage, getDataFromLocalstorage } from './index';
 import { put } from './requests';

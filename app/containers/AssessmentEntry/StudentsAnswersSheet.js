@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { get, isEmpty } from 'lodash';
+import get from 'lodash.get';
+import isEmpty from 'lodash.isempty';
 
 import { AssessmentEntryFormView } from '../../components/AssessmentEntry';
 import { fetchAnswers } from '../../actions';

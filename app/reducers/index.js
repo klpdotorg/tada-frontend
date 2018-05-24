@@ -1,4 +1,3 @@
-export * from './tada';
 export * from './Users';
 export * from './programs';
 export * from './assessments';

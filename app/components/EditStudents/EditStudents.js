@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
-import { isEmpty } from 'lodash';
+import isEmpty from 'lodash.isempty';
 
 import { EditStudentsForm } from '../../containers/EditStudents';
 import { Loading } from '../common';

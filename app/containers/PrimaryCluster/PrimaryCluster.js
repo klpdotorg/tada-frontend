@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { get, isEmpty } from 'lodash';
+import get from 'lodash.get';
+import isEmpty from 'lodash.isempty';
 
 import { DEFAULT_PARENT_NODE_ID } from 'config';
 import {
@@ -68,4 +69,4 @@ const PrimaryCluster = connect(mapStateToProps, {
   getManagements,
 })(FetchClusterEntity);
 
-export { PrimaryCluster };
+export default PrimaryCluster;

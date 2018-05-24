@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { get, pickBy } from 'lodash';
+import get from 'lodash.get';
+import pickBy from 'lodash.pickby';
 import PropTypes from 'prop-types';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';

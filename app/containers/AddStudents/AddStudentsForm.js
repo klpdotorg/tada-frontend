@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import _ from 'lodash';
+import map from 'lodash.map';
+import isEmpty from 'lodash.isempty';
+import uniq from 'lodash.uniq';
+import includes from 'lodash.includes';
+import get from 'lodash.get';
 
 import { AddStudentInputRow } from './index';
 import { goBack, setAddStudentsFormErrors, addStudents } from '../../actions';
@@ -33,8 +37,8 @@ class AddStudentsFormView extends Component {
   setRequiredField(field) {
     let required = '';
 
-    _.map(REQUIRED_FIELDS, (requiredField) => {
-      if (_.includes(requiredField.value, field)) {
+    map(REQUIRED_FIELDS, (requiredField) => {
+      if (includes(requiredField.value, field)) {
         required = '*';
       }
     });
@@ -46,7 +50,7 @@ class AddStudentsFormView extends Component {
     const { values, studentGroupId, studentGroupNodeId, institutionId, depth } = this.props;
 
     const errorList = [];
-    _.values(values).forEach((value) => {
+    Object.values(values).forEach((value) => {
       REQUIRED_FIELDS.forEach((requiredField) => {
         if (!value[requiredField.value]) {
           errorList.push(requiredField.label);
@@ -55,7 +59,7 @@ class AddStudentsFormView extends Component {
     });
 
     this.props.setAddStudentsFormErrors(errorList);
-    if (_.isEmpty(errorList)) {
+    if (isEmpty(errorList)) {
       this.props.addStudents(studentGroupNodeId, studentGroupId, institutionId, depth);
     }
   }
@@ -70,7 +74,7 @@ class AddStudentsFormView extends Component {
     return (
       <div className="alert alert-danger">
         <strong>Error:</strong>
-        {` Please enter ${_.uniq(formErrors).join(', ')} fields value before submitting the form.`}
+        {` Please enter ${uniq(formErrors).join(', ')} fields value before submitting the form.`}
       </div>
     );
   }
@@ -146,7 +150,7 @@ const mapStateToProps = (state, ownProps) => {
     formErrors: state.addStudents.formErrors,
     rows: state.addStudents.rows,
     values: state.addStudents.values,
-    path: _.get(state.boundaries.boundaryDetails, `[${ownProps.studentGroupNodeId}].path`),
+    path: get(state.boundaries.boundaryDetails, `[${ownProps.studentGroupNodeId}].path`),
   };
 };
 

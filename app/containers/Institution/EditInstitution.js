@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
-import { get } from 'lodash';
+import get from 'lodash.get';
 
 import {
   deleteInstitution,

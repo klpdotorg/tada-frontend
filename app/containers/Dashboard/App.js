@@ -52,4 +52,4 @@ const App = connect(mapStateToProps, {
   fetchPermissions: fetchUserPermissions,
 })(TadaContentContainer);
 
-export { App };
+export default App;

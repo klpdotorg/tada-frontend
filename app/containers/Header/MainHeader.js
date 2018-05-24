@@ -5,7 +5,7 @@ import { logoutUser, openChangeUserInfoModal, openChangePasswordModal } from '..
 
 class Header extends Component {
   componentDidMount() {
-    $('.dropdown-toggle').dropdown();
+    // $('.dropdown-toggle').dropdown();
   }
 
   render() {

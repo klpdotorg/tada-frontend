@@ -1,5 +1,4 @@
 import { SERVER_API_BASE } from 'config';
-import _ from 'lodash';
 import { push } from 'react-router-redux';
 
 import {
@@ -68,7 +67,7 @@ export const editStudents = (groupNodeId, groupId, institutionId, depth) => {
   return (dispatch, getState) => {
     const state = getState();
     const { values } = state.editStudents;
-    const newValues = _.values(values);
+    const newValues = Object.values(values);
 
     dispatch(showBoundaryLoading());
 

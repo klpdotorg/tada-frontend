@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import { get, flatten } from 'lodash';
+import get from 'lodash.get';
+import flatten from 'lodash.flatten';
 import { ShowClassesView } from '../../components/MapAssessments';
 import { selectClassOfMa } from '../../actions';
 

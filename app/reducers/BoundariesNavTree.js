@@ -1,4 +1,4 @@
-import { omit } from 'lodash';
+import omit from 'lodash.omit';
 import {
   SET_BOUNDARIES,
   REMOVE_EXISTING_BOUNDARIES_NODE,

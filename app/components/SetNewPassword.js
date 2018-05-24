@@ -3,8 +3,7 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { confirmResetPassword } from '../actions';
 import { routeActions, push } from 'react-router-redux';
-
-var klplogo = require('../../assets/images/KLP_logo.png');
+import klplogo from '../css/images/KLP_logo.png';
 
 class SetNewPasswordUI extends Component {
   constructor(props) {
@@ -34,9 +33,7 @@ class SetNewPasswordUI extends Component {
   handleSubmit(event) {
     event.preventDefault();
     const new_password = this.refs.pass.value;
-    this.props.dispatch(
-      confirmResetPassword(this.props.params.uid, this.props.params.token, new_password),
-    );
+    this.props.dispatch(confirmResetPassword(this.props.params.uid, this.props.params.token, new_password));
     // const email = this.refs.email.value;
     // this.props.dispatch(resetPassword(email));
   }
@@ -54,7 +51,9 @@ class SetNewPasswordUI extends Component {
             <div id="navbar" className="navbar-collapse collapse">
               <p className="app-name navbar-text pull-left">Data Entry Operations 2015-2016</p>
               <p className="navbar-text pull-right">
-                <Link to="/register" className="btn btn-primary padded-btn">SIGN UP</Link>
+                <Link to="/register" className="btn btn-primary padded-btn">
+                  SIGN UP
+                </Link>
               </p>
             </div>
           </div>
@@ -69,7 +68,9 @@ class SetNewPasswordUI extends Component {
             <div className="col-sm-12 col-md-10 col-md-offset-1">
               <form id="loginForm">
                 <div className="form-group input-group">
-                  <span className="input-group-addon"><label htmlFor="pass">Password:</label></span>
+                  <span className="input-group-addon">
+                    <label htmlFor="pass">Password:</label>
+                  </span>
                   <input
                     id="pass"
                     ref="pass"
@@ -102,7 +103,7 @@ class SetNewPasswordUI extends Component {
             </div>
           </div>
         </div>
-        {/*Pwd reset modal*/}
+        {/* Pwd reset modal */}
         <div
           className="modal fade"
           data-backdrop="false"
@@ -117,19 +118,24 @@ class SetNewPasswordUI extends Component {
                 <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 className="modal-title" id="changeUserNameTitle"> Password Reset</h4>
+                <h4 className="modal-title" id="changeUserNameTitle">
+                  {' '}
+                  Password Reset
+                </h4>
               </div>
               <div className="modal-body">
                 Your password has been reset successfully. Please login with your new password.
               </div>
               <div className="modal-footer">
-                <button type="button" className="btn btn-primary" data-dismiss="modal">OK</button>
+                <button type="button" className="btn btn-primary" data-dismiss="modal">
+                  OK
+                </button>
               </div>
             </div>
           </div>
         </div>
 
-        {/*Pwd reset failed modal*/}
+        {/* Pwd reset failed modal */}
         <div
           className="modal fade"
           data-backdrop="false"
@@ -144,13 +150,18 @@ class SetNewPasswordUI extends Component {
                 <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 className="modal-title" id="changeUserNameTitle"> Password Reset</h4>
+                <h4 className="modal-title" id="changeUserNameTitle">
+                  {' '}
+                  Password Reset
+                </h4>
               </div>
               <div className="modal-body">
                 We couldn't set your new password. Please try again or contact support.
               </div>
               <div className="modal-footer">
-                <button type="button" className="btn btn-primary" data-dismiss="modal">OK</button>
+                <button type="button" className="btn btn-primary" data-dismiss="modal">
+                  OK
+                </button>
               </div>
             </div>
           </div>
@@ -160,10 +171,12 @@ class SetNewPasswordUI extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  pwdResetConfirmed: state.passwordreset.reset_confirmed,
-  pwdResetRejected: state.passwordreset.reset_rejected,
-});
-//This will just connect it to the store
+const mapStateToProps = (state) => {
+  return {
+    pwdResetConfirmed: state.passwordreset.reset_confirmed,
+    pwdResetRejected: state.passwordreset.reset_rejected,
+  };
+};
+// This will just connect it to the store
 const SetNewPassword = connect()(SetNewPasswordUI);
 export default SetNewPassword;

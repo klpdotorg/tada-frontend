@@ -1,5 +1,6 @@
 import { SERVER_API_BASE } from 'config';
-import { flatten, isArray } from 'lodash';
+import flatten from 'lodash.flatten';
+import isArray from 'lodash.isarray';
 
 import { convertArrayToObject } from '../utils';
 import { get } from './requests';

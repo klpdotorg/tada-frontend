@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { get, isEmpty } from 'lodash';
+import get from 'lodash.get';
+import isEmpty from 'lodash.isempty';
 import { connect } from 'react-redux';
 
 import { DEFAULT_PARENT_NODE_ID } from 'config';
@@ -87,4 +88,4 @@ const AddStudents = connect(mapStateToProps, {
   getLanguages,
 })(FetchAddStudentResources);
 
-export { AddStudents };
+export default AddStudents;

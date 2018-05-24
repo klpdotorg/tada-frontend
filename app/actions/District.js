@@ -1,10 +1,10 @@
 import { push } from 'react-router-redux';
+import { SERVER_API_BASE as serverApiBase } from 'config';
 
 import { TOGGLE_MODAL, SET_BOUNDARIES } from './types';
 import { post } from './requests';
 import { toggleModal, openEntity } from './index';
 import { getEntityType, getEntityDepth, convertEntitiesToObject, getPath } from '../utils';
-import { SERVER_API_BASE as serverApiBase } from 'config';
 
 export const toggleProjectModal = () => {
   return {

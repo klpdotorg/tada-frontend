@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { isEmpty } from 'lodash';
+import isEmpty from 'lodash.isempty';
 
 import { DEFAULT_PARENT_NODE_ID } from 'config';
 
@@ -46,4 +46,4 @@ const mapStateToProps = (state, ownProps) => {
 
 const PrimaryDistrict = connect(mapStateToProps, { getBoundariesEntities })(PrimaryDistrictView);
 
-export { PrimaryDistrict };
+export default PrimaryDistrict;

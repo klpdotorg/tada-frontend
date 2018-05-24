@@ -1,5 +1,7 @@
 import { SERVER_API_BASE } from 'config';
-import { pull, omit, remove } from 'lodash';
+import pull from 'lodash.pull';
+import omit from 'lodash.omit';
+import remove from 'lodash.remove';
 
 import { get, patch, deleteRequest } from './requests';
 import {

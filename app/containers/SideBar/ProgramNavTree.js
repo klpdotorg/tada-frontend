@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import TreeView from 'react-treeview';
 import { Link } from 'react-router';
-import { has, map } from 'lodash';
+import has from 'lodash.has';
+import map from 'lodash.map';
+import get from 'lodash.get';
 
 import { capitalize } from '../../utils';
 import { filterBoundaries } from './utils';
@@ -14,6 +16,7 @@ import {
   selectProgramAssessment,
   getPrograms,
   selectProgram,
+  openFilterByProgramEntity,
 } from '../../actions/';
 import { Loading, Message } from '../../components/common';
 
@@ -62,11 +65,17 @@ class NavTree extends Component {
 
     const contain = has(entity, ['assessment']);
     if (contain) {
+      const type = get(entity.assessment, 'assessment-type', '');
       const path = `/filterprograms/questiongroups/${entity.assessment
-        .id}/institutions/${node.uniqueId}`;
+        .id}/${type}s/${node.uniqueId}`;
 
       return (
-        <Link key={node.uniqueId} to={path}>
+        <Link
+          key={node.uniqueId}
+          onClick={() => {
+            this.props.openBoundary(node.uniqueId, newDepth);
+          }}
+        >
           <span>
             {label} ({entity.assessment.name})
           </span>
@@ -181,6 +190,7 @@ const ProgramNavTree = connect(mapStateToProps, {
   selectProgramAssessment,
   getPrograms,
   selectProgram,
+  openBoundary: openFilterByProgramEntity,
 })(NavTree);
 
 export { ProgramNavTree };

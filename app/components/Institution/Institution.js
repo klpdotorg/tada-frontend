@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
-import { isEmpty } from 'lodash';
+import isEmpty from 'lodash.isempty';
 
 import { PermissionMessages, InstitutionActions } from './index';
 import { EditInstitution } from '../../containers/Institution';

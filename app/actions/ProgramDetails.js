@@ -1,5 +1,5 @@
 import { SERVER_API_BASE, DEFAULT_PARENT_ID } from 'config';
-import _ from 'lodash';
+import getObject from 'lodash.get';
 
 import { get } from './requests';
 import {
@@ -8,8 +8,20 @@ import {
   SET_FITLER_PROGRAM_ENTITIES,
   REMOVE_EXISTING_NODE,
 } from './types';
-import { convertEntitiesToObject } from '../utils';
+import { convertEntitiesToObject, getPath } from '../utils';
 import { showBoundaryLoading, closeBoundaryLoading } from './index';
+
+export const openFilterByProgramEntity = (uniqueId, depth) => {
+  return (dispatch, getState) => {
+    const state = getState();
+
+    console.log(uniqueId, depth);
+
+    const path = getPath(state, uniqueId, depth, 'program');
+    console.log(path, 'printing the path of programEntity');
+    // dispatch(push(path));
+  };
+};
 
 export const collapsedProgramEntity = (value) => {
   return (dispatch, getState) => {
@@ -33,7 +45,7 @@ const getUrlForFilterProgram = (entity, surveyId, surveyOn) => {
   const admin1 = `${SERVER_API_BASE}survey/${surveyId}/boundary-associations/?boundary_id=${DEFAULT_PARENT_ID}&boundary_type=admin1`;
   const admin2 = `${SERVER_API_BASE}survey/${surveyId}/boundary-associations/?boundary_id=${entity.id}&boundary_type=admin2`;
   const admin3 = `${SERVER_API_BASE}survey/${surveyId}/boundary-associations/?boundary_id=${entity.id}&boundary_type=admin3`;
-  const institutions = `${SERVER_API_BASE}institutions/?admin3=${entity.id}&survey_id=${surveyId}`;
+  const institutions = `${SERVER_API_BASE}survey/${surveyId}/institution-associations/?boundary_id=${entity.id}`;
   const institutionMapping = `${SERVER_API_BASE}surveys/${surveyId}/questiongroup/mappings/?boundary_id=${entity.id}`;
   const studentgroupMapping = `${SERVER_API_BASE}surveys/${surveyId}/questiongroup/mappings/?institution_id=${entity.id}`;
 
@@ -89,7 +101,7 @@ const fetchAdmins = (entity) => {
   return (dispatch, getState) => {
     const state = getState();
     const { selectedProgram, programs } = state.programs;
-    const programInfo = _.get(programs, selectedProgram);
+    const programInfo = getObject(programs, selectedProgram);
     const url = getUrlForFilterProgram(entity, selectedProgram, programInfo.survey_on);
 
     get(url).then((res) => {
@@ -111,7 +123,7 @@ export const getFilterByProgramEntites = (entity) => {
     dispatch(showBoundaryLoading());
     const { selectedProgram } = state.programs;
     const { uncollapsedEntities } = state.programDetails;
-    const currentNode = _.get(uncollapsedEntities, entity.depth);
+    const currentNode = getObject(uncollapsedEntities, entity.depth);
     const existing = currentNode === entity.uniqueId;
     if (!existing && entity.depth <= 5) {
       dispatch(fetchAdmins(entity, selectedProgram));

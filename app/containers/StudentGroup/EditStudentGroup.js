@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
-import { get } from 'lodash';
+import get from 'lodash.get';
 
 import {
   deleteStudentGroup,
@@ -14,7 +14,7 @@ import {
 } from '../../actions';
 
 import { Confirm } from '../Modal';
-import { hasChildren, checkPermissions } from '../../utils';
+import { hasChildren } from '../../utils';
 
 const { Input, Select } = FRC;
 

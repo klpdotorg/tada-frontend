@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { get, capitalize, isEmpty } from 'lodash';
+import get from 'lodash.get';
+import capitalize from 'lodash.capitalize';
+import isEmpty from 'lodash.isempty';
 
 import { Loading } from '../common';
 

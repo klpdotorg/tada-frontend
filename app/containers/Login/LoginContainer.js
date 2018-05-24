@@ -99,4 +99,4 @@ Login.propTypes = {
 
 const LoginContainer = connect(mapStateToProps, { sendLoginToServer })(Login);
 
-export { LoginContainer };
+export default LoginContainer;

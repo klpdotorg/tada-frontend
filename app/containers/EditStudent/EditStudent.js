@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
-import { get } from 'lodash';
+import get from 'lodash.get';
 
 import { Modal } from '../../components/Modal';
 import { lastVerifiedYears } from '../../Data';

@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
-import _ from 'lodash';
+import reduce from 'lodash.reduce';
+import get from 'lodash.get';
 
 import 'react-select/dist/react-select.css';
 import { Modal } from '../../components/Modal';
@@ -34,7 +35,7 @@ class CreateInstitutionForm extends Component {
       dise: myform.institutionDise_code,
     };
 
-    const filterInstitution = _.reduce(
+    const filterInstitution = reduce(
       institution,
       (soFar, value, key) => {
         if (value) {
@@ -128,28 +129,28 @@ class CreateInstitutionForm extends Component {
           <Select
             name="institutionCat"
             label="Category:"
-            value={_.get(institutionCategories[0], 'value')}
+            value={get(institutionCategories[0], 'value')}
             options={institutionCategories}
           />
           <Select
             multiple
             name="institutionLang"
             label="Medium:"
-            value={[_.get(languages[0], 'value')]}
+            value={[get(languages[0], 'value')]}
             options={languages}
             required
           />
           <Select
             name="institutionManagement"
             label="Management:"
-            value={_.get(managements[0], 'value')}
+            value={get(managements[0], 'value')}
             options={managements}
             required
           />
           <Select
             name="institutionGender"
             label="Gender:"
-            value={_.get(selectOptions, '[0].value')}
+            value={get(selectOptions, '[0].value')}
             options={selectOptions}
             required
           />
@@ -165,7 +166,7 @@ class CreateInstitutionForm extends Component {
           <Select
             name="last_verified_year"
             label="Last Verified Year:"
-            value={_.get(lastVerifiedYears[0], 'value')}
+            value={get(lastVerifiedYears[0], 'value')}
             options={lastVerifiedYears}
             required
           />

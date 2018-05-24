@@ -9,7 +9,7 @@ const ActionsView = (props) => {
       <button
         type="button"
         className="btn btn-primary"
-        onClick={props.assignPermissionToBoundaries}
+        onClick={props.submitBoundary}
         disabled={disabledBoundary}
       >
         Assign Permissions to Boundaries
@@ -17,7 +17,7 @@ const ActionsView = (props) => {
       <button
         type="button"
         className="btn btn-primary assessment-button"
-        onClick={props.assignPermissionToAssessments}
+        onClick={props.submitAssessment}
         disabled={disabledAssessment}
       >
         Assign Permissions to Assessments
@@ -29,8 +29,8 @@ const ActionsView = (props) => {
 ActionsView.propTypes = {
   disabledBoundary: PropTypes.bool,
   disabledAssessment: PropTypes.bool,
-  assignPermissionToAssessments: PropTypes.func,
-  assignPermissionToBoundaries: PropTypes.func,
+  submitBoundary: PropTypes.func,
+  submitAssessment: PropTypes.func,
 };
 
 export { ActionsView };

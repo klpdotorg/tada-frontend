@@ -1,6 +1,6 @@
 import { SERVER_API_BASE } from 'config';
 import { push } from 'react-router-redux';
-import { isEmpty } from 'lodash';
+import isEmpty from 'lodash.isempty';
 import { REQUEST_LOGIN, LOGIN_FAILED, LOGIN_SUCCESS, SET_USER_PROFILE } from './types';
 
 export const getDataFromLocalstorage = () => {

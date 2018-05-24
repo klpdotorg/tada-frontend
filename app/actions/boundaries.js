@@ -1,6 +1,8 @@
 import { SERVER_API_BASE, STATE_CODE, PER_PAGE } from 'config';
 import { push } from 'react-router-redux';
-import _ from 'lodash';
+import pull from 'lodash.pull';
+import omit from 'lodash.omit';
+import getObject from 'lodash.get';
 
 import { get, patch, deleteRequest } from './requests';
 import { convertEntitiesToObject, getPath, getEntityDepth } from '../utils';
@@ -22,9 +24,9 @@ export const removeEntity = (params) => {
 
     const boundariesByParentId = {
       ...state.boundaries.boundariesByParentId,
-      [parentDepth]: _.pull(state.boundaries.boundariesByParentId[parentDepth], boundaryNodeId),
+      [parentDepth]: pull(state.boundaries.boundariesByParentId[parentDepth], boundaryNodeId),
     };
-    const newUnCollapsedEntities = _.omit(state.boundaries.uncollapsedEntities, parentDepth + 1);
+    const newUnCollapsedEntities = omit(state.boundaries.uncollapsedEntities, parentDepth + 1);
     dispatch({
       type: SET_BOUNDARIES,
       boundariesByParentId,
@@ -106,7 +108,7 @@ export const uncollapsedBoundaries = (entity) => {
   return (dispatch, getState) => {
     const state = getState();
     const { uncollapsedEntities } = state.boundaries;
-    const currentNode = _.get(uncollapsedEntities, entity.depth);
+    const currentNode = getObject(uncollapsedEntities, entity.depth);
     const existing = currentNode === entity.uniqueId;
 
     if (entity.depth > 0) {
@@ -164,7 +166,7 @@ const fetchBoundaries = (Ids) => {
       const entity = Ids[0];
       const entities = Ids.slice(1);
       const { uncollapsedEntities } = state.boundaries;
-      const currentNode = _.get(uncollapsedEntities, entity.depth);
+      const currentNode = getObject(uncollapsedEntities, entity.depth);
       const existing = currentNode === entity.uniqueId;
 
       if (!existing && entity.depth <= 5) {

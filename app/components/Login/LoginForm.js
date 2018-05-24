@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const klplogo = require('../../../assets/images/KLP_logo.png');
+const klplogo = require('../../css/images/KLP_logo.png');
 
 const LoginPageWrapper = ({ error, children }) => {
   return (

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import $ from 'jquery';
 
 import { SideBarWrapper } from '../../components/SideBar';
 import { SchoolsNavTree, PermissionsNavTree, ProgramNavTree, MapAssessmentTree } from './index';
@@ -16,7 +15,6 @@ class SideBar extends Component {
 
   toggleTree(e) {
     e.preventDefault();
-    $('#wrapper').toggleClass('toggled');
   }
 
   renderNavTree() {

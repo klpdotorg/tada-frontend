@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { isEmpty } from 'lodash';
+import isEmpty from 'lodash.isempty';
 
 import { DEFAULT_PARENT_NODE_ID } from 'config';
 import { PrimaryBlockView } from '../../components/PrimaryBlock';
@@ -52,4 +52,4 @@ const mapStateToProps = (state, ownProps) => {
 
 const PrimaryBlock = connect(mapStateToProps, { getBoundariesEntities })(FetchBlockEntity);
 
-export { PrimaryBlock };
+export default PrimaryBlock;

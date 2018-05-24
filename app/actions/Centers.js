@@ -1,5 +1,5 @@
 import { SERVER_API_BASE } from 'config';
-import _ from 'lodash';
+import getObject from 'lodash.get';
 
 import { get, post } from './requests';
 import { SET_CENTERS, SELECT_CENTER } from './types';
@@ -21,7 +21,7 @@ export const fetchCenters = (institutionId) => {
         value: response.results,
       });
       if (response.results.length) {
-        dispatch(selectCenter(_.get(response.results, '0.id', '')));
+        dispatch(selectCenter(getObject(response.results, '0.id', '')));
       }
     });
   };

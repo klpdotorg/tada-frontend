@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { get } from 'lodash';
+import get from 'lodash.get';
 
 import { EditDistrictForm } from '../common';
 import {

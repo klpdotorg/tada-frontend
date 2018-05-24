@@ -8,7 +8,7 @@ import { Link } from 'react-router';
 
 import { ChangePassword, ChangeUserInfo, ConfirmPassword, GetOTP } from '../../containers/Profile';
 
-import klplogo from '../../../assets/images/KLP_logo.png';
+import klplogo from '../../css/images/KLP_logo.png';
 
 const HeaderBar = ({ username, openChangePasswordModal, openChangeUserInfoModal, logoutUser }) => {
   return (

@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { get, map } from 'lodash';
+import get from 'lodash.get';
+import map from 'lodash.map';
 
 const AssessmentEntryRowView = (props) => {
-  const { id, name, answers, questions, assessmentId, groupValue, dateOfVisit } = props;
+  const { id, name, answers, questions, assessmentId, groupValue, dateOfVisit, rowId } = props;
   return (
     <tr>
       <td>{id}</td>
@@ -32,12 +33,7 @@ const AssessmentEntryRowView = (props) => {
                 className="form-control"
                 value={get(currentVal, 'answer', '')}
                 onChange={(e) => {
-                  const value = {
-                    [question.id]: {
-                      value: e.target.value,
-                    },
-                  };
-                  props.onChange(value, id);
+                  props.onChange(rowId, currentVal.id, e.target.value);
                 }}
               >
                 {question.options.map((val) => {
@@ -68,14 +64,9 @@ const AssessmentEntryRowView = (props) => {
               type="text"
               required
               className="form-control"
-              style={{ color: 'red', padding: '0px', width: '30px' }}
+              style={{ padding: '0px' }}
               onChange={(e) => {
-                const value = {
-                  [question.id]: {
-                    value: e.target.value,
-                  },
-                };
-                props.onChange(value, id);
+                props.onChange(rowId, id, e.target.value);
               }}
             />
           </td>
@@ -113,14 +104,15 @@ const AssessmentEntryRowView = (props) => {
 };
 
 AssessmentEntryRowView.propTypes = {
-  id: PropTypes.number,
+  id: PropTypes.any,
   name: PropTypes.string,
   questions: PropTypes.object,
-  answers: PropTypes.object,
+  answers: PropTypes.array,
   onSave: PropTypes.func,
   assessmentId: PropTypes.any,
   groupValue: PropTypes.string,
   dateOfVisit: PropTypes.any,
+  rowId: PropTypes.any,
 };
 
 export { AssessmentEntryRowView };

@@ -1,33 +1,17 @@
 import React from 'react';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
+import Loadable from 'react-loadable';
 import { Provider } from 'react-redux';
-import { get } from 'lodash';
+import get from 'lodash.get';
 import { syncHistoryWithStore } from 'react-router-redux';
 
-import { Dashboard } from './components/Dashboard';
-import { PrimaryDistrict } from './containers/PrimaryDistrict';
-import { PrimaryBlock } from './containers/PrimaryBlock';
-import { PrimaryCluster } from './containers/PrimaryCluster';
-import { Institution } from './containers/Institution';
-import { PreschoolProject } from './containers/PreschoolProject';
-import { PreschoolCircle } from './containers/PreschoolCircle';
-import { Preschool } from './containers/Preschool';
-import { StudentGroup } from './containers/StudentGroup';
-import { AddStudents } from './containers/AddStudents';
-import { EditStudents } from './containers/EditStudents';
-import { ViewStudents } from './containers/ViewStudents';
-import Student from './components/Student';
-import { LoginContainer } from './containers/Login';
-import Logout from './components/Logout';
-import { App } from './containers/Dashboard';
+import tadastore from './store';
+
 import { Programs } from './containers/Programs';
 import { Questions } from './containers/Questions';
-import ResetPassword from './components/ResetPassword';
-import SetNewPassword from './components/SetNewPassword';
-import Reports from './components/Reports';
 import { Teachers } from './containers/Teachers';
+import { ViewStudents } from './containers/ViewStudents';
 import { DistrictPermissions, BlockPermissions } from './containers/Permissions';
-import tadastore from './store';
 import RevertEntity from './containers/RevertEntity';
 import { MapAssessments } from './containers/MapAssessments';
 import { ManageUsers } from './containers/Users';
@@ -38,6 +22,125 @@ import {
 } from './containers/AssessmentEntry';
 import { DefaultMessage } from './components/AssessmentEntry';
 import { AssignPermissionMessage } from './components/Permissions';
+
+const Loading = ({ error }) => {
+  if (error) {
+    return <div>Error: error</div>;
+  }
+  return <div>Loading...</div>;
+};
+
+const App = Loadable({
+  loader: () => {
+    return import('./containers/Dashboard/App');
+  },
+  loading: Loading,
+});
+
+const Dashboard = Loadable({
+  loader: () => {
+    return import('./components/Dashboard/Dashboard');
+  },
+  loading: Loading,
+});
+
+const PrimaryDistrict = Loadable({
+  loader: () => {
+    return import('./containers/PrimaryDistrict/PrimaryDistrict');
+  },
+  loading: Loading,
+});
+
+const PrimaryBlock = Loadable({
+  loader: () => {
+    return import('./containers/PrimaryBlock/PrimaryBlock');
+  },
+  loading: Loading,
+});
+
+const PrimaryCluster = Loadable({
+  loader: () => {
+    return import('./containers/PrimaryCluster/PrimaryCluster');
+  },
+  loading: Loading,
+});
+
+const Institution = Loadable({
+  loader: () => {
+    return import('./containers/Institution/Institution');
+  },
+  loading: Loading,
+});
+
+const PreschoolProject = Loadable({
+  loader: () => {
+    return import('./containers/PreschoolProject/PreschoolProject');
+  },
+  loading: Loading,
+});
+
+const PreschoolCircle = Loadable({
+  loader: () => {
+    return import('./containers/PreschoolCircle/PreschoolCircle');
+  },
+  loading: Loading,
+});
+
+const Preschool = Loadable({
+  loader: () => {
+    return import('./containers/Preschool/Preschool');
+  },
+  loading: Loading,
+});
+
+const StudentGroup = Loadable({
+  loader: () => {
+    return import('./containers/StudentGroup/StudentGroup');
+  },
+  loading: Loading,
+});
+
+const AddStudents = Loadable({
+  loader: () => {
+    return import('./containers/AddStudents/AddStudents');
+  },
+  loading: Loading,
+});
+
+const EditStudents = Loadable({
+  loader: () => {
+    return import('./containers/EditStudents/EditStudents');
+  },
+  loading: Loading,
+});
+
+const LoginContainer = Loadable({
+  loader: () => {
+    return import('./containers/Login/LoginContainer');
+  },
+  loading: Loading,
+});
+
+const Logout = Loadable({
+  loader: () => {
+    return import('./components/Logout');
+  },
+  loading: Loading,
+});
+
+const ResetPassword = Loadable({
+  loader: () => {
+    return import('./components/ResetPassword');
+  },
+  loading: Loading,
+});
+
+const SetNewPassword = Loadable({
+  loader: () => {
+    return import('./components/SetNewPassword');
+  },
+  loading: Loading,
+});
 
 const history = syncHistoryWithStore(browserHistory, tadastore);
 
@@ -78,7 +181,6 @@ export const routes = (
           component={StudentsAnswersSheet}
         />
         <Route path="mapassessments" component={MapAssessments} />
-        <Route path="reports" component={Reports} />
         <Route path="revert-entity/:entityName" component={RevertEntity} />
         <Route path="programs/:programId" component={Programs} />
         <Route
@@ -153,10 +255,6 @@ export const routes = (
         <Route
           path="district/:districtNodeId/block/:blockNodeId/cluster/:clusterNodeId/institution/:institutionNodeId/studentgroup/:studentGroupNodeId/editStudents"
           component={EditStudents}
-        />
-        <Route
-          path="district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId/studentgroups/:groupId/students/:studentId"
-          component={Student}
         />
       </Route>
     </Router>

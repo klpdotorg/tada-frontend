@@ -1,7 +1,8 @@
 import { connect } from 'react-redux';
-import { isEmpty, get } from 'lodash';
+import isEmpty from 'lodash.isempty';
+import get from 'lodash.get';
 
-import { PermissionsView } from '../../components/Permissions';
+// import { PermissionsView } from '../../components/Permissions';
 
 const mapStateToProps = (state, ownProps) => {
   const { boundaryType } = ownProps.params;

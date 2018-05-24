@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-let klplogo = require('../../assets/images/KLP_logo.png');
+let klplogo = require('../css/images/KLP_logo.png');
 
 const Logout = () => {
   return (

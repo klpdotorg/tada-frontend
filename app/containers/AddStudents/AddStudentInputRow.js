@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { get } from 'lodash';
+import get from 'lodash.get';
 
 import { StudentInputRow } from '../common';
 import { openNode, saveNewStudends, addStudentsFormValueChanged } from '../../actions';

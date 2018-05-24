@@ -1,4 +1,5 @@
-import { isEmpty } from 'lodash';
+import isEmpty from 'lodash.get';
+import getObject from 'lodash.get';
 import { SERVER_API_BASE } from 'config';
 
 import {
@@ -10,6 +11,8 @@ import {
   HIDE_ASSESSMENT_ENTRY_LOADING,
   SHOW_ANSWERS_LOADING,
   HIDE_ANSWERS_LOADING,
+  SET_ASSESSMENT_ENTRY_STUDENTS,
+  ON_CHANGE_GROUP_VALUE,
 } from './types';
 import { get } from './requests';
 import { fetchAllPrograms, setQuestions, setPrograms } from './index';
@@ -39,11 +42,26 @@ export const hideAnswersLoading = () => {
   };
 };
 
-export const onChangeAssessmentEntry = (value, id) => {
+export const onChangeGroupValue = (id, value) => {
   return {
-    type: CHANGE_ASSESSMENT_ENTRY_ANSWERS,
-    id,
-    value,
+    type: ON_CHANGE_GROUP_VALUE,
+    value: {
+      [id]: value,
+    },
+  };
+};
+
+export const onChangeAssessmentEntry = (value, entityId, questionId) => {
+  return (dispatch) => {
+    dispatch({
+      type: CHANGE_ASSESSMENT_ENTRY_ANSWERS,
+      id: entityId,
+      value: {
+        [questionId]: {
+          value,
+        },
+      },
+    });
   };
 };
 
@@ -94,19 +112,34 @@ const getURL = (type, boundaryId) => {
   }
 };
 
+const fetchQuestions = (programId, assessmentId) => {
+  const url = `${SERVER_API_BASE}surveys/${programId}/questiongroup/${assessmentId}/questions/`;
+
+  return get(url);
+};
+
 export const fetchSelectedAssessmentQuestions = (assessmentId) => {
   return (dispatch, getState) => {
     dispatch(showAnswersLoading());
 
     const state = getState();
     const { selectedProgram } = state.programs;
+    if (!selectedProgram) {
+      fetchAllPrograms().then((results) => {
+        dispatch(setPrograms(results));
 
-    const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${assessmentId}/questions/`;
-
-    return get(url).then((response) => {
-      dispatch(setQuestions(response.results, assessmentId));
-      dispatch(hideAnswersLoading());
-    });
+        const id = getObject(results[0], 'id', '');
+        fetchQuestions(id, assessmentId).then((response) => {
+          dispatch(setQuestions(response.results, assessmentId));
+          dispatch(hideAnswersLoading());
+        });
+      });
+    } else {
+      fetchQuestions(selectedProgram, assessmentId).then((response) => {
+        dispatch(setQuestions(response.results, assessmentId));
+        dispatch(hideAnswersLoading());
+      });
+    }
   };
 };
 
@@ -127,6 +160,20 @@ export const fetchSelectedAssessmentBoundary = () => {
         value: Object.keys(entities),
       });
       dispatch(fetchSelectedAssessmentQuestions());
+    });
+  };
+};
+
+export const fetchStudentsForAssessmentEntry = (id) => {
+  return (dispatch) => {
+    dispatch(showAssessmentEntryLoading());
+    const url = `${SERVER_API_BASE}studentgroups/${id}/students/`;
+    get(url).then((res) => {
+      dispatch({
+        type: SET_ASSESSMENT_ENTRY_STUDENTS,
+        value: res.results,
+      });
+      dispatch(hideAssessmentEntryLoading());
     });
   };
 };

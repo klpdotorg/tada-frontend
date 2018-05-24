@@ -1,5 +1,11 @@
 import { SERVER_API_BASE, PER_PAGE } from 'config';
-import _ from 'lodash';
+import isEqual from 'lodash.isequal';
+import getObject from 'lodash.get';
+import isEmpty from 'lodash.isempty';
+import flattenDeep from 'lodash.flattendeep';
+import uniq from 'lodash.uniq';
+import pull from 'lodash.pull';
+
 import Notifications from 'react-notification-system-redux';
 
 import { mapAssessmentsDone, mapAssessmentsFailed } from './notifications';
@@ -92,7 +98,7 @@ export const selectAllInstitutionsOfMA = (Ids) => {
     const state = getState();
     const { selectedAssessmentType, selectedInstitutions } = state.mapAssessments;
 
-    if (_.isEqual(Ids, selectedInstitutions)) {
+    if (isEqual(Ids, selectedInstitutions)) {
       dispatch({
         type: SELECT_INSTITUTION_OF_MA,
         value: [],
@@ -124,7 +130,7 @@ export const selectAllClustersOfMA = (entities) => {
       return entity.uniqueId;
     });
 
-    if (_.isEqual(Ids, selectedClusters)) {
+    if (isEqual(Ids, selectedClusters)) {
       dispatch({
         type: SELECT_CLUSTER_OF_MA,
         value: [],
@@ -176,7 +182,7 @@ export const selectClusterOfMA = (entity) => {
     if (selectedClusters.includes(entity.uniqueId)) {
       dispatch({
         type: SELECT_CLUSTER_OF_MA,
-        value: _.pull(selectedClusters, entity.uniqueId),
+        value: pull(selectedClusters, entity.uniqueId),
       });
       dispatch({
         type: SET_INSTITUTIONS_OF_MA,
@@ -199,7 +205,7 @@ export const selectInstitutionOfMA = (entity) => {
     if (selectedInstitutions.includes(entity.id)) {
       dispatch({
         type: SELECT_INSTITUTION_OF_MA,
-        value: _.pull(selectedInstitutions, entity.id),
+        value: pull(selectedInstitutions, entity.id),
       });
       dispatch({
         type: SET_STUDENTGROUPS_OF_MA,
@@ -225,7 +231,7 @@ export const selectClassOfMa = (entity) => {
     if (selectedClasses.includes(entity.id)) {
       dispatch({
         type: SELECT_CLASS_OF_MA,
-        value: _.pull(selectedClasses, entity.id),
+        value: pull(selectedClasses, entity.id),
       });
     } else {
       dispatch({
@@ -243,7 +249,7 @@ export const selectAssessmentOfMA = (value) => {
     if (selectedAssessments.includes(value)) {
       dispatch({
         type: SELECT_ASSESSMENT_OF_MA,
-        value: _.pull(selectedAssessments, value),
+        value: pull(selectedAssessments, value),
       });
     } else {
       dispatch({
@@ -332,15 +338,15 @@ export const mapBoundariesToAssessments = () => {
     const { selectedProgram } = state.programs;
     const { selectedInstitutions, selectedAssessments, selectedClasses } = state.mapAssessments;
     const { uncollapsedEntities, boundaryDetails } = state.boundaries;
-    const district = _.get(boundaryDetails, [uncollapsedEntities['1']], {});
+    const district = getObject(boundaryDetails, [uncollapsedEntities['1']], {});
     const Ids = selectedInstitutions.map((id) => {
-      const value = _.get(boundaryDetails, `${id}institution`, {});
-      const boundary = _.get(value, 'boundary', {});
+      const value = getObject(boundaryDetails, `${id}institution`, {});
+      const boundary = getObject(value, 'boundary', {});
       return [boundary.id, boundary.parent];
     });
-    const boundaryIds = _.uniq(_.flattenDeep([district.id, ...Ids]));
+    const boundaryIds = uniq(flattenDeep([district.id, ...Ids]));
 
-    if (_.isEmpty(selectedClasses)) {
+    if (isEmpty(selectedClasses)) {
       dispatch(mapAssessmentsToInsitutions(
         selectedProgram,
         selectedAssessments,

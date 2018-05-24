@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Formsy from 'formsy-react';
-import moment from 'moment';
 import FRC from 'formsy-react-components';
 import { saveNewAssessment, enableSubmitForm, disableSubmitForm } from '../../actions';
 
 import { Modal } from '../../components/Modal';
+import { dateFormat } from '../../utils';
 
 const { Input, RadioGroup, Checkbox } = FRC;
 
@@ -18,14 +18,13 @@ class CreateAssessmentForm extends Component {
   }
 
   setStartDate() {
-    const formatteddate = moment().format('YYYY-MM-DD');
+    const formatteddate = dateFormat(new Date());
     return formatteddate;
   }
 
   setEndDate() {
-    return moment()
-      .add(1, 'years')
-      .format('YYYY-MM-DD');
+    const date = new Date();
+    return dateFormat(new Date(date.setFullYear(date.getFullYear() + 1)));
   }
 
   submitForm() {
@@ -70,7 +69,9 @@ class CreateAssessmentForm extends Component {
           onValidSubmit={this.submitForm}
           onValid={this.props.enableSubmitForm}
           onInvalid={this.props.disabledSubmitForm}
-          ref={(ref) => { return (this.myform = ref); }}
+          ref={(ref) => {
+            return (this.myform = ref);
+          }}
         >
           <Input
             name="assessmentName"

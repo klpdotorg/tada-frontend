@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { isEmpty, get } from 'lodash';
+import isEmpty from 'lodash.isempty';
+import get from 'lodash.get';
 
 import { DEFAULT_PARENT_NODE_ID } from 'config';
 import {
@@ -90,4 +91,4 @@ const Preschool = connect(mapStateToProps, {
   getManagements,
 })(FetchPreschoolEntity);
 
-export { Preschool };
+export default Preschool;

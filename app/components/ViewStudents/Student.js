@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { isEmpty, includes } from 'lodash';
+import isEmpty from 'lodash.isempty';
+import includes from 'lodash.includes';
 
-import { dateParser, hasChildren } from '../../utils';
+import { dateParser } from '../../utils';
 
 const StudentView = (props) => {
   const { student, selectedStudents, hasPermissions, canDelete } = props;

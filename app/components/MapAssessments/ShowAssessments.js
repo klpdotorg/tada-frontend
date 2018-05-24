@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { includes } from 'lodash';
+import includes from 'lodash.includes';
+
 import { Loading } from '../common';
 
 const ShowAssessmentsView = (props) => {

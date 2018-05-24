@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import get from 'lodash.get';
+import uniq from 'lodash.uniq';
 
 export const CLASS = 'class';
 export const BOUNDARY = 'boundary';
@@ -20,7 +21,7 @@ represented as parent. We are treating everything as an "entity" and thus the ne
 export const getParentId = (entity, group) => {
   var parent = -1;
   // Hack to figure out if we're dealing with a school or something else. This won't work. FIX IT!
-  if (_.get(entity, 'boundary.boundary_type') === 'SC') {
+  if (get(entity, 'boundary.boundary_type') === 'SC') {
     parent = `${entity.boundary.id}${entity.boundary_type}`;
   } else if (entity.group_type) {
     parent = entity.institution;
@@ -179,7 +180,7 @@ export const processStudents = (students, groupId, boundariesByParent, boundaryD
   return {
     boundariesByParentId: {
       ...boundariesByParent,
-      [groupId]: _.uniq(studentIds.concat(group)),
+      [groupId]: uniq(studentIds.concat(group)),
     },
     boundaryDetails: {
       ...boundaryDetails,
@@ -190,7 +191,7 @@ export const processStudents = (students, groupId, boundariesByParent, boundaryD
 
 export const changeArrayToObject = (array, fieldName) => {
   return array.reduce((soFar, item) => {
-    const itemVal = _.get(item, fieldName);
+    const itemVal = get(item, fieldName);
     soFar[itemVal] = item;
 
     return soFar;

@@ -1,5 +1,4 @@
 import { SERVER_API_BASE } from 'config';
-import _ from 'lodash';
 
 import {
   SET_ADD_STUDENTS_FORM_ERRORS,
@@ -37,7 +36,7 @@ export const addStudents = (groupNodeId, groupId, institutionId, depth) => {
   return (dispatch, getState) => {
     const state = getState();
     const { values } = state.addStudents;
-    const newValues = _.values(values);
+    const newValues = Object.values(values);
 
     dispatch(showBoundaryLoading());
 
