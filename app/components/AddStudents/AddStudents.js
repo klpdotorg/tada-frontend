@@ -6,7 +6,17 @@ import { AddStudentsForm } from '../../containers/AddStudents';
 import { Loading } from '../common';
 
 const AddStudentsView = (props) => {
-  const { district, block, cluster, institution, studentGroup, isLoading, params, depth } = props;
+  const {
+    district,
+    block,
+    cluster,
+    institution,
+    studentGroup,
+    isLoading,
+    params,
+    depth,
+    hasPermissions,
+  } = props;
 
   if (isLoading) {
     return <Loading />;
@@ -36,12 +46,14 @@ const AddStudentsView = (props) => {
         studentGroupId={studentGroup.id}
         institutionId={institution.id}
         depth={depth}
+        hasPermissions={hasPermissions}
       />
     </div>
   );
 };
 
 AddStudentsView.propTypes = {
+  hasPermissions: PropTypes.bool,
   district: PropTypes.object,
   block: PropTypes.object,
   cluster: PropTypes.object,

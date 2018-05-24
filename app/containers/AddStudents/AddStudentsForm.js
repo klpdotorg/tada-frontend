@@ -80,11 +80,17 @@ class AddStudentsFormView extends Component {
   }
 
   renderRows() {
+    const { hasPermissions, institutionId } = this.props;
     const rows = Array.from(Array(this.props.rows).keys());
 
     return rows.map((row, index) => {
       return (
-        <AddStudentInputRow key={index} index={index} institutionId={this.props.institutionId} />
+        <AddStudentInputRow
+          key={index}
+          index={index}
+          institutionId={institutionId}
+          hasPermissions={hasPermissions}
+        />
       );
     });
   }
@@ -143,6 +149,7 @@ AddStudentsFormView.propTypes = {
   setAddStudentsFormErrors: PropTypes.func,
   addStudents: PropTypes.func,
   depth: PropTypes.number,
+  hasPermissions: PropTypes.bool,
 };
 
 const mapStateToProps = (state, ownProps) => {
