@@ -102,7 +102,6 @@ export const saveNewAssessment = (options) => {
     const state = getState();
     const programId = state.programs.selectedProgram;
     const createAssessmentURL = `${serverApiBase}surveys/${programId}/questiongroup/`;
-
     post(createAssessmentURL, options).then((response) => {
       dispatch(assessmentCreated(response));
       dispatch({
@@ -165,16 +164,18 @@ export const deleteAssessments = () => {
     dispatch(closeConfirmModal());
 
     const state = getState();
+    console.log(state.programs, 'Printing all the programs');
     const { selectedProgram } = state.programs;
     const { selectedAssessments } = state.assessments;
     const promises = selectedAssessments.map((id) => {
       const url = `${serverApiBase}surveys/${selectedProgram}/questiongroup/${id}/`;
-      return deleteRequest(url);
+      console.log(url, 'Printing this url');
+      // return deleteRequest(url);
     });
 
-    Promise.all(promises).then(() => {
-      dispatch(getAssessments());
-      dispatch(closeAssessmentLoading());
-    });
+    // Promise.all(promises).then(() => {
+    //   dispatch(getAssessments());
+    //   dispatch(closeAssessmentLoading());
+    // });
   };
 };

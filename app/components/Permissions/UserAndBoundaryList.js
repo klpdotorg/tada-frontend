@@ -5,6 +5,7 @@ import capitalize from 'lodash.capitalize';
 import isEmpty from 'lodash.isempty';
 
 import { Loading } from '../common';
+import { Pagination } from '../../containers/Users';
 
 const UserAndBoundaryListView = (props) => {
   const { loading, users, selectedUsers, selectedBoundaries, boundaries, indexes } = props;
@@ -66,6 +67,7 @@ const UserAndBoundaryListView = (props) => {
           })}
         </tbody>
       </table>
+      <Pagination />
       {loading ? (
         <div className="base-spacing" style={{ paddingLeft: 10 }}>
           <Loading />

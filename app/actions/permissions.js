@@ -87,9 +87,11 @@ export const submitBoundaryPermissions = () => {
     const { selectedBoundaries, selectedUsers } = state.permissions;
     const promises = selectedUsers.map((user) => {
       const url = `${SERVER_API_BASE}users/${user}/permissions/`;
-      return post(url, {
-        boundary_id: selectedBoundaries,
-      });
+      const boundaries = selectedBoundaries.reduce((soFar, id) => {
+        soFar.boundary_id = id;
+        return soFar;
+      }, {});
+      return post(url, boundaries);
     });
 
     Promise.all(promises).then((response) => {
