@@ -2,7 +2,7 @@ const path = require('path');
 const configFile = require('./settings/config.json');
 
 module.exports = {
-  mode: 'development',
+  mode: 'production',
   entry: [
     path.resolve(__dirname, 'app/main.js')
   ],
