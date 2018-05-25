@@ -122,3 +122,5 @@ export const ON_CHANGE_ANSWER = 'on_change_answer';
 export const SET_ASSESSMENT_ENTRY_STUDENTS = 'set_assessment_entry_students';
 export const ON_CHANGE_GROUP_VALUE = 'on_change_group_value';
 export const ON_CHANGE_DATE_OF_VISITS = 'on_change_date_of_visits';
+export const LOADING_BOUNDARY_ASSESSMENT = 'loading_boundary_assessment';
+export const SET_BOUNDARY_ASSESSMENTS = 'set_boundary_assessments';

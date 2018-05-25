@@ -164,18 +164,16 @@ export const deleteAssessments = () => {
     dispatch(closeConfirmModal());
 
     const state = getState();
-    console.log(state.programs, 'Printing all the programs');
     const { selectedProgram } = state.programs;
     const { selectedAssessments } = state.assessments;
     const promises = selectedAssessments.map((id) => {
       const url = `${serverApiBase}surveys/${selectedProgram}/questiongroup/${id}/`;
-      console.log(url, 'Printing this url');
-      // return deleteRequest(url);
+      return deleteRequest(url);
     });
 
-    // Promise.all(promises).then(() => {
-    //   dispatch(getAssessments());
-    //   dispatch(closeAssessmentLoading());
-    // });
+    Promise.all(promises).then(() => {
+      dispatch(getAssessments(selectedProgram));
+      dispatch(closeAssessmentLoading());
+    });
   };
 };

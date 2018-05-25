@@ -9,8 +9,16 @@ import {
   SELECT_PERMISSIONS_USER,
   UNSELECT_PERMISSIONS_USER,
   SET_USER_PERMISSIONS,
+  LOADING_BOUNDARY_ASSESSMENT,
 } from './types';
 import { get, post } from './requests';
+
+const loadingBoundaryAssessment = (value) => {
+  return {
+    type: LOADING_BOUNDARY_ASSESSMENT,
+    value,
+  };
+};
 
 export const openPermissionBoundary = (id, depth) => {
   return (dispatch, getState) => {
@@ -27,11 +35,24 @@ export const fetchBoundariesForPermission = (params) => {
   };
 };
 
+export const fetchBoundaryAssessments = (entity) => {
+  return (dispatch, getState) => {
+    dispatch(loadingBoundaryAssessment(true));
+    const state = getState();
+    const { selectedProgram } = state.programs;
+    const url = `${SERVER_API_BASE}survey/${selectedProgram}/boundary-associations/?boundary_id=${entity.id}`;
+    get(url, (response) => {
+      console.log(response, 'Printing the response of fetchBoundaryAssessment');
+      dispatch(loadingBoundaryAssessment(false));
+    });
+  };
+};
 export const selectPermissionsBoundary = (id) => {
   return (dispatch, getState) => {
     const state = getState();
     const { selectedBoundaries } = state.permissions;
     if (!selectedBoundaries.includes(id)) {
+      dispatch(fetchBoundaryAssessments({ id }));
       dispatch({
         type: SELECT_PERMISSIONS_BOUNDARY,
         value: [...selectedBoundaries, id],
@@ -87,11 +108,9 @@ export const submitBoundaryPermissions = () => {
     const { selectedBoundaries, selectedUsers } = state.permissions;
     const promises = selectedUsers.map((user) => {
       const url = `${SERVER_API_BASE}users/${user}/permissions/`;
-      const boundaries = selectedBoundaries.reduce((soFar, id) => {
-        soFar.boundary_id = id;
-        return soFar;
-      }, {});
-      return post(url, boundaries);
+      return post(url, {
+        boundary_id: selectedBoundaries,
+      });
     });
 
     Promise.all(promises).then((response) => {
