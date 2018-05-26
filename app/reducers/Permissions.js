@@ -3,11 +3,15 @@ import {
   UNSELECT_PERMISSIONS_BOUNDARY,
   SELECT_PERMISSIONS_USER,
   UNSELECT_PERMISSIONS_USER,
+  LOADING_BOUNDARY_ASSESSMENT,
+  SET_BOUNDARY_ASSESSMENTS,
 } from '../actions/types';
 
 const INITIAL_STATE = {
   selectedBoundaries: [],
   selectedUsers: [],
+  assessments: {},
+  loadingAssessment: false,
 };
 
 const Permissions = (state = INITIAL_STATE, action) => {
@@ -31,6 +35,16 @@ const Permissions = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         selectedUsers: action.value,
+      };
+    case LOADING_BOUNDARY_ASSESSMENT:
+      return {
+        ...state,
+        loadingAssessment: action.value,
+      };
+    case SET_BOUNDARY_ASSESSMENTS:
+      return {
+        ...state,
+        assessments: action.value,
       };
     default:
       return state;
