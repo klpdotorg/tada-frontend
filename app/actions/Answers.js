@@ -2,7 +2,7 @@ import { SERVER_API_BASE } from 'config';
 
 import getObject from 'lodash.get';
 import map from 'lodash.map';
-import { post, get } from './requests';
+import { post, get, put } from './requests';
 import { SET_ANSWERS, FETCHING_ANSWERS, ON_CHANGE_ANSWER } from './types';
 
 export const onChangeAnswer = (answergroupId, answerId, value) => {
@@ -110,6 +110,20 @@ export const createAnswerGroup = (params) => {
       status: 'AC',
     }).then((res) => {
       dispatch(saveAnswer({ ...params, answergroupId: res.id }));
+    });
+  };
+};
+
+export const editAnswers = (params) => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const { selectedProgram } = state.programs;
+    const { answergroupId, assessmentId } = params;
+    const answers = get(state.answers.answers, answergroupId, []);
+    const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${assessmentId}/answergroups/${answergroupId}/answers`;
+
+    put(url, answers).then((res) => {
+      console.log(res, 'This is done');
     });
   };
 };
