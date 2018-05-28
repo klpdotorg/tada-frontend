@@ -182,29 +182,6 @@ export const getPath = (state, uniqueId, depth, boundaryType) => {
   return path;
 };
 
-// export const generatePagination = (current, max, step) => {
-//   let result = [];
-
-//   if (max < 9) {
-//     return _.range(1, max + 1);
-//   }
-
-//   if (current <= step) {
-//     const values = _.range(1, step);
-//     result = [...result, ...values];
-//   } else {
-//     const values = _.range(current, current + step);
-
-//     result = [...result, ...values];
-//   }
-
-//   result.push('...');
-//   const newValues = _.range(max - (step - 1), max + 1);
-//   result = [...result, ...newValues];
-
-//   return result;
-// };
-
 const add = (a, b) => {
   return range(a, b);
 };

@@ -36,8 +36,8 @@ const AssessmentEntryRowView = (props) => {
                   props.onChange(rowId, currentVal.id, e.target.value);
                 }}
               >
-                {question.options.map((val) => {
-                  return <option>{val}</option>;
+                {question.options.map((val, index) => {
+                  return <option key={index}>{val}</option>;
                 })}
               </select>
             </td>
@@ -48,8 +48,8 @@ const AssessmentEntryRowView = (props) => {
           return (
             <td key={question.id} className="answer-field">
               <select className="form-control" value={get(currentVal, 'answer', '')}>
-                {question.options.map((val) => {
-                  return <option>{val}</option>;
+                {question.options.map((val, index) => {
+                  return <option key={index}>{val}</option>;
                 })}
               </select>
             </td>
@@ -74,6 +74,7 @@ const AssessmentEntryRowView = (props) => {
       })}
       <td>
         <button
+          disabled
           className="btn btn-primary padded-btn"
           title="Edit answer"
           data-toggle="tooltip"

@@ -822,3 +822,15 @@ table.table-fixedwidth td, .table-fixedwidth th {
 .answer-table td {
   min-width: 100px;
 }
+
+.filterbyprogram-link {
+  border: none;
+  text-align: left;
+  background: none;
+  color: #3379b7; 
+  display: block;
+}
+
+.filterbyprogram-link:hover {
+  text-decoration: underline;
+}

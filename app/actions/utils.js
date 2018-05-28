@@ -8,7 +8,7 @@ import { post, patch, deleteRequest } from './requests';
 import { SERVER_API_BASE } from 'config';
 
 export const patchStudentAPI = (body, groupId) => {
-  return patch(`${SERVER_API_BASE}students/${body.id}/`, body).then(data => {
+  return patch(`${SERVER_API_BASE}students/${body.id}/`, body).then((data) => {
     return new Promise((resolve, reject) => {
       resolve({
         students: {
@@ -20,19 +20,20 @@ export const patchStudentAPI = (body, groupId) => {
   });
 };
 
-export const mapStudentsAPI = body => {
+export const mapStudentsAPI = (body) => {
   return post(
     `${SERVER_API_BASE}studentgroups/${body.student_group}/students/${body.student}/enrollment/`,
     body,
   );
 };
 
-export const deleteStudentAPI = id => {
+export const deleteStudentAPI = (id) => {
   return deleteRequest(`${SERVER_API_BASE}students/${id}/`);
 };
 
 export const boundaryType = (id = 2, details) => {
-  let boundaryCategory, institution;
+  let boundaryCategory,
+    institution;
   // console.log(id)
   // console.log(details[id])
   switch (details[id].depth) {

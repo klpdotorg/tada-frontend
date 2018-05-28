@@ -51,6 +51,20 @@ export const getEntityType = (entity) => {
 };
 
 export const getBoundaryType = (boundary) => {
+  const assessmentType = boundary['assessment-type'];
+
+  if (assessmentType) {
+    if (assessmentType === 'institution') {
+      return 'primary';
+    }
+
+    if (assessmentType === 'studentgroup') {
+      return 'class';
+    }
+
+    return 'null';
+  }
+
   if (boundary.boundary_type) {
     return boundary.boundary_type;
   }

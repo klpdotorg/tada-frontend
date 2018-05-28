@@ -1,4 +1,6 @@
 import { SERVER_API_BASE, DEFAULT_PARENT_ID } from 'config';
+import { push } from 'react-router-redux';
+
 import getObject from 'lodash.get';
 
 import { get } from './requests';
@@ -9,17 +11,16 @@ import {
   REMOVE_EXISTING_NODE,
 } from './types';
 import { convertEntitiesToObject, getPath } from '../utils';
-import { showBoundaryLoading, closeBoundaryLoading } from './index';
+import { showBoundaryLoading, closeBoundaryLoading, fetchAllPrograms, setPrograms } from './index';
 
-export const openFilterByProgramEntity = (uniqueId, depth) => {
+export const openFilterByProgramEntity = (uniqueId, depth, assessmentId) => {
   return (dispatch, getState) => {
     const state = getState();
+    const { selectedProgram } = state.programs;
+    const boundaryPath = getPath(state, uniqueId, depth, 'program');
 
-    console.log(uniqueId, depth);
-
-    const path = getPath(state, uniqueId, depth, 'program');
-    console.log(path, 'printing the path of programEntity');
-    // dispatch(push(path));
+    const path = `/filterprograms/${selectedProgram}/questiongroup/${assessmentId}${boundaryPath}`;
+    dispatch(push(path));
   };
 };
 
@@ -97,36 +98,19 @@ const getUrlForFilterProgram = (entity, surveyId, surveyOn) => {
   }
 };
 
-const fetchAdmins = (entity) => {
+export const fetchProgramEntities = (Ids) => {
   return (dispatch, getState) => {
     const state = getState();
-    const { selectedProgram, programs } = state.programs;
-    const programInfo = getObject(programs, selectedProgram);
-    const url = getUrlForFilterProgram(entity, selectedProgram, programInfo.survey_on);
-
-    get(url).then((res) => {
-      const entities = convertEntitiesToObject(res.results);
-
-      dispatch({
-        type: SET_FITLER_PROGRAM_ENTITIES,
-        programDetails: entities,
-        entitiesByParentId: { [entity.depth]: Object.keys(entities) },
-      });
-      dispatch(closeBoundaryLoading());
-    });
-  };
-};
-
-export const getFilterByProgramEntites = (entity) => {
-  return (dispatch, getState) => {
-    const state = getState();
-    dispatch(showBoundaryLoading());
-    const { selectedProgram } = state.programs;
+    const entity = Ids[0];
+    const entities = Ids.slice(1);
     const { uncollapsedEntities } = state.programDetails;
     const currentNode = getObject(uncollapsedEntities, entity.depth);
     const existing = currentNode === entity.uniqueId;
+
     if (!existing && entity.depth <= 5) {
-      dispatch(fetchAdmins(entity, selectedProgram));
+      dispatch(fetchAdmins(entity, entities));
+    } else {
+      dispatch(closeBoundaryLoading());
     }
 
     if (entity.depth > 0) {
@@ -158,6 +142,57 @@ export const getFilterByProgramEntites = (entity) => {
         type: REMOVE_EXISTING_NODE,
         value: entity.depth,
       });
+    } else {
+      dispatch({
+        type: UNCOLLAPSED_PROGRAM_ENTITY,
+        value: {},
+      });
+    }
+  };
+};
+
+const fetchAdmins = (entity, moreEntities) => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const { selectedProgram, programs } = state.programs;
+    const boundary = getObject(state.programDetails, ['programDetails', entity.uniqueId], {});
+    const programInfo = getObject(programs, selectedProgram);
+    const url = getUrlForFilterProgram(
+      { ...entity, id: boundary.id },
+      selectedProgram,
+      programInfo.survey_on,
+    );
+
+    get(url).then((res) => {
+      const entities = convertEntitiesToObject(res.results);
+
+      dispatch({
+        type: SET_FITLER_PROGRAM_ENTITIES,
+        programDetails: entities,
+        entitiesByParentId: { [entity.depth]: Object.keys(entities) },
+      });
+
+      if (moreEntities && moreEntities.length) {
+        dispatch(fetchProgramEntities(moreEntities));
+      } else {
+        dispatch(closeBoundaryLoading());
+      }
+    });
+  };
+};
+
+export const getProgramEntities = (Ids) => {
+  return (dispatch, getState) => {
+    const state = getState();
+    dispatch(showBoundaryLoading());
+    const { selectedProgram } = state.programs;
+    if (!selectedProgram) {
+      fetchAllPrograms().then((results) => {
+        dispatch(setPrograms(results));
+        dispatch(fetchProgramEntities(Ids));
+      });
+    } else {
+      dispatch(fetchProgramEntities(Ids));
     }
   };
 };

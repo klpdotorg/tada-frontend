@@ -3,17 +3,31 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import get from 'lodash.get';
 import isEmpty from 'lodash.isempty';
+import { DEFAULT_PROGRAM_NODE_ID } from 'config';
 
 import { AssessmentEntryFormView } from '../../components/AssessmentEntry';
-import { fetchAnswers, fetchAnswerGroups, fetchSelectedAssessmentQuestions } from '../../actions';
+import {
+  fetchAnswers,
+  fetchAnswerGroups,
+  fetchSelectedAssessmentQuestions,
+  selectProgram,
+} from '../../actions';
 
 class FetchAnswersAndQuestions extends Component {
   componentDidMount() {
     const { boundary } = this.props;
     const { questionGroupId } = this.props.params;
-    this.props.fetchQuestions(questionGroupId);
+    const { districtId, blockId, clusterId, programId } = this.props.params;
+    const entities = [DEFAULT_PROGRAM_NODE_ID, districtId, blockId, clusterId].map((id, index) => {
+      return {
+        uniqueId: id,
+        depth: index,
+      };
+    });
+    this.props.fetchQuestions(questionGroupId, entities);
+    this.props.selectProgram(programId);
     if (!isEmpty(boundary)) {
-      // this.props.fetchAnswerGroups(questionGroupId, 'studentgroup_id', boundary.id);
+      this.props.fetchAnswerGroups(questionGroupId, 'studentgroup_id', boundary.id);
     }
   }
 
@@ -23,7 +37,7 @@ class FetchAnswersAndQuestions extends Component {
     const currentId = get(this.props, ['boundary', 'id'], '');
     if (nextId !== currentId) {
       if (!isEmpty(nextProps.boundary)) {
-        // this.props.fetchAnswerGroups(questionGroupId, 'studentgroup_id', nextId);
+        this.props.fetchAnswerGroups(questionGroupId, 'studentgroup_id', nextId);
       }
     }
   }
@@ -40,6 +54,7 @@ FetchAnswersAndQuestions.propTypes = {
   fetchQuestions: PropTypes.func,
   fetchBoundaries: PropTypes.func,
   fetchAnswers: PropTypes.func,
+  selectProgram: PropTypes.func,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -58,6 +73,7 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const StudentGroupAnswersSheet = connect(mapStateToProps, {
+  selectProgram,
   fetchAnswers,
   fetchAnswerGroups,
   fetchQuestions: fetchSelectedAssessmentQuestions,

@@ -20,7 +20,7 @@ import {
   StudentsAnswersSheet,
   StudentGroupAnswersSheet,
 } from './containers/AssessmentEntry';
-import { DefaultMessage } from './components/AssessmentEntry';
+import { DefaultMessage } from './containers/AssessmentEntry';
 import { AssignPermissionMessage } from './components/Permissions';
 
 const Loading = ({ error }) => {
@@ -169,15 +169,15 @@ export const routes = (
         <Route path="programmes" component={Programs} />
         <Route path="filterprograms" component={DefaultMessage} />
         <Route
-          path="filterprograms/questiongroups/:questionGroupId/institutions/:institutionId"
+          path="filterprograms/:programId/questiongroup/:questionGroupId/district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId"
           component={InstitutionAnswersSheet}
         />
         <Route
-          path="filterprograms/questiongroups/:questionGroupId/studentgroups/:studentGroupId"
+          path="filterprograms/:programId/questiongroup/:questionGroupId/district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId/studentgroup/:studentGroupId"
           component={StudentGroupAnswersSheet}
         />
         <Route
-          path="filterprograms/questiongroups/:questionGroupId/students/:studentGroupId"
+          path="filterprograms/:programId/questiongroup/:questionGroupId/district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId/students/:studentGroupId"
           component={StudentsAnswersSheet}
         />
         <Route path="mapassessments" component={MapAssessments} />

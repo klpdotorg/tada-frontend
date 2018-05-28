@@ -1,4 +1,4 @@
-import isEmpty from 'lodash.get';
+import isEmpty from 'lodash.isempty';
 import getObject from 'lodash.get';
 import { SERVER_API_BASE } from 'config';
 
@@ -15,7 +15,7 @@ import {
   ON_CHANGE_GROUP_VALUE,
 } from './types';
 import { get } from './requests';
-import { fetchAllPrograms, setQuestions, setPrograms } from './index';
+import { fetchAllPrograms, setQuestions, setPrograms, getProgramEntities } from './index';
 import { getEntityType, convertEntitiesToObject } from '../utils';
 
 export const showAssessmentEntryLoading = () => {
@@ -118,15 +118,15 @@ const fetchQuestions = (programId, assessmentId) => {
   return get(url);
 };
 
-export const fetchSelectedAssessmentQuestions = (assessmentId) => {
+export const fetchSelectedAssessmentQuestions = (assessmentId, entities) => {
   return (dispatch, getState) => {
     dispatch(showAnswersLoading());
-
     const state = getState();
     const { selectedProgram } = state.programs;
     if (!selectedProgram) {
       fetchAllPrograms().then((results) => {
         dispatch(setPrograms(results));
+        dispatch(getProgramEntities(entities));
 
         const id = getObject(results[0], 'id', '');
         fetchQuestions(id, assessmentId).then((response) => {

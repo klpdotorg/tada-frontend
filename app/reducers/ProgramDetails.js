@@ -6,7 +6,12 @@ import {
 } from '../actions/types';
 
 const INITIAL_STATE = {
-  programDetails: {},
+  programDetails: {
+    '1state': {
+      id: 1,
+      boundary_type: 'ST',
+    },
+  },
   entitiesByParentId: {},
   uncollapsedEntities: {},
 };

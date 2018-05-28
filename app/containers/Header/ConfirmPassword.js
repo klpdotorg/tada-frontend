@@ -44,7 +44,9 @@ class ConfirmPasswordScreen extends Component {
           onValidSubmit={this.submitForm}
           onValid={this.props.enableConfirmPasswordForm}
           onInvalid={this.props.disableConfirmPasswordForm}
-          ref={(ref) => { return (this.myform = ref); }}
+          ref={(ref) => {
+            return (this.myform = ref);
+          }}
         >
           <Input
             name="password"

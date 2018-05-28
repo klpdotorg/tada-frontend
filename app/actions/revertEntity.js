@@ -19,8 +19,8 @@ const showReactivationStatus = (res, dispatch) => {
   }
 };
 
-const reactiveUser = (entity, entityName, dispatch) =>
-  fetch(`${authApiBase}auth/${entityName}/${entity.id}`, {
+const reactiveUser = (entity, entityName, dispatch) => {
+  return fetch(`${authApiBase}auth/${entityName}/${entity.id}`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
@@ -29,10 +29,11 @@ const reactiveUser = (entity, entityName, dispatch) =>
     body: JSON.stringify({ is_active: true }),
   })
     .then(checkStatus)
-    .then(res => {
+    .then((res) => {
       showReactivationStatus(res, dispatch);
       return res;
     });
+};
 
 export const revertEntity = (entityName, entity, dispatch) => {
   if (entityName === 'users') {
@@ -54,7 +55,7 @@ export const revertEntity = (entityName, entity, dispatch) => {
     body: JSON.stringify(entity),
   })
     .then(checkStatus)
-    .then(res => {
+    .then((res) => {
       showReactivationStatus(res, dispatch);
       return res;
     });
