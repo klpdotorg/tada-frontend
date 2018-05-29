@@ -93,11 +93,7 @@ class EditDistrictForm extends Component {
             placeholder="Please enter the district name"
             className="form-control"
             required
-            validations={{
-              textValidation(values, value) {
-                return value.match(/^[a-zA-Z0-9 ]*$/g) ? true : 'Please enter text only';
-              },
-            }}
+            validations="minLength:1"
           />
         </Formsy.Form>
         <div className="col-md-8">
