@@ -14,13 +14,13 @@ import { ViewStudents } from './containers/ViewStudents';
 import { DistrictPermissions, BlockPermissions } from './containers/Permissions';
 import RevertEntity from './containers/RevertEntity';
 import { MapAssessments } from './containers/MapAssessments';
-import { ManageUsers } from './containers/Users';
+// import { ManageUsers } from './containers/Users/ManageUsers';
 import {
   InstitutionAnswersSheet,
   StudentsAnswersSheet,
   StudentGroupAnswersSheet,
+  DefaultMessage,
 } from './containers/AssessmentEntry';
-import { DefaultMessage } from './containers/AssessmentEntry';
 import { AssignPermissionMessage } from './components/Permissions';
 
 const Loading = ({ error }) => {
@@ -33,6 +33,13 @@ const Loading = ({ error }) => {
 const App = Loadable({
   loader: () => {
     return import('./containers/Dashboard/App');
+  },
+  loading: Loading,
+});
+
+const ManageUsers = Loadable({
+  loader: () => {
+    return import('./containers/Users/ManageUsers');
   },
   loading: Loading,
 });

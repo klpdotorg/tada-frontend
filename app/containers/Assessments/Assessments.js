@@ -57,4 +57,4 @@ const Assessments = connect(mapStateToProps, {
   deleteAssessments,
 })(GetAssessments);
 
-export { Assessments };
+export default Assessments;
