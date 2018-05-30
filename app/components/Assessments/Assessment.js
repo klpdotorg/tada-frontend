@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import get from 'lodash.get';
 
 import { dateParser } from '../../utils';
 
@@ -19,8 +20,8 @@ const AssessmentRow = (props) => {
         />
       </td>
       <td>{assessment.name}</td>
-      <td>{dateParser(assessment.start_date)}</td>
-      <td>{dateParser(assessment.end_date)}</td>
+      <td>{dateParser(get(assessment, 'start_date', new Date()))}</td>
+      <td>{dateParser(get(assessment, 'end_date', new Date()))}</td>
       <td>{assessment.type}</td>
       <td>{assessment.double_entry}</td>
       <td>{assessment.academic_year}</td>
