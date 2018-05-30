@@ -32,7 +32,7 @@ class StudentInputRow extends Component {
   }
 
   render() {
-    const { formErrors, index, languages, hasPermissions } = this.props;
+    const { formErrors, index, languages, hasPermissions, studentGroupId, depth } = this.props;
 
     return (
       <tr className={includes(formErrors, index) ? 'bg-danger' : ''}>
@@ -210,6 +210,20 @@ class StudentInputRow extends Component {
             disabled={!hasPermissions}
           />
         </td>
+        <td>
+          <button
+            onClick={() => {
+              this.props.addStudent(index, studentGroupId, depth);
+              // props.openEditStudentModal(props.studentNodeId);
+            }}
+            className="btn btn-primary padded-btn"
+            data-toggle="tooltip"
+            title="Edit"
+            // disabled={!hasPermissions}
+          >
+            Save
+          </button>
+        </td>
       </tr>
     );
   }
@@ -223,6 +237,9 @@ StudentInputRow.propTypes = {
   updateValue: PropTypes.func,
   student: PropTypes.object,
   institutionId: PropTypes.number,
+  addStudent: PropTypes.func,
+  studentGroupId: PropTypes.any,
+  depth: PropTypes.any,
 };
 
 export { StudentInputRow };

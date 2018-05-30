@@ -2,12 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import isEmpty from 'lodash.isempty';
 import includes from 'lodash.includes';
+import get from 'lodash.get';
 
 import { dateParser } from '../../utils';
 
 const StudentView = (props) => {
-  const { student, selectedStudents, hasPermissions, canDelete } = props;
-  const { id, first_name, last_name, uid, gender, dob, langVal } = student;
+  const { student, selectedStudents, hasPermissions, canDelete, languages } = props;
+  const { id, first_name, last_name, uid, gender, dob, mt } = student;
+  const langVal = languages.find((lan) => {
+    return lan.value === mt;
+  });
   const checked = includes(selectedStudents, props.studentNodeId);
 
   if (isEmpty(student)) {
@@ -31,7 +35,7 @@ const StudentView = (props) => {
       </td>
       <td>{uid}</td>
       <td>{gender}</td>
-      <td>{langVal}</td>
+      <td>{get(langVal, 'label', '')}</td>
       <td>{dateParser(dob)}</td>
       <td>
         ___
@@ -75,6 +79,7 @@ const StudentView = (props) => {
 };
 
 StudentView.propTypes = {
+  languages: PropTypes.array,
   hasPermissions: PropTypes.bool,
   canDelete: PropTypes.bool,
   student: PropTypes.object,

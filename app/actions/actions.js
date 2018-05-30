@@ -1,14 +1,15 @@
 import fetch from 'isomorphic-fetch';
 import { SERVER_API_BASE as serverApiBase } from 'config';
+import { goBack } from 'react-router-redux';
 
 import { checkStatus, get } from './requests';
 import { urls as Urls } from '../constants';
 import { boundaryType } from './utils';
 import { SET_PARENT_NODE } from './types';
 
-export const goBack = () => {
-  return {
-    type: 'pop',
+export const goback = () => {
+  return (dispatch) => {
+    dispatch(goBack());
   };
 };
 

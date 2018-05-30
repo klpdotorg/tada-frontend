@@ -8,7 +8,7 @@ import get from 'lodash.get';
 import uniq from 'lodash.uniq';
 
 import { EditStudentInputRow } from './index';
-import { setEditStudentsFormErrors, editStudents, goBack, setEditStudents } from '../../actions';
+import { setEditStudentsFormErrors, editStudents, goback, setEditStudents } from '../../actions';
 
 const REQUIRED_FIELDS = [
   {
@@ -106,44 +106,68 @@ class EditStudentsFormView extends Component {
     return (
       <div>
         {this.renderErrors()}
-        <div className="table-responsive">
+        <div className="table-responsive add-students-table">
           <table className="table table-hover table-fixedwidth">
             <thead>
-              <tr className="text-primary text-uppercase">
-                <th>First Name{this.setRequiredField('first_name')}</th>
-                <th>Middle Name{this.setRequiredField('middle_name')}</th>
-                <th>Last Name{this.setRequiredField('last_name')}</th>
-                <th>Government student ID{this.setRequiredField('uid')}</th>
-                <th>Gender{this.setRequiredField('gender')}</th>
-                <th>Mother Tongue{this.setRequiredField('mt')}</th>
-                <th>Academic Year{this.setRequiredField('academic_year')}</th>
-                <th>Date of Birth{this.setRequiredField('dob')}</th>
-                <th>Father First Name{this.setRequiredField('fatherFirstName')}</th>
-                <th>Father Middle Name{this.setRequiredField('fatherMiddleName')}</th>
-                <th>Father Last Name{this.setRequiredField('fatherLastName')}</th>
-                <th>Mother First Name{this.setRequiredField('motherFirstName')}</th>
-                <th>Mother Middle Name{this.setRequiredField('motherMiddleName')}</th>
-                <th>Mother Last Name{this.setRequiredField('motherLastName')}</th>
+              <tr>
+                <th className="add-students-header-text">
+                  First Name{this.setRequiredField('first_name')}
+                </th>
+                <th className="add-students-header-text">
+                  Middle Name{this.setRequiredField('middle_name')}
+                </th>
+                <th className="add-students-header-text">
+                  Last Name{this.setRequiredField('last_name')}
+                </th>
+                <th className="add-students-header-text">
+                  Government student ID{this.setRequiredField('uid')}
+                </th>
+                <th className="add-students-header-text">
+                  Gender{this.setRequiredField('gender')}
+                </th>
+                <th className="add-students-header-text">
+                  Mother Tongue{this.setRequiredField('mt')}
+                </th>
+                <th className="add-students-header-text">
+                  Academic Year{this.setRequiredField('academic_year')}
+                </th>
+                <th className="add-students-header-text">
+                  Date of Birth{this.setRequiredField('dob')}
+                </th>
+                <th className="add-students-header-text">
+                  Father First Name{this.setRequiredField('fatherFirstName')}
+                </th>
+                <th className="add-students-header-text">
+                  Father Middle Name{this.setRequiredField('fatherMiddleName')}
+                </th>
+                <th className="add-students-header-text">
+                  Father Last Name{this.setRequiredField('fatherLastName')}
+                </th>
+                <th className="add-students-header-text">
+                  Mother First Name{this.setRequiredField('motherFirstName')}
+                </th>
+                <th className="add-students-header-text">
+                  Mother Middle Name{this.setRequiredField('motherMiddleName')}
+                </th>
+                <th className="add-students-header-text">
+                  Mother Last Name{this.setRequiredField('motherLastName')}
+                </th>
               </tr>
             </thead>
             <tbody>{this.renderRows()}</tbody>
           </table>
-          <div className="row">
-            <div className="col-md-4">
-              <button
-                className="btn btn-primary"
-                onClick={this.validate}
-                disabled={!hasPermissions}
-              >
-                Save
-              </button>
-              <button onClick={this.props.goBack} className="btn btn-primary padded-btn">
-                Discard
-              </button>
-            </div>
-          </div>
-          <div className="base-spacing-mid" />
         </div>
+        <div className="row">
+          <div className="col-md-4">
+            <button className="btn btn-primary" onClick={this.validate} disabled={!hasPermissions}>
+              Save
+            </button>
+            <button onClick={this.props.goback} className="btn btn-primary padded-btn">
+              Discard
+            </button>
+          </div>
+        </div>
+        <div className="base-spacing-mid" />
       </div>
     );
   }
@@ -151,7 +175,7 @@ class EditStudentsFormView extends Component {
 
 EditStudentsFormView.propTypes = {
   hasPermissions: PropTypes.bool,
-  goBack: PropTypes.func,
+  goback: PropTypes.func,
   formErrors: PropTypes.array,
   studentGroupNodeId: PropTypes.string,
   institutionId: PropTypes.number,
@@ -172,7 +196,7 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const EditStudentsForm = connect(mapStateToProps, {
-  goBack,
+  goback,
   setEditStudentsFormErrors,
   editStudents,
   setEditStudents,

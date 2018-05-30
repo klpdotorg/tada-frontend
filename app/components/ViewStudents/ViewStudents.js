@@ -44,36 +44,35 @@ const ViewStudentsCont = (props) => {
         </li>
         <li>{studentGroup.name}</li>
       </ol>
-      <div className="table-responsive">
-        <div className="row">
-          <h4 className="text-primary col-md-10">Student Details</h4>
-          <div className="col-md-2 text-center">
-            <button
-              type="submit"
-              className="btn btn-primary"
-              onClick={() => {
-                props.openEditStudentsForm(params.studentGroupNodeId);
-              }}
-              disabled={canEdit && !hasPermissions}
-            >
-              Edit Students
-            </button>
-          </div>
+      <div className="row">
+        <h4 className="text-primary col-md-10">Student Details</h4>
+        <div className="col-md-2 text-center">
+          <button
+            type="submit"
+            className="btn btn-primary"
+            onClick={() => {
+              props.openEditStudentsForm(params.studentGroupNodeId);
+            }}
+            disabled={canEdit && !hasPermissions}
+          >
+            Edit Students
+          </button>
         </div>
-        <div className="base-spacing-mid border-base" />
-        <div className="base-spacing-sm" />
+      </div>
+      <div className="base-spacing-sm" />
+      <div className="table-responsive add-students-table">
         <table className="table table-condensed table-fixedwidth">
           <thead>
             <tr className="text-primary text-uppercase">
-              <th>Select</th>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Government student ID</th>
-              <th>Gender</th>
-              <th>Mother Tongue</th>
-              <th>Date of Birth</th>
-              <th>Father's Name</th>
-              <th>Mother's Name</th>
+              <th className="add-students-header-text">Select</th>
+              <th className="add-students-header-text">ID</th>
+              <th className="add-students-header-text">Name</th>
+              <th className="add-students-header-text">Government student ID</th>
+              <th className="add-students-header-text">Gender</th>
+              <th className="add-students-header-text">Mother Tongue</th>
+              <th className="add-students-header-text">Date of Birth</th>
+              <th className="add-students-header-text">Father's Name</th>
+              <th className="add-students-header-text">Mother's Name</th>
               <th />
             </tr>
           </thead>
@@ -83,38 +82,38 @@ const ViewStudentsCont = (props) => {
             hasPermissions={hasPermissions}
           />
         </table>
-        <div className="row base-spacing-mid">
-          <div className="col-md-4 centers-select-box">
-            <h5 className="text-primary" htmlFor="sel1">
-              Centers:
-            </h5>
-            <select
-              className="form-control"
-              id="sel1"
-              onChange={(e) => {
-                props.selectCenter(e.target.value);
-              }}
-              value={selectedCenter}
-            >
-              {centers.map((center, i) => {
-                return (
-                  <option key={i} value={center.id}>
-                    {center.label}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-          <div className="col-md-4">
-            <button
-              type="submit"
-              className="btn btn-primary"
-              disabled={!canMapStudents}
-              onClick={props.mapStudentsWithCenter}
-            >
-              Map to Center
-            </button>
-          </div>
+      </div>
+      <div className="row base-spacing-mid">
+        <div className="col-md-4 centers-select-box">
+          <h5 className="text-primary" htmlFor="sel1">
+            Centers:
+          </h5>
+          <select
+            className="form-control"
+            id="sel1"
+            onChange={(e) => {
+              props.selectCenter(e.target.value);
+            }}
+            value={selectedCenter}
+          >
+            {centers.map((center, i) => {
+              return (
+                <option key={i} value={center.id}>
+                  {center.label}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+        <div className="col-md-4">
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={!canMapStudents}
+            onClick={props.mapStudentsWithCenter}
+          >
+            Map to Center
+          </button>
         </div>
       </div>
       <EditStudent studentGroupNodeId={params.studentGroupNodeId} hasPermissions={hasPermissions} />

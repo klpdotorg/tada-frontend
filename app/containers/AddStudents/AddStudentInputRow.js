@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import get from 'lodash.get';
 
 import { StudentInputRow } from '../common';
-import { openNode, saveNewStudends, addStudentsFormValueChanged } from '../../actions';
+import { addStudentsFormValueChanged, addStudent } from '../../actions';
 
 const mapStateToProps = (state) => {
   const { languages } = state.languages;
@@ -30,16 +30,9 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    updateValue: (value, rowNumber) => {
-      dispatch(addStudentsFormValueChanged(value, rowNumber));
-    },
-  };
-};
-
 const AddStudentInputRow = connect(mapStateToProps, {
   updateValue: addStudentsFormValueChanged,
+  addStudent,
 })(StudentInputRow);
 
 export { AddStudentInputRow };

@@ -834,3 +834,14 @@ table.table-fixedwidth td, .table-fixedwidth th {
 .filterbyprogram-link:hover {
   text-decoration: underline;
 }
+
+.add-students-table {
+  border: 1px solid #f3eaea;
+  margin-bottom: 20px;
+}
+
+.add-students-header-text {
+  font-size: 13px;
+  font-weight: 400;
+  color: #337abb;
+}
