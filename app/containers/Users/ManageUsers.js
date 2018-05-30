@@ -30,4 +30,4 @@ const ManageUsers = connect(mapStateToProps, {
   showAddUserModal: toggleAddUserModal,
 })(FetchUsers);
 
-export { ManageUsers };
+export default ManageUsers;

@@ -102,7 +102,6 @@ export const saveNewAssessment = (options) => {
     const state = getState();
     const programId = state.programs.selectedProgram;
     const createAssessmentURL = `${serverApiBase}surveys/${programId}/questiongroup/`;
-
     post(createAssessmentURL, options).then((response) => {
       dispatch(assessmentCreated(response));
       dispatch({
@@ -173,7 +172,7 @@ export const deleteAssessments = () => {
     });
 
     Promise.all(promises).then(() => {
-      dispatch(getAssessments());
+      dispatch(getAssessments(selectedProgram));
       dispatch(closeAssessmentLoading());
     });
   };

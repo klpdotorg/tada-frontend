@@ -56,7 +56,9 @@ class RegistrationForm extends Component {
             <div id="navbar" className="navbar-collapse collapse">
               <p className="app-name navbar-text pull-left">Data Entry Operations 2015-2016</p>
               <p className="navbar-text pull-right">
-                <Link to="/login" className="btn btn-primary padded-btn">LOGIN</Link>
+                <Link to="/login" className="btn btn-primary padded-btn">
+                  LOGIN
+                </Link>
               </p>
             </div>
           </div>
@@ -64,8 +66,8 @@ class RegistrationForm extends Component {
         <div className="container-fluid absolute-center is-responsive">
           <div className="row">
             <div className="col-sm-12 col-md-10 col-md-offset-1">
-              {' '}<p className="app-name navbar-text pull-left">User Registration</p>
               {' '}
+              <p className="app-name navbar-text pull-left">User Registration</p>{' '}
             </div>
             <div className="col-sm-12 col-md-10 col-md-offset-1">
               <form id="loginForm">
@@ -130,7 +132,7 @@ class RegistrationForm extends Component {
             </div>
           </div>
         </div>
-        {/* Reg successful modal*/}
+        {/* Reg successful modal */}
         <div
           className="modal fade"
           data-backdrop="false"
@@ -145,7 +147,10 @@ class RegistrationForm extends Component {
                 <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 className="modal-title" id="regSuccessTitle"> Registration Successful</h4>
+                <h4 className="modal-title" id="regSuccessTitle">
+                  {' '}
+                  Registration Successful
+                </h4>
               </div>
               <div className="modal-body">
                 Registration successful! Please click OK to proceed to the Login page.

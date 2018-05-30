@@ -14,13 +14,13 @@ import { ViewStudents } from './containers/ViewStudents';
 import { DistrictPermissions, BlockPermissions } from './containers/Permissions';
 import RevertEntity from './containers/RevertEntity';
 import { MapAssessments } from './containers/MapAssessments';
-import { ManageUsers } from './containers/Users';
+// import { ManageUsers } from './containers/Users/ManageUsers';
 import {
   InstitutionAnswersSheet,
   StudentsAnswersSheet,
   StudentGroupAnswersSheet,
+  DefaultMessage,
 } from './containers/AssessmentEntry';
-import { DefaultMessage } from './components/AssessmentEntry';
 import { AssignPermissionMessage } from './components/Permissions';
 
 const Loading = ({ error }) => {
@@ -33,6 +33,13 @@ const Loading = ({ error }) => {
 const App = Loadable({
   loader: () => {
     return import('./containers/Dashboard/App');
+  },
+  loading: Loading,
+});
+
+const ManageUsers = Loadable({
+  loader: () => {
+    return import('./containers/Users/ManageUsers');
   },
   loading: Loading,
 });
@@ -169,15 +176,15 @@ export const routes = (
         <Route path="programmes" component={Programs} />
         <Route path="filterprograms" component={DefaultMessage} />
         <Route
-          path="filterprograms/questiongroups/:questionGroupId/institutions/:institutionId"
+          path="filterprograms/:programId/questiongroup/:questionGroupId/district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId"
           component={InstitutionAnswersSheet}
         />
         <Route
-          path="filterprograms/questiongroups/:questionGroupId/studentgroups/:studentGroupId"
+          path="filterprograms/:programId/questiongroup/:questionGroupId/district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId/studentgroup/:studentGroupId"
           component={StudentGroupAnswersSheet}
         />
         <Route
-          path="filterprograms/questiongroups/:questionGroupId/students/:studentGroupId"
+          path="filterprograms/:programId/questiongroup/:questionGroupId/district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId/students/:studentGroupId"
           component={StudentsAnswersSheet}
         />
         <Route path="mapassessments" component={MapAssessments} />

@@ -53,3 +53,24 @@ export const addStudents = (groupNodeId, groupId, institutionId, depth) => {
     });
   };
 };
+
+export const addStudent = (index, groupId, depth) => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const { values } = state.addStudents;
+    const newValues = Object.values(values);
+
+    dispatch(showBoundaryLoading());
+    post(`${SERVER_API_BASE}studentgroups/${groupId}/students/`, [
+      newValues[index],
+    ]).then((response) => {
+      const entities = convertEntitiesToObject(response.results);
+      dispatch({
+        type: SET_BOUNDARIES,
+        boundaryDetails: entities,
+        boundariesByParentId: { [depth]: Object.keys(entities) },
+      });
+      dispatch(closeBoundaryLoading());
+    });
+  };
+};

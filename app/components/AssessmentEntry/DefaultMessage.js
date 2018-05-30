@@ -1,6 +1,6 @@
 import React from 'react';
 
-const DefaultMessage = () => {
+const DefaultMessageView = () => {
   return (
     <div className="text-center">
       <p>Filter program asssessment!</p>
@@ -8,4 +8,4 @@ const DefaultMessage = () => {
   );
 };
 
-export { DefaultMessage };
+export { DefaultMessageView };

@@ -12,7 +12,7 @@ const CreateEntryFormView = (props) => {
       {rows.map((row) => {
         const groupValue = get(groupValues, row.id, '');
         return (
-          <tr>
+          <tr key={row.id}>
             <td>{row.id}</td>
             <td
               className="td-student-name"
@@ -55,7 +55,7 @@ const CreateEntryFormView = (props) => {
 
               if (questionType === 'CheckBox') {
                 return (
-                  <td key={question.id + i} className="answer-field">
+                  <td key={question.id} className="answer-field">
                     <select
                       className="form-control"
                       value={value}
@@ -63,8 +63,8 @@ const CreateEntryFormView = (props) => {
                         props.onChange(e.target.value, row.id, question.id);
                       }}
                     >
-                      {question.options.map((val) => {
-                        return <option>{val}</option>;
+                      {question.options.map((val, index) => {
+                        return <option key={index}>{val}</option>;
                       })}
                     </select>
                   </td>
@@ -134,10 +134,10 @@ const CreateEntryFormView = (props) => {
 
 CreateEntryFormView.propTypes = {
   questions: PropTypes.object,
-  answers: PropTypes.array,
+  answers: PropTypes.object,
   assessmentId: PropTypes.any,
-  groupValues: PropTypes.array,
-  rows: PropTypes.object,
+  groupValues: PropTypes.object,
+  rows: PropTypes.array,
 };
 
 export { CreateEntryFormView };

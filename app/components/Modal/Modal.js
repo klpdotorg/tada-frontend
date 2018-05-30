@@ -4,7 +4,7 @@ import ReactModal from 'react-modal';
 
 import { modalStyle as customStyles } from '../../styles.js';
 
-const Modal = props => {
+const Modal = (props) => {
   const {
     contentLabel,
     isOpen,
@@ -39,11 +39,13 @@ const Modal = props => {
             {children}
           </div>
           <div className="modal-footer">
-            {hideCancelBtn
-              ? ''
-              : <button type="button" className="btn btn-primary" onClick={onCloseModal}>
-                  {!cancelBtnLabel ? 'Discard' : cancelBtnLabel}
-                </button>}
+            {hideCancelBtn ? (
+              ''
+            ) : (
+              <button type="button" className="btn btn-primary" onClick={onCloseModal}>
+                {!cancelBtnLabel ? 'Discard' : cancelBtnLabel}
+              </button>
+            )}
             <button
               type="button"
               disabled={!canSubmit}

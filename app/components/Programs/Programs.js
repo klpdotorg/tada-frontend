@@ -1,10 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import map from 'lodash.map';
+import Loadable from 'react-loadable';
 
-import { Assessments, CreateAssessment } from '../../containers/Assessments';
+import { CreateAssessment } from '../../containers/Assessments';
 import { Message, Loading } from '../common';
 import { SelectedProgram, CreateProgram, EditProgram } from '../../containers/Programs';
+
+const Assessments = Loadable({
+  loader: () => {
+    return import('../../containers/Assessments/Assessments');
+  },
+  loading: Loading,
+});
 
 const ProgramView = (props) => {
   const { selectedProgram, programs, loading } = props;
@@ -72,4 +80,4 @@ ProgramView.propTypes = {
   openAddAssessmentModal: PropTypes.func,
 };
 
-export { ProgramView };
+export default ProgramView;

@@ -116,14 +116,20 @@ class Entity extends Component {
               <th>Revert</th>
             </tr>
           </thead>
-          <tbody>{this.state.entities.map((entity) => { return this.renderEntity(entity); })}</tbody>
+          <tbody>
+            {this.state.entities.map((entity) => {
+              return this.renderEntity(entity);
+            })}
+          </tbody>
         </table>
         {this.state.pageNumbers && (
           <nav aria-label="Page navigation" className="text-center">
             <ul className="pagination">
               <li>
                 <a
-                  onClick={() => { return this.handlePage(this.state.currentPage - 1); }}
+                  onClick={() => {
+                    return this.handlePage(this.state.currentPage - 1);
+                  }}
                   aria-label="Previous"
                 >
                   <span aria-hidden="true">&laquo;</span>
@@ -140,12 +146,23 @@ class Entity extends Component {
 
                 return (
                   <li key={i}>
-                    <a onClick={() => { return this.handlePage(item); }}>{item}</a>
+                    <a
+                      onClick={() => {
+                        return this.handlePage(item);
+                      }}
+                    >
+                      {item}
+                    </a>
                   </li>
                 );
               })}
               <li>
-                <a onClick={() => { return this.handlePage(this.state.currentPage + 1); }} aria-label="Next">
+                <a
+                  onClick={() => {
+                    return this.handlePage(this.state.currentPage + 1);
+                  }}
+                  aria-label="Next"
+                >
                   <span aria-hidden="true">&raquo;</span>
                 </a>
               </li>

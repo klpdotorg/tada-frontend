@@ -10,31 +10,29 @@ import {
 
 const RenderForm = (props) => {
   const { loading, params, uniqueId, rows } = props;
-  let element = '';
+
   if (loading) {
     return <tbody />;
   }
 
-  // if (!rows.length) {
-  return <CreateEntryForm assessmentId={params.questionGroupId} uniqueId={uniqueId} />;
-  // } else {
-  //   element = rows.map((rowId) => {
-  //     return (
-  //       <AssessmentEntryRow
-  //         rowId={rowId}
-  //         key={rowId}
-  //         assessmentId={params.questionGroupId}
-  //         uniqueId={uniqueId}
-  //       />
-  //     );
-  //   });
-  // }
+  if (!rows.length) {
+    return <CreateEntryForm assessmentId={params.questionGroupId} uniqueId={uniqueId} />;
+  }
 
-  // return (
-  //   <tbody>
-  //     {element}
-  //   </tbody>
-  // );
+  return (
+    <tbody>
+      {rows.map((rowId) => {
+        return (
+          <AssessmentEntryRow
+            rowId={rowId}
+            key={rowId}
+            assessmentId={params.questionGroupId}
+            uniqueId={uniqueId}
+          />
+        );
+      })}
+    </tbody>
+  );
 };
 
 const AssessmentEntryFormView = (props) => {

@@ -1,14 +1,23 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import Loadable from 'react-loadable';
 
-import { ProgramView } from '../../components/Programs';
 import {
   getPrograms,
   openCreateProgramModal,
   openAddAssessmentModal,
   selectProgram,
 } from '../../actions';
+
+import { Loading } from '../../components/common';
+
+const ProgramView = Loadable({
+  loader: () => {
+    return import('../../components/Programs/Programs');
+  },
+  loading: Loading,
+});
 
 class GetPrograms extends Component {
   componentDidMount() {

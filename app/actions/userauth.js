@@ -24,7 +24,7 @@ export function checkUserPassword(pass) {
 // state and we don't want to persist in the Redux store.
 export function resetPasswordEmail(email_address) {
   return function (dispatch, getState) {
-    return fetch(authApiBase + 'auth/password/reset/', {
+    return fetch(`${authApiBase}auth/password/reset/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -38,11 +38,11 @@ export function resetPasswordEmail(email_address) {
 
 export function resetPasswordForce(id, newPassword) {
   return function (dispatch, getState) {
-    return fetch(Urls.USERS + id + '/', {
+    return fetch(`${Urls.USERS + id}/`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: 'Token ' + sessionStorage.token,
+        Authorization: `Token ${sessionStorage.token}`,
       },
       body: JSON.stringify({
         password: newPassword,
@@ -53,11 +53,11 @@ export function resetPasswordForce(id, newPassword) {
 
 export function changePassword(currentPassword, newPassword) {
   return function (dispatch, getState) {
-    return fetch(authApiBase + 'auth/password/', {
+    return fetch(`${authApiBase}auth/password/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: 'Token ' + sessionStorage.token,
+        Authorization: `Token ${sessionStorage.token}`,
       },
       body: JSON.stringify({
         new_password: newPassword,
@@ -70,15 +70,15 @@ export function changePassword(currentPassword, newPassword) {
 export function deleteUser(userid) {
   return function (dispatch, getState) {
     console.log('Inside deleteUser', userid);
-    return fetch(Urls.USERS + userid + '/', {
+    return fetch(`${Urls.USERS + userid}/`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: 'Token ' + sessionStorage.token,
+        Authorization: `Token ${sessionStorage.token}`,
       },
     })
       .then(checkStatusNoJSON)
-      .then(response => {
+      .then((response) => {
         dispatch(userDeleted(userid));
       });
   };
@@ -86,7 +86,7 @@ export function deleteUser(userid) {
 
 export function confirmResetPassword(userUid, userToken, newpassword) {
   return function (dispatch, getState) {
-    return fetch(authApiBase + 'auth/password/reset/confirm/', {
+    return fetch(`${authApiBase}auth/password/reset/confirm/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -98,7 +98,7 @@ export function confirmResetPassword(userUid, userToken, newpassword) {
         re_new_password: newpassword,
       }),
     })
-      .then(response => {
+      .then((response) => {
         if (response.status >= 200 && response.status < 300) {
           dispatch(passwordResetConfirmed());
         } else {
@@ -107,7 +107,7 @@ export function confirmResetPassword(userUid, userToken, newpassword) {
           throw error;
         }
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch(passwordResetRejected(error));
       });
   };
@@ -115,7 +115,7 @@ export function confirmResetPassword(userUid, userToken, newpassword) {
 
 export function changeUserName(newUserName, password) {
   return function (dispatch, getState) {
-    return fetch(authApiBase + 'auth/username/', {
+    return fetch(`${authApiBase}auth/username/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -125,10 +125,10 @@ export function changeUserName(newUserName, password) {
         current_password: password,
       })
         .then(checkStatus)
-        .then(data => {
+        .then((data) => {
           console.log('Username changed');
         })
-        .catch(error => {
+        .catch((error) => {
           dispatch(requestFailed(error));
         }),
     });
@@ -137,7 +137,7 @@ export function changeUserName(newUserName, password) {
 
 export function checkUserAuth(email, pass) {
   return function (dispatch, getState) {
-    return fetch(authApiBase + 'auth/login/', {
+    return fetch(`${authApiBase}auth/login/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -157,15 +157,15 @@ export function listUsers() {
 export function fetchAllUsers() {
   return function (dispatch, getState) {
     dispatch(requestAllUsers());
-    return fetch(Urls.USERS + '?is_active=True&limit=1000', {
+    return fetch(`${Urls.USERS}?is_active=True&limit=1000`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: 'Token ' + sessionStorage.token,
+        Authorization: `Token ${sessionStorage.token}`,
       },
     })
       .then(checkStatus)
-      .then(data => {
+      .then((data) => {
         dispatch(allUsersFetched(data));
         return data;
       });
@@ -180,15 +180,15 @@ export function fetchUsers(pageNumber) {
       return;
     }
     var offset = (pageNumber - 1) * 20;
-    return fetch(Urls.USERS + '?is_active=True&offset=' + offset, {
+    return fetch(`${Urls.USERS}?is_active=True&offset=${offset}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: 'Token ' + sessionStorage.token,
+        Authorization: `Token ${sessionStorage.token}`,
       },
     })
       .then(checkStatus)
-      .then(data => {
+      .then((data) => {
         dispatch(usersFetched(data, pageNumber));
         return data;
       });
@@ -197,11 +197,11 @@ export function fetchUsers(pageNumber) {
 
 function addUserToRoleOnly(userid, role) {
   return function (dispatch, getState) {
-    return fetch(Urls.USERS + userid + '/', {
+    return fetch(`${Urls.USERS + userid}/`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: 'Token ' + sessionStorage.token,
+        Authorization: `Token ${sessionStorage.token}`,
       },
       body: JSON.stringify({
         group: role,
@@ -212,11 +212,11 @@ function addUserToRoleOnly(userid, role) {
 
 export function addUserToRole(userid, firstname, lastname, role) {
   return function (dispatch, getState) {
-    return fetch(Urls.USERS + userid + '/', {
+    return fetch(`${Urls.USERS + userid}/`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: 'Token ' + sessionStorage.token,
+        Authorization: `Token ${sessionStorage.token}`,
       },
       body: JSON.stringify({
         group: role,
@@ -229,16 +229,16 @@ export function addUserToRole(userid, firstname, lastname, role) {
 
 export function deactivateUser(id) {
   return function (dispatch, getState) {
-    return fetch(Urls.USERS + id + '/', {
+    return fetch(`${Urls.USERS + id}/`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: 'Token ' + sessionStorage.token,
+        Authorization: `Token ${sessionStorage.token}`,
       },
       body: JSON.stringify({ is_active: false }),
     })
       .then(checkStatus)
-      .then(data => {
+      .then((data) => {
         dispatch(userDeleted(data.id));
       });
   };
@@ -246,11 +246,11 @@ export function deactivateUser(id) {
 
 export function modifyUser(id, firstName, lastName, email, role) {
   return function (dispatch, getState) {
-    return fetch(Urls.USERS + id + '/', {
+    return fetch(`${Urls.USERS + id}/`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: 'Token ' + sessionStorage.token,
+        Authorization: `Token ${sessionStorage.token}`,
       },
       body: JSON.stringify({
         first_name: firstName,
@@ -260,9 +260,11 @@ export function modifyUser(id, firstName, lastName, email, role) {
     })
       .then(checkStatus)
       .then(() => {
-        dispatch(addUserToRoleOnly(id, role)).then(checkStatus).then(data => {
-          dispatch(userModified(data));
-        });
+        dispatch(addUserToRoleOnly(id, role))
+          .then(checkStatus)
+          .then((data) => {
+            dispatch(userModified(data));
+          });
       });
   };
 }
@@ -279,11 +281,11 @@ function selfModified(data) {
 export function modifySelf(email, firstName, lastName) {
   return function (dispatch, getState) {
     let id = getState().login.id;
-    return fetch(Urls.USERS + id + '/', {
+    return fetch(`${Urls.USERS + id}/`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: 'Token ' + sessionStorage.token,
+        Authorization: `Token ${sessionStorage.token}`,
       },
       body: JSON.stringify({
         first_name: firstName,
@@ -292,7 +294,7 @@ export function modifySelf(email, firstName, lastName) {
       }),
     })
       .then(checkStatus)
-      .then(data => {
+      .then((data) => {
         dispatch(selfModified(data));
         return data;
       });
@@ -305,7 +307,7 @@ export function createUser(firstname, lastname, username, email, password, role)
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: 'Token ' + sessionStorage.token,
+        Authorization: `Token ${sessionStorage.token}`,
       },
       body: JSON.stringify({
         first_name: firstname,
@@ -316,10 +318,10 @@ export function createUser(firstname, lastname, username, email, password, role)
       }),
     })
       .then(checkStatus)
-      .then(data => {
+      .then((data) => {
         dispatch(addUserToRole(data.id, firstname, lastname, role))
           .then(checkStatus)
-          .then(userrole => {
+          .then((userrole) => {
             dispatch(userCreated(userrole));
           });
         return data;
@@ -327,9 +329,11 @@ export function createUser(firstname, lastname, username, email, password, role)
   };
 }
 
-export const requestAllUsers = () => ({
-  type: 'REQUEST_ALL_USERS',
-});
+export const requestAllUsers = () => {
+  return {
+    type: 'REQUEST_ALL_USERS',
+  };
+};
 
 function userCreated(userdata) {
   return {

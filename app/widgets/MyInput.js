@@ -9,10 +9,9 @@ class MyInput extends React.Component {
   }
 
   render() {
-    const className =
-      'form-group' +
-      (this.props.className || ' ') +
-      (this.showRequired() ? 'required' : this.showError() ? 'error' : null);
+    const className = `form-group${this.props.className || ' '}${this.showRequired()
+      ? 'required'
+      : this.showError() ? 'error' : null}`;
     const errorMessage = this.getErrorMessage();
     return (
       <div className={className}>

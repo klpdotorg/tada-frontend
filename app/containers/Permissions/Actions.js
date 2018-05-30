@@ -7,8 +7,8 @@ const mapStateToProps = (state) => {
   const { selectedBoundaries, selectedAssessments, selectedUsers } = state.permissions;
 
   return {
-    disabledBoundary: isEmpty(selectedBoundaries) && isEmpty(selectedUsers),
-    disabledAssessment: isEmpty(selectedAssessments) && isEmpty(selectedUsers),
+    disabledBoundary: isEmpty(selectedBoundaries) || isEmpty(selectedUsers),
+    disabledAssessment: isEmpty(selectedAssessments) || isEmpty(selectedUsers),
   };
 };
 

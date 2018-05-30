@@ -12,6 +12,7 @@ const mapStateToProps = (state, ownProps) => {
     student: get(state.boundaries.boundaryDetails, ownProps.studentNodeId, {}),
     selectedStudents,
     canDelete: isAdmin,
+    languages: state.languages.languages,
   };
 };
 
