@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import { StudentInputRow } from '../common';
-import { editStudentsFormValueChanged } from '../../actions';
+import { editStudentsFormValueChanged, modifyStudent } from '../../actions';
 
 const mapStateToProps = (state, ownProps) => {
   const { languages } = state.languages;
@@ -12,12 +12,8 @@ const mapStateToProps = (state, ownProps) => {
     middle_name: value.middle_name,
     last_name: value.last_name,
     dob: value.dob,
-    fatherFirstName: value.fatherFirstName,
-    fatherMiddleName: value.motherFirstName,
-    fatherLastName: value.fatherLastName,
-    motherFirstName: value.motherFirstName,
-    motherMiddleName: value.motherMiddleName,
-    motherLastName: value.motherLastName,
+    father_name: value.father_name,
+    mother_name: value.mother_name,
     uid: value.uid,
     mt: languages.find((lang) => {
       return lang.value === value.mt;
@@ -35,6 +31,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const EditStudentInputRow = connect(mapStateToProps, {
   updateValue: editStudentsFormValueChanged,
+  onSave: modifyStudent,
 })(StudentInputRow);
 
 export { EditStudentInputRow };

@@ -1,14 +1,18 @@
 import { SERVER_API_BASE } from 'config';
+import Notifications from 'react-notification-system-redux';
+import omit from 'lodash.omit';
 
 import {
   SET_ADD_STUDENTS_FORM_ERRORS,
   SET_LANGUAGES_FOR_ADD_STUDENTS_FORM,
   ADD_STUDENTS_FORM_VALUE_CHANGED,
   SET_BOUNDARIES,
+  RESET_ADD_STUDENTS_FORM,
 } from './types';
 import { post } from './requests';
 import { showBoundaryLoading, closeBoundaryLoading, openViewStudents } from './index';
 import { convertEntitiesToObject } from '../utils';
+import { showSuccessMessage } from './notifications';
 
 export const setAddStudentsFormErrors = (value) => {
   return {
@@ -70,6 +74,11 @@ export const addStudent = (index, groupId, depth) => {
         boundaryDetails: entities,
         boundariesByParentId: { [depth]: Object.keys(entities) },
       });
+      dispatch({
+        type: RESET_ADD_STUDENTS_FORM,
+        value: omit(values, index),
+      });
+      dispatch(Notifications.success(showSuccessMessage('Student Added!', 'Student successfully added.')));
       dispatch(closeBoundaryLoading());
     });
   };

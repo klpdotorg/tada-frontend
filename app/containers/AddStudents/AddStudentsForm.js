@@ -130,22 +130,10 @@ class AddStudentsFormView extends Component {
                   Date of Birth{this.setRequiredField('dob')}
                 </th>
                 <th className="add-students-header-text">
-                  Father First Name{this.setRequiredField('fatherFirstName')}
+                  Father Name{this.setRequiredField('father_name')}
                 </th>
                 <th className="add-students-header-text">
-                  Father Middle Name{this.setRequiredField('fatherMiddleName')}
-                </th>
-                <th className="add-students-header-text">
-                  Father Last Name{this.setRequiredField('fatherLastName')}
-                </th>
-                <th className="add-students-header-text">
-                  Mother First Name{this.setRequiredField('motherFirstName')}
-                </th>
-                <th className="add-students-header-text">
-                  Mother Middle Name{this.setRequiredField('motherMiddleName')}
-                </th>
-                <th className="add-students-header-text">
-                  Mother Last Name{this.setRequiredField('motherLastName')}
+                  Mother Name{this.setRequiredField('mother_name')}
                 </th>
                 <th className="add-students-header-text">Save</th>
               </tr>

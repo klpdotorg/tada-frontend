@@ -98,7 +98,7 @@ const ViewStudentsCont = (props) => {
           >
             {centers.map((center, i) => {
               return (
-                <option key={i} value={center.id}>
+                <option key={i} value={center.value}>
                   {center.label}
                 </option>
               );

@@ -32,7 +32,15 @@ class StudentInputRow extends Component {
   }
 
   render() {
-    const { formErrors, index, languages, hasPermissions, studentGroupId, depth } = this.props;
+    const {
+      formErrors,
+      index,
+      languages,
+      hasPermissions,
+      studentGroupId,
+      depth,
+      action,
+    } = this.props;
 
     return (
       <tr className={includes(formErrors, index) ? 'bg-danger' : ''}>
@@ -146,9 +154,9 @@ class StudentInputRow extends Component {
         </td>
         <td>
           <input
-            value={this.state.fatherFirstName}
+            value={this.state.father_name}
             onChange={(e) => {
-              this.changeVal(e, 'fatherFirstName');
+              this.changeVal(e, 'father_name');
             }}
             type="text"
             className="form-control"
@@ -157,73 +165,30 @@ class StudentInputRow extends Component {
         </td>
         <td>
           <input
-            value={this.state.fatherMiddleName}
+            value={this.state.mother_name}
             onChange={(e) => {
-              this.changeVal(e, 'fatherMiddleName');
+              this.changeVal(e, 'mother_name');
             }}
             type="text"
             className="form-control"
             disabled={!hasPermissions}
           />
         </td>
-        <td>
-          <input
-            value={this.state.fatherLastName}
-            onChange={(e) => {
-              this.changeVal(e, 'fatherLastName');
-            }}
-            type="text"
-            className="form-control"
-            disabled={!hasPermissions}
-          />
-        </td>
-        <td>
-          <input
-            value={this.state.motherFirstName}
-            onChange={(e) => {
-              this.changeVal(e, 'motherFirstName');
-            }}
-            type="text"
-            className="form-control"
-            disabled={!hasPermissions}
-          />
-        </td>
-        <td>
-          <input
-            value={this.state.motherMiddleName}
-            onChange={(e) => {
-              this.changeVal(e, 'motherMiddleName');
-            }}
-            type="text"
-            className="form-control"
-            disabled={!hasPermissions}
-          />
-        </td>
-        <td>
-          <input
-            value={this.state.motherLastName}
-            onChange={(e) => {
-              this.changeVal(e, 'motherLastName');
-            }}
-            type="text"
-            className="form-control"
-            disabled={!hasPermissions}
-          />
-        </td>
-        <td>
-          <button
-            onClick={() => {
-              this.props.addStudent(index, studentGroupId, depth);
-              // props.openEditStudentModal(props.studentNodeId);
-            }}
-            className="btn btn-primary padded-btn"
-            data-toggle="tooltip"
-            title="Edit"
-            // disabled={!hasPermissions}
-          >
-            Save
-          </button>
-        </td>
+        {action === 'addStudents' && (
+          <td>
+            <button
+              onClick={() => {
+                this.props.addStudent(index, studentGroupId, depth);
+              }}
+              className="btn btn-primary padded-btn"
+              data-toggle="tooltip"
+              title="Edit"
+              // disabled={!hasPermissions}
+            >
+              Save
+            </button>
+          </td>
+        )}
       </tr>
     );
   }

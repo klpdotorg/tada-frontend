@@ -144,3 +144,11 @@ export const permissionAssigned = (title, message) => {
     message,
   };
 };
+
+export const showSuccessMessage = (title, message) => {
+  return {
+    ...baseNotification,
+    title,
+    message,
+  };
+};

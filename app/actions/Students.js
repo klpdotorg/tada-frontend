@@ -138,7 +138,6 @@ export const modifyStudent = (studentId, options) => {
     });
 
     const editStudentURL = `${SERVER_API_BASE}students/${studentId}/`;
-
     patch(editStudentURL, options).then((response) => {
       const entities = convertEntitiesToObject([response]);
 
