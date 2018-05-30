@@ -1,0 +1,41 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:7.10
+    working_directory: ~/tada-frontend
+    steps:
+      - checkout
+
+  deploy:
+    docker:
+      # Python image required for AWS client
+      - image: circleci/python:2.7
+    working_directory: ~/tada-frontend
+    steps:
+      - checkout
+      - run:
+          name: Install pip
+          command: 'sudo apt-get update && sudo apt-get install python-pip'
+      - run:
+          name: Install awscli
+          command: 'sudo pip install awscli'
+      - run:
+          name: Deploy using CodeDeploy
+          command: |
+            aws deploy create-deployment \
+            --application-name tadadev \
+            --deployment-config-name CodeDeployDefault.OneAtATime \
+            --deployment-group-name tadadev-group \
+            --ignore-application-stop-failures \
+            --description 'TADA GitHub deployment' \
+            --github-location repository=klpdotorg/tada-frontend,commitId=${CIRCLE_SHA1}
+
+workflows:
+  version: 2
+  deploy:
+    jobs:
+      - deploy:
+          filters:
+            branches:
+              only: master
