@@ -33,7 +33,7 @@ const SecondaryNavBar = (props) => {
         data-toggle="tooltip"
         onClick={managePrograms}
       >
-        <span className="fa fa-pencil-square-o" /> Manage Programs
+        <span className="fa fa-pencil-square-o" /> Manage Surveys
       </button>
       <button
         type="button"

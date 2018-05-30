@@ -57,8 +57,8 @@ class EditProgramForm extends Component {
 
     return (
       <Modal
-        title="Edit Program"
-        contentLabel="Edit Program"
+        title="Edit Survey"
+        contentLabel="Edit Survey"
         isOpen={isOpen}
         canSubmit={canSubmit}
         submitForm={this.submitForm}
@@ -78,9 +78,9 @@ class EditProgramForm extends Component {
             name="programName"
             id="programName"
             value={this.getValue(program.name)}
-            label="Program"
+            label="Survey"
             type="text"
-            placeholder="Please enter the program name"
+            placeholder="Please enter the survey name"
             help="This is a required field"
             required
             validations="minLength:1"
@@ -91,7 +91,7 @@ class EditProgramForm extends Component {
             value={this.getValue(program.description)}
             label="Description"
             type="text"
-            placeholder="Please enter the program description (Optional)"
+            placeholder="Please enter the survey description (Optional)"
           />
         </Formsy.Form>
       </Modal>
