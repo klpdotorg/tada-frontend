@@ -781,6 +781,14 @@ table.table-fixedwidth td, .table-fixedwidth th {
   padding-top: 30px;
 }
 
+.boundary-assessments .table-header {
+  background: #3379b7;
+  color: white;
+  border-bottom: 0px;
+  font-size: 16px;
+  font-weight: 400;
+}
+
 .permissions-cont .table-header {
   background: #3379b7;
   color: white;
@@ -791,6 +799,11 @@ table.table-fixedwidth td, .table-fixedwidth th {
 .permissions-cont .permission-item-table {
   margin: 0;
   padding: 0;
+}
+
+.remove-margin-padding {
+  margin: 0;
+  padding: 0; 
 }
 
 .permissions-cont table {
@@ -844,4 +857,11 @@ table.table-fixedwidth td, .table-fixedwidth th {
   font-size: 13px;
   font-weight: 400;
   color: #337abb;
+}
+
+.boundary-assessments {
+  margin-top: 60px;
+}
+.permission-item-table td {
+  height: 38px;
 }

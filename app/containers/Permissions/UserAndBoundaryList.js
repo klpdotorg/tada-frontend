@@ -67,7 +67,6 @@ const mapStateToProps = (state, ownProps) => {
   return {
     users: usersValues,
     selectedUsers,
-    userLoading: loading,
     boundaries: Ids.map((id) => {
       return {
         uniqueId: id,
@@ -75,7 +74,8 @@ const mapStateToProps = (state, ownProps) => {
       };
     }),
     selectedBoundaries,
-    boundaryLoading: state.appstate.loadingBoundary,
+    loadingBoundary: state.appstate.loadingBoundary,
+    userLoading: loading,
     boundary,
     district,
     indexes,

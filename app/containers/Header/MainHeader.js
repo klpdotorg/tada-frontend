@@ -6,6 +6,18 @@ import { logoutUser, openChangeUserInfoModal, openChangePasswordModal } from '..
 class Header extends Component {
   componentDidMount() {
     // $('.dropdown-toggle').dropdown();
+    // window.onclick = function(event) {
+    //   if (!event.target.matches('.dropbtn')) {
+    //     var dropdowns = document.getElementsByClassName("profile-");
+    //     var i;
+    //     for (i = 0; i < dropdowns.length; i++) {
+    //       var openDropdown = dropdowns[i];
+    //       if (openDropdown.classList.contains('show')) {
+    //         openDropdown.classList.remove('show');
+    //       }
+    //     }
+    //   }
+    // }
   }
 
   render() {

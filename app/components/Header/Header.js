@@ -33,7 +33,7 @@ const HeaderBar = ({ username, openChangePasswordModal, openChangeUserInfoModal,
               <span className="glyphicon glyphicon-user" />
               <span className="caret" />
             </button>
-            <ul className="dropdown-menu">
+            <ul className="dropdown-menu" id="profile-dropdown">
               <li onClick={openChangePasswordModal}>
                 <a href="#">Change Password</a>
               </li>
