@@ -26,14 +26,18 @@ const HeaderBar = (props) => {
           <div className="btn-group navbar-text pull-right dropdown">
             <button
               type="button"
-              className="btn btn-primary padded-btn dropdown-toggle"
+              id="show-profile-dropdown"
+              className="btn btn-primary padded-btn dropdown-toggle show-profile-dropdown"
               data-toggle="dropdown"
               aria-haspopup="true"
               aria-expanded="false"
               onClick={props.openDropdown}
             >
-              <span className="glyphicon glyphicon-user" />
-              <span className="caret" />
+              <span
+                className="glyphicon glyphicon-user show-profile-dropdown"
+                id="profile-user-icon"
+              />
+              <span className="caret show-profile-dropdown" />
             </button>
             <ul className="dropdown-menu" id="profile-dropdown">
               <li onClick={openChangePasswordModal}>
