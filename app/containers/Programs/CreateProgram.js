@@ -46,8 +46,8 @@ class CreateProgramForm extends Component {
 
     return (
       <Modal
-        title="Create Program"
-        contentLabel="Create Program"
+        title="Create Survey"
+        contentLabel="Create Survey"
         isOpen={isOpen}
         canSubmit={canSubmit}
         submitForm={this.submitForm}
@@ -67,9 +67,9 @@ class CreateProgramForm extends Component {
             name="programName"
             id="programName"
             value=""
-            label="Program"
+            label="Survey"
             type="text"
-            placeholder="Please enter the program name"
+            placeholder="Please enter the survey name"
             help="This is a required field"
             required
             validations="minLength:1"
@@ -80,7 +80,7 @@ class CreateProgramForm extends Component {
             value=""
             label="Description"
             type="text"
-            placeholder="Please enter the program description (Optional)"
+            placeholder="Please enter the survey description (Optional)"
           />
           <Select
             name="survey_on"

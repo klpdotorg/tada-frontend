@@ -43,7 +43,9 @@ class EditStudentForm extends Component {
       mt: myform.language,
       gender: myform.gender,
       dob: myform.dob,
-      acdamic_year: myform.acdamicYear,
+      acdamic_year: myform.acdamic_year,
+      father_name: myform.father_name,
+      mother_name: myform.mother_name,
     };
 
     this.props.modifyStudent(studentGroupNodeId, this.props.student.id, student);
@@ -51,7 +53,18 @@ class EditStudentForm extends Component {
 
   render() {
     const { title, isOpen, canSubmit, student, languages } = this.props;
-    const { first_name, middle_name, last_name, uid, gender, mt, dob, acdamic_year } = student;
+    const {
+      first_name,
+      middle_name,
+      last_name,
+      uid,
+      gender,
+      mt,
+      dob,
+      acdamic_year,
+      father_name,
+      mother_name,
+    } = student;
     const selectGender = [{ value: 'male', label: 'Male' }, { value: 'female', label: 'Female' }];
 
     return (
@@ -131,11 +144,34 @@ class EditStudentForm extends Component {
             <Select name="gender" label="Gender" value={gender} options={selectGender} />
           </div>
           <div className="col-sm-12">
-            <Select name="language" label="Language" value={mt} options={languages} />
+            <Select name="language" label="Mother Tongue" value={mt} options={languages} />
+          </div>
+          <div className="col-sm-12">
+            <Input
+              name="father_name"
+              id="father_name"
+              value={this.getValue(father_name)}
+              label="Father Name:"
+              type="text"
+              className="form-control"
+              validations="minLength:1"
+            />
+          </div>
+          <div className="col-sm-12">
+            <Input
+              name="mother_name"
+              id="mother_name"
+              value={this.getValue(mother_name)}
+              label="Mother Name:"
+              type="text"
+              className="form-control"
+              validations="minLength:1"
+            />
           </div>
           <div className="col-sm-12">
             <Select
-              name="acdamicYear"
+              name="acdamic_year"
+              id="acdamic_year"
               label="Acadamic Year"
               value={this.getValue(acdamic_year)}
               options={lastVerifiedYears}

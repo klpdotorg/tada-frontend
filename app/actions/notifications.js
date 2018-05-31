@@ -136,3 +136,19 @@ export const mapAssessmentsFailed = {
   title: 'Error!',
   message: 'Please check your assessments and boundaries',
 };
+
+export const permissionAssigned = (title, message) => {
+  return {
+    ...baseNotification,
+    title,
+    message,
+  };
+};
+
+export const showSuccessMessage = (title, message) => {
+  return {
+    ...baseNotification,
+    title,
+    message,
+  };
+};

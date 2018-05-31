@@ -30,7 +30,7 @@ const ProgramView = (props) => {
       <div className="row center-block">
         <div className="col-md-8 form-inline">
           <h4 className="text-primary" htmlFor="sel1">
-            Programs:{' '}
+            Surveys:{' '}
           </h4>
           <select
             className="form-control"
@@ -51,14 +51,14 @@ const ProgramView = (props) => {
         </div>
         <div className=" col-md-4">
           <button type="button" className="btn btn-primary" onClick={props.openCreateProgramModal}>
-            Add Program
+            Add Survey
           </button>
           <button
             type="button"
             className="btn btn-primary padded-btn"
             onClick={props.openAddAssessmentModal}
           >
-            Add Assessments
+            Add QuestionGroup
           </button>
         </div>
       </div>

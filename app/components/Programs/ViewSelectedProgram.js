@@ -16,7 +16,7 @@ const ViewSelectedProgram = (props) => {
 
   return (
     <div className="bg-faded">
-      <h4 className="text-primary">Program Details</h4>
+      <h4 className="text-primary">Survey Details</h4>
       <div className="base-spacing-sm border-base" />
       <div className="base-spacing-mid" />
       <div className="row center-block">
@@ -24,7 +24,7 @@ const ViewSelectedProgram = (props) => {
           <div className="row">
             <h5 className="col-md-4">
               <span className="text-primary">
-                <strong>Program name: </strong>
+                <strong>Survey name: </strong>
               </span>
               {selectedProgram.name}
             </h5>

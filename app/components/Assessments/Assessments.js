@@ -13,14 +13,14 @@ const AssessmentTable = (props) => {
   }
   return (
     <div>
-      <h4 className="text-primary text-center">Assessments in this Programme</h4>
+      <h4 className="text-primary text-center">QuestionGroups in this Programme</h4>
       <hr style={{ width: 100 }} />
       <div className="border-table">
         <table className="table table-striped" style={{ marginBottom: 0 }}>
           <tbody>
             <tr className="info">
               <th>Select</th>
-              <th>Assessment</th>
+              <th>QuestionGroup</th>
               <th>Start Date</th>
               <th>End Date</th>
               <th>Type</th>

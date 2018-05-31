@@ -2,6 +2,7 @@ import {
   SET_ADD_STUDENTS_FORM_ERRORS,
   SET_LANGUAGES_FOR_ADD_STUDENTS_FORM,
   ADD_STUDENTS_FORM_VALUE_CHANGED,
+  RESET_ADD_STUDENTS_FORM,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -30,6 +31,11 @@ const AddStudents = (state = INITIAL_STATE, action) => {
           ...state.values,
           [action.rowNumber]: action.value,
         },
+      };
+    case RESET_ADD_STUDENTS_FORM:
+      return {
+        ...state,
+        values: action.value,
       };
     default:
       return state;

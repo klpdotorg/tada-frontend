@@ -124,3 +124,5 @@ export const ON_CHANGE_GROUP_VALUE = 'on_change_group_value';
 export const ON_CHANGE_DATE_OF_VISITS = 'on_change_date_of_visits';
 export const LOADING_BOUNDARY_ASSESSMENT = 'loading_boundary_assessment';
 export const SET_BOUNDARY_ASSESSMENTS = 'set_boundary_assessments';
+export const SELECT_PERMISSIONS_ASSESSMENT = 'select_permissions_assessment';
+export const RESET_ADD_STUDENTS_FORM = 'reset_add_students_form';

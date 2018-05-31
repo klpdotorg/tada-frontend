@@ -1,17 +1,19 @@
 import { SERVER_API_BASE } from 'config';
 import { push } from 'react-router-redux';
+import Notifications from 'react-notification-system-redux';
 
 import { fetchBoundary, showBoundaryLoading } from './index';
-import { getPath } from '../utils';
+import { getPath, convertEntitiesToObject } from '../utils';
 import {
   SELECT_PERMISSIONS_BOUNDARY,
-  UNSELECT_PERMISSIONS_BOUNDARY,
   SELECT_PERMISSIONS_USER,
-  UNSELECT_PERMISSIONS_USER,
+  SELECT_PERMISSIONS_ASSESSMENT,
   SET_USER_PERMISSIONS,
   LOADING_BOUNDARY_ASSESSMENT,
+  SET_BOUNDARY_ASSESSMENTS,
 } from './types';
 import { get, post } from './requests';
+import { permissionAssigned } from './notifications';
 
 const loadingBoundaryAssessment = (value) => {
   return {
@@ -39,14 +41,19 @@ export const fetchBoundaryAssessments = (entity) => {
   return (dispatch, getState) => {
     dispatch(loadingBoundaryAssessment(true));
     const state = getState();
-    const { selectedProgram } = state.programs;
-    const url = `${SERVER_API_BASE}survey/${selectedProgram}/boundary-associations/?boundary_id=${entity.id}`;
-    get(url, (response) => {
-      console.log(response, 'Printing the response of fetchBoundaryAssessment');
+    const { assessments } = state.permissions;
+    const url = `${SERVER_API_BASE}boundary/questiongroup-map/?boundary_id=[${entity.id}]`;
+    get(url).then((response) => {
+      const entities = convertEntitiesToObject(response.results);
+      dispatch({
+        type: SET_BOUNDARY_ASSESSMENTS,
+        value: { ...assessments, ...entities },
+      });
       dispatch(loadingBoundaryAssessment(false));
     });
   };
 };
+
 export const selectPermissionsBoundary = (id) => {
   return (dispatch, getState) => {
     const state = getState();
@@ -59,7 +66,7 @@ export const selectPermissionsBoundary = (id) => {
       });
     } else {
       dispatch({
-        type: UNSELECT_PERMISSIONS_BOUNDARY,
+        type: SELECT_PERMISSIONS_BOUNDARY,
         value: selectedBoundaries.filter((val) => {
           return val !== id;
         }),
@@ -79,8 +86,28 @@ export const selectPermissionsUser = (id) => {
       });
     } else {
       dispatch({
-        type: UNSELECT_PERMISSIONS_USER,
+        type: SELECT_PERMISSIONS_USER,
         value: selectedUsers.filter((val) => {
+          return val !== id;
+        }),
+      });
+    }
+  };
+};
+
+export const selectPermissionsAssessment = (id) => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const { selectedAssessments } = state.permissions;
+    if (!selectedAssessments.includes(id)) {
+      dispatch({
+        type: SELECT_PERMISSIONS_ASSESSMENT,
+        value: [...selectedAssessments, id],
+      });
+    } else {
+      dispatch({
+        type: SELECT_PERMISSIONS_ASSESSMENT,
+        value: selectedAssessments.filter((val) => {
           return val !== id;
         }),
       });
@@ -113,8 +140,15 @@ export const submitBoundaryPermissions = () => {
       });
     });
 
-    Promise.all(promises).then((response) => {
-      console.log(response);
+    Promise.all(promises).then(() => {
+      dispatch({
+        type: SELECT_PERMISSIONS_BOUNDARY,
+        value: [],
+      });
+      dispatch(Notifications.success(permissionAssigned(
+        'Permission Assigned',
+        'Boundary permissions are successfully assigned.',
+      )));
     });
   };
 };
@@ -130,8 +164,15 @@ export const submitAssessmentPermissions = () => {
       });
     });
 
-    Promise.all(promises).then((response) => {
-      console.log(response);
+    Promise.all(promises).then(() => {
+      dispatch({
+        type: SELECT_PERMISSIONS_ASSESSMENT,
+        value: [],
+      });
+      dispatch(Notifications.success(permissionAssigned(
+        'Permission Assigned',
+        'Assessment permissions are successfully assigned.',
+      )));
     });
   };
 };

@@ -55,8 +55,8 @@ class CreateAssessmentForm extends Component {
 
     return (
       <Modal
-        title="Create Assessment"
-        contentLabel="Create Assessment"
+        title="Create QuestionGroup"
+        contentLabel="Create QuestionGroup"
         isOpen={isOpen}
         onCloseModal={this.props.closeConfirmModal}
         canSubmit={canSubmit}
@@ -79,7 +79,7 @@ class CreateAssessmentForm extends Component {
             value=""
             label="Name"
             type="text"
-            placeholder="Please enter the assessment name"
+            placeholder="Please enter the questiongroup name"
             help="This is a required field"
             required
             validations="minLength:1"
@@ -89,7 +89,7 @@ class CreateAssessmentForm extends Component {
             label="Start Date"
             value={this.setStartDate()}
             name="startDate"
-            help="Please select the start date of the assessment"
+            help="Please select the start date of the questiongroup"
             required
             id="startDate"
           />
@@ -97,7 +97,7 @@ class CreateAssessmentForm extends Component {
             type="date"
             label="End Date"
             value={this.setEndDate()}
-            help="Please select the end date of the assessment"
+            help="Please select the end date of the questiongroup"
             required
             name="endDate"
           />
@@ -105,7 +105,7 @@ class CreateAssessmentForm extends Component {
             name="type"
             type="inline"
             label="Type"
-            help="Select the type of this assessment"
+            help="Select the type of this questiongroup"
             options={type}
             required
           />
@@ -113,7 +113,7 @@ class CreateAssessmentForm extends Component {
             label="Double Entry"
             name="doubleEntry"
             id="doubleEntry"
-            help="Check this box if this assessment will need double entry"
+            help="Check this box if this questiongroup will need double entry"
           />
         </Formsy.Form>
       </Modal>

@@ -8,6 +8,7 @@ import {
   enableSubmitForm,
   disableSubmitForm,
   toggleCreateQuestionModal,
+  getLanguages,
 } from '../../actions';
 import { QuestionTypes } from '../../Data';
 
@@ -20,6 +21,10 @@ class CreateQuestionForm extends Component {
     super(props);
 
     this.submitForm = this.submitForm.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.getLanguages();
   }
 
   getQuestionTypes() {
@@ -40,7 +45,10 @@ class CreateQuestionForm extends Component {
         display_text: myform.displayText,
         key: myform.key,
         question_type_id: myform.type,
-        is_featured: true,
+        is_featured: myform.is_featured,
+        options: myform.options,
+        max_score: myform.max_score,
+        pass_score: myform.pass_score,
         status: 'AC',
       },
     };
@@ -49,7 +57,17 @@ class CreateQuestionForm extends Component {
   }
 
   render() {
-    const { isOpen, canSubmit } = this.props;
+    const { isOpen, canSubmit, languages } = this.props;
+    const featuredValues = [
+      {
+        value: true,
+        label: 'True',
+      },
+      {
+        value: false,
+        label: 'False',
+      },
+    ];
 
     return (
       <Modal
@@ -92,6 +110,21 @@ class CreateQuestionForm extends Component {
             placeholder="Please enter the display text"
             required
           />
+          <Input
+            name="options"
+            id="options"
+            value=""
+            label="Options"
+            type="text"
+            placeholder="Please enter the Options (example 0,1 or true,false etc)."
+          />
+          <Select
+            name="is_featured"
+            label="Is Featured"
+            options={featuredValues}
+            value="true"
+            required
+          />
           <Select name="type" label="Type" options={this.getQuestionTypes()} value="1" required />
           <Input
             name="key"
@@ -101,6 +134,23 @@ class CreateQuestionForm extends Component {
             type="text"
             placeholder="Enter key"
           />
+          <Input
+            name="max_score"
+            id="max_score"
+            value=""
+            label="Max Score"
+            type="text"
+            placeholder="Enter Max score"
+          />
+          <Input
+            name="pass_score"
+            id="pass_score"
+            value=""
+            label="Pass Score"
+            type="text"
+            placeholder="Enter Pass score"
+          />
+          <Select name="lang_name" label="Language" options={languages} required />
         </Formsy.Form>
       </Modal>
     );
@@ -116,6 +166,8 @@ CreateQuestionForm.propTypes = {
   enableSubmitForm: PropTypes.func,
   disableSubmitForm: PropTypes.func,
   onCloseModal: PropTypes.func,
+  getLanguages: PropTypes.func,
+  languages: PropTypes.array,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -123,6 +175,7 @@ const mapStateToProps = (state, ownProps) => {
     isOpen: state.modal.createQuestion,
     canSubmit: state.appstate.enableSubmitForm,
     assessmentId: Number(ownProps.assessmentId),
+    languages: state.languages.languages,
   };
 };
 
@@ -131,6 +184,7 @@ const CreateQuestion = connect(mapStateToProps, {
   enableSubmitForm,
   disableSubmitForm,
   onCloseModal: toggleCreateQuestionModal,
+  getLanguages,
 })(CreateQuestionForm);
 
 export { CreateQuestion };

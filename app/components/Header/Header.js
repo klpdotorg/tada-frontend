@@ -10,7 +10,8 @@ import { ChangePassword, ChangeUserInfo, ConfirmPassword, GetOTP } from '../../c
 
 import klplogo from '../../css/images/KLP_logo.png';
 
-const HeaderBar = ({ username, openChangePasswordModal, openChangeUserInfoModal, logoutUser }) => {
+const HeaderBar = (props) => {
+  const { username, openChangePasswordModal, openChangeUserInfoModal, logoutUser } = props;
   return (
     <nav className="main__header navbar navbar-white navbar-fixed-top">
       <div id="header" className="container-fluid">
@@ -29,11 +30,12 @@ const HeaderBar = ({ username, openChangePasswordModal, openChangeUserInfoModal,
               data-toggle="dropdown"
               aria-haspopup="true"
               aria-expanded="false"
+              onClick={props.openDropdown}
             >
               <span className="glyphicon glyphicon-user" />
               <span className="caret" />
             </button>
-            <ul className="dropdown-menu">
+            <ul className="dropdown-menu" id="profile-dropdown">
               <li onClick={openChangePasswordModal}>
                 <a href="#">Change Password</a>
               </li>
@@ -65,6 +67,7 @@ HeaderBar.propTypes = {
   openChangePasswordModal: PropTypes.func,
   openChangeUserInfoModal: PropTypes.func,
   logoutUser: PropTypes.func,
+  openDropdown: PropTypes.func,
 };
 
 export { HeaderBar };

@@ -8,7 +8,7 @@ import { dateParser } from '../../utils';
 
 const StudentView = (props) => {
   const { student, selectedStudents, hasPermissions, canDelete, languages } = props;
-  const { id, first_name, last_name, uid, gender, dob, mt } = student;
+  const { id, first_name, last_name, uid, gender, dob, mt, mother_name, father_name } = student;
   const langVal = languages.find((lan) => {
     return lan.value === mt;
   });
@@ -37,14 +37,8 @@ const StudentView = (props) => {
       <td>{gender}</td>
       <td>{get(langVal, 'label', '')}</td>
       <td>{dateParser(dob)}</td>
-      <td>
-        ___
-        {/* displayFullName(get(relations, 'Father[0]')) */}
-      </td>
-      <td>
-        ___
-        {/* displayFullName(get(relations, 'Mother[0]')) */}
-      </td>
+      <td>{father_name}</td>
+      <td>{mother_name}</td>
       <td>
         <button
           onClick={() => {

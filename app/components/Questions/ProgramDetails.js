@@ -10,13 +10,13 @@ const ProgramDetailsView = (props) => {
       <div className="col-md-8">
         <h5>
           <span className="text-primary">
-            <strong>Program name: </strong>
+            <strong>Survey name: </strong>
           </span>
           {program.name}
         </h5>
         <h5>
           <span className="text-primary">
-            <strong>Assessment name: </strong>
+            <strong>Questiongroup name: </strong>
           </span>
           {assessment.name}
         </h5>
