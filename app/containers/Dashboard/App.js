@@ -15,13 +15,34 @@ const mapStateToProps = (state) => {
 };
 
 class TadaContentContainer extends Component {
+  constructor() {
+    super();
+    this.state = {
+      showSideBar: true,
+    };
+
+    this.toggleSideBar = this.toggleSideBar.bind(this);
+  }
+
+  state = {
+    showSideBar: true,
+  };
+
   componentWillMount() {
     this.props.setUserProfile();
     this.props.fetchPermissions();
   }
 
+  toggleSideBar(e) {
+    e.preventDefault();
+    this.setState({
+      showSideBar: !this.state.showSideBar,
+    });
+  }
+
   render() {
     const { location, children, notifications } = this.props;
+    const { showSideBar } = this.state;
 
     return (
       <div>
@@ -30,8 +51,18 @@ class TadaContentContainer extends Component {
         <MainNavBar />
         <SecondaryNavBarCont />
         <div className="main__wrapper">
-          <SideBarContainer location={location} />
+          <SideBarContainer location={location} showSideBar={showSideBar} />
           <MainContentArea>{children}</MainContentArea>
+          <div className="sidebar-toggler" style={{ left: showSideBar ? '22.3%' : '0px' }}>
+            <a
+              href="#menu-toggle"
+              className="btn btn-primary btn-xs"
+              id="menu-toggle"
+              onClick={this.toggleSideBar}
+            >
+              <span id="toggler-icon" className="glyphicon glyphicon-resize-horizontal" />
+            </a>
+          </div>
         </div>
         <Notifications notifications={notifications} />
       </div>

@@ -13,10 +13,6 @@ class SideBar extends Component {
     this.renderNavTree = this.renderNavTree.bind(this);
   }
 
-  toggleTree(e) {
-    e.preventDefault();
-  }
-
   renderNavTree() {
     const { location } = this.props;
 
@@ -36,12 +32,15 @@ class SideBar extends Component {
   }
 
   render() {
-    return <SideBarWrapper toggleTree={this.toggleTree} renderNavTree={this.renderNavTree} />;
+    const { showSideBar } = this.props;
+
+    return <SideBarWrapper showSideBar={showSideBar} renderNavTree={this.renderNavTree} />;
   }
 }
 
 SideBar.propTypes = {
   location: PropTypes.object,
+  showSideBar: PropTypes.bool,
 };
 
 const mapStateToProps = (state, ownProps) => {

@@ -6,7 +6,7 @@ import { logoutUser, openChangeUserInfoModal, openChangePasswordModal } from '..
 class Header extends Component {
   componentDidMount() {
     window.onclick = (event) => {
-      if (!event.target.matches('.dropdown-toggle')) {
+      if (!event.target.matches('.show-profile-dropdown')) {
         const el = document.getElementById('profile-dropdown');
         if (el.classList.contains('show')) {
           el.classList.remove('show');
