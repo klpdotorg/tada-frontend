@@ -863,3 +863,10 @@ table.table-fixedwidth td, .table-fixedwidth th {
 .permission-item-table td {
   height: 38px;
 }
+.selected-map-assessment {
+  background-color: #337abb;
+}
+.selected-map-assessment a:focus {
+  color: inherit;
+  text-decoration: none;
+}

@@ -13,6 +13,8 @@ export const checkStatus = (response) => {
   } else if (response.status === 403) {
     store.dispatch(Notifications.error("You don't permission to do it."));
     return null;
+  } else if (response.status === 400) {
+    return response.json();
   }
 
   return null;
@@ -73,7 +75,6 @@ export const post = (url, body) => {
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Token ${user.token}`,
-      Origin: 'http://tada.dev.ilp.org.in',
     },
     body: JSON.stringify(body),
   })
@@ -91,7 +92,6 @@ export const patch = (url, body) => {
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Token ${user.token}`,
-      Origin: 'http://tada.dev.ilp.org.in',
     },
     body: JSON.stringify(body),
   })
@@ -110,7 +110,6 @@ export const put = (url, body) => {
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Token ${user.token}`,
-      Origin: 'http://tada.dev.ilp.org.in',
     },
     body: JSON.stringify(body),
   })

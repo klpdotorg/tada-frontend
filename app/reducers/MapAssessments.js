@@ -22,6 +22,7 @@ const INITIAL_STATE = {
   selectedClasses: [],
   selectedClusters: [],
   institutions: {},
+  selectedEntityId: null,
   classes: {},
   loading: false,
 };
@@ -41,12 +42,14 @@ const MapAssessments = (state = INITIAL_STATE, action) => {
     case SET_CLUSTERS_INDEX_OF_MA:
       return {
         ...state,
+        selectedEntityId: action.id,
         clustersIndex: action.index,
       };
     case SET_INSTITUTIONS_INDEX_OF_MA:
       return {
         ...state,
         institutionsIndex: action.index,
+        selectedEntityId: action.id,
         institutions: [],
       };
     case RESET_INSTITUTIONS_OF_MA:

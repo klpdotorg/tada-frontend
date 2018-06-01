@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 import { Loading } from '../common';
 
 const ShowClassesView = (props) => {
-  console.log(props.loading);
-
   return (
     <div className="row center-block">
       <div className="col-md-12">
@@ -63,7 +61,6 @@ const RenderClasses = (props) => {
 RenderClasses.propTypes = {
   classes: PropTypes.array,
   selectedClasses: PropTypes.array,
-  selectClass: PropTypes.func,
   loading: PropTypes.bool,
 };
 

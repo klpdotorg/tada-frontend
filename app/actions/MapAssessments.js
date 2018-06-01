@@ -8,7 +8,7 @@ import pull from 'lodash.pull';
 
 import Notifications from 'react-notification-system-redux';
 
-import { mapAssessmentsDone, mapAssessmentsFailed } from './notifications';
+import { mapAssessmentsDone, mapAssessmentsFailed, errorNotification } from './notifications';
 
 import {
   SELECT_CLUSTER_OF_MA,
@@ -260,16 +260,18 @@ export const selectAssessmentOfMA = (value) => {
   };
 };
 
-export const openBoundaryOfMa = (Id, depth) => {
+export const openBoundaryOfMa = (id, depth) => {
   return (dispatch) => {
     if (depth === 1) {
       dispatch({
         type: SET_INSTITUTIONS_INDEX_OF_MA,
         index: null,
+        id,
       });
       dispatch({
         type: SET_CLUSTERS_INDEX_OF_MA,
         index: depth + 1,
+        id,
       });
     }
 
@@ -277,11 +279,13 @@ export const openBoundaryOfMa = (Id, depth) => {
       dispatch({
         type: SET_CLUSTERS_INDEX_OF_MA,
         index: null,
+        id,
       });
 
       dispatch({
         type: SET_INSTITUTIONS_INDEX_OF_MA,
         index: depth + 1,
+        id,
       });
     }
   };
@@ -296,11 +300,15 @@ export const mapAssessmentsToInsitutions = (surveyId, assessments, institutions,
       institution_ids: institutions,
       boundary_ids: boundaryIds,
     })
-      .then(() => {
-        dispatch(Notifications.success(mapAssessmentsDone));
-        dispatch({
-          type: RESET_MAP_ASSESSMENTS,
-        });
+      .then((response) => {
+        if (response.detail) {
+          dispatch(Notifications.error(errorNotification('Institution Mapping', response.detail, 10)));
+        } else {
+          dispatch(Notifications.success(mapAssessmentsDone));
+          dispatch({
+            type: RESET_MAP_ASSESSMENTS,
+          });
+        }
       })
       .catch(() => {
         dispatch(Notifications.error(mapAssessmentsFailed));
@@ -320,11 +328,15 @@ export const mapAssessmentsToStudentgroups = (
       questiongroup_ids: assessments,
       studentgroup_ids: studentgroups,
     })
-      .then(() => {
-        dispatch(Notifications.success(mapAssessmentsDone));
-        dispatch({
-          type: RESET_MAP_ASSESSMENTS,
-        });
+      .then((response) => {
+        if (response.detail) {
+          dispatch(Notifications.error(errorNotification('Studentgroup Mapping', response.detail, 10)));
+        } else {
+          dispatch(Notifications.success(mapAssessmentsDone));
+          dispatch({
+            type: RESET_MAP_ASSESSMENTS,
+          });
+        }
       })
       .catch(() => {
         dispatch(Notifications.error(mapAssessmentsFailed));

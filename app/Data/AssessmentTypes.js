@@ -7,7 +7,7 @@ const AssessmentTypes = [
   {
     id: 2,
     value: 'StudentGroup',
-    label: 'StduentGroup',
+    label: 'StudentGroup',
   },
 ];
 

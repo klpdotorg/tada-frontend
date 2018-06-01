@@ -152,3 +152,12 @@ export const showSuccessMessage = (title, message) => {
     message,
   };
 };
+
+export const errorNotification = (title, message, value) => {
+  return {
+    ...baseNotification,
+    title,
+    message,
+    autoDismiss: value || 5,
+  };
+};

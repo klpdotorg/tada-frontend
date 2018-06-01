@@ -39,19 +39,19 @@ class NavTree extends Component {
     return [];
   }
 
-  renderLabel(node, depth) {
+  renderLabel(node, depth, selected) {
     const { entity } = node;
-
     const label =
       capitalize(entity.label) || capitalize(entity.name) || capitalize(entity.first_name);
 
     if (depth <= 0) {
-      return <span>{label}</span>;
+      return <span style={{ color: selected ? 'white' : 'black' }}>{label}</span>;
     }
 
     return (
       <Link
         tabIndex="0"
+        key={node.uniqueId}
         onClick={() => {
           this.props.fetchBoundariesOfMA({
             id: entity.id,
@@ -61,7 +61,7 @@ class NavTree extends Component {
           this.props.openBoundaryOfMa(node.uniqueId, depth);
         }}
       >
-        <span>{label}</span>
+        <span style={{ color: selected ? 'white' : 'black' }}>{label}</span>
       </Link>
     );
   }
@@ -69,7 +69,8 @@ class NavTree extends Component {
   renderSubTree(node, index, depth) {
     const newDepth = depth + 1;
     const { entity } = node;
-    const name = this.renderLabel(node, depth);
+    const selectedEntity = this.props.selectedEntityId === node.uniqueId;
+    const name = this.renderLabel(node, depth, selectedEntity);
     const treeNodes = this.getTreeNodes(newDepth);
     const collapsed = this.props.uncollapsed[newDepth] === node.uniqueId;
 
@@ -91,6 +92,7 @@ class NavTree extends Component {
         }}
         nodeLabel={name}
         collapsed={!collapsed}
+        itemClassName={selectedEntity ? 'selected-map-assessment' : ''}
       >
         {depth <= 3
           ? treeNodes.map((child, i) => {
@@ -128,12 +130,14 @@ class NavTree extends Component {
 }
 
 const mapStateToProps = (state) => {
+  const { selectedEntityId } = state.mapAssessments;
   return {
     entities: state.boundaries.boundaryDetails,
     entitiesByParentId: state.boundaries.boundariesByParentId,
     uncollapsed: state.boundaries.uncollapsedEntities,
     loading: state.appstate.loadingBoundary,
     selectedPrimary: state.schoolSelection.primarySchool,
+    selectedEntityId,
   };
 };
 
