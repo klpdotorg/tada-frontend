@@ -1,8 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { checkPermissions } from '../../checkPermissions';
+
 const QuestionView = (props) => {
-  const { question_text, display_text, key, question_type, id } = props.question;
+  const { isAdmin, groups, question } = props;
+  const { question_text, display_text, key, question_type, id } = question;
+  const editQuestion = isAdmin || checkPermissions(groups, 'editQuestion');
+  const deleteQuestion = isAdmin || checkPermissions(groups, 'deleteQuestion');
 
   return (
     <tr>
@@ -18,6 +23,7 @@ const QuestionView = (props) => {
           onClick={() => {
             props.editQuestion(id);
           }}
+          disabled={!editQuestion}
         >
           <span className="fa fa-pencil-square-o" />
         </button>
@@ -27,6 +33,7 @@ const QuestionView = (props) => {
           className="btn btn-primary padded-btn"
           data-toggle="tooltip"
           title="Delete Question"
+          disabled={!deleteQuestion}
           onClick={() => {
             props.deleteQuestion(props.assessmentId, id);
           }}
@@ -39,6 +46,8 @@ const QuestionView = (props) => {
 };
 
 QuestionView.propTypes = {
+  isAdmin: PropTypes.bool,
+  groups: PropTypes.array,
   question: PropTypes.object,
   editQuestion: PropTypes.func,
   deleteQuestion: PropTypes.func,

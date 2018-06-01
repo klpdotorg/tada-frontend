@@ -41,11 +41,14 @@ const mapStateToProps = (state) => {
   const assessments = map(state.assessments.assessments, (assessment) => {
     return assessment.id;
   });
+  const { isAdmin, groups } = state.profile;
 
   return {
     programId: Number(programId),
     assessments,
     canEdit: isEmpty(selectedAssessments),
+    isAdmin,
+    groups,
   };
 };
 

@@ -8,8 +8,12 @@ import { SecondaryNavBar } from '../../components/Header';
 import { handleSearchText } from '../../actions';
 
 const mapStateToProps = (state) => {
+  const { groups, isAdmin } = state.profile;
+
   return {
     suggestionResults: state.header.suggestionResults,
+    isAdmin,
+    groups,
   };
 };
 

@@ -7,10 +7,14 @@ import { openEditAssessmentModal, redirect, selectAssessment } from '../../actio
 const mapStateToProps = (state, ownProps) => {
   const selectedProgramId = state.programs.selectedProgram;
   const { selectedAssessments } = state.assessments;
+  const { isAdmin, groups } = state.profile;
+
   return {
     assessment: get(state.assessments.assessments, ownProps.id, {}),
     url: `programs/${selectedProgramId}/assessments/${ownProps.id}/questions`,
     selectedAssessments,
+    isAdmin,
+    groups,
   };
 };
 

@@ -4,9 +4,12 @@ import PropTypes from 'prop-types';
 import { Assessment, EditAssessment } from '../../containers/Assessments';
 import { Confirm } from '../../containers/Modal';
 import { Loading, Message } from '../common';
+import { checkPermissions } from '../../checkPermissions';
 
 const AssessmentTable = (props) => {
-  const { loading, assessments, canEdit } = props;
+  const { loading, assessments, canEdit, groups, isAdmin } = props;
+  const deleteAssessment = isAdmin || checkPermissions(groups, 'deleteAssessment');
+  const deactivateAssessment = isAdmin || checkPermissions(groups, 'deactivateAssessment');
 
   if (loading) {
     return <Loading />;
@@ -47,7 +50,7 @@ const AssessmentTable = (props) => {
         <button
           type="button"
           className="btn btn-primary margin-right-btn"
-          disabled={canEdit}
+          disabled={canEdit || !deleteAssessment}
           onClick={() => {
             props.openDeleteAssessmentsModal('deleteAssessmnets');
           }}
@@ -57,7 +60,7 @@ const AssessmentTable = (props) => {
         <button
           type="button"
           className="btn btn-primary"
-          disabled={canEdit}
+          disabled={canEdit || !deactivateAssessment}
           onClick={() => {
             props.openDeactivateAssessmentsModal('deactivateAssessments');
           }}
@@ -72,6 +75,8 @@ const AssessmentTable = (props) => {
 };
 
 AssessmentTable.propTypes = {
+  isAdmin: PropTypes.bool,
+  groups: PropTypes.array,
   canEdit: PropTypes.bool,
   loading: PropTypes.bool,
   assessments: PropTypes.array,

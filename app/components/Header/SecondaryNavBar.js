@@ -5,6 +5,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 // import { asyncContainer, Typeahead } from 'react-bootstrap-typeahead';
 import { CreateDistrict } from '../../containers/Header';
+import { checkPermissions } from '../../checkPermissions';
 
 // const AsyncTypeahead = asyncContainer(Typeahead);
 
@@ -22,59 +23,85 @@ const SecondaryNavBar = (props) => {
     manageProgramFilter,
     goHome,
     mapAssessments,
+    isAdmin,
+    groups,
   } = props;
+  const showPrograms = checkPermissions(groups, 'programs');
+  const map_assessments = checkPermissions(groups, 'mapAssessments');
+  const showPermissions = checkPermissions(groups, 'permissions');
+  const showRevertEntity = checkPermissions(groups, 'revertEntity');
 
   // if (sessionStorage.getItem('isAdmin')) {
   const displayelement = (
     <div className="pull-right">
-      <button
-        type="button"
-        className="btn btn-info navbar-btn all-padded-btn"
-        data-toggle="tooltip"
-        onClick={managePrograms}
-      >
-        <span className="fa fa-pencil-square-o" /> Manage Surveys
-      </button>
-      <button
-        type="button"
-        className="btn btn-info navbar-btn all-padded-btn"
-        onClick={toggleDistrictModal}
-        data-toggle="tooltip"
-        data-placement="bottom"
-        title="Create District"
-      >
-        <span className="fa fa-globe" />
-      </button>
-      <button
-        type="button"
-        className="btn btn-info navbar-btn all-padded-btn"
-        data-toggle="tooltip"
-        data-placement="bottom"
-        title="Manage Permissions"
-        onClick={managePermissions}
-      >
-        <span className="fa fa-key" />
-      </button>
-      <button
-        type="button"
-        className="btn btn-info navbar-btn all-padded-btn"
-        data-toggle="tooltip"
-        data-placement="bottom"
-        title="Manage Users"
-        onClick={manageUsers}
-      >
-        <span className="fa fa-users" />
-      </button>
-      <button
-        type="button"
-        className="btn btn-info navbar-btn all-padded-btn"
-        data-toggle="tooltip"
-        data-placement="bottom"
-        title="Map Assessments"
-        onClick={mapAssessments}
-      >
-        <span className="fa fa-database" />
-      </button>
+      {isAdmin || showPrograms ? (
+        <button
+          type="button"
+          className="btn btn-info navbar-btn all-padded-btn"
+          data-toggle="tooltip"
+          onClick={managePrograms}
+        >
+          <span className="fa fa-pencil-square-o" /> Manage Surveys
+        </button>
+      ) : (
+        <span />
+      )}
+      {isAdmin ? (
+        <button
+          type="button"
+          className="btn btn-info navbar-btn all-padded-btn"
+          onClick={toggleDistrictModal}
+          data-toggle="tooltip"
+          data-placement="bottom"
+          title="Create District"
+        >
+          <span className="fa fa-globe" />
+        </button>
+      ) : (
+        <span />
+      )}
+      {isAdmin || showPermissions ? (
+        <button
+          type="button"
+          className="btn btn-info navbar-btn all-padded-btn"
+          data-toggle="tooltip"
+          data-placement="bottom"
+          title="Manage Permissions"
+          onClick={managePermissions}
+        >
+          <span className="fa fa-key" />
+        </button>
+      ) : (
+        <span />
+      )}
+      {isAdmin ? (
+        <button
+          type="button"
+          className="btn btn-info navbar-btn all-padded-btn"
+          data-toggle="tooltip"
+          data-placement="bottom"
+          title="Manage Users"
+          onClick={manageUsers}
+        >
+          <span className="fa fa-users" />
+        </button>
+      ) : (
+        <span />
+      )}
+      {isAdmin || map_assessments ? (
+        <button
+          type="button"
+          className="btn btn-info navbar-btn all-padded-btn"
+          data-toggle="tooltip"
+          data-placement="bottom"
+          title="Map Assessments"
+          onClick={mapAssessments}
+        >
+          <span className="fa fa-database" />
+        </button>
+      ) : (
+        <span />
+      )}
       <button
         type="button"
         className="btn btn-info navbar-btn all-padded-btn"
@@ -85,16 +112,20 @@ const SecondaryNavBar = (props) => {
       >
         <span className="fa fa-bar-chart" />
       </button>
-      <button
-        type="button"
-        className="btn btn-info navbar-btn all-padded-btn"
-        data-toggle="tooltip"
-        data-placement="bottom"
-        title="Revert Entity State"
-        onClick={manageRevertEntity}
-      >
-        <span className="fa fa-undo" />
-      </button>
+      {isAdmin || showRevertEntity ? (
+        <button
+          type="button"
+          className="btn btn-info navbar-btn all-padded-btn"
+          data-toggle="tooltip"
+          data-placement="bottom"
+          title="Revert Entity State"
+          onClick={manageRevertEntity}
+        >
+          <span className="fa fa-undo" />
+        </button>
+      ) : (
+        <span />
+      )}
       <button
         type="button"
         className="btn btn-primary navbar-btn all-padded-btn"
@@ -134,6 +165,7 @@ const SecondaryNavBar = (props) => {
 };
 
 SecondaryNavBar.propTypes = {
+  isAdmin: PropTypes.bool,
   suggestionResults: PropTypes.array,
   handleSubmit: PropTypes.func,
   onSearch: PropTypes.func,
@@ -146,6 +178,7 @@ SecondaryNavBar.propTypes = {
   manageProgramFilter: PropTypes.func,
   goHome: PropTypes.func,
   mapAssessments: PropTypes.func,
+  groups: PropTypes.array,
 };
 
 export { SecondaryNavBar };

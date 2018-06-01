@@ -5,8 +5,11 @@ import { QuestionView } from '../../components/Questions';
 import { openEditQuestionForm, deleteQuestion } from '../../actions';
 
 const mapStateToProps = (state, ownProps) => {
+  const { isAdmin, groups } = state.profile;
   return {
     question: get(state.questions.questions, ownProps.id, {}),
+    groups,
+    isAdmin,
   };
 };
 

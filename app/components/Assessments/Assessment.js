@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import get from 'lodash.get';
 
 import { dateParser } from '../../utils';
+import { checkPermissions } from '../../checkPermissions';
 
 const AssessmentRow = (props) => {
-  const { assessment, url, selectedAssessments } = props;
+  const { assessment, url, selectedAssessments, groups, isAdmin } = props;
   const checked = selectedAssessments.includes(assessment.id);
+  const editAssessment = isAdmin || checkPermissions(groups, 'editAssessment');
 
   return (
     <tr key={assessment.id}>
@@ -33,6 +35,7 @@ const AssessmentRow = (props) => {
           onClick={() => {
             props.openEditAssessmentModal(assessment.id);
           }}
+          disabled={!editAssessment}
         >
           <span className="fa fa-pencil-square-o" />
         </button>
@@ -54,6 +57,8 @@ const AssessmentRow = (props) => {
 };
 
 AssessmentRow.propTypes = {
+  groups: PropTypes.array,
+  isAdmin: PropTypes.bool,
   assessment: PropTypes.object,
   url: PropTypes.string,
   openEditAssessmentModal: PropTypes.func,

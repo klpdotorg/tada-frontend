@@ -23,6 +23,7 @@ export const setDataInLocalStorage = (user) => {
       mobileNo: user.mobile_no,
       isAdmin: user.is_superuser,
       token: user.token,
+      groups: user.groups,
     };
 
     dispatch({

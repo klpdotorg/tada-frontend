@@ -3,9 +3,14 @@ import PropTypes from 'prop-types';
 
 import { Loading } from '../common';
 import { DeactivateEntity, Confirm } from '../../containers/Modal';
+import { checkPermissions } from '../../checkPermissions';
 
 const ViewSelectedProgram = (props) => {
-  const { selectedProgram } = props;
+  const { selectedProgram, isAdmin, groups } = props;
+  const editProgram = isAdmin || checkPermissions(groups, 'editProgram');
+  const deleteProgram = isAdmin || checkPermissions(groups, 'deleteProgram');
+  const deactivateProgram = isAdmin || checkPermissions(groups, 'deactivateProgram');
+
   if (!selectedProgram) {
     return (
       <div className="row text-center">
@@ -40,7 +45,12 @@ const ViewSelectedProgram = (props) => {
         </div>
 
         <div className="col-md-4 pull-right">
-          <button type="button" className="btn btn-info" onClick={props.openEditProgramModal}>
+          <button
+            type="button"
+            className="btn btn-info"
+            onClick={props.openEditProgramModal}
+            disabled={!editProgram}
+          >
             <span className="fa fa-pencil-square-o" />Edit
           </button>
           <button
@@ -49,7 +59,7 @@ const ViewSelectedProgram = (props) => {
             onClick={() => {
               props.showDeactivateModal(selectedProgram.name, selectedProgram.id);
             }}
-            disabled={false}
+            disabled={!deactivateProgram}
           >
             Deactivate
           </button>
@@ -59,7 +69,7 @@ const ViewSelectedProgram = (props) => {
             onClick={() => {
               props.showDeleteModal(selectedProgram.name, `${selectedProgram.id}deleteProgram`);
             }}
-            disabled={!props.canDelete}
+            disabled={!props.canDelete || !deleteProgram}
           >
             <span className="fa fa-trash-o" /> Delete
           </button>
@@ -82,6 +92,8 @@ const ViewSelectedProgram = (props) => {
 };
 
 ViewSelectedProgram.propTypes = {
+  isAdmin: PropTypes.bool,
+  groups: PropTypes.array,
   canDelete: PropTypes.bool,
   showDeleteModal: PropTypes.func,
   openEditProgramModal: PropTypes.func,
