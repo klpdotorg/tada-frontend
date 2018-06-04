@@ -4,3 +4,4 @@ export * from './Actions';
 export * from './AddUser';
 export * from './EditUser';
 export * from './Pagination';
+export * from './ResetUserPassword';

@@ -9,6 +9,7 @@ import {
   UPDATE_USER_OF_USERS,
   DELETE_USERS,
   SET_USER_COUNT,
+  SET_ID_FOR_RESET_PASSWORD,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -17,10 +18,16 @@ const INITIAL_STATE = {
   users: {},
   editUser: null,
   selectedUsers: [],
+  resetPasswordUserId: null,
 };
 
 const Users = (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case SET_ID_FOR_RESET_PASSWORD:
+      return {
+        ...state,
+        resetPasswordUserId: action.value,
+      };
     case SET_USERS:
       return {
         ...state,
