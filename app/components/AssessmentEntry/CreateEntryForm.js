@@ -6,11 +6,12 @@ import map from 'lodash.map';
 import { dateFormat } from '../../utils';
 
 const CreateEntryFormView = (props) => {
-  const { rows, answers, questions, assessmentId, groupValues } = props;
+  const { rows, answers, questions, assessmentId, groupValues, dateOfVisits, boundaryInfo } = props;
   return (
     <tbody>
       {rows.map((row) => {
         const groupValue = get(groupValues, row.id, '');
+        const dateOfVisit = get(dateOfVisits, row.id, new Date());
         return (
           <tr key={row.id}>
             <td>{row.id}</td>
@@ -32,20 +33,20 @@ const CreateEntryFormView = (props) => {
                 className="form-control"
                 style={{ padding: '0px' }}
                 onChange={(e) => {
-                  props.changeGroupValue(e.target.value);
+                  props.onChangeGroupValue(row.id, e.target.value);
                 }}
               />
             </td>
             <td className="answer-field">
               <input
-                value={dateFormat(new Date())}
+                value={dateFormat(dateOfVisit)}
                 data-date-format="dd-mm-yyyy"
                 type="date"
                 required
                 className="form-control"
                 style={{ padding: '0px' }}
                 onChange={(e) => {
-                  props.changeDateOfVisit(e.target.value);
+                  props.onChangeDateOfVisit(row.id, new Date(e.target.value).toISOString());
                 }}
               />
             </td>
@@ -107,6 +108,7 @@ const CreateEntryFormView = (props) => {
                 onClick={() => {
                   // console.log('Edit Button Clicked');
                 }}
+                disabled
               >
                 Edit
                 <span className="fa fa-pencil-square-o" />
@@ -116,6 +118,7 @@ const CreateEntryFormView = (props) => {
               <button
                 onClick={() => {
                   props.onSave({
+                    ...boundaryInfo,
                     assessmentId,
                     boundaryId: row.id,
                   });
@@ -138,6 +141,8 @@ CreateEntryFormView.propTypes = {
   assessmentId: PropTypes.any,
   groupValues: PropTypes.object,
   rows: PropTypes.array,
+  dateOfVisits: PropTypes.object,
+  boundaryInfo: PropTypes.object,
 };
 
 export { CreateEntryFormView };

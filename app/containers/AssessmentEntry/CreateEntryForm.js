@@ -9,20 +9,61 @@ import {
   createAnswerGroup,
   fetchStudentsForAssessmentEntry,
   onChangeGroupValue,
+  onChangeDateOfVisit,
 } from '../../actions';
 
 class GetResources extends Component {
   constructor() {
     super();
 
+    this.state = {
+      defaultValueSet: false,
+    };
     this.getRows = this.getRows.bind(this);
   }
 
   componentDidMount() {
-    const { surveyType, id } = this.props;
+    const rows = this.getRows();
+    const { surveyType, questions, boundaryInfo } = this.props;
     if (surveyType === 'student') {
-      this.props.fetchStudents(id);
+      this.props.fetchStudents(boundaryInfo.boundaryId);
     }
+
+    if (rows.length && Object.values(questions).length) {
+      this.setDefaultValue(rows);
+      this.setState({
+        defaultValueSet: true,
+      });
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const rows = this.getRows();
+    const { questions } = nextProps;
+
+    if (!this.state.defaultValueSet) {
+      if (rows.length && Object.values(questions).length) {
+        this.setDefaultValue(rows);
+        this.setState({
+          defaultValueSet: true,
+        });
+      }
+    }
+  }
+
+  setDefaultValue(rows) {
+    const { questions } = this.props;
+    const values = Object.values(questions);
+    rows.forEach((row) => {
+      values.forEach((question) => {
+        const questionType = get(question, 'question_type');
+        const options = get(question, 'options', []);
+        if (questionType === 'CheckBox' || questionType === 'Radio') {
+          this.props.onChange(options[0], row.id, question.id);
+        }
+      });
+      this.props.onChangeDateOfVisit(row.id, new Date().toISOString());
+    });
   }
 
   getRows() {
@@ -51,11 +92,15 @@ class GetResources extends Component {
 }
 
 GetResources.propTypes = {
+  questions: PropTypes.object,
+  onChange: PropTypes.func,
+  onChangeDateOfVisit: PropTypes.func,
   surveyType: PropTypes.string,
   fetchStudents: PropTypes.func,
   students: PropTypes.array,
   name: PropTypes.string,
   id: PropTypes.any,
+  boundaryInfo: PropTypes.object,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -81,6 +126,7 @@ const CreateEntryForm = connect(mapStateToProps, {
   onSave: createAnswerGroup,
   fetchStudents: fetchStudentsForAssessmentEntry,
   onChangeGroupValue,
+  onChangeDateOfVisit,
 })(GetResources);
 
 export { CreateEntryForm };

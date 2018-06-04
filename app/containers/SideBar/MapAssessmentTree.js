@@ -150,6 +150,7 @@ NavTree.propTypes = {
   fetchBoundariesOfMA: PropTypes.func,
   loading: PropTypes.bool,
   selectedPrimary: PropTypes.bool,
+  selectedEntityId: PropTypes.any,
 };
 
 const MapAssessmentTree = connect(mapStateToProps, {

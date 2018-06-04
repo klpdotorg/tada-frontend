@@ -51,7 +51,7 @@ export const selectProgram = (value) => {
   };
 };
 
-export const setPrograms = (value) => {
+export const setPrograms = (value, programId) => {
   return (dispatch) => {
     dispatch({
       type: SET_PROGRAMS,
@@ -60,7 +60,7 @@ export const setPrograms = (value) => {
     if (value.length) {
       dispatch({
         type: SELECT_PROGRAM,
-        value: value[0].id,
+        value: programId || value[0].id,
       });
     }
   };

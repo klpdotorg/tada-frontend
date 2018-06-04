@@ -15,29 +15,34 @@ import {
 
 class FetchAnswersAndQuestions extends Component {
   componentDidMount() {
-    const { boundary } = this.props;
-    const { questionGroupId } = this.props.params;
-    const { districtId, blockId, clusterId, programId } = this.props.params;
-    const entities = [DEFAULT_PROGRAM_NODE_ID, districtId, blockId, clusterId].map((id, index) => {
+    const { boundary, boundaryInfo } = this.props;
+    const { assessmentId, boundaryType, boundaryId } = boundaryInfo;
+    const { districtId, blockId, clusterId, programId, institutionId } = this.props.params;
+    const entities = [
+      DEFAULT_PROGRAM_NODE_ID,
+      districtId,
+      blockId,
+      clusterId,
+      institutionId,
+    ].map((id, index) => {
       return {
         uniqueId: id,
         depth: index,
       };
     });
-    this.props.fetchQuestions(questionGroupId, entities);
-    this.props.selectProgram(programId);
+    this.props.fetchQuestions(assessmentId, entities, programId);
     if (!isEmpty(boundary)) {
-      this.props.fetchAnswerGroups(questionGroupId, 'studentgroup_id', boundary.id);
+      this.props.fetchAnswerGroups(assessmentId, boundaryType, boundaryId);
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    const { questionGroupId } = this.props.params;
+    const { assessmentId, boundaryType, boundaryId } = nextProps.boundaryInfo;
     const nextId = get(nextProps, ['boundary', 'id'], '');
     const currentId = get(this.props, ['boundary', 'id'], '');
     if (nextId !== currentId) {
       if (!isEmpty(nextProps.boundary)) {
-        this.props.fetchAnswerGroups(questionGroupId, 'studentgroup_id', nextId);
+        this.props.fetchAnswerGroups(assessmentId, boundaryType, boundaryId);
       }
     }
   }
@@ -55,20 +60,27 @@ FetchAnswersAndQuestions.propTypes = {
   fetchBoundaries: PropTypes.func,
   fetchAnswers: PropTypes.func,
   selectProgram: PropTypes.func,
+  boundaryInfo: PropTypes.object,
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const { studentGroupId } = ownProps.params;
+  const { studentGroupId, questionGroupId } = ownProps.params;
   const { answersLoading } = state.assessmentEntry;
   const { answergroups, fetching } = state.answergroups;
   const answerFetching = state.answers.fetching;
   const studentGroup = get(state.programDetails.programDetails, studentGroupId, {});
+  const { loadingBoundary } = state.appstate;
 
   return {
     boundary: studentGroup,
     rows: Object.keys(answergroups),
-    loading: answersLoading || fetching || answerFetching,
+    loading: answersLoading || fetching || answerFetching || loadingBoundary,
     uniqueId: studentGroupId,
+    boundaryInfo: {
+      boundaryId: studentGroup.id,
+      assessmentId: questionGroupId,
+      boundaryType: 'studentgroup',
+    },
   };
 };
 

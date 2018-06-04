@@ -9,14 +9,20 @@ import {
 } from '../../containers/AssessmentEntry';
 
 const RenderForm = (props) => {
-  const { loading, params, uniqueId, rows } = props;
+  const { loading, params, uniqueId, rows, boundaryInfo } = props;
 
   if (loading) {
     return <tbody />;
   }
 
   if (!rows.length) {
-    return <CreateEntryForm assessmentId={params.questionGroupId} uniqueId={uniqueId} />;
+    return (
+      <CreateEntryForm
+        assessmentId={params.questionGroupId}
+        uniqueId={uniqueId}
+        boundaryInfo={boundaryInfo}
+      />
+    );
   }
 
   return (
@@ -28,6 +34,7 @@ const RenderForm = (props) => {
             key={rowId}
             assessmentId={params.questionGroupId}
             uniqueId={uniqueId}
+            boundaryInfo={boundaryInfo}
           />
         );
       })}
@@ -65,6 +72,7 @@ RenderForm.propTypes = {
   rows: PropTypes.array,
   params: PropTypes.object,
   uniqueId: PropTypes.any,
+  boundaryInfo: PropTypes.object,
 };
 
 export { AssessmentEntryFormView };

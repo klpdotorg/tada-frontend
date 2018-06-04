@@ -21,7 +21,7 @@ import { Loading, Message } from '../../components/common';
 
 class NavTree extends Component {
   componentDidMount() {
-    this.props.getPrograms();
+    // this.props.getPrograms();
     if (this.props.selectedProgram) {
       this.props.getProgramEntities([{ depth: 0, uniqueId: '1state' }]);
     }
@@ -100,16 +100,22 @@ class NavTree extends Component {
     );
   }
 
-  renderBoundariesState(length) {
-    if (this.props.loading && !length) {
+  renderBoundariesState(nodes) {
+    if (this.props.loading && !nodes.length) {
       return <Loading />;
     }
 
-    if (!length) {
+    if (!nodes.length) {
       return <Message message="No Boundaries Found" />;
     }
 
-    return <span />;
+    return (
+      <div>
+        {nodes.map((element, i) => {
+          return this.renderSubTree(element, i, 0);
+        })}
+      </div>
+    );
   }
 
   render() {
@@ -140,10 +146,7 @@ class NavTree extends Component {
             })}
           </select>
         </div>
-        {nodes.map((element, i) => {
-          return this.renderSubTree(element, i, 0);
-        })}
-        {this.renderBoundariesState(nodes.length)}
+        {this.renderBoundariesState(nodes)}
       </div>
     );
   }
@@ -169,9 +172,7 @@ NavTree.propTypes = {
   entitiesByParentId: PropTypes.object,
   entities: PropTypes.object,
   selectedProgram: PropTypes.number,
-  resetProgramNavTree: PropTypes.func,
   openBoundary: PropTypes.func,
-  getPrograms: PropTypes.func,
   loading: PropTypes.bool,
   selectedPrimary: PropTypes.bool,
   programLoading: PropTypes.bool,

@@ -3,8 +3,21 @@ import PropTypes from 'prop-types';
 import get from 'lodash.get';
 import map from 'lodash.map';
 
+import { dateFormat } from '../../utils';
+
 const AssessmentEntryRowView = (props) => {
-  const { id, name, answers, questions, assessmentId, groupValue, dateOfVisit, rowId } = props;
+  const {
+    id,
+    name,
+    answers,
+    questions,
+    assessmentId,
+    groupValue,
+    dateOfVisit,
+    rowId,
+    answergroupId,
+    boundaryInfo,
+  } = props;
   return (
     <tr>
       <td>{id}</td>
@@ -19,7 +32,7 @@ const AssessmentEntryRowView = (props) => {
         {name}
       </td>
       <td>{groupValue}</td>
-      <td>{dateOfVisit}</td>
+      <td>{dateFormat(dateOfVisit)}</td>
       {map(questions, (question) => {
         const questionType = get(question, 'question_type');
         const currentVal = answers.find((answer) => {
@@ -66,7 +79,8 @@ const AssessmentEntryRowView = (props) => {
               className="form-control"
               style={{ padding: '0px' }}
               onChange={(e) => {
-                props.onChange(rowId, id, e.target.value);
+                console.log(e.target.value, 'printing the value', currentVal, question.id, answers);
+                props.onChange(rowId, currentVal.id, e.target.value);
               }}
             />
           </td>
@@ -91,6 +105,8 @@ const AssessmentEntryRowView = (props) => {
           id={`save_${id}`}
           onClick={() => {
             props.onSave({
+              ...boundaryInfo,
+              answergroupId,
               assessmentId,
               boundaryId: id,
             });
@@ -105,6 +121,8 @@ const AssessmentEntryRowView = (props) => {
 };
 
 AssessmentEntryRowView.propTypes = {
+  answergroupId: PropTypes.any,
+  boundaryInfo: PropTypes.object,
   id: PropTypes.any,
   name: PropTypes.string,
   questions: PropTypes.object,

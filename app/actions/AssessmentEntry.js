@@ -13,9 +13,16 @@ import {
   HIDE_ANSWERS_LOADING,
   SET_ASSESSMENT_ENTRY_STUDENTS,
   ON_CHANGE_GROUP_VALUE,
+  ON_CHANGE_DATE_OF_VISITS,
 } from './types';
 import { get } from './requests';
-import { fetchAllPrograms, setQuestions, setPrograms, getProgramEntities } from './index';
+import {
+  fetchAllPrograms,
+  setQuestions,
+  setPrograms,
+  getProgramEntities,
+  fetchAnswerGroups,
+} from './index';
 import { getEntityType, convertEntitiesToObject } from '../utils';
 
 export const showAssessmentEntryLoading = () => {
@@ -45,6 +52,15 @@ export const hideAnswersLoading = () => {
 export const onChangeGroupValue = (id, value) => {
   return {
     type: ON_CHANGE_GROUP_VALUE,
+    value: {
+      [id]: value,
+    },
+  };
+};
+
+export const onChangeDateOfVisit = (id, value) => {
+  return {
+    type: ON_CHANGE_DATE_OF_VISITS,
     value: {
       [id]: value,
     },
@@ -118,14 +134,14 @@ const fetchQuestions = (programId, assessmentId) => {
   return get(url);
 };
 
-export const fetchSelectedAssessmentQuestions = (assessmentId, entities) => {
+export const fetchSelectedAssessmentQuestions = (assessmentId, entities, programId) => {
   return (dispatch, getState) => {
     dispatch(showAnswersLoading());
     const state = getState();
     const { selectedProgram } = state.programs;
     if (!selectedProgram) {
       fetchAllPrograms().then((results) => {
-        dispatch(setPrograms(results));
+        dispatch(setPrograms(results, programId));
         dispatch(getProgramEntities(entities));
 
         const id = getObject(results[0], 'id', '');
@@ -166,21 +182,27 @@ export const fetchSelectedAssessmentBoundary = () => {
 
 export const fetchStudentsForAssessmentEntry = (id) => {
   return (dispatch) => {
+    let studentGroupId = '';
+    if (typeof id === 'object') {
+      studentGroupId = id.boundaryId;
+    } else {
+      studentGroupId = id;
+    }
+
     dispatch(showAssessmentEntryLoading());
-    const url = `${SERVER_API_BASE}studentgroups/${id}/students/`;
+    const url = `${SERVER_API_BASE}studentgroups/${studentGroupId}/students/`;
     get(url).then((res) => {
       dispatch({
         type: SET_ASSESSMENT_ENTRY_STUDENTS,
         value: res.results,
       });
       dispatch(hideAssessmentEntryLoading());
+      if (typeof id === 'object') {
+        const { assessmentId } = id;
+        res.results.forEach((student) => {
+          dispatch(fetchAnswerGroups(assessmentId, 'student_id', student.id));
+        });
+      }
     });
   };
 };
-
-// export const fetchAnswers = (assessmentId) => {
-//   return (dispatch) => {
-//     dispatch(showAnswersLoading());
-//     dispatch(fetchSelectedAssessmentQuestions(assessmentId));
-//   };
-// };

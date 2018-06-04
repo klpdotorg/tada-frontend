@@ -743,6 +743,7 @@ table.table-fixedwidth td, .table-fixedwidth th {
   border: 1px solid #c7c0c0;
   width: 100%;
   overflow-x: scroll;
+  max-width: 1036px;
 }
 
 .loading-cont {

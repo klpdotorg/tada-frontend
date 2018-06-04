@@ -3,18 +3,48 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import get from 'lodash.get';
 import isEmpty from 'lodash.isempty';
+import { DEFAULT_PROGRAM_NODE_ID } from 'config';
 
 import { AssessmentEntryFormView } from '../../components/AssessmentEntry';
-import { fetchAnswers } from '../../actions';
+import {
+  fetchAnswers,
+  fetchAnswerGroups,
+  fetchSelectedAssessmentQuestions,
+  fetchStudentsForAssessmentEntry,
+} from '../../actions';
 
 class FetchAnswersAndQuestions extends Component {
   componentDidMount() {
-    const { studentgroup } = this.props;
-    const { questionGroupId } = this.props.params;
-    this.props.fetchSelectedAssessmentQuestions(questionGroupId);
+    const { boundary, boundaryInfo } = this.props;
+    const { assessmentId } = boundaryInfo;
+    const { districtId, blockId, clusterId, programId, institutionId } = this.props.params;
+    const entities = [
+      DEFAULT_PROGRAM_NODE_ID,
+      districtId,
+      blockId,
+      clusterId,
+      institutionId,
+    ].map((id, index) => {
+      return {
+        uniqueId: id,
+        depth: index,
+      };
+    });
+    this.props.fetchSelectedAssessmentQuestions(assessmentId, entities, programId);
+    if (!isEmpty(boundary)) {
+      this.props.fetchStudentsForAssessmentEntry(boundaryInfo);
+      // this.props.fetchAnswerGroups(assessmentId, boundaryType, boundaryId);
+    }
+  }
 
-    if (!isEmpty(studentgroup)) {
-      this.props.fetchAnswerGroups(questionGroupId, 'studentgroup_id', studentgroup.id);
+  componentWillReceiveProps(nextProps) {
+    const nextId = get(nextProps, ['boundary', 'id'], '');
+    const currentId = get(this.props, ['boundary', 'id'], '');
+    if (nextId !== currentId) {
+      if (!isEmpty(nextProps.boundary)) {
+        this.props.fetchStudentsForAssessmentEntry(nextProps.boundaryInfo);
+        // this.props.fetchAnswerGroups(assessmentId, boundaryType, boundaryId);
+      }
     }
   }
 
@@ -25,29 +55,39 @@ class FetchAnswersAndQuestions extends Component {
 
 FetchAnswersAndQuestions.propTypes = {
   params: PropTypes.object,
-  studentgroup: PropTypes.object,
+  boundary: PropTypes.object,
+  boundaryInfo: PropTypes.object,
   fetchSelectedAssessmentQuestions: PropTypes.func,
   fetchAnswerGroups: PropTypes.func,
+  fetchStudentsForAssessmentEntry: PropTypes.func,
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const { studentgroupId } = ownProps.params;
-
+  const { studentGroupId, questionGroupId } = ownProps.params;
   const { answersLoading } = state.assessmentEntry;
   const { answergroups, fetching } = state.answergroups;
   const answereFetching = state.answers.fetching;
-  const studentgroup = get(state.programDetails.programDetails, studentgroupId, {});
+  const studentgroup = get(state.programDetails.programDetails, studentGroupId, {});
+  const { loadingBoundary } = state.appstate;
 
   return {
     rows: Object.keys(answergroups),
-    studentgroup,
-    loading: answersLoading || fetching || answereFetching,
-    uniqueId: studentgroupId,
+    boundary: studentgroup,
+    loading: answersLoading || fetching || answereFetching || loadingBoundary,
+    uniqueId: studentGroupId,
+    boundaryInfo: {
+      boundaryId: studentgroup.id,
+      assessmentId: questionGroupId,
+      boundaryType: 'studentgroup',
+    },
   };
 };
 
 const StudentsAnswersSheet = connect(mapStateToProps, {
   fetchAnswers,
+  fetchAnswerGroups,
+  fetchSelectedAssessmentQuestions,
+  fetchStudentsForAssessmentEntry,
 })(FetchAnswersAndQuestions);
 
 export { StudentsAnswersSheet };

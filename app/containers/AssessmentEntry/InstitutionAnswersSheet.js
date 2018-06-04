@@ -6,17 +6,12 @@ import isEmpty from 'lodash.isempty';
 import { DEFAULT_PROGRAM_NODE_ID } from 'config';
 
 import { AssessmentEntryFormView } from '../../components/AssessmentEntry';
-import {
-  fetchAnswers,
-  fetchAnswerGroups,
-  fetchSelectedAssessmentQuestions,
-  selectProgram,
-} from '../../actions';
+import { fetchAnswers, fetchAnswerGroups, fetchSelectedAssessmentQuestions } from '../../actions';
 
 class FetchAnswersAndQuestions extends Component {
   componentDidMount() {
-    const { institution } = this.props;
-    const { questionGroupId } = this.props.params;
+    const { institution, boundaryInfo } = this.props;
+    const { assessmentId, boundaryType, boundaryId } = boundaryInfo;
     const { districtId, blockId, clusterId, programId } = this.props.params;
     const entities = [DEFAULT_PROGRAM_NODE_ID, districtId, blockId, clusterId].map((id, index) => {
       return {
@@ -24,20 +19,19 @@ class FetchAnswersAndQuestions extends Component {
         depth: index,
       };
     });
-    this.props.fetchSelectedAssessmentQuestions(questionGroupId, entities);
-    this.props.selectProgram(programId);
+    this.props.fetchSelectedAssessmentQuestions(assessmentId, entities, programId);
     if (!isEmpty(institution)) {
-      this.props.fetchAnswerGroups(questionGroupId, 'institution_id', institution.id);
+      this.props.fetchAnswerGroups(assessmentId, boundaryType, boundaryId);
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    const { questionGroupId } = this.props.params;
+    const { assessmentId, boundaryType, boundaryId } = nextProps.boundaryInfo;
     const nextId = get(nextProps, ['institution', 'id'], '');
     const currentId = get(this.props, ['institution', 'id'], '');
     if (nextId !== currentId) {
       if (!isEmpty(nextProps.institution)) {
-        this.props.fetchAnswerGroups(questionGroupId, 'institution_id', nextId);
+        this.props.fetchAnswerGroups(assessmentId, boundaryType, boundaryId);
       }
     }
   }
@@ -48,6 +42,7 @@ class FetchAnswersAndQuestions extends Component {
 }
 
 FetchAnswersAndQuestions.propTypes = {
+  boundaryInfo: PropTypes.object,
   fetchBoundaries: PropTypes.func,
   fetchQuestions: PropTypes.func,
   fetchAnswers: PropTypes.func,
@@ -59,7 +54,7 @@ FetchAnswersAndQuestions.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const { institutionId } = ownProps.params;
+  const { institutionId, questionGroupId } = ownProps.params;
 
   const { answersLoading } = state.assessmentEntry;
   const { answergroups, fetching } = state.answergroups;
@@ -74,6 +69,11 @@ const mapStateToProps = (state, ownProps) => {
     loading: answersLoading || fetching || answereFetching || loadingBoundary,
     uniqueId: institutionId,
     programsLength: Object.keys(programs).length,
+    boundaryInfo: {
+      boundaryId: institution.id,
+      assessmentId: questionGroupId,
+      boundaryType: 'institution',
+    },
   };
 };
 
@@ -81,7 +81,6 @@ const InstitutionAnswersSheet = connect(mapStateToProps, {
   fetchAnswers,
   fetchAnswerGroups,
   fetchSelectedAssessmentQuestions,
-  selectProgram,
 })(FetchAnswersAndQuestions);
 
 export { InstitutionAnswersSheet };

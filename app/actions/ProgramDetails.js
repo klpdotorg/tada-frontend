@@ -9,18 +9,29 @@ import {
   UNCOLLAPSED_PROGRAM_ENTITY,
   SET_FITLER_PROGRAM_ENTITIES,
   REMOVE_EXISTING_NODE,
+  RESET_PROGRAM_NAV_TREE,
 } from './types';
 import { convertEntitiesToObject, getPath } from '../utils';
 import { showBoundaryLoading, closeBoundaryLoading, fetchAllPrograms, setPrograms } from './index';
+
+const checkFilterByProgramUrl = (path, surveyOn) => {
+  if (surveyOn === 'student') {
+    return path.replace('studentgroup', 'students');
+  }
+
+  return path;
+};
 
 export const openFilterByProgramEntity = (uniqueId, depth, assessmentId) => {
   return (dispatch, getState) => {
     const state = getState();
     const { selectedProgram } = state.programs;
+    const survey = getObject(state.programs.programs, selectedProgram, {});
     const boundaryPath = getPath(state, uniqueId, depth, 'program');
 
     const path = `/filterprograms/${selectedProgram}/questiongroup/${assessmentId}${boundaryPath}`;
-    dispatch(push(path));
+    const url = checkFilterByProgramUrl(path, survey.survey_on);
+    dispatch(push(url));
   };
 };
 
@@ -50,6 +61,7 @@ const getUrlForFilterProgram = (entity, surveyId, surveyOn) => {
   const institutionMapping = `${SERVER_API_BASE}surveys/${surveyId}/questiongroup/mappings/?boundary_id=${entity.id}`;
   const studentgroupMapping = `${SERVER_API_BASE}surveys/${surveyId}/questiongroup/mappings/?institution_id=${entity.id}`;
 
+  console.log(entity, surveyId, surveyOn);
   if (surveyOn === 'institution') {
     switch (entity.depth) {
       case 0:
@@ -153,6 +165,12 @@ export const fetchProgramEntities = (Ids) => {
 
 const fetchAdmins = (entity, moreEntities) => {
   return (dispatch, getState) => {
+    if (entity.depth === 0) {
+      dispatch({
+        type: RESET_PROGRAM_NAV_TREE,
+      });
+    }
+
     const state = getState();
     const { selectedProgram, programs } = state.programs;
     const boundary = getObject(state.programDetails, ['programDetails', entity.uniqueId], {});

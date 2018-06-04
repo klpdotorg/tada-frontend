@@ -1,9 +1,12 @@
 import { SERVER_API_BASE } from 'config';
+import Notifications from 'react-notification-system-redux';
 
 import getObject from 'lodash.get';
 import map from 'lodash.map';
 import { post, get, put } from './requests';
 import { SET_ANSWERS, FETCHING_ANSWERS, ON_CHANGE_ANSWER } from './types';
+import { fetchAnswerGroups } from '.';
+import { showSuccessMessage } from './notifications';
 
 export const onChangeAnswer = (answergroupId, answerId, value) => {
   return (dispatch, getState) => {
@@ -83,14 +86,15 @@ const filterAnswers = (answers) => {
 export const saveAnswer = (params) => {
   return (dispatch, getState) => {
     const state = getState();
-    const { assessmentId, boundaryId, answergroupId } = params;
+    const { assessmentId, boundaryId, answergroupId, boundaryType } = params;
     const { answers } = state.assessmentEntry;
     const { selectedProgram } = state.programs;
     const filteredAnswers = filterAnswers(answers[boundaryId]);
 
-    const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${assessmentId}/answergroups/${answergroupId}/answers/`;
-    post(url, filteredAnswers).then((res) => {
-      console.log(res);
+    const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${assessmentId}/answergroups/${answergroupId}/answers/?per_page=10`;
+    post(url, filteredAnswers).then(() => {
+      dispatch(fetchAnswerGroups(assessmentId, boundaryType, boundaryId));
+      dispatch(Notifications.success(showSuccessMessage('Answers Save!', 'Answers successfully saved!')));
     });
   };
 };
@@ -103,10 +107,14 @@ export const createAnswerGroup = (params) => {
     const state = getState();
     const { assessmentId, boundaryId } = params;
     const { selectedProgram } = state.programs;
+    const name = getObject(state.assessmentEntry.groupValues, [boundaryId], '');
+    const dateOfVisit = getObject(state.assessmentEntry.dateOfVisits, [boundaryId], new Date());
     const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${assessmentId}/answergroups/`;
 
     post(url, {
-      institution: boundaryId,
+      [params.boundaryType]: boundaryId,
+      group_value: name,
+      date_of_visit: dateOfVisit,
       status: 'AC',
     }).then((res) => {
       dispatch(saveAnswer({ ...params, answergroupId: res.id }));
@@ -118,12 +126,13 @@ export const editAnswers = (params) => {
   return (dispatch, getState) => {
     const state = getState();
     const { selectedProgram } = state.programs;
-    const { answergroupId, assessmentId } = params;
-    const answers = get(state.answers.answers, answergroupId, []);
-    const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${assessmentId}/answergroups/${answergroupId}/answers`;
+    const { answergroupId, assessmentId, boundaryId, boundaryType } = params;
+    const answers = getObject(state.answers.answers, answergroupId, []);
+    const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${assessmentId}/answergroups/${answergroupId}/answers/`;
 
-    put(url, answers).then((res) => {
-      console.log(res, 'This is done');
+    put(url, answers).then(() => {
+      dispatch(fetchAnswerGroups(assessmentId, boundaryType, boundaryId));
+      dispatch(Notifications.success(showSuccessMessage('Answers Edit!', 'Answers successfully edited!')));
     });
   };
 };
