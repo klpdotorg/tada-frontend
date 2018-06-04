@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const UsersView = ({ users, selectedUsers, editUser, selectUser }) => {
+const UsersView = ({ users, selectedUsers, editUser, selectUser, resetPassword }) => {
   return (
     <tbody>
       {users.map((user) => {
@@ -35,6 +35,18 @@ const UsersView = ({ users, selectedUsers, editUser, selectUser }) => {
                 <i className="fa fa-pencil-square-o" />
               </button>
             </td>
+            <td>
+              <button
+                className="btn btn-primary padded-btn"
+                data-toggle="tooltip"
+                title="Reset"
+                onClick={() => {
+                  resetPassword(user.id);
+                }}
+              >
+                <i className="fa fa-pencil-square-o" />
+              </button>
+            </td>
           </tr>
         );
       })}
@@ -47,6 +59,7 @@ UsersView.propTypes = {
   selectedUsers: PropTypes.array,
   editUser: PropTypes.func,
   selectUser: PropTypes.func,
+  resetPassword: PropTypes.func,
 };
 
 export { UsersView };

@@ -126,3 +126,4 @@ export const LOADING_BOUNDARY_ASSESSMENT = 'loading_boundary_assessment';
 export const SET_BOUNDARY_ASSESSMENTS = 'set_boundary_assessments';
 export const SELECT_PERMISSIONS_ASSESSMENT = 'select_permissions_assessment';
 export const RESET_ADD_STUDENTS_FORM = 'reset_add_students_form';
+export const SET_ID_FOR_RESET_PASSWORD = 'set_id_for_reset_password';

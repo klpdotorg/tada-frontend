@@ -15,6 +15,7 @@ import {
   GO_PAGINATION_BACK,
   CHANGE_PAGINATION_CURRENT,
   SET_PAGINATION_COUNT,
+  SET_ID_FOR_RESET_PASSWORD,
 } from './types';
 import { convertArrayToObject } from '../utils';
 import { showSuccessMessage } from './notifications';
@@ -78,6 +79,19 @@ export const toggleEditUserModal = () => {
   return {
     type: TOGGLE_MODAL,
     modal: 'editUser',
+  };
+};
+
+export const toggleResetUserPasswordModal = (value) => {
+  return (dispatch) => {
+    dispatch({
+      type: TOGGLE_MODAL,
+      modal: 'resetUserPassword',
+    });
+    dispatch({
+      type: SET_ID_FOR_RESET_PASSWORD,
+      value,
+    });
   };
 };
 
