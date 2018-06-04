@@ -39,11 +39,14 @@ export const fetchAnswerGroups = (assessmentId, boundaryType, boundaryId) => {
       });
 
       Promise.all(promises).then((value) => {
+        console.log(value, boundaryId);
         const updateValue = flatten(value);
-        dispatch({
-          type: SET_ANSWER_GROUPS,
-          value: convertArrayToObject(updateValue),
-        });
+        // dispatch({
+        //   type: SET_ANSWER_GROUPS,
+        //   value: {
+        //     [boundaryId]: convertArrayToObject(updateValue),
+        //   },
+        // });
         dispatch(fetchAnswers(assessmentId));
         dispatch(fetchingAnswergroups(false));
       });
@@ -57,7 +60,9 @@ export const fetchAnswerGroups = (assessmentId, boundaryType, boundaryId) => {
       getAnswerGroups(params).then((response) => {
         dispatch({
           type: SET_ANSWER_GROUPS,
-          value: convertArrayToObject(response),
+          value: {
+            [boundaryId]: convertArrayToObject(response),
+          },
         });
         dispatch(fetchAnswers(assessmentId));
         dispatch(fetchingAnswergroups(false));

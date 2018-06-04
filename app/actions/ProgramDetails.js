@@ -61,7 +61,6 @@ const getUrlForFilterProgram = (entity, surveyId, surveyOn) => {
   const institutionMapping = `${SERVER_API_BASE}surveys/${surveyId}/questiongroup/mappings/?boundary_id=${entity.id}`;
   const studentgroupMapping = `${SERVER_API_BASE}surveys/${surveyId}/questiongroup/mappings/?institution_id=${entity.id}`;
 
-  console.log(entity, surveyId, surveyOn);
   if (surveyOn === 'institution') {
     switch (entity.depth) {
       case 0:

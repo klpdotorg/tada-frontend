@@ -850,6 +850,8 @@ table.table-fixedwidth td, .table-fixedwidth th {
 .add-students-table {
   border: 1px solid #f3eaea;
   margin-bottom: 20px;
+  max-width: 1035px;
+  width: 100%;
 }
 
 .add-students-header-text {

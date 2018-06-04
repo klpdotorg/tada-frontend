@@ -199,9 +199,10 @@ export const fetchStudentsForAssessmentEntry = (id) => {
       dispatch(hideAssessmentEntryLoading());
       if (typeof id === 'object') {
         const { assessmentId } = id;
-        res.results.forEach((student) => {
-          dispatch(fetchAnswerGroups(assessmentId, 'student_id', student.id));
+        const Ids = res.results.map((value) => {
+          return value.id;
         });
+        dispatch(fetchAnswerGroups(assessmentId, 'student', Ids));
       }
     });
   };

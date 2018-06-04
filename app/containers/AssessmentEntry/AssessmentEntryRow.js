@@ -7,7 +7,7 @@ import { onChangeAnswer, editAnswers } from '../../actions';
 const mapStateToProps = (state, ownProps) => {
   const { rowId } = ownProps;
   const { answergroups } = state.answergroups;
-  const row = get(answergroups, rowId, {});
+  const row = get(answergroups, [ownProps.boundaryInfo.boundaryId, rowId], {});
   const boundary = get(state.programDetails.programDetails, ownProps.uniqueId, {});
   const answers = get(state.answers.answers, rowId, []);
 

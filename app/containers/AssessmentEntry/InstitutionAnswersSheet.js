@@ -62,9 +62,8 @@ const mapStateToProps = (state, ownProps) => {
   const institution = get(state.programDetails.programDetails, institutionId, {});
   const { programs } = state.programs;
   const { loadingBoundary } = state.appstate;
-
   return {
-    rows: Object.keys(answergroups),
+    rows: Object.keys(get(answergroups, institution.id, {})),
     institution,
     loading: answersLoading || fetching || answereFetching || loadingBoundary,
     uniqueId: institutionId,

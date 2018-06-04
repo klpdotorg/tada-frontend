@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import isEmpty from 'lodash.isempty';
 
-import { NoPermissionBlockView } from './index';
 import { EditBlock } from '../../containers/PrimaryBlock';
 import { CreateCluster } from '../../containers/PrimaryCluster';
+import { getPath } from '../../utils';
 
 const PrimaryBlockView = ({ isAdmin, isLoading, district, block, params }) => {
+  // console.log(getPath(district));
   if (isLoading || isEmpty(block)) {
     return (
       <div>

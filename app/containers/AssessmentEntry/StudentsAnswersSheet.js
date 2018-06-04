@@ -76,6 +76,9 @@ const mapStateToProps = (state, ownProps) => {
     loading: answersLoading || fetching || answereFetching || loadingBoundary,
     uniqueId: studentGroupId,
     boundaryInfo: {
+      students: state.assessmentEntry.students.map((value, key) => {
+        return key;
+      }),
       boundaryId: studentgroup.id,
       assessmentId: questionGroupId,
       boundaryType: 'studentgroup',

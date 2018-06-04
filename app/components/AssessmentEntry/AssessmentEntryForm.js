@@ -45,20 +45,31 @@ const RenderForm = (props) => {
 const AssessmentEntryFormView = (props) => {
   const { loading } = props;
   return (
-    <div className="answer-table">
-      <table className="table table-striped">
-        <thead>
-          <AssessmentEntryColHeader />
-        </thead>
-        <RenderForm {...props} />
-      </table>
-      {loading ? (
-        <div style={{ textAlign: 'center', paddingBottom: 10 }}>
-          <Loading />
-        </div>
-      ) : (
-        <div />
-      )}
+    <div>
+      <button
+        onClick={() => {
+          console.log('OnPress');
+        }}
+        className="btn btn-primary"
+        style={{ float: 'right', marginBottom: 20 }}
+      >
+        Add Row
+      </button>
+      <div className="answer-table">
+        <table className="table table-striped">
+          <thead>
+            <AssessmentEntryColHeader />
+          </thead>
+          <RenderForm {...props} />
+        </table>
+        {loading ? (
+          <div style={{ textAlign: 'center', paddingBottom: 10 }}>
+            <Loading />
+          </div>
+        ) : (
+          <div />
+        )}
+      </div>
     </div>
   );
 };

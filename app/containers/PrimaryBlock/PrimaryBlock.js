@@ -6,6 +6,7 @@ import isEmpty from 'lodash.isempty';
 import { DEFAULT_PARENT_NODE_ID } from 'config';
 import { PrimaryBlockView } from '../../components/PrimaryBlock';
 import { getBoundariesEntities } from '../../actions';
+import { get } from '../../actions/requests';
 
 class FetchBlockEntity extends Component {
   constructor() {
@@ -41,10 +42,12 @@ FetchBlockEntity.propTypes = {
 const mapStateToProps = (state, ownProps) => {
   const { blockNodeId, districtNodeId } = ownProps.params;
   const { isAdmin } = state.profile;
-
+  console.log(ownProps);
+  const pathname = get(ownProps, ['location', 'pathname'], '');
   return {
     block: state.boundaries.boundaryDetails[blockNodeId] || {},
     district: state.boundaries.boundaryDetails[districtNodeId] || {},
+    // districtPath:
     isLoading: state.appstate.loadingBoundary,
     isAdmin,
   };

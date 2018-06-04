@@ -73,7 +73,7 @@ const mapStateToProps = (state, ownProps) => {
 
   return {
     boundary: studentGroup,
-    rows: Object.keys(answergroups),
+    rows: Object.keys(get(answergroups, studentGroup.id, {})),
     loading: answersLoading || fetching || answerFetching || loadingBoundary,
     uniqueId: studentGroupId,
     boundaryInfo: {

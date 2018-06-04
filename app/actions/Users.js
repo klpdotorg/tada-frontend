@@ -1,4 +1,6 @@
 import { SERVER_API_BASE } from 'config';
+import Notifications from 'react-notification-system-redux';
+
 import { get, put, deleteRequest } from './requests';
 import {
   SET_USERS,
@@ -15,6 +17,7 @@ import {
   SET_PAGINATION_COUNT,
 } from './types';
 import { convertArrayToObject } from '../utils';
+import { showSuccessMessage } from './notifications';
 
 const showUsersLoading = () => {
   return {
@@ -141,6 +144,22 @@ export const deleteUsers = () => {
         type: SELECT_USER,
         value: [],
       });
+    });
+  };
+};
+
+export const resetUserPassword = (body) => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const { resetPasswordUserId } = state.users;
+    console.log(body, resetPasswordUserId);
+    const url = `${SERVER_API_BASE}tada/users/${resetPasswordUserId}/reset-password/`;
+    put(url, body).then((response) => {
+      console.log(response);
+      if (response) {
+        dispatch(Notifications.success(showSuccessMessage('Reset Password', 'User password successfully reset.')));
+      }
+      dispatch(toggleResetUserPasswordModal());
     });
   };
 };
