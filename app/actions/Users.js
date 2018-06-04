@@ -166,10 +166,8 @@ export const resetUserPassword = (body) => {
   return (dispatch, getState) => {
     const state = getState();
     const { resetPasswordUserId } = state.users;
-    console.log(body, resetPasswordUserId);
     const url = `${SERVER_API_BASE}tada/users/${resetPasswordUserId}/reset-password/`;
     put(url, body).then((response) => {
-      console.log(response);
       if (response) {
         dispatch(Notifications.success(showSuccessMessage('Reset Password', 'User password successfully reset.')));
       }
