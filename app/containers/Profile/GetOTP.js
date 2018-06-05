@@ -6,7 +6,7 @@ import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
 
 import { Modal } from '../../components/Modal';
-import { resetPassword, enableSubmitForm, disableSubmitForm } from '../../actions';
+import { resetPassword, enableSubmitForm, disableSubmitForm, toggleModal } from '../../actions';
 
 const { Input } = FRC;
 
@@ -31,7 +31,9 @@ class GetOTPView extends Component {
         title="Enter OTP"
         contentLabel="Enter OTP"
         isOpen={isOpen}
-        onCloseModal={this.props.closeOTPModal}
+        onCloseModal={() => {
+          this.props.toggleModal('changeOTP');
+        }}
         canSubmit={canSubmit}
         submitForm={this.submitForm}
         cancelBtnLabel="Cancel"
@@ -55,7 +57,7 @@ GetOTPView.propTypes = {
   isOpen: PropTypes.bool,
   canSubmit: PropTypes.bool,
   otp: PropTypes.number,
-  closeOTPModal: PropTypes.func,
+  toggleModal: PropTypes.func,
   enableSubmitForm: PropTypes.func,
   disableSubmitForm: PropTypes.func,
   changeOTP: PropTypes.func,
@@ -70,6 +72,7 @@ const mapStateToProps = (state) => {
 
 const GetOTP = connect(mapStateToProps, {
   changeOTP: resetPassword,
+  toggleModal,
   enableSubmitForm,
   disableSubmitForm,
 })(GetOTPView);
