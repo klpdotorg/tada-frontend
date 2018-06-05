@@ -33,9 +33,9 @@ class EditStudentForm extends Component {
   }
 
   submitForm() {
-    const { studentGroupNodeId } = this.props;
+    const { studentGroupId, student } = this.props;
     const myform = this.myform.getModel();
-    const student = {
+    const updateStudent = {
       first_name: myform.firstName,
       middle_name: myform.middleName,
       last_name: myform.lastName,
@@ -43,12 +43,15 @@ class EditStudentForm extends Component {
       mt: myform.language,
       gender: myform.gender,
       dob: myform.dob,
-      acdamic_year: myform.acdamic_year,
+      academic_year: myform.academic_year,
       father_name: myform.father_name,
       mother_name: myform.mother_name,
+      id: student.id,
+      institution: student.institution,
+      status: 'AC',
     };
 
-    this.props.modifyStudent(studentGroupNodeId, this.props.student.id, student);
+    this.props.modifyStudent(studentGroupId, updateStudent);
   }
 
   render() {
@@ -61,10 +64,11 @@ class EditStudentForm extends Component {
       gender,
       mt,
       dob,
-      acdamic_year,
+      academic_year,
       father_name,
       mother_name,
     } = student;
+    console.log(academic_year, 'printing the reponse', student);
     const selectGender = [{ value: 'male', label: 'Male' }, { value: 'female', label: 'Female' }];
 
     return (
@@ -170,10 +174,10 @@ class EditStudentForm extends Component {
           </div>
           <div className="col-sm-12">
             <Select
-              name="acdamic_year"
-              id="acdamic_year"
+              name="academic_year"
+              id="academic_year"
               label="Acadamic Year"
-              value={this.getValue(acdamic_year)}
+              value={this.getValue(academic_year) || '0607'}
               options={lastVerifiedYears}
             />
           </div>
@@ -185,7 +189,7 @@ class EditStudentForm extends Component {
 
 EditStudentForm.propTypes = {
   title: PropTypes.string,
-  studentGroupNodeId: PropTypes.string,
+  studentGroupId: PropTypes.string,
   id: PropTypes.string,
   isOpen: PropTypes.bool,
   canSubmit: PropTypes.bool,
@@ -219,9 +223,8 @@ const mapDispatchToProps = (dispatch) => {
         modal: 'editStudent',
       });
     },
-    modifyStudent: (studentGroupNodeId, studentId, form) => {
-      dispatch(setParentNode(studentGroupNodeId));
-      dispatch(modifyStudent(studentId, form));
+    modifyStudent: (groupId, student) => {
+      dispatch(modifyStudent(groupId, student));
     },
     enableSubmitForm: () => {
       dispatch(enableSubmitForm());

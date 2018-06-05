@@ -3,7 +3,7 @@ import pull from 'lodash.pull';
 import omit from 'lodash.omit';
 import remove from 'lodash.remove';
 
-import { get, patch, deleteRequest } from './requests';
+import { get, put, deleteRequest } from './requests';
 import {
   SELECT_STUDENT_IN_VIEW_STUDENTS,
   TOGGLE_MODAL,
@@ -129,7 +129,7 @@ export const openEditStudentModal = (value) => {
   };
 };
 
-export const modifyStudent = (studentId, options) => {
+export const modifyStudent = (groupId, options) => {
   return (dispatch) => {
     dispatch(showBoundaryLoading());
     dispatch({
@@ -137,10 +137,10 @@ export const modifyStudent = (studentId, options) => {
       modal: 'editStudent',
     });
 
-    const editStudentURL = `${SERVER_API_BASE}students/${studentId}/`;
-    patch(editStudentURL, options).then((response) => {
-      const entities = convertEntitiesToObject([response]);
+    const editStudentURL = `${SERVER_API_BASE}studentgroups/${groupId}/students/`;
 
+    put(editStudentURL, [options]).then((response) => {
+      const entities = convertEntitiesToObject(response.results);
       dispatch({
         type: SET_BOUNDARIES,
         boundaryDetails: entities,
