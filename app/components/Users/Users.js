@@ -6,6 +6,13 @@ const UsersView = ({ users, selectedUsers, editUser, selectUser, resetPassword }
     <tbody>
       {users.map((user) => {
         const checked = selectedUsers.includes(user.id);
+        const groups = user.groups.map((item) => {
+          if (typeof item === 'object') {
+            return item.name;
+          }
+
+          return item;
+        });
 
         return (
           <tr key={user.id}>
@@ -13,7 +20,7 @@ const UsersView = ({ users, selectedUsers, editUser, selectUser, resetPassword }
               {user.first_name} {user.last_name}
             </td>
             <td>{user.id}</td>
-            <td>{user.groups.join(', ')}</td>
+            <td>{groups.join(', ')}</td>
             <td>
               <input
                 checked={checked}
