@@ -40,7 +40,6 @@ const ShowInstitutionsView = (props) => {
 
             return (
               <li className="list-group-item" key={institution.uniqueId}>
-                <div className="pull-left">{institution.value.id}</div>
                 <span className="margin-left">{capitalize(institution.value.name)}</span>
                 <div className="pull-right">
                   <input
