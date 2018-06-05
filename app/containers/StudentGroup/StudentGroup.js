@@ -7,7 +7,7 @@ import isEmpty from 'lodash.isempty';
 import { DEFAULT_PARENT_NODE_ID } from 'config';
 import { StudentGroupView } from '../../components/StudentGroup';
 import { getBoundariesEntities, openViewStudents, openAddStudents } from '../../actions';
-import { checkPermissions } from '../../utils';
+import { checkPermissions, getEntitiesPath } from '../../utils';
 
 class FetchStudentGroupEntity extends Component {
   componentDidMount() {
@@ -83,6 +83,13 @@ const mapStateToProps = (state, ownProps) => {
     [district.id, block.id, cluster.id],
     institution.id,
   );
+  const pathname = get(ownProps, ['location', 'pathname'], '');
+  const paths = getEntitiesPath(pathname, [
+    districtNodeId,
+    blockNodeId,
+    clusterNodeId,
+    institutionNodeId,
+  ]);
 
   return {
     district,
@@ -93,6 +100,7 @@ const mapStateToProps = (state, ownProps) => {
     isLoading: state.appstate.loadingBoundary,
     isPrimary: state.schoolSelection.primarySchool,
     hasPermissions,
+    paths,
   };
 };
 

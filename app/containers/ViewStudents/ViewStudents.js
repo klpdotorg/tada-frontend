@@ -14,7 +14,7 @@ import {
   mapStudentsWithCenter,
 } from '../../actions';
 import { ViewStudentsCont } from '../../components/ViewStudents';
-import { checkPermissions } from '../../utils';
+import { checkPermissions, getEntitiesPath } from '../../utils';
 
 class FetchStudents extends Component {
   componentDidMount() {
@@ -85,6 +85,14 @@ const mapStateToProps = (state, ownProps) => {
     [district.id, block.id, cluster.id],
     institution.id,
   );
+  const pathname = get(ownProps, ['location', 'pathname'], '');
+  const paths = getEntitiesPath(pathname, [
+    districtNodeId,
+    blockNodeId,
+    clusterNodeId,
+    institutionNodeId,
+    studentGroupNodeId,
+  ]);
 
   return {
     district,
@@ -104,6 +112,7 @@ const mapStateToProps = (state, ownProps) => {
     isLoading: state.appstate.loadingBoundary,
     canMapStudents: !isEmpty(selectedStudents) && !isEmpty(centers),
     hasPermissions,
+    paths,
   };
 };
 

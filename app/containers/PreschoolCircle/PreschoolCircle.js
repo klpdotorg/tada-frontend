@@ -12,6 +12,7 @@ import {
   getManagements,
 } from '../../actions';
 import { PreschoolCircleView } from '../../components/PreschoolCircle';
+import { getEntitiesPath } from '../../utils';
 
 class FetchCircleEntity extends Component {
   componentWillMount() {
@@ -53,12 +54,15 @@ FetchCircleEntity.propTypes = {
 const mapStateToProps = (state, ownProps) => {
   const { projectNodeId, districtNodeId, circleNodeId } = ownProps.params;
   const { isAdmin } = state.profile;
+  const pathname = get(ownProps, ['location', 'pathname'], '');
+  const paths = getEntitiesPath(pathname, [districtNodeId, projectNodeId]);
 
   return {
     circle: get(state.boundaries.boundaryDetails, circleNodeId, {}),
     project: get(state.boundaries.boundaryDetails, projectNodeId, {}),
     district: get(state.boundaries.boundaryDetails, districtNodeId, {}),
     isLoading: state.appstate.loadingBoundary,
+    paths,
     isAdmin,
   };
 };

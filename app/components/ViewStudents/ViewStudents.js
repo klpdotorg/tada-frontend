@@ -21,6 +21,7 @@ const ViewStudentsCont = (props) => {
     selectedCenter,
     canMapStudents,
     hasPermissions,
+    paths,
   } = props;
 
   if (isLoading || isEmpty(studentGroup)) {
@@ -31,18 +32,21 @@ const ViewStudentsCont = (props) => {
     <div>
       <ol className="breadcrumb">
         <li>
-          <Link to={district.path}>{district.name}</Link>
+          <Link to={paths[0]}>{district.name}</Link>
         </li>
         <li>
-          <Link to={block.path}>{block.name}</Link>
+          <Link to={paths[1]}>{block.name}</Link>
         </li>
         <li>
-          <Link to={cluster.path}>{cluster.name}</Link>
+          <Link to={paths[2]}>{cluster.name}</Link>
         </li>
         <li>
-          <Link to={institution.path}>{institution.name}</Link>
+          <Link to={paths[3]}>{institution.name}</Link>
         </li>
-        <li>{studentGroup.name}</li>
+        <li>
+          <Link to={paths[3]}>{studentGroup.name}</Link>
+        </li>
+        <li className="active"> View Students</li>
       </ol>
       <div className="row">
         <h4 className="text-primary col-md-10">Student Details</h4>
@@ -116,12 +120,13 @@ const ViewStudentsCont = (props) => {
           </button>
         </div>
       </div>
-      <EditStudent studentGroupNodeId={params.studentGroupNodeId} hasPermissions={hasPermissions} />
+      <EditStudent studentGroupId={studentGroup.id} hasPermissions={hasPermissions} />
     </div>
   );
 };
 
 ViewStudentsCont.propTypes = {
+  paths: PropTypes.array,
   hasPermissions: PropTypes.bool,
   district: PropTypes.object,
   block: PropTypes.object,

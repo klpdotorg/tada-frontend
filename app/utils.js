@@ -245,3 +245,10 @@ export const checkPermissions = (isAdmin, permissions, boundaryId, institutionId
 
   return false;
 };
+
+export const getEntitiesPath = (url, entities) => {
+  return entities.map((entity) => {
+    const index = url.indexOf(entity) + entity.length;
+    return url.slice(0, index);
+  });
+};

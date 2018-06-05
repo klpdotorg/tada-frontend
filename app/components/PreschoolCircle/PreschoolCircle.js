@@ -5,9 +5,8 @@ import isEmpty from 'lodash.isempty';
 
 import { CreatePreschool } from '../../containers/Preschool';
 import { EditCircle } from '../../containers/PreschoolCircle';
-import { NoPermissionView } from './index';
 
-const PreschoolCircleView = ({ isAdmin, isLoading, district, project, circle, params }) => {
+const PreschoolCircleView = ({ paths, isLoading, district, project, circle, params }) => {
   if (isLoading || isEmpty(circle)) {
     return (
       <div>
@@ -21,10 +20,10 @@ const PreschoolCircleView = ({ isAdmin, isLoading, district, project, circle, pa
     <div>
       <ol className="breadcrumb">
         <li>
-          <Link to={district.path}>{district.name}</Link>
+          <Link to={paths[0]}>{district.name}</Link>
         </li>
         <li>
-          <Link to={project.path}>{project.name}</Link>
+          <Link to={paths[1]}>{project.name}</Link>
         </li>
         <li className="active">{circle.name}</li>
       </ol>
@@ -36,7 +35,7 @@ const PreschoolCircleView = ({ isAdmin, isLoading, district, project, circle, pa
 
 PreschoolCircleView.propTypes = {
   isLoading: PropTypes.bool,
-  isAdmin: PropTypes.bool,
+  paths: PropTypes.array,
   district: PropTypes.object,
   project: PropTypes.object,
   circle: PropTypes.object,

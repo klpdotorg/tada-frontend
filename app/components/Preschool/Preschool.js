@@ -9,7 +9,16 @@ import { CreateClass } from '../../containers/StudentGroup';
 import { Loading } from '../common';
 
 const PreschoolView = (props) => {
-  const { isLoading, district, project, circle, institution, params, hasPermissions } = props;
+  const {
+    isLoading,
+    district,
+    project,
+    circle,
+    institution,
+    params,
+    hasPermissions,
+    paths,
+  } = props;
 
   if (isLoading || isEmpty(institution)) {
     return <Loading />;
@@ -19,15 +28,15 @@ const PreschoolView = (props) => {
     <div>
       <ol className="breadcrumb">
         <li>
-          <Link to={district.path}>{district.name}</Link>
+          <Link to={paths[0]}>{district.name}</Link>
         </li>
         <li>
           {' '}
-          <Link to={project.path}> {project.name}</Link>
+          <Link to={paths[1]}> {project.name}</Link>
         </li>
         <li>
           {' '}
-          <Link to={circle.path}> {circle.name}</Link>
+          <Link to={paths[2]}> {circle.name}</Link>
         </li>
         <li className="active"> {institution.name}</li>
       </ol>
@@ -55,7 +64,7 @@ const PreschoolView = (props) => {
 
 PreschoolView.propTypes = {
   hasPermissions: PropTypes.bool,
-  isAdmin: PropTypes.bool,
+  paths: PropTypes.array,
   depth: PropTypes.number,
   isLoading: PropTypes.bool,
   district: PropTypes.object,

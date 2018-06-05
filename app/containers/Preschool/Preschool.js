@@ -14,7 +14,7 @@ import {
   toggleClassModal,
 } from '../../actions';
 import { PreschoolView } from '../../components/Preschool';
-import { checkPermissions } from '../../utils';
+import { checkPermissions, getEntitiesPath } from '../../utils';
 
 class FetchPreschoolEntity extends Component {
   componentDidMount() {
@@ -70,6 +70,8 @@ const mapStateToProps = (state, ownProps) => {
     [district.id, project.id, circle.id],
     institution.id,
   );
+  const pathname = get(ownProps, ['location', 'pathname'], '');
+  const paths = getEntitiesPath(pathname, [districtNodeId, projectNodeId, circleNodeId]);
 
   return {
     district,
@@ -78,6 +80,7 @@ const mapStateToProps = (state, ownProps) => {
     institution,
     isLoading: state.appstate.loadingBoundary,
     isAdmin,
+    paths,
     hasPermissions,
   };
 };

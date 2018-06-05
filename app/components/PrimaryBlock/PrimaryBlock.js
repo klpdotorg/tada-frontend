@@ -5,10 +5,8 @@ import isEmpty from 'lodash.isempty';
 
 import { EditBlock } from '../../containers/PrimaryBlock';
 import { CreateCluster } from '../../containers/PrimaryCluster';
-import { getPath } from '../../utils';
 
-const PrimaryBlockView = ({ isAdmin, isLoading, district, block, params }) => {
-  // console.log(getPath(district));
+const PrimaryBlockView = ({ paths, isLoading, district, block, params }) => {
   if (isLoading || isEmpty(block)) {
     return (
       <div>
@@ -22,7 +20,7 @@ const PrimaryBlockView = ({ isAdmin, isLoading, district, block, params }) => {
     <div>
       <ol className="breadcrumb">
         <li>
-          <Link to={district.path}>{district.name}</Link>
+          <Link to={paths[0]}>{district.name}</Link>
         </li>
         <li className="active">{block.name}</li>
       </ol>
@@ -38,7 +36,7 @@ const PrimaryBlockView = ({ isAdmin, isLoading, district, block, params }) => {
 
 PrimaryBlockView.propTypes = {
   isLoading: PropTypes.bool,
-  isAdmin: PropTypes.bool,
+  paths: PropTypes.array,
   district: PropTypes.object,
   block: PropTypes.object,
   params: PropTypes.object,

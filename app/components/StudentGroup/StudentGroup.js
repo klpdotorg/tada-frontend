@@ -19,6 +19,7 @@ const StudentGroupView = (props) => {
     params,
     depth,
     hasPermissions,
+    paths,
   } = props;
 
   if (isLoading || isEmpty(studentGroup)) {
@@ -29,20 +30,18 @@ const StudentGroupView = (props) => {
     <div>
       <ol className="breadcrumb">
         <li>
-          <Link to={district.path}>{district.name}</Link>
+          <Link to={paths[0]}>{district.name}</Link>
         </li>
         <li>
-          <Link to={block.path}>{block.name}</Link>
+          <Link to={paths[1]}>{block.name}</Link>
         </li>
         <li>
-          <Link to={cluster.path}>{cluster.name}</Link>
+          <Link to={paths[2]}>{cluster.name}</Link>
         </li>
         <li>
-          <Link to={institution.path}>{institution.name}</Link>
+          <Link to={paths[3]}>{institution.name}</Link>
         </li>
-        <li>
-          <Link className="active">{studentGroup.name}</Link>
-        </li>
+        <li className="active"> {institution.name}</li>
       </ol>
       <NoPermissionView hasPermissions={hasPermissions} />
       <div className="row">
@@ -72,6 +71,7 @@ const StudentGroupView = (props) => {
 };
 
 StudentGroupView.propTypes = {
+  paths: PropTypes.array,
   isLoading: PropTypes.bool,
   isPrimary: PropTypes.bool,
   district: PropTypes.object,

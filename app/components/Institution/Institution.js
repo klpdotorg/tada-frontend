@@ -9,16 +9,7 @@ import { CreateClass } from '../../containers/StudentGroup';
 import { Loading } from '../common';
 
 const InstitutionView = (props) => {
-  const {
-    isLoading,
-    district,
-    block,
-    cluster,
-    institution,
-    params,
-    isAdmin,
-    hasPermissions,
-  } = props;
+  const { isLoading, district, block, cluster, institution, params, paths, hasPermissions } = props;
 
   if (isLoading || isEmpty(institution)) {
     return <Loading />;
@@ -28,15 +19,15 @@ const InstitutionView = (props) => {
     <div>
       <ol className="breadcrumb">
         <li>
-          <Link to={district.path}>{district.name}</Link>
+          <Link to={paths[0]}>{district.name}</Link>
         </li>
         <li>
           {' '}
-          <Link to={block.path}> {block.name}</Link>
+          <Link to={paths[1]}> {block.name}</Link>
         </li>
         <li>
           {' '}
-          <Link to={cluster.path}> {cluster.name}</Link>
+          <Link to={paths[2]}> {cluster.name}</Link>
         </li>
         <li className="active"> {institution.name}</li>
       </ol>
@@ -65,7 +56,7 @@ const InstitutionView = (props) => {
 
 InstitutionView.propTypes = {
   hasPermissions: PropTypes.bool,
-  isAdmin: PropTypes.bool,
+  paths: PropTypes.array,
   isLoading: PropTypes.bool,
   district: PropTypes.object,
   block: PropTypes.object,

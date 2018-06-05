@@ -16,6 +16,7 @@ const AddStudentsView = (props) => {
     params,
     depth,
     hasPermissions,
+    paths,
   } = props;
 
   if (isLoading) {
@@ -26,20 +27,21 @@ const AddStudentsView = (props) => {
     <div>
       <ol className="breadcrumb">
         <li>
-          <Link to={district.path}>{district.name}</Link>
+          <Link to={paths[0]}>{district.name}</Link>
         </li>
         <li>
-          <Link to={block.path}>{block.name}</Link>
+          <Link to={paths[1]}>{block.name}</Link>
         </li>
         <li>
-          <Link to={cluster.path}>{cluster.name}</Link>
+          <Link to={paths[2]}>{cluster.name}</Link>
         </li>
         <li>
-          <Link to={institution.path}>{institution.name}</Link>
+          <Link to={paths[3]}>{institution.name}</Link>
         </li>
         <li>
-          <Link className="active">{studentGroup.name}</Link>
+          <Link to={paths[4]}>{studentGroup.name}</Link>
         </li>
+        <li className="active"> Add Students</li>
       </ol>
       <AddStudentsForm
         studentGroupNodeId={params.studentGroupNodeId}
@@ -53,6 +55,7 @@ const AddStudentsView = (props) => {
 };
 
 AddStudentsView.propTypes = {
+  paths: PropTypes.array,
   hasPermissions: PropTypes.bool,
   district: PropTypes.object,
   block: PropTypes.object,

@@ -14,7 +14,7 @@ import {
   openTeachers,
   toggleClassModal,
 } from '../../actions';
-import { checkPermissions } from '../../utils';
+import { checkPermissions, getEntitiesPath } from '../../utils';
 
 class FetchInstitutionEntity extends Component {
   componentDidMount() {
@@ -73,6 +73,8 @@ const mapStateToProps = (state, ownProps) => {
     [district.id, block.id, cluster.id],
     institution.id,
   );
+  const pathname = get(ownProps, ['location', 'pathname'], '');
+  const paths = getEntitiesPath(pathname, [districtNodeId, blockNodeId, clusterNodeId]);
 
   return {
     district,
@@ -82,6 +84,7 @@ const mapStateToProps = (state, ownProps) => {
     isLoading: state.appstate.loadingBoundary,
     isAdmin,
     hasPermissions,
+    paths,
   };
 };
 

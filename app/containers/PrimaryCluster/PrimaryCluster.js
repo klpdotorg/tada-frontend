@@ -12,6 +12,7 @@ import {
   getManagements,
 } from '../../actions';
 import { PrimaryClusterView } from '../../components/PrimaryCluster';
+import { getEntitiesPath } from '../../utils';
 
 class FetchClusterEntity extends Component {
   componentWillMount() {
@@ -52,6 +53,8 @@ FetchClusterEntity.propTypes = {
 const mapStateToProps = (state, ownProps) => {
   const { blockNodeId, districtNodeId, clusterNodeId } = ownProps.params;
   const { isAdmin } = state.profile;
+  const pathname = get(ownProps, ['location', 'pathname'], '');
+  const paths = getEntitiesPath(pathname, [districtNodeId, blockNodeId]);
 
   return {
     cluster: get(state.boundaries.boundaryDetails, clusterNodeId, {}),
@@ -59,6 +62,7 @@ const mapStateToProps = (state, ownProps) => {
     district: get(state.boundaries.boundaryDetails, districtNodeId, {}),
     isLoading: state.appstate.loadingBoundary,
     isAdmin,
+    paths,
   };
 };
 

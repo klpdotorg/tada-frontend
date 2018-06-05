@@ -8,7 +8,7 @@ import { DEFAULT_PARENT_NODE_ID } from 'config';
 
 import { EditStudentsView } from '../../components/EditStudents';
 import { getBoundariesEntities, getLanguages } from '../../actions';
-import { checkPermissions } from '../../utils';
+import { checkPermissions, getEntitiesPath } from '../../utils';
 
 class FetchAddStudentResources extends Component {
   componentDidMount() {
@@ -85,6 +85,14 @@ const mapStateToProps = (state, ownProps) => {
     [district.id, block.id, cluster.id],
     institution.id,
   );
+  const pathname = get(ownProps, ['location', 'pathname'], '');
+  const paths = getEntitiesPath(pathname, [
+    districtNodeId,
+    blockNodeId,
+    clusterNodeId,
+    institutionNodeId,
+    studentGroupNodeId,
+  ]);
 
   return {
     district,
@@ -95,6 +103,7 @@ const mapStateToProps = (state, ownProps) => {
     studentIds: get(state.boundaries.boundariesByParentId, '5', []),
     isLoading: state.appstate.loadingBoundary,
     hasPermissions,
+    paths,
   };
 };
 
