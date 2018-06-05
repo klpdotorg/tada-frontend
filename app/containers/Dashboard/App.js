@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 
 import { setUserProfile, fetchUserPermissions } from '../../actions/';
 import { MainHeader, MainNavBar, SecondaryNavBarCont } from '../Header';
+import { LoadingBoundary } from '../common';
 import { SideBarContainer } from '../SideBar';
 import { MainContentArea, TreeTogglerSpacing } from '../../components/Dashboard';
 
@@ -63,6 +64,7 @@ class TadaContentContainer extends Component {
               <span id="toggler-icon" className="glyphicon glyphicon-resize-horizontal" />
             </a>
           </div>
+          <LoadingBoundary show />
         </div>
         <Notifications notifications={notifications} />
       </div>

@@ -15,7 +15,7 @@ const UserAndBoundaryListView = (props) => {
     boundaries,
     indexes,
     userLoading,
-    boundaryLoading,
+    loadingBoundary,
   } = props;
 
   return (
@@ -75,7 +75,7 @@ const UserAndBoundaryListView = (props) => {
             </tr>
           </thead>
           <tbody>
-            {boundaryLoading ? (
+            {loadingBoundary ? (
               <tr>
                 <td>
                   <Loading />
@@ -118,7 +118,7 @@ UserAndBoundaryListView.propTypes = {
   users: PropTypes.array,
   selectedUsers: PropTypes.array,
   userLoading: PropTypes.bool,
-  boundaryLoading: PropTypes.bool,
+  loadingBoundary: PropTypes.bool,
   boundaries: PropTypes.array,
   selectedBoundaries: PropTypes.array,
   indexes: PropTypes.array,

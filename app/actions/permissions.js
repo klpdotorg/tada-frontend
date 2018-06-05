@@ -2,7 +2,7 @@ import { SERVER_API_BASE } from 'config';
 import { push } from 'react-router-redux';
 import Notifications from 'react-notification-system-redux';
 
-import { fetchBoundary, showBoundaryLoading } from './index';
+import { fetchBoundary, showBoundaryLoading, toggleSubmitLoading } from './index';
 import { getPath, convertEntitiesToObject } from '../utils';
 import {
   SELECT_PERMISSIONS_BOUNDARY,
@@ -131,6 +131,7 @@ export const fetchUserPermissions = () => {
 
 export const submitBoundaryPermissions = () => {
   return (dispatch, getState) => {
+    dispatch(toggleSubmitLoading());
     const state = getState();
     const { selectedBoundaries, selectedUsers } = state.permissions;
     const promises = selectedUsers.map((user) => {
@@ -149,12 +150,14 @@ export const submitBoundaryPermissions = () => {
         'Permission Assigned',
         'Boundary permissions are successfully assigned.',
       )));
+      dispatch(toggleSubmitLoading());
     });
   };
 };
 
 export const submitAssessmentPermissions = () => {
   return (dispatch, getState) => {
+    dispatch(toggleSubmitLoading());
     const state = getState();
     const { selectedAssessments, selectedUsers } = state.permissions;
     const promises = selectedUsers.map((user) => {
@@ -173,6 +176,7 @@ export const submitAssessmentPermissions = () => {
         'Permission Assigned',
         'Assessment permissions are successfully assigned.',
       )));
+      dispatch(toggleSubmitLoading());
     });
   };
 };

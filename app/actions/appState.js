@@ -10,6 +10,7 @@ import {
   CLOSE_INSTITUTION_LOADING_IN_MA,
   SHOW_CLASSES_LOADING_IN_MA,
   CLOSE_CLASSES_LOADING_IN_MA,
+  TOGGLE_SUBMIT_LOADING,
 } from './types';
 
 export const redirect = (url) => {
@@ -90,5 +91,11 @@ export const showClassesLoadingInMA = () => {
 export const closeClassesLoadingInMA = () => {
   return {
     type: CLOSE_CLASSES_LOADING_IN_MA,
+  };
+};
+
+export const toggleSubmitLoading = () => {
+  return {
+    type: TOGGLE_SUBMIT_LOADING,
   };
 };

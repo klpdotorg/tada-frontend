@@ -7,6 +7,7 @@ import {
   CLOSE_INSTITUTION_LOADING_IN_MA,
   SHOW_CLASSES_LOADING_IN_MA,
   CLOSE_CLASSES_LOADING_IN_MA,
+  TOGGLE_SUBMIT_LOADING,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -18,6 +19,7 @@ const INITIAL_STATE = {
   enableSubmitForm: false,
   loadingInstitutionInMA: false,
   loadingStudentgroupInMA: false,
+  submitLoading: false,
 };
 
 const AppState = (state = INITIAL_STATE, action) => {
@@ -71,6 +73,11 @@ const AppState = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         loadingStudentgroupInMa: false,
+      };
+    case TOGGLE_SUBMIT_LOADING:
+      return {
+        ...state,
+        submitLoading: !state.submitLoading,
       };
     default:
       return state;
