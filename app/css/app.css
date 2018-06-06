@@ -922,3 +922,8 @@ table.table-fixedwidth td, .table-fixedwidth th {
   line-height: 1em;
   vertical-align: middle;
 }
+
+.user-search-bar {
+  display: flex;
+  margin-right: 20px;
+}

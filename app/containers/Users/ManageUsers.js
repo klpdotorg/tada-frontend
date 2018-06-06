@@ -1,8 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import isEmpty from 'lodash.isempty';
+
 import { ManageUsersView } from '../../components/Users';
-import { fetchUsers, toggleAddUserModal } from '../../actions';
+import {
+  fetchUsers,
+  toggleAddUserModal,
+  onChangeUserSearchText,
+  submitUserSearch,
+} from '../../actions';
 
 class FetchUsers extends Component {
   componentDidMount() {
@@ -14,10 +21,11 @@ class FetchUsers extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { loading } = state.users;
+  const { loading, users } = state.users;
 
   return {
     loading,
+    hasUsers: !isEmpty(users),
   };
 };
 
@@ -28,6 +36,8 @@ FetchUsers.propTypes = {
 const ManageUsers = connect(mapStateToProps, {
   fetchUsers,
   showAddUserModal: toggleAddUserModal,
+  onChangeText: onChangeUserSearchText,
+  submit: submitUserSearch,
 })(FetchUsers);
 
 export default ManageUsers;

@@ -16,9 +16,17 @@ import {
   CHANGE_PAGINATION_CURRENT,
   SET_PAGINATION_COUNT,
   SET_ID_FOR_RESET_PASSWORD,
+  ON_CHANGE_USER_SEARCH_TEXT,
 } from './types';
 import { convertArrayToObject } from '../utils';
 import { showSuccessMessage } from './notifications';
+
+export const onChangeUserSearchText = (value) => {
+  return {
+    type: ON_CHANGE_USER_SEARCH_TEXT,
+    value,
+  };
+};
 
 const showUsersLoading = () => {
   return {
@@ -39,6 +47,28 @@ export const fetchUsers = () => {
     const { current } = state.pagination;
 
     const url = `${SERVER_API_BASE}tada/users/?per_page=10&page=${current}`;
+    get(url).then((res) => {
+      dispatch({
+        type: SET_USERS,
+        value: convertArrayToObject(res.results),
+      });
+      dispatch({
+        type: SET_PAGINATION_COUNT,
+        value: res.count,
+      });
+      dispatch(hideUsersLoading());
+    });
+  };
+};
+
+export const submitUserSearch = () => {
+  return (dispatch, getState) => {
+    dispatch(showUsersLoading());
+    const state = getState();
+    const { searchText } = state.users;
+    const { current } = state.pagination;
+
+    const url = `${SERVER_API_BASE}tada/users/?search=${searchText}&per_page=10&page=${current}`;
     get(url).then((res) => {
       dispatch({
         type: SET_USERS,
