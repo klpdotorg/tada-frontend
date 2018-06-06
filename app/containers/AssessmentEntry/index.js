@@ -6,3 +6,4 @@ export * from './StudentGroupAnswersSheet';
 export * from './StudentsAnswersSheet';
 export * from './CreateEntryForm';
 export * from './DefaultMessage';
+export * from './CreateEntryRow';
