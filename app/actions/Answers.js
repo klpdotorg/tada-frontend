@@ -48,10 +48,10 @@ export const fetchAnswers = (assessmentId) => {
     const Ids = Object.keys(answergroups);
     const promises = Ids.map((Id) => {
       const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${assessmentId}/answergroups/${Id}/answers/`;
-      return get(url).then((res) => {
+      return get(url).then(({ data }) => {
         return {
           id: Id,
-          value: res.results,
+          value: data.results,
         };
       });
     });
@@ -116,8 +116,8 @@ export const createAnswerGroup = (params) => {
       group_value: name,
       date_of_visit: dateOfVisit,
       status: 'AC',
-    }).then((res) => {
-      dispatch(saveAnswer({ ...params, answergroupId: res.id }));
+    }).then(({ data }) => {
+      dispatch(saveAnswer({ ...params, answergroupId: data.id }));
     });
   };
 };

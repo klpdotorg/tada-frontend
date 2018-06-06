@@ -44,8 +44,8 @@ export const addStudents = (groupNodeId, groupId, institutionId, depth) => {
 
     dispatch(showBoundaryLoading());
 
-    post(`${SERVER_API_BASE}studentgroups/${groupId}/students/`, newValues).then((response) => {
-      const entities = convertEntitiesToObject(response.results);
+    post(`${SERVER_API_BASE}studentgroups/${groupId}/students/`, newValues).then(({ data }) => {
+      const entities = convertEntitiesToObject(data.results);
       dispatch({
         type: SET_BOUNDARIES,
         boundaryDetails: entities,
@@ -67,8 +67,8 @@ export const addStudent = (index, groupId, depth) => {
     dispatch(showBoundaryLoading());
     post(`${SERVER_API_BASE}studentgroups/${groupId}/students/`, [
       newValues[index],
-    ]).then((response) => {
-      const entities = convertEntitiesToObject(response.results);
+    ]).then(({ data }) => {
+      const entities = convertEntitiesToObject(data.results);
       dispatch({
         type: SET_BOUNDARIES,
         boundaryDetails: entities,

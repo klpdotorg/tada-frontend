@@ -15,13 +15,13 @@ export const selectCenter = (Id) => {
 export const fetchCenters = (institutionId) => {
   return (dispatch) => {
     const url = `${SERVER_API_BASE}institutions/${institutionId}/studentgroups/?group_type=center`;
-    get(url).then((response) => {
+    get(url).then(({ data }) => {
       dispatch({
         type: SET_CENTERS,
-        value: response.results,
+        value: data.results,
       });
-      if (response.results.length) {
-        dispatch(selectCenter(getObject(response.results, '0.id', '')));
+      if (data.results.length) {
+        dispatch(selectCenter(getObject(data.results, '0.id', '')));
       }
     });
   };

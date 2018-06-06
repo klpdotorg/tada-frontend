@@ -45,10 +45,10 @@ export const setEditTeacherId = (value) => {
 export const getTeachers = (institutionId) => {
   return (dispatch) => {
     dispatch(showTeacherLoading());
-    get(`${serverApiBase}teachers/?institution=${institutionId}`).then((response) => {
+    get(`${serverApiBase}teachers/?institution=${institutionId}`).then(({ data }) => {
       dispatch({
         type: TEACHER_FETCHED,
-        value: response.results.reduce((soFar, value) => {
+        value: data.results.reduce((soFar, value) => {
           const result = soFar;
 
           result[value.id] = value;
@@ -65,7 +65,7 @@ export const saveNewTeacher = (teacher) => {
     dispatch(showTeacherLoading());
 
     const createTeacherURL = `${serverApiBase}teachers/`;
-    post(createTeacherURL, teacher).then((response) => {
+    post(createTeacherURL, teacher).then(({ data }) => {
       dispatch({
         type: TOGGLE_MODAL,
         modal: 'createTeacher',
@@ -73,7 +73,7 @@ export const saveNewTeacher = (teacher) => {
       dispatch({
         type: SET_TEACHER,
         value: {
-          [response.id]: response,
+          [data.id]: data,
         },
       });
       dispatch(closeTeacherLoading());
@@ -86,7 +86,7 @@ export const editTeacher = (teacher, Id) => {
     dispatch(showTeacherLoading());
 
     const createTeacherURL = `${serverApiBase}teachers/${Id}/`;
-    patch(createTeacherURL, teacher).then((response) => {
+    patch(createTeacherURL, teacher).then(({ data }) => {
       dispatch({
         type: TOGGLE_MODAL,
         modal: 'editTeacher',
@@ -94,7 +94,7 @@ export const editTeacher = (teacher, Id) => {
       dispatch({
         type: SET_TEACHER,
         value: {
-          [Id]: response,
+          [Id]: data,
         },
       });
       dispatch(closeTeacherLoading());

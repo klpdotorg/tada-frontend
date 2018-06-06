@@ -17,8 +17,8 @@ export const fetchingAnswergroups = (value) => {
 export const getAnswerGroups = (params) => {
   const { assessmentId, programId, boundaryId, boundaryType } = params;
   const url = `${SERVER_API_BASE}surveys/${programId}/questiongroup/${assessmentId}/answergroups/?${boundaryType}_id=${boundaryId}&per_page=10`;
-  return get(url).then((response) => {
-    return response.results;
+  return get(url).then(({ data }) => {
+    return data.results;
   });
 };
 

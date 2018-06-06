@@ -47,14 +47,14 @@ export const fetchUsers = () => {
     const { current } = state.pagination;
 
     const url = `${SERVER_API_BASE}tada/users/?per_page=10&page=${current}`;
-    get(url).then((res) => {
+    get(url).then(({ data }) => {
       dispatch({
         type: SET_USERS,
-        value: convertArrayToObject(res.results),
+        value: convertArrayToObject(data.results),
       });
       dispatch({
         type: SET_PAGINATION_COUNT,
-        value: res.count,
+        value: data.count,
       });
       dispatch(hideUsersLoading());
     });
@@ -69,14 +69,14 @@ export const submitUserSearch = () => {
     const { current } = state.pagination;
 
     const url = `${SERVER_API_BASE}tada/users/?search=${searchText}&per_page=10&page=${current}`;
-    get(url).then((res) => {
+    get(url).then(({ data }) => {
       dispatch({
         type: SET_USERS,
-        value: convertArrayToObject(res.results),
+        value: convertArrayToObject(data.results),
       });
       dispatch({
         type: SET_PAGINATION_COUNT,
-        value: res.count,
+        value: data.count,
       });
       dispatch(hideUsersLoading());
     });
@@ -138,10 +138,10 @@ export const openEditUserModal = (value) => {
 export const saveUser = (user) => {
   return (dispatch) => {
     const url = `${SERVER_API_BASE}tada/users/${user.id}/`;
-    put(url, user).then((res) => {
+    put(url, user).then(({ data }) => {
       dispatch({
         type: UPDATE_USER_OF_USERS,
-        value: res,
+        value: data,
       });
       dispatch(toggleEditUserModal());
     });
@@ -197,8 +197,8 @@ export const resetUserPassword = (body) => {
     const state = getState();
     const { resetPasswordUserId } = state.users;
     const url = `${SERVER_API_BASE}tada/users/${resetPasswordUserId}/reset-password/`;
-    put(url, body).then((response) => {
-      if (response) {
+    put(url, body).then(({ data }) => {
+      if (data) {
         dispatch(Notifications.success(showSuccessMessage('Reset Password', 'User password successfully reset.')));
       }
       dispatch(toggleResetUserPasswordModal());

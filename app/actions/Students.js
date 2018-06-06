@@ -73,7 +73,7 @@ export const fetchStudentBoundaries = (parentId) => {
     const getStudentURL = `${SERVER_API_BASE}studentgroups/${parentEntity.id}/students/`;
 
     get(getStudentURL)
-      .then((data) => {
+      .then(({ data }) => {
         const entities = convertEntitiesToObject(data.results);
         dispatch({
           type: SET_BOUNDARIES,
@@ -95,7 +95,7 @@ export const fetchStudents = (parentBoundaryId, moreIds) => {
   return (dispatch) => {
     const getStudentURL = `${SERVER_API_BASE}studentgroups/${parentBoundaryId}/students/`;
     get(getStudentURL)
-      .then((data) => {
+      .then(({ data }) => {
         const entities = convertEntitiesToObject([data.results]);
         dispatch({
           type: SET_BOUNDARIES,
@@ -139,8 +139,8 @@ export const modifyStudent = (groupId, options) => {
 
     const editStudentURL = `${SERVER_API_BASE}studentgroups/${groupId}/students/`;
 
-    put(editStudentURL, [options]).then((response) => {
-      const entities = convertEntitiesToObject(response.results);
+    put(editStudentURL, [options]).then(({ data }) => {
+      const entities = convertEntitiesToObject(data.results);
       dispatch({
         type: SET_BOUNDARIES,
         boundaryDetails: entities,

@@ -86,6 +86,7 @@ ManageUsersView.propTypes = {
   showAddUserModal: PropTypes.func,
   onChangeText: PropTypes.func,
   submit: PropTypes.func,
+  hasUsers: PropTypes.bool,
 };
 
 export { ManageUsersView };

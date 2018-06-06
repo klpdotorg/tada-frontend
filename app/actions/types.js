@@ -129,3 +129,4 @@ export const RESET_ADD_STUDENTS_FORM = 'reset_add_students_form';
 export const SET_ID_FOR_RESET_PASSWORD = 'set_id_for_reset_password';
 export const TOGGLE_SUBMIT_LOADING = 'toggle_submit_loading';
 export const ON_CHANGE_USER_SEARCH_TEXT = 'on_change_user_search_text';
+export const CHANGE_PASSWORD_ERROR = 'change_password_error';

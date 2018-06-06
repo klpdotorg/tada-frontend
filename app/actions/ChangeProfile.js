@@ -23,14 +23,14 @@ export const openChangeUserInfoModal = () => {
   };
 };
 
-export const changeUserInfo = (data) => {
+export const changeUserInfo = (body) => {
   return (dispatch) => {
     dispatch(openChangeUserInfoModal());
 
     const url = `${SERVER_API_BASE}users/profile`;
-    put(url, data).then((res) => {
-      if (!isEmpty(res)) {
-        dispatch(setDataInLocalStorage(res));
+    put(url, body).then(({ data }) => {
+      if (!isEmpty(data)) {
+        dispatch(setDataInLocalStorage(data));
         dispatch(Notifications.success({
           ...baseNotification,
           title: 'Profile updated!',

@@ -12,10 +12,10 @@ export const toggleAddUserModal = () => {
 export const saveNewUser = (user) => {
   return (dispatch) => {
     const url = `${SERVER_API_BASE}tada/users/`;
-    post(url, user).then((res) => {
+    post(url, user).then(({ data }) => {
       dispatch({
         type: ADD_USER_TO_USERS,
-        value: res,
+        value: data,
       });
       dispatch(toggleAddUserModal());
     });

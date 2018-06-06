@@ -62,7 +62,7 @@ export const fetchInstitutionDetails = (parentBoundaryId, moreIds) => {
   return (dispatch) => {
     const institutionsUrl = `${serverApiBase}institutions/?`;
     return get(`${institutionsUrl}admin3=${parentBoundaryId}`)
-      .then((data) => {
+      .then(({ data }) => {
         dispatch(responseReceivedFromServer(data));
         if (moreIds && moreIds.length) {
           dispatch(getEntities(moreIds));
@@ -79,8 +79,8 @@ export const fetchInstitutionDetails = (parentBoundaryId, moreIds) => {
 export const getManagements = () => {
   return (dispatch) => {
     get(`${serverApiBase}institution/managements`)
-      .then((managements) => {
-        const mnmts = managements.results.map((management) => {
+      .then(({ data }) => {
+        const mnmts = data.results.map((management) => {
           return {
             value: management.id,
             label: management.name,
@@ -97,8 +97,8 @@ export const getManagements = () => {
 export const getInstitutionCategories = () => {
   return (dispatch) => {
     get(`${serverApiBase}institution/categories`)
-      .then((categories) => {
-        const filterCats = categories.results
+      .then(({ data }) => {
+        const filterCats = data.results
           .filter((cat) => {
             return cat.type.id === 'primary';
           })
@@ -122,8 +122,8 @@ export const modifyInstitution = (id, options) => {
     const boundaryType = getState().schoolSelection.primarySchool ? 'primary' : 'pre';
     const newOptions = { ...options, institution_type: boundaryType };
 
-    patch(`${serverApiBase}institutions/${id}/`, newOptions).then((response) => {
-      const entities = convertEntitiesToObject([response]);
+    patch(`${serverApiBase}institutions/${id}/`, newOptions).then(({ data }) => {
+      const entities = convertEntitiesToObject([data]);
 
       dispatch({
         type: SET_BOUNDARIES,
@@ -140,19 +140,19 @@ export const saveNewInstitution = (options) => {
     const boundaryType = state.schoolSelection.primarySchool ? 'primary' : 'pre';
     const newOptions = { ...options, institution_type: boundaryType };
 
-    post(`${serverApiBase}institutions/`, newOptions).then((response) => {
-      const entities = convertEntitiesToObject([response]);
+    post(`${serverApiBase}institutions/`, newOptions).then(({ data }) => {
+      const entities = convertEntitiesToObject([data]);
       dispatch({
         type: SET_BOUNDARIES,
         boundaryDetails: entities,
       });
       dispatch(toggleModal('createInstitution'));
 
-      const type = getEntityType(response);
-      const depth = getEntityDepth(response);
-      const path = getPath(state, { uniqueId: `${response.id}${type}`, type }, depth);
+      const type = getEntityType(data);
+      const depth = getEntityDepth(data);
+      const path = getPath(state, { uniqueId: `${data.id}${type}`, type }, depth);
 
-      dispatch(openEntity({ depth, uniqueId: `${response.id}${type}` }));
+      dispatch(openEntity({ depth, uniqueId: `${data.id}${type}` }));
       dispatch(push(path));
     });
   };

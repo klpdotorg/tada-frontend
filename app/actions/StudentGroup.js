@@ -38,7 +38,7 @@ export const fetchStudentGroup = (parentBoundaryId, moreIds) => {
   return (dispatch) => {
     const studentgroupUrl = `${SERVER_API_BASE}institutions/${parentBoundaryId}/studentgroups/`;
     return get(studentgroupUrl)
-      .then((data) => {
+      .then(({ data }) => {
         dispatch(setBoundaries(data));
         if (moreIds && moreIds.length) {
           dispatch(getEntities(moreIds));
@@ -56,8 +56,8 @@ export const modifyStudentGroup = (studentGroup, studentGroupId) => {
   return (dispatch) => {
     dispatch(showBoundaryLoading());
 
-    patch(`${SERVER_API_BASE}studentgroups/${studentGroupId}/`, studentGroup).then((response) => {
-      const entities = convertEntitiesToObject([response]);
+    patch(`${SERVER_API_BASE}studentgroups/${studentGroupId}/`, studentGroup).then(({ data }) => {
+      const entities = convertEntitiesToObject([data]);
 
       dispatch({
         type: SET_BOUNDARIES,
@@ -70,20 +70,20 @@ export const modifyStudentGroup = (studentGroup, studentGroupId) => {
 
 export const saveNewClass = (options) => {
   return (dispatch, getState) => {
-    post(`${SERVER_API_BASE}studentgroups/`, options).then((response) => {
+    post(`${SERVER_API_BASE}studentgroups/`, options).then(({ data }) => {
       const state = getState();
-      const entities = convertEntitiesToObject([response]);
+      const entities = convertEntitiesToObject([data]);
       dispatch({
         type: SET_BOUNDARIES,
         boundaryDetails: entities,
       });
       dispatch(toggleModal('createClass'));
 
-      const type = getEntityType(response);
-      const depth = getEntityDepth(response);
-      const path = getPath(state, { uniqueId: `${response.id}${type}`, type }, depth);
+      const type = getEntityType(data);
+      const depth = getEntityDepth(data);
+      const path = getPath(state, { uniqueId: `${data.id}${type}`, type }, depth);
 
-      dispatch(openEntity({ depth, uniqueId: `${response.id}${type}` }));
+      dispatch(openEntity({ depth, uniqueId: `${data.id}${type}` }));
       dispatch(push(path));
     });
   };

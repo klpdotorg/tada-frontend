@@ -76,8 +76,8 @@ export const programCreated = (value) => {
 export const fetchAllPrograms = () => {
   const fetchProgramsUrl = `${serverApiBase}surveys/?per_page=${PER_PAGE}`;
 
-  return get(fetchProgramsUrl).then((response) => {
-    return response.results;
+  return get(fetchProgramsUrl).then(({ data }) => {
+    return data.results;
   });
 };
 
@@ -96,9 +96,9 @@ export const saveNewProgram = (options) => {
     dispatch(showProgramLoading());
     const createProgramURL = `${serverApiBase}surveys/`;
 
-    post(createProgramURL, options).then((response) => {
-      dispatch(programCreated({ [response.id]: response }));
-      dispatch(selectProgram(response.id));
+    post(createProgramURL, options).then(({ data }) => {
+      dispatch(programCreated({ [data.id]: data }));
+      dispatch(selectProgram(data.id));
       dispatch({
         type: TOGGLE_MODAL,
         modal: 'createProgram',
@@ -115,8 +115,8 @@ export const saveProgram = (options) => {
     const { selectedProgram } = getState().programs;
     const editProgramURL = `${serverApiBase}surveys/${selectedProgram}/`;
 
-    patch(editProgramURL, options).then((response) => {
-      dispatch(programCreated({ [response.id]: response }));
+    patch(editProgramURL, options).then(({ data }) => {
+      dispatch(programCreated({ [data.id]: data }));
       dispatch({
         type: TOGGLE_MODAL,
         modal: 'editProgram',
