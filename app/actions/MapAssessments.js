@@ -41,8 +41,8 @@ const fetchStudentGroupOfMA = (entity) => {
     dispatch(showClassesLoadingInMA());
     const url = `${SERVER_API_BASE}institutions/${entity.id}/studentgroups/?&per_page=${PER_PAGE}`;
 
-    get(url).then((res) => {
-      const entities = convertEntitiesToObject(res.results);
+    get(url).then(({ data }) => {
+      const entities = convertEntitiesToObject(data.results);
 
       dispatch({
         type: SET_BOUNDARIES,
@@ -66,8 +66,8 @@ const fetchInstitutionOfMA = (entity) => {
     dispatch(showInstitutionLoadingInMa());
     const url = `${SERVER_API_BASE}institutions/?admin3=${entity.id}&per_page=${PER_PAGE}`;
 
-    get(url).then((res) => {
-      const entities = convertEntitiesToObject(res.results);
+    get(url).then(({ data }) => {
+      const entities = convertEntitiesToObject(data.results);
 
       dispatch({
         type: SET_BOUNDARIES,
@@ -300,9 +300,9 @@ export const mapAssessmentsToInsitutions = (surveyId, assessments, institutions,
       institution_ids: institutions,
       boundary_ids: boundaryIds,
     })
-      .then((response) => {
-        if (response.detail) {
-          dispatch(Notifications.error(errorNotification('Institution Mapping', response.detail, 10)));
+      .then(({ data }) => {
+        if (data.detail) {
+          dispatch(Notifications.error(errorNotification('Institution Mapping', data.detail, 10)));
         } else {
           dispatch(Notifications.success(mapAssessmentsDone));
           dispatch({
@@ -328,8 +328,8 @@ export const mapAssessmentsToStudentgroups = (
       questiongroup_ids: assessments,
       studentgroup_ids: studentgroups,
     })
-      .then((response) => {
-        if (response.detail) {
+      .then(({ data }) => {
+        if (data.detail) {
           dispatch(Notifications.error(errorNotification('Studentgroup Mapping', response.detail, 10)));
         } else {
           dispatch(Notifications.success(mapAssessmentsDone));

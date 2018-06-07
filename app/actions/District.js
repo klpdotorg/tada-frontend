@@ -31,20 +31,20 @@ export const saveNewDistrict = (name) => {
       status: 'AC',
     };
 
-    post(`${serverApiBase}boundaries/`, options).then((response) => {
+    post(`${serverApiBase}boundaries/`, options).then(({ data }) => {
       const state = getState();
-      const entities = convertEntitiesToObject([response]);
+      const entities = convertEntitiesToObject([data]);
       dispatch({
         type: SET_BOUNDARIES,
         boundaryDetails: entities,
       });
       dispatch(toggleModal('createDistrict'));
 
-      const type = getEntityType(response);
-      const depth = getEntityDepth(response);
-      const path = getPath(state, { uniqueId: `${response.id}${type}`, type }, depth);
+      const type = getEntityType(data);
+      const depth = getEntityDepth(data);
+      const path = getPath(state, { uniqueId: `${data.id}${type}`, type }, depth);
 
-      dispatch(openEntity({ depth, uniqueId: `${response.id}${type}` }));
+      dispatch(openEntity({ depth, uniqueId: `${data.id}${type}` }));
       dispatch(push(path));
     });
   };

@@ -145,14 +145,14 @@ export const fetchSelectedAssessmentQuestions = (assessmentId, entities, program
         dispatch(getProgramEntities(entities));
 
         const id = getObject(results[0], 'id', '');
-        fetchQuestions(id, assessmentId).then((response) => {
-          dispatch(setQuestions(response.results, assessmentId));
+        fetchQuestions(id, assessmentId).then(({ data }) => {
+          dispatch(setQuestions(data.results, assessmentId));
           dispatch(hideAnswersLoading());
         });
       });
     } else {
-      fetchQuestions(selectedProgram, assessmentId).then((response) => {
-        dispatch(setQuestions(response.results, assessmentId));
+      fetchQuestions(selectedProgram, assessmentId).then(({ data }) => {
+        dispatch(setQuestions(data.results, assessmentId));
         dispatch(hideAnswersLoading());
       });
     }
@@ -165,8 +165,8 @@ export const fetchSelectedAssessmentBoundary = () => {
     const { selectedProgramAssess } = state.assessmentEntry;
     const url = getURL(selectedProgramAssess.boundaryType, selectedProgramAssess.boundaryId);
 
-    get(url).then((res) => {
-      const entities = convertEntitiesToObject(res.results);
+    get(url).then(({ data }) => {
+      const entities = convertEntitiesToObject(data.results);
       dispatch({
         type: SET_BOUNDARIES,
         boundaryDetails: entities,
@@ -191,15 +191,15 @@ export const fetchStudentsForAssessmentEntry = (id) => {
 
     dispatch(showAssessmentEntryLoading());
     const url = `${SERVER_API_BASE}studentgroups/${studentGroupId}/students/`;
-    get(url).then((res) => {
+    get(url).then(({ data }) => {
       dispatch({
         type: SET_ASSESSMENT_ENTRY_STUDENTS,
-        value: res.results,
+        value: data.results,
       });
       dispatch(hideAssessmentEntryLoading());
       if (typeof id === 'object') {
         const { assessmentId } = id;
-        const Ids = res.results.map((value) => {
+        const Ids = data.results.map((value) => {
           return value.id;
         });
         dispatch(fetchAnswerGroups(assessmentId, 'student', Ids));

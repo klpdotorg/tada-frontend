@@ -72,8 +72,8 @@ export const getQuestions = (programId, assessmentId) => {
     dispatch(showQuestionLoading());
 
     const getQuestionsURL = `${SERVER_API_BASE}surveys/${programId}/questiongroup/${assessmentId}/questions/`;
-    fetchQuestions(getQuestionsURL).then((response) => {
-      dispatch(setQuestions(response.results));
+    fetchQuestions(getQuestionsURL).then(({ data }) => {
+      dispatch(setQuestions(data.results));
       dispatch(hideQuestionLoading());
     });
   };
@@ -85,13 +85,14 @@ export const getQuestionParentEntities = (programId, assessmentId) => {
 
     const fetchProgramsUrl = `${SERVER_API_BASE}surveys/`;
 
-    get(fetchProgramsUrl).then((programResponse) => {
-      dispatch(setPrograms(programResponse.results));
+    get(fetchProgramsUrl).then(({ data }) => {
+      dispatch(setPrograms(data.results));
       dispatch(selectProgram(programId));
 
       const fetchAssessmentsURL = `${SERVER_API_BASE}surveys/${programId}/questiongroup/`;
-      get(fetchAssessmentsURL).then((assessmentResponse) => {
-        dispatch(setAssessments(assessmentResponse.results));
+      get(fetchAssessmentsURL).then((response) => {
+        const { results } = response.data;
+        dispatch(setAssessments(results));
         dispatch(getQuestions(programId, assessmentId));
         dispatch(hideQuestionLoading());
       });
@@ -108,8 +109,8 @@ export const createNewQuestion = (data, programId, assessmentId) => {
 
     dispatch(showQuestionLoading());
     const createQuestionURL = `${SERVER_API_BASE}surveys/${programId}/questiongroup/${assessmentId}/questions/`;
-    post(createQuestionURL, data).then((response) => {
-      const { question_details } = response;
+    post(createQuestionURL, data).then(({ data }) => {
+      const { question_details } = data;
       dispatch({
         type: SET_QUESTION,
         value: { [question_details.id]: question_details },
@@ -119,7 +120,7 @@ export const createNewQuestion = (data, programId, assessmentId) => {
   };
 };
 
-export const saveQuestion = (data, programId, assessmentId, questionId) => {
+export const saveQuestion = (question, programId, assessmentId, questionId) => {
   return (dispatch) => {
     dispatch({
       type: TOGGLE_MODAL,
@@ -128,10 +129,10 @@ export const saveQuestion = (data, programId, assessmentId, questionId) => {
 
     dispatch(showQuestionLoading());
     const editQuestionURL = `${SERVER_API_BASE}surveys/${programId}/questiongroup/${assessmentId}/questions/${questionId}/`;
-    put(editQuestionURL, data).then((response) => {
+    put(editQuestionURL, question).then(({ data }) => {
       dispatch({
         type: SET_QUESTION,
-        value: { [response.id]: response },
+        value: { [data.id]: data },
       });
       dispatch(hideQuestionLoading());
     });

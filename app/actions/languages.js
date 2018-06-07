@@ -12,8 +12,8 @@ const setLanguages = (value) => {
 export const getLanguages = () => {
   return (dispatch) => {
     get(`${SERVER_API_BASE}languages/`)
-      .then((languages) => {
-        const langs = languages.results.map((language) => {
+      .then(({ data }) => {
+        const langs = data.results.map((language) => {
           return {
             value: language.char_id,
             label: language.name,

@@ -43,8 +43,8 @@ export const fetchBoundaryAssessments = (entity) => {
     const state = getState();
     const { assessments } = state.permissions;
     const url = `${SERVER_API_BASE}boundary/questiongroup-map/?boundary_id=[${entity.id}]`;
-    get(url).then((response) => {
-      const entities = convertEntitiesToObject(response.results);
+    get(url).then(({ data }) => {
+      const entities = convertEntitiesToObject(data.results);
       dispatch({
         type: SET_BOUNDARY_ASSESSMENTS,
         value: { ...assessments, ...entities },
@@ -120,10 +120,10 @@ export const fetchUserPermissions = () => {
     const state = getState();
     const { id } = state.profile;
     const url = `${SERVER_API_BASE}users/${id}/permissions/`;
-    get(url).then((res) => {
+    get(url).then(({ data }) => {
       dispatch({
         type: SET_USER_PERMISSIONS,
-        value: res,
+        value: data,
       });
     });
   };

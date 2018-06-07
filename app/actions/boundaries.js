@@ -87,8 +87,8 @@ export const fetchBoundary = (entity, moreEntities) => {
       id: boundary.id,
     });
 
-    get(url).then((res) => {
-      const entities = convertEntitiesToObject(res.results);
+    get(url).then(({ data }) => {
+      const entities = convertEntitiesToObject(data.results);
       dispatch({
         type: SET_BOUNDARIES,
         boundaryDetails: entities,
@@ -192,9 +192,9 @@ export const modifyBoundary = (boundaryId, name) => {
     dispatch(showBoundaryLoading());
 
     patch(`${SERVER_API_BASE}boundaries/${boundaryId}/`, { name })
-      .then((response) => {
-        if (response) {
-          const entities = convertEntitiesToObject([response]);
+      .then(({ data }) => {
+        if (data) {
+          const entities = convertEntitiesToObject([data]);
 
           dispatch({
             type: SET_BOUNDARIES,
@@ -218,8 +218,8 @@ export const deleteBoundary = (params) => {
     const url = `${SERVER_API_BASE}boundaries/${boundaryId}/`;
 
     deleteRequest(url)
-      .then((response) => {
-        if (response.status === 204) {
+      .then((data) => {
+        if (data.status === 204) {
           dispatch(removeEntity(params));
         }
       })

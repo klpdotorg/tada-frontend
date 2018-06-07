@@ -35,7 +35,7 @@ export const createAnswergroup = (url, body) => {
   return post(url, body);
 };
 
-export const fetchAnswers = (assessmentId) => {
+export const fetchAnswers = (assessmentId, boundaryId) => {
   return (dispatch, getState) => {
     dispatch({
       type: FETCHING_ANSWERS,
@@ -45,13 +45,13 @@ export const fetchAnswers = (assessmentId) => {
     const { answergroups } = state.answergroups;
     const { selectedProgram } = state.programs;
 
-    const Ids = Object.keys(answergroups);
+    const Ids = Object.keys(getObject(answergroups, boundaryId, {}));
     const promises = Ids.map((Id) => {
       const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${assessmentId}/answergroups/${Id}/answers/`;
-      return get(url).then((res) => {
+      return get(url).then(({ data }) => {
         return {
           id: Id,
-          value: res.results,
+          value: data.results,
         };
       });
     });
@@ -116,8 +116,8 @@ export const createAnswerGroup = (params) => {
       group_value: name,
       date_of_visit: dateOfVisit,
       status: 'AC',
-    }).then((res) => {
-      dispatch(saveAnswer({ ...params, answergroupId: res.id }));
+    }).then(({ data }) => {
+      dispatch(saveAnswer({ ...params, answergroupId: data.id }));
     });
   };
 };
@@ -129,7 +129,6 @@ export const editAnswers = (params) => {
     const { answergroupId, assessmentId, boundaryId, boundaryType } = params;
     const answers = getObject(state.answers.answers, answergroupId, []);
     const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${assessmentId}/answergroups/${answergroupId}/answers/`;
-
     put(url, answers).then(() => {
       dispatch(fetchAnswerGroups(assessmentId, boundaryType, boundaryId));
       dispatch(Notifications.success(showSuccessMessage('Answers Edit!', 'Answers successfully edited!')));

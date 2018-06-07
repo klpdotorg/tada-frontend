@@ -1,9 +1,9 @@
 import Notifications from 'react-notification-system-redux';
 import { SERVER_API_BASE } from 'config';
 
-import { post } from './requests';
-import { TOGGLE_MODAL, CHANGE_USER_PASSWORD } from './types';
-import { generateOTP, baseNotification } from './index';
+import { put } from './requests';
+import { TOGGLE_MODAL, CHANGE_USER_PASSWORD, CHANGE_PASSWORD_ERROR } from './types';
+import { baseNotification } from './index';
 
 export const openChangePasswordModal = () => {
   return {
@@ -15,7 +15,7 @@ export const openChangePasswordModal = () => {
 export const handleChangePassword = (value) => {
   return (dispatch) => {
     // Generating otp for user
-    generateOTP();
+    // generateOTP();
     dispatch({
       type: CHANGE_USER_PASSWORD,
       value,
@@ -31,27 +31,63 @@ export const handleChangePassword = (value) => {
   };
 };
 
-export const resetPassword = (otp) => {
+export const updatePassword = (body) => {
   return (dispatch, getState) => {
     const state = getState();
-    const { password } = state.changePassword;
-    const { mobileNo } = state.profile;
+    const { newPassword, oldPassword } = body;
+    const { id } = state.profile;
+    const url = `${SERVER_API_BASE}tada/users/${id}/change-password/`;
+    put(url, {
+      old_password: oldPassword,
+      new_password: newPassword,
+    }).then((response) => {
+      if (response.status === 400) {
+        dispatch({
+          type: CHANGE_PASSWORD_ERROR,
+          value: response.data[0],
+        });
+      }
 
-    const url = `${SERVER_API_BASE}users/otp-password-reset/`;
-    post(url, {
-      mobile_no: mobileNo,
-      password,
-      otp,
-    }).then((res) => {
-      dispatch({
-        type: TOGGLE_MODAL,
-        modal: 'changeOTP',
-      });
-      dispatch(Notifications.success({
-        ...baseNotification,
-        title: 'Password Reset',
-        message: 'User password reset successfully!',
-      }));
+      if (response.status === 200) {
+        dispatch(Notifications.success({
+          ...baseNotification,
+          title: 'Password Reset',
+          message: 'User password reset successfully!',
+        }));
+        dispatch({
+          type: TOGGLE_MODAL,
+          modal: 'changePasswordModal',
+        });
+        dispatch({
+          type: CHANGE_PASSWORD_ERROR,
+          value: '',
+        });
+      }
     });
   };
 };
+
+// export const resetPassword = (otp) => {
+//   return (dispatch, getState) => {
+//     const state = getState();
+//     const { password } = state.changePassword;
+//     const { mobileNo } = state.profile;
+
+//     const url = `${SERVER_API_BASE}users/otp-password-reset/`;
+//     post(url, {
+//       mobile_no: mobileNo,
+//       password,
+//       otp,
+//     }).then((res) => {
+//       dispatch({
+//         type: TOGGLE_MODAL,
+//         modal: 'changeOTP',
+//       });
+//       dispatch(Notifications.success({
+//         ...baseNotification,
+//         title: 'Password Reset',
+//         message: 'User password reset successfully!',
+//       }));
+//     });
+//   };
+// };

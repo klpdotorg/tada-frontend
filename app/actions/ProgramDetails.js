@@ -180,8 +180,8 @@ const fetchAdmins = (entity, moreEntities) => {
       programInfo.survey_on,
     );
 
-    get(url).then((res) => {
-      const entities = convertEntitiesToObject(res.results);
+    get(url).then(({ data }) => {
+      const entities = convertEntitiesToObject(data.results);
 
       dispatch({
         type: SET_FITLER_PROGRAM_ENTITIES,

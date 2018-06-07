@@ -16,9 +16,17 @@ import {
   CHANGE_PAGINATION_CURRENT,
   SET_PAGINATION_COUNT,
   SET_ID_FOR_RESET_PASSWORD,
+  ON_CHANGE_USER_SEARCH_TEXT,
 } from './types';
 import { convertArrayToObject } from '../utils';
 import { showSuccessMessage } from './notifications';
+
+export const onChangeUserSearchText = (value) => {
+  return {
+    type: ON_CHANGE_USER_SEARCH_TEXT,
+    value,
+  };
+};
 
 const showUsersLoading = () => {
   return {
@@ -39,14 +47,36 @@ export const fetchUsers = () => {
     const { current } = state.pagination;
 
     const url = `${SERVER_API_BASE}tada/users/?per_page=10&page=${current}`;
-    get(url).then((res) => {
+    get(url).then(({ data }) => {
       dispatch({
         type: SET_USERS,
-        value: convertArrayToObject(res.results),
+        value: convertArrayToObject(data.results),
       });
       dispatch({
         type: SET_PAGINATION_COUNT,
-        value: res.count,
+        value: data.count,
+      });
+      dispatch(hideUsersLoading());
+    });
+  };
+};
+
+export const submitUserSearch = () => {
+  return (dispatch, getState) => {
+    dispatch(showUsersLoading());
+    const state = getState();
+    const { searchText } = state.users;
+    const { current } = state.pagination;
+
+    const url = `${SERVER_API_BASE}tada/users/?search=${searchText}&per_page=10&page=${current}`;
+    get(url).then(({ data }) => {
+      dispatch({
+        type: SET_USERS,
+        value: convertArrayToObject(data.results),
+      });
+      dispatch({
+        type: SET_PAGINATION_COUNT,
+        value: data.count,
       });
       dispatch(hideUsersLoading());
     });
@@ -108,10 +138,10 @@ export const openEditUserModal = (value) => {
 export const saveUser = (user) => {
   return (dispatch) => {
     const url = `${SERVER_API_BASE}tada/users/${user.id}/`;
-    put(url, user).then((res) => {
+    put(url, user).then(({ data }) => {
       dispatch({
         type: UPDATE_USER_OF_USERS,
-        value: res,
+        value: data,
       });
       dispatch(toggleEditUserModal());
     });
@@ -167,8 +197,8 @@ export const resetUserPassword = (body) => {
     const state = getState();
     const { resetPasswordUserId } = state.users;
     const url = `${SERVER_API_BASE}tada/users/${resetPasswordUserId}/reset-password/`;
-    put(url, body).then((response) => {
-      if (response) {
+    put(url, body).then(({ data }) => {
+      if (data) {
         dispatch(Notifications.success(showSuccessMessage('Reset Password', 'User password successfully reset.')));
       }
       dispatch(toggleResetUserPasswordModal());

@@ -6,7 +6,12 @@ import { tokenExpired, logoutUser } from './index';
 
 export const checkStatus = (response) => {
   if (response.status >= 200 && response.status < 300) {
-    return response.json();
+    return response.json().then((json) => {
+      return {
+        data: json,
+        status: response.status,
+      };
+    });
   } else if (response.status === 401) {
     store.dispatch(logoutUser());
     return null;
@@ -14,7 +19,12 @@ export const checkStatus = (response) => {
     store.dispatch(Notifications.error("You don't permission to do it."));
     return null;
   } else if (response.status === 400) {
-    return response.json();
+    return response.json().then((json) => {
+      return {
+        data: json,
+        status: response.status,
+      };
+    });
   }
 
   return null;

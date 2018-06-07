@@ -10,6 +10,7 @@ import {
   DELETE_USERS,
   SET_USER_COUNT,
   SET_ID_FOR_RESET_PASSWORD,
+  ON_CHANGE_USER_SEARCH_TEXT,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -19,10 +20,16 @@ const INITIAL_STATE = {
   editUser: null,
   selectedUsers: [],
   resetPasswordUserId: null,
+  searchText: '',
 };
 
 const Users = (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case ON_CHANGE_USER_SEARCH_TEXT:
+      return {
+        ...state,
+        searchText: action.value,
+      };
     case SET_ID_FOR_RESET_PASSWORD:
       return {
         ...state,

@@ -4,12 +4,7 @@ import { connect } from 'react-redux';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
 
-import {
-  toggleModal,
-  handleChangePassword,
-  enableSubmitForm,
-  disableSubmitForm,
-} from '../../actions';
+import { toggleModal, updatePassword, enableSubmitForm, disableSubmitForm } from '../../actions';
 
 import { Modal } from '../../components/Modal';
 
@@ -25,10 +20,14 @@ class ChangePasswordScreen extends Component {
   submitForm() {
     const myform = this.myform.getModel();
 
-    this.props.changePwd(myform.password);
+    this.props.updatePassword({
+      oldPassword: myform.old_password,
+      newPassword: myform.password,
+    });
   }
 
   render() {
+    const { error } = this.props;
     return (
       <Modal
         title="Change Password"
@@ -49,6 +48,14 @@ class ChangePasswordScreen extends Component {
             this.myform = ref;
           }}
         >
+          {error ? <div className="alert alert-danger">{error}</div> : <span />}
+          <Input
+            name="old_password"
+            id="old_password"
+            type="password"
+            label="Old Password"
+            required
+          />
           <Input
             name="password"
             id="password"
@@ -76,10 +83,11 @@ class ChangePasswordScreen extends Component {
 }
 
 ChangePasswordScreen.propTypes = {
+  error: PropTypes.string,
   isOpen: PropTypes.bool,
   canSubmit: PropTypes.bool,
   closeModal: PropTypes.func,
-  changePwd: PropTypes.func,
+  updatePassword: PropTypes.func,
   enableSubmitForm: PropTypes.func,
   disableSubmitForm: PropTypes.func,
 };
@@ -88,12 +96,13 @@ const mapStateToProps = (state) => {
   return {
     isOpen: state.modal.changePasswordModal,
     canSubmit: state.appstate.enableSubmitForm,
+    error: state.changePassword.error,
   };
 };
 
 const ChangePassword = connect(mapStateToProps, {
   closeModal: toggleModal,
-  changePwd: handleChangePassword,
+  updatePassword,
   enableSubmitForm,
   disableSubmitForm,
 })(ChangePasswordScreen);

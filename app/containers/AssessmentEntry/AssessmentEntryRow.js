@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import get from 'lodash.get';
 
 import { AssessmentEntryRowView } from '../../components/AssessmentEntry';
-import { onChangeAnswer, editAnswers } from '../../actions';
+import { onChangeAnswer, editAnswerGroup } from '../../actions';
 
 const mapStateToProps = (state, ownProps) => {
   const { rowId } = ownProps;
@@ -25,7 +25,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const AssessmentEntryRow = connect(mapStateToProps, {
   onChange: onChangeAnswer,
-  onSave: editAnswers,
+  onSave: editAnswerGroup,
 })(AssessmentEntryRowView);
 
 export { AssessmentEntryRow };

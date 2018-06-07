@@ -51,7 +51,10 @@ const UsersView = ({ users, selectedUsers, editUser, selectUser, resetPassword }
                   resetPassword(user.id);
                 }}
               >
-                <i className="fa fa-pencil-square-o" />
+                <span className="fa-passwd-reset fa-stack">
+                  <i className="fa fa-undo fa-stack-1x" />
+                  <i className="fa fa-lock fa-stack-1x" />
+                </span>
               </button>
             </td>
           </tr>

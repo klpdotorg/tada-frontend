@@ -65,8 +65,8 @@ export const getAssessments = (programId) => {
   return (dispatch) => {
     dispatch(showAssessmentLoading());
     const fetchAssessmentsURL = `${serverApiBase}surveys/${programId}/questiongroup/`;
-    get(fetchAssessmentsURL).then((response) => {
-      dispatch(setAssessments(response.results));
+    get(fetchAssessmentsURL).then(({ data }) => {
+      dispatch(setAssessments(data.results));
       dispatch(closeAssessmentLoading());
     });
   };
@@ -102,8 +102,8 @@ export const saveNewAssessment = (options) => {
     const state = getState();
     const programId = state.programs.selectedProgram;
     const createAssessmentURL = `${serverApiBase}surveys/${programId}/questiongroup/`;
-    post(createAssessmentURL, options).then((response) => {
-      dispatch(assessmentCreated(response));
+    post(createAssessmentURL, options).then(({ data }) => {
+      dispatch(assessmentCreated(data));
       dispatch({
         type: TOGGLE_MODAL,
         modal: 'createAssessment',
@@ -122,8 +122,8 @@ export const saveAssessment = (options) => {
     const { editAssessmentId } = state.assessments;
     const editAssessmentURL = `${serverApiBase}surveys/${selectedProgram}/questiongroup/${editAssessmentId}/`;
 
-    patch(editAssessmentURL, options).then((response) => {
-      dispatch(assessmentCreated(response));
+    patch(editAssessmentURL, options).then(({ data }) => {
+      dispatch(assessmentCreated(data));
       dispatch({
         type: TOGGLE_MODAL,
         modal: 'editAssessment',
