@@ -4,7 +4,7 @@ import isArray from 'lodash.isarray';
 import getObject from 'lodash.get';
 
 import { convertArrayToObject } from '../utils';
-import { get, put } from './requests';
+import { get, patch } from './requests';
 import { FETCHING_ANSWER_GROUPS, SET_ANSWER_GROUPS } from './types';
 import { fetchAnswers, editAnswers } from './index';
 
@@ -74,13 +74,13 @@ export const fetchAnswerGroups = (assessmentId, boundaryType, boundaryId) => {
 export const editAnswerGroup = (params) => {
   return (dispatch, getState) => {
     const state = getState();
-    const { assessmentId, boundaryId } = params;
+    const { assessmentId, answergroupId, boundaryId } = params;
     const { selectedProgram } = state.programs;
-    const name = getObject(state.assessmentEntry.groupValues, [boundaryId], '');
-    const dateOfVisit = getObject(state.assessmentEntry.dateOfVisits, [boundaryId], new Date());
-    const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${assessmentId}/answergroups/`;
+    const name = getObject(state.assessmentEntry.groupValues, [answergroupId], '');
+    const dateOfVisit = getObject(state.assessmentEntry.dateOfVisits, [answergroupId], new Date());
+    const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${assessmentId}/answergroups/${answergroupId}/`;
 
-    put(url, {
+    patch(url, {
       [params.boundaryType]: boundaryId,
       group_value: name,
       date_of_visit: dateOfVisit,

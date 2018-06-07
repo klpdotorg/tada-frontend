@@ -31,8 +31,31 @@ const AssessmentEntryRowView = (props) => {
       >
         {name}
       </td>
-      <td>{groupValue}</td>
-      <td>{dateFormat(dateOfVisit)}</td>
+      <td>
+        <input
+          value={groupValue}
+          type="text"
+          required
+          className="form-control"
+          style={{ padding: '0px' }}
+          onChange={(e) => {
+            props.onChangeGroupValue(answergroupId, e.target.value);
+          }}
+        />
+      </td>
+      <td>
+        <input
+          value={dateFormat(new Date(dateOfVisit))}
+          data-date-format="dd-mm-yyyy"
+          type="date"
+          required
+          className="form-control"
+          style={{ padding: '0px' }}
+          onChange={(e) => {
+            props.onChangeDateOfVisit(answergroupId, new Date(e.target.value));
+          }}
+        />
+      </td>
       {map(questions, (question) => {
         const questionType = get(question, 'question_type');
         const currentVal = answers.find((answer) => {
@@ -120,6 +143,8 @@ const AssessmentEntryRowView = (props) => {
 };
 
 AssessmentEntryRowView.propTypes = {
+  onChangeDateOfVisit: PropTypes.func,
+  onChangeGroupValue: PropTypes.func,
   answergroupId: PropTypes.any,
   boundaryInfo: PropTypes.object,
   id: PropTypes.any,
