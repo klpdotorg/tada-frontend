@@ -20,7 +20,7 @@ const Pagination = (state = INITIAL_STATE, action) => {
     case GO_PAGINATION_BACK:
       return {
         ...state,
-        current: action.current - 1,
+        current: state.current - 1,
       };
     case CHANGE_PAGINATION_CURRENT:
       return {

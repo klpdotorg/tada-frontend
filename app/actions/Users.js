@@ -94,14 +94,20 @@ export const userPaginationChange = (value) => {
 };
 
 export const userPaginationNext = () => {
-  return {
-    type: GO_PAGINATION_NEXT,
+  return (dispatch) => {
+    dispatch({
+      type: GO_PAGINATION_NEXT,
+    });
+    dispatch(fetchUsers());
   };
 };
 
 export const userPaginationBack = () => {
-  return {
-    type: GO_PAGINATION_BACK,
+  return (dispatch) => {
+    dispatch({
+      type: GO_PAGINATION_BACK,
+    });
+    dispatch(fetchUsers());
   };
 };
 

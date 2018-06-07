@@ -8,11 +8,10 @@ const PaginationView = (props) => {
   const { count, current } = props;
   const numbers = Math.ceil(count / 10);
   const values = generatePagination(current, numbers, 4);
-
   return (
     <nav aria-label="Page navigation" className="user-pagination">
       <ul className="pagination">
-        <li>
+        <li className={current <= 1 ? 'disabled' : ''}>
           <a aria-label="Previous" onClick={props.goBack}>
             <span aria-hidden="true">&laquo;</span>
           </a>
@@ -51,7 +50,7 @@ const PaginationView = (props) => {
             </li>
           );
         })}
-        <li>
+        <li className={current >= numbers ? 'disabled' : ''}>
           <a aria-label="Next" onClick={props.goForward}>
             <span aria-hidden="true">&raquo;</span>
           </a>

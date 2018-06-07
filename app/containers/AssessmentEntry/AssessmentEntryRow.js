@@ -1,8 +1,33 @@
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import get from 'lodash.get';
+import PropTypes from 'prop-types';
 
 import { AssessmentEntryRowView } from '../../components/AssessmentEntry';
-import { onChangeAnswer, editAnswerGroup } from '../../actions';
+import {
+  onChangeAnswer,
+  editAnswerGroup,
+  onChangeDateOfVisit,
+  onChangeGroupValue,
+} from '../../actions';
+
+class SetDefaultValues extends Component {
+  componentDidMount() {
+    const { answergroupId, row } = this.props;
+    this.props.onChangeGroupValue(answergroupId, row.group_value);
+    this.props.onChangeDateOfVisit(answergroupId, new Date(row.date_of_visit));
+  }
+  render() {
+    return <AssessmentEntryRowView {...this.props} />;
+  }
+}
+
+SetDefaultValues.propTypes = {
+  row: PropTypes.object,
+  answergroupId: PropTypes.number,
+  onChangeGroupValue: PropTypes.func,
+  onChangeDateOfVisit: PropTypes.func,
+};
 
 const mapStateToProps = (state, ownProps) => {
   const { rowId } = ownProps;
@@ -12,9 +37,10 @@ const mapStateToProps = (state, ownProps) => {
   const answers = get(state.answers.answers, rowId, []);
 
   return {
+    row,
     answergroupId: row.id,
-    groupValue: row.group_value,
-    dateOfVisit: row.date_of_visit,
+    groupValue: get(state.assessmentEntry, ['groupValues', row.id], ''),
+    dateOfVisit: get(state.assessmentEntry, ['dateOfVisits', row.id], new Date()),
     questions: state.questions.questions,
     id: get(boundary, 'id', ''),
     name: get(boundary, 'name', ''),
@@ -26,6 +52,8 @@ const mapStateToProps = (state, ownProps) => {
 const AssessmentEntryRow = connect(mapStateToProps, {
   onChange: onChangeAnswer,
   onSave: editAnswerGroup,
-})(AssessmentEntryRowView);
+  onChangeGroupValue,
+  onChangeDateOfVisit,
+})(SetDefaultValues);
 
 export { AssessmentEntryRow };
