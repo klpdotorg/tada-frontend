@@ -145,14 +145,14 @@ export const fetchSelectedAssessmentQuestions = (assessmentId, entities, program
         dispatch(getProgramEntities(entities));
 
         const id = getObject(results[0], 'id', '');
-        fetchQuestions(id, assessmentId).then((response) => {
-          dispatch(setQuestions(response.results, assessmentId));
+        fetchQuestions(id, assessmentId).then(({ data }) => {
+          dispatch(setQuestions(data.results, assessmentId));
           dispatch(hideAnswersLoading());
         });
       });
     } else {
-      fetchQuestions(selectedProgram, assessmentId).then((response) => {
-        dispatch(setQuestions(response.results, assessmentId));
+      fetchQuestions(selectedProgram, assessmentId).then(({ data }) => {
+        dispatch(setQuestions(data.results, assessmentId));
         dispatch(hideAnswersLoading());
       });
     }

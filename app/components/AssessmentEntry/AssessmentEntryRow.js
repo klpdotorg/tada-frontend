@@ -79,7 +79,6 @@ const AssessmentEntryRowView = (props) => {
               className="form-control"
               style={{ padding: '0px' }}
               onChange={(e) => {
-                console.log(e.target.value, 'printing the value', currentVal, question.id, answers);
                 props.onChange(rowId, currentVal.id, e.target.value);
               }}
             />

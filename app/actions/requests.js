@@ -5,7 +5,6 @@ import { syncError } from './notifications';
 import { tokenExpired, logoutUser } from './index';
 
 export const checkStatus = (response) => {
-  console.log(response.status, 'asfd');
   if (response.status >= 200 && response.status < 300) {
     return response.json().then((json) => {
       return {
