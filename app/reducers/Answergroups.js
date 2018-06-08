@@ -10,7 +10,7 @@ const Answergroups = (state = INITIAL_STATE, action) => {
     case SET_ANSWER_GROUPS:
       return {
         ...state,
-        answergroups: action.value,
+        answergroups: { ...state.answergroups, ...action.value },
       };
     case FETCHING_ANSWER_GROUPS:
       return {

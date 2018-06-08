@@ -1,7 +1,7 @@
 import { SERVER_API_BASE } from 'config';
-import flatten from 'lodash.flatten';
 import isArray from 'lodash.isarray';
 import getObject from 'lodash.get';
+import isEmpty from 'lodash.isempty';
 
 import { convertArrayToObject } from '../utils';
 import { get, patch } from './requests';
@@ -40,14 +40,18 @@ export const fetchAnswerGroups = (assessmentId, boundaryType, boundaryId) => {
       });
 
       Promise.all(promises).then((value) => {
-        const updateValue = flatten(value);
-        // dispatch({
-        //   type: SET_ANSWER_GROUPS,
-        //   value: {
-        //     [boundaryId]: convertArrayToObject(updateValue),
-        //   },
-        // });
-        dispatch(fetchAnswers(assessmentId, boundaryId));
+        value.forEach((item) => {
+          if (!isEmpty(item)) {
+            const studentId = getObject(item, '[0].student', '');
+            dispatch({
+              type: SET_ANSWER_GROUPS,
+              value: {
+                [studentId]: convertArrayToObject(item),
+              },
+            });
+            dispatch(fetchAnswers(assessmentId, studentId));
+          }
+        });
         dispatch(fetchingAnswergroups(false));
       });
     } else {

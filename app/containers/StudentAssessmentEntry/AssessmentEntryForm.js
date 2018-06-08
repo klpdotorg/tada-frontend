@@ -5,7 +5,7 @@ import get from 'lodash.get';
 import isEmpty from 'lodash.isempty';
 import { DEFAULT_PROGRAM_NODE_ID } from 'config';
 
-import { AssessmentEntryFormView } from '../../components/AssessmentEntry';
+import { AssessmentEntryFormView } from '../../components/StudentAssessmentEntry';
 import {
   fetchAnswers,
   fetchAnswerGroups,
@@ -33,7 +33,6 @@ class FetchAnswersAndQuestions extends Component {
     this.props.fetchSelectedAssessmentQuestions(assessmentId, entities, programId);
     if (!isEmpty(boundary)) {
       this.props.fetchStudentsForAssessmentEntry(boundaryInfo);
-      // this.props.fetchAnswerGroups(assessmentId, boundaryType, boundaryId);
     }
   }
 
@@ -43,7 +42,6 @@ class FetchAnswersAndQuestions extends Component {
     if (nextId !== currentId) {
       if (!isEmpty(nextProps.boundary)) {
         this.props.fetchStudentsForAssessmentEntry(nextProps.boundaryInfo);
-        // this.props.fetchAnswerGroups(assessmentId, boundaryType, boundaryId);
       }
     }
   }
@@ -64,24 +62,30 @@ FetchAnswersAndQuestions.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const { studentGroupId, questionGroupId } = ownProps.params;
-  const { answersLoading } = state.assessmentEntry;
+  const { answersLoading, students } = state.assessmentEntry;
   const { answergroups, fetching } = state.answergroups;
   const answereFetching = state.answers.fetching;
   const studentgroup = get(state.programDetails.programDetails, studentGroupId, {});
   const { loadingBoundary } = state.appstate;
+  const rows = students.reduce((soFar, student) => {
+    const result = soFar;
+    const values = get(answergroups, [student.id], {});
+    result[student.id] = values;
+    return result;
+  }, {});
 
   return {
-    rows: Object.keys(answergroups),
+    rows,
     boundary: studentgroup,
     loading: answersLoading || fetching || answereFetching || loadingBoundary,
     uniqueId: studentGroupId,
     boundaryInfo: {
-      students: state.assessmentEntry.students.map((value, key) => {
-        return key;
+      students: state.assessmentEntry.students.map((value) => {
+        return value.id;
       }),
       boundaryId: studentgroup.id,
       assessmentId: questionGroupId,
-      boundaryType: 'studentgroup',
+      boundaryType: 'student',
     },
   };
 };

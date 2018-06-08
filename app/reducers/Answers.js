@@ -10,7 +10,10 @@ const Answers = (state = INITIAL_STATE, action) => {
     case SET_ANSWERS:
       return {
         ...state,
-        answers: action.value,
+        answers: {
+          ...state.answers,
+          ...action.value,
+        },
       };
     case ON_CHANGE_ANSWER: {
       return {
