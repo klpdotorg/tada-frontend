@@ -7,6 +7,7 @@ import {
   SHOW_PROGRAMS_LOADING,
   CLOSE_PROGRAMS_LOADING,
   DELETE_PROGRAM,
+  CREATE_PROGRAM_ERROR,
 } from '../actions/types';
 import { changeArrayToObject } from './utils';
 
@@ -15,6 +16,7 @@ const INITIAL_STATE = {
   editProgramId: null,
   selectedProgram: '',
   loading: false,
+  error: {},
 };
 
 const Programs = (state = INITIAL_STATE, action) => {
@@ -53,6 +55,11 @@ const Programs = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         programs: omit(state.programs, action.value),
+      };
+    case CREATE_PROGRAM_ERROR:
+      return {
+        ...state,
+        error: action.value,
       };
     default:
       return state;
