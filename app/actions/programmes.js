@@ -97,7 +97,6 @@ export const saveNewProgram = (options) => {
     const createProgramURL = `${serverApiBase}surveys/`;
 
     post(createProgramURL, options).then((response) => {
-      console.log(response);
       if (response.status === 201) {
         dispatch(programCreated({ [response.data.id]: response.data }));
         dispatch(selectProgram(response.data.id));
