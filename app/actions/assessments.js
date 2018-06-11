@@ -11,6 +11,7 @@ import {
   SET_EDIT_ASSESSMENT_ID,
   SELECT_ASSESSMENT,
   CREATE_ASSESSMENT_ERROR,
+  SET_RESPONDENT_TYPES,
 } from './types';
 import { closeConfirmModal } from './index';
 
@@ -185,6 +186,18 @@ export const deleteAssessments = () => {
     Promise.all(promises).then(() => {
       dispatch(getAssessments(selectedProgram));
       dispatch(closeAssessmentLoading());
+    });
+  };
+};
+
+export const fetchRespondentTypes = () => {
+  return (dispatch) => {
+    const url = `${serverApiBase}respondenttype/`;
+    get(url).then(({ data }) => {
+      dispatch({
+        type: SET_RESPONDENT_TYPES,
+        value: data.results,
+      });
     });
   };
 };

@@ -35,6 +35,7 @@ import {
   Answergroups,
   Answers,
   UserPermissions,
+  RespondentTypes,
 } from './reducers';
 
 const reducer = combineReducers({
@@ -69,6 +70,7 @@ const reducer = combineReducers({
   answergroups: Answergroups,
   answers: Answers,
   userPermissions: UserPermissions,
+  respondentTypes: RespondentTypes,
 });
 
 const middleware = compose(

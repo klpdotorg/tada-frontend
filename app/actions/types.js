@@ -132,3 +132,4 @@ export const ON_CHANGE_USER_SEARCH_TEXT = 'on_change_user_search_text';
 export const CHANGE_PASSWORD_ERROR = 'change_password_error';
 export const CREATE_PROGRAM_ERROR = 'create_program_error';
 export const CREATE_ASSESSMENT_ERROR = 'create_assessment_error';
+export const SET_RESPONDENT_TYPES = 'set_respondent_types';

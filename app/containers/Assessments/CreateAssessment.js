@@ -7,7 +7,13 @@ import get from 'lodash.get';
 import isEmpty from 'lodash.isempty';
 import map from 'lodash.map';
 
-import { saveNewAssessment, enableSubmitForm, disableSubmitForm } from '../../actions';
+import {
+  saveNewAssessment,
+  enableSubmitForm,
+  disableSubmitForm,
+  toggleModal,
+  fetchRespondentTypes,
+} from '../../actions';
 import { Modal } from '../../components/Modal';
 import { dateFormat } from '../../utils';
 import { lastVerifiedYears } from '../../Data';
@@ -18,7 +24,16 @@ class CreateAssessmentForm extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      showRespondentTypes: false,
+    };
+
     this.submitForm = this.submitForm.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.fetchRespondentTypes();
   }
 
   setStartDate() {
@@ -29,6 +44,21 @@ class CreateAssessmentForm extends Component {
   setEndDate() {
     const date = new Date();
     return dateFormat(new Date(date.setFullYear(date.getFullYear() + 1)));
+  }
+
+  filterRespondentTypes() {
+    return this.props.respondentTypes.map((type) => {
+      return {
+        value: type.char_id,
+        label: type.name,
+      };
+    });
+  }
+
+  handleChange(field, value) {
+    this.setState({
+      showRespondentTypes: value,
+    });
   }
 
   submitForm() {
@@ -43,13 +73,15 @@ class CreateAssessmentForm extends Component {
       academic_year_id: myform.academic_year_id,
       inst_type: myform.inst_type_id,
       source_id: myform.source_id,
-      survey: myform.type_id,
+      survey_on: myform.type_id,
       description: myform.description,
       lang_name: myform.lang_name,
       comments_required: myform.comments_required,
       image_required: myform.image_required,
       respondent_type_required: myform.respondent_type_required,
       respondent_type: myform.respondent_type,
+      type: myform.type,
+      survey: this.props.programId,
       status: 'AC',
     };
 
@@ -57,9 +89,10 @@ class CreateAssessmentForm extends Component {
   }
 
   render() {
+    const { showRespondentTypes } = this.state;
     const { isOpen, canSubmit, error } = this.props;
-
-    const types = [
+    const respondentTypes = this.filterRespondentTypes();
+    const surveyTypes = [
       { value: 'institution', label: 'Institution' },
       { value: 'class', label: 'Class' },
       { value: 'student', label: 'Student' },
@@ -67,7 +100,11 @@ class CreateAssessmentForm extends Component {
     const institutionTypes = [
       { value: 'primary', label: 'Primary School' },
       { value: 'pre', label: 'Pre School' },
-      { value: 'both', label: 'Both' },
+    ];
+    const types = [
+      { value: 'assessment', label: 'Assessment' },
+      { value: 'preception', label: 'Perception' },
+      { value: 'monitor', label: 'Monitor' },
     ];
 
     return (
@@ -75,7 +112,9 @@ class CreateAssessmentForm extends Component {
         title="Create QuestionGroup"
         contentLabel="Create QuestionGroup"
         isOpen={isOpen}
-        onCloseModal={this.props.closeConfirmModal}
+        onCloseModal={() => {
+          this.props.toggleModal('createAssessment');
+        }}
         canSubmit={canSubmit}
         submitForm={this.submitForm}
         cancelBtnLabel="Cancel"
@@ -146,6 +185,14 @@ class CreateAssessmentForm extends Component {
             label="Version"
             type="number"
             validations="minLength:1"
+            required
+          />
+          <Select
+            name="type"
+            label="Type"
+            value={get(types[0], 'value')}
+            options={types}
+            required
           />
           <Select
             name="academic_year_id"
@@ -171,8 +218,8 @@ class CreateAssessmentForm extends Component {
           <Select
             name="type_id"
             label="Survey Type"
-            value={get(types[0], 'value')}
-            options={types}
+            value={get(surveyTypes[0], 'value')}
+            options={surveyTypes}
             required
           />
           <Input
@@ -190,20 +237,23 @@ class CreateAssessmentForm extends Component {
             label="Name in local language"
             type="text"
             validations="minLength:1"
+            required
           />
-          <Select
-            name="default_respondent_type_id"
-            label="Respondent Type"
-            // value={get(types[0], 'value')}
-            options={[]}
-          />
-          <Checkbox label="Comments Required" name="comments_required" id="comments_required" />
-          <Checkbox label="Image Required" name="image_required" id="image_required" />
           <Checkbox
             label="Respondent Type Required"
             name="respondenttype_required"
             id="respondenttype_required"
+            onChange={this.handleChange}
           />
+          <Select
+            name="default_respondent_type_id"
+            label="Respondent Type"
+            // value={get(respondentTypes[0], 'value')}
+            options={respondentTypes}
+            disabled={!showRespondentTypes}
+          />
+          <Checkbox label="Comments Required" name="comments_required" id="comments_required" />
+          <Checkbox label="Image Required" name="image_required" id="image_required" />
           <Checkbox
             label="Double Entry"
             name="doubleEntry"
@@ -223,7 +273,10 @@ CreateAssessmentForm.propTypes = {
   save: PropTypes.func,
   enableSubmitForm: PropTypes.func,
   disabledSubmitForm: PropTypes.func,
-  closeConfirmModal: PropTypes.func,
+  toggleModal: PropTypes.func,
+  fetchRespondentTypes: PropTypes.func,
+  respondentTypes: PropTypes.array,
+  programId: PropTypes.any,
 };
 
 const mapStateToProps = (state) => {
@@ -232,29 +285,16 @@ const mapStateToProps = (state) => {
     canSubmit: state.appstate.enableSubmitForm,
     programId: Number(state.programs.selectedProgram),
     error: state.assessments.error,
+    respondentTypes: state.respondentTypes.types,
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    save: (form) => {
-      dispatch(saveNewAssessment(form));
-    },
-    enableSubmitForm: () => {
-      dispatch(enableSubmitForm());
-    },
-    disableSubmitForm: () => {
-      dispatch(disableSubmitForm());
-    },
-    closeConfirmModal: () => {
-      dispatch({
-        type: 'TOGGLE_MODAL',
-        modal: 'createAssessment',
-      });
-    },
-  };
-};
-
-const CreateAssessment = connect(mapStateToProps, mapDispatchToProps)(CreateAssessmentForm);
+const CreateAssessment = connect(mapStateToProps, {
+  save: saveNewAssessment,
+  enableSubmitForm,
+  disableSubmitForm,
+  toggleModal,
+  fetchRespondentTypes,
+})(CreateAssessmentForm);
 
 export { CreateAssessment };

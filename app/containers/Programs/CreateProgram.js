@@ -42,6 +42,7 @@ class CreateProgramForm extends Component {
       lang_name: myform.lang_name,
       admin0: DEFAULT_PARENT_ID,
     };
+
     this.props.save(pickBy(program));
   }
 

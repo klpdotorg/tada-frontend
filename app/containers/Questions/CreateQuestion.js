@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
+import get from 'lodash.get';
+
 import {
   createNewQuestion,
   enableSubmitForm,
@@ -150,7 +152,13 @@ class CreateQuestionForm extends Component {
             type="text"
             placeholder="Enter Pass score"
           />
-          <Select name="lang_name" label="Language" options={languages} required />
+          <Select
+            name="lang_name"
+            label="Language"
+            options={languages}
+            required
+            value={get(languages, '[0].value', '')}
+          />
         </Formsy.Form>
       </Modal>
     );
