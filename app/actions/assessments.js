@@ -10,6 +10,8 @@ import {
   SET_ASSESSMENT,
   SET_EDIT_ASSESSMENT_ID,
   SELECT_ASSESSMENT,
+  CREATE_ASSESSMENT_ERROR,
+  SET_RESPONDENT_TYPES,
 } from './types';
 import { closeConfirmModal } from './index';
 
@@ -97,18 +99,28 @@ export const openEditAssessmentModal = (value) => {
 
 export const saveNewAssessment = (options) => {
   return (dispatch, getState) => {
-    dispatch(showAssessmentLoading());
+    // dispatch(showAssessmentLoading());
 
     const state = getState();
     const programId = state.programs.selectedProgram;
     const createAssessmentURL = `${serverApiBase}surveys/${programId}/questiongroup/`;
-    post(createAssessmentURL, options).then(({ data }) => {
-      dispatch(assessmentCreated(data));
-      dispatch({
-        type: TOGGLE_MODAL,
-        modal: 'createAssessment',
-      });
-      dispatch(closeAssessmentLoading());
+    post(createAssessmentURL, options).then((response) => {
+      if (response.status === 201) {
+        dispatch(assessmentCreated(response.data));
+        dispatch({
+          type: TOGGLE_MODAL,
+          modal: 'createAssessment',
+        });
+        dispatch({
+          type: CREATE_ASSESSMENT_ERROR,
+          value: {},
+        });
+      } else {
+        dispatch({
+          type: CREATE_ASSESSMENT_ERROR,
+          value: response.data,
+        });
+      }
     });
   };
 };
@@ -174,6 +186,18 @@ export const deleteAssessments = () => {
     Promise.all(promises).then(() => {
       dispatch(getAssessments(selectedProgram));
       dispatch(closeAssessmentLoading());
+    });
+  };
+};
+
+export const fetchRespondentTypes = () => {
+  return (dispatch) => {
+    const url = `${serverApiBase}respondenttype/`;
+    get(url).then(({ data }) => {
+      dispatch({
+        type: SET_RESPONDENT_TYPES,
+        value: data.results,
+      });
     });
   };
 };

@@ -9,6 +9,7 @@ import {
   SHOW_PROGRAMS_LOADING,
   CLOSE_PROGRAMS_LOADING,
   DELETE_PROGRAM,
+  CREATE_PROGRAM_ERROR,
 } from './types';
 import { closeConfirmModal } from './index';
 
@@ -93,17 +94,26 @@ export const getPrograms = () => {
 
 export const saveNewProgram = (options) => {
   return (dispatch) => {
-    dispatch(showProgramLoading());
     const createProgramURL = `${serverApiBase}surveys/`;
 
-    post(createProgramURL, options).then(({ data }) => {
-      dispatch(programCreated({ [data.id]: data }));
-      dispatch(selectProgram(data.id));
-      dispatch({
-        type: TOGGLE_MODAL,
-        modal: 'createProgram',
-      });
-      dispatch(closeProgramLoading());
+    post(createProgramURL, options).then((response) => {
+      if (response.status === 201) {
+        dispatch(programCreated({ [response.data.id]: response.data }));
+        dispatch(selectProgram(response.data.id));
+        dispatch({
+          type: TOGGLE_MODAL,
+          modal: 'createProgram',
+        });
+        dispatch({
+          type: CREATE_PROGRAM_ERROR,
+          value: '',
+        });
+      } else {
+        dispatch({
+          type: CREATE_PROGRAM_ERROR,
+          value: response.data,
+        });
+      }
     });
   };
 };

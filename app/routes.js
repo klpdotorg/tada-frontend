@@ -17,10 +17,11 @@ import { MapAssessments } from './containers/MapAssessments';
 // import { ManageUsers } from './containers/Users/ManageUsers';
 import {
   InstitutionAnswersSheet,
-  StudentsAnswersSheet,
   StudentGroupAnswersSheet,
   DefaultMessage,
 } from './containers/AssessmentEntry';
+import { StudentsAnswersSheet } from './containers/StudentAssessmentEntry';
+
 import { AssignPermissionMessage } from './components/Permissions';
 
 const Loading = ({ error }) => {

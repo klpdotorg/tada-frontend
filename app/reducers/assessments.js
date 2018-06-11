@@ -5,6 +5,7 @@ import {
   SET_ASSESSMENT,
   SET_EDIT_ASSESSMENT_ID,
   SELECT_ASSESSMENT,
+  CREATE_ASSESSMENT_ERROR,
 } from '../actions/types';
 import { changeArrayToObject } from './utils';
 
@@ -13,6 +14,7 @@ const INITIAL_STATE = {
   editAssessmentId: null,
   loading: false,
   selectedAssessments: [],
+  error: {},
 };
 
 const Assessments = (state = INITIAL_STATE, action) => {
@@ -51,6 +53,11 @@ const Assessments = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         selectedAssessments: action.value,
+      };
+    case CREATE_ASSESSMENT_ERROR:
+      return {
+        ...state,
+        error: action.value,
       };
     default:
       return state;
