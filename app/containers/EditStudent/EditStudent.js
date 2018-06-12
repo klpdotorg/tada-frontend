@@ -68,7 +68,6 @@ class EditStudentForm extends Component {
       father_name,
       mother_name,
     } = student;
-    console.log(academic_year, 'printing the reponse', student);
     const selectGender = [{ value: 'male', label: 'Male' }, { value: 'female', label: 'Female' }];
 
     return (
