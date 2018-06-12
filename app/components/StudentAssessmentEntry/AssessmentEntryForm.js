@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import isEmpty from 'lodash.isempty';
-import map from 'lodash.map';
 import flatten from 'lodash.flatten';
 
 import { Loading } from '../common';
@@ -9,7 +8,7 @@ import { AssessmentEntryColHeader } from '../../containers/AssessmentEntry';
 import { AssessmentEntryRow, CreateEntryRow } from '../../containers/StudentAssessmentEntry';
 
 const RenderForm = (props) => {
-  const { loading, params, uniqueId, rows, boundaryInfo, elements } = props;
+  const { loading, params, uniqueId, rows, boundaryInfo } = props;
   if (loading) {
     return <tbody />;
   }
@@ -18,7 +17,9 @@ const RenderForm = (props) => {
     <tbody>
       {flatten(boundaryInfo.students.map((Id) => {
           if (!isEmpty(rows[Id])) {
-            return map(rows[Id], (row, rowId) => {
+            const keys = Object.keys(rows[Id]);
+            return keys.map((rowId) => {
+              const row = rows[Id][rowId];
               return (
                 <AssessmentEntryRow
                   rowId={rowId}
@@ -112,7 +113,6 @@ RenderForm.propTypes = {
   params: PropTypes.object,
   uniqueId: PropTypes.any,
   boundaryInfo: PropTypes.object,
-  elements: PropTypes.number,
 };
 
 export { AssessmentEntryFormView };

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import get from 'lodash.get';
-import pickBy from 'lodash.pickby';
 import PropTypes from 'prop-types';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
@@ -41,7 +40,7 @@ class EditProgramForm extends Component {
       status: 'AC',
     };
     // Save program
-    this.props.save(pickBy(program));
+    this.props.save(program);
   }
 
   render() {

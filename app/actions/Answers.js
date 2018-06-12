@@ -2,7 +2,6 @@ import { SERVER_API_BASE } from 'config';
 import Notifications from 'react-notification-system-redux';
 
 import getObject from 'lodash.get';
-import map from 'lodash.map';
 import { post, get, put } from './requests';
 import { SET_ANSWERS, FETCHING_ANSWERS, ON_CHANGE_ANSWER } from './types';
 import { fetchAnswerGroups } from '.';
@@ -75,7 +74,8 @@ export const fetchAnswers = (assessmentId, boundaryId) => {
 };
 
 const filterAnswers = (answers) => {
-  return map(answers, (val, key) => {
+  return Object.keys(answers).map((key) => {
+    const val = answers[key];
     return {
       question: key,
       answer: val.value,

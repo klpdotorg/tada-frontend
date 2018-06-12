@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import map from 'lodash.map';
 import Loadable from 'react-loadable';
 
 import { CreateAssessment } from '../../containers/Assessments';
@@ -40,7 +39,8 @@ const ProgramView = (props) => {
             }}
             value={selectedProgram}
           >
-            {map(programs, (program) => {
+            {Object.keys(programs).map((programId) => {
+              const program = programs[programId];
               return (
                 <option key={program.id} value={program.id}>
                   {program.name}

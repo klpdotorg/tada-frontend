@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import TreeView from 'react-treeview';
 import has from 'lodash.has';
-import map from 'lodash.map';
 import get from 'lodash.get';
 
 import { capitalize } from '../../utils';
@@ -137,7 +136,8 @@ class NavTree extends Component {
             }}
             value={selectedProgram}
           >
-            {map(programs, (program) => {
+            {Object.keys(programs).map((Id) => {
+              const program = programs[Id];
               return (
                 <option key={program.id} value={program.id}>
                   {program.name}

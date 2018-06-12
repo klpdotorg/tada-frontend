@@ -24,7 +24,7 @@ class SetDefaultValues extends Component {
 
 SetDefaultValues.propTypes = {
   row: PropTypes.object,
-  rowId: PropTypes.number,
+  rowId: PropTypes.any,
   onChangeGroupValue: PropTypes.func,
   onChangeDateOfVisit: PropTypes.func,
 };

@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import map from 'lodash.map';
 
 import { generatePagination } from '../../utils';
 
@@ -8,6 +7,7 @@ const PaginationView = (props) => {
   const { count, current } = props;
   const numbers = Math.ceil(count / 10);
   const values = generatePagination(current, numbers, 4);
+
   return (
     <nav aria-label="Page navigation" className="user-pagination">
       <ul className="pagination">
@@ -16,7 +16,7 @@ const PaginationView = (props) => {
             <span aria-hidden="true">&laquo;</span>
           </a>
         </li>
-        {map(values, (number, i) => {
+        {values.map((number, i) => {
           if (number === '...') {
             return (
               <li key={i}>

@@ -5,7 +5,6 @@ import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
 import get from 'lodash.get';
 import isEmpty from 'lodash.isempty';
-import map from 'lodash.map';
 
 import {
   saveNewAssessment,
@@ -131,7 +130,8 @@ class CreateAssessmentForm extends Component {
         >
           {!isEmpty(error) ? (
             <div className="alert alert-danger">
-              {map(error, (value, key) => {
+              {Object.keys(error).map((key) => {
+                const value = error[key];
                 return (
                   <p key={key}>
                     <strong>{key}:</strong> {value[0]}

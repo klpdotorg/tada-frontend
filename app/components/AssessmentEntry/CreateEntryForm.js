@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import get from 'lodash.get';
-import map from 'lodash.map';
 
 import { dateFormat } from '../../utils';
 
@@ -50,7 +49,8 @@ const CreateEntryFormView = (props) => {
                 }}
               />
             </td>
-            {map(questions, (question, i) => {
+            {Object.keys(questions).map((questionId) => {
+              const question = questions[questionId];
               const questionType = get(question, 'question_type');
               const value = get(answers, [row.id, question.id, 'value'], '');
 

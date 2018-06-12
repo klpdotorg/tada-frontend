@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import map from 'lodash.map';
 import includes from 'lodash.includes';
 import isEmpty from 'lodash.isempty';
 import get from 'lodash.get';
@@ -41,7 +40,7 @@ class EditStudentsFormView extends Component {
   setRequiredField(field) {
     let required = '';
 
-    map(REQUIRED_FIELDS, (requiredField) => {
+    REQUIRED_FIELDS.forEach((requiredField) => {
       if (includes(requiredField.value, field)) {
         required = '*';
       }
