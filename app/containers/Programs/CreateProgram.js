@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import pickBy from 'lodash.pickby';
 import PropTypes from 'prop-types';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
 import { DEFAULT_PARENT_ID } from 'config';
-import map from 'lodash.map';
 import isEmpty from 'lodash.isempty';
 
 import { Modal } from '../../components/Modal';
@@ -43,7 +41,7 @@ class CreateProgramForm extends Component {
       admin0: DEFAULT_PARENT_ID,
     };
 
-    this.props.save(pickBy(program));
+    this.props.save(program);
   }
 
   render() {
@@ -70,7 +68,8 @@ class CreateProgramForm extends Component {
         >
           {!isEmpty(error) ? (
             <div className="alert alert-danger">
-              {map(error, (value, key) => {
+              {Object.keys(error).map((key) => {
+                const value = error[key];
                 return (
                   <p key={key}>
                     <strong>{key}</strong> {value[0]}

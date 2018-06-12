@@ -1,21 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import map from 'lodash.map';
 
 const AssessmentEntryColHeaderView = ({ questions }) => {
   const values = Object.keys(questions);
-
   return (
     <tr className="bg-info">
       <td>UID</td>
       <td colSpan="2">Boundary Name</td>
       <td>Name</td>
       <td>Date of Visit</td>
-      {map(values, (id, i) => {
+      {values.map((id, i) => {
         return <td key={id}>{i + 1}</td>;
       })}
-      <td>Edit</td>
       <td>Save</td>
     </tr>
   );

@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import get from 'lodash.get';
-import map from 'lodash.map';
 
 import { dateFormat } from '../../utils';
 
@@ -54,7 +53,8 @@ const CreateEntryRowView = (props) => {
           }}
         />
       </td>
-      {map(questions, (question, i) => {
+      {Object.keys(questions).map((questionId) => {
+        const question = questions[questionId];
         const questionType = get(question, 'question_type');
         const value = get(answers, [id, question.id, 'value'], '');
 
@@ -106,20 +106,6 @@ const CreateEntryRowView = (props) => {
       })}
       <td>
         <button
-          className="btn btn-primary padded-btn"
-          title="Edit answer"
-          data-toggle="tooltip"
-          onClick={() => {
-            // console.log('Edit Button Clicked');
-          }}
-          disabled
-        >
-          Edit
-          <span className="fa fa-pencil-square-o" />
-        </button>
-      </td>
-      <td>
-        <button
           onClick={() => {
             props.onSave({
               ...boundaryInfo,
@@ -142,7 +128,7 @@ CreateEntryRowView.propTypes = {
   questions: PropTypes.object,
   answers: PropTypes.object,
   assessmentId: PropTypes.any,
-  groupValue: PropTypes.object,
+  groupValue: PropTypes.string,
   dateOfVisit: PropTypes.object,
   boundaryInfo: PropTypes.object,
   onChangeDateOfVisit: PropTypes.func,

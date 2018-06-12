@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import map from 'lodash.map';
 import isEmpty from 'lodash.isempty';
 
 import { AssessmentTable } from '../../components/Assessments';
@@ -38,9 +37,7 @@ GetAssessments.propTypes = {
 const mapStateToProps = (state) => {
   const { selectedAssessments } = state.assessments;
   const programId = state.programs.selectedProgram;
-  const assessments = map(state.assessments.assessments, (assessment) => {
-    return assessment.id;
-  });
+  const assessments = Object.keys(state.assessments.assessments);
   const { isAdmin, groups } = state.profile;
 
   return {
