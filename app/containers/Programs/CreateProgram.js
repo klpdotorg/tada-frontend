@@ -72,7 +72,7 @@ class CreateProgramForm extends Component {
                 const value = error[key];
                 return (
                   <p key={key}>
-                    <strong>{key}</strong> {value[0]}
+                    <strong>{key}:</strong> {value[0]}
                   </p>
                 );
               })}

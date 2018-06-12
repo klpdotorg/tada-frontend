@@ -133,3 +133,4 @@ export const CHANGE_PASSWORD_ERROR = 'change_password_error';
 export const CREATE_PROGRAM_ERROR = 'create_program_error';
 export const CREATE_ASSESSMENT_ERROR = 'create_assessment_error';
 export const SET_RESPONDENT_TYPES = 'set_respondent_types';
+export const CREATE_QUESTION_ERROR = 'create_question_error';
