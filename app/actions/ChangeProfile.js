@@ -2,7 +2,7 @@ import Notifications from 'react-notification-system-redux';
 import { SERVER_API_BASE } from 'config';
 import isEmpty from 'lodash.isempty';
 
-import { TOGGLE_MODAL, SET_USER_PROFILE } from './types';
+import { TOGGLE_MODAL, SET_USER_PROFILE, SELECT_STATE } from './types';
 import { baseNotification, setDataInLocalStorage, getDataFromLocalstorage } from './index';
 import { put } from './requests';
 
@@ -12,6 +12,10 @@ export const setUserProfile = () => {
     dispatch({
       type: SET_USER_PROFILE,
       value: user,
+    });
+    dispatch({
+      type: SELECT_STATE,
+      value: user.state_code,
     });
   };
 };

@@ -134,3 +134,6 @@ export const CREATE_PROGRAM_ERROR = 'create_program_error';
 export const CREATE_ASSESSMENT_ERROR = 'create_assessment_error';
 export const SET_RESPONDENT_TYPES = 'set_respondent_types';
 export const CREATE_QUESTION_ERROR = 'create_question_error';
+export const SET_STATES = 'set_states';
+export const SELECT_STATE = 'select_state';
+export const STATES_LOADING = 'states_loading';

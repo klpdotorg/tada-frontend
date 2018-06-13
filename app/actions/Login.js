@@ -14,7 +14,9 @@ export const getDataFromLocalstorage = () => {
 };
 
 export const setDataInLocalStorage = (user) => {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const state = getState();
+
     const newUser = {
       id: user.id,
       email: user.email,
@@ -24,6 +26,7 @@ export const setDataInLocalStorage = (user) => {
       isAdmin: user.is_superuser,
       token: user.token,
       groups: user.groups,
+      state_code: state.states.selectedState,
     };
 
     dispatch({
