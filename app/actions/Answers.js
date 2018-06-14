@@ -2,24 +2,47 @@ import { SERVER_API_BASE } from 'config';
 import Notifications from 'react-notification-system-redux';
 
 import getObject from 'lodash.get';
+import isEmpty from 'lodash.isempty';
 import { post, get, put } from './requests';
 import { SET_ANSWERS, FETCHING_ANSWERS, ON_CHANGE_ANSWER } from './types';
 import { fetchAnswerGroups } from '.';
 import { showSuccessMessage } from './notifications';
 
-export const onChangeAnswer = (answergroupId, answerId, value) => {
+export const onChangeAnswer = (answergroupId, answerId, value, questionId) => {
   return (dispatch, getState) => {
     const state = getState();
     const answergroup = getObject(state.answers.answers, [answergroupId], []);
-    const answers = answergroup.map((answer) => {
-      if (answer.id === answerId) {
-        return {
-          ...answer,
-          answer: value,
-        };
+    let answers = [];
+    if (!answerId) {
+      const found = answergroup.find((answer) => {
+        return answer.question === questionId;
+      });
+      if (found) {
+        answers = answergroup.map((answer) => {
+          if (answer.question === questionId) {
+            return {
+              ...answer,
+              answer: value,
+            };
+          }
+
+          return answer;
+        });
+      } else {
+        answers = [...answergroup, { answer: value, question: questionId }];
       }
-      return answer;
-    });
+    } else {
+      answers = answergroup.map((answer) => {
+        if (answer.id === answerId) {
+          return {
+            ...answer,
+            answer: value,
+          };
+        }
+
+        return answer;
+      });
+    }
 
     dispatch({
       type: ON_CHANGE_ANSWER,
@@ -122,16 +145,43 @@ export const createAnswerGroup = (params) => {
   };
 };
 
+const filterExistingAnswers = (answers) => {
+  return answers.reduce((soFar, value) => {
+    const result = soFar;
+    if (value.id) {
+      if (!result.existingAnswers) {
+        result.existingAnswers = [];
+      }
+      result.existingAnswers = [...result.existingAnswers, value];
+    } else {
+      if (!result.newAnswers) {
+        result.newAnswers = [];
+      }
+      result.newAnswers = [...result.newAnswers, value];
+    }
+    return result;
+  }, {});
+};
+
 export const editAnswers = (params) => {
   return (dispatch, getState) => {
     const state = getState();
     const { selectedProgram } = state.programs;
     const { answergroupId, assessmentId, boundaryId, boundaryType } = params;
     const answers = getObject(state.answers.answers, answergroupId, []);
+    const { existingAnswers, newAnswers } = filterExistingAnswers(answers);
     const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${assessmentId}/answergroups/${answergroupId}/answers/`;
-    put(url, answers).then(() => {
-      dispatch(fetchAnswerGroups(assessmentId, boundaryType, boundaryId));
-      dispatch(Notifications.success(showSuccessMessage('Answers Edit!', 'Answers successfully edited!')));
-    });
+    if (!isEmpty(existingAnswers)) {
+      put(url, existingAnswers).then(() => {
+        dispatch(fetchAnswerGroups(assessmentId, boundaryType, boundaryId));
+        dispatch(Notifications.success(showSuccessMessage('Answers Edit!', 'Answers successfully edited!')));
+      });
+    }
+    if (!isEmpty(newAnswers)) {
+      post(url, newAnswers).then(() => {
+        dispatch(fetchAnswerGroups(assessmentId, boundaryType, boundaryId));
+        dispatch(Notifications.success(showSuccessMessage('Answers Save!', 'Answers successfully saved!')));
+      });
+    }
   };
 };
