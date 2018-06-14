@@ -8,6 +8,7 @@ const permissions = {
     'createAssessments',
     'createQuestion',
     'editQuestion',
+    'permissions',
   ],
   tada_deo: [],
 };

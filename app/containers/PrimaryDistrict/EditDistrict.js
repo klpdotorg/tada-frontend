@@ -18,7 +18,7 @@ const mapStateToProps = (state, ownProps) => {
   const { boundaries } = state;
   const { isAdmin } = state.profile;
   const boundary = get(boundaries.boundaryDetails, districtNodeId, {});
-  const hasPermissions = checkPermissions(isAdmin, state.userPermissions, boundary);
+  const hasPermissions = checkPermissions(isAdmin, state.userPermissions, [boundary.id]);
 
   return {
     canSubmit: state.appstate.enableSubmitForm,

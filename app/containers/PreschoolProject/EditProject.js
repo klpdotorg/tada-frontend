@@ -141,7 +141,7 @@ const mapStateToProps = (state, ownProps) => {
   const { boundaries } = state;
   const { isAdmin } = state.profile;
   const project = get(boundaries.boundaryDetails, projectNodeId, {});
-  const hasPermissions = checkPermissions(isAdmin, state.userPermissions, project.id);
+  const hasPermissions = checkPermissions(isAdmin, state.userPermissions, [project.id]);
 
   return {
     project,

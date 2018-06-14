@@ -140,7 +140,7 @@ const mapStateToProps = (state, ownProps) => {
   const { boundaries } = state;
   const { isAdmin } = state.profile;
   const block = get(boundaries.boundaryDetails, blockNodeId, {});
-  const hasPermissions = checkPermissions(isAdmin, state.userPermissions, block.id);
+  const hasPermissions = checkPermissions(isAdmin, state.userPermissions, [block.id]);
 
   return {
     block,

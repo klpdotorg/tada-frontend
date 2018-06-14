@@ -140,7 +140,7 @@ const mapStateToProps = (state, ownProps) => {
   const { boundaries } = state;
   const circle = get(boundaries.boundaryDetails, circleNodeId, {});
   const { isAdmin } = state.profile;
-  const hasPermissions = checkPermissions(isAdmin, state.userPermissions, circle.id);
+  const hasPermissions = checkPermissions(isAdmin, state.userPermissions, [circle.id]);
 
   return {
     canDelete: isAdmin && hasChildren(circleNodeId, boundaries),
