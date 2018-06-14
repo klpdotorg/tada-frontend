@@ -194,6 +194,7 @@ export const deleteUsers = () => {
         type: SELECT_USER,
         value: [],
       });
+      dispatch(Notifications.success(showSuccessMessage('User Deleted!', 'User successfully deleted.')));
     });
   };
 };

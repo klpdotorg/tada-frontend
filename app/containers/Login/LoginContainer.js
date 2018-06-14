@@ -15,7 +15,7 @@ class Login extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchStates(true);
+    this.props.fetchStates();
   }
 
   handleSubmit(event) {

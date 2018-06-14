@@ -139,7 +139,6 @@ export const saveNewInstitution = (options) => {
     const state = getState();
     const boundaryType = state.schoolSelection.primarySchool ? 'primary' : 'pre';
     const newOptions = { ...options, institution_type: boundaryType };
-
     post(`${serverApiBase}institutions/`, newOptions).then(({ data }) => {
       const entities = convertEntitiesToObject([data]);
       dispatch({

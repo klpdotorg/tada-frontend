@@ -102,20 +102,6 @@ const CreateEntryFormView = (props) => {
             })}
             <td>
               <button
-                className="btn btn-primary padded-btn"
-                title="Edit answer"
-                data-toggle="tooltip"
-                onClick={() => {
-                  // console.log('Edit Button Clicked');
-                }}
-                disabled
-              >
-                Edit
-                <span className="fa fa-pencil-square-o" />
-              </button>
-            </td>
-            <td>
-              <button
                 onClick={() => {
                   props.onSave({
                     ...boundaryInfo,

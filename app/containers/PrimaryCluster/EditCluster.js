@@ -140,7 +140,7 @@ const mapStateToProps = (state, ownProps) => {
   const { boundaries } = state;
   const { isAdmin } = state.profile;
   const cluster = get(boundaries.boundaryDetails, clusterNodeId, {});
-  const hasPermissions = checkPermissions(isAdmin, state.userPermissions, cluster.id);
+  const hasPermissions = checkPermissions(isAdmin, state.userPermissions, [cluster.id]);
 
   return {
     canDelete: isAdmin && hasChildren(clusterNodeId, boundaries),
