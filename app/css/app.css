@@ -861,7 +861,7 @@ table.table-fixedwidth td, .table-fixedwidth th {
 }
 
 .boundary-assessments {
-  margin-top: 60px;
+  margin-top: 107px;
 }
 .permission-item-table td {
   height: 38px;
@@ -926,4 +926,9 @@ table.table-fixedwidth td, .table-fixedwidth th {
 .user-search-bar {
   display: flex;
   margin-right: 20px;
+}
+
+.permission-user-search {
+  width: 50%;
+  margin-bottom: 13px;
 }

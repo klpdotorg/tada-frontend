@@ -9,6 +9,8 @@ import {
   fetchBoundariesForPermission,
   selectPermissionsBoundary,
   selectPermissionsUser,
+  onChangeUserSearchText,
+  submitUserSearch,
 } from '../../actions';
 import { UserAndBoundaryListView } from '../../components/Permissions';
 
@@ -87,6 +89,8 @@ const UserAndBoundaryList = connect(mapStateToProps, {
   fetchBoundary: fetchBoundariesForPermission,
   selectUser: selectPermissionsUser,
   selectBoundary: selectPermissionsBoundary,
+  onChangeText: onChangeUserSearchText,
+  submit: submitUserSearch,
 })(GetResources);
 
 export { UserAndBoundaryList };

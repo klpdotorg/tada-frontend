@@ -20,6 +20,25 @@ const UserAndBoundaryListView = (props) => {
 
   return (
     <div className="col-md-12 permission-item-table">
+      <div className="user-search-bar permission-user-search">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Search User"
+          style={{ marginRight: 10 }}
+          onChange={(e) => {
+            props.onChangeText(e.target.value);
+          }}
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') {
+              props.submit();
+            }
+          }}
+        />
+        <button className="btn btn-primary" onClick={props.submit}>
+          Search
+        </button>
+      </div>
       <div className="col-md-6 remove-margin-padding">
         <table className="table table-striped table-bordered">
           <thead>
@@ -122,6 +141,8 @@ UserAndBoundaryListView.propTypes = {
   boundaries: PropTypes.array,
   selectedBoundaries: PropTypes.array,
   indexes: PropTypes.array,
+  onChangeText: PropTypes.func,
+  submit: PropTypes.func,
 };
 
 export { UserAndBoundaryListView };
