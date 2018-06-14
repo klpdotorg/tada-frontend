@@ -1,4 +1,6 @@
 import { SERVER_API_BASE } from 'config';
+import getObject from 'lodash.get';
+
 import { get, post, put, deleteRequest } from './requests';
 import {
   SET_QUESTION,
@@ -8,6 +10,7 @@ import {
   TOGGLE_MODAL,
   SET_EDIT_QUESTION_ID,
   DELETE_QUESTION,
+  CREATE_QUESTION_ERROR,
 } from './types';
 import { setPrograms, selectProgram, setAssessments } from './index';
 
@@ -102,20 +105,28 @@ export const getQuestionParentEntities = (programId, assessmentId) => {
 
 export const createNewQuestion = (data, programId, assessmentId) => {
   return (dispatch) => {
-    dispatch({
-      type: TOGGLE_MODAL,
-      modal: 'createQuestion',
-    });
-
-    dispatch(showQuestionLoading());
     const createQuestionURL = `${SERVER_API_BASE}surveys/${programId}/questiongroup/${assessmentId}/questions/`;
-    post(createQuestionURL, data).then(({ data }) => {
-      const { question_details } = data;
-      dispatch({
-        type: SET_QUESTION,
-        value: { [question_details.id]: question_details },
-      });
-      dispatch(hideQuestionLoading());
+    post(createQuestionURL, data).then((response) => {
+      if (response.status === 201) {
+        const { question_details } = response.data;
+        dispatch({
+          type: SET_QUESTION,
+          value: { [question_details.id]: question_details },
+        });
+        dispatch({
+          type: TOGGLE_MODAL,
+          modal: 'createQuestion',
+        });
+        dispatch({
+          type: CREATE_QUESTION_ERROR,
+          value: {},
+        });
+      } else {
+        dispatch({
+          type: CREATE_QUESTION_ERROR,
+          value: getObject(response.data, 'question_details', response.data),
+        });
+      }
     });
   };
 };

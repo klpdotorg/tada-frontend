@@ -102,7 +102,11 @@ const AssessmentEntryRowView = (props) => {
               className="form-control"
               style={{ padding: '0px' }}
               onChange={(e) => {
-                props.onChange(rowId, currentVal.id, e.target.value);
+                if (currentVal && currentVal.id) {
+                  props.onChange(rowId, currentVal.id, e.target.value);
+                } else {
+                  props.onChange(rowId, '', e.target.value, question.id);
+                }
               }}
             />
           </td>

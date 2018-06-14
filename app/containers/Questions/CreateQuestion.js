@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
 import get from 'lodash.get';
+import isEmpty from 'lodash.isempty';
 
 import {
   createNewQuestion,
@@ -59,7 +60,7 @@ class CreateQuestionForm extends Component {
   }
 
   render() {
-    const { isOpen, canSubmit, languages } = this.props;
+    const { isOpen, canSubmit, languages, error } = this.props;
     const featuredValues = [
       {
         value: true,
@@ -91,6 +92,20 @@ class CreateQuestionForm extends Component {
             this.myform = ref;
           }}
         >
+          {!isEmpty(error) ? (
+            <div className="alert alert-danger">
+              {Object.keys(error).map((key) => {
+                const value = error[key];
+                return (
+                  <p key={key}>
+                    <strong>{key}:</strong> {value[0]}
+                  </p>
+                );
+              })}
+            </div>
+          ) : (
+            <span />
+          )}
           <Textarea
             rows={2}
             cols={60}
@@ -176,6 +191,7 @@ CreateQuestionForm.propTypes = {
   onCloseModal: PropTypes.func,
   getLanguages: PropTypes.func,
   languages: PropTypes.array,
+  error: PropTypes.object,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -184,6 +200,7 @@ const mapStateToProps = (state, ownProps) => {
     canSubmit: state.appstate.enableSubmitForm,
     assessmentId: Number(ownProps.assessmentId),
     languages: state.languages.languages,
+    error: state.questions.error,
   };
 };
 

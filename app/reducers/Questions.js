@@ -6,12 +6,14 @@ import {
   HIDE_QUESTION_LOADING,
   SET_EDIT_QUESTION_ID,
   DELETE_QUESTION,
+  CREATE_QUESTION_ERROR,
 } from '../actions/types';
 
 const INITIAL_STATE = {
   questions: {},
   editQuestion: '',
   loading: false,
+  error: {},
 };
 
 const Questions = (state = INITIAL_STATE, action) => {
@@ -48,6 +50,11 @@ const Questions = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         questions: omit(state.questions, action.value),
+      };
+    case CREATE_QUESTION_ERROR:
+      return {
+        ...state,
+        error: action.value,
       };
     default:
       return state;

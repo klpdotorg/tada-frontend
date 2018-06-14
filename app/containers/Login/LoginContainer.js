@@ -5,13 +5,17 @@ import { Link } from 'react-router';
 
 import { LoginPageWrapper } from '../../components/Login';
 
-import { sendLoginToServer } from '../../actions/';
+import { sendLoginToServer, fetchStates, selectState } from '../../actions/';
 
 class Login extends Component {
   constructor(prop) {
     super(prop);
 
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.fetchStates(true);
   }
 
   handleSubmit(event) {
@@ -24,8 +28,7 @@ class Login extends Component {
   }
 
   render() {
-    const { loginIn, error } = this.props;
-
+    const { loginIn, error, states, selectedState } = this.props;
     return (
       <LoginPageWrapper error={error}>
         <div className="row">
@@ -60,6 +63,27 @@ class Login extends Component {
                   placeholder="(HINT: tada)"
                 />
               </div>
+              <div className="form-group input-group">
+                <span className="input-group-addon">
+                  <i className="glyphicon glyphicon-globe" />
+                </span>
+                <select
+                  className="form-control"
+                  id="sel1"
+                  onChange={(e) => {
+                    this.props.selectState(e.target.value);
+                  }}
+                  value={selectedState}
+                >
+                  {states.map((state) => {
+                    return (
+                      <option key={state.state_code} value={state.state_code}>
+                        {state.name}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
               {loginIn ? (
                 <div className="text-center">
                   <i className="fa fa-cog fa-spin fa-lg fa-fw" />
@@ -85,9 +109,13 @@ class Login extends Component {
 }
 
 const mapStateToProps = (state) => {
+  const { selectedState, states, loading } = state.states;
   return {
     error: state.login.error,
     loginIn: state.login.isLoggingIn,
+    states,
+    selectedState,
+    loading,
   };
 };
 
@@ -95,8 +123,16 @@ Login.propTypes = {
   error: PropTypes.bool.isRequired,
   loginIn: PropTypes.bool,
   sendLoginToServer: PropTypes.func,
+  selectedState: PropTypes.string,
+  states: PropTypes.array,
+  fetchStates: PropTypes.func,
+  selectState: PropTypes.func,
 };
 
-const LoginContainer = connect(mapStateToProps, { sendLoginToServer })(Login);
+const LoginContainer = connect(mapStateToProps, {
+  sendLoginToServer,
+  fetchStates,
+  selectState,
+})(Login);
 
 export default LoginContainer;

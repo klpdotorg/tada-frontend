@@ -1,6 +1,7 @@
 {
 	"SERVER_API_BASE": "http://next.ilp.org.in/api/v1/",
 	"SERVER_AUTH_BASE": "http://next.ilp.org.in/",
+	"SERVER_STATE_BASE": "https://klp.org.in/api/v1/",
 	"REPORTS_EMAIL": "subha@klp.org.in",
 	"DEFAULT_PARENT_ID": 2,
 	"STATE_CODE": "ka",
