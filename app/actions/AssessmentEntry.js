@@ -85,10 +85,11 @@ export const fetchAssessmentEntryResources = () => {
   return (dispatch, getState) => {
     const state = getState();
     const { programs } = state.programs;
+    const { state_code } = state.profile;
 
     if (isEmpty(programs)) {
       dispatch(showAssessmentEntryLoading());
-      fetchAllPrograms().then((res) => {
+      fetchAllPrograms(state_code).then((res) => {
         dispatch(setPrograms(res));
         dispatch(hideAssessmentEntryLoading());
       });
@@ -138,9 +139,10 @@ export const fetchSelectedAssessmentQuestions = (assessmentId, entities, program
   return (dispatch, getState) => {
     dispatch(showAnswersLoading());
     const state = getState();
+    const { state_code } = state.profile;
     const { selectedProgram } = state.programs;
     if (!selectedProgram) {
-      fetchAllPrograms().then((results) => {
+      fetchAllPrograms(state_code).then((results) => {
         dispatch(setPrograms(results, programId));
         dispatch(getProgramEntities(entities));
 

@@ -191,8 +191,11 @@ export const deleteAssessments = () => {
 };
 
 export const fetchRespondentTypes = () => {
-  return (dispatch) => {
-    const url = `${serverApiBase}respondenttype/`;
+  return (dispatch, getState) => {
+    const state = getState();
+    const { state_code } = state.profile;
+
+    const url = `${serverApiBase}respondenttype/?state=${state_code}`;
     get(url).then(({ data }) => {
       dispatch({
         type: SET_RESPONDENT_TYPES,

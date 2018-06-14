@@ -201,10 +201,11 @@ const fetchAdmins = (entity, moreEntities) => {
 export const getProgramEntities = (Ids) => {
   return (dispatch, getState) => {
     const state = getState();
+    const { state_code } = state.profile;
     dispatch(showBoundaryLoading());
     const { selectedProgram } = state.programs;
     if (!selectedProgram) {
-      fetchAllPrograms().then((results) => {
+      fetchAllPrograms(state_code).then((results) => {
         dispatch(setPrograms(results));
         dispatch(fetchProgramEntities(Ids));
       });

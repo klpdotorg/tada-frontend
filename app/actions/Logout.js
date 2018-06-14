@@ -1,5 +1,6 @@
-import { RESET } from './types';
 import { push } from 'react-router-redux';
+
+import { RESET } from './types';
 
 export const logoutUser = () => {
   return (dispatch) => {
