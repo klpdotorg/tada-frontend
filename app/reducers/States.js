@@ -3,7 +3,7 @@ import { SET_STATES, SELECT_STATE, STATES_LOADING } from '../actions/types';
 const INITIAL_STATE = {
   loading: false,
   states: [],
-  selectedState: '',
+  selectedState: 'ka',
 };
 
 const States = (state = INITIAL_STATE, action) => {
