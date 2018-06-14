@@ -1,4 +1,4 @@
-import { SET_USER_PERMISSIONS } from '../actions/types';
+import { SET_USER_PERMISSIONS, RESET } from '../actions/types';
 
 const INITIAL_STATE = {
   boundaries: [],
@@ -13,6 +13,8 @@ const UserPermissions = (state = INITIAL_STATE, action) => {
         ...state,
         ...action.value,
       };
+    case RESET:
+      return INITIAL_STATE;
     default:
       return state;
   }

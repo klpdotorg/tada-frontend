@@ -1,3 +1,5 @@
+import { RESET } from '../actions/types';
+
 const INITIAL_STATE = {
   primarySchool: true,
 };
@@ -12,6 +14,8 @@ const SchoolSelection = (state = INITIAL_STATE, action) => {
       return {
         primarySchool: false,
       };
+    case RESET:
+      return INITIAL_STATE;
     default:
       return state;
   }

@@ -11,6 +11,7 @@ import {
   RESET_MAP_ASSESSMENTS,
   RESET_INSTITUTIONS_OF_MA,
   RESET_STUDENTGROUPS_OF_MA,
+  RESET,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -94,6 +95,8 @@ const MapAssessments = (state = INITIAL_STATE, action) => {
         selectedClasses: action.value,
       };
     case RESET_MAP_ASSESSMENTS:
+      return INITIAL_STATE;
+    case RESET:
       return INITIAL_STATE;
     default:
       return state;

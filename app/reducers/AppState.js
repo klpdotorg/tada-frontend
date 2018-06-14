@@ -8,6 +8,7 @@ import {
   SHOW_CLASSES_LOADING_IN_MA,
   CLOSE_CLASSES_LOADING_IN_MA,
   TOGGLE_SUBMIT_LOADING,
+  RESET,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -79,6 +80,8 @@ const AppState = (state = INITIAL_STATE, action) => {
         ...state,
         submitLoading: !state.submitLoading,
       };
+    case RESET:
+      return INITIAL_STATE;
     default:
       return state;
   }

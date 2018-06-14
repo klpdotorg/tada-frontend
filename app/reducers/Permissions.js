@@ -4,6 +4,7 @@ import {
   SELECT_PERMISSIONS_ASSESSMENT,
   LOADING_BOUNDARY_ASSESSMENT,
   SET_BOUNDARY_ASSESSMENTS,
+  RESET,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -41,6 +42,8 @@ const Permissions = (state = INITIAL_STATE, action) => {
         ...state,
         selectedAssessments: action.value,
       };
+    case RESET:
+      return INITIAL_STATE;
     default:
       return state;
   }

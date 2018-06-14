@@ -11,6 +11,7 @@ import {
   SET_USER_COUNT,
   SET_ID_FOR_RESET_PASSWORD,
   ON_CHANGE_USER_SEARCH_TEXT,
+  RESET,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -86,6 +87,8 @@ const Users = (state = INITIAL_STATE, action) => {
         ...state,
         count: action.value,
       };
+    case RESET:
+      return INITIAL_STATE;
     default:
       return state;
   }

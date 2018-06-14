@@ -1,3 +1,5 @@
+import { RESET } from '../actions/types';
+
 const INITIAL_STATE = {
   reset_request_successful: false,
   reset_request_failed: false,
@@ -32,6 +34,8 @@ const PasswordReset = (state = INITIAL_STATE, action) => {
         ...state,
         change_password_worked: true,
       };
+    case RESET:
+      return INITIAL_STATE;
     default:
       return state;
   }

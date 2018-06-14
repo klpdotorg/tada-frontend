@@ -1,4 +1,4 @@
-import { OPEN_CONFIRM_MODAL, CLOSE_CONFIRM_MODAL } from '../actions/types';
+import { OPEN_CONFIRM_MODAL, CLOSE_CONFIRM_MODAL, RESET } from '../actions/types';
 
 const INITIAL_STATE = {
   isOpen: false,
@@ -17,6 +17,8 @@ const Confirm = (state = INITIAL_STATE, action) => {
         ...action.value,
       };
     case CLOSE_CONFIRM_MODAL:
+      return INITIAL_STATE;
+    case RESET:
       return INITIAL_STATE;
     default:
       return state;

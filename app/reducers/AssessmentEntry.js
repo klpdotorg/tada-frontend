@@ -12,6 +12,7 @@ import {
   SET_ASSESSMENT_ENTRY_STUDENTS,
   ON_CHANGE_GROUP_VALUE,
   ON_CHANGE_DATE_OF_VISITS,
+  RESET,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -103,6 +104,8 @@ const AssessmentEntry = (state = INITIAL_STATE, action) => {
         selectedProgramAssess: action.value,
       };
     case RESET_ASSESSMENTR_ENTRY:
+      return INITIAL_STATE;
+    case RESET:
       return INITIAL_STATE;
     default:
       return state;

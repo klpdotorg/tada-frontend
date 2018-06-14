@@ -6,6 +6,7 @@ import {
   SET_EDIT_ASSESSMENT_ID,
   SELECT_ASSESSMENT,
   CREATE_ASSESSMENT_ERROR,
+  RESET,
 } from '../actions/types';
 import { changeArrayToObject } from './utils';
 
@@ -59,6 +60,8 @@ const Assessments = (state = INITIAL_STATE, action) => {
         ...state,
         error: action.value,
       };
+    case RESET:
+      return INITIAL_STATE;
     default:
       return state;
   }

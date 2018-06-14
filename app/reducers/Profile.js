@@ -1,4 +1,4 @@
-import { SET_USER_PROFILE } from '../actions/types';
+import { SET_USER_PROFILE, RESET } from '../actions/types';
 
 const INITIAL_STATE = {
   isAdmin: true,
@@ -11,6 +11,8 @@ const Profile = (state = INITIAL_STATE, action) => {
         ...state,
         ...action.value,
       };
+    case RESET:
+      return INITIAL_STATE;
     default:
       return state;
   }

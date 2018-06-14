@@ -1,4 +1,4 @@
-import { SET_ANSWERS, FETCHING_ANSWERS, ON_CHANGE_ANSWER } from '../actions/types';
+import { SET_ANSWERS, FETCHING_ANSWERS, ON_CHANGE_ANSWER, RESET } from '../actions/types';
 
 const INITIAL_STATE = {
   answers: [],
@@ -29,6 +29,8 @@ const Answers = (state = INITIAL_STATE, action) => {
         ...state,
         fetching: action.value,
       };
+    case RESET:
+      return INITIAL_STATE;
     default:
       return state;
   }

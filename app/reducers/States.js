@@ -1,4 +1,4 @@
-import { SET_STATES, SELECT_STATE, STATES_LOADING } from '../actions/types';
+import { SET_STATES, SELECT_STATE, STATES_LOADING, RESET } from '../actions/types';
 
 const INITIAL_STATE = {
   loading: false,
@@ -23,6 +23,8 @@ const States = (state = INITIAL_STATE, action) => {
         ...state,
         loading: action.value,
       };
+    case RESET:
+      return INITIAL_STATE;
     default:
       return state;
   }

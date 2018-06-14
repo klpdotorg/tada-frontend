@@ -5,6 +5,7 @@ import {
   LOGIN_SUCCESS,
   SELF_MODIFIED,
   USER_DATA_FETCHED,
+  RESET,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -70,6 +71,8 @@ const Login = (state = INITIAL_STATE, action) => {
         token: '',
         id: '',
       };
+    case RESET:
+      return INITIAL_STATE;
     default:
       return state;
   }

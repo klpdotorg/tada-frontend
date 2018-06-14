@@ -13,6 +13,7 @@ import {
   DISABLE_CONFIRM_PASSWORD_FORM,
   DISABLE_CHANGE_USER_INFO_FORM,
   SUGGESTION_RESULTS,
+  RESET,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -95,6 +96,8 @@ const Header = (state = INITIAL_STATE, action) => {
         ...state,
         suggestionResults: action.results,
       };
+    case RESET:
+      return INITIAL_STATE;
     default:
       return state;
   }

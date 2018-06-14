@@ -3,6 +3,7 @@ import {
   GO_PAGINATION_BACK,
   CHANGE_PAGINATION_CURRENT,
   SET_PAGINATION_COUNT,
+  RESET,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -32,6 +33,8 @@ const Pagination = (state = INITIAL_STATE, action) => {
         ...state,
         count: action.value,
       };
+    case RESET:
+      return INITIAL_STATE;
     default:
       return state;
   }

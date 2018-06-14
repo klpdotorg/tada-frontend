@@ -1,3 +1,5 @@
+import { RESET } from '../actions/types';
+
 const INITIAL_STATE = {
   createDistrict: false,
   createBlock: false,
@@ -23,6 +25,8 @@ const Modal = (state = INITIAL_STATE, action) => {
         ...state,
         [action.modal]: !state[action.modal],
       };
+    case RESET:
+      return INITIAL_STATE;
     default:
       return state;
   }
