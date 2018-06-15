@@ -47,15 +47,27 @@ export const fetchUsers = () => {
     const { current } = state.pagination;
 
     const url = `${SERVER_API_BASE}tada/users/?per_page=10&page=${current}`;
-    get(url).then(({ data }) => {
-      dispatch({
-        type: SET_USERS,
-        value: convertArrayToObject(data.results),
-      });
-      dispatch({
-        type: SET_PAGINATION_COUNT,
-        value: data.count,
-      });
+    get(url).then((response) => {
+      if (response.status === 200) {
+        const { data } = response;
+        dispatch({
+          type: SET_USERS,
+          value: convertArrayToObject(data.results),
+        });
+        dispatch({
+          type: SET_PAGINATION_COUNT,
+          value: data.count,
+        });
+      } else {
+        dispatch({
+          type: SET_USERS,
+          value: {},
+        });
+        dispatch({
+          type: SET_PAGINATION_COUNT,
+          value: 0,
+        });
+      }
       dispatch(hideUsersLoading());
     });
   };

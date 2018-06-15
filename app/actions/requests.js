@@ -1,8 +1,8 @@
 import Notifications from 'react-notification-system-redux';
 
 import store from '../store';
-import { syncError } from './notifications';
-import { tokenExpired, logoutUser } from './index';
+import { syncError, errorNotification } from './notifications';
+import { logoutUser } from './index';
 
 export const checkStatus = (response) => {
   if (response.status >= 200 && response.status < 300) {
@@ -16,8 +16,11 @@ export const checkStatus = (response) => {
     store.dispatch(logoutUser());
     return null;
   } else if (response.status === 403) {
-    store.dispatch(Notifications.error("You don't permission to do it."));
-    return null;
+    store.dispatch(Notifications.error(errorNotification('Permission Error!', "You don't permission to do it.")));
+    return {
+      data: {},
+      status: response.status,
+    };
   } else if (response.status === 400) {
     return response.json().then((json) => {
       return {
@@ -25,12 +28,14 @@ export const checkStatus = (response) => {
         status: response.status,
       };
     });
+  } else if (response.status === 500) {
+    return {
+      data: {},
+      status: response.status,
+    };
   }
 
   return null;
-  // const error = new Error(response.statusText);
-  // error.response = response;
-  // throw error;
 };
 
 export const checkStatusNoJSON = (response) => {
