@@ -37,3 +37,5 @@ export * from './AddUser';
 export * from './Answers';
 export * from './Answergroups';
 export * from './States';
+export * from './Sources';
+export * from './Partners';

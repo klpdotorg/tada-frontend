@@ -37,6 +37,8 @@ import {
   UserPermissions,
   RespondentTypes,
   States,
+  Partners,
+  Sources,
 } from './reducers';
 
 const reducer = combineReducers({
@@ -73,6 +75,8 @@ const reducer = combineReducers({
   userPermissions: UserPermissions,
   respondentTypes: RespondentTypes,
   states: States,
+  partners: Partners,
+  sources: Sources,
 });
 
 const middleware = compose(
