@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router';
 
 const ProgramDetailsView = (props) => {
   const { program, assessment } = props;
@@ -26,9 +25,9 @@ const ProgramDetailsView = (props) => {
         <button type="button" className="btn btn-primary" onClick={props.toggleCreateQuestionModal}>
           Add Question
         </button>
-        <Link to="/programmes" className="btn btn-info padded-btn">
+        <button className="btn btn-info padded-btn" onClick={props.goBack}>
           Back to Program
-        </Link>
+        </button>
       </div>
     </div>
   );
@@ -38,6 +37,7 @@ ProgramDetailsView.propTypes = {
   program: PropTypes.object,
   assessment: PropTypes.object,
   toggleCreateQuestionModal: PropTypes.func,
+  goBack: PropTypes.func,
 };
 
 export { ProgramDetailsView };

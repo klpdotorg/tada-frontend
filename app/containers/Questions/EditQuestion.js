@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import get from 'lodash.get';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
+import isEmpty from 'lodash.isempty';
+
 import {
   saveQuestion,
   enableSubmitForm,
@@ -19,6 +21,10 @@ const { Input, Textarea, Select } = FRC;
 class EditQuestionForm extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      disabledOptionsField: false,
+    };
 
     this.submitForm = this.submitForm.bind(this);
     this.getValue = this.getValue.bind(this);
@@ -59,9 +65,20 @@ class EditQuestionForm extends Component {
   }
 
   render() {
-    const { isOpen, canSubmit, question } = this.props;
+    const { disabledOptionsField } = this.state;
+    const { isOpen, canSubmit, question, error, languages } = this.props;
     const type = this.getQuestionTypeId(get(question, 'question_type', '')) || {};
-
+    const featuredValues = [
+      {
+        value: true,
+        label: 'True',
+      },
+      {
+        value: false,
+        label: 'False',
+      },
+    ];
+    const options = this.getValue('options') || [];
     return (
       <Modal
         title="Edit Question"
@@ -74,7 +91,7 @@ class EditQuestionForm extends Component {
         submitBtnLabel="Edit"
       >
         <Formsy.Form
-          id="createQuestion"
+          id="editQuestion"
           onValidSubmit={this.submitForm}
           onValid={this.props.enableSubmitForm}
           onInvalid={this.props.disableSubmitForm}
@@ -82,14 +99,28 @@ class EditQuestionForm extends Component {
             this.myform = ref;
           }}
         >
+          {!isEmpty(error) ? (
+            <div className="alert alert-danger">
+              {Object.keys(error).map((key) => {
+                const value = error[key];
+                return (
+                  <p key={key}>
+                    <strong>{key}:</strong> {value[0]}
+                  </p>
+                );
+              })}
+            </div>
+          ) : (
+            <span />
+          )}
           <Textarea
             rows={2}
             cols={60}
             name="qnText"
             label="Question Text"
-            value={this.getValue('question_text')}
             placeholder="Please enter the question text"
             validations="minLength:10"
+            value={this.getValue('question_text')}
             validationErrors={{
               minLength: 'Please provide at least 10 characters.',
             }}
@@ -105,11 +136,28 @@ class EditQuestionForm extends Component {
             required
           />
           <Select
+            name="is_featured"
+            label="Is Featured"
+            options={featuredValues}
+            value={this.getValue('is_featured')}
+            required
+          />
+          <Select
             name="type"
-            value={type.id}
             label="Type"
             options={this.getQuestionTypes()}
+            value={this.getValue('version')}
             required
+            onChange={this.handleTypeChange}
+          />
+          <Input
+            name="options"
+            id="options"
+            value={options.join(', ')}
+            label="Options"
+            type="text"
+            disabled={disabledOptionsField}
+            placeholder="Please enter the Options (example 0,1 or true,false etc)."
           />
           <Input
             name="key"
@@ -118,6 +166,29 @@ class EditQuestionForm extends Component {
             label="Key"
             type="text"
             placeholder="Enter key"
+          />
+          <Input
+            name="max_score"
+            id="max_score"
+            value={this.getValue('max_score')}
+            label="Max Score"
+            type="text"
+            placeholder="Enter Max score"
+          />
+          <Input
+            name="pass_score"
+            id="pass_score"
+            value={this.getValue('pass_score')}
+            label="Pass Score"
+            type="text"
+            placeholder="Enter Pass score"
+          />
+          <Select
+            name="lang_name"
+            label="Language"
+            options={languages}
+            required
+            value={this.getValue('lang_name') || get(languages, '[0].value', '')}
           />
         </Formsy.Form>
       </Modal>
@@ -139,14 +210,16 @@ EditQuestionForm.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const { editQuestion, questions } = state.questions;
+  const { editQuestion, questions, error } = state.questions;
 
   return {
     isOpen: state.modal.editQuestion,
+    languages: state.languages.languages,
     canSubmit: state.appstate.enableSubmitForm,
     assessmentId: Number(ownProps.assessmentId),
     question: get(questions, editQuestion),
     questionId: editQuestion,
+    error,
   };
 };
 
