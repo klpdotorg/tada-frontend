@@ -48,7 +48,7 @@ class AddUserView extends Component {
         onCloseModal={this.props.closeConfirmModal}
         canSubmit={canSubmit}
         submitForm={this.submitForm}
-        autocomplete="off"
+        autoComplete="off"
       >
         <Formsy.Form
           onValidSubmit={this.submitForm}

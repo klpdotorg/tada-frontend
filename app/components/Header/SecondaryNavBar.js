@@ -30,6 +30,7 @@ const SecondaryNavBar = (props) => {
   const map_assessments = checkPermissions(groups, 'mapAssessments');
   const showPermissions = checkPermissions(groups, 'permissions');
   const showRevertEntity = checkPermissions(groups, 'revertEntity');
+  const showUsers = checkPermissions(groups, 'users');
 
   // if (sessionStorage.getItem('isAdmin')) {
   const displayelement = (
@@ -74,7 +75,7 @@ const SecondaryNavBar = (props) => {
       ) : (
         <span />
       )}
-      {isAdmin ? (
+      {isAdmin || showUsers ? (
         <button
           type="button"
           className="btn btn-info navbar-btn all-padded-btn"
@@ -102,16 +103,20 @@ const SecondaryNavBar = (props) => {
       ) : (
         <span />
       )}
-      <button
-        type="button"
-        className="btn btn-info navbar-btn all-padded-btn"
-        data-toggle="tooltip"
-        data-placement="bottom"
-        title="View DEO Report"
-        onClick={manageReports}
-      >
-        <span className="fa fa-bar-chart" />
-      </button>
+      {/* { isAdmin || showUsers ? (
+        <button
+          type="button"
+          className="btn btn-info navbar-btn all-padded-btn"
+          data-toggle="tooltip"
+          data-placement="bottom"
+          title="View DEO Report"
+          onClick={manageReports}
+        >
+          <span className="fa fa-bar-chart" />
+        </button>
+      ) :
+        <span />
+      } */}
       {isAdmin || showRevertEntity ? (
         <button
           type="button"

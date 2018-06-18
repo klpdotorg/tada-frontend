@@ -1,15 +1,7 @@
 import get from 'lodash.get';
 
 const permissions = {
-  tada_dee: [
-    'mapAssessments',
-    'programs',
-    'createProgram',
-    'createAssessments',
-    'createQuestion',
-    'editQuestion',
-    'permissions',
-  ],
+  tada_dee: ['permissions', 'users'],
   tada_deo: [],
 };
 
