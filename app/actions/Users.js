@@ -17,9 +17,17 @@ import {
   SET_PAGINATION_COUNT,
   SET_ID_FOR_RESET_PASSWORD,
   ON_CHANGE_USER_SEARCH_TEXT,
+  SET_USER_ERROR,
 } from './types';
 import { convertArrayToObject } from '../utils';
 import { showSuccessMessage } from './notifications';
+
+export const setUserError = (value) => {
+  return {
+    type: SET_USER_ERROR,
+    value,
+  };
+};
 
 export const onChangeUserSearchText = (value) => {
   return {

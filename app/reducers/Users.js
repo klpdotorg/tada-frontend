@@ -12,6 +12,7 @@ import {
   SET_ID_FOR_RESET_PASSWORD,
   ON_CHANGE_USER_SEARCH_TEXT,
   RESET,
+  SET_USER_ERROR,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -22,6 +23,7 @@ const INITIAL_STATE = {
   selectedUsers: [],
   resetPasswordUserId: null,
   searchText: '',
+  error: {},
 };
 
 const Users = (state = INITIAL_STATE, action) => {
@@ -86,6 +88,11 @@ const Users = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         count: action.value,
+      };
+    case SET_USER_ERROR:
+      return {
+        ...state,
+        error: action.value,
       };
     case RESET:
       return INITIAL_STATE;
