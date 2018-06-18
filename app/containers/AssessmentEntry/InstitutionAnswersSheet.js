@@ -10,9 +10,21 @@ import { fetchAnswers, fetchAnswerGroups, fetchSelectedAssessmentQuestions } fro
 
 class FetchAnswersAndQuestions extends Component {
   componentDidMount() {
-    const { institution, boundaryInfo } = this.props;
+    this.fetchResources(this.props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const nextId = get(nextProps, ['institution', 'id'], '');
+    const currentId = get(this.props, ['institution', 'id'], '');
+    if (nextId !== currentId) {
+      this.fetchResources(nextProps);
+    }
+  }
+
+  fetchResources(props) {
+    const { institution, boundaryInfo } = props;
     const { assessmentId, boundaryType, boundaryId } = boundaryInfo;
-    const { districtId, blockId, clusterId, programId } = this.props.params;
+    const { districtId, blockId, clusterId, programId } = props.params;
     const entities = [DEFAULT_PROGRAM_NODE_ID, districtId, blockId, clusterId].map((id, index) => {
       return {
         uniqueId: id,
@@ -22,17 +34,6 @@ class FetchAnswersAndQuestions extends Component {
     this.props.fetchSelectedAssessmentQuestions(assessmentId, entities, programId);
     if (!isEmpty(institution)) {
       this.props.fetchAnswerGroups(assessmentId, boundaryType, boundaryId);
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { assessmentId, boundaryType, boundaryId } = nextProps.boundaryInfo;
-    const nextId = get(nextProps, ['institution', 'id'], '');
-    const currentId = get(this.props, ['institution', 'id'], '');
-    if (nextId !== currentId) {
-      if (!isEmpty(nextProps.institution)) {
-        this.props.fetchAnswerGroups(assessmentId, boundaryType, boundaryId);
-      }
     }
   }
 
@@ -62,6 +63,7 @@ const mapStateToProps = (state, ownProps) => {
   const institution = get(state.programDetails.programDetails, institutionId, {});
   const { programs } = state.programs;
   const { loadingBoundary } = state.appstate;
+
   return {
     rows: Object.keys(get(answergroups, institution.id, {})),
     institution,
@@ -73,6 +75,7 @@ const mapStateToProps = (state, ownProps) => {
       assessmentId: questionGroupId,
       boundaryType: 'institution',
     },
+    noQuestions: isEmpty(state.questions.questions),
   };
 };
 

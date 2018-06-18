@@ -76,8 +76,8 @@ const CreateEntryFormView = (props) => {
                 return (
                   <td key={question.id} className="answer-field">
                     <select className="form-control" value={value}>
-                      {question.options.map((val) => {
-                        return <option>{val}</option>;
+                      {question.options.map((val, index) => {
+                        return <option key={index}>{val}</option>;
                       })}
                     </select>
                   </td>

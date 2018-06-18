@@ -57,7 +57,10 @@ class EditQuestionForm extends Component {
       display_text: myform.displayText,
       key: myform.key,
       question_type_id: myform.type,
-      is_featured: true,
+      is_featured: myform.is_featured,
+      options: myform.options,
+      max_score: myform.max_score,
+      pass_score: myform.pass_score,
       status: 'AC',
     };
 
@@ -66,8 +69,7 @@ class EditQuestionForm extends Component {
 
   render() {
     const { disabledOptionsField } = this.state;
-    const { isOpen, canSubmit, question, error, languages } = this.props;
-    const type = this.getQuestionTypeId(get(question, 'question_type', '')) || {};
+    const { isOpen, canSubmit, error, languages } = this.props;
     const featuredValues = [
       {
         value: true,
@@ -207,6 +209,8 @@ EditQuestionForm.propTypes = {
   onCloseModal: PropTypes.func,
   question: PropTypes.object,
   questionId: PropTypes.any,
+  languages: PropTypes.object,
+  error: PropTypes.object,
 };
 
 const mapStateToProps = (state, ownProps) => {

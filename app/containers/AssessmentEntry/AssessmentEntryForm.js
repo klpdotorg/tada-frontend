@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import isEmpty from 'lodash.isempty';
 
 import { AssessmentEntryFormView } from '../../components/AssessmentEntry';
 import { fetchAnswers } from '../../actions';
@@ -26,6 +27,7 @@ const mapStateToProps = (state) => {
   return {
     boundaries: boundaryIds,
     loading: answersLoading,
+    noQuestions: isEmpty(state.questions.questions),
   };
 };
 

@@ -36,7 +36,6 @@ const AssessmentEntryRowView = (props) => {
           type="text"
           required
           className="form-control"
-          style={{ padding: '0px' }}
           onChange={(e) => {
             props.onChangeGroupValue(answergroupId, e.target.value);
           }}
@@ -49,7 +48,6 @@ const AssessmentEntryRowView = (props) => {
           type="date"
           required
           className="form-control"
-          style={{ padding: '0px' }}
           onChange={(e) => {
             props.onChangeDateOfVisit(answergroupId, new Date(e.target.value));
           }}
@@ -69,7 +67,11 @@ const AssessmentEntryRowView = (props) => {
                 className="form-control"
                 value={get(currentVal, 'answer', '')}
                 onChange={(e) => {
-                  props.onChange(rowId, currentVal.id, e.target.value);
+                  if (currentVal && currentVal.id) {
+                    props.onChange(rowId, currentVal.id, e.target.value);
+                  } else {
+                    props.onChange(rowId, '', e.target.value, question.id);
+                  }
                 }}
               >
                 {question.options.map((val, index) => {
@@ -100,12 +102,11 @@ const AssessmentEntryRowView = (props) => {
               type="text"
               required
               className="form-control"
-              style={{ padding: '0px' }}
               onChange={(e) => {
-                if (currentVal) {
+                if (currentVal && currentVal.id) {
                   props.onChange(rowId, currentVal.id, e.target.value);
                 } else {
-                  props.onChange(rowId, '', e.target.value, questionId);
+                  props.onChange(rowId, '', e.target.value, question.id);
                 }
               }}
             />
