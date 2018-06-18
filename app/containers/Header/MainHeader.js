@@ -8,7 +8,7 @@ class Header extends Component {
     window.onclick = (event) => {
       if (!event.target.matches('.show-profile-dropdown')) {
         const el = document.getElementById('profile-dropdown');
-        if (el.classList.contains('show')) {
+        if (el && el.classList.contains('show')) {
           el.classList.remove('show');
         }
       }

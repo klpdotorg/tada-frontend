@@ -3,6 +3,7 @@ import {
   SET_FITLER_PROGRAM_ENTITIES,
   REMOVE_EXISTING_NODE,
   RESET_PROGRAM_NAV_TREE,
+  RESET,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -51,6 +52,8 @@ const ProgramDetails = (state = INITIAL_STATE, action) => {
         entitiesByParentId: {},
         uncollapsedEntities: {},
       };
+    case RESET:
+      return INITIAL_STATE;
     default:
       return state;
   }

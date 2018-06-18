@@ -1,4 +1,4 @@
-import { SET_LANGUAGES } from '../actions/types';
+import { SET_LANGUAGES, RESET } from '../actions/types';
 
 const INITIAL_STATE = {
   languages: [],
@@ -11,6 +11,8 @@ const Languages = (state = INITIAL_STATE, action) => {
         ...state,
         languages: action.value,
       };
+    case RESET:
+      return INITIAL_STATE;
     default:
       return state;
   }

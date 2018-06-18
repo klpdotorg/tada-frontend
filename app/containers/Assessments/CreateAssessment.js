@@ -5,6 +5,7 @@ import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
 import get from 'lodash.get';
 import isEmpty from 'lodash.isempty';
+import capitalize from 'lodash.capitalize';
 
 import {
   saveNewAssessment,
@@ -12,6 +13,7 @@ import {
   disableSubmitForm,
   toggleModal,
   fetchRespondentTypes,
+  fetchSources,
 } from '../../actions';
 import { Modal } from '../../components/Modal';
 import { dateFormat } from '../../utils';
@@ -32,6 +34,7 @@ class CreateAssessmentForm extends Component {
   }
 
   componentDidMount() {
+    this.props.fetchSources();
     this.props.fetchRespondentTypes();
   }
 
@@ -45,18 +48,12 @@ class CreateAssessmentForm extends Component {
     return dateFormat(new Date(date.setFullYear(date.getFullYear() + 1)));
   }
 
-  filterRespondentTypes() {
-    return this.props.respondentTypes.map((type) => {
+  getSources() {
+    return this.props.sources.map((source) => {
       return {
-        value: type.char_id,
-        label: type.name,
+        value: source.id,
+        label: capitalize(source.name),
       };
-    });
-  }
-
-  handleChange(field, value) {
-    this.setState({
-      showRespondentTypes: value,
     });
   }
 
@@ -87,6 +84,21 @@ class CreateAssessmentForm extends Component {
     this.props.save(assessment);
   }
 
+  filterRespondentTypes() {
+    return this.props.respondentTypes.map((type) => {
+      return {
+        value: type.char_id,
+        label: type.name,
+      };
+    });
+  }
+
+  handleChange(field, value) {
+    this.setState({
+      showRespondentTypes: value,
+    });
+  }
+
   render() {
     const { showRespondentTypes } = this.state;
     const { isOpen, canSubmit, error } = this.props;
@@ -105,6 +117,7 @@ class CreateAssessmentForm extends Component {
       { value: 'preception', label: 'Perception' },
       { value: 'monitor', label: 'Monitor' },
     ];
+    const sources = this.getSources();
 
     return (
       <Modal
@@ -159,7 +172,6 @@ class CreateAssessmentForm extends Component {
             value=""
             label="Details"
             type="text"
-            required
             validations="minLength:1"
           />
           <Input
@@ -181,9 +193,9 @@ class CreateAssessmentForm extends Component {
           <Input
             name="version"
             id="version"
-            value=""
+            value="1.0"
             label="Version"
-            type="number"
+            type="string"
             validations="minLength:1"
             required
           />
@@ -197,7 +209,7 @@ class CreateAssessmentForm extends Component {
           <Select
             name="academic_year_id"
             label="Academic Year"
-            value={get(lastVerifiedYears[0], 'value')}
+            value={'1718' || get(lastVerifiedYears[0], 'value')}
             options={lastVerifiedYears}
           />
           <Select
@@ -207,13 +219,12 @@ class CreateAssessmentForm extends Component {
             options={institutionTypes}
             required
           />
-          <Input
+          <Select
             name="source_id"
-            id="source_id"
-            value=""
             label="Source"
-            type="number"
-            validations="minLength:1"
+            value={get(sources[0], 'value')}
+            options={sources}
+            required
           />
           <Select
             name="type_id"
@@ -237,7 +248,6 @@ class CreateAssessmentForm extends Component {
             label="Name in local language"
             type="text"
             validations="minLength:1"
-            required
           />
           <Checkbox
             label="Respondent Type Required"
@@ -267,6 +277,8 @@ class CreateAssessmentForm extends Component {
 }
 
 CreateAssessmentForm.propTypes = {
+  fetchSources: PropTypes.func,
+  sources: PropTypes.array,
   error: PropTypes.object,
   isOpen: PropTypes.bool,
   canSubmit: PropTypes.bool,
@@ -280,12 +292,14 @@ CreateAssessmentForm.propTypes = {
 };
 
 const mapStateToProps = (state) => {
+  const { sources } = state.sources;
   return {
     isOpen: state.modal.createAssessment,
     canSubmit: state.appstate.enableSubmitForm,
     programId: Number(state.programs.selectedProgram),
     error: state.assessments.error,
     respondentTypes: state.respondentTypes.types,
+    sources,
   };
 };
 
@@ -295,6 +309,7 @@ const CreateAssessment = connect(mapStateToProps, {
   disableSubmitForm,
   toggleModal,
   fetchRespondentTypes,
+  fetchSources,
 })(CreateAssessmentForm);
 
 export { CreateAssessment };

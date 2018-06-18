@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { Loading } from '../common';
+import { Loading, Message } from '../common';
 import {
   AssessmentEntryColHeader,
   AssessmentEntryRow,
@@ -10,9 +10,9 @@ import {
 } from '../../containers/AssessmentEntry';
 
 const RenderForm = (props) => {
-  const { loading, params, uniqueId, rows, boundaryInfo, elements } = props;
+  const { loading, params, uniqueId, rows, boundaryInfo, elements, noQuestions } = props;
 
-  if (loading) {
+  if (loading || noQuestions) {
     return <tbody />;
   }
 
@@ -72,7 +72,7 @@ class AssessmentEntryFormView extends Component {
 
   render() {
     const { elements } = this.state;
-    const { loading, rows } = this.props;
+    const { loading, rows, noQuestions } = this.props;
     const disabled = elements >= 1 || !rows.length;
 
     return (
@@ -88,16 +88,21 @@ class AssessmentEntryFormView extends Component {
           Add Row
         </button>
         <div className="answer-table">
-          <table className="table table-striped">
+          <table className="table table-striped" style={{ marginBottom: 0 }}>
             <thead>
               <AssessmentEntryColHeader />
             </thead>
             <RenderForm {...this.props} elements={elements} />
           </table>
           {loading ? (
-            <div style={{ textAlign: 'center', paddingBottom: 10 }}>
+            <div style={{ textAlign: 'center', paddingBottom: 10, paddingTop: 10 }}>
               <Loading />
             </div>
+          ) : (
+            <div />
+          )}
+          {!loading && noQuestions ? (
+            <Message message="This Question group has no questions." style={{ padding: 10 }} />
           ) : (
             <div />
           )}
@@ -110,6 +115,7 @@ class AssessmentEntryFormView extends Component {
 AssessmentEntryFormView.propTypes = {
   loading: PropTypes.bool,
   rows: PropTypes.array,
+  noQuestions: PropTypes.bool,
 };
 
 RenderForm.propTypes = {
@@ -119,6 +125,7 @@ RenderForm.propTypes = {
   uniqueId: PropTypes.any,
   boundaryInfo: PropTypes.object,
   elements: PropTypes.number,
+  noQuestions: PropTypes.bool,
 };
 
 export { AssessmentEntryFormView };

@@ -5,9 +5,16 @@ import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
 import { DEFAULT_PARENT_ID } from 'config';
 import isEmpty from 'lodash.isempty';
+import get from 'lodash.get';
 
 import { Modal } from '../../components/Modal';
-import { saveNewProgram, enableSubmitForm, disableSubmitForm } from '../../actions';
+import {
+  saveNewProgram,
+  enableSubmitForm,
+  disableSubmitForm,
+  toggleModal,
+  fetchPartners,
+} from '../../actions';
 import { SurveyOns } from '../../Data';
 
 const { Input, Select } = FRC;
@@ -20,11 +27,24 @@ class CreateProgramForm extends Component {
     this.getSurveyOns = this.getSurveyOns.bind(this);
   }
 
+  componentDidMount() {
+    this.props.fetchPartners();
+  }
+
   getSurveyOns() {
     return SurveyOns.map((survey) => {
       return {
         value: survey.id,
         label: survey.label,
+      };
+    });
+  }
+
+  getPartners() {
+    return this.props.partners.map((partner) => {
+      return {
+        value: partner.char_id,
+        label: partner.name,
       };
     });
   }
@@ -46,6 +66,7 @@ class CreateProgramForm extends Component {
 
   render() {
     const { isOpen, canSubmit, error } = this.props;
+    const partners = this.getPartners();
 
     return (
       <Modal
@@ -54,7 +75,9 @@ class CreateProgramForm extends Component {
         isOpen={isOpen}
         canSubmit={canSubmit}
         submitForm={this.submitForm}
-        onCloseModal={this.props.closeConfirmModal}
+        onCloseModal={() => {
+          this.props.toggleModal('createProgram');
+        }}
         cancelBtnLabel="Cancel"
         submitBtnLabel="Create"
       >
@@ -99,7 +122,13 @@ class CreateProgramForm extends Component {
             type="text"
             placeholder="Please enter the survey description (Optional)"
           />
-          <Input name="partner" id="partner" value="" label="Partner" type="text" />
+          <Select
+            name="partner"
+            label="Partners"
+            options={partners}
+            value={get(partners, '[0].value', '')}
+            required
+          />
           <Select
             name="survey_on"
             label="Survey On Type"
@@ -121,43 +150,33 @@ class CreateProgramForm extends Component {
 }
 
 CreateProgramForm.propTypes = {
+  partners: PropTypes.array,
+  fetchPartners: PropTypes.func,
   isOpen: PropTypes.bool,
   canSubmit: PropTypes.bool,
   save: PropTypes.func,
   enableSubmitForm: PropTypes.func,
   disableSubmitForm: PropTypes.func,
-  closeConfirmModal: PropTypes.func,
+  toggleModal: PropTypes.func,
   error: PropTypes.object,
 };
 
 const mapStateToProps = (state) => {
+  const { partners } = state.partners;
   return {
     isOpen: state.modal.createProgram,
     canSubmit: state.appstate.enableSubmitForm,
     error: state.programs.error,
+    partners,
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    save: (form) => {
-      dispatch(saveNewProgram(form));
-    },
-    enableSubmitForm: () => {
-      dispatch(enableSubmitForm());
-    },
-    disableSubmitForm: () => {
-      dispatch(disableSubmitForm());
-    },
-    closeConfirmModal: () => {
-      dispatch({
-        type: 'TOGGLE_MODAL',
-        modal: 'createProgram',
-      });
-    },
-  };
-};
-
-const CreateProgram = connect(mapStateToProps, mapDispatchToProps)(CreateProgramForm);
+const CreateProgram = connect(mapStateToProps, {
+  save: saveNewProgram,
+  enableSubmitForm,
+  disableSubmitForm,
+  toggleModal,
+  fetchPartners,
+})(CreateProgramForm);
 
 export { CreateProgram };

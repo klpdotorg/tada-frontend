@@ -7,6 +7,7 @@ import {
   CLOSE_TEACHER_LOADING,
   SET_TEACHER,
   DELETE_TEACHER,
+  RESET,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -52,6 +53,8 @@ const Teachers = (state = INITIAL_STATE, action) => {
           ...action.value,
         },
       };
+    case RESET:
+      return INITIAL_STATE;
     default:
       return state;
   }

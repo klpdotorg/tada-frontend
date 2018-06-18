@@ -137,3 +137,7 @@ export const CREATE_QUESTION_ERROR = 'create_question_error';
 export const SET_STATES = 'set_states';
 export const SELECT_STATE = 'select_state';
 export const STATES_LOADING = 'states_loading';
+export const RESET = 'reset';
+export const SET_SOURCES = 'set_sources';
+export const SET_PARTNERS = 'set_partners';
+export const SET_USER_ERROR = 'set_user_error';

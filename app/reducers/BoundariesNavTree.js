@@ -5,6 +5,7 @@ import {
   UNCOLLAPSED_BOUNDARIES,
   RESET_BOUNDARY_NAV_TREE,
   DELETE_BOUNDARY_NODE,
+  RESET,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -59,6 +60,8 @@ const BoundariesNavTree = (state = INITIAL_STATE, action) => {
         boundaryDetails: omit(state.boundaryDetails, action.value),
         boundariesByParentId: omit(state.boundariesByParentId, action.value),
       };
+    case RESET:
+      return INITIAL_STATE;
     default:
       return state;
   }

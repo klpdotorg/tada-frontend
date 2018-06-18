@@ -1,4 +1,4 @@
-import { SET_RESPONDENT_TYPES } from '../actions/types';
+import { SET_RESPONDENT_TYPES, RESET } from '../actions/types';
 
 const INITIAL_STATE = {
   types: [],
@@ -11,6 +11,8 @@ const RespondentTypes = (state = INITIAL_STATE, action) => {
         ...state,
         types: action.value,
       };
+    case RESET:
+      return INITIAL_STATE;
     default:
       return state;
   }

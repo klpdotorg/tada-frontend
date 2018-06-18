@@ -1,4 +1,4 @@
-import { SET_INSTITUTION_CATS, SET_INSTITUTION_MANAGEMENTS } from '../actions/types';
+import { SET_INSTITUTION_CATS, SET_INSTITUTION_MANAGEMENTS, RESET } from '../actions/types';
 import { lastVerifiedYears } from '../Data';
 
 const INITIAL_STATE = {
@@ -19,6 +19,8 @@ const Institution = (state = INITIAL_STATE, action) => {
         ...state,
         managements: action.value,
       };
+    case RESET:
+      return INITIAL_STATE;
     default:
       return state;
   }

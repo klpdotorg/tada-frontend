@@ -3,6 +3,7 @@ import {
   SET_EDIT_STUDENT_ID,
   SET_STUDENTS,
   SET_STUDENT,
+  RESET,
 } from '../actions/types';
 import { changeArrayToObject } from './utils';
 
@@ -36,6 +37,8 @@ const Students = (state = INITIAL_STATE, action) => {
       };
     case SET_EDIT_STUDENT_ID:
       return { ...state, editStudentId: action.value };
+    case RESET:
+      return INITIAL_STATE;
     default:
       return state;
   }

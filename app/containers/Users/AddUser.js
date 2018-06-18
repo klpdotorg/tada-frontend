@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
+import isEmpty from 'lodash.isempty';
 
 import { Modal } from '../../components/Modal';
 import { roles } from '../../Data';
@@ -37,7 +38,7 @@ class AddUserView extends Component {
   }
 
   render() {
-    const { isOpen, canSubmit } = this.props;
+    const { isOpen, canSubmit, error } = this.props;
 
     return (
       <Modal
@@ -47,6 +48,7 @@ class AddUserView extends Component {
         onCloseModal={this.props.closeConfirmModal}
         canSubmit={canSubmit}
         submitForm={this.submitForm}
+        autocomplete="off"
       >
         <Formsy.Form
           onValidSubmit={this.submitForm}
@@ -56,6 +58,20 @@ class AddUserView extends Component {
             this.myform = ref;
           }}
         >
+          {!isEmpty(error) ? (
+            <div className="alert alert-danger">
+              {Object.keys(error).map((key) => {
+                const value = error[key];
+                return (
+                  <p key={key}>
+                    <strong>{key}:</strong> {value[0]}
+                  </p>
+                );
+              })}
+            </div>
+          ) : (
+            <span />
+          )}
           <Input
             name="firstName"
             id="firstName"
@@ -115,12 +131,14 @@ AddUserView.propTypes = {
   disableSubmitForm: PropTypes.func,
   closeConfirmModal: PropTypes.func,
   save: PropTypes.func,
+  error: PropTypes.object,
 };
 
 const mapStateToProps = (state) => {
   return {
     isOpen: state.modal.createUser,
     canSubmit: state.appstate.enableSubmitForm,
+    error: state.users.error,
   };
 };
 

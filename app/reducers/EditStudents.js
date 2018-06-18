@@ -2,6 +2,7 @@ import {
   SET_EDIT_STUDENTS_FORM_ERRORS,
   SET_LANGUAGES_FOR_EDIT_STUDENTS_FORM,
   EDIT_STUDENTS_FORM_VALUE_CHANGED,
+  RESET,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -30,6 +31,8 @@ const EditStudents = (state = INITIAL_STATE, action) => {
           [action.rowNumber]: action.value,
         },
       };
+    case RESET:
+      return INITIAL_STATE;
     default:
       return state;
   }

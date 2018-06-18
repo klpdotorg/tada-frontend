@@ -1,4 +1,4 @@
-import { CHANGE_USER_PASSWORD, CHANGE_PASSWORD_ERROR } from '../actions/types';
+import { CHANGE_USER_PASSWORD, CHANGE_PASSWORD_ERROR, RESET } from '../actions/types';
 
 const INITIAL_STATE = {
   password: '',
@@ -17,6 +17,8 @@ const ChangePassword = (state = INITIAL_STATE, action) => {
         ...state,
         error: action.value,
       };
+    case RESET:
+      return INITIAL_STATE;
     default:
       return state;
   }

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Loadable from 'react-loadable';
+import isEmpty from 'lodash.isempty';
 
 import {
   getPrograms,
@@ -22,7 +23,9 @@ const ProgramView = Loadable({
 class GetPrograms extends Component {
   componentDidMount() {
     // Fetching all programs
-    this.props.getPrograms();
+    if (isEmpty(this.props.programs)) {
+      this.props.getPrograms();
+    }
   }
 
   render() {
@@ -32,6 +35,7 @@ class GetPrograms extends Component {
 
 GetPrograms.propTypes = {
   getPrograms: PropTypes.func,
+  programs: PropTypes.object,
 };
 
 const mapStateToProps = (state) => {

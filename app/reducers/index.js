@@ -30,3 +30,5 @@ export * from './Answers';
 export * from './UserPermissions';
 export * from './RespondentTypes';
 export * from './States';
+export * from './Partners';
+export * from './Sources';

@@ -23,7 +23,11 @@ class CreateQuestionForm extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      disabledOptionsField: true,
+    };
     this.submitForm = this.submitForm.bind(this);
+    this.handleTypeChange = this.handleTypeChange.bind(this);
   }
 
   componentDidMount() {
@@ -59,7 +63,20 @@ class CreateQuestionForm extends Component {
     this.props.save(question, programId, assessmentId);
   }
 
+  handleTypeChange(field, value) {
+    if (value == 2) {
+      this.setState({
+        disabledOptionsField: false,
+      });
+    } else {
+      this.setState({
+        disabledOptionsField: true,
+      });
+    }
+  }
+
   render() {
+    const { disabledOptionsField } = this.state;
     const { isOpen, canSubmit, languages, error } = this.props;
     const featuredValues = [
       {
@@ -127,30 +144,31 @@ class CreateQuestionForm extends Component {
             placeholder="Please enter the display text"
             required
           />
+          <Select
+            name="is_featured"
+            label="Is Featured"
+            options={featuredValues}
+            value="false"
+            required
+          />
+          <Select
+            name="type"
+            label="Type"
+            options={this.getQuestionTypes()}
+            value="1"
+            required
+            onChange={this.handleTypeChange}
+          />
           <Input
             name="options"
             id="options"
             value=""
             label="Options"
             type="text"
+            disabled={disabledOptionsField}
             placeholder="Please enter the Options (example 0,1 or true,false etc)."
           />
-          <Select
-            name="is_featured"
-            label="Is Featured"
-            options={featuredValues}
-            value="true"
-            required
-          />
-          <Select name="type" label="Type" options={this.getQuestionTypes()} value="1" required />
-          <Input
-            name="key"
-            id="key"
-            value="ivrss-grade"
-            label="Key"
-            type="text"
-            placeholder="Enter key"
-          />
+          <Input name="key" id="key" value="" label="Key" type="text" placeholder="Enter key" />
           <Input
             name="max_score"
             id="max_score"

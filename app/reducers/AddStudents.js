@@ -3,6 +3,7 @@ import {
   SET_LANGUAGES_FOR_ADD_STUDENTS_FORM,
   ADD_STUDENTS_FORM_VALUE_CHANGED,
   RESET_ADD_STUDENTS_FORM,
+  RESET,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -37,6 +38,8 @@ const AddStudents = (state = INITIAL_STATE, action) => {
         ...state,
         values: action.value,
       };
+    case RESET:
+      return INITIAL_STATE;
     default:
       return state;
   }

@@ -8,6 +8,7 @@ import {
   CLOSE_PROGRAMS_LOADING,
   DELETE_PROGRAM,
   CREATE_PROGRAM_ERROR,
+  RESET,
 } from '../actions/types';
 import { changeArrayToObject } from './utils';
 
@@ -61,6 +62,8 @@ const Programs = (state = INITIAL_STATE, action) => {
         ...state,
         error: action.value,
       };
+    case RESET:
+      return INITIAL_STATE;
     default:
       return state;
   }

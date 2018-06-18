@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Loading = (props) => {
+const Loading = (props, style) => {
   return (
-    <div>
+    <div style={style}>
       <i className="fa fa-cog fa-spin fa-lg fa-fw" />
       <span className="text-muted">{props.loadingText || 'Loading...'}</span>
     </div>

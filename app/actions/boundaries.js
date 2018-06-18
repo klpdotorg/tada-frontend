@@ -1,4 +1,4 @@
-import { SERVER_API_BASE, STATE_CODE, PER_PAGE } from 'config';
+import { SERVER_API_BASE, PER_PAGE } from 'config';
 import { push } from 'react-router-redux';
 import pull from 'lodash.pull';
 import omit from 'lodash.omit';
@@ -60,9 +60,9 @@ export const setBoundaries = (data) => {
   };
 };
 
-const getUrlForBoundary = (entity) => {
+const getUrlForBoundary = (entity, stateCode) => {
   if (entity.depth < 3) {
-    return `${SERVER_API_BASE}boundaries/?parent=${entity.id}&state=${STATE_CODE}&per_page=0`;
+    return `${SERVER_API_BASE}boundaries/?parent=${entity.id}&state=${stateCode}&per_page=0`;
   }
 
   switch (entity.depth) {
@@ -81,11 +81,15 @@ export const fetchBoundary = (entity, moreEntities) => {
   return (dispatch, getState) => {
     const state = getState();
     const boundary = state.boundaries.boundaryDetails[entity.uniqueId];
+    const { state_code } = state.profile;
 
-    const url = getUrlForBoundary({
-      depth: entity.depth,
-      id: boundary.id,
-    });
+    const url = getUrlForBoundary(
+      {
+        depth: entity.depth,
+        id: boundary.id,
+      },
+      state_code,
+    );
 
     get(url).then(({ data }) => {
       const entities = convertEntitiesToObject(data.results);

@@ -4,7 +4,7 @@ import get from 'lodash.get';
 import capitalize from 'lodash.capitalize';
 import isEmpty from 'lodash.isempty';
 
-import { Loading } from '../common';
+import { Loading, Message } from '../common';
 import { Pagination } from '../../containers/Users';
 
 const UserAndBoundaryListView = (props) => {
@@ -49,6 +49,15 @@ const UserAndBoundaryListView = (props) => {
             </tr>
           </thead>
           <tbody>
+            {/* {(!userLoading && isEmpty(users)) ?
+              (
+                <tr>
+                  <td>
+                    <Message message="No users found!" />
+                  </td>
+                </tr>
+              ) :
+                <tr /> */}
             {userLoading ? (
               <tr>
                 <td>
@@ -74,7 +83,7 @@ const UserAndBoundaryListView = (props) => {
                           }}
                         />
                       ) : (
-                        <span style={{ height: 20 }} />
+                        <span style={{ height: 0 }} />
                       )}
                     </td>
                   </tr>

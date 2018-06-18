@@ -74,8 +74,8 @@ export const programCreated = (value) => {
   };
 };
 
-export const fetchAllPrograms = () => {
-  const fetchProgramsUrl = `${serverApiBase}surveys/?per_page=${PER_PAGE}`;
+export const fetchAllPrograms = (stateCode) => {
+  const fetchProgramsUrl = `${serverApiBase}surveys/?state=${stateCode}&per_page=${PER_PAGE}`;
 
   return get(fetchProgramsUrl).then(({ data }) => {
     return data.results;
@@ -83,9 +83,11 @@ export const fetchAllPrograms = () => {
 };
 
 export const getPrograms = () => {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const { state_code } = state.profile;
     dispatch(showProgramLoading());
-    fetchAllPrograms().then((results) => {
+    fetchAllPrograms(state_code).then((results) => {
       dispatch(setPrograms(results));
       dispatch(closeProgramLoading());
     });

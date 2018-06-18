@@ -7,6 +7,7 @@ import {
   SET_EDIT_QUESTION_ID,
   DELETE_QUESTION,
   CREATE_QUESTION_ERROR,
+  RESET,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -56,6 +57,8 @@ const Questions = (state = INITIAL_STATE, action) => {
         ...state,
         error: action.value,
       };
+    case RESET:
+      return INITIAL_STATE;
     default:
       return state;
   }
