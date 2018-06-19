@@ -15,6 +15,32 @@ import {
 } from './types';
 import { closeConfirmModal } from './index';
 
+export const toggleEditAssessmentModal = () => {
+  return (dispatch) => {
+    dispatch({
+      type: TOGGLE_MODAL,
+      modal: 'editAssessment',
+    });
+    dispatch({
+      type: CREATE_ASSESSMENT_ERROR,
+      value: {},
+    });
+  };
+};
+
+export const toggleCreateAssessmentModal = () => {
+  return (dispatch) => {
+    dispatch({
+      type: TOGGLE_MODAL,
+      modal: 'createAssessment',
+    });
+    dispatch({
+      type: CREATE_ASSESSMENT_ERROR,
+      value: {},
+    });
+  };
+};
+
 export const showAssessmentLoading = () => {
   return {
     type: SHOW_ASSESSMENT_LOADING,

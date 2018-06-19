@@ -13,6 +13,32 @@ import {
 } from './types';
 import { closeConfirmModal } from './index';
 
+export const toggleEditProgramModal = () => {
+  return (dispatch) => {
+    dispatch({
+      type: TOGGLE_MODAL,
+      moda: 'editProgram',
+    });
+    dispatch({
+      type: CREATE_PROGRAM_ERROR,
+      value: {},
+    });
+  };
+};
+
+export const toggleCreateProgramModal = () => {
+  return (dispatch) => {
+    dispatch({
+      type: TOGGLE_MODAL,
+      modal: 'createProgram',
+    });
+    dispatch({
+      type: CREATE_PROGRAM_ERROR,
+      value: {},
+    });
+  };
+};
+
 export const showProgramLoading = () => {
   return {
     type: SHOW_PROGRAMS_LOADING,
@@ -22,24 +48,6 @@ export const showProgramLoading = () => {
 export const closeProgramLoading = () => {
   return {
     type: CLOSE_PROGRAMS_LOADING,
-  };
-};
-
-export const openEditProgramModal = () => {
-  return (dispatch) => {
-    dispatch({
-      type: TOGGLE_MODAL,
-      modal: 'editProgram',
-    });
-  };
-};
-
-export const openCreateProgramModal = () => {
-  return (dispatch) => {
-    dispatch({
-      type: TOGGLE_MODAL,
-      modal: 'createProgram',
-    });
   };
 };
 
@@ -127,13 +135,20 @@ export const saveProgram = (options) => {
     const { selectedProgram } = getState().programs;
     const editProgramURL = `${serverApiBase}surveys/${selectedProgram}/`;
 
-    patch(editProgramURL, options).then(({ data }) => {
-      dispatch(programCreated({ [data.id]: data }));
-      dispatch({
-        type: TOGGLE_MODAL,
-        modal: 'editProgram',
-      });
-      dispatch(closeProgramLoading());
+    patch(editProgramURL, options).then((response) => {
+      if (response.status === 200) {
+        dispatch(programCreated({ [response.data.id]: response.data }));
+        dispatch({
+          type: TOGGLE_MODAL,
+          modal: 'editProgram',
+        });
+        dispatch(closeProgramLoading());
+      } else {
+        dispatch({
+          type: CREATE_PROGRAM_ERROR,
+          value: response.data,
+        });
+      }
     });
   };
 };

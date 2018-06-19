@@ -115,6 +115,13 @@ class CreateProgramForm extends Component {
             validations="minLength:1"
           />
           <Input
+            name="lang_name"
+            id="lang_name"
+            value=""
+            label="Name in local language"
+            type="text"
+          />
+          <Input
             name="description"
             id="description"
             value=""
@@ -135,13 +142,6 @@ class CreateProgramForm extends Component {
             options={this.getSurveyOns()}
             value="institution"
             required
-          />
-          <Input
-            name="lang_name"
-            id="lang_name"
-            value=""
-            label="Name in local language"
-            type="text"
           />
         </Formsy.Form>
       </Modal>
