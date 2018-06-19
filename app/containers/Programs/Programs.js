@@ -6,8 +6,8 @@ import isEmpty from 'lodash.isempty';
 
 import {
   getPrograms,
-  openCreateProgramModal,
-  openAddAssessmentModal,
+  toggleCreateProgramModal,
+  toggleEditProgramModal,
   selectProgram,
 } from '../../actions';
 
@@ -48,8 +48,8 @@ const mapStateToProps = (state) => {
 
 const Programs = connect(mapStateToProps, {
   getPrograms,
-  openAddAssessmentModal,
-  openCreateProgramModal,
+  openAddAssessmentModal: toggleCreateProgramModal,
+  openCreateProgramModal: toggleEditProgramModal,
   selectProgram,
 })(GetPrograms);
 

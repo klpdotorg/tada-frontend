@@ -4,9 +4,15 @@ import Notifications from 'react-notification-system-redux';
 import getObject from 'lodash.get';
 import isEmpty from 'lodash.isempty';
 import { post, get, put } from './requests';
-import { SET_ANSWERS, FETCHING_ANSWERS, ON_CHANGE_ANSWER } from './types';
+import { SET_ANSWERS, FETCHING_ANSWERS, ON_CHANGE_ANSWER, RESET_CREATE_FORM_ENTRY } from './types';
 import { fetchAnswerGroups } from '.';
 import { showSuccessMessage } from './notifications';
+
+export const resetCreateFormEntry = () => {
+  return {
+    type: RESET_CREATE_FORM_ENTRY,
+  };
+};
 
 export const onChangeAnswer = (answergroupId, answerId, value, questionId) => {
   return (dispatch, getState) => {
@@ -97,13 +103,17 @@ export const fetchAnswers = (assessmentId, boundaryId) => {
 };
 
 const filterAnswers = (answers) => {
-  return Object.keys(answers).map((key) => {
-    const val = answers[key];
-    return {
-      question: key,
-      answer: val.value,
-    };
-  });
+  return Object.keys(answers)
+    .map((key) => {
+      const val = answers[key];
+      return {
+        question: key,
+        answer: val.value,
+      };
+    })
+    .filter((answer) => {
+      return answer.answer;
+    });
 };
 
 export const saveAnswer = (params) => {
@@ -117,6 +127,7 @@ export const saveAnswer = (params) => {
     const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${assessmentId}/answergroups/${answergroupId}/answers/?per_page=10`;
     post(url, filteredAnswers).then(() => {
       dispatch(fetchAnswerGroups(assessmentId, boundaryType, boundaryId));
+      dispatch(resetCreateFormEntry());
       dispatch(Notifications.success(showSuccessMessage('Answers Save!', 'Answers successfully saved!')));
     });
   };
@@ -180,6 +191,7 @@ export const editAnswers = (params) => {
     if (!isEmpty(newAnswers)) {
       post(url, newAnswers).then(() => {
         dispatch(fetchAnswerGroups(assessmentId, boundaryType, boundaryId));
+        dispatch(resetCreateFormEntry());
         dispatch(Notifications.success(showSuccessMessage('Answers Save!', 'Answers successfully saved!')));
       });
     }

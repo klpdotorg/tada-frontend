@@ -34,7 +34,6 @@ const CreateEntryRowView = (props) => {
           type="text"
           required
           className="form-control"
-          style={{ padding: '0px' }}
           onChange={(e) => {
             props.onChangeGroupValue(id, e.target.value);
           }}
@@ -47,7 +46,6 @@ const CreateEntryRowView = (props) => {
           type="date"
           required
           className="form-control"
-          style={{ padding: '0px' }}
           onChange={(e) => {
             props.onChangeDateOfVisit(id, new Date(e.target.value).toISOString());
           }}
@@ -96,7 +94,6 @@ const CreateEntryRowView = (props) => {
               type="text"
               required
               className="form-control"
-              style={{ padding: '0px' }}
               onChange={(e) => {
                 props.onChange(e.target.value, id, question.id);
               }}

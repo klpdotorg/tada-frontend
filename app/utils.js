@@ -110,7 +110,7 @@ export const toggleSet = (set, val) => {
 };
 
 export const dateFormat = (date) => {
-  return new Date(date).toISOString().slice(0, 10);
+  return new Date(date || new Date()).toISOString().slice(0, 10);
 };
 
 export const getNodeId = (id) => {

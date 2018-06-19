@@ -13,6 +13,7 @@ import {
   ON_CHANGE_GROUP_VALUE,
   ON_CHANGE_DATE_OF_VISITS,
   RESET,
+  RESET_CREATE_FORM_ENTRY,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -102,6 +103,13 @@ const AssessmentEntry = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         selectedProgramAssess: action.value,
+      };
+    case RESET_CREATE_FORM_ENTRY:
+      return {
+        ...state,
+        answers: {},
+        groupValues: {},
+        dateOfVisits: {},
       };
     case RESET_ASSESSMENTR_ENTRY:
       return INITIAL_STATE;

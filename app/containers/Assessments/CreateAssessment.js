@@ -11,9 +11,9 @@ import {
   saveNewAssessment,
   enableSubmitForm,
   disableSubmitForm,
-  toggleModal,
   fetchRespondentTypes,
   fetchSources,
+  toggleCreateAssessmentModal,
 } from '../../actions';
 import { Modal } from '../../components/Modal';
 import { dateFormat } from '../../utils';
@@ -66,9 +66,9 @@ class CreateAssessmentForm extends Component {
       end_date: myform.endDate,
       version: myform.version,
       double_entry: myform.doubleEntry,
-      academic_year_id: myform.academic_year_id,
+      academic_year: myform.academic_year_id,
       inst_type: myform.inst_type_id,
-      source_id: myform.source_id,
+      source: myform.source_id,
       survey_on: myform.type_id,
       description: myform.description,
       lang_name: myform.lang_name,
@@ -124,9 +124,7 @@ class CreateAssessmentForm extends Component {
         title="Create QuestionGroup"
         contentLabel="Create QuestionGroup"
         isOpen={isOpen}
-        onCloseModal={() => {
-          this.props.toggleModal('createAssessment');
-        }}
+        onCloseModal={this.props.closeModal}
         canSubmit={canSubmit}
         submitForm={this.submitForm}
         cancelBtnLabel="Cancel"
@@ -167,10 +165,26 @@ class CreateAssessmentForm extends Component {
             validations="minLength:1"
           />
           <Input
+            name="lang_name"
+            id="lang_name"
+            value=""
+            label="Name in local language"
+            type="text"
+            validations="minLength:1"
+          />
+          <Input
+            name="description"
+            id="description"
+            value=""
+            label="Description"
+            type="text"
+            validations="minLength:1"
+          />
+          <Input
             name="group_text"
             id="group_text"
             value=""
-            label="Details"
+            label="Group Text"
             type="text"
             validations="minLength:1"
           />
@@ -195,9 +209,8 @@ class CreateAssessmentForm extends Component {
             id="version"
             value="1.0"
             label="Version"
-            type="string"
+            type="text"
             validations="minLength:1"
-            required
           />
           <Select
             name="type"
@@ -232,22 +245,6 @@ class CreateAssessmentForm extends Component {
             value={get(surveyTypes[0], 'value')}
             options={surveyTypes}
             required
-          />
-          <Input
-            name="description"
-            id="description"
-            value=""
-            label="Description"
-            type="text"
-            validations="minLength:1"
-          />
-          <Input
-            name="lang_name"
-            id="lang_name"
-            value=""
-            label="Name in local language"
-            type="text"
-            validations="minLength:1"
           />
           <Checkbox
             label="Respondent Type Required"
@@ -285,7 +282,7 @@ CreateAssessmentForm.propTypes = {
   save: PropTypes.func,
   enableSubmitForm: PropTypes.func,
   disabledSubmitForm: PropTypes.func,
-  toggleModal: PropTypes.func,
+  closeModal: PropTypes.func,
   fetchRespondentTypes: PropTypes.func,
   respondentTypes: PropTypes.array,
   programId: PropTypes.any,
@@ -307,7 +304,7 @@ const CreateAssessment = connect(mapStateToProps, {
   save: saveNewAssessment,
   enableSubmitForm,
   disableSubmitForm,
-  toggleModal,
+  closeModal: toggleCreateAssessmentModal,
   fetchRespondentTypes,
   fetchSources,
 })(CreateAssessmentForm);
