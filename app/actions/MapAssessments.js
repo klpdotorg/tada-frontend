@@ -348,7 +348,12 @@ export const mapBoundariesToAssessments = () => {
   return (dispatch, getState) => {
     const state = getState();
     const { selectedProgram } = state.programs;
-    const { selectedInstitutions, selectedAssessments, selectedClasses } = state.mapAssessments;
+    const {
+      selectedInstitutions,
+      selectedAssessments,
+      selectedClasses,
+      selectedEntityId,
+    } = state.mapAssessments;
     const { uncollapsedEntities, boundaryDetails } = state.boundaries;
     const district = getObject(boundaryDetails, [uncollapsedEntities['1']], {});
     const Ids = selectedInstitutions.map((id) => {
@@ -358,19 +363,28 @@ export const mapBoundariesToAssessments = () => {
     });
     const boundaryIds = uniq(flattenDeep([district.id, ...Ids]));
 
-    if (isEmpty(selectedClasses)) {
+    if (!isEmpty(selectedClasses) || !isEmpty(selectedInstitutions)) {
+      if (isEmpty(selectedClasses)) {
+        dispatch(mapAssessmentsToInsitutions(
+          selectedProgram,
+          selectedAssessments,
+          selectedInstitutions,
+          boundaryIds,
+        ));
+      } else {
+        dispatch(mapAssessmentsToStudentgroups(
+          selectedProgram,
+          selectedInstitutions,
+          selectedClasses,
+          selectedAssessments,
+        ));
+      }
+    } else {
       dispatch(mapAssessmentsToInsitutions(
         selectedProgram,
         selectedAssessments,
-        selectedInstitutions,
-        boundaryIds,
-      ));
-    } else {
-      dispatch(mapAssessmentsToStudentgroups(
-        selectedProgram,
-        selectedInstitutions,
-        selectedClasses,
-        selectedAssessments,
+        [],
+        [boundaryDetails[selectedEntityId].id],
       ));
     }
   };

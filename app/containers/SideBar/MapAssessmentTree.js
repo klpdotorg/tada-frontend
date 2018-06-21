@@ -75,7 +75,7 @@ class NavTree extends Component {
     const collapsed = this.props.uncollapsed[newDepth] === node.uniqueId;
 
     if (depth >= 3) {
-      return <span />;
+      return <span key={node.uniqueId} />;
     }
 
     return (
