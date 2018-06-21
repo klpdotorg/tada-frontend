@@ -55,6 +55,7 @@ class EditQuestionForm extends Component {
     const question = {
       question_text: myform.qnText,
       display_text: myform.displayText,
+      lang_name: myform.lang_name,
       key: myform.key,
       question_type_id: myform.type,
       is_featured: myform.is_featured,
@@ -69,7 +70,7 @@ class EditQuestionForm extends Component {
 
   render() {
     const { disabledOptionsField } = this.state;
-    const { isOpen, canSubmit, error, languages } = this.props;
+    const { isOpen, canSubmit, error } = this.props;
     const featuredValues = [
       {
         value: true,
@@ -129,6 +130,14 @@ class EditQuestionForm extends Component {
             required
           />
           <Input
+            name="lang_name"
+            id="lang_name"
+            value={this.getValue('lang_name')}
+            label="Question text in local language"
+            type="text"
+            validations="minLength:1"
+          />
+          <Input
             name="displayText"
             id="displayText"
             value={this.getValue('display_text')}
@@ -185,13 +194,6 @@ class EditQuestionForm extends Component {
             type="text"
             placeholder="Enter Pass score"
           />
-          <Select
-            name="lang_name"
-            label="Language"
-            options={languages}
-            required
-            value={this.getValue('lang_name') || get(languages, '[0].value', '')}
-          />
         </Formsy.Form>
       </Modal>
     );
@@ -209,7 +211,6 @@ EditQuestionForm.propTypes = {
   onCloseModal: PropTypes.func,
   question: PropTypes.object,
   questionId: PropTypes.any,
-  languages: PropTypes.object,
   error: PropTypes.object,
 };
 
@@ -218,7 +219,6 @@ const mapStateToProps = (state, ownProps) => {
 
   return {
     isOpen: state.modal.editQuestion,
-    languages: state.languages.languages,
     canSubmit: state.appstate.enableSubmitForm,
     assessmentId: Number(ownProps.assessmentId),
     question: get(questions, editQuestion),

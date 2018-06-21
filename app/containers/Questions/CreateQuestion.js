@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
-import get from 'lodash.get';
 import isEmpty from 'lodash.isempty';
 
 import {
@@ -50,6 +49,7 @@ class CreateQuestionForm extends Component {
       question_details: {
         question_text: myform.qnText,
         display_text: myform.displayText,
+        lang_name: myform.lang_name,
         key: myform.key,
         question_type_id: myform.type,
         is_featured: myform.is_featured,
@@ -77,7 +77,7 @@ class CreateQuestionForm extends Component {
 
   render() {
     const { disabledOptionsField } = this.state;
-    const { isOpen, canSubmit, languages, error } = this.props;
+    const { isOpen, canSubmit, error } = this.props;
     const featuredValues = [
       {
         value: true,
@@ -136,6 +136,14 @@ class CreateQuestionForm extends Component {
             required
           />
           <Input
+            name="lang_name"
+            id="lang_name"
+            value=""
+            label="Question text in local language"
+            type="text"
+            validations="minLength:1"
+          />
+          <Input
             name="displayText"
             id="displayText"
             value=""
@@ -148,7 +156,7 @@ class CreateQuestionForm extends Component {
             name="is_featured"
             label="Is Featured"
             options={featuredValues}
-            value="false"
+            value="true"
             required
           />
           <Select
@@ -185,13 +193,6 @@ class CreateQuestionForm extends Component {
             type="text"
             placeholder="Enter Pass score"
           />
-          <Select
-            name="lang_name"
-            label="Language"
-            options={languages}
-            required
-            value={get(languages, '[0].value', '')}
-          />
         </Formsy.Form>
       </Modal>
     );
@@ -208,7 +209,6 @@ CreateQuestionForm.propTypes = {
   disableSubmitForm: PropTypes.func,
   onCloseModal: PropTypes.func,
   getLanguages: PropTypes.func,
-  languages: PropTypes.array,
   error: PropTypes.object,
 };
 
@@ -217,7 +217,6 @@ const mapStateToProps = (state, ownProps) => {
     isOpen: state.modal.createQuestion,
     canSubmit: state.appstate.enableSubmitForm,
     assessmentId: Number(ownProps.assessmentId),
-    languages: state.languages.languages,
     error: state.questions.error,
   };
 };
