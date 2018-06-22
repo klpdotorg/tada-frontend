@@ -20,15 +20,8 @@ import { Loading, Message } from '../../components/common';
 
 class NavTree extends Component {
   componentDidMount() {
-    // this.props.getPrograms();
     if (this.props.selectedProgram) {
       this.props.getProgramEntities([{ depth: 0, uniqueId: '1state' }]);
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.selectedProgram !== nextProps.selectedProgram) {
-      // this.props.getProgramEntities([{ depth: 0, uniqueId: '1state' }]);
     }
   }
 
@@ -57,6 +50,8 @@ class NavTree extends Component {
     const newDepth = depth + 1;
     const treeNodes = this.getTreeNodes(newDepth);
     const collapsed = this.props.uncollapsed[newDepth] === node.uniqueId;
+    const selected = this.props.selectedEntityId === node.uniqueId;
+
     const label =
       capitalize(entity.label) || capitalize(entity.name) || capitalize(entity.first_name);
 
@@ -71,6 +66,7 @@ class NavTree extends Component {
             this.props.openBoundary(node.uniqueId, newDepth, id);
           }}
           className="filterbyprogram-link"
+          style={selected ? { background: '#3379b7', color: 'white' } : {}}
         >
           {label} ({entity.assessment.name})
         </button>
@@ -154,20 +150,29 @@ class NavTree extends Component {
 
 const mapStateToProps = (state) => {
   const { programs, loading } = state.programs;
+  const {
+    programDetails,
+    selectedEntityId,
+    entitiesByParentId,
+    uncollapsedEntities,
+  } = state.programDetails;
+
   return {
-    entities: state.programDetails.programDetails,
-    entitiesByParentId: state.programDetails.entitiesByParentId,
-    uncollapsed: state.programDetails.uncollapsedEntities,
+    entities: programDetails,
+    entitiesByParentId,
+    uncollapsed: uncollapsedEntities,
     selectedProgram: Number(state.programs.selectedProgram),
     loading: state.appstate.loadingBoundary,
     selectedPrimary: state.schoolSelection.primarySchool,
     programs,
     programLoading: loading,
+    selectedEntityId,
   };
 };
 
 NavTree.propTypes = {
   getProgramEntities: PropTypes.func,
+  selectedEntityId: PropTypes.string,
   uncollapsed: PropTypes.object,
   entitiesByParentId: PropTypes.object,
   entities: PropTypes.object,

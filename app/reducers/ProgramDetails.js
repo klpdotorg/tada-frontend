@@ -4,6 +4,7 @@ import {
   REMOVE_EXISTING_NODE,
   RESET_PROGRAM_NAV_TREE,
   RESET,
+  SELECT_PROGRAM_ENTITY,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -15,6 +16,7 @@ const INITIAL_STATE = {
   },
   entitiesByParentId: {},
   uncollapsedEntities: {},
+  selectedEntityId: '',
 };
 
 const ProgramDetails = (state = INITIAL_STATE, action) => {
@@ -51,6 +53,11 @@ const ProgramDetails = (state = INITIAL_STATE, action) => {
         ...state,
         entitiesByParentId: {},
         uncollapsedEntities: {},
+      };
+    case SELECT_PROGRAM_ENTITY:
+      return {
+        ...state,
+        selectedEntityId: action.value,
       };
     case RESET:
       return INITIAL_STATE;

@@ -51,6 +51,7 @@ class NavTree extends Component {
     return (
       <Link
         tabIndex="0"
+        className={selected ? 'selected-map-assessment' : ''}
         key={node.uniqueId}
         onClick={() => {
           this.props.fetchBoundariesOfMA({
@@ -61,7 +62,7 @@ class NavTree extends Component {
           this.props.openBoundaryOfMa(node.uniqueId, depth);
         }}
       >
-        <span style={{ color: selected ? 'white' : 'black' }}>{label}</span>
+        <span style={{ color: selected ? 'white' : '#337ab7' }}>{label}</span>
       </Link>
     );
   }
@@ -92,7 +93,7 @@ class NavTree extends Component {
         }}
         nodeLabel={name}
         collapsed={!collapsed}
-        itemClassName={selectedEntity ? 'selected-map-assessment' : ''}
+        itemClassName="mapassessment-treeNode-item"
       >
         {depth <= 3
           ? treeNodes.map((child, i) => {

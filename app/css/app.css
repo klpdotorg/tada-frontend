@@ -841,6 +841,7 @@ table.table-fixedwidth td, .table-fixedwidth th {
   background: none;
   color: #3379b7; 
   display: block;
+  width: 100%;
 }
 
 .filterbyprogram-link:hover {
@@ -868,10 +869,15 @@ table.table-fixedwidth td, .table-fixedwidth th {
 }
 .selected-map-assessment {
   background-color: #337abb;
+  padding-left: 10px;
+  flex: 1;
 }
 .selected-map-assessment a:focus {
   color: inherit;
   text-decoration: none;
+}
+.mapassessment-treeNode-item {
+  display: flex;
 }
 
 .loader {
@@ -931,4 +937,7 @@ table.table-fixedwidth td, .table-fixedwidth th {
 .permission-user-search {
   width: 50%;
   margin-bottom: 13px;
+}
+.filterbyprogram-treeview-item {
+  background: red;
 }

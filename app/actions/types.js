@@ -142,3 +142,4 @@ export const SET_SOURCES = 'set_sources';
 export const SET_PARTNERS = 'set_partners';
 export const SET_USER_ERROR = 'set_user_error';
 export const RESET_CREATE_FORM_ENTRY = 'reset_create_form_entry';
+export const SELECT_PROGRAM_ENTITY = 'select_program_entity';

@@ -49,6 +49,7 @@ ActiveSubmitButton.propTypes = {
   selectedInstitutions: PropTypes.bool,
   selectedClasses: PropTypes.bool,
   selectedAssessments: PropTypes.bool,
+  institutionsIndex: PropTypes.any,
 };
 
 const mapStateToProps = (state) => {

@@ -71,7 +71,10 @@ export const editStudents = (groupNodeId, groupId, institutionId, depth) => {
 
     dispatch(showBoundaryLoading());
 
-    put(`${SERVER_API_BASE}studentgroups/${groupId}/students/`, newValues).then(({ data }) => {
+    put(
+      `${SERVER_API_BASE}studentgroups/${groupId}/students/bulk-update/`,
+      newValues,
+    ).then(({ data }) => {
       const entities = convertEntitiesToObject(data.results);
       dispatch({
         type: SET_BOUNDARIES,
