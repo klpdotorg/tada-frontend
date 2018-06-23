@@ -941,3 +941,12 @@ table.table-fixedwidth td, .table-fixedwidth th {
 .filterbyprogram-treeview-item {
   background: red;
 }
+
+.filterByProgram-header {
+  display: flex;
+}
+
+.filterByProgram-path {
+  flex: 1;
+  margin-right: 30px;
+}

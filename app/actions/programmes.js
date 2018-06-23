@@ -17,7 +17,7 @@ export const toggleEditProgramModal = () => {
   return (dispatch) => {
     dispatch({
       type: TOGGLE_MODAL,
-      moda: 'editProgram',
+      modal: 'editProgram',
     });
     dispatch({
       type: CREATE_PROGRAM_ERROR,
