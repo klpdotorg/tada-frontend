@@ -7,6 +7,7 @@ import {
   AssessmentEntryRow,
   CreateEntryForm,
   CreateEntryRow,
+  Header,
 } from '../../containers/AssessmentEntry';
 
 const RenderForm = (props) => {
@@ -72,21 +73,17 @@ class AssessmentEntryFormView extends Component {
 
   render() {
     const { elements } = this.state;
-    const { loading, rows, noQuestions } = this.props;
+    const { loading, rows, noQuestions, params } = this.props;
     const disabled = elements >= 1 || !rows.length;
+    const { districtId, blockId, clusterId, institutionId, studentGroupId } = params;
 
     return (
       <div>
-        <button
+        <Header
+          addRow={this.addRow}
           disabled={disabled}
-          onClick={() => {
-            this.addRow();
-          }}
-          className="btn btn-primary"
-          style={{ float: 'right', marginBottom: 20 }}
-        >
-          Add Row
-        </button>
+          entityIds={[districtId, blockId, clusterId, institutionId, studentGroupId]}
+        />
         <div className="answer-table">
           <table className="table table-striped" style={{ marginBottom: 0 }}>
             <thead>
@@ -116,6 +113,7 @@ AssessmentEntryFormView.propTypes = {
   loading: PropTypes.bool,
   rows: PropTypes.array,
   noQuestions: PropTypes.bool,
+  params: PropTypes.object,
 };
 
 RenderForm.propTypes = {

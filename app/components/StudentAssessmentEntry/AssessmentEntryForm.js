@@ -4,7 +4,7 @@ import isEmpty from 'lodash.isempty';
 import flatten from 'lodash.flatten';
 
 import { Loading } from '../common';
-import { AssessmentEntryColHeader } from '../../containers/AssessmentEntry';
+import { AssessmentEntryColHeader, Header } from '../../containers/AssessmentEntry';
 import { AssessmentEntryRow, CreateEntryRow } from '../../containers/StudentAssessmentEntry';
 
 const RenderForm = (props) => {
@@ -67,21 +67,17 @@ class AssessmentEntryFormView extends Component {
 
   render() {
     const { elements } = this.state;
-    const { loading, rows } = this.props;
+    const { loading, rows, params } = this.props;
+    const { districtId, blockId, clusterId, institutionId, studentGroupId } = params;
     const disabled = elements >= 1 || !rows.length;
 
     return (
       <div>
-        <button
+        <Header
+          addRow={this.addRow}
           disabled={disabled}
-          onClick={() => {
-            this.addRow();
-          }}
-          className="btn btn-primary"
-          style={{ float: 'right', marginBottom: 20 }}
-        >
-          Add Row
-        </button>
+          entityIds={[districtId, blockId, clusterId, institutionId, studentGroupId]}
+        />
         <div className="answer-table">
           <table className="table table-striped">
             <thead>
@@ -105,6 +101,7 @@ class AssessmentEntryFormView extends Component {
 AssessmentEntryFormView.propTypes = {
   loading: PropTypes.bool,
   rows: PropTypes.object,
+  params: PropTypes.object,
 };
 
 RenderForm.propTypes = {
