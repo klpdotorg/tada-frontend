@@ -17,6 +17,7 @@ class ActiveSubmitButton extends Component {
       selectedInstitutions,
       selectedClasses,
       selectedAssessments,
+      institutionsIndex,
     } = this.props;
 
     if (!selectedAssessments) {
@@ -28,6 +29,10 @@ class ActiveSubmitButton extends Component {
     }
 
     if (assessmentType === 2 && selectedClasses) {
+      return true;
+    }
+
+    if (institutionsIndex) {
       return true;
     }
 
@@ -44,6 +49,7 @@ ActiveSubmitButton.propTypes = {
   selectedInstitutions: PropTypes.bool,
   selectedClasses: PropTypes.bool,
   selectedAssessments: PropTypes.bool,
+  institutionsIndex: PropTypes.any,
 };
 
 const mapStateToProps = (state) => {
@@ -58,12 +64,12 @@ const mapStateToProps = (state) => {
   } = state.mapAssessments;
 
   const showInstitutions = institutionsIndex > 0 || selectedClusters.length > 0;
-
   return {
     showClusters: clustersIndex > 0,
     selectedInstitutions: selectedInstitutions.length > 0,
     selectedClasses: selectedClasses.length > 0,
     selectedAssessments: selectedAssessments.length > 0,
+    institutionsIndex,
     showInstitutions,
     assessmentType: Number(selectedAssessmentType),
   };

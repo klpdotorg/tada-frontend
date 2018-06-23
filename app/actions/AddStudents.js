@@ -43,7 +43,6 @@ export const addStudents = (groupNodeId, groupId, institutionId, depth) => {
     const newValues = Object.values(values);
 
     dispatch(showBoundaryLoading());
-
     post(`${SERVER_API_BASE}studentgroups/${groupId}/students/`, newValues).then(({ data }) => {
       const entities = convertEntitiesToObject(data.results);
       dispatch({

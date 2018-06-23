@@ -4,7 +4,7 @@ import isEmpty from 'lodash.isempty';
 
 import { ViewSelectedProgram } from '../../components/Programs';
 import {
-  openEditProgramModal,
+  toggleEditProgramModal,
   deactivateProgram,
   openDeactivateProgramModal,
   openDeleteProgramModal,
@@ -23,7 +23,7 @@ const mapStateToProps = (state) => {
 };
 
 const SelectedProgram = connect(mapStateToProps, {
-  openEditProgramModal,
+  openEditProgramModal: toggleEditProgramModal,
   showDeactivateModal: openDeactivateProgramModal,
   deactivateProgram,
   deleteProgram,

@@ -8,7 +8,7 @@ import { SET_ANSWERS, FETCHING_ANSWERS, ON_CHANGE_ANSWER, RESET_CREATE_FORM_ENTR
 import { fetchAnswerGroups } from '.';
 import { showSuccessMessage } from './notifications';
 
-export const resetCreateFormEntry = () => {
+const resetCreateFormEntry = () => {
   return {
     type: RESET_CREATE_FORM_ENTRY,
   };

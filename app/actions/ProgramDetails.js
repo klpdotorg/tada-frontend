@@ -10,6 +10,7 @@ import {
   SET_FITLER_PROGRAM_ENTITIES,
   REMOVE_EXISTING_NODE,
   RESET_PROGRAM_NAV_TREE,
+  SELECT_PROGRAM_ENTITY,
 } from './types';
 import { convertEntitiesToObject, getPath } from '../utils';
 import { showBoundaryLoading, closeBoundaryLoading, fetchAllPrograms, setPrograms } from './index';
@@ -31,6 +32,11 @@ export const openFilterByProgramEntity = (uniqueId, depth, assessmentId) => {
 
     const path = `/filterprograms/${selectedProgram}/questiongroup/${assessmentId}${boundaryPath}`;
     const url = checkFilterByProgramUrl(path, survey.survey_on);
+
+    dispatch({
+      type: SELECT_PROGRAM_ENTITY,
+      value: uniqueId,
+    });
     dispatch(push(url));
   };
 };

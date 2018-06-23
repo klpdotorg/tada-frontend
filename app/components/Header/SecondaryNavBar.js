@@ -11,15 +11,15 @@ import { checkPermissions } from '../../checkPermissions';
 
 const SecondaryNavBar = (props) => {
   const {
-    suggestionResults,
+    // suggestionResults,
     handleSubmit,
-    onSearch,
+    // onSearch,
     managePrograms,
     toggleDistrictModal,
     managePermissions,
     manageUsers,
     manageReports,
-    manageRevertEntity,
+    // manageRevertEntity,
     manageProgramFilter,
     goHome,
     mapAssessments,
@@ -117,7 +117,7 @@ const SecondaryNavBar = (props) => {
       ) :
         <span />
       } */}
-      {isAdmin || showRevertEntity ? (
+      {/* {isAdmin || showRevertEntity ? (
         <button
           type="button"
           className="btn btn-info navbar-btn all-padded-btn"
@@ -130,7 +130,7 @@ const SecondaryNavBar = (props) => {
         </button>
       ) : (
         <span />
-      )}
+      )} */}
       <button
         type="button"
         className="btn btn-primary navbar-btn all-padded-btn"
@@ -171,15 +171,15 @@ const SecondaryNavBar = (props) => {
 
 SecondaryNavBar.propTypes = {
   isAdmin: PropTypes.bool,
-  suggestionResults: PropTypes.array,
+  // suggestionResults: PropTypes.array,
   handleSubmit: PropTypes.func,
-  onSearch: PropTypes.func,
+  // onSearch: PropTypes.func,
   managePrograms: PropTypes.func,
   toggleDistrictModal: PropTypes.func,
   managePermissions: PropTypes.func,
   manageUsers: PropTypes.func,
   manageReports: PropTypes.func,
-  manageRevertEntity: PropTypes.func,
+  // manageRevertEntity: PropTypes.func,
   manageProgramFilter: PropTypes.func,
   goHome: PropTypes.func,
   mapAssessments: PropTypes.func,
