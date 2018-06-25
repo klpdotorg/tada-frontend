@@ -71,7 +71,7 @@ const getUrlForBoundary = (entity, stateCode) => {
     case 4:
       return `${SERVER_API_BASE}institutions/${entity.id}/studentgroups/`;
     case 5:
-      return `${SERVER_API_BASE}studentgroups/${entity.id}/students`;
+      return `${SERVER_API_BASE}studentgroups/${entity.id}/students/`;
     default:
       return null;
   }

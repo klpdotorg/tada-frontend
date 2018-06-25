@@ -26,6 +26,14 @@ export const openPermissionBoundary = (id, depth) => {
   return (dispatch, getState) => {
     const state = getState();
     const path = getPath(state, id, depth);
+    dispatch({
+      type: SET_BOUNDARY_ASSESSMENTS,
+      value: {},
+    });
+    dispatch({
+      type: SELECT_PERMISSIONS_BOUNDARY,
+      value: [],
+    });
     dispatch(push(`/permissions${path}`));
   };
 };
@@ -42,7 +50,7 @@ export const fetchBoundaryAssessments = (entity) => {
     dispatch(loadingBoundaryAssessment(true));
     const state = getState();
     const { assessments } = state.permissions;
-    const url = `${SERVER_API_BASE}boundary/questiongroup-map/?boundary_id=[${entity.id}]`;
+    const url = `${SERVER_API_BASE}boundary/questiongroup-map/?boundary_ids=${entity.id}`;
     get(url).then(({ data }) => {
       const entities = convertEntitiesToObject(data.results);
       dispatch({

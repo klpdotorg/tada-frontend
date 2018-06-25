@@ -12,6 +12,7 @@ import {
   fetchSelectedAssessmentQuestions,
   fetchStudentsForAssessmentEntry,
 } from '../../actions';
+import { checkAssessmentPermissions } from '../../utils';
 
 class FetchAnswersAndQuestions extends Component {
   componentDidMount() {
@@ -73,6 +74,9 @@ const mapStateToProps = (state, ownProps) => {
     result[student.id] = values;
     return result;
   }, {});
+  const { isAdmin } = state.profile;
+  const { assessments } = state.userPermissions;
+  const canView = checkAssessmentPermissions(isAdmin, assessments, questionGroupId);
 
   return {
     rows,
@@ -87,6 +91,8 @@ const mapStateToProps = (state, ownProps) => {
       assessmentId: questionGroupId,
       boundaryType: 'student',
     },
+    noQuestions: isEmpty(state.questions.questions),
+    canView,
   };
 };
 

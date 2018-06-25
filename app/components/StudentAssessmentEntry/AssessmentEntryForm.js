@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 import isEmpty from 'lodash.isempty';
 import flatten from 'lodash.flatten';
 
-import { Loading } from '../common';
+import { Loading, Message } from '../common';
 import { AssessmentEntryColHeader, Header } from '../../containers/AssessmentEntry';
 import { AssessmentEntryRow, CreateEntryRow } from '../../containers/StudentAssessmentEntry';
 
 const RenderForm = (props) => {
-  const { loading, params, uniqueId, rows, boundaryInfo } = props;
-  if (loading) {
+  const { loading, params, uniqueId, rows, boundaryInfo, canView, noQuestions } = props;
+
+  if (loading || noQuestions || !canView) {
     return <tbody />;
   }
 
@@ -67,7 +68,7 @@ class AssessmentEntryFormView extends Component {
 
   render() {
     const { elements } = this.state;
-    const { loading, rows, params } = this.props;
+    const { loading, rows, params, noQuestions, canView } = this.props;
     const { districtId, blockId, clusterId, institutionId, studentGroupId } = params;
     const disabled = elements >= 1 || !rows.length;
 
@@ -92,6 +93,16 @@ class AssessmentEntryFormView extends Component {
           ) : (
             <div />
           )}
+          {!loading && noQuestions ? (
+            <Message message="This Question group has no questions." style={{ padding: 10 }} />
+          ) : (
+            <div />
+          )}
+          {!loading && !canView ? (
+            <Message message="You don't have permission to do this." style={{ padding: 10 }} />
+          ) : (
+            <div />
+          )}
         </div>
       </div>
     );
@@ -102,6 +113,8 @@ AssessmentEntryFormView.propTypes = {
   loading: PropTypes.bool,
   rows: PropTypes.object,
   params: PropTypes.object,
+  canView: PropTypes.bool,
+  noQuestions: PropTypes.bool,
 };
 
 RenderForm.propTypes = {
@@ -110,6 +123,8 @@ RenderForm.propTypes = {
   params: PropTypes.object,
   uniqueId: PropTypes.any,
   boundaryInfo: PropTypes.object,
+  canView: PropTypes.bool,
+  noQuestions: PropTypes.bool,
 };
 
 export { AssessmentEntryFormView };

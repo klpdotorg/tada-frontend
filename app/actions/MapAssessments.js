@@ -330,7 +330,7 @@ export const mapAssessmentsToStudentgroups = (
     })
       .then(({ data }) => {
         if (data.detail) {
-          dispatch(Notifications.error(errorNotification('Studentgroup Mapping', response.detail, 10)));
+          dispatch(Notifications.error(errorNotification('Studentgroup Mapping', data.detail, 10)));
         } else {
           dispatch(Notifications.success(mapAssessmentsDone));
           dispatch({
