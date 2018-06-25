@@ -17,8 +17,12 @@ class FetchBlocks extends Component {
         this.props.getBoundariesEntities([
           {
             id: newId,
-            depth: 2,
+            depth: 1,
             uniqueId: params.districtId,
+          },
+          {
+            uniqueId: params.blockId,
+            depth: 2,
           },
         ]);
       }
