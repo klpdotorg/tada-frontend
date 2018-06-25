@@ -12,6 +12,7 @@ import {
   fetchSelectedAssessmentQuestions,
   selectProgram,
 } from '../../actions';
+import { checkAssessmentPermissions } from '../../utils';
 
 class FetchAnswersAndQuestions extends Component {
   componentDidMount() {
@@ -70,6 +71,9 @@ const mapStateToProps = (state, ownProps) => {
   const answerFetching = state.answers.fetching;
   const studentGroup = get(state.programDetails.programDetails, studentGroupId, {});
   const { loadingBoundary } = state.appstate;
+  const { isAdmin } = state.profile;
+  const { assessments } = state.userPermissions;
+  const canView = checkAssessmentPermissions(isAdmin, assessments, questionGroupId);
 
   return {
     boundary: studentGroup,
@@ -81,6 +85,7 @@ const mapStateToProps = (state, ownProps) => {
       assessmentId: questionGroupId,
       boundaryType: 'studentgroup',
     },
+    canView,
   };
 };
 

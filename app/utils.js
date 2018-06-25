@@ -217,6 +217,18 @@ export const generatePagination = (page, size, step) => {
   return result;
 };
 
+export const checkAssessmentPermissions = (isAdmin, assessments, assessmentId) => {
+  if (isAdmin) {
+    return true;
+  }
+
+  if (assessments.includes(Number(assessmentId))) {
+    return true;
+  }
+
+  return false;
+};
+
 export const checkPermissions = (isAdmin, permissions, boundaryId, institutionId) => {
   const { boundaries, institutions } = permissions;
 

@@ -11,9 +11,9 @@ import {
 } from '../../containers/AssessmentEntry';
 
 const RenderForm = (props) => {
-  const { loading, params, uniqueId, rows, boundaryInfo, elements, noQuestions } = props;
+  const { loading, params, uniqueId, rows, boundaryInfo, elements, noQuestions, canView } = props;
 
-  if (loading || noQuestions) {
+  if (loading || noQuestions || !canView) {
     return <tbody />;
   }
 
@@ -73,7 +73,7 @@ class AssessmentEntryFormView extends Component {
 
   render() {
     const { elements } = this.state;
-    const { loading, rows, noQuestions, params } = this.props;
+    const { loading, rows, noQuestions, params, canView } = this.props;
     const disabled = elements >= 1 || !rows.length;
     const { districtId, blockId, clusterId, institutionId, studentGroupId } = params;
 
@@ -103,6 +103,11 @@ class AssessmentEntryFormView extends Component {
           ) : (
             <div />
           )}
+          {!loading && !canView ? (
+            <Message message="You don't have permission to do this." style={{ padding: 10 }} />
+          ) : (
+            <div />
+          )}
         </div>
       </div>
     );
@@ -114,6 +119,7 @@ AssessmentEntryFormView.propTypes = {
   rows: PropTypes.array,
   noQuestions: PropTypes.bool,
   params: PropTypes.object,
+  canView: PropTypes.bool,
 };
 
 RenderForm.propTypes = {
@@ -124,6 +130,7 @@ RenderForm.propTypes = {
   boundaryInfo: PropTypes.object,
   elements: PropTypes.number,
   noQuestions: PropTypes.bool,
+  canView: PropTypes.bool,
 };
 
 export { AssessmentEntryFormView };

@@ -817,6 +817,10 @@ table.table-fixedwidth td, .table-fixedwidth th {
   float: right;
 }
 
+.boundary-assessments .select-checkbox {
+  float: right;
+}
+
 .permissions-assessment {
   padding-top: 60px;
 }

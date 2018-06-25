@@ -7,6 +7,7 @@ import { DEFAULT_PROGRAM_NODE_ID } from 'config';
 
 import { AssessmentEntryFormView } from '../../components/AssessmentEntry';
 import { fetchAnswers, fetchAnswerGroups, fetchSelectedAssessmentQuestions } from '../../actions';
+import { checkAssessmentPermissions } from '../../utils';
 
 class FetchAnswersAndQuestions extends Component {
   componentDidMount() {
@@ -63,6 +64,9 @@ const mapStateToProps = (state, ownProps) => {
   const institution = get(state.programDetails.programDetails, institutionId, {});
   const { programs } = state.programs;
   const { loadingBoundary } = state.appstate;
+  const { isAdmin } = state.profile;
+  const { assessments } = state.userPermissions;
+  const canView = checkAssessmentPermissions(isAdmin, assessments, questionGroupId);
 
   return {
     rows: Object.keys(get(answergroups, institution.id, {})),
@@ -76,6 +80,7 @@ const mapStateToProps = (state, ownProps) => {
       boundaryType: 'institution',
     },
     noQuestions: isEmpty(state.questions.questions),
+    canView,
   };
 };
 

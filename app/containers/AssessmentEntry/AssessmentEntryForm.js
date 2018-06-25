@@ -5,6 +5,7 @@ import isEmpty from 'lodash.isempty';
 
 import { AssessmentEntryFormView } from '../../components/AssessmentEntry';
 import { fetchAnswers } from '../../actions';
+import { checkAssessmentPermissions } from '../../utils';
 
 class GetSelectAssessmentBoundaries extends Component {
   componentDidMount() {
@@ -24,6 +25,7 @@ GetSelectAssessmentBoundaries.propTypes = {
 
 const mapStateToProps = (state) => {
   const { boundaryIds, answersLoading } = state.assessmentEntry;
+
   return {
     boundaries: boundaryIds,
     loading: answersLoading,
