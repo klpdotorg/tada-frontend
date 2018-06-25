@@ -69,7 +69,7 @@ export const fetchStudentBoundaries = (parentId) => {
     const state = getState();
     const parentEntity = state.boundaries.boundaryDetails[parentId];
     const parentDepth = getEntityDepth(parentEntity);
-    const getStudentURL = `${SERVER_API_BASE}studentgroups/${parentEntity.id}/students`;
+    const getStudentURL = `${SERVER_API_BASE}studentgroups/${parentEntity.id}/students/`;
 
     get(getStudentURL)
       .then(({ data }) => {
@@ -92,7 +92,7 @@ export const fetchStudentBoundaries = (parentId) => {
 
 export const fetchStudents = (parentBoundaryId, moreIds) => {
   return (dispatch) => {
-    const getStudentURL = `${SERVER_API_BASE}studentgroups/${parentBoundaryId}/students`;
+    const getStudentURL = `${SERVER_API_BASE}studentgroups/${parentBoundaryId}/students/`;
     get(getStudentURL)
       .then(({ data }) => {
         const entities = convertEntitiesToObject([data.results]);
