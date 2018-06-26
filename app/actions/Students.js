@@ -1,6 +1,7 @@
 import { SERVER_API_BASE } from 'config';
 import pull from 'lodash.pull';
 import omit from 'lodash.omit';
+import Notifications from 'react-notification-system-redux';
 
 import { get, put, deleteRequest } from './requests';
 import {
@@ -21,6 +22,7 @@ import {
   closeConfirmModal,
 } from './index';
 import { convertEntitiesToObject, getEntityDepth } from '../utils';
+import { showSuccessMessage, errorNotification } from './notifications';
 
 export const resetSelectedStudents = () => {
   return {
@@ -153,14 +155,13 @@ export const deleteStudent = (params) => {
   return (dispatch, getState) => {
     dispatch(showBoundaryLoading());
     dispatch(closeConfirmModal());
+    const state = getState();
+    const { parentId, boundaryNodeId, boundaryId } = params;
+    const parentEntity = state.boundaries.boundaryDetails[parentId];
 
-    deleteRequest(`${SERVER_API_BASE}students/${params.boundaryId}/`).then((response) => {
+    deleteRequest(`${SERVER_API_BASE}studentgroups/${parentEntity.id}/students/${boundaryId}/`).then((response) => {
       if (response.status >= 200 && response.status < 300) {
-        const { parentId, boundaryNodeId } = params;
-        const state = getState();
-        const parentEntity = state.boundaries.boundaryDetails[parentId];
         const parentDepth = getEntityDepth(parentEntity);
-
         const boundariesByParentId = {
           ...state.boundaries.boundariesByParentId,
           [parentDepth]: pull(state.boundaries.boundariesByParentId[parentDepth], boundaryNodeId),
@@ -179,8 +180,11 @@ export const deleteStudent = (params) => {
           type: DELETE_BOUNDARY_NODE,
           value: boundaryNodeId,
         });
-        dispatch(closeBoundaryLoading());
+        dispatch(Notifications.success(showSuccessMessage('Student Deleted', 'Student successfully deleted!')));
+      } else {
+        dispatch(Notifications.error(errorNotification('Error!', 'Student not deleted!')));
       }
+      dispatch(closeBoundaryLoading());
     });
   };
 };
