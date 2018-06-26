@@ -4,9 +4,15 @@ import Notifications from 'react-notification-system-redux';
 import getObject from 'lodash.get';
 import isEmpty from 'lodash.isempty';
 import { post, get, put } from './requests';
-import { SET_ANSWERS, FETCHING_ANSWERS, ON_CHANGE_ANSWER, RESET_CREATE_FORM_ENTRY } from './types';
+import {
+  SET_ANSWERS,
+  FETCHING_ANSWERS,
+  ON_CHANGE_ANSWER,
+  RESET_CREATE_FORM_ENTRY,
+  SET_ANSWERS_ERROR,
+} from './types';
 import { fetchAnswerGroups } from '.';
-import { showSuccessMessage } from './notifications';
+import { errorNotification, showSuccessMessage } from './notifications';
 
 const resetCreateFormEntry = () => {
   return {
@@ -116,6 +122,23 @@ const filterAnswers = (answers) => {
     });
 };
 
+export const showAnswerError = (error) => {
+  return (dispatch) => {
+    dispatch(Notifications.error(errorNotification('Error!', 'Answers not saved!')));
+    dispatch({
+      type: SET_ANSWERS_ERROR,
+      value: error,
+    });
+  };
+};
+
+export const resetAnswerError = () => {
+  return {
+    type: SET_ANSWERS_ERROR,
+    value: {},
+  };
+};
+
 export const saveAnswer = (params) => {
   return (dispatch, getState) => {
     const state = getState();
@@ -125,10 +148,15 @@ export const saveAnswer = (params) => {
     const filteredAnswers = filterAnswers(answers[boundaryId]);
 
     const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${assessmentId}/answergroups/${answergroupId}/answers/?per_page=10`;
-    post(url, filteredAnswers).then(() => {
-      dispatch(fetchAnswerGroups(assessmentId, boundaryType, boundaryId));
-      dispatch(resetCreateFormEntry());
-      dispatch(Notifications.success(showSuccessMessage('Answers Save!', 'Answers successfully saved!')));
+    post(url, filteredAnswers).then((response) => {
+      if (response.status === 201) {
+        dispatch(fetchAnswerGroups(assessmentId, boundaryType, boundaryId));
+        dispatch(resetCreateFormEntry());
+        dispatch(resetAnswerError());
+        dispatch(Notifications.success(showSuccessMessage('Answers Save!', 'Answers successfully saved!')));
+      } else {
+        dispatch(showAnswerError(response.data));
+      }
     });
   };
 };
@@ -150,8 +178,13 @@ export const createAnswerGroup = (params) => {
       group_value: name,
       date_of_visit: dateOfVisit,
       status: 'AC',
-    }).then(({ data }) => {
-      dispatch(saveAnswer({ ...params, answergroupId: data.id }));
+    }).then((response) => {
+      if (response.status === 201) {
+        dispatch(saveAnswer({ ...params, answergroupId: response.data.id }));
+        dispatch(resetAnswerError());
+      } else {
+        dispatch(showAnswerError(response.data));
+      }
     });
   };
 };
@@ -183,17 +216,33 @@ export const editAnswers = (params) => {
     const { existingAnswers, newAnswers } = filterExistingAnswers(answers);
     const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${assessmentId}/answergroups/${answergroupId}/answers/`;
     if (!isEmpty(existingAnswers)) {
-      put(url, existingAnswers).then(() => {
-        dispatch(fetchAnswerGroups(assessmentId, boundaryType, boundaryId));
-        dispatch(Notifications.success(showSuccessMessage('Answers Edit!', 'Answers successfully edited!')));
+      put(url, existingAnswers).then((response) => {
+        if (response.status === 201 || response.status === 200) {
+          dispatch(fetchAnswerGroups(assessmentId, boundaryType, boundaryId));
+          dispatch(resetAnswerError());
+          dispatch(Notifications.success(showSuccessMessage('Answers Edit!', 'Answers successfully edited!')));
+        } else {
+          dispatch(showAnswerError(response.data));
+        }
       });
     }
+
     if (!isEmpty(newAnswers)) {
-      post(url, newAnswers).then(() => {
-        dispatch(fetchAnswerGroups(assessmentId, boundaryType, boundaryId));
-        dispatch(resetCreateFormEntry());
-        dispatch(Notifications.success(showSuccessMessage('Answers Save!', 'Answers successfully saved!')));
+      post(url, newAnswers).then((response) => {
+        if (response.status === 201) {
+          dispatch(fetchAnswerGroups(assessmentId, boundaryType, boundaryId));
+          dispatch(resetCreateFormEntry());
+          dispatch(resetAnswerError());
+          dispatch(Notifications.success(showSuccessMessage('Answers Save!', 'Answers successfully saved!')));
+        } else {
+          dispatch(showAnswerError(response.data));
+        }
       });
+    }
+
+    if (isEmpty(existingAnswers) && isEmpty(newAnswers)) {
+      dispatch(resetAnswerError());
+      dispatch(Notifications.success(showSuccessMessage('Answers Save!', 'Answers successfully saved!')));
     }
   };
 };

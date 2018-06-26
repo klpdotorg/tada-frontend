@@ -77,6 +77,7 @@ const mapStateToProps = (state, ownProps) => {
   const { isAdmin } = state.profile;
   const { assessments } = state.userPermissions;
   const canView = checkAssessmentPermissions(isAdmin, assessments, questionGroupId);
+  const { error } = state.answers;
 
   return {
     rows,
@@ -93,6 +94,7 @@ const mapStateToProps = (state, ownProps) => {
     },
     noQuestions: isEmpty(state.questions.questions),
     canView,
+    error,
   };
 };
 

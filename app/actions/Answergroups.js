@@ -6,7 +6,7 @@ import isEmpty from 'lodash.isempty';
 import { convertArrayToObject } from '../utils';
 import { get, patch } from './requests';
 import { FETCHING_ANSWER_GROUPS, SET_ANSWER_GROUPS } from './types';
-import { fetchAnswers, editAnswers } from './index';
+import { fetchAnswers, editAnswers, showAnswerError, resetAnswerError } from './index';
 
 export const fetchingAnswergroups = (value) => {
   return {
@@ -89,8 +89,13 @@ export const editAnswerGroup = (params) => {
       group_value: name,
       date_of_visit: dateOfVisit,
       status: 'AC',
-    }).then(({ data }) => {
-      dispatch(editAnswers({ ...params, answergroupId: data.id }));
+    }).then((response) => {
+      if (response.status === 200) {
+        dispatch(editAnswers({ ...params, answergroupId: response.data.id }));
+        dispatch(resetAnswerError());
+      } else {
+        dispatch(showAnswerError(response.data));
+      }
     });
   };
 };

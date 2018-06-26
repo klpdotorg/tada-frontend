@@ -13,7 +13,13 @@ import {
   SELECT_PROGRAM_ENTITY,
 } from './types';
 import { convertEntitiesToObject, getPath } from '../utils';
-import { showBoundaryLoading, closeBoundaryLoading, fetchAllPrograms, setPrograms } from './index';
+import {
+  showBoundaryLoading,
+  closeBoundaryLoading,
+  fetchAllPrograms,
+  setPrograms,
+  resetAnswerError,
+} from './index';
 
 const checkFilterByProgramUrl = (path, surveyOn) => {
   if (surveyOn === 'student') {
@@ -37,6 +43,7 @@ export const openFilterByProgramEntity = (uniqueId, depth, assessmentId) => {
       type: SELECT_PROGRAM_ENTITY,
       value: uniqueId,
     });
+    dispatch(resetAnswerError());
     dispatch(push(url));
   };
 };

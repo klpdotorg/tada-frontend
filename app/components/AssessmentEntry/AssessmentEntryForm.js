@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import isEmpty from 'lodash.isempty';
 
 import { Loading, Message } from '../common';
 import {
@@ -73,7 +74,7 @@ class AssessmentEntryFormView extends Component {
 
   render() {
     const { elements } = this.state;
-    const { loading, rows, noQuestions, params, canView } = this.props;
+    const { loading, rows, noQuestions, params, canView, error } = this.props;
     const disabled = elements >= 1 || !rows.length;
     const { districtId, blockId, clusterId, institutionId, studentGroupId } = params;
 
@@ -84,6 +85,20 @@ class AssessmentEntryFormView extends Component {
           disabled={disabled}
           entityIds={[districtId, blockId, clusterId, institutionId, studentGroupId]}
         />
+        {!isEmpty(error) ? (
+          <div className="alert alert-danger">
+            {Object.keys(error).map((key) => {
+              const value = error[key];
+              return (
+                <p key={key}>
+                  <strong>{key}:</strong> {value[0]}
+                </p>
+              );
+            })}
+          </div>
+        ) : (
+          <span />
+        )}
         <div className="answer-table">
           <table className="table table-striped" style={{ marginBottom: 0 }}>
             <thead>
@@ -115,6 +130,7 @@ class AssessmentEntryFormView extends Component {
 }
 
 AssessmentEntryFormView.propTypes = {
+  error: PropTypes.object,
   loading: PropTypes.bool,
   rows: PropTypes.array,
   noQuestions: PropTypes.bool,

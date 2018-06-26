@@ -74,6 +74,7 @@ const mapStateToProps = (state, ownProps) => {
   const { isAdmin } = state.profile;
   const { assessments } = state.userPermissions;
   const canView = checkAssessmentPermissions(isAdmin, assessments, questionGroupId);
+  const { error } = state.answers;
 
   return {
     boundary: studentGroup,
@@ -86,6 +87,7 @@ const mapStateToProps = (state, ownProps) => {
       boundaryType: 'studentgroup',
     },
     canView,
+    error,
   };
 };
 
