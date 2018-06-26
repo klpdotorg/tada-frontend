@@ -35,7 +35,6 @@ class FetchBlocks extends Component {
 }
 
 FetchBlocks.propTypes = {
-  loading: PropTypes.bool,
   find: PropTypes.bool,
   district: PropTypes.object,
   getBoundariesEntities: PropTypes.func,
@@ -45,13 +44,12 @@ FetchBlocks.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const { districtId, blockId } = ownProps.params;
-  const { boundariesByParentId, boundaryDetails } = state.boundaries;
-  const boundaries = get(boundariesByParentId, 2, []);
+  const { boundaryDetails } = state.boundaries;
   const district = get(boundaryDetails, districtId, {});
   const find = get(boundaryDetails, blockId, {});
-
+  const { loadingBoundary } = state.appstate;
   return {
-    loading: isEmpty(boundaries),
+    loading: loadingBoundary, // isEmpty(boundaries),
     district,
     boundaryType: 'block',
     boundaryId: blockId,

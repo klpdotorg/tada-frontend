@@ -13,9 +13,11 @@ import { Loading } from '../common';
 const PermissionsView = (props) => {
   const { boundaryId, boundaryType, loading } = props;
 
-  if (loading) {
-    return <Loading />;
-  }
+  // console.log(loading, 'Printing the loading');
+
+  // if (loading) {
+  //   return <Loading />;
+  // }
 
   return (
     <div>

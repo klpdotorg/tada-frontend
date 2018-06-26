@@ -1,6 +1,7 @@
 import { SERVER_API_BASE } from 'config';
 import { push } from 'react-router-redux';
 import Notifications from 'react-notification-system-redux';
+import omit from 'lodash.omit';
 
 import { fetchBoundary, showBoundaryLoading, toggleSubmitLoading } from './index';
 import { getPath, convertEntitiesToObject } from '../utils';
@@ -52,10 +53,9 @@ export const fetchBoundaryAssessments = (entity) => {
     const { assessments } = state.permissions;
     const url = `${SERVER_API_BASE}boundary/questiongroup-map/?boundary_ids=${entity.id}`;
     get(url).then(({ data }) => {
-      const entities = convertEntitiesToObject(data.results);
       dispatch({
         type: SET_BOUNDARY_ASSESSMENTS,
-        value: { ...assessments, ...entities },
+        value: { ...assessments, ...{ [entity.id]: data.results } },
       });
       dispatch(loadingBoundaryAssessment(false));
     });
@@ -65,7 +65,7 @@ export const fetchBoundaryAssessments = (entity) => {
 export const selectPermissionsBoundary = (id) => {
   return (dispatch, getState) => {
     const state = getState();
-    const { selectedBoundaries } = state.permissions;
+    const { selectedBoundaries, assessments } = state.permissions;
     if (!selectedBoundaries.includes(id)) {
       dispatch(fetchBoundaryAssessments({ id }));
       dispatch({
@@ -78,6 +78,10 @@ export const selectPermissionsBoundary = (id) => {
         value: selectedBoundaries.filter((val) => {
           return val !== id;
         }),
+      });
+      dispatch({
+        type: SET_BOUNDARY_ASSESSMENTS,
+        value: omit(assessments, id),
       });
     }
   };

@@ -16,18 +16,20 @@ import { UserAndBoundaryListView } from '../../components/Permissions';
 
 class GetResources extends Component {
   componentDidMount() {
+    const { boundaryId } = this.props;
     this.props.fetchUsers();
-    this.fetchResources(this.props.boundary);
+    this.fetchResources(this.props.boundary, boundaryId);
   }
 
   componentWillReceiveProps(nextProps) {
+    const { boundaryId } = nextProps;
     if (nextProps.boundary.id !== this.props.boundary.id) {
-      this.fetchResources(nextProps.boundary);
+      this.fetchResources(nextProps.boundary, boundaryId);
     }
   }
 
-  fetchResources = (boundary) => {
-    const { district, boundaryId } = this.props;
+  fetchResources = (boundary, boundaryId) => {
+    const { district } = this.props;
 
     if (!isEmpty(boundary)) {
       this.props.fetchBoundary(

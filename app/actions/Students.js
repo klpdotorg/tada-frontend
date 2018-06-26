@@ -136,9 +136,9 @@ export const modifyStudent = (groupId, options) => {
       modal: 'editStudent',
     });
 
-    const editStudentURL = `${SERVER_API_BASE}studentgroups/${groupId}/student/${options.id}`;
+    const editStudentURL = `${SERVER_API_BASE}studentgroups/${groupId}/students/bulk-update/`; // `${SERVER_API_BASE}studentgroups/${groupId}/student/${options.id}`;
 
-    put(editStudentURL, options).then(({ data }) => {
+    put(editStudentURL, [options]).then(({ data }) => {
       const entities = convertEntitiesToObject(data.results);
       dispatch({
         type: SET_BOUNDARIES,

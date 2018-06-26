@@ -15,7 +15,7 @@ const StudentView = (props) => {
   const checked = includes(selectedStudents, props.studentNodeId);
 
   if (isEmpty(student)) {
-    return <div />;
+    return <tr />;
   }
 
   return (

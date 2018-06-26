@@ -188,8 +188,7 @@ class EditStudentForm extends Component {
 
 EditStudentForm.propTypes = {
   title: PropTypes.string,
-  studentGroupId: PropTypes.string,
-  id: PropTypes.string,
+  studentGroupId: PropTypes.any,
   isOpen: PropTypes.bool,
   canSubmit: PropTypes.bool,
   languages: PropTypes.array,
