@@ -12,8 +12,12 @@ const mapStateToProps = (state) => {
     selectedAssessments,
     selectedBoundaries,
   } = state.permissions;
+  const values = Object.values(assessments).map((value) => {
+    return Object.values(value);
+  });
+
   return {
-    assessments: Object.values(assessments),
+    assessments: [].concat(...values),
     loading: loadingAssessment,
     selectedAssessments,
     noSelectedBoundaries: isEmpty(selectedBoundaries),

@@ -41,8 +41,6 @@ class NavTree extends Component {
 
   renderLabel(node, depth, collapsed) {
     const { entity } = node;
-    const type = getEntityType(entity);
-
     const label =
       capitalize(entity.label) || capitalize(entity.name) || capitalize(entity.first_name);
 
@@ -51,6 +49,15 @@ class NavTree extends Component {
         key={entity.name || entity.id}
         tabIndex="0"
         onClick={() => {
+          if (!collapsed) {
+            this.props.getBoundariesEntities([
+              {
+                id: entity.id,
+                depth,
+                uniqueId: node.uniqueId,
+              },
+            ]);
+          }
           this.props.openBoundary(node.uniqueId, depth);
         }}
       >
