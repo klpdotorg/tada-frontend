@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 
 import { SecondaryNavBar } from '../../components/Header';
-import { handleSearchText } from '../../actions';
+import { handleSearchText, toggleDistrictModal } from '../../actions';
 
 const mapStateToProps = (state) => {
   const { groups, isAdmin } = state.profile;
@@ -20,10 +20,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     toggleDistrictModal: () => {
-      dispatch({
-        type: 'TOGGLE_MODAL',
-        modal: 'createDistrict',
-      });
+      dispatch(toggleDistrictModal());
     },
     managePrograms: () => {
       dispatch(push('/programmes'));

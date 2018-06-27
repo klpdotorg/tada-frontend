@@ -8,6 +8,7 @@ const mapStateToProps = (state) => {
     placeHolder: 'Project Name',
     title: 'Create New Project',
     isOpen: state.modal.createProject,
+    error: state.boundaries.createError,
   };
 };
 

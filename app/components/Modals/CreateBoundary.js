@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
+import isEmpty from 'lodash.isempty';
 
 import { Modal } from '../Modal';
 
@@ -42,7 +43,7 @@ class CreateBoundary extends Component {
 
   render() {
     const { canSubmit } = this.state;
-    const { title, isOpen, placeHolder } = this.props;
+    const { title, isOpen, placeHolder, error } = this.props;
 
     return (
       <Modal
@@ -61,9 +62,23 @@ class CreateBoundary extends Component {
           onInvalid={this.disableSubmitButton}
           disabled={this.state.disabled}
           ref={(ref) => {
-            return (this.myform = ref);
+            this.myform = ref;
           }}
         >
+          {!isEmpty(error) ? (
+            <div className="alert alert-danger">
+              {Object.keys(error).map((key) => {
+                const value = error[key];
+                return (
+                  <p key={key}>
+                    <strong>{key}:</strong> {value[0]}
+                  </p>
+                );
+              })}
+            </div>
+          ) : (
+            <span />
+          )}
           <Input
             name="entityName"
             id="entityName"
@@ -72,7 +87,7 @@ class CreateBoundary extends Component {
             type="text"
             placeholder={placeHolder}
             help="Enter the name of the entity to be created"
-            required
+            // required
             validations="minLength:1"
           />
         </Formsy.Form>
@@ -89,6 +104,7 @@ CreateBoundary.propTypes = {
   parentNodeId: PropTypes.string,
   onCloseModal: PropTypes.func,
   save: PropTypes.func,
+  error: PropTypes.object,
 };
 
 export { CreateBoundary };

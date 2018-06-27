@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import FRC from 'formsy-react-components';
 import Formsy from 'formsy-react';
 import get from 'lodash.get';
+import isEmpty from 'lodash.isempty';
 
 import { Confirm } from '../Modal';
 import {
@@ -44,7 +45,7 @@ class EditProjectForm extends Component {
   }
 
   render() {
-    const { canDelete, project, canSubmit, hasPermissions } = this.props;
+    const { canDelete, project, canSubmit, hasPermissions, error } = this.props;
 
     return (
       <div>
@@ -84,6 +85,21 @@ class EditProjectForm extends Component {
           }}
           disabled={!hasPermissions}
         >
+          <div className="base-spacing-sm" />
+          {!isEmpty(error) ? (
+            <div className="alert alert-danger">
+              {Object.keys(error).map((key) => {
+                const value = error[key];
+                return (
+                  <p key={key}>
+                    <strong>{key}:</strong> {value[0]}
+                  </p>
+                );
+              })}
+            </div>
+          ) : (
+            <span />
+          )}
           <Input
             name="ProjectName"
             id="ProjectName"
@@ -91,7 +107,7 @@ class EditProjectForm extends Component {
             label="Project :"
             type="text"
             className="form-control"
-            required
+            // required
             validations="minLength:1"
           />
         </Formsy.Form>
@@ -134,6 +150,7 @@ EditProjectForm.propTypes = {
   enableSubmitForm: PropTypes.func,
   disableSubmitForm: PropTypes.func,
   showConfirmModal: PropTypes.func,
+  error: PropTypes.object,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -149,6 +166,7 @@ const mapStateToProps = (state, ownProps) => {
     openConfirmModal: state.appstate.confirmModal,
     canSubmit: state.appstate.enableSubmitForm,
     hasPermissions,
+    error: boundaries.editError,
   };
 };
 

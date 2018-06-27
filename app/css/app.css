@@ -954,3 +954,15 @@ table.table-fixedwidth td, .table-fixedwidth th {
   flex: 1;
   margin-right: 30px;
 }
+
+.loading-spinner {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 100px;
+  z-index: 1;
+  opacity: 1;
+  background: rgba(255,255,255,0.8);
+}

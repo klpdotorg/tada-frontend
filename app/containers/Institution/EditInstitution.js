@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
 import get from 'lodash.get';
+import isEmpty from 'lodash.isempty';
 
 import {
   deleteInstitution,
@@ -14,7 +15,7 @@ import {
 } from '../../actions';
 
 import { Confirm } from '../Modal';
-import { hasChildren, checkPermissions } from '../../utils';
+import { hasChildren } from '../../utils';
 
 const { Input, Textarea, Select } = FRC;
 
@@ -81,6 +82,7 @@ class EditInstitutionForm extends Component {
       managements,
       lastVerifiedYears,
       hasPermissions,
+      error,
     } = this.props;
 
     return (
@@ -93,6 +95,20 @@ class EditInstitutionForm extends Component {
         }}
         disabled={!hasPermissions}
       >
+        {!isEmpty(error) ? (
+          <div className="alert alert-danger">
+            {Object.keys(error).map((key) => {
+              const value = error[key];
+              return (
+                <p key={key}>
+                  <strong>{key}:</strong> {value[0]}
+                </p>
+              );
+            })}
+          </div>
+        ) : (
+          <span />
+        )}
         <div className="form-group">
           <div className="col-sm-12">
             <Input
@@ -259,6 +275,7 @@ EditInstitutionForm.propTypes = {
   showConfirmModal: PropTypes.func,
   enableSubmitForm: PropTypes.func,
   disableSubmitForm: PropTypes.func,
+  error: PropTypes.object,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -276,6 +293,7 @@ const mapStateToProps = (state, ownProps) => {
     managements: state.institution.managements,
     institutionCategories: state.institution.institutionCats,
     lastVerifiedYears: state.institution.lastVerifiedYears,
+    error: boundaries.editError,
   };
 };
 

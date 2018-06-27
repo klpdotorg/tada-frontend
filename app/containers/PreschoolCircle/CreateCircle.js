@@ -8,6 +8,7 @@ const mapStateToProps = (state) => {
     placeHolder: 'Circle Name',
     title: 'Create New Circle',
     isOpen: state.modal.createCircle,
+    error: state.boundaries.createError,
   };
 };
 

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import get from 'lodash.get';
+import isEmpty from 'lodash.isempty';
 
 import FRC from 'formsy-react-components';
 import Formsy from 'formsy-react';
@@ -44,7 +45,7 @@ class EditBlockForm extends Component {
   }
 
   render() {
-    const { canDelete, block, hasPermissions } = this.props;
+    const { canDelete, block, hasPermissions, error } = this.props;
     return (
       <div>
         {!hasPermissions ? (
@@ -82,6 +83,21 @@ class EditBlockForm extends Component {
           }}
           disabled={!hasPermissions}
         >
+          <div className="base-spacing-sm" />
+          {!isEmpty(error) ? (
+            <div className="alert alert-danger">
+              {Object.keys(error).map((key) => {
+                const value = error[key];
+                return (
+                  <p key={key}>
+                    <strong>{key}:</strong> {value[0]}
+                  </p>
+                );
+              })}
+            </div>
+          ) : (
+            <span />
+          )}
           <Input
             name="BlockName"
             id="BlockName"
@@ -121,6 +137,7 @@ class EditBlockForm extends Component {
 }
 
 EditBlockForm.propTypes = {
+  error: PropTypes.object,
   hasPermissions: PropTypes.bool,
   block: PropTypes.object,
   districtNodeId: PropTypes.string,
@@ -148,6 +165,7 @@ const mapStateToProps = (state, ownProps) => {
     openConfirmModal: state.appstate.confirmModal,
     canSubmit: state.appstate.enableSubmitForm,
     hasPermissions,
+    error: boundaries.editError,
   };
 };
 

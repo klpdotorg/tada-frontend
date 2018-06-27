@@ -1,4 +1,5 @@
 import { push } from 'react-router-redux';
+import Notifications from 'react-notification-system-redux';
 
 import { SERVER_API_BASE } from 'config';
 import { get, post, patch, deleteRequest } from './requests';
@@ -12,9 +13,15 @@ import {
   openEntity,
   removeEntity,
   closeConfirmModal,
+  toggleSpinner,
+  resetEditBoundaryError,
+  showEditBoundaryError,
+  showCreateBoundaryError,
+  resetCreateBoundaryError,
 } from './index';
 import { SET_BOUNDARIES } from './types';
 import { getPath, getEntityType, getEntityDepth, convertEntitiesToObject } from '../utils';
+import { showSuccessMessage, errorNotification } from './notifications';
 
 export const openViewStudents = (id, depth) => {
   return (dispatch, getState) => {
@@ -54,37 +61,50 @@ export const fetchStudentGroup = (parentBoundaryId, moreIds) => {
 
 export const modifyStudentGroup = (studentGroup, studentGroupId) => {
   return (dispatch) => {
-    dispatch(showBoundaryLoading());
+    dispatch(toggleSpinner(true));
 
-    patch(`${SERVER_API_BASE}studentgroups/${studentGroupId}/`, studentGroup).then(({ data }) => {
-      const entities = convertEntitiesToObject([data]);
+    patch(`${SERVER_API_BASE}studentgroups/${studentGroupId}/`, studentGroup).then((response) => {
+      if (response.status === 200) {
+        const { data } = response;
+        const entities = convertEntitiesToObject([data]);
 
-      dispatch({
-        type: SET_BOUNDARIES,
-        boundaryDetails: entities,
-      });
-      dispatch(closeBoundaryLoading());
+        dispatch({
+          type: SET_BOUNDARIES,
+          boundaryDetails: entities,
+        });
+        dispatch(resetEditBoundaryError());
+        dispatch(Notifications.success(showSuccessMessage('Student Group Modified!', 'Student Group successfully modified!')));
+      } else {
+        dispatch(showEditBoundaryError(response.data));
+      }
+      dispatch(toggleSpinner(false));
     });
   };
 };
 
 export const saveNewClass = (options) => {
   return (dispatch, getState) => {
-    post(`${SERVER_API_BASE}studentgroups/`, options).then(({ data }) => {
-      const state = getState();
-      const entities = convertEntitiesToObject([data]);
-      dispatch({
-        type: SET_BOUNDARIES,
-        boundaryDetails: entities,
-      });
-      dispatch(toggleModal('createClass'));
+    post(`${SERVER_API_BASE}studentgroups/`, options).then((response) => {
+      if (response.status === 201) {
+        const { data } = response;
+        const state = getState();
+        const entities = convertEntitiesToObject([data]);
+        dispatch({
+          type: SET_BOUNDARIES,
+          boundaryDetails: entities,
+        });
+        dispatch(toggleModal('createClass'));
 
-      const type = getEntityType(data);
-      const depth = getEntityDepth(data);
-      const path = getPath(state, { uniqueId: `${data.id}${type}`, type }, depth);
+        const type = getEntityType(data);
+        const depth = getEntityDepth(data);
+        const path = getPath(state, { uniqueId: `${data.id}${type}`, type }, depth);
 
-      dispatch(openEntity({ depth, uniqueId: `${data.id}${type}` }));
-      dispatch(push(path));
+        dispatch(openEntity({ depth, uniqueId: `${data.id}${type}` }));
+        dispatch(resetCreateBoundaryError());
+        dispatch(push(path));
+      } else {
+        dispatch(showCreateBoundaryError(response.data));
+      }
     });
   };
 };
@@ -96,16 +116,15 @@ export const deleteStudentGroup = (params) => {
 
     return deleteRequest(`${SERVER_API_BASE}institutions/${params.parentId}/studentgroups/${params.boundaryId}/`)
       .then((response) => {
-        if (response.status >= 200 && response.status < 300) {
+        if (response.status === 204) {
           dispatch(removeEntity({
             boundaryId: params.boundaryId,
             boundaryNodeId: params.boundaryNodeId,
             parentId: params.parentNodeId,
           }));
+          dispatch(Notifications.success(showSuccessMessage('Student Group Deleted!', 'Student Group successfully deleted!')));
         } else {
-          const error = new Error(response.statusText);
-          error.response = response;
-          throw error;
+          dispatch(Notifications.error(errorNotification('Error!', 'Student Group not deleted!')));
         }
       })
       .catch((error) => {

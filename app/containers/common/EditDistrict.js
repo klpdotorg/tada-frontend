@@ -3,6 +3,7 @@ import FRC from 'formsy-react-components';
 import Formsy from 'formsy-react';
 import PropTypes from 'prop-types';
 import { DEFAULT_PARENT_NODE_ID } from 'config';
+import isEmpty from 'lodash.isempty';
 
 import { Confirm } from '../Modal';
 
@@ -33,7 +34,7 @@ class EditDistrictForm extends Component {
   }
 
   render() {
-    const { boundary, primary, canDelete, hasPermissions } = this.props;
+    const { boundary, primary, canDelete, hasPermissions, error } = this.props;
 
     return (
       <div>
@@ -84,6 +85,20 @@ class EditDistrictForm extends Component {
           disabled={!hasPermissions}
         >
           <div className="base-spacing-sm" />
+          {!isEmpty(error) ? (
+            <div className="alert alert-danger">
+              {Object.keys(error).map((key) => {
+                const value = error[key];
+                return (
+                  <p key={key}>
+                    <strong>{key}:</strong> {value[0]}
+                  </p>
+                );
+              })}
+            </div>
+          ) : (
+            <span />
+          )}
           <Input
             name="DistrictName"
             id="DistrictName"
@@ -123,6 +138,7 @@ class EditDistrictForm extends Component {
 }
 
 EditDistrictForm.propTypes = {
+  error: PropTypes.object,
   hasPermissions: PropTypes.bool,
   canSubmit: PropTypes.bool,
   boundary: PropTypes.object,

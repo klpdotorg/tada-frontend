@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
 import get from 'lodash.get';
+import isEmpty from 'lodash.isempty';
 
 import {
   deleteStudentGroup,
@@ -28,7 +29,6 @@ class EditStudentGroupForm extends Component {
 
   saveStudentGroup() {
     const myform = this.myform.getModel();
-
     const studentGroup = {
       name: myform.className,
       section: myform.sectionName,
@@ -57,11 +57,10 @@ class EditStudentGroupForm extends Component {
       { label: 'Center', value: 'center' },
     ];
 
-    const { studentGroup, canDelete, hasPermissions } = this.props;
+    const { studentGroup, canDelete, hasPermissions, error } = this.props;
 
     return (
       <Formsy.Form
-        onValidSubmit={this.saveStudentGroup}
         onValid={this.props.enableSubmitForm}
         onInvalid={this.props.disableSubmitForm}
         ref={(ref) => {
@@ -69,6 +68,21 @@ class EditStudentGroupForm extends Component {
         }}
         disabled={!hasPermissions}
       >
+        <div className="base-spacing-sm" />
+        {!isEmpty(error) ? (
+          <div className="alert alert-danger">
+            {Object.keys(error).map((key) => {
+              const value = error[key];
+              return (
+                <p key={key}>
+                  <strong>{key}:</strong> {value[0]}
+                </p>
+              );
+            })}
+          </div>
+        ) : (
+          <span />
+        )}
         <div className="form-group">
           <div className="col-sm-12">
             <Input
@@ -92,7 +106,6 @@ class EditStudentGroupForm extends Component {
               label="Section :"
               type="text"
               className="form-control"
-              required
               validations="minLength:1"
             />
           </div>
@@ -112,7 +125,7 @@ class EditStudentGroupForm extends Component {
             type="submit"
             className="btn btn-primary padded-btn"
             onClick={this.saveStudentGroup}
-            disabled={!hasPermissions}
+            disabled={!hasPermissions || !this.props.canSubmit}
           >
             Save
           </button>
@@ -134,6 +147,7 @@ class EditStudentGroupForm extends Component {
 }
 
 EditStudentGroupForm.propTypes = {
+  canSubmit: PropTypes.bool,
   studentGroup: PropTypes.object,
   canDelete: PropTypes.bool,
   studentGroupNodeId: PropTypes.string,
@@ -145,6 +159,7 @@ EditStudentGroupForm.propTypes = {
   enableSubmitForm: PropTypes.func,
   disableSubmitForm: PropTypes.func,
   hasPermissions: PropTypes.bool,
+  error: PropTypes.object,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -159,6 +174,7 @@ const mapStateToProps = (state, ownProps) => {
     studentGroup,
     canSubmit: state.appstate.enableSubmitForm,
     institutionCategories: state.institution.institutionCats,
+    error: boundaries.editError,
   };
 };
 

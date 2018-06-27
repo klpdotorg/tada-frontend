@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import isEmpty from 'lodash.isempty';
 
+import { Spinner } from '../../containers/common';
 import { CreatePreschool } from '../../containers/Preschool';
 import { EditCircle } from '../../containers/PreschoolCircle';
 
@@ -18,6 +19,7 @@ const PreschoolCircleView = ({ paths, isLoading, district, project, circle, para
 
   return (
     <div>
+      <Spinner />
       <ol className="breadcrumb">
         <li>
           <Link to={paths[0]}>{district.name}</Link>

@@ -7,6 +7,7 @@ const mapStateToProps = (state) => {
     isOpen: state.modal.createDistrict,
     placeHolder: 'District Name',
     title: 'Create New District',
+    error: state.boundaries.createError,
   };
 };
 

@@ -27,6 +27,7 @@ const mapStateToProps = (state, ownProps) => {
     confirmModal: state.appstate.confirmModal,
     primary: state.schoolSelection.primarySchool,
     hasPermissions,
+    error: boundaries.editError,
   };
 };
 

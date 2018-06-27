@@ -11,7 +11,15 @@ import {
   SHOW_CLASSES_LOADING_IN_MA,
   CLOSE_CLASSES_LOADING_IN_MA,
   TOGGLE_SUBMIT_LOADING,
+  TOGGLE_SPINNER,
 } from './types';
+
+export const toggleSpinner = (value) => {
+  return {
+    type: TOGGLE_SPINNER,
+    value,
+  };
+};
 
 export const redirect = (url) => {
   return (dispatch) => {

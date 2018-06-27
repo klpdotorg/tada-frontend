@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import isEmpty from 'lodash.isempty';
 
 import { PermissionView, PreschoolActions } from './index';
+import { Spinner } from '../../containers/common';
 import { EditPreschool } from '../../containers/Preschool';
 import { CreateClass } from '../../containers/StudentGroup';
 import { Loading } from '../common';
@@ -26,6 +27,7 @@ const PreschoolView = (props) => {
 
   return (
     <div>
+      <Spinner />
       <ol className="breadcrumb">
         <li>
           <Link to={paths[0]}>{district.name}</Link>

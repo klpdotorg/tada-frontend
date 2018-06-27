@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import FRC from 'formsy-react-components';
 import Formsy from 'formsy-react';
 import get from 'lodash.get';
+import isEmpty from 'lodash.isempty';
 
 import {
   modifyBoundary,
@@ -44,7 +45,7 @@ class EditClusterView extends Component {
   }
 
   render() {
-    const { canDelete, cluster, hasPermissions } = this.props;
+    const { canDelete, cluster, hasPermissions, error } = this.props;
 
     return (
       <div>
@@ -82,6 +83,21 @@ class EditClusterView extends Component {
             this.myform = ref;
           }}
         >
+          <div className="base-spacing-sm" />
+          {!isEmpty(error) ? (
+            <div className="alert alert-danger">
+              {Object.keys(error).map((key) => {
+                const value = error[key];
+                return (
+                  <p key={key}>
+                    <strong>{key}:</strong> {value[0]}
+                  </p>
+                );
+              })}
+            </div>
+          ) : (
+            <span />
+          )}
           <Input
             name="ClusterName"
             id="ClusterName"
@@ -133,6 +149,7 @@ EditClusterView.propTypes = {
   toggleSchoolModal: PropTypes.func,
   disableSubmitForm: PropTypes.func,
   showConfirmModal: PropTypes.func,
+  error: PropTypes.object,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -148,6 +165,7 @@ const mapStateToProps = (state, ownProps) => {
     canSubmit: state.appstate.enableSubmitForm,
     cluster,
     hasPermissions,
+    error: boundaries.editError,
   };
 };
 

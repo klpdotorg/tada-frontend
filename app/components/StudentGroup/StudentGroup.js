@@ -4,6 +4,7 @@ import isEmpty from 'lodash.isempty';
 import { Link } from 'react-router';
 
 import { NoPermissionView, StudentGroupActions } from './index';
+import { Spinner } from '../../containers/common';
 import { EditStudentGroup } from '../../containers/StudentGroup';
 import { Loading } from '../common';
 
@@ -28,6 +29,7 @@ const StudentGroupView = (props) => {
 
   return (
     <div>
+      <Spinner />
       <ol className="breadcrumb">
         <li>
           <Link to={paths[0]}>{district.name}</Link>
@@ -41,7 +43,7 @@ const StudentGroupView = (props) => {
         <li>
           <Link to={paths[3]}>{institution.name}</Link>
         </li>
-        <li className="active"> {institution.name}</li>
+        <li className="active"> {studentGroup.name}</li>
       </ol>
       <NoPermissionView hasPermissions={hasPermissions} />
       <div className="row">
@@ -59,7 +61,7 @@ const StudentGroupView = (props) => {
           }}
         />
       </div>
-      <div className="base-spacing-mid border-base" />
+      <div className="base-spacing-sm border-base" />
       <EditStudentGroup
         institutionId={institution.id}
         institutionNodeId={params.institutionNodeId}

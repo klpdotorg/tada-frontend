@@ -17,6 +17,7 @@ const mapStateToProps = (state) => {
     managements: state.institution.managements,
     institutionCategories: state.institution.institutionCats,
     lastVerifiedYears: state.institution.lastVerifiedYears,
+    error: state.boundaries.createError,
   };
 };
 

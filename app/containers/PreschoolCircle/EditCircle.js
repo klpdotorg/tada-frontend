@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import FRC from 'formsy-react-components';
 import Formsy from 'formsy-react';
 import get from 'lodash.get';
+import isEmpty from 'lodash.isempty';
 
 import {
   modifyBoundary,
@@ -44,7 +45,7 @@ class EditCircleForm extends Component {
   }
 
   render() {
-    const { canDelete, circle, canSubmit, hasPermissions } = this.props;
+    const { canDelete, circle, canSubmit, hasPermissions, error } = this.props;
 
     return (
       <div>
@@ -83,6 +84,21 @@ class EditCircleForm extends Component {
           }}
           disabled={!hasPermissions}
         >
+          <div className="base-spacing-sm" />
+          {!isEmpty(error) ? (
+            <div className="alert alert-danger">
+              {Object.keys(error).map((key) => {
+                const value = error[key];
+                return (
+                  <p key={key}>
+                    <strong>{key}:</strong> {value[0]}
+                  </p>
+                );
+              })}
+            </div>
+          ) : (
+            <span />
+          )}
           <Input
             name="circleName"
             id="circleName"
@@ -133,6 +149,7 @@ EditCircleForm.propTypes = {
   toggleSchoolModal: PropTypes.func,
   disableSubmitForm: PropTypes.func,
   showConfirmModal: PropTypes.func,
+  error: PropTypes.object,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -148,6 +165,7 @@ const mapStateToProps = (state, ownProps) => {
     canSubmit: state.appstate.enableSubmitForm,
     circle,
     hasPermissions,
+    error: boundaries.editError,
   };
 };
 

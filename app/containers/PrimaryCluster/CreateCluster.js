@@ -8,6 +8,7 @@ const mapStateToProps = (state) => {
     placeHolder: 'Cluster Name',
     title: 'Create New Cluster',
     isOpen: state.modal.createCluster,
+    error: state.boundaries.createError,
   };
 };
 

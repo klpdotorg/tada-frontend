@@ -8,11 +8,34 @@ import {
   ADD_STUDENTS_FORM_VALUE_CHANGED,
   SET_BOUNDARIES,
   RESET_ADD_STUDENTS_FORM,
+  SET_STUDENT_ERROR,
 } from './types';
 import { post } from './requests';
-import { showBoundaryLoading, closeBoundaryLoading, openViewStudents } from './index';
+import {
+  showBoundaryLoading,
+  closeBoundaryLoading,
+  openViewStudents,
+  toggleSpinner,
+} from './index';
 import { convertEntitiesToObject } from '../utils';
 import { showSuccessMessage } from './notifications';
+
+export const showStudentError = (error) => {
+  return (dispatch) => {
+    dispatch({
+      type: SET_STUDENT_ERROR,
+      value: error,
+    });
+    dispatch(Notifications.error(showSuccessMessage('Error!', 'Student not saved.')));
+  };
+};
+
+export const resetStudentError = () => {
+  return {
+    type: SET_STUDENT_ERROR,
+    value: {},
+  };
+};
 
 export const setAddStudentsFormErrors = (value) => {
   return {
@@ -42,17 +65,23 @@ export const addStudents = (groupNodeId, groupId, institutionId, depth) => {
     const { values } = state.addStudents;
     const newValues = Object.values(values);
 
-    dispatch(showBoundaryLoading());
-    post(`${SERVER_API_BASE}studentgroups/${groupId}/students/`, newValues).then(({ data }) => {
-      const entities = convertEntitiesToObject(data.results);
-      dispatch({
-        type: SET_BOUNDARIES,
-        boundaryDetails: entities,
-        boundariesByParentId: { [depth]: Object.keys(entities) },
-      });
+    dispatch(toggleSpinner(true));
+    post(`${SERVER_API_BASE}studentgroups/${groupId}/students/`, newValues).then((response) => {
+      if (response.status === 201) {
+        const { data } = response;
+        const entities = convertEntitiesToObject(data.results);
+        dispatch({
+          type: SET_BOUNDARIES,
+          boundaryDetails: entities,
+          boundariesByParentId: { [depth]: Object.keys(entities) },
+        });
+        dispatch(openViewStudents(groupNodeId, depth));
+        dispatch(resetStudentError());
+      } else {
+        dispatch(showStudentError(response.data.results));
+      }
 
-      dispatch(closeBoundaryLoading());
-      dispatch(openViewStudents(groupNodeId, depth));
+      dispatch(toggleSpinner(false));
     });
   };
 };

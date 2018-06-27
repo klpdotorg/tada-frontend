@@ -1,16 +1,18 @@
 import { push } from 'react-router-redux';
+import { SERVER_API_BASE as serverApiBase } from 'config';
 
 import { post } from './requests';
-import { openEntity } from './index';
+import { openEntity, showCreateBoundaryError, resetCreateBoundaryError } from './index';
 import { convertEntitiesToObject, getEntityType, getEntityDepth, getPath } from '../utils';
 import { SET_BOUNDARIES, TOGGLE_MODAL } from './types';
 
-import { SERVER_API_BASE as serverApiBase } from 'config';
-
 export const toggleCreateClusterModal = () => {
-  return {
-    type: TOGGLE_MODAL,
-    modal: 'createCluster',
+  return (dispatch) => {
+    dispatch({
+      type: TOGGLE_MODAL,
+      modal: 'createCluster',
+    });
+    dispatch(resetCreateBoundaryError());
   };
 };
 
@@ -26,20 +28,26 @@ export const saveNewCluster = (name, blockId) => {
       status: 'AC',
     };
 
-    post(`${serverApiBase}boundaries/`, options).then(({ data }) => {
-      const entities = convertEntitiesToObject([data]);
-      dispatch({
-        type: SET_BOUNDARIES,
-        boundaryDetails: entities,
-      });
-      dispatch(toggleCreateClusterModal());
+    post(`${serverApiBase}boundaries/`, options).then((response) => {
+      if (response.status === 201) {
+        const { data } = response;
+        const entities = convertEntitiesToObject([data]);
+        dispatch({
+          type: SET_BOUNDARIES,
+          boundaryDetails: entities,
+        });
+        dispatch(toggleCreateClusterModal());
 
-      const type = getEntityType(data);
-      const depth = getEntityDepth(data);
-      const path = getPath(state, { uniqueId: `${data.id}${type}`, type }, depth);
+        const type = getEntityType(data);
+        const depth = getEntityDepth(data);
+        const path = getPath(state, { uniqueId: `${data.id}${type}`, type }, depth);
 
-      dispatch(openEntity({ depth, uniqueId: `${data.id}${type}` }));
-      dispatch(push(path));
+        dispatch(openEntity({ depth, uniqueId: `${data.id}${type}` }));
+        dispatch(resetCreateBoundaryError());
+        dispatch(push(path));
+      } else {
+        dispatch(showCreateBoundaryError(response.data));
+      }
     });
   };
 };

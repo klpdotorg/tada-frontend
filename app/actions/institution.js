@@ -1,4 +1,5 @@
 import { push } from 'react-router-redux';
+import Notifications from 'react-notification-system-redux';
 
 import { SERVER_API_BASE as serverApiBase } from 'config';
 import { get, post, deleteRequest, patch } from './requests';
@@ -19,19 +20,31 @@ import {
   openEntity,
   showBoundaryLoading,
   closeConfirmModal,
+  showCreateBoundaryError,
+  resetCreateBoundaryError,
+  showEditBoundaryError,
+  resetEditBoundaryError,
+  toggleSpinner,
 } from './index';
+import { showSuccessMessage, errorNotification } from './notifications';
 
 export const toggleCreateInstitutionModal = () => {
-  return {
-    type: TOGGLE_MODAL,
-    modal: 'createInstitution',
+  return (dispatch) => {
+    dispatch({
+      type: TOGGLE_MODAL,
+      modal: 'createInstitution',
+    });
+    dispatch(resetCreateBoundaryError());
   };
 };
 
 export const toggleClassModal = () => {
-  return {
-    type: TOGGLE_MODAL,
-    modal: 'createClass',
+  return (dispatch) => {
+    dispatch({
+      type: TOGGLE_MODAL,
+      modal: 'createClass',
+    });
+    dispatch(resetCreateBoundaryError());
   };
 };
 
@@ -118,18 +131,25 @@ export const getInstitutionCategories = () => {
 
 export const modifyInstitution = (id, options) => {
   return (dispatch, getState) => {
-    dispatch(showBoundaryLoading());
+    dispatch(toggleSpinner(true));
     const boundaryType = getState().schoolSelection.primarySchool ? 'primary' : 'pre';
     const newOptions = { ...options, institution_type: boundaryType };
 
-    patch(`${serverApiBase}institutions/${id}/`, newOptions).then(({ data }) => {
-      const entities = convertEntitiesToObject([data]);
+    patch(`${serverApiBase}institutions/${id}/`, newOptions).then((response) => {
+      if (response.status === 200) {
+        const { data } = response;
+        const entities = convertEntitiesToObject([data]);
 
-      dispatch({
-        type: SET_BOUNDARIES,
-        boundaryDetails: entities,
-      });
-      dispatch(closeBoundaryLoading());
+        dispatch({
+          type: SET_BOUNDARIES,
+          boundaryDetails: entities,
+        });
+        dispatch(resetEditBoundaryError());
+      } else {
+        dispatch(showEditBoundaryError(response.data));
+      }
+
+      dispatch(toggleSpinner(false));
     });
   };
 };
@@ -139,20 +159,26 @@ export const saveNewInstitution = (options) => {
     const state = getState();
     const boundaryType = state.schoolSelection.primarySchool ? 'primary' : 'pre';
     const newOptions = { ...options, institution_type: boundaryType };
-    post(`${serverApiBase}institutions/`, newOptions).then(({ data }) => {
-      const entities = convertEntitiesToObject([data]);
-      dispatch({
-        type: SET_BOUNDARIES,
-        boundaryDetails: entities,
-      });
-      dispatch(toggleModal('createInstitution'));
+    post(`${serverApiBase}institutions/`, newOptions).then((response) => {
+      if (response.status === 201) {
+        const { data } = response;
+        const entities = convertEntitiesToObject([data]);
+        dispatch({
+          type: SET_BOUNDARIES,
+          boundaryDetails: entities,
+        });
+        dispatch(toggleModal('createInstitution'));
 
-      const type = getEntityType(data);
-      const depth = getEntityDepth(data);
-      const path = getPath(state, { uniqueId: `${data.id}${type}`, type }, depth);
+        const type = getEntityType(data);
+        const depth = getEntityDepth(data);
+        const path = getPath(state, { uniqueId: `${data.id}${type}`, type }, depth);
 
-      dispatch(openEntity({ depth, uniqueId: `${data.id}${type}` }));
-      dispatch(push(path));
+        dispatch(openEntity({ depth, uniqueId: `${data.id}${type}` }));
+        dispatch(resetCreateBoundaryError());
+        dispatch(push(path));
+      } else {
+        dispatch(showCreateBoundaryError(response.data));
+      }
     });
   };
 };
@@ -166,10 +192,9 @@ export const deleteInstitution = (params) => {
       .then((response) => {
         if (response.status >= 200 && response.status < 300) {
           dispatch(removeEntity(params));
+          dispatch(Notifications.success(showSuccessMessage('Institution Deleted!', 'Institution successfully deleted!')));
         } else {
-          const error = new Error(response.statusText);
-          error.response = response;
-          throw error;
+          dispatch(Notifications.error(errorNotification('Error!', 'Institution not deleted!')));
         }
       })
       .catch((error) => {

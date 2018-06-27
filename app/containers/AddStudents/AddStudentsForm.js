@@ -22,6 +22,10 @@ const REQUIRED_FIELDS = [
     value: 'gender',
     label: 'Gender',
   },
+  {
+    value: 'uid',
+    label: 'Government student ID',
+  },
 ];
 
 class AddStudentsFormView extends Component {
@@ -97,8 +101,33 @@ class AddStudentsFormView extends Component {
   }
 
   render() {
+    const { error, values } = this.props;
     return (
       <div>
+        {!isEmpty(error) ? (
+          <div className="alert alert-danger">
+            {error.map((row, rowIndex) => {
+              const fields = Object.keys(row);
+              return (
+                <p key={rowIndex}>
+                  <span>
+                    <strong>Row {rowIndex + 1}</strong>
+                  </span>
+                  <br />
+                  {fields.map((field) => {
+                    return (
+                      <span>
+                        <strong>{field}:</strong> {get(row, `${field}[0].message`, '')}
+                      </span>
+                    );
+                  })}
+                </p>
+              );
+            })}
+          </div>
+        ) : (
+          <span />
+        )}
         {this.renderErrors()}
         <div className="table-responsive add-students-table">
           <table className="table table-hover table-fixedwidth">
@@ -142,7 +171,7 @@ class AddStudentsFormView extends Component {
         </div>
         <div className="row">
           <div className="col-md-4">
-            <button className="btn btn-primary" onClick={this.validate}>
+            <button className="btn btn-primary" onClick={this.validate} disabled={isEmpty(values)}>
               Save
             </button>
             <button onClick={this.props.goback} className="btn btn-primary padded-btn">
@@ -167,6 +196,7 @@ AddStudentsFormView.propTypes = {
   setAddStudentsFormErrors: PropTypes.func,
   addStudents: PropTypes.func,
   depth: PropTypes.number,
+  error: PropTypes.object,
   hasPermissions: PropTypes.bool,
 };
 
@@ -176,6 +206,7 @@ const mapStateToProps = (state, ownProps) => {
     rows: state.addStudents.rows,
     values: state.addStudents.values,
     path: get(state.boundaries.boundaryDetails, `[${ownProps.studentGroupNodeId}].path`),
+    error: state.students.error,
   };
 };
 

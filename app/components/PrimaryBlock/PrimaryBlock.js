@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import isEmpty from 'lodash.isempty';
 
+import { Spinner } from '../../containers/common';
 import { EditBlock } from '../../containers/PrimaryBlock';
 import { CreateCluster } from '../../containers/PrimaryCluster';
 
@@ -18,6 +19,7 @@ const PrimaryBlockView = ({ paths, isLoading, district, block, params }) => {
 
   return (
     <div>
+      <Spinner />
       <ol className="breadcrumb">
         <li>
           <Link to={paths[0]}>{district.name}</Link>

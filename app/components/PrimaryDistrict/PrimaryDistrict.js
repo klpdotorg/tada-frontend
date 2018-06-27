@@ -2,23 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import isEmpty from 'lodash.isempty';
 
-import { NoPermissionDistrictView } from './index';
+import { Loading } from '../common';
+import { Spinner } from '../../containers/common';
 import { CreateBlock } from '../../containers/PrimaryBlock';
 import { CreateProject } from '../../containers/PreschoolProject';
 import { EditDistrict } from '../../containers/PrimaryDistrict';
 
-const PrimaryDistrictView = ({ isAdmin, isLoading, district, districtNodeId }) => {
+const PrimaryDistrictView = ({ isLoading, district, districtNodeId }) => {
   if (isLoading || isEmpty(district)) {
-    return (
-      <div>
-        <i className="fa fa-cog fa-spin fa-lg fa-fw" />
-        <span className="text-muted">Loading...</span>
-      </div>
-    );
+    return <Loading />;
   }
 
   return (
     <div>
+      <Spinner />
       <ol className="breadcrumb">
         <li className="active">{district.name}</li>
       </ol>
@@ -31,7 +28,6 @@ const PrimaryDistrictView = ({ isAdmin, isLoading, district, districtNodeId }) =
 
 PrimaryDistrictView.propTypes = {
   isLoading: PropTypes.bool,
-  isAdmin: PropTypes.bool,
   districtNodeId: PropTypes.string,
   district: PropTypes.object,
 };

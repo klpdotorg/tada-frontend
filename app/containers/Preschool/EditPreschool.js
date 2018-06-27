@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
 import get from 'lodash.get';
+import isEmpty from 'lodash.isempty';
 
 import {
   deleteInstitution,
@@ -71,6 +72,7 @@ class EditPreschoolForm extends Component {
       languages,
       institutionCategories,
       managements,
+      error,
     } = this.props;
 
     return (
@@ -82,6 +84,20 @@ class EditPreschoolForm extends Component {
           this.myform = ref;
         }}
       >
+        {!isEmpty(error) ? (
+          <div className="alert alert-danger">
+            {Object.keys(error).map((key) => {
+              const value = error[key];
+              return (
+                <p key={key}>
+                  <strong>{key}:</strong> {value[0]}
+                </p>
+              );
+            })}
+          </div>
+        ) : (
+          <span />
+        )}
         <div className="form-group">
           <div className="col-sm-12">
             <Input
@@ -223,6 +239,7 @@ class EditPreschoolForm extends Component {
 }
 
 EditPreschoolForm.propTypes = {
+  error: PropTypes.object,
   canSubmit: PropTypes.bool,
   circleNodeId: PropTypes.string,
   institutionNodeId: PropTypes.string,
@@ -251,6 +268,7 @@ const mapStateToProps = (state, ownProps) => {
     languages: state.languages.languages,
     managements: state.institution.managements,
     institutionCategories: state.institution.institutionCats,
+    error: boundaries.editError,
   };
 };
 

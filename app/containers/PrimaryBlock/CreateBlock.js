@@ -8,6 +8,7 @@ const mapStateToProps = (state) => {
     placeHolder: 'Block Name',
     title: 'Create New Block',
     isOpen: state.modal.createBlock,
+    error: state.boundaries.createError,
   };
 };
 

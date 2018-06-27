@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 
+import { Spinner } from '../../containers/common';
 import { Loading } from '../common';
 import { CheckPermissions } from './index';
 import { CreateInstitution } from '../../containers/Institution';
@@ -13,6 +14,7 @@ const PrimaryClusterView = ({ isAdmin, isLoading, district, block, cluster, para
 
   return (
     <div>
+      <Spinner />
       <ol className="breadcrumb">
         <li>
           <Link to={paths[0]}>{district.name}</Link>

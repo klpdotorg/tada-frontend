@@ -6,6 +6,8 @@ import {
   RESET_BOUNDARY_NAV_TREE,
   DELETE_BOUNDARY_NODE,
   RESET,
+  SET_CREATE_BOUNDARY_ERROR,
+  SET_EDIT_BOUNDARY_ERROR,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -17,6 +19,8 @@ const INITIAL_STATE = {
   },
   boundariesByParentId: {},
   uncollapsedEntities: {},
+  createError: {},
+  editError: {},
 };
 
 const BoundariesNavTree = (state = INITIAL_STATE, action) => {
@@ -59,6 +63,16 @@ const BoundariesNavTree = (state = INITIAL_STATE, action) => {
         ...state,
         boundaryDetails: omit(state.boundaryDetails, action.value),
         boundariesByParentId: omit(state.boundariesByParentId, action.value),
+      };
+    case SET_CREATE_BOUNDARY_ERROR:
+      return {
+        ...state,
+        createError: action.value,
+      };
+    case SET_EDIT_BOUNDARY_ERROR:
+      return {
+        ...state,
+        editError: action.value,
       };
     case RESET:
       return INITIAL_STATE;

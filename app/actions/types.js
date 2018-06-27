@@ -144,3 +144,7 @@ export const SET_USER_ERROR = 'set_user_error';
 export const RESET_CREATE_FORM_ENTRY = 'reset_create_form_entry';
 export const SELECT_PROGRAM_ENTITY = 'select_program_entity';
 export const SET_ANSWERS_ERROR = 'set_answers_error';
+export const SET_CREATE_BOUNDARY_ERROR = 'set_create_boundary_error';
+export const SET_EDIT_BOUNDARY_ERROR = 'set_edit_boundary_error';
+export const TOGGLE_SPINNER = 'toggle_spinner';
+export const SET_STUDENT_ERROR = 'set_student_error';

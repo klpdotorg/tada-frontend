@@ -9,6 +9,7 @@ import {
   CLOSE_CLASSES_LOADING_IN_MA,
   TOGGLE_SUBMIT_LOADING,
   RESET,
+  TOGGLE_SPINNER,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -21,6 +22,7 @@ const INITIAL_STATE = {
   loadingInstitutionInMA: false,
   loadingStudentgroupInMA: false,
   submitLoading: false,
+  showSpinner: false,
 };
 
 const AppState = (state = INITIAL_STATE, action) => {
@@ -79,6 +81,11 @@ const AppState = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         submitLoading: !state.submitLoading,
+      };
+    case TOGGLE_SPINNER:
+      return {
+        ...state,
+        showSpinner: action.value,
       };
     case RESET:
       return INITIAL_STATE;

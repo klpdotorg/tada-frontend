@@ -3,6 +3,7 @@ import { push } from 'react-router-redux';
 import pull from 'lodash.pull';
 import omit from 'lodash.omit';
 import getObject from 'lodash.get';
+import Notifications from 'react-notification-system-redux';
 
 import { get, patch, deleteRequest } from './requests';
 import { convertEntitiesToObject, getPath, getEntityDepth } from '../utils';
@@ -11,8 +12,50 @@ import {
   REMOVE_EXISTING_BOUNDARIES_NODE,
   UNCOLLAPSED_BOUNDARIES,
   DELETE_BOUNDARY_NODE,
+  SET_EDIT_BOUNDARY_ERROR,
+  SET_CREATE_BOUNDARY_ERROR,
 } from './types';
-import { showBoundaryLoading, closeBoundaryLoading, closeConfirmModal } from './index';
+import {
+  showBoundaryLoading,
+  closeBoundaryLoading,
+  closeConfirmModal,
+  toggleSpinner,
+} from './index';
+import { errorNotification, showSuccessMessage } from './notifications';
+
+export const showEditBoundaryError = (error) => {
+  return (dispatch) => {
+    dispatch({
+      type: SET_EDIT_BOUNDARY_ERROR,
+      value: error,
+    });
+    dispatch(Notifications.error(showSuccessMessage('Error!', 'Boundary not saved.')));
+  };
+};
+
+export const showCreateBoundaryError = (error) => {
+  return (dispatch) => {
+    dispatch({
+      type: SET_CREATE_BOUNDARY_ERROR,
+      value: error,
+    });
+    dispatch(Notifications.error(showSuccessMessage('Error!', 'Boundary not saved.')));
+  };
+};
+
+export const resetCreateBoundaryError = () => {
+  return {
+    type: SET_CREATE_BOUNDARY_ERROR,
+    value: {},
+  };
+};
+
+export const resetEditBoundaryError = () => {
+  return {
+    type: SET_EDIT_BOUNDARY_ERROR,
+    value: {},
+  };
+};
 
 export const removeEntity = (params) => {
   return (dispatch, getState) => {
@@ -50,6 +93,7 @@ export const openBoundary = (uniqueId, depth) => {
     const path = getPath(state, uniqueId, depth);
 
     dispatch(push(path));
+    dispatch(resetEditBoundaryError());
   };
 };
 
@@ -193,19 +237,22 @@ export const getBoundariesEntities = (Ids) => {
 
 export const modifyBoundary = (boundaryId, name) => {
   return (dispatch) => {
-    dispatch(showBoundaryLoading());
+    dispatch(toggleSpinner(true));
 
     patch(`${SERVER_API_BASE}boundaries/${boundaryId}/`, { name })
-      .then(({ data }) => {
-        if (data) {
-          const entities = convertEntitiesToObject([data]);
+      .then((response) => {
+        if (response.status === 200) {
+          const entities = convertEntitiesToObject([response.data]);
 
           dispatch({
             type: SET_BOUNDARIES,
             boundaryDetails: entities,
           });
-          dispatch(closeBoundaryLoading());
+          dispatch(resetEditBoundaryError());
+        } else {
+          dispatch(showEditBoundaryError(response.data));
         }
+        dispatch(toggleSpinner(false));
       })
       .catch((error) => {
         console.log(error, 'Printing the error over here');
@@ -225,6 +272,9 @@ export const deleteBoundary = (params) => {
       .then((data) => {
         if (data.status === 204) {
           dispatch(removeEntity(params));
+          dispatch(Notifications.success(showSuccessMessage('Boundary Deleted!', 'Boundary successfully deleted!')));
+        } else {
+          dispatch(Notifications.error(errorNotification('Error!', 'Boundary not deleted!')));
         }
       })
       .catch((err) => {

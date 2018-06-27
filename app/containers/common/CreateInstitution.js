@@ -4,6 +4,7 @@ import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
 import reduce from 'lodash.reduce';
 import get from 'lodash.get';
+import isEmpty from 'lodash.isempty';
 
 import 'react-select/dist/react-select.css';
 import { Modal } from '../../components/Modal';
@@ -58,6 +59,7 @@ class CreateInstitutionForm extends Component {
       managements,
       institutionCategories,
       lastVerifiedYears,
+      error,
     } = this.props;
 
     const selectOptions = [
@@ -83,6 +85,20 @@ class CreateInstitutionForm extends Component {
             this.myform = ref;
           }}
         >
+          {!isEmpty(error) ? (
+            <div className="alert alert-danger">
+              {Object.keys(error).map((key) => {
+                const value = error[key];
+                return (
+                  <p key={key}>
+                    <strong>{key}:</strong> {value[0]}
+                  </p>
+                );
+              })}
+            </div>
+          ) : (
+            <span />
+          )}
           <Input
             name="name"
             id="name"
@@ -177,7 +193,7 @@ class CreateInstitutionForm extends Component {
 }
 
 CreateInstitutionForm.propTypes = {
-  parentNodeId: PropTypes.string,
+  error: PropTypes.object,
   isOpen: PropTypes.bool,
   canSubmit: PropTypes.bool,
   title: PropTypes.string,

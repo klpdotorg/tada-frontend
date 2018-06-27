@@ -52,7 +52,7 @@ class StudentInputRow extends Component {
             }}
             type="text"
             className="form-control"
-            required
+            // required
             disabled={!hasPermissions}
           />
         </td>
