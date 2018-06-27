@@ -11,6 +11,7 @@ import {
   disableSubmitForm,
   toggleCreateQuestionModal,
   getLanguages,
+  fetchQuestionTypes,
 } from '../../actions';
 import { QuestionTypes } from '../../Data';
 
@@ -30,11 +31,12 @@ class CreateQuestionForm extends Component {
   }
 
   componentDidMount() {
+    this.props.fetchQuestionTypes();
     this.props.getLanguages();
   }
 
   getQuestionTypes() {
-    return QuestionTypes.map((type) => {
+    return this.props.types.map((type) => {
       return {
         value: type.id,
         label: `${type.display} (${type.type})`,
@@ -204,11 +206,13 @@ CreateQuestionForm.propTypes = {
   canSubmit: PropTypes.bool,
   programId: PropTypes.number,
   assessmentId: PropTypes.number,
+  types: PropTypes.array,
   save: PropTypes.func,
   enableSubmitForm: PropTypes.func,
   disableSubmitForm: PropTypes.func,
   onCloseModal: PropTypes.func,
   getLanguages: PropTypes.func,
+  fetchQuestionTypes: PropTypes.func,
   error: PropTypes.object,
 };
 
@@ -218,6 +222,7 @@ const mapStateToProps = (state, ownProps) => {
     canSubmit: state.appstate.enableSubmitForm,
     assessmentId: Number(ownProps.assessmentId),
     error: state.questions.error,
+    types: state.questionTypes.types,
   };
 };
 
@@ -227,6 +232,7 @@ const CreateQuestion = connect(mapStateToProps, {
   disableSubmitForm,
   onCloseModal: toggleCreateQuestionModal,
   getLanguages,
+  fetchQuestionTypes,
 })(CreateQuestionForm);
 
 export { CreateQuestion };

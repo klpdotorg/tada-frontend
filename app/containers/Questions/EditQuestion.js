@@ -12,7 +12,6 @@ import {
   disableSubmitForm,
   toggleEditQuestionModal,
 } from '../../actions';
-import { QuestionTypes } from '../../Data';
 
 import { Modal } from '../../components/Modal';
 
@@ -31,7 +30,7 @@ class EditQuestionForm extends Component {
   }
 
   getQuestionTypes() {
-    return QuestionTypes.map((type) => {
+    return this.props.types.map((type) => {
       return {
         value: type.id,
         label: `${type.display} (${type.type})`,
@@ -40,7 +39,7 @@ class EditQuestionForm extends Component {
   }
 
   getQuestionTypeId(typeText) {
-    return QuestionTypes.find((type) => {
+    return this.props.types.find((type) => {
       return type.display === typeText;
     });
   }
@@ -157,7 +156,7 @@ class EditQuestionForm extends Component {
             name="type"
             label="Type"
             options={this.getQuestionTypes()}
-            value={this.getValue('version')}
+            value={this.getValue('question_type')}
             required
             onChange={this.handleTypeChange}
           />
@@ -202,6 +201,7 @@ class EditQuestionForm extends Component {
 
 EditQuestionForm.propTypes = {
   isOpen: PropTypes.bool,
+  types: PropTypes.array,
   canSubmit: PropTypes.bool,
   programId: PropTypes.number,
   assessmentId: PropTypes.number,
@@ -224,6 +224,7 @@ const mapStateToProps = (state, ownProps) => {
     question: get(questions, editQuestion),
     questionId: editQuestion,
     error,
+    types: state.questionTypes.types,
   };
 };
 

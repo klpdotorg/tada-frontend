@@ -148,3 +148,4 @@ export const SET_CREATE_BOUNDARY_ERROR = 'set_create_boundary_error';
 export const SET_EDIT_BOUNDARY_ERROR = 'set_edit_boundary_error';
 export const TOGGLE_SPINNER = 'toggle_spinner';
 export const SET_STUDENT_ERROR = 'set_student_error';
+export const SET_QUESTION_TYPES = 'set_question_types';

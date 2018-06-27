@@ -39,3 +39,4 @@ export * from './Answergroups';
 export * from './States';
 export * from './Sources';
 export * from './Partners';
+export * from './QuestionTypes';

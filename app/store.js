@@ -39,6 +39,7 @@ import {
   States,
   Partners,
   Sources,
+  QuestionTypes,
 } from './reducers';
 
 const reducer = combineReducers({
@@ -77,6 +78,7 @@ const reducer = combineReducers({
   states: States,
   partners: Partners,
   sources: Sources,
+  questionTypes: QuestionTypes,
 });
 
 const middleware = compose(

@@ -145,6 +145,7 @@ export const modifyInstitution = (id, options) => {
           boundaryDetails: entities,
         });
         dispatch(resetEditBoundaryError());
+        dispatch(Notifications.success(showSuccessMessage('Institution Modified!', 'Institution modified successfully.')));
       } else {
         dispatch(showEditBoundaryError(response.data));
       }
@@ -175,6 +176,7 @@ export const saveNewInstitution = (options) => {
 
         dispatch(openEntity({ depth, uniqueId: `${data.id}${type}` }));
         dispatch(resetCreateBoundaryError());
+        dispatch(Notifications.success(showSuccessMessage('Institution Created!', 'Institution created successfully.')));
         dispatch(push(path));
       } else {
         dispatch(showCreateBoundaryError(response.data));

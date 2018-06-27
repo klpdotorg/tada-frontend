@@ -32,3 +32,4 @@ export * from './RespondentTypes';
 export * from './States';
 export * from './Partners';
 export * from './Sources';
+export * from './QuestionTypes';

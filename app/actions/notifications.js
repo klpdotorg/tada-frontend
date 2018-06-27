@@ -150,6 +150,7 @@ export const showSuccessMessage = (title, message) => {
     ...baseNotification,
     title,
     message,
+    autoDismiss: 1,
   };
 };
 
@@ -158,6 +159,6 @@ export const errorNotification = (title, message, value) => {
     ...baseNotification,
     title,
     message,
-    autoDismiss: value || 5,
+    autoDismiss: value || 1,
   };
 };

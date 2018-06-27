@@ -29,7 +29,7 @@ export const showEditBoundaryError = (error) => {
       type: SET_EDIT_BOUNDARY_ERROR,
       value: error,
     });
-    dispatch(Notifications.error(showSuccessMessage('Error!', 'Boundary not saved.')));
+    dispatch(Notifications.error(errorNotification('Error!', 'Boundary not saved.')));
   };
 };
 
@@ -39,7 +39,7 @@ export const showCreateBoundaryError = (error) => {
       type: SET_CREATE_BOUNDARY_ERROR,
       value: error,
     });
-    dispatch(Notifications.error(showSuccessMessage('Error!', 'Boundary not saved.')));
+    dispatch(Notifications.error(errorNotification('Error!', 'Boundary not saved.')));
   };
 };
 
