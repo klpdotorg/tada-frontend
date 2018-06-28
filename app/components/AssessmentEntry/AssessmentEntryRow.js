@@ -118,6 +118,8 @@ const AssessmentEntryRowView = (props) => {
                 id={question.id}
                 value={get(currentVal, 'answer', '')}
                 type="number"
+                min={question.pass_score}
+                max={question.max_score}
                 required
                 className="form-control"
                 onChange={(e) => {
