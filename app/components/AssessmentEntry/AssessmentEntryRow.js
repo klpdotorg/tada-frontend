@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import get from 'lodash.get';
 
 import { dateFormat } from '../../utils';
+import { MultiSelect, Select } from '../common';
 
 const AssessmentEntryRowView = (props) => {
   const {
@@ -53,31 +54,36 @@ const AssessmentEntryRowView = (props) => {
           }}
         />
       </td>
-      {Object.keys(questions).map((questionId) => {
+      {Object.keys(questions).map((questionId, i) => {
         const question = questions[questionId];
         const questionType = get(question, 'question_type');
         const currentVal = answers.find((answer) => {
           return answer.question === question.id;
         });
+        const options = question.options.filter((n) => {
+          return n;
+        });
 
         if (questionType === 'CheckBox') {
+          const answerVal = get(currentVal, 'answer', []);
           return (
             <td key={question.id} className="answer-field">
-              <select
-                className="form-control"
-                value={get(currentVal, 'answer', '')}
-                onChange={(e) => {
+              <MultiSelect
+                value={typeof answerVal === 'object' ? answerVal : [answerVal]}
+                options={options.map((val) => {
+                  return {
+                    label: val,
+                    value: val,
+                  };
+                })}
+                onChange={(val) => {
                   if (currentVal && currentVal.id) {
-                    props.onChange(rowId, currentVal.id, e.target.value);
+                    props.onChange(rowId, currentVal.id, val);
                   } else {
-                    props.onChange(rowId, '', e.target.value, question.id);
+                    props.onChange(rowId, '', val, question.id);
                   }
                 }}
-              >
-                {question.options.map((val, index) => {
-                  return <option key={index}>{val}</option>;
-                })}
-              </select>
+              />
             </td>
           );
         }
@@ -85,21 +91,22 @@ const AssessmentEntryRowView = (props) => {
         if (questionType === 'Radio') {
           return (
             <td key={question.id} className="answer-field">
-              <select
-                className="form-control"
+              <Select
+                options={options.map((val) => {
+                  return {
+                    label: val,
+                    value: val,
+                  };
+                })}
                 value={get(currentVal, 'answer', '')}
-                onChange={(e) => {
+                onChange={(val) => {
                   if (currentVal && currentVal.id) {
-                    props.onChange(rowId, currentVal.id, e.target.value);
+                    props.onChange(rowId, currentVal.id, val);
                   } else {
-                    props.onChange(rowId, '', e.target.value, question.id);
+                    props.onChange(rowId, '', val, question.id);
                   }
                 }}
-              >
-                {question.options.map((val, index) => {
-                  return <option key={index}>{val}</option>;
-                })}
-              </select>
+              />
             </td>
           );
         }

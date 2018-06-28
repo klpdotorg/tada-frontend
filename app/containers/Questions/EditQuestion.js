@@ -23,10 +23,24 @@ class EditQuestionForm extends Component {
 
     this.state = {
       disabledOptionsField: false,
+      disabledScoreFields: false,
+      options: [],
     };
 
     this.submitForm = this.submitForm.bind(this);
     this.getValue = this.getValue.bind(this);
+    this.handleTypeChange = this.handleTypeChange.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.question !== this.props.question) {
+      const newVal = this.checkOptionPermission(nextProps.question.question_type_id);
+      const scorePermission = this.checkScorePermission(nextProps.question.question_type_id);
+      this.setState({
+        disabledOptionsField: newVal,
+        disabledScoreFields: scorePermission,
+      });
+    }
   }
 
   getQuestionTypes() {
@@ -46,6 +60,31 @@ class EditQuestionForm extends Component {
 
   getValue(field) {
     return get(this.props.question, field, '');
+  }
+
+  checkOptionPermission(value) {
+    if (Number(value) === 2 || Number(value) === 1) {
+      return false;
+    }
+
+    return true;
+  }
+
+  checkScorePermission(value) {
+    if (Number(value) === 3) {
+      return false;
+    }
+
+    return true;
+  }
+
+  handleTypeChange(field, value) {
+    const newVal = this.checkOptionPermission(value);
+    const scorePermission = this.checkScorePermission(value);
+    this.setState({
+      disabledOptionsField: newVal,
+      disabledScoreFields: scorePermission,
+    });
   }
 
   submitForm() {
@@ -68,7 +107,7 @@ class EditQuestionForm extends Component {
   }
 
   render() {
-    const { disabledOptionsField } = this.state;
+    const { disabledOptionsField, disabledScoreFields } = this.state;
     const { isOpen, canSubmit, error } = this.props;
     const featuredValues = [
       {
@@ -80,7 +119,7 @@ class EditQuestionForm extends Component {
         label: 'False',
       },
     ];
-    const options = this.getValue('options') || [];
+    const options = this.state.options || this.getValue('options') || [];
     return (
       <Modal
         title="Edit Question"
@@ -156,7 +195,7 @@ class EditQuestionForm extends Component {
             name="type"
             label="Type"
             options={this.getQuestionTypes()}
-            value={this.getValue('question_type')}
+            value={this.getValue('question_type_id')}
             required
             onChange={this.handleTypeChange}
           />
@@ -184,6 +223,8 @@ class EditQuestionForm extends Component {
             label="Max Score"
             type="text"
             placeholder="Enter Max score"
+            disabled={disabledScoreFields}
+            required={!disabledScoreFields}
           />
           <Input
             name="pass_score"
@@ -192,6 +233,8 @@ class EditQuestionForm extends Component {
             label="Pass Score"
             type="text"
             placeholder="Enter Pass score"
+            disabled={disabledScoreFields}
+            required={!disabledScoreFields}
           />
         </Formsy.Form>
       </Modal>

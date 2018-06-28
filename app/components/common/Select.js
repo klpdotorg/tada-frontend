@@ -1,30 +1,96 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import isEmtpy from 'lodash.isempty';
+import isEmpty from 'lodash.isempty';
+
+const RenderOptions = (props) => {
+  const { options, id, value } = props;
+
+  if (!isEmpty(options)) {
+    return (
+      <ul className="dropdown-menu multi-select" id={`multiselect-dropdown${id}`}>
+        {options.map((option, i) => {
+          if (Number(value) === Number(option.value)) {
+            return (
+              <li className="selected-multiselect-item" key={i}>
+                <a
+                  onClick={() => {
+                    props.handleChange(option.value);
+                  }}
+                >
+                  <input type="radio" aria-label="..." checked />
+                  <span>{option.label}</span>
+                </a>
+              </li>
+            );
+          }
+          return (
+            <li key={i}>
+              <a
+                onClick={() => {
+                  props.handleChange(option.value);
+                }}
+              >
+                <input type="radio" aria-label="..." checked={false} />
+                <span>{option.label}</span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    );
+  }
+
+  return (
+    <ul className="dropdown-menu multi-select" id={`multiselect-dropdown${id}`}>
+      <li className="disabled">
+        <a>
+          <input type="radio" aria-label="..." checked={false} />
+          <span>Empty</span>
+        </a>
+      </li>
+    </ul>
+  );
+};
 
 class Select extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: '',
+      value: this.props.value,
+      id: Math.floor(Math.random() * (200 - 0 + 1)) + 0,
     };
     this.handleChange = this.handleChange.bind(this);
     this.toggleDropdown = this.toggleDropdown.bind(this);
+    this.handleDocumentClick = this.handleDocumentClick.bind(this);
   }
 
   componentDidMount() {
-    window.onclick = (event) => {
-      if (!event.target.matches('.show-multiSelect-dropdown')) {
-        const el = document.getElementById(`multiselect-dropdown${this.props.id}`);
-        if (el && el.classList.contains('show')) {
-          el.classList.remove('show');
-        }
+    window.addEventListener('click', this.handleDocumentClick);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.value !== this.props.value) {
+      this.setState({
+        value: nextProps.value,
+      });
+    }
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('click', this.handleDocumentClick, false);
+  }
+
+  handleDocumentClick() {
+    if (!event.target.matches(`.show-multiSelect-dropdown${this.state.id}`)) {
+      const el = document.getElementById(`multiselect-dropdown${this.state.id}`);
+      if (el && el.classList.contains('show')) {
+        el.classList.remove('show');
       }
-    };
+    }
   }
 
   toggleDropdown() {
-    const el = document.getElementById(`multiselect-dropdown${this.props.id}`);
+    const el = document.getElementById(`multiselect-dropdown${this.state.id}`);
     if (!el.classList.contains('show')) {
       el.classList.add('show');
     } else {
@@ -42,9 +108,9 @@ class Select extends React.Component {
   }
 
   render() {
-    const { value } = this.state;
+    const { value, id } = this.state;
     const { options } = this.props;
-    const dropdownClassName = `show-multiSelect-dropdown${this.props.id}`;
+    const dropdownClassName = `show-multiSelect-dropdown${id}`;
 
     return (
       <div>
@@ -53,44 +119,18 @@ class Select extends React.Component {
             className={`btn btn-default dropdown-toggle ${dropdownClassName}`}
             type="button"
             data-toggle="dropdown"
+            style={{ width: 110 }}
             onClick={this.toggleDropdown}
           >
-            <span className={dropdownClassName}>{!isEmtpy(value) ? value : 'Select...'}</span>
+            <span className={`multiselect-text ${dropdownClassName}`}>
+              {!isEmpty(value) ? value : 'Select...'}
+            </span>
             <span
               className={`caret ${dropdownClassName}`}
               style={{ float: 'right', marginTop: 9 }}
             />
           </button>
-          <ul className="dropdown-menu multi-select" id={`multiselect-dropdown${this.props.id}`}>
-            {options.map((option, i) => {
-              if (value === option.value) {
-                return (
-                  <li className="selected-multiselect-item" key={i}>
-                    <a
-                      onClick={() => {
-                        this.handleChange(option.value);
-                      }}
-                    >
-                      <input type="radio" aria-label="..." checked />
-                      <span>{option.label}</span>
-                    </a>
-                  </li>
-                );
-              }
-              return (
-                <li key={i}>
-                  <a
-                    onClick={() => {
-                      this.handleChange(option.value);
-                    }}
-                  >
-                    <input type="radio" aria-label="..." checked={false} />
-                    <span>{option.label}</span>
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
+          <RenderOptions options={options} handleChange={this.handleChange} id={id} value={value} />
         </div>
       </div>
     );
@@ -98,7 +138,6 @@ class Select extends React.Component {
 }
 
 Select.defaultProps = {
-  id: 1,
   options: [
     {
       value: 'html',
@@ -117,8 +156,14 @@ Select.defaultProps = {
 
 Select.propTypes = {
   options: PropTypes.array,
-  id: PropTypes.any,
   onChange: PropTypes.func,
+  value: PropTypes.any,
+};
+
+RenderOptions.propTypes = {
+  options: PropTypes.array,
+  id: PropTypes.number,
+  value: PropTypes.any,
 };
 
 export { Select };

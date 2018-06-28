@@ -13,7 +13,6 @@ import {
   getLanguages,
   fetchQuestionTypes,
 } from '../../actions';
-import { QuestionTypes } from '../../Data';
 
 import { Modal } from '../../components/Modal';
 
@@ -25,6 +24,7 @@ class CreateQuestionForm extends Component {
 
     this.state = {
       disabledOptionsField: true,
+      disabledScoreFields: false,
     };
     this.submitForm = this.submitForm.bind(this);
     this.handleTypeChange = this.handleTypeChange.bind(this);
@@ -65,20 +65,33 @@ class CreateQuestionForm extends Component {
     this.props.save(question, programId, assessmentId);
   }
 
-  handleTypeChange(field, value) {
-    if (value == 2) {
-      this.setState({
-        disabledOptionsField: false,
-      });
-    } else {
-      this.setState({
-        disabledOptionsField: true,
-      });
+  checkOptionPermission(value) {
+    if (Number(value) === 2 || Number(value) === 1) {
+      return false;
     }
+
+    return true;
+  }
+
+  checkScorePermission(value) {
+    if (Number(value) === 3) {
+      return false;
+    }
+
+    return true;
+  }
+
+  handleTypeChange(field, value) {
+    const newVal = this.checkOptionPermission(value);
+    const scorePermission = this.checkScorePermission(value);
+    this.setState({
+      disabledOptionsField: newVal,
+      disabledScoreFields: scorePermission,
+    });
   }
 
   render() {
-    const { disabledOptionsField } = this.state;
+    const { disabledOptionsField, disabledScoreFields } = this.state;
     const { isOpen, canSubmit, error } = this.props;
     const featuredValues = [
       {
@@ -184,16 +197,20 @@ class CreateQuestionForm extends Component {
             id="max_score"
             value=""
             label="Max Score"
-            type="text"
+            type="number"
             placeholder="Enter Max score"
+            disabled={disabledScoreFields}
+            required={!disabledScoreFields}
           />
           <Input
             name="pass_score"
             id="pass_score"
             value=""
             label="Pass Score"
-            type="text"
+            type="number"
             placeholder="Enter Pass score"
+            disabled={disabledScoreFields}
+            required={!disabledScoreFields}
           />
         </Formsy.Form>
       </Modal>

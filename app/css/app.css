@@ -966,7 +966,9 @@ table.table-fixedwidth td, .table-fixedwidth th {
   opacity: 1;
   background: rgba(255,255,255,0.8);
 }
-
+.multi-select {
+  z-index: 100;
+}
 .multi-select input {
   margin-right: 8px;
 }
@@ -979,4 +981,13 @@ table.table-fixedwidth td, .table-fixedwidth th {
 .selected-multiselect-item a:hover {
   background-image: none;
   background-color: #337ab7 !important; 
-};
+}
+.multiselect-text {
+  text-align: left;
+  height: 16px;
+  display: inline-block;
+  width: 67px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
