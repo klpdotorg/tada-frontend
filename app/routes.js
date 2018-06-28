@@ -15,6 +15,7 @@ import { DistrictPermissions, BlockPermissions } from './containers/Permissions'
 import RevertEntity from './containers/RevertEntity';
 import { MapAssessments } from './containers/MapAssessments';
 // import { ManageUsers } from './containers/Users/ManageUsers';
+import { MultiSelect } from './components/common';
 import {
   InstitutionAnswersSheet,
   StudentGroupAnswersSheet,
@@ -174,6 +175,7 @@ export const routes = (
       <Route path="/" component={App} onEnter={isUserAuthenticated}>
         <IndexRoute component={Dashboard} onEnter={isUserAuthenticated} />
         <Route path="dashboard" component={Dashboard} />
+        <Route path="multiselect" component={MultiSelect} />
         <Route path="programmes" component={Programs} />
         <Route path="filterprograms" component={DefaultMessage} />
         <Route

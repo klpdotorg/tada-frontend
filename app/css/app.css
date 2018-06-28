@@ -966,3 +966,17 @@ table.table-fixedwidth td, .table-fixedwidth th {
   opacity: 1;
   background: rgba(255,255,255,0.8);
 }
+
+.multi-select input {
+  margin-right: 8px;
+}
+.selected-multiselect-item {
+  background: #337ab7;
+}
+.selected-multiselect-item span {
+  color: white;
+}
+.selected-multiselect-item a:hover {
+  background-image: none;
+  background-color: #337ab7 !important; 
+};

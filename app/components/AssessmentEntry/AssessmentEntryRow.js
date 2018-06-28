@@ -85,11 +85,42 @@ const AssessmentEntryRowView = (props) => {
         if (questionType === 'Radio') {
           return (
             <td key={question.id} className="answer-field">
-              <select className="form-control" value={get(currentVal, 'answer', '')}>
+              <select
+                className="form-control"
+                value={get(currentVal, 'answer', '')}
+                onChange={(e) => {
+                  if (currentVal && currentVal.id) {
+                    props.onChange(rowId, currentVal.id, e.target.value);
+                  } else {
+                    props.onChange(rowId, '', e.target.value, question.id);
+                  }
+                }}
+              >
                 {question.options.map((val, index) => {
                   return <option key={index}>{val}</option>;
                 })}
               </select>
+            </td>
+          );
+        }
+
+        if (questionType === 'NumericBox') {
+          return (
+            <td key={question.id} className="answer-field">
+              <input
+                id={question.id}
+                value={get(currentVal, 'answer', '')}
+                type="number"
+                required
+                className="form-control"
+                onChange={(e) => {
+                  if (currentVal && currentVal.id) {
+                    props.onChange(rowId, currentVal.id, e.target.value);
+                  } else {
+                    props.onChange(rowId, '', e.target.value, question.id);
+                  }
+                }}
+              />
             </td>
           );
         }
