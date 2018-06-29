@@ -15,9 +15,16 @@ const mapStateToProps = (state) => {
   const values = Object.values(assessments).map((value) => {
     return Object.values(value);
   });
+  const newAssessments = [].concat(...values);
+  const uniqItems = newAssessments.reduce((soFar, item) => {
+    const result = soFar;
+    result[item.questiongroup_id] = item;
+
+    return result;
+  }, {});
 
   return {
-    assessments: [].concat(...values),
+    assessments: Object.values(uniqItems),
     loading: loadingAssessment,
     selectedAssessments,
     noSelectedBoundaries: isEmpty(selectedBoundaries),
