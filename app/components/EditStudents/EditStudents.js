@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import isEmpty from 'lodash.isempty';
 
 import { EditStudentsForm } from '../../containers/EditStudents';
+import { Spinner } from '../../containers/common';
 import { Loading } from '../common';
 
 const EditStudentsView = (props) => {
@@ -27,6 +28,7 @@ const EditStudentsView = (props) => {
 
   return (
     <div>
+      <Spinner />
       <ol className="breadcrumb">
         <li>
           <Link to={paths[0]}>{district.name}</Link>

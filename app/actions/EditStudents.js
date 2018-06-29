@@ -8,7 +8,7 @@ import {
   SET_BOUNDARIES,
 } from './types';
 import { put } from './requests';
-import { showBoundaryLoading, closeBoundaryLoading, openViewStudents } from './index';
+import { showStudentError, resetStudentError, openViewStudents, toggleSpinner } from './index';
 import { convertEntitiesToObject, getPath, getEntityDepth } from '../utils';
 
 export const openEditStudentsForm = (groupNodeId) => {
@@ -69,21 +69,27 @@ export const editStudents = (groupNodeId, groupId, institutionId, depth) => {
     const { values } = state.editStudents;
     const newValues = Object.values(values);
 
-    dispatch(showBoundaryLoading());
+    dispatch(toggleSpinner(true));
 
     put(
       `${SERVER_API_BASE}studentgroups/${groupId}/students/bulk-update/`,
       newValues,
-    ).then(({ data }) => {
-      const entities = convertEntitiesToObject(data.results);
-      dispatch({
-        type: SET_BOUNDARIES,
-        boundaryDetails: entities,
-        boundariesByParentId: { [depth]: Object.keys(entities) },
-      });
+    ).then((response) => {
+      if (response.status === 200) {
+        const { data } = response;
+        const entities = convertEntitiesToObject(data.results);
+        dispatch({
+          type: SET_BOUNDARIES,
+          boundaryDetails: entities,
+          boundariesByParentId: { [depth]: Object.keys(entities) },
+        });
 
-      dispatch(closeBoundaryLoading());
-      dispatch(openViewStudents(groupNodeId, depth));
+        dispatch(openViewStudents(groupNodeId, depth));
+        dispatch(resetStudentError());
+      } else {
+        dispatch(showStudentError(response.data.results));
+      }
+      dispatch(toggleSpinner(false));
     });
   };
 };

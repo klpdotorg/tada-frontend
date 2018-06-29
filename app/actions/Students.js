@@ -20,6 +20,8 @@ import {
   requestFailed,
   showBoundaryLoading,
   closeConfirmModal,
+  resetStudentError,
+  showStudentError,
 } from './index';
 import { convertEntitiesToObject, getEntityDepth } from '../utils';
 import { showSuccessMessage, errorNotification } from './notifications';
@@ -132,21 +134,25 @@ export const openEditStudentModal = (value) => {
 
 export const modifyStudent = (groupId, options) => {
   return (dispatch) => {
-    dispatch(showBoundaryLoading());
-    dispatch({
-      type: TOGGLE_MODAL,
-      modal: 'editStudent',
-    });
-
     const editStudentURL = `${SERVER_API_BASE}studentgroups/${groupId}/students/bulk-update/`; // `${SERVER_API_BASE}studentgroups/${groupId}/student/${options.id}`;
 
-    put(editStudentURL, [options]).then(({ data }) => {
-      const entities = convertEntitiesToObject(data.results);
+    put(editStudentURL, [options]).then((response) => {
+      if (response.status === 200) {
+        const { data } = response;
+        const entities = convertEntitiesToObject(data.results);
+        dispatch({
+          type: SET_BOUNDARIES,
+          boundaryDetails: entities,
+        });
+        dispatch(resetStudentError());
+      } else {
+        dispatch(showStudentError(response.data.results));
+      }
+
       dispatch({
-        type: SET_BOUNDARIES,
-        boundaryDetails: entities,
+        type: TOGGLE_MODAL,
+        modal: 'editStudent',
       });
-      dispatch(closeBoundaryLoading());
     });
   };
 };

@@ -18,6 +18,7 @@ import {
   showEditBoundaryError,
   showCreateBoundaryError,
   resetCreateBoundaryError,
+  resetStudentError,
 } from './index';
 import { SET_BOUNDARIES } from './types';
 import { getPath, getEntityType, getEntityDepth, convertEntitiesToObject } from '../utils';
@@ -27,7 +28,7 @@ export const openViewStudents = (id, depth) => {
   return (dispatch, getState) => {
     const state = getState();
     const path = getPath(state, id, depth);
-
+    dispatch(resetStudentError());
     dispatch(push(`${path}/students`));
   };
 };
@@ -36,7 +37,7 @@ export const openAddStudents = (id, depth) => {
   return (dispatch, getState) => {
     const state = getState();
     const path = getPath(state, id, depth);
-
+    dispatch(resetStudentError());
     dispatch(push(`${path}/addStudents`));
   };
 };

@@ -12,10 +12,10 @@ import {
 } from './types';
 import { post } from './requests';
 import {
-  showBoundaryLoading,
-  closeBoundaryLoading,
   openViewStudents,
   toggleSpinner,
+  showBoundaryLoading,
+  closeBoundaryLoading,
 } from './index';
 import { convertEntitiesToObject } from '../utils';
 import { showSuccessMessage } from './notifications';
@@ -95,18 +95,25 @@ export const addStudent = (index, groupId, depth) => {
     dispatch(showBoundaryLoading());
     post(`${SERVER_API_BASE}studentgroups/${groupId}/students/`, [
       newValues[index],
-    ]).then(({ data }) => {
-      const entities = convertEntitiesToObject(data.results);
-      dispatch({
-        type: SET_BOUNDARIES,
-        boundaryDetails: entities,
-        boundariesByParentId: { [depth]: Object.keys(entities) },
-      });
-      dispatch({
-        type: RESET_ADD_STUDENTS_FORM,
-        value: omit(values, index),
-      });
-      dispatch(Notifications.success(showSuccessMessage('Student Added!', 'Student successfully added.')));
+    ]).then((response) => {
+      if (response.status === 201) {
+        const { data } = response;
+        const entities = convertEntitiesToObject(data.results);
+        dispatch({
+          type: SET_BOUNDARIES,
+          boundaryDetails: entities,
+          boundariesByParentId: { [depth]: Object.keys(entities) },
+        });
+        dispatch({
+          type: RESET_ADD_STUDENTS_FORM,
+          value: omit(values, index),
+        });
+        dispatch(Notifications.success(showSuccessMessage('Student Added!', 'Student successfully added.')));
+        dispatch(resetStudentError());
+      } else {
+        dispatch(showStudentError(response.data.results));
+      }
+
       dispatch(closeBoundaryLoading());
     });
   };

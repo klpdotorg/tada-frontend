@@ -100,10 +100,34 @@ class EditStudentsFormView extends Component {
   }
 
   render() {
-    const { hasPermissions } = this.props;
+    const { hasPermissions, error } = this.props;
 
     return (
       <div>
+        {!isEmpty(error) ? (
+          <div className="alert alert-danger">
+            {error.map((row, rowIndex) => {
+              const fields = Object.keys(row);
+              return (
+                <p key={rowIndex}>
+                  <span>
+                    <strong>Row {rowIndex + 1}</strong>
+                  </span>
+                  <br />
+                  {fields.map((field) => {
+                    return (
+                      <span>
+                        <strong>{field}:</strong> {get(row, `${field}[0].message`, '')}
+                      </span>
+                    );
+                  })}
+                </p>
+              );
+            })}
+          </div>
+        ) : (
+          <span />
+        )}
         {this.renderErrors()}
         <div className="table-responsive add-students-table">
           <table className="table table-hover table-fixedwidth">
@@ -172,6 +196,7 @@ EditStudentsFormView.propTypes = {
   editStudents: PropTypes.func,
   depth: PropTypes.number,
   setEditStudents: PropTypes.func,
+  error: PropTypes.object,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -179,6 +204,7 @@ const mapStateToProps = (state, ownProps) => {
     formErrors: state.editStudents.formErrors,
     values: state.editStudents.values,
     path: get(state.boundaries.boundaryDetails, `[${ownProps.studentGroupNodeId}].path`),
+    error: state.students.error,
   };
 };
 
