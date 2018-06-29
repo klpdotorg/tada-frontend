@@ -18,7 +18,7 @@ import { checkPermissions, getEntitiesPath } from '../../utils';
 
 class FetchStudents extends Component {
   componentDidMount() {
-    const { params, studentIds } = this.props;
+    const { params, studentGroup } = this.props;
 
     const {
       blockNodeId,
@@ -28,7 +28,7 @@ class FetchStudents extends Component {
       studentGroupNodeId,
     } = params;
 
-    if (!studentIds.length) {
+    if (isEmpty(studentGroup)) {
       const entities = [
         DEFAULT_PARENT_NODE_ID,
         districtNodeId,
@@ -39,12 +39,10 @@ class FetchStudents extends Component {
       ].map((id, i) => {
         return { depth: i, uniqueId: id };
       });
-
       this.props.getBoundariesEntities(entities);
     }
 
     const studentGroupId = get(this.props.studentGroup, 'id');
-
     if (studentGroupId) {
       this.props.fetchStudentBoundaries(studentGroupNodeId);
     }

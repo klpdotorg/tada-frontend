@@ -167,7 +167,6 @@ export const uncollapsedBoundaries = (entity) => {
       if (!existing) {
         depths.push(entity.depth);
       }
-
       const newUnCollapsedEntities = depths.reduce((soFar, depth) => {
         const result = soFar;
         const value = uncollapsedEntities[depth];
@@ -180,7 +179,6 @@ export const uncollapsedBoundaries = (entity) => {
 
         return result;
       }, {});
-
       dispatch({
         type: UNCOLLAPSED_BOUNDARIES,
         value: newUnCollapsedEntities,
