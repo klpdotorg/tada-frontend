@@ -95,8 +95,14 @@ class AddUserView extends Component {
             id="mobileno"
             value=""
             label="Mobile No."
-            type="number"
-            validations="minLength:1"
+            type="tel"
+            validations={{
+              myCustomIsFiveValidation: (values, value) => {
+                return value.match(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im)
+                  ? true
+                  : '';
+              },
+            }}
             required
           />
           <Input
@@ -105,7 +111,7 @@ class AddUserView extends Component {
             value=""
             label="Email"
             type="email"
-            validations="minLength:1"
+            validations="isEmail"
             required
           />
           <Input
