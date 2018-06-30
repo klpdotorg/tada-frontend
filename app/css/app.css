@@ -741,8 +741,10 @@ table.table-fixedwidth td, .table-fixedwidth th {
 
 .answer-table {
   border: 1px solid #c7c0c0;
-  width: 100%;
-  overflow-x: scroll;
+  width: 97%;
+  overflow: scroll;
+  position: absolute;
+  height: 90%;
   max-width: 1036px;
 }
 
@@ -990,4 +992,10 @@ table.table-fixedwidth td, .table-fixedwidth th {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.Select-menu-outer {
+  z-index: 9999;
+  position: absolute;
+
 }

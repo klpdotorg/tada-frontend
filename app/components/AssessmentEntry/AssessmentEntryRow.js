@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import get from 'lodash.get';
+import Select from 'react-select';
 
 import { dateFormat } from '../../utils';
-import { MultiSelect, Select } from '../common';
 
 const AssessmentEntryRowView = (props) => {
   const {
@@ -68,21 +68,28 @@ const AssessmentEntryRowView = (props) => {
           const answerVal = get(currentVal, 'answer', []);
           return (
             <td key={question.id} className="answer-field">
-              <MultiSelect
-                value={typeof answerVal === 'object' ? answerVal : [answerVal]}
+              <Select
+                name="form-field-name"
+                style={{ minWidth: 200 }}
+                value={answerVal}
+                menuContainerStyle={{ zIndex: 9999 }}
+                multi
+                onChange={(val) => {
+                  const filterVal = val.map((item) => {
+                    return item.value;
+                  });
+                  if (currentVal && currentVal.id) {
+                    props.onChange(rowId, currentVal.id, filterVal);
+                  } else {
+                    props.onChange(rowId, '', filterVal, question.id);
+                  }
+                }}
                 options={options.map((val) => {
                   return {
                     label: val,
                     value: val,
                   };
                 })}
-                onChange={(val) => {
-                  if (currentVal && currentVal.id) {
-                    props.onChange(rowId, currentVal.id, val);
-                  } else {
-                    props.onChange(rowId, '', val, question.id);
-                  }
-                }}
               />
             </td>
           );
@@ -98,12 +105,13 @@ const AssessmentEntryRowView = (props) => {
                     value: val,
                   };
                 })}
+                style={{ minWidth: 100 }}
                 value={get(currentVal, 'answer', '')}
                 onChange={(val) => {
                   if (currentVal && currentVal.id) {
-                    props.onChange(rowId, currentVal.id, val);
+                    props.onChange(rowId, currentVal.id, val.value);
                   } else {
-                    props.onChange(rowId, '', val, question.id);
+                    props.onChange(rowId, '', val.value, question.id);
                   }
                 }}
               />

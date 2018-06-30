@@ -24,6 +24,7 @@ const RenderForm = (props) => {
         assessmentId={params.questionGroupId}
         uniqueId={uniqueId}
         boundaryInfo={boundaryInfo}
+        resetRow={props.resetRow}
       />
     );
   }
@@ -48,6 +49,7 @@ const RenderForm = (props) => {
             assessmentId={params.questionGroupId}
             uniqueId={uniqueId}
             boundaryInfo={boundaryInfo}
+            resetRow={props.resetRow}
           />
         );
       })}
@@ -64,11 +66,19 @@ class AssessmentEntryFormView extends Component {
     };
 
     this.addRow = this.addRow.bind(this);
+    this.resetRow = this.resetRow.bind(this);
   }
 
   addRow() {
     this.setState({
       elements: this.state.elements + 1,
+    });
+  }
+
+  resetRow() {
+    console.log('asdfas');
+    this.setState({
+      elements: 0,
     });
   }
 
@@ -104,7 +114,7 @@ class AssessmentEntryFormView extends Component {
             <thead>
               <AssessmentEntryColHeader />
             </thead>
-            <RenderForm {...this.props} elements={elements} />
+            <RenderForm {...this.props} elements={elements} resetRow={this.resetRow} />
           </table>
           {loading ? (
             <div style={{ textAlign: 'center', paddingBottom: 10, paddingTop: 10 }}>

@@ -11,7 +11,11 @@ const AssessmentEntryColHeaderView = ({ questions }) => {
       <td>Name</td>
       <td>Date of Visit</td>
       {values.map((id, i) => {
-        return <td key={id}>{i + 1}</td>;
+        return (
+          <td key={id} title={questions[id].question_text}>
+            {i + 1}
+          </td>
+        );
       })}
       <td>Save</td>
     </tr>

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import get from 'lodash.get';
+import Select from 'react-select';
 
 import { dateFormat } from '../../utils';
 
@@ -55,21 +56,32 @@ const CreateEntryRowView = (props) => {
         const question = questions[questionId];
         const questionType = get(question, 'question_type');
         const value = get(answers, [id, question.id, 'value'], '');
+        const options = question.options.filter((n) => {
+          return n;
+        });
 
         if (questionType === 'CheckBox') {
           return (
             <td key={question.id} className="answer-field">
-              <select
-                className="form-control"
+              <Select
+                name="form-field-name"
+                style={{ minWidth: 200 }}
                 value={value}
-                onChange={(e) => {
-                  props.onChange(e.target.value, id, question.id);
-                }}
-              >
-                {question.options.map((val, index) => {
-                  return <option key={index}>{val}</option>;
+                menuContainerStyle={{ zIndex: 9999 }}
+                multi
+                options={options.map((val) => {
+                  return {
+                    label: val,
+                    value: val,
+                  };
                 })}
-              </select>
+                onChange={(val) => {
+                  const filterVal = val.map((item) => {
+                    return item.value;
+                  });
+                  props.onChange(filterVal, id, question.id);
+                }}
+              />
             </td>
           );
         }
@@ -77,11 +89,19 @@ const CreateEntryRowView = (props) => {
         if (questionType === 'Radio') {
           return (
             <td key={question.id} className="answer-field">
-              <select className="form-control" value={value}>
-                {question.options.map((val) => {
-                  return <option>{val}</option>;
+              <Select
+                options={options.map((val) => {
+                  return {
+                    label: val,
+                    value: val,
+                  };
                 })}
-              </select>
+                style={{ minWidth: 100 }}
+                value={value}
+                onChange={(val) => {
+                  props.onChange(val.value, id, question.id);
+                }}
+              />
             </td>
           );
         }
@@ -109,6 +129,7 @@ const CreateEntryRowView = (props) => {
               assessmentId,
               boundaryId: id,
             });
+            props.resetRow();
           }}
           className="btn btn-primary"
         >

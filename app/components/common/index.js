@@ -4,3 +4,4 @@ export * from './LoadingBoundary';
 export * from './Spinner';
 export * from './MultiSelect';
 export * from './Select';
+export * from './NewSelect';

@@ -59,7 +59,7 @@ class GetResources extends Component {
         const questionType = get(question, 'question_type');
         const options = get(question, 'options', []);
         if (questionType === 'CheckBox' || questionType === 'Radio') {
-          this.props.onChange(options[0], row.id, question.id);
+          // this.props.onChange(options[0], row.id, question.id);
         }
       });
       this.props.onChangeDateOfVisit(row.id, new Date().toISOString());
