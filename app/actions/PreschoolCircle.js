@@ -1,10 +1,12 @@
 import { push } from 'react-router-redux';
 import { SERVER_API_BASE as serverApiBase } from 'config';
+import Notifications from 'react-notification-system-redux';
 
 import { post } from './requests';
 import { openEntity, showCreateBoundaryError, resetCreateBoundaryError } from './index';
 import { getEntityDepth, getEntityType, getPath, convertEntitiesToObject } from '../utils';
 import { SET_BOUNDARIES, TOGGLE_MODAL } from './types';
+import { showSuccessMessage } from './notifications';
 
 export const toggleCreateCircleModal = () => {
   return (dispatch) => {
@@ -44,6 +46,7 @@ export const saveNewCircle = (name, projectId) => {
         dispatch(openEntity({ depth, uniqueId: `${data.id}${type}` }));
         dispatch(resetCreateBoundaryError());
         dispatch(push(path));
+        dispatch(Notifications.success(showSuccessMessage('Boundary created!', 'Boundary created successfully.')));
       } else {
         dispatch(showCreateBoundaryError(response.data));
       }

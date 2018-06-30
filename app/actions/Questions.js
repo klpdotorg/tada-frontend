@@ -27,14 +27,24 @@ export const openEditQuestionForm = (value) => {
       type: SET_EDIT_QUESTION_ID,
       value,
     });
+    dispatch({
+      type: CREATE_QUESTION_ERROR,
+      value: {},
+    });
     dispatch(toggleEditQuestionModal());
   };
 };
 
 export const toggleCreateQuestionModal = () => {
-  return {
-    type: TOGGLE_MODAL,
-    modal: 'createQuestion',
+  return (dispatch) => {
+    dispatch({
+      type: TOGGLE_MODAL,
+      modal: 'createQuestion',
+    });
+    dispatch({
+      type: CREATE_QUESTION_ERROR,
+      value: {},
+    });
   };
 };
 

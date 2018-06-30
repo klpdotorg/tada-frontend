@@ -1,5 +1,6 @@
 import { push } from 'react-router-redux';
 import { SERVER_API_BASE as serverApiBase } from 'config';
+import Notifications from 'react-notification-system-redux';
 
 import { TOGGLE_MODAL, SET_BOUNDARIES } from './types';
 import { post } from './requests';
@@ -10,6 +11,7 @@ import {
   resetCreateBoundaryError,
 } from './index';
 import { getEntityType, getEntityDepth, convertEntitiesToObject, getPath } from '../utils';
+import { showSuccessMessage } from './notifications';
 
 export const toggleDistrictModal = () => {
   return (dispatch) => {
@@ -70,6 +72,7 @@ export const saveNewDistrict = (name) => {
         dispatch(openEntity({ depth, uniqueId: `${data.id}${type}` }));
         dispatch(push(path));
         dispatch(resetCreateBoundaryError());
+        dispatch(Notifications.success(showSuccessMessage('Boundary Created!', 'Boundary created successfully.')));
       } else {
         dispatch(showCreateBoundaryError(response.data));
       }

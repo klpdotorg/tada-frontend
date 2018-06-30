@@ -1,5 +1,6 @@
 import { push } from 'react-router-redux';
 import { SERVER_API_BASE as serverApiBase } from 'config';
+import Notifications from 'react-notification-system-redux';
 
 import { post } from './requests';
 import {
@@ -10,6 +11,7 @@ import {
 } from './index';
 import { getEntityDepth, getEntityType, getPath, convertEntitiesToObject } from '../utils';
 import { SET_BOUNDARIES } from './types';
+import { showSuccessMessage } from './notifications';
 
 export const saveNewBlock = (name, districtId) => {
   return (dispatch, getState) => {
@@ -39,6 +41,7 @@ export const saveNewBlock = (name, districtId) => {
         dispatch(openEntity({ depth, uniqueId: `${data.id}${type}` }));
         dispatch(resetCreateBoundaryError());
         dispatch(push(path));
+        dispatch(Notifications.success(showSuccessMessage('Boundary created!', 'Boundary created successfully.')));
       } else {
         dispatch(showCreateBoundaryError(response.data));
       }

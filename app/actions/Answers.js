@@ -177,6 +177,8 @@ export const createAnswerGroup = (params) => {
       [params.boundaryType]: boundaryId,
       group_value: name,
       date_of_visit: dateOfVisit,
+      institution_images: [],
+      questiongroup: assessmentId,
       status: 'AC',
     }).then((response) => {
       if (response.status === 201) {

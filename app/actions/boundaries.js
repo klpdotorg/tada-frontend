@@ -247,6 +247,7 @@ export const modifyBoundary = (boundaryId, name) => {
             boundaryDetails: entities,
           });
           dispatch(resetEditBoundaryError());
+          dispatch(Notifications.success(showSuccessMessage('Boundary Modified!', 'Boundary modified successfully.')));
         } else {
           dispatch(showEditBoundaryError(response.data));
         }
