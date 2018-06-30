@@ -29,7 +29,7 @@ const ViewStudentsCont = (props) => {
   }
 
   return (
-    <div>
+    <div className="add-students-container">
       <ol className="breadcrumb">
         <li>
           <Link to={paths[0]}>{district.name}</Link>

@@ -338,7 +338,7 @@ div.well{
 
 .sidebar-wrapper {
    /*z-index: 1000;*/
-    width: 30%;
+    width: 23%;
     /*position: absolute;
     left: 300px;
     width: 0;*/
@@ -365,9 +365,10 @@ div.well{
 }
 
 #main-content-wrapper {
-  width: 100%;
-  position: absolute;
-  padding: 15px;
+  position: relative;
+  flex: 1;
+  padding-right: 1px;
+  padding-top: 1px;
 }
 
 #wrapper.toggled #main-content-wrapper {
@@ -393,7 +394,6 @@ div.well{
     }
 
     #main-content-wrapper {
-        padding: 20px;
         position: relative;
     }
 
@@ -665,6 +665,7 @@ table.table-fixedwidth td, .table-fixedwidth th {
 .main__wrapper {
   display: flex;
   flex-direction: row;
+  padding-top: 10px;
 }
 
 .assessments-actions {
@@ -745,7 +746,6 @@ table.table-fixedwidth td, .table-fixedwidth th {
   overflow: scroll;
   position: absolute;
   height: 90%;
-  max-width: 1036px;
 }
 
 .loading-cont {
@@ -857,8 +857,12 @@ table.table-fixedwidth td, .table-fixedwidth th {
 .add-students-table {
   border: 1px solid #f3eaea;
   margin-bottom: 20px;
-  max-width: 1035px;
   width: 100%;
+}
+
+.add-students-container {
+  position: absolute;
+  width: 97.2%;
 }
 
 .add-students-header-text {

@@ -103,7 +103,7 @@ class EditStudentsFormView extends Component {
     const { hasPermissions, error } = this.props;
 
     return (
-      <div>
+      <div className="add-students-container">
         {!isEmpty(error) ? (
           <div className="alert alert-danger">
             {error.map((row, rowIndex) => {
@@ -174,7 +174,7 @@ class EditStudentsFormView extends Component {
               Save
             </button>
             <button onClick={this.props.goback} className="btn btn-primary padded-btn">
-              Discard
+              Go Back
             </button>
           </div>
         </div>
