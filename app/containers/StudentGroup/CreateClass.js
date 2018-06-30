@@ -71,10 +71,15 @@ class CreateClassForm extends Component {
             id="class"
             value=""
             label="Class"
-            type="text"
+            type="number"
             placeholder="Please enter the class/grade"
             help="This is a required field"
-            validations="minLength:1"
+            validations={{
+              isNumeric: true,
+              myCustomIsFiveValidation: (values, value) => {
+                return value > 0 && value < 10 ? true : '';
+              },
+            }}
             required
           />
           <Input
@@ -84,7 +89,7 @@ class CreateClassForm extends Component {
             label="Section"
             type="text"
             placeholder="Please enter the section"
-            validations="isAlphanumeric,minLength:1"
+            validations="isWords,minLength:1"
           />
           <Select name="group_type" label="Type" options={role} value="class" required />
         </Formsy.Form>

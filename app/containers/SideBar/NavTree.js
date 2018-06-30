@@ -5,10 +5,23 @@ import TreeView from 'react-treeview';
 import { Link } from 'react-router';
 import { DEFAULT_PARENT_NODE_ID } from 'config';
 
-import { capitalize } from '../../utils';
+import { capitalize, getEntityType } from '../../utils';
 import { filterBoundaries } from './utils';
 import { collapsedProgramEntity, getBoundariesEntities, openBoundary } from '../../actions/';
 import { Loading, Message } from '../../components/common';
+
+const getLabel = (boundary) => {
+  const type = getEntityType(boundary);
+  if (type === 'studentgroup') {
+    return `${boundary.name} ${boundary.section}`;
+  }
+
+  if (boundary.name) {
+    return capitalize(boundary.name);
+  }
+
+  return capitalize(boundary.first_name);
+};
 
 class NavTree extends Component {
   componentDidMount() {
@@ -38,8 +51,7 @@ class NavTree extends Component {
   renderLabel(node, depth, collapsed) {
     const { entity } = node;
 
-    const label =
-      capitalize(entity.label) || capitalize(entity.name) || capitalize(entity.first_name);
+    const label = getLabel(entity);
 
     return (
       <Link
