@@ -86,12 +86,12 @@ class EditStudentsFormView extends Component {
     const rows = Object.keys(this.props.values);
     const { hasPermissions } = this.props;
 
-    return rows.map((id) => {
+    return rows.map((id, i) => {
       return (
         <EditStudentInputRow
           key={id}
           id={id}
-          index={id}
+          index={i}
           institutionId={this.props.institutionId}
           hasPermissions={hasPermissions}
         />
@@ -133,6 +133,7 @@ class EditStudentsFormView extends Component {
           <table className="table table-hover table-fixedwidth">
             <thead>
               <tr>
+                <th>#</th>
                 <th className="add-students-header-text">
                   First Name{this.setRequiredField('first_name')}
                 </th>

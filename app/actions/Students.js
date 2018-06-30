@@ -145,6 +145,7 @@ export const modifyStudent = (groupId, options) => {
           boundaryDetails: entities,
         });
         dispatch(resetStudentError());
+        dispatch(Notifications.success(showSuccessMessage('Student Modified!', 'Student successfully modified.')));
       } else {
         dispatch(showStudentError(response.data.results));
       }

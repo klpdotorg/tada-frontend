@@ -91,6 +91,7 @@ class AddStudentsFormView extends Component {
         <AddStudentInputRow
           key={index}
           index={index}
+          id={index}
           institutionId={institutionId}
           hasPermissions={hasPermissions}
           depth={depth}
@@ -108,6 +109,11 @@ class AddStudentsFormView extends Component {
           <div className="alert alert-danger">
             {error.map((row, rowIndex) => {
               const fields = Object.keys(row);
+
+              if (!fields.length) {
+                return <span />;
+              }
+
               return (
                 <p key={rowIndex}>
                   <span>
@@ -116,8 +122,8 @@ class AddStudentsFormView extends Component {
                   <br />
                   {fields.map((field) => {
                     return (
-                      <span>
-                        <strong>{field}:</strong> {get(row, `${field}[0].message`, '')}
+                      <span style={{ paddingLeft: 10 }}>
+                        <strong>{field}:</strong> {get(row, `${field}[0]`, '')}
                       </span>
                     );
                   })}
@@ -133,6 +139,7 @@ class AddStudentsFormView extends Component {
           <table className="table table-hover table-fixedwidth">
             <thead>
               <tr>
+                <th>#</th>
                 <th className="add-students-header-text">
                   First Name{this.setRequiredField('first_name')}
                 </th>
@@ -163,7 +170,7 @@ class AddStudentsFormView extends Component {
                 <th className="add-students-header-text">
                   Mother Name{this.setRequiredField('mother_name')}
                 </th>
-                <th className="add-students-header-text">Save</th>
+                <th>Save</th>
               </tr>
             </thead>
             <tbody>{this.renderRows()}</tbody>

@@ -601,7 +601,7 @@ overridden elsewhere.
 }
 
 table.table-fixedwidth td, .table-fixedwidth th {
-    min-width: 150px;
+    /* min-width: 150px; */
 }
 
 /* PANKAJ's CHANGES */
@@ -869,6 +869,7 @@ table.table-fixedwidth td, .table-fixedwidth th {
   font-size: 13px;
   font-weight: 400;
   color: #337abb;
+  min-width: 180px;
 }
 
 .boundary-assessments {
@@ -1001,5 +1002,8 @@ table.table-fixedwidth td, .table-fixedwidth th {
 .Select-menu-outer {
   z-index: 9999;
   position: absolute;
+}
 
+.add-students-table .form-control {
+  min-width: 140px;
 }

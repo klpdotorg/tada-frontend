@@ -68,7 +68,7 @@ const ViewStudentsCont = (props) => {
         <table className="table table-condensed table-fixedwidth">
           <thead>
             <tr className="text-primary text-uppercase">
-              <th className="add-students-header-text">Select</th>
+              {/* <th className="add-students-header-text">Select</th> */}
               <th className="add-students-header-text">ID</th>
               <th className="add-students-header-text">Name</th>
               <th className="add-students-header-text">Government student ID</th>
@@ -77,7 +77,8 @@ const ViewStudentsCont = (props) => {
               <th className="add-students-header-text">Date of Birth</th>
               <th className="add-students-header-text">Father's Name</th>
               <th className="add-students-header-text">Mother's Name</th>
-              <th />
+              <th>Edit</th>
+              <th>Delete</th>
             </tr>
           </thead>
           <StudentList

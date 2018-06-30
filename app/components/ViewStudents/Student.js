@@ -20,7 +20,7 @@ const StudentView = (props) => {
 
   return (
     <tr>
-      <td>
+      {/* <td>
         <input
           checked={checked}
           onChange={() => {
@@ -28,17 +28,33 @@ const StudentView = (props) => {
           }}
           type="checkbox"
         />
-      </td>
-      <td>{id}</td>
+      </td> */}
       <td>
-        {first_name} {last_name}
+        <span>{id}</span>
       </td>
-      <td>{uid}</td>
-      <td>{gender}</td>
-      <td>{get(langVal, 'label', '')}</td>
-      <td>{dateParser(dob)}</td>
-      <td>{father_name}</td>
-      <td>{mother_name}</td>
+      <td>
+        <span>
+          {first_name} {last_name}
+        </span>
+      </td>
+      <td>
+        <span>{uid}</span>
+      </td>
+      <td>
+        <span>{gender}</span>
+      </td>
+      <td>
+        <span>{get(langVal, 'label', '')}</span>
+      </td>
+      <td>
+        <span>{dateParser(dob)}</span>
+      </td>
+      <td>
+        <span>{father_name}</span>
+      </td>
+      <td>
+        <span>{mother_name}</span>
+      </td>
       <td>
         <button
           onClick={() => {
@@ -51,6 +67,8 @@ const StudentView = (props) => {
         >
           <i className="fa fa-pencil-square-o" />
         </button>
+      </td>
+      <td>
         <button
           onClick={() => {
             const params = {

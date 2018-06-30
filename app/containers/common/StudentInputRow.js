@@ -26,7 +26,7 @@ class StudentInputRow extends Component {
             status: 'AC',
           },
         },
-        this.props.index,
+        this.props.id,
       );
     });
   }
@@ -44,6 +44,9 @@ class StudentInputRow extends Component {
 
     return (
       <tr className={includes(formErrors, index) ? 'bg-danger' : ''}>
+        <td style={{ width: 30 }}>
+          <span>{index + 1}</span>
+        </td>
         <td>
           <input
             value={this.state.first_name}
@@ -205,6 +208,8 @@ StudentInputRow.propTypes = {
   addStudent: PropTypes.func,
   studentGroupId: PropTypes.any,
   depth: PropTypes.any,
+  action: PropTypes.any,
+  id: PropTypes.any,
 };
 
 export { StudentInputRow };

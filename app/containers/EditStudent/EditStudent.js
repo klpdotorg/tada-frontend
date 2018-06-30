@@ -3,17 +3,12 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
+import isEmpty from 'lodash.isempty';
 import get from 'lodash.get';
 
 import { Modal } from '../../components/Modal';
 import { lastVerifiedYears } from '../../Data';
-import {
-  modifyStudent,
-  enableSubmitForm,
-  disableSubmitForm,
-  setParentNode,
-  getLanguages,
-} from '../../actions';
+import { modifyStudent, enableSubmitForm, disableSubmitForm, getLanguages } from '../../actions';
 
 const { Input, Select } = FRC;
 
@@ -55,7 +50,7 @@ class EditStudentForm extends Component {
   }
 
   render() {
-    const { title, isOpen, canSubmit, student, languages } = this.props;
+    const { title, isOpen, canSubmit, student, languages, error } = this.props;
     const {
       first_name,
       middle_name,
@@ -87,6 +82,30 @@ class EditStudentForm extends Component {
             this.myform = ref;
           }}
         >
+          {!isEmpty(error) ? (
+            <div className="alert alert-danger">
+              {error.map((row, rowIndex) => {
+                const fields = Object.keys(row);
+                return (
+                  <p key={rowIndex}>
+                    <span>
+                      <strong>Row {rowIndex + 1}</strong>
+                    </span>
+                    <br />
+                    {fields.map((field) => {
+                      return (
+                        <span>
+                          <strong>{field}:</strong> {get(row, `${field}[0].message`, '')}
+                        </span>
+                      );
+                    })}
+                  </p>
+                );
+              })}
+            </div>
+          ) : (
+            <span />
+          )}
           <div className="col-sm-12">
             <Input
               name="firstName"
@@ -210,6 +229,7 @@ const mapStateToProps = (state) => {
     student: get(state.boundaries.boundaryDetails, `[${id}]`, {}),
     canSubmit: state.appstate.enableSubmitForm,
     languages: state.languages.languages,
+    error: state.students.error,
   };
 };
 
