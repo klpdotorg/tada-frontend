@@ -34,7 +34,7 @@ class EditUserView extends Component {
 
   render() {
     const { first_name, last_name, email, mobile_no, groups, isOpen, canSubmit } = this.props;
-
+    console.log(groups);
     return (
       <Modal
         title="Edit User"
@@ -76,7 +76,13 @@ class EditUserView extends Component {
             value={mobile_no}
             label="Mobile No."
             type="number"
-            validations="minLength:1"
+            validations={{
+              myCustomIsFiveValidation: (values, value) => {
+                return value.match(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im)
+                  ? true
+                  : '';
+              },
+            }}
             required
           />
           <Input
@@ -84,8 +90,8 @@ class EditUserView extends Component {
             id="email"
             value={email}
             label="Email"
+            validations="isEmail"
             type="email"
-            validations="minLength:1"
             required
           />
           <Select multiple name="role" label="Role" options={roles} value={groups} required />
