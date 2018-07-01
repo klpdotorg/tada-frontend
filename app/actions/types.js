@@ -149,3 +149,4 @@ export const SET_EDIT_BOUNDARY_ERROR = 'set_edit_boundary_error';
 export const TOGGLE_SPINNER = 'toggle_spinner';
 export const SET_STUDENT_ERROR = 'set_student_error';
 export const SET_QUESTION_TYPES = 'set_question_types';
+export const SET_MAP_ASSESSMENT_ERROR = 'set_map_assessment_error';

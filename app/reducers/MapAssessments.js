@@ -12,6 +12,7 @@ import {
   RESET_INSTITUTIONS_OF_MA,
   RESET_STUDENTGROUPS_OF_MA,
   RESET,
+  SET_MAP_ASSESSMENT_ERROR,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -26,6 +27,7 @@ const INITIAL_STATE = {
   selectedEntityId: null,
   classes: {},
   loading: false,
+  error: {},
 };
 
 const MapAssessments = (state = INITIAL_STATE, action) => {
@@ -96,6 +98,11 @@ const MapAssessments = (state = INITIAL_STATE, action) => {
       };
     case RESET_MAP_ASSESSMENTS:
       return INITIAL_STATE;
+    case SET_MAP_ASSESSMENT_ERROR:
+      return {
+        ...state,
+        error: action.value,
+      };
     case RESET:
       return INITIAL_STATE;
     default:

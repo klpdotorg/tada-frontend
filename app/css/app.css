@@ -638,9 +638,6 @@ table.table-fixedwidth td, .table-fixedwidth th {
   padding-right: 0px;
 }
 
-.mapAssessment-institution-cont {
-  padding-left: 4px;
-}
 .ma-boundary-heading {
   display: flex;
 }
@@ -796,10 +793,6 @@ table.table-fixedwidth td, .table-fixedwidth th {
   border-bottom: 0px;
   font-size: 16px;
   font-weight: 400;
-}
-.permissions-cont .permission-item-table {
-  margin: 0;
-  padding: 0;
 }
 
 .remove-margin-padding {
@@ -1006,4 +999,15 @@ table.table-fixedwidth td, .table-fixedwidth th {
 
 .add-students-table .form-control {
   min-width: 140px;
+}
+
+.permission-default-message {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 30%;
+}
+
+.permission-default-message span {
+  font-size: 20px;
 }

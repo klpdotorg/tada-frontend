@@ -61,6 +61,7 @@ const mapStateToProps = (state) => {
     selectedInstitutions,
     selectedClasses,
     selectedAssessments,
+    error,
   } = state.mapAssessments;
 
   const showInstitutions = institutionsIndex > 0 || selectedClusters.length > 0;
@@ -72,6 +73,7 @@ const mapStateToProps = (state) => {
     institutionsIndex,
     showInstitutions,
     assessmentType: Number(selectedAssessmentType),
+    error,
   };
 };
 

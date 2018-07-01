@@ -4,7 +4,7 @@ import Notifications from 'react-notification-system-redux';
 import omit from 'lodash.omit';
 
 import { fetchBoundary, showBoundaryLoading, toggleSubmitLoading } from './index';
-import { getPath, convertEntitiesToObject } from '../utils';
+import { getPath } from '../utils';
 import {
   SELECT_PERMISSIONS_BOUNDARY,
   SELECT_PERMISSIONS_USER,

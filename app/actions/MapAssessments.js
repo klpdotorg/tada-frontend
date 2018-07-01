@@ -24,6 +24,7 @@ import {
   RESET_MAP_ASSESSMENTS,
   RESET_INSTITUTIONS_OF_MA,
   RESET_STUDENTGROUPS_OF_MA,
+  SET_MAP_ASSESSMENT_ERROR,
 } from './types';
 import {
   fetchBoundary,
@@ -32,9 +33,29 @@ import {
   closeInstitutionLoadingInMa,
   showClassesLoadingInMA,
   closeClassesLoadingInMA,
+  toggleSubmitLoading,
 } from './index';
 import { convertEntitiesToObject } from '../utils';
 import { get, post } from './requests';
+
+const showMappingError = () => {
+  return (dispatch) => {
+    dispatch({
+      type: SET_MAP_ASSESSMENT_ERROR,
+      value: {
+        error: ['The fields institution, questiongroup must make a unique set.'],
+      },
+    });
+    dispatch(Notifications.error(errorNotification('Error!', 'Mapping not done successfully.')));
+  };
+};
+
+const resetMappingError = () => {
+  return {
+    type: SET_MAP_ASSESSMENT_ERROR,
+    value: {},
+  };
+};
 
 const fetchStudentGroupOfMA = (entity) => {
   return (dispatch) => {
@@ -262,11 +283,16 @@ export const selectAssessmentOfMA = (value) => {
 
 export const openBoundaryOfMa = (id, depth) => {
   return (dispatch) => {
+    dispatch(resetMappingError());
     if (depth === 1) {
       dispatch({
         type: SET_INSTITUTIONS_INDEX_OF_MA,
         index: null,
         id,
+      });
+      dispatch({
+        type: SELECT_CLASS_OF_MA,
+        value: [],
       });
       dispatch({
         type: SET_CLUSTERS_INDEX_OF_MA,
@@ -300,15 +326,17 @@ export const mapAssessmentsToInsitutions = (surveyId, assessments, institutions,
       institution_ids: institutions,
       boundary_ids: boundaryIds,
     })
-      .then(({ data }) => {
-        if (data.detail) {
-          dispatch(Notifications.error(errorNotification('Institution Mapping', data.detail, 10)));
-        } else {
+      .then((response) => {
+        if (response.status === 200) {
           dispatch(Notifications.success(mapAssessmentsDone));
           dispatch({
             type: RESET_MAP_ASSESSMENTS,
           });
+          dispatch(resetMappingError());
+        } else {
+          dispatch(showMappingError(response.data));
         }
+        dispatch(toggleSubmitLoading());
       })
       .catch(() => {
         dispatch(Notifications.error(mapAssessmentsFailed));
@@ -328,15 +356,17 @@ export const mapAssessmentsToStudentgroups = (
       questiongroup_ids: assessments,
       studentgroup_ids: studentgroups,
     })
-      .then(({ data }) => {
-        if (data.detail) {
-          dispatch(Notifications.error(errorNotification('Studentgroup Mapping', data.detail, 10)));
-        } else {
+      .then((response) => {
+        if (response.status === 200) {
           dispatch(Notifications.success(mapAssessmentsDone));
           dispatch({
             type: RESET_MAP_ASSESSMENTS,
           });
+          dispatch(resetMappingError());
+        } else {
+          dispatch(showMappingError(response.data));
         }
+        dispatch(toggleSubmitLoading(false));
       })
       .catch(() => {
         dispatch(Notifications.error(mapAssessmentsFailed));
@@ -346,6 +376,7 @@ export const mapAssessmentsToStudentgroups = (
 
 export const mapBoundariesToAssessments = () => {
   return (dispatch, getState) => {
+    dispatch(toggleSubmitLoading(true));
     const state = getState();
     const { selectedProgram } = state.programs;
     const {

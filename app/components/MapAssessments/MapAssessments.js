@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import isEmpty from 'lodash.isempty';
 
 import { DefaultMessage } from './index';
 import {
@@ -12,11 +13,25 @@ import {
 } from '../../containers/MapAssessments';
 
 const MapAssessmentsView = (props) => {
-  const { showClusters, showInstitutions, mapAssessments, assessmentType } = props;
+  const { showClusters, showInstitutions, mapAssessments, assessmentType, error } = props;
   const disabled = !props.activeSubmit();
 
   return (
     <div className="row">
+      {!isEmpty(error) ? (
+        <div className="alert alert-danger" style={{ marginLeft: 10, marginRight: 10 }}>
+          {Object.keys(error).map((key) => {
+            const value = error[key];
+            return (
+              <p key={key}>
+                <strong>{key}:</strong> {value[0]}
+              </p>
+            );
+          })}
+        </div>
+      ) : (
+        <span />
+      )}
       <div className="col-md-9">
         <div className="row">
           {showClusters ? (
@@ -64,6 +79,7 @@ MapAssessmentsView.propTypes = {
   mapAssessments: PropTypes.func,
   activeSubmit: PropTypes.func,
   assessmentType: PropTypes.number,
+  error: PropTypes.object,
 };
 
 export { MapAssessmentsView };
