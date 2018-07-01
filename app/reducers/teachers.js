@@ -8,12 +8,14 @@ import {
   SET_TEACHER,
   DELETE_TEACHER,
   RESET,
+  SET_TEACHER_ERROR,
 } from '../actions/types';
 
 const INITIAL_STATE = {
   editTeacherId: null,
   loading: false,
   teachers: {},
+  error: {},
 };
 
 const Teachers = (state = INITIAL_STATE, action) => {
@@ -52,6 +54,11 @@ const Teachers = (state = INITIAL_STATE, action) => {
           ...state.teachers,
           ...action.value,
         },
+      };
+    case SET_TEACHER_ERROR:
+      return {
+        ...state,
+        error: action.value,
       };
     case RESET:
       return INITIAL_STATE;

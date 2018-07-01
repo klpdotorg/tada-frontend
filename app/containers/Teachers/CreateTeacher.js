@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
 import get from 'lodash.get';
+import isEmpty from 'lodash.isempty';
 
 import { Modal } from '../../components/Modal';
 import { getStaffTypes } from './utils';
@@ -38,7 +39,7 @@ class CreateTeacherForm extends Component {
   }
 
   render() {
-    const { languages, canSubmit, isOpen, staffTypes } = this.props;
+    const { languages, canSubmit, isOpen, staffTypes, error } = this.props;
     const gender = [
       {
         label: 'Male',
@@ -64,9 +65,23 @@ class CreateTeacherForm extends Component {
           onValid={this.props.enableSubmitForm}
           onInvalid={this.props.disableSubmitForm}
           ref={(ref) => {
-            return (this.myform = ref);
+            this.myform = ref;
           }}
         >
+          {!isEmpty(error) ? (
+            <div className="alert alert-danger">
+              {Object.keys(error).map((key) => {
+                const value = error[key];
+                return (
+                  <p key={key}>
+                    <strong>{key}:</strong> {value[0]}
+                  </p>
+                );
+              })}
+            </div>
+          ) : (
+            <span />
+          )}
           <Input
             name="firstName"
             id="firstName"
@@ -97,6 +112,7 @@ class CreateTeacherForm extends Component {
             id="doj"
             value=""
             label="Date of Join"
+            required
             type="date"
             validations="minLength:1"
           />
@@ -128,6 +144,7 @@ class CreateTeacherForm extends Component {
 }
 
 CreateTeacherForm.propTypes = {
+  error: PropTypes.object,
   isOpen: PropTypes.bool,
   canSubmit: PropTypes.bool,
   languages: PropTypes.array,
@@ -145,6 +162,7 @@ const mapStateToProps = (state) => {
     canSubmit: state.appstate.enableSubmitForm,
     languages: state.languages.languages,
     staffTypes: getStaffTypes(state.schoolSelection.primarySchool),
+    error: state.teachers.error,
   };
 };
 

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import get from 'lodash.get';
+import isEmpty from 'lodash.isempty';
 
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
@@ -36,7 +37,7 @@ class EditTeacherForm extends Component {
   };
 
   render() {
-    const { languages, staffTypes, teacher, isOpen, canSubmit } = this.props;
+    const { languages, staffTypes, teacher, isOpen, canSubmit, error } = this.props;
     const genderOptions = [
       {
         label: 'Male',
@@ -63,9 +64,23 @@ class EditTeacherForm extends Component {
           onValid={this.props.enableSubmitForm}
           onInvalid={this.props.disableSubmitForm}
           ref={(ref) => {
-            return (this.myform = ref);
+            this.myform = ref;
           }}
         >
+          {!isEmpty(error) ? (
+            <div className="alert alert-danger">
+              {Object.keys(error).map((key) => {
+                const value = error[key];
+                return (
+                  <p key={key}>
+                    <strong>{key}:</strong> {value[0]}
+                  </p>
+                );
+              })}
+            </div>
+          ) : (
+            <span />
+          )}
           <Input
             name="firstName"
             id="firstName"
@@ -97,6 +112,7 @@ class EditTeacherForm extends Component {
             value={this.getValue(doj)}
             label="Date of Join"
             type="date"
+            required
             validations="minLength:1"
           />
           <Input
@@ -127,6 +143,7 @@ class EditTeacherForm extends Component {
 }
 
 EditTeacherForm.propTypes = {
+  error: PropTypes.object,
   isOpen: PropTypes.bool,
   canSubmit: PropTypes.bool,
   closeConfirmModal: PropTypes.func,
@@ -140,7 +157,8 @@ EditTeacherForm.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-  const teacherVal = get(state.teachers.teachers, state.teachers.editTeacherId, {});
+  const { error, teachers, editTeacherId } = state.teachers;
+  const teacherVal = get(teachers, editTeacherId, {});
 
   return {
     isOpen: state.modal.editTeacher,
@@ -148,6 +166,7 @@ const mapStateToProps = (state) => {
     teacher: teacherVal || {},
     languages: state.languages.languages,
     staffTypes: getStaffTypes(state.schoolSelection.primarySchool),
+    error,
   };
 };
 

@@ -1,4 +1,6 @@
 import { SERVER_API_BASE as serverApiBase } from 'config';
+import Notifications from 'react-notification-system-redux';
+
 import { get, post, patch, deleteRequest } from './requests';
 import {
   TEACHER_FETCHED,
@@ -8,12 +10,31 @@ import {
   CLOSE_TEACHER_LOADING,
   SET_TEACHER,
   DELETE_TEACHER,
+  SET_TEACHER_ERROR,
 } from './types';
+import { showSuccessMessage, errorNotification } from './notifications';
+
+const showTeacherError = (value) => {
+  return {
+    type: SET_TEACHER_ERROR,
+    value,
+  };
+};
+
+export const resetTeacherError = () => {
+  return {
+    type: SET_TEACHER_ERROR,
+    value: {},
+  };
+};
 
 export const showAddTeacherPopup = () => {
-  return {
-    type: TOGGLE_MODAL,
-    modal: 'createTeacher',
+  return (dispatch) => {
+    dispatch({
+      type: TOGGLE_MODAL,
+      modal: 'createTeacher',
+    });
+    dispatch(resetTeacherError());
   };
 };
 
@@ -31,6 +52,7 @@ export const closeTeacherLoading = () => {
 
 export const setEditTeacherId = (value) => {
   return (dispatch) => {
+    dispatch(resetTeacherError());
     dispatch({
       type: TOGGLE_MODAL,
       modal: 'editTeacher',
@@ -62,42 +84,52 @@ export const getTeachers = (institutionId) => {
 
 export const saveNewTeacher = (teacher) => {
   return (dispatch) => {
-    dispatch(showTeacherLoading());
-
     const createTeacherURL = `${serverApiBase}teachers/`;
-    post(createTeacherURL, teacher).then(({ data }) => {
-      dispatch({
-        type: TOGGLE_MODAL,
-        modal: 'createTeacher',
-      });
-      dispatch({
-        type: SET_TEACHER,
-        value: {
-          [data.id]: data,
-        },
-      });
-      dispatch(closeTeacherLoading());
+    post(createTeacherURL, teacher).then((response) => {
+      if (response.status === 201) {
+        const { data } = response;
+        dispatch({
+          type: TOGGLE_MODAL,
+          modal: 'createTeacher',
+        });
+        dispatch({
+          type: SET_TEACHER,
+          value: {
+            [data.id]: data,
+          },
+        });
+        dispatch(resetTeacherError());
+        dispatch(Notifications.success(showSuccessMessage('Teacher created!', 'Teacher successfully created.')));
+      } else {
+        dispatch(showTeacherError(response.data));
+        dispatch(Notifications.error(errorNotification('Error', 'Teacher not created!')));
+      }
     });
   };
 };
 
 export const editTeacher = (teacher, Id) => {
   return (dispatch) => {
-    dispatch(showTeacherLoading());
-
     const createTeacherURL = `${serverApiBase}teachers/${Id}/`;
-    patch(createTeacherURL, teacher).then(({ data }) => {
-      dispatch({
-        type: TOGGLE_MODAL,
-        modal: 'editTeacher',
-      });
-      dispatch({
-        type: SET_TEACHER,
-        value: {
-          [Id]: data,
-        },
-      });
-      dispatch(closeTeacherLoading());
+    patch(createTeacherURL, teacher).then((response) => {
+      if (response.status === 200) {
+        const { data } = response;
+        dispatch({
+          type: TOGGLE_MODAL,
+          modal: 'editTeacher',
+        });
+        dispatch({
+          type: SET_TEACHER,
+          value: {
+            [Id]: data,
+          },
+        });
+        dispatch(resetTeacherError());
+        dispatch(Notifications.success(showSuccessMessage('Teacher modified!', 'Teacher successfully modified.')));
+      } else {
+        dispatch(showTeacherError(response.data));
+        dispatch(Notifications.error(showSuccessMessage('Error!', 'Teacher not modified.')));
+      }
     });
   };
 };
@@ -108,11 +140,16 @@ export const deleteTeacher = (Id) => {
 
     const createTeacherURL = `${serverApiBase}teachers/${Id}/`;
 
-    deleteRequest(createTeacherURL).then(() => {
-      dispatch({
-        type: DELETE_TEACHER,
-        value: Id,
-      });
+    deleteRequest(createTeacherURL).then((response) => {
+      if (response.status === 204) {
+        dispatch({
+          type: DELETE_TEACHER,
+          value: Id,
+        });
+        dispatch(Notifications.success(showSuccessMessage('Teacher Deleted!', 'Teacher deleted successfully.')));
+      } else {
+        dispatch(Notifications.error(errorNotification('Error', 'Teacher not deleted!')));
+      }
       dispatch(closeTeacherLoading());
     });
   };
