@@ -13,7 +13,7 @@ import {
   showAddTeacherPopup,
   showTeacherLoading,
 } from '../../actions';
-import { checkPermissions } from '../../utils';
+import { checkPermissions, getEntitiesPath } from '../../utils';
 
 class GetTeachers extends Component {
   constructor(props) {
@@ -73,6 +73,13 @@ const mapStateToProps = (state, ownProps) => {
     [district.id, block.id, cluster.id],
     institution.id,
   );
+  const pathname = get(ownProps, ['location', 'pathname'], '');
+  const paths = getEntitiesPath(pathname, [
+    districtNodeId,
+    blockNodeId,
+    clusterNodeId,
+    institutionNodeId,
+  ]);
 
   return {
     district,
@@ -83,6 +90,7 @@ const mapStateToProps = (state, ownProps) => {
     isLoading: state.appstate.loadingBoundary,
     teacherLoading: state.teachers.loading,
     hasPermissions,
+    paths,
   };
 };
 

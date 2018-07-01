@@ -16,6 +16,7 @@ const TeacherScreen = (props) => {
     isLoading,
     teacherLoading,
     hasPermissions,
+    paths,
   } = props;
 
   if (isLoading) {
@@ -26,16 +27,16 @@ const TeacherScreen = (props) => {
     <div>
       <ol className="breadcrumb">
         <li>
-          <Link to={district.path}>{district.name}</Link>
+          <Link to={paths[0]}>{district.name}</Link>
         </li>
         <li>
-          <Link to={block.path}>{block.name}</Link>
+          <Link to={paths[1]}>{block.name}</Link>
         </li>
         <li>
-          <Link to={cluster.path}>{cluster.name}</Link>
+          <Link to={paths[2]}>{cluster.name}</Link>
         </li>
         <li>
-          <Link to={institution.path}>{institution.name}</Link>
+          <Link to={paths[3]}>{institution.name}</Link>
         </li>
         <li>Teachers</li>
       </ol>
@@ -61,6 +62,7 @@ TeacherScreen.propTypes = {
   teacherLoading: PropTypes.bool,
   showAddTeacherPopup: PropTypes.func,
   hasPermissions: PropTypes.bool,
+  paths: PropTypes.array,
 };
 
 export { TeacherScreen };
