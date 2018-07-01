@@ -6,7 +6,7 @@ const AssessmentEntryColHeaderView = ({ questions }) => {
   const values = Object.keys(questions);
   return (
     <tr className="bg-info">
-      <td>UID</td>
+      <td>ID</td>
       <td colSpan="2">Boundary Name</td>
       <td>Name</td>
       <td>Date of Visit</td>
