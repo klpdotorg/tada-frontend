@@ -56,7 +56,7 @@ class CreateQuestionForm extends Component {
         question_type_id: myform.type,
         is_featured: myform.is_featured,
         options: myform.options,
-        max_score: myform.max_score,
+        max_score: myform.max_score || 0,
         pass_score: myform.pass_score,
         status: 'AC',
       },
@@ -199,6 +199,7 @@ class CreateQuestionForm extends Component {
             label="Max Score"
             type="number"
             placeholder="Enter Max score"
+            validations="isNumeric"
             disabled={disabledScoreFields}
             required={!disabledScoreFields}
           />

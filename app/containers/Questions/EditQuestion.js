@@ -24,7 +24,7 @@ class EditQuestionForm extends Component {
     this.state = {
       disabledOptionsField: false,
       disabledScoreFields: false,
-      options: [],
+      options: null,
     };
 
     this.submitForm = this.submitForm.bind(this);
@@ -32,17 +32,15 @@ class EditQuestionForm extends Component {
     this.handleTypeChange = this.handleTypeChange.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.question !== this.props.question) {
-      const newVal = this.checkOptionPermission(nextProps.question.question_type_id);
-      const scorePermission = this.checkScorePermission(nextProps.question.question_type_id);
-      this.setState({
-        disabledOptionsField: newVal,
-        disabledScoreFields: scorePermission,
-      });
-    }
+  componentDidMount() {
+    // this.disabledOptions(this.props);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.question !== this.props.question) {
+      this.disabledOptions(nextProps);
+    }
+  }
   getQuestionTypes() {
     return this.props.types.map((type) => {
       return {
@@ -62,6 +60,15 @@ class EditQuestionForm extends Component {
     return get(this.props.question, field, '');
   }
 
+  disabledOptions(nextProps) {
+    const newVal = this.checkOptionPermission(nextProps.question.question_type_id);
+    const scorePermission = this.checkScorePermission(nextProps.question.question_type_id);
+    this.setState({
+      disabledOptionsField: newVal,
+      disabledScoreFields: scorePermission,
+    });
+  }
+
   checkOptionPermission(value) {
     if (Number(value) === 2 || Number(value) === 1) {
       return false;
@@ -78,9 +85,29 @@ class EditQuestionForm extends Component {
     return true;
   }
 
+  emptyOptions(value) {
+    if (Number(value) === 3 || Number(value) === 4) {
+      return false;
+    }
+
+    return true;
+  }
+
   handleTypeChange(field, value) {
     const newVal = this.checkOptionPermission(value);
     const scorePermission = this.checkScorePermission(value);
+    const emtpy = this.emptyOptions(value);
+
+    if (emtpy) {
+      this.setState({
+        options: this.getValue('options'),
+      });
+    } else {
+      this.setState({
+        options: null,
+      });
+    }
+
     this.setState({
       disabledOptionsField: newVal,
       disabledScoreFields: scorePermission,

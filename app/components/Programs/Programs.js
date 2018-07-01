@@ -27,8 +27,8 @@ const ProgramView = (props) => {
   return (
     <div>
       <div className="row center-block">
-        <div className="col-md-8 form-inline">
-          <h4 className="text-primary" htmlFor="sel1">
+        <div className="form-inline" style={{ display: 'flex' }}>
+          <h4 className="text-primary" htmlFor="sel1" style={{ marginRight: 15 }}>
             Surveys:{' '}
           </h4>
           <select
@@ -49,7 +49,7 @@ const ProgramView = (props) => {
             })}
           </select>
         </div>
-        <div className=" col-md-4">
+        <div style={{ float: 'right' }}>
           <button type="button" className="btn btn-primary" onClick={props.openCreateProgramModal}>
             Add Survey
           </button>
