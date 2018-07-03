@@ -327,7 +327,8 @@ export const mapAssessmentsToInsitutions = (surveyId, assessments, institutions,
       boundary_ids: boundaryIds,
     })
       .then((response) => {
-        if (response.status === 200) {
+        console.log(response.status, 'Printiing the response status');
+        if (response.status === 201) {
           dispatch(Notifications.success(mapAssessmentsDone));
           dispatch({
             type: RESET_MAP_ASSESSMENTS,
@@ -357,7 +358,7 @@ export const mapAssessmentsToStudentgroups = (
       studentgroup_ids: studentgroups,
     })
       .then((response) => {
-        if (response.status === 200) {
+        if (response.status === 201) {
           dispatch(Notifications.success(mapAssessmentsDone));
           dispatch({
             type: RESET_MAP_ASSESSMENTS,
