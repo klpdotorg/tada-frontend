@@ -21,7 +21,7 @@ const HeaderBar = (props) => {
           </a>
         </div>
         <div id="navbar" className="navbar-collapse collapse">
-          <p className="app-name navbar-text pull-left">Data Entry Operations 2015-2016</p>
+          <p className="app-name navbar-text pull-left">Data Entry Operations 2017-2018</p>
 
           <div className="btn-group navbar-text pull-right dropdown">
             <button

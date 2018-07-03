@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-let klplogo = require('../css/images/KLP_logo.png');
+const klplogo = require('../css/images/KLP_logo.png');
+const klpImage = require('../css/images/klp.png');
 
 const Logout = () => {
   return (
@@ -24,9 +25,12 @@ const Logout = () => {
           </div>
         </div>
       </nav>
-      <div className="container-fluid absolute-center is-responsive">
-        <div className="row">
-          <div className="col-lg-12">You have successfully logged out. Come back soon!</div>
+      <div className="klpimage-cont">
+        <img src={klpImage} className="klpImage" />
+      </div>
+      <div className="row logout-text">
+        <div className="col-lg-12">
+          <span>You have successfully logged out. Come back soon!</span>
         </div>
       </div>
     </div>

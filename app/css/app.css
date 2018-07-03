@@ -1011,3 +1011,23 @@ table.table-fixedwidth td, .table-fixedwidth th {
 .permission-default-message span {
   font-size: 20px;
 }
+
+.klpimage-cont {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 30px;
+}
+.klpImage {
+  width: 226px;
+  height: 205px;
+  background: #FFD6B0;
+  padding: 12px;
+  border-radius: 7px;
+}
+
+.logout-text {
+  margin-top: 30px;
+  font-size: 21px;
+  text-align: center;
+}

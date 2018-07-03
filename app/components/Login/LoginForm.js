@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const klplogo = require('../../css/images/KLP_logo.png');
+const klpImage = require('../../css/images/klp.png');
 
 const LoginPageWrapper = ({ error, children }) => {
   return (
@@ -14,14 +15,20 @@ const LoginPageWrapper = ({ error, children }) => {
             </a>
           </div>
           <div id="navbar" className="navbar-collapse collapse">
-            <p className="app-name navbar-text pull-left">Data Entry Operations 2015-2016</p>
+            <p className="app-name navbar-text pull-left">Data Entry Operations 2017-2018</p>
             {/* <p className="navbar-text pull-right">
             <Link to="/register" className="btn btn-primary padded-btn">SIGN UP</Link>
           </p> */}
           </div>
         </div>
       </nav>
-      <div className="container-fluid absolute-center is-responsive">
+      <div className="klpimage-cont">
+        <img src={klpImage} className="klpImage" />
+      </div>
+      <div
+        className="container-fluid absolute-center is-responsive"
+        style={{ position: 'relative' }}
+      >
         {error && (
           <div className="alert alert-warning">
             <strong>Warning!</strong> Bad login information. Recheck the username and/or password.
