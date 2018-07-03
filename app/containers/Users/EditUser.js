@@ -34,7 +34,6 @@ class EditUserView extends Component {
 
   render() {
     const { first_name, last_name, email, mobile_no, groups, isOpen, canSubmit } = this.props;
-    console.log(groups);
     return (
       <Modal
         title="Edit User"

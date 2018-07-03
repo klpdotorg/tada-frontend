@@ -1031,3 +1031,7 @@ table.table-fixedwidth td, .table-fixedwidth th {
   font-size: 21px;
   text-align: center;
 }
+
+a {
+  cursor: pointer;
+}
