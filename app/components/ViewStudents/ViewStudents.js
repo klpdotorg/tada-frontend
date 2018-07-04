@@ -44,7 +44,7 @@ const ViewStudentsCont = (props) => {
           <Link to={paths[3]}>{institution.name}</Link>
         </li>
         <li>
-          <Link to={paths[3]}>{studentGroup.name}</Link>
+          <Link to={paths[4]}>{studentGroup.name}</Link>
         </li>
         <li className="active"> View Students</li>
       </ol>

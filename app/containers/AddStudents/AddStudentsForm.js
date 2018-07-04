@@ -8,6 +8,7 @@ import get from 'lodash.get';
 
 import { AddStudentInputRow } from './index';
 import { goback, setAddStudentsFormErrors, addStudents } from '../../actions';
+import { checkForRequiredFields, checkRequiredLengthFields } from './utils';
 
 const REQUIRED_FIELDS = [
   {
@@ -22,10 +23,6 @@ const REQUIRED_FIELDS = [
     value: 'gender',
     label: 'Gender',
   },
-  {
-    value: 'uid',
-    label: 'Government student ID',
-  },
 ];
 
 class AddStudentsFormView extends Component {
@@ -35,6 +32,7 @@ class AddStudentsFormView extends Component {
     this.renderErrors = this.renderErrors.bind(this);
     this.renderRows = this.renderRows.bind(this);
     this.validate = this.validate.bind(this);
+    this.disabledSubmit = this.disabledSubmit.bind(this);
   }
 
   setRequiredField(field) {
@@ -65,6 +63,22 @@ class AddStudentsFormView extends Component {
     if (isEmpty(errorList)) {
       this.props.addStudents(studentGroupNodeId, studentGroupId, institutionId, depth);
     }
+  }
+
+  disabledSubmit() {
+    let disabled = true;
+    const { values } = this.props;
+    const keys = Object.keys(this.props.values);
+
+    keys.forEach((key) => {
+      const requiredDisabled = checkForRequiredFields(values[key]);
+      const requiredLength = checkRequiredLengthFields(values[key]);
+      if (!requiredDisabled && !requiredLength) {
+        disabled = false;
+      }
+    });
+
+    return disabled;
   }
 
   renderErrors() {
@@ -102,7 +116,9 @@ class AddStudentsFormView extends Component {
   }
 
   render() {
-    const { error, values } = this.props;
+    const { error } = this.props;
+    const disabled = this.disabledSubmit();
+
     return (
       <div className="add-students-container">
         {!isEmpty(error) ? (
@@ -178,7 +194,7 @@ class AddStudentsFormView extends Component {
         </div>
         <div className="row">
           <div className="col-md-4">
-            <button className="btn btn-primary" onClick={this.validate} disabled={isEmpty(values)}>
+            <button className="btn btn-primary" onClick={this.validate} disabled={disabled}>
               Save
             </button>
             <button onClick={this.props.goback} className="btn btn-primary padded-btn">

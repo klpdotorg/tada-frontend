@@ -40,6 +40,7 @@ class StudentInputRow extends Component {
       studentGroupId,
       depth,
       action,
+      disabled,
     } = this.props;
 
     return (
@@ -186,7 +187,7 @@ class StudentInputRow extends Component {
               className="btn btn-primary padded-btn"
               data-toggle="tooltip"
               title="Edit"
-              // disabled={!hasPermissions}
+              disabled={disabled}
             >
               Save
             </button>

@@ -327,7 +327,6 @@ export const mapAssessmentsToInsitutions = (surveyId, assessments, institutions,
       boundary_ids: boundaryIds,
     })
       .then((response) => {
-        console.log(response.status, 'Printiing the response status');
         if (response.status === 201) {
           dispatch(Notifications.success(mapAssessmentsDone));
           dispatch({
