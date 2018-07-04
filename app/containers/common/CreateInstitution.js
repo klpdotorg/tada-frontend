@@ -177,6 +177,7 @@ class CreateInstitutionForm extends Component {
             label="DISE Code:"
             type="text"
             className="form-control"
+            validations="isLength:11"
             required
           />
           <Select

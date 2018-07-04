@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import get from 'lodash.get';
 import Select from 'react-select';
 
-import { dateFormat } from '../../utils';
+import { dateFormat, between } from '../../utils';
 
 const CreateEntryRowView = (props) => {
   const {
@@ -99,7 +99,34 @@ const CreateEntryRowView = (props) => {
                 style={{ minWidth: 100 }}
                 value={value}
                 onChange={(val) => {
-                  props.onChange(val.value, id, question.id);
+                  const newVal = val ? val.value : '';
+                  props.onChange(newVal, id, question.id);
+                }}
+              />
+            </td>
+          );
+        }
+
+        if (questionType === 'NumericBox') {
+          return (
+            <td key={question.id} className="answer-field">
+              <input
+                id={question.id}
+                value={value}
+                type="number"
+                min={question.pass_score}
+                max={question.max_score}
+                required
+                className="form-control"
+                onChange={(e) => {
+                  if (between(e.target.value, 0, question.max_score)) {
+                    props.onChange(e.target.value, id, question.id);
+                  } else {
+                    props.infoNotification(
+                      'Warning: ',
+                      `Enter value between 0 and ${question.max_score}.`,
+                    );
+                  }
                 }}
               />
             </td>
@@ -152,6 +179,7 @@ CreateEntryRowView.propTypes = {
   onChangeDateOfVisit: PropTypes.func,
   onSave: PropTypes.func,
   onChangeGroupValue: PropTypes.func,
+  resetRow: PropTypes.func,
 };
 
 export { CreateEntryRowView };

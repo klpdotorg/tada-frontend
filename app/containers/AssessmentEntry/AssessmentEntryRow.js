@@ -9,6 +9,7 @@ import {
   editAnswerGroup,
   onChangeDateOfVisit,
   onChangeGroupValue,
+  infoNotification,
 } from '../../actions';
 
 class SetDefaultValues extends Component {
@@ -54,6 +55,7 @@ const AssessmentEntryRow = connect(mapStateToProps, {
   onSave: editAnswerGroup,
   onChangeGroupValue,
   onChangeDateOfVisit,
+  infoNotification,
 })(SetDefaultValues);
 
 export { AssessmentEntryRow };

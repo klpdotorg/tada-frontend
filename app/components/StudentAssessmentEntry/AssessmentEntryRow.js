@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import get from 'lodash.get';
+import Select from 'react-select';
 
-import { dateFormat } from '../../utils';
+import { dateFormat, between } from '../../utils';
 
 const AssessmentEntryRowView = (props) => {
   const {
@@ -61,21 +62,32 @@ const AssessmentEntryRowView = (props) => {
         const currentVal = answers.find((answer) => {
           return answer.question === question.id;
         });
+        const options = question.options.filter((n) => {
+          return n;
+        });
 
         if (questionType === 'CheckBox') {
           return (
             <td key={question.id} className="answer-field">
-              <select
-                className="form-control"
+              <Select
+                name="form-field-name"
+                style={{ minWidth: 200 }}
                 value={get(currentVal, 'answer', '')}
-                onChange={(e) => {
-                  props.onChange(rowId, currentVal.id, e.target.value);
+                menuContainerStyle={{ zIndex: 9999 }}
+                multi
+                onChange={(newVal) => {
+                  const filterVal = newVal.map((item) => {
+                    return item.value;
+                  });
+                  props.onChange(rowId, currentVal.id, filterVal);
                 }}
-              >
-                {question.options.map((val, index) => {
-                  return <option key={index}>{val}</option>;
+                options={options.map((val) => {
+                  return {
+                    label: val,
+                    value: val,
+                  };
                 })}
-              </select>
+              />
             </td>
           );
         }
@@ -83,11 +95,52 @@ const AssessmentEntryRowView = (props) => {
         if (questionType === 'Radio') {
           return (
             <td key={question.id} className="answer-field">
-              <select className="form-control" value={get(currentVal, 'answer', '')}>
-                {question.options.map((val, index) => {
-                  return <option key={index}>{val}</option>;
+              <Select
+                name="form-field-name"
+                style={{ minWidth: 200 }}
+                value={get(currentVal, 'answer', '')}
+                menuContainerStyle={{ zIndex: 9999 }}
+                onChange={(val) => {
+                  const newVal = val ? val.value : '';
+                  props.onChange(rowId, currentVal.id, newVal);
+                }}
+                options={options.map((val) => {
+                  return {
+                    label: val,
+                    value: val,
+                  };
                 })}
-              </select>
+              />
+            </td>
+          );
+        }
+
+        if (questionType === 'NumericBox') {
+          return (
+            <td key={question.id} className="answer-field">
+              <input
+                id={question.id}
+                value={get(currentVal, 'answer', '')}
+                type="number"
+                min={question.pass_score}
+                max={question.max_score}
+                required
+                className="form-control"
+                onChange={(e) => {
+                  if (between(e.target.value, 0, question.max_score)) {
+                    if (currentVal && currentVal.id) {
+                      props.onChange(rowId, currentVal.id, e.target.value);
+                    } else {
+                      props.onChange(rowId, '', e.target.value, question.id);
+                    }
+                  } else {
+                    props.infoNotification(
+                      'Warning: ',
+                      `Enter value between 0 and ${question.max_score}.`,
+                    );
+                  }
+                }}
+              />
             </td>
           );
         }

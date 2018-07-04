@@ -1,4 +1,5 @@
 import { push } from 'react-router-redux';
+import Notifications from 'react-notification-system-redux';
 
 import {
   ENABLE_SUBMIT_FORM,
@@ -13,6 +14,14 @@ import {
   TOGGLE_SUBMIT_LOADING,
   TOGGLE_SPINNER,
 } from './types';
+
+import { showSuccessMessage } from './notifications';
+
+export const infoNotification = (title, body) => {
+  return (dispatch) => {
+    dispatch(Notifications.info(showSuccessMessage(title, body)));
+  };
+};
 
 export const toggleSpinner = (value) => {
   return {

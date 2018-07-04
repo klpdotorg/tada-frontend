@@ -10,6 +10,7 @@ import {
   fetchStudentsForAssessmentEntry,
   onChangeGroupValue,
   onChangeDateOfVisit,
+  infoNotification,
 } from '../../actions';
 
 class GetResources extends Component {
@@ -109,6 +110,7 @@ const CreateEntryRow = connect(mapStateToProps, {
   fetchStudents: fetchStudentsForAssessmentEntry,
   onChangeGroupValue,
   onChangeDateOfVisit,
+  infoNotification,
 })(GetResources);
 
 export { CreateEntryRow };

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import get from 'lodash.get';
 import Select from 'react-select';
 
-import { dateFormat } from '../../utils';
+import { dateFormat, between } from '../../utils';
 
 const AssessmentEntryRowView = (props) => {
   const {
@@ -108,10 +108,11 @@ const AssessmentEntryRowView = (props) => {
                 style={{ minWidth: 100 }}
                 value={get(currentVal, 'answer', '')}
                 onChange={(val) => {
+                  const newVal = val ? val.value : '';
                   if (currentVal && currentVal.id) {
-                    props.onChange(rowId, currentVal.id, val.value);
+                    props.onChange(rowId, currentVal.id, newVal);
                   } else {
-                    props.onChange(rowId, '', val.value, question.id);
+                    props.onChange(rowId, '', newVal, question.id);
                   }
                 }}
               />
@@ -131,10 +132,17 @@ const AssessmentEntryRowView = (props) => {
                 required
                 className="form-control"
                 onChange={(e) => {
-                  if (currentVal && currentVal.id) {
-                    props.onChange(rowId, currentVal.id, e.target.value);
+                  if (between(e.target.value, 0, question.max_score)) {
+                    if (currentVal && currentVal.id) {
+                      props.onChange(rowId, currentVal.id, e.target.value);
+                    } else {
+                      props.onChange(rowId, '', e.target.value, question.id);
+                    }
                   } else {
-                    props.onChange(rowId, '', e.target.value, question.id);
+                    props.infoNotification(
+                      'Warning: ',
+                      `Enter value between 0 and ${question.max_score}.`,
+                    );
                   }
                 }}
               />
