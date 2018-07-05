@@ -58,10 +58,10 @@ class CreateQuestionForm extends Component {
         options: myform.options,
         max_score: myform.max_score || 0,
         pass_score: myform.pass_score,
+        sequence: myform.order,
         status: 'AC',
       },
     };
-
     this.props.save(question, programId, assessmentId);
   }
 
@@ -92,7 +92,7 @@ class CreateQuestionForm extends Component {
 
   render() {
     const { disabledOptionsField, disabledScoreFields } = this.state;
-    const { isOpen, canSubmit, error } = this.props;
+    const { isOpen, canSubmit, error, order } = this.props;
     const featuredValues = [
       {
         value: true,
@@ -213,6 +213,14 @@ class CreateQuestionForm extends Component {
             disabled={disabledScoreFields}
             required={!disabledScoreFields}
           />
+          <Input
+            name="order"
+            id="order"
+            value={order}
+            label="Order"
+            type="number"
+            placeholder="Enter order"
+          />
         </Formsy.Form>
       </Modal>
     );
@@ -232,15 +240,19 @@ CreateQuestionForm.propTypes = {
   getLanguages: PropTypes.func,
   fetchQuestionTypes: PropTypes.func,
   error: PropTypes.object,
+  order: PropTypes.number,
 };
 
 const mapStateToProps = (state, ownProps) => {
+  const keys = Object.values(state.questions.questions);
+
   return {
     isOpen: state.modal.createQuestion,
     canSubmit: state.appstate.enableSubmitForm,
     assessmentId: Number(ownProps.assessmentId),
     error: state.questions.error,
     types: state.questionTypes.types,
+    order: keys.length + 1,
   };
 };
 

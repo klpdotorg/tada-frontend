@@ -57,12 +57,15 @@ class EditQuestionForm extends Component {
   }
 
   getValue(field) {
-    return get(this.props.question, field, '');
+    const questionDetails = get(this.props.question, 'question_details', {});
+    return get(questionDetails, field, '');
   }
 
   disabledOptions(nextProps) {
-    const newVal = this.checkOptionPermission(nextProps.question.question_type_id);
-    const scorePermission = this.checkScorePermission(nextProps.question.question_type_id);
+    const questionDetails = get(nextProps.question, 'question_details', {});
+
+    const newVal = this.checkOptionPermission(questionDetails.question_type_id);
+    const scorePermission = this.checkScorePermission(questionDetails.question_type_id);
     this.setState({
       disabledOptionsField: newVal,
       disabledScoreFields: scorePermission,
@@ -125,8 +128,9 @@ class EditQuestionForm extends Component {
       question_type_id: myform.type,
       is_featured: myform.is_featured,
       options: myform.options,
-      max_score: myform.max_score,
+      max_score: myform.max_score || 0,
       pass_score: myform.pass_score,
+      sequence: myform.order,
       status: 'AC',
     };
 
@@ -262,6 +266,14 @@ class EditQuestionForm extends Component {
             placeholder="Enter Pass score"
             disabled={disabledScoreFields}
             required={!disabledScoreFields}
+          />
+          <Input
+            name="order"
+            id="order"
+            value={this.getValue('sequence')}
+            label="Order"
+            type="number"
+            placeholder="Enter order"
           />
         </Formsy.Form>
       </Modal>
