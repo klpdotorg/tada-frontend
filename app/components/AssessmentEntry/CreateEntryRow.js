@@ -133,6 +133,24 @@ const CreateEntryRowView = (props) => {
           );
         }
 
+        if (questionType === 'Date') {
+          return (
+            <td key={question.id} className="answer-field">
+              <input
+                id={question.id}
+                value={value}
+                type="date"
+                data-date-format="dd-mm-yyyy"
+                required
+                className="form-control"
+                onChange={(e) => {
+                  props.onChange(e.target.value, id, question.id);
+                }}
+              />
+            </td>
+          );
+        }
+
         return (
           <td key={question.id} className="answer-field">
             <input

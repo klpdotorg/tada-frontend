@@ -150,6 +150,28 @@ const AssessmentEntryRowView = (props) => {
           );
         }
 
+        if (questionType === 'Date') {
+          return (
+            <td key={question.id} className="answer-field">
+              <input
+                id={question.id}
+                value={get(currentVal, 'answer', '')}
+                type="date"
+                data-date-format="dd-mm-yyyy"
+                required
+                className="form-control"
+                onChange={(e) => {
+                  if (currentVal && currentVal.id) {
+                    props.onChange(rowId, currentVal.id, e.target.value);
+                  } else {
+                    props.onChange(rowId, '', e.target.value, question.id);
+                  }
+                }}
+              />
+            </td>
+          );
+        }
+
         return (
           <td key={question.id} className="answer-field">
             <input
