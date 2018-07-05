@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
 import isEmpty from 'lodash.isempty';
+import get from 'lodash.get';
 
 import {
   createNewQuestion,
@@ -33,6 +34,13 @@ class CreateQuestionForm extends Component {
   componentDidMount() {
     this.props.fetchQuestionTypes();
     this.props.getLanguages();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.types !== this.props.types) {
+      const Id = get(nextProps.types, '[0].id', '');
+      this.handleTypeChange(null, Id);
+    }
   }
 
   getQuestionTypes() {
