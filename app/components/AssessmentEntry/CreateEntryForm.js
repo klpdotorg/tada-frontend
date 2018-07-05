@@ -49,7 +49,7 @@ const CreateEntryFormView = (props) => {
               />
             </td>
             {Object.keys(questions).map((questionId) => {
-              const question = questions[questionId];
+              const question = get(questions, `${questionId}.question_details`, {});
               const questionType = get(question, 'question_type');
               const value = get(answers, [row.id, question.id, 'value'], '');
               const options = question.options.filter((n) => {

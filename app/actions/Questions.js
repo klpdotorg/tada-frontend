@@ -52,7 +52,8 @@ export const setQuestions = (value) => {
   return (dispatch) => {
     const entities = value.reduce((soFar, entity) => {
       const result = soFar;
-      result[entity.id] = entity;
+      const Id = getObject(entity, 'question_details.id', '');
+      result[Id] = entity;
 
       return result;
     }, {});
@@ -118,10 +119,12 @@ export const createNewQuestion = (data, programId, assessmentId) => {
     const createQuestionURL = `${SERVER_API_BASE}surveys/${programId}/questiongroup/${assessmentId}/questions/`;
     post(createQuestionURL, data).then((response) => {
       if (response.status === 201) {
-        const { question_details } = response.data;
+        const Id = getObject(response, 'data.question_details.id', '');
         dispatch({
           type: SET_QUESTION,
-          value: { [question_details.id]: question_details },
+          value: {
+            [Id]: response.data,
+          },
         });
         dispatch({
           type: TOGGLE_MODAL,
@@ -143,19 +146,32 @@ export const createNewQuestion = (data, programId, assessmentId) => {
 
 export const saveQuestion = (question, programId, assessmentId, questionId) => {
   return (dispatch) => {
-    dispatch({
-      type: TOGGLE_MODAL,
-      modal: 'editQuestion',
-    });
-
-    dispatch(showQuestionLoading());
     const editQuestionURL = `${SERVER_API_BASE}surveys/${programId}/questiongroup/${assessmentId}/questions/${questionId}/`;
-    put(editQuestionURL, question).then(({ data }) => {
-      dispatch({
-        type: SET_QUESTION,
-        value: { [data.id]: data },
-      });
-      dispatch(hideQuestionLoading());
+    put(editQuestionURL, question).then((response) => {
+      if (response.status === 200) {
+        const { data } = response;
+        dispatch({
+          type: SET_QUESTION,
+          value: {
+            [data.id]: {
+              question_details: data,
+            },
+          },
+        });
+        dispatch({
+          type: TOGGLE_MODAL,
+          modal: 'editQuestion',
+        });
+        dispatch({
+          type: CREATE_QUESTION_ERROR,
+          value: {},
+        });
+      } else {
+        dispatch({
+          type: CREATE_QUESTION_ERROR,
+          value: getObject(response.data, 'question_details', response.data),
+        });
+      }
     });
   };
 };
