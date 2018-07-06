@@ -157,6 +157,7 @@ RenderForm.propTypes = {
   elements: PropTypes.number,
   noQuestions: PropTypes.bool,
   canView: PropTypes.bool,
+  resetRow: PropTypes.func,
 };
 
 export { AssessmentEntryFormView };

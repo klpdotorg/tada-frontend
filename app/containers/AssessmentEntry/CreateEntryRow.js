@@ -9,6 +9,7 @@ import {
   createAnswerGroup,
   fetchStudentsForAssessmentEntry,
   onChangeGroupValue,
+  onChangeComments,
   onChangeDateOfVisit,
   infoNotification,
 } from '../../actions';
@@ -88,7 +89,7 @@ GetResources.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const { programs, selectedProgram } = state.programs;
-  const { students, answers, groupValues, dateOfVisits } = state.assessmentEntry;
+  const { students, answers, groupValues, dateOfVisits, comments } = state.assessmentEntry;
   const boundary = get(state.programDetails.programDetails, ownProps.uniqueId, {});
   const program = get(programs, selectedProgram, {});
 
@@ -101,6 +102,7 @@ const mapStateToProps = (state, ownProps) => {
     students,
     groupValues,
     dateOfVisit: new Date(),
+    comments,
   };
 };
 
@@ -111,6 +113,7 @@ const CreateEntryRow = connect(mapStateToProps, {
   onChangeGroupValue,
   onChangeDateOfVisit,
   infoNotification,
+  onChangeComments,
 })(GetResources);
 
 export { CreateEntryRow };

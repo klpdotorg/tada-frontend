@@ -14,6 +14,7 @@ import {
   ON_CHANGE_DATE_OF_VISITS,
   RESET,
   RESET_CREATE_FORM_ENTRY,
+  ON_CHANGE_COMMENTS,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -25,10 +26,19 @@ const INITIAL_STATE = {
   students: [],
   groupValues: {},
   dateOfVisits: {},
+  comments: {},
 };
 
 const AssessmentEntry = (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case ON_CHANGE_COMMENTS:
+      return {
+        ...state,
+        comments: {
+          ...state.comments,
+          ...action.value,
+        },
+      };
     case ON_CHANGE_DATE_OF_VISITS:
       return {
         ...state,

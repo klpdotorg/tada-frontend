@@ -11,6 +11,7 @@ import {
   onChangeGroupValue,
   onChangeDateOfVisit,
   infoNotification,
+  onChangeComments,
 } from '../../actions';
 
 class GetResources extends Component {
@@ -106,7 +107,7 @@ GetResources.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const { programs, selectedProgram } = state.programs;
-  const { students, answers, groupValues, dateOfVisits } = state.assessmentEntry;
+  const { students, answers, groupValues, dateOfVisits, comments } = state.assessmentEntry;
   const boundary = get(state.programDetails.programDetails, ownProps.uniqueId, {});
   const program = get(programs, selectedProgram, {});
 
@@ -119,6 +120,7 @@ const mapStateToProps = (state, ownProps) => {
     students,
     groupValues,
     dateOfVisits,
+    comments,
   };
 };
 
@@ -129,6 +131,7 @@ const CreateEntryForm = connect(mapStateToProps, {
   onChangeGroupValue,
   onChangeDateOfVisit,
   infoNotification,
+  onChangeComments,
 })(GetResources);
 
 export { CreateEntryForm };

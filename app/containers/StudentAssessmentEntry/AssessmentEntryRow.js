@@ -10,6 +10,7 @@ import {
   onChangeDateOfVisit,
   onChangeGroupValue,
   infoNotification,
+  onChangeComments,
 } from '../../actions';
 
 class SetDefaultValues extends Component {
@@ -17,6 +18,7 @@ class SetDefaultValues extends Component {
     const { rowId, row } = this.props;
     this.props.onChangeGroupValue(rowId, row.group_value);
     this.props.onChangeDateOfVisit(rowId, new Date(row.date_of_visit));
+    this.props.onChangeComments(rowId, row.comments);
   }
   render() {
     return <AssessmentEntryRowView {...this.props} />;
@@ -28,6 +30,7 @@ SetDefaultValues.propTypes = {
   rowId: PropTypes.any,
   onChangeGroupValue: PropTypes.func,
   onChangeDateOfVisit: PropTypes.func,
+  onChangeComments: PropTypes.func,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -39,6 +42,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     groupValue: get(state.assessmentEntry, ['groupValues', ownProps.rowId], ''),
     dateOfVisit: get(state.assessmentEntry, ['dateOfVisits', ownProps.rowId], new Date()),
+    comment: get(state.assessmentEntry, ['comments', ownProps.id], ''),
     questions: state.questions.questions,
     id: get(boundary, 'id', ''),
     name: `${get(boundary, 'first_name', '')} ${get(boundary, 'last_name', '')}`,
@@ -52,6 +56,7 @@ const AssessmentEntryRow = connect(mapStateToProps, {
   onChangeGroupValue,
   onChangeDateOfVisit,
   infoNotification,
+  onChangeComments,
 })(SetDefaultValues);
 
 export { AssessmentEntryRow };

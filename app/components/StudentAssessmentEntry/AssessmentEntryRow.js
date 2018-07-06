@@ -17,6 +17,7 @@ const AssessmentEntryRowView = (props) => {
     rowId,
     answergroupId,
     boundaryInfo,
+    comment,
   } = props;
   return (
     <tr>
@@ -56,13 +57,25 @@ const AssessmentEntryRowView = (props) => {
           }}
         />
       </td>
+      <td>
+        <input
+          value={comment}
+          type="text"
+          required
+          className="form-control"
+          onChange={(e) => {
+            props.onChangeComments(answergroupId, e.target.value);
+          }}
+        />
+      </td>
       {Object.keys(questions).map((questionId) => {
         const question = get(questions, `${questionId}.question_details`, {});
         const questionType = get(question, 'question_type');
         const currentVal = answers.find((answer) => {
           return answer.question === question.id;
         });
-        const options = question.options.filter((n) => {
+        const questionOptions = get(question, 'options', []) || [];
+        const options = questionOptions.filter((n) => {
           return n;
         });
 
@@ -212,6 +225,7 @@ AssessmentEntryRowView.propTypes = {
   onChangeGroupValue: PropTypes.func,
   answergroupId: PropTypes.any,
   boundaryInfo: PropTypes.object,
+  comment: PropTypes.string,
   id: PropTypes.any,
   name: PropTypes.string,
   questions: PropTypes.object,
@@ -221,6 +235,7 @@ AssessmentEntryRowView.propTypes = {
   groupValue: PropTypes.string,
   dateOfVisit: PropTypes.any,
   rowId: PropTypes.any,
+  onChangeComments: PropTypes.func,
 };
 
 export { AssessmentEntryRowView };

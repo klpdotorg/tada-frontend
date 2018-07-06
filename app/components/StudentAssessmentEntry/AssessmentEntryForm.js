@@ -10,7 +10,7 @@ import { AssessmentEntryRow, CreateEntryRow } from '../../containers/StudentAsse
 const RenderForm = (props) => {
   const { loading, params, uniqueId, rows, boundaryInfo, canView, noQuestions } = props;
 
-  if (loading || noQuestions || !canView) {
+  if (loading || noQuestions || !canView || isEmpty(boundaryInfo.students)) {
     return <tbody />;
   }
 
@@ -68,7 +68,7 @@ class AssessmentEntryFormView extends Component {
 
   render() {
     const { elements } = this.state;
-    const { loading, rows, params, noQuestions, canView, error } = this.props;
+    const { loading, rows, params, noQuestions, canView, error, boundaryInfo } = this.props;
     const { districtId, blockId, clusterId, institutionId, studentGroupId } = params;
     const disabled = elements >= 1 || !rows.length;
 
@@ -114,6 +114,11 @@ class AssessmentEntryFormView extends Component {
           )}
           {!loading && !canView ? (
             <Message message="You don't have permission to do this." style={{ padding: 10 }} />
+          ) : (
+            <div />
+          )}
+          {!loading && isEmpty(boundaryInfo.students) ? (
+            <Message message="This Student Group has no Students" style={{ padding: 10 }} />
           ) : (
             <div />
           )}

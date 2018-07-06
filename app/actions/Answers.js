@@ -171,6 +171,7 @@ export const createAnswerGroup = (params) => {
     const { selectedProgram } = state.programs;
     const name = getObject(state.assessmentEntry.groupValues, [boundaryId], '');
     const dateOfVisit = getObject(state.assessmentEntry.dateOfVisits, [boundaryId], new Date());
+    const comment = getObject(state.assessmentEntry.comments, [boundaryId], '');
     const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${assessmentId}/answergroups/`;
 
     post(url, {
@@ -179,6 +180,7 @@ export const createAnswerGroup = (params) => {
       date_of_visit: dateOfVisit,
       institution_images: [],
       questiongroup: assessmentId,
+      comments: comment,
       status: 'AC',
     }).then((response) => {
       if (response.status === 201) {

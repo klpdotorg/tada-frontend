@@ -14,6 +14,7 @@ import {
   SET_ASSESSMENT_ENTRY_STUDENTS,
   ON_CHANGE_GROUP_VALUE,
   ON_CHANGE_DATE_OF_VISITS,
+  ON_CHANGE_COMMENTS,
 } from './types';
 import { get } from './requests';
 import {
@@ -61,6 +62,15 @@ export const onChangeGroupValue = (id, value) => {
 export const onChangeDateOfVisit = (id, value) => {
   return {
     type: ON_CHANGE_DATE_OF_VISITS,
+    value: {
+      [id]: value,
+    },
+  };
+};
+
+export const onChangeComments = (id, value) => {
+  return {
+    type: ON_CHANGE_COMMENTS,
     value: {
       [id]: value,
     },

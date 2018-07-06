@@ -4,7 +4,7 @@ import getObject from 'lodash.get';
 import isEmpty from 'lodash.isempty';
 
 import { convertArrayToObject } from '../utils';
-import { get, patch, put } from './requests';
+import { get, put } from './requests';
 import { FETCHING_ANSWER_GROUPS, SET_ANSWER_GROUPS } from './types';
 import { fetchAnswers, editAnswers, showAnswerError, resetAnswerError } from './index';
 
@@ -17,7 +17,7 @@ export const fetchingAnswergroups = (value) => {
 
 export const getAnswerGroups = (params) => {
   const { assessmentId, programId, boundaryId, boundaryType } = params;
-  const url = `${SERVER_API_BASE}surveys/${programId}/questiongroup/${assessmentId}/answergroups/?${boundaryType}_id=${boundaryId}&per_page=10`;
+  const url = `${SERVER_API_BASE}surveys/${programId}/questiongroup/${assessmentId}/answergroups/?${boundaryType}_id=${boundaryId}&per_page=12`;
   return get(url).then(({ data }) => {
     return data.results;
   });
@@ -82,6 +82,7 @@ export const editAnswerGroup = (params) => {
     const { selectedProgram } = state.programs;
     const name = getObject(state.assessmentEntry.groupValues, [answergroupId], '');
     const dateOfVisit = getObject(state.assessmentEntry.dateOfVisits, [answergroupId], new Date());
+    const comment = getObject(state.assessmentEntry.comments, [answergroupId], '');
     const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${assessmentId}/answergroups/${answergroupId}/`;
 
     put(url, {
@@ -89,6 +90,7 @@ export const editAnswerGroup = (params) => {
       group_value: name,
       date_of_visit: dateOfVisit,
       questiongroup: assessmentId,
+      comments: comment,
       institution_images: [],
       status: 'AC',
     }).then((response) => {

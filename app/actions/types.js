@@ -151,3 +151,4 @@ export const SET_STUDENT_ERROR = 'set_student_error';
 export const SET_QUESTION_TYPES = 'set_question_types';
 export const SET_MAP_ASSESSMENT_ERROR = 'set_map_assessment_error';
 export const SET_TEACHER_ERROR = 'set_teacher_error';
+export const ON_CHANGE_COMMENTS = 'on_change_comments';

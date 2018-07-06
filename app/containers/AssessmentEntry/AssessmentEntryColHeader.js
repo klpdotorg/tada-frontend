@@ -4,12 +4,14 @@ import { connect } from 'react-redux';
 
 const AssessmentEntryColHeaderView = ({ questions }) => {
   const values = Object.keys(questions);
+
   return (
     <tr className="bg-info">
       <td>ID</td>
       <td colSpan="2">Boundary Name</td>
       <td>Name</td>
       <td>Date of Visit</td>
+      <td>Comments</td>
       {values.map((id, i) => {
         return (
           <td key={id} title={questions[id].question_text}>

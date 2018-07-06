@@ -10,6 +10,7 @@ import {
   fetchStudentsForAssessmentEntry,
   onChangeGroupValue,
   onChangeDateOfVisit,
+  onChangeComments,
   infoNotification,
 } from '../../actions';
 
@@ -57,6 +58,7 @@ class GetResources extends Component {
   setDefaultValue() {
     this.props.onChangeDateOfVisit(this.props.boundaryId, new Date());
     this.props.onChangeGroupValue(this.props.boundaryId, '');
+    this.props.onChangeComments(this.props.boundaryId, '');
   }
 
   render() {
@@ -76,11 +78,12 @@ GetResources.propTypes = {
   name: PropTypes.string,
   id: PropTypes.any,
   boundaryInfo: PropTypes.object,
+  onChangeComments: PropTypes.func,
 };
 
 const mapStateToProps = (state, ownProps) => {
   const { programs, selectedProgram } = state.programs;
-  const { students, answers, groupValues, dateOfVisits } = state.assessmentEntry;
+  const { students, answers, groupValues, dateOfVisits, comments } = state.assessmentEntry;
   const boundary = state.assessmentEntry.students.find((student) => {
     return ownProps.boundaryId === student.id;
   });
@@ -95,6 +98,7 @@ const mapStateToProps = (state, ownProps) => {
     students,
     groupValue: get(groupValues, ownProps.boundaryId, ''),
     dateOfVisit: get(dateOfVisits, ownProps.boundaryId, new Date()),
+    comment: get(comments, ownProps.boundaryId, ''),
   };
 };
 
@@ -105,6 +109,7 @@ const CreateEntryRow = connect(mapStateToProps, {
   onChangeGroupValue,
   onChangeDateOfVisit,
   infoNotification,
+  onChangeComments,
 })(GetResources);
 
 export { CreateEntryRow };
