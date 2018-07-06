@@ -31,7 +31,7 @@ class AddUserView extends Component {
       mobile_no: myform.mobileno,
       email: myform.email,
       password: myform.password,
-      groups: myform.role,
+      groups: [myform.role],
     };
 
     this.props.save(user);
@@ -123,7 +123,7 @@ class AddUserView extends Component {
             required
             validations="minLength:5"
           />
-          <Select multiple name="role" label="Role" options={roles} value={['tada_deo']} required />
+          <Select name="role" label="Role" options={roles} value="tada_deo" required />
         </Formsy.Form>
       </Modal>
     );

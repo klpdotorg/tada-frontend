@@ -26,7 +26,7 @@ class EditUserView extends Component {
       last_name: myform.lastName,
       mobile_no: myform.mobileno,
       email: myform.email,
-      groups: myform.role,
+      groups: [myform.role],
     };
 
     this.props.save(user);
@@ -34,6 +34,8 @@ class EditUserView extends Component {
 
   render() {
     const { first_name, last_name, email, mobile_no, groups, isOpen, canSubmit } = this.props;
+    const group = get(groups, '[2]', 'tada_deo');
+
     return (
       <Modal
         title="Edit User"
@@ -93,7 +95,7 @@ class EditUserView extends Component {
             type="email"
             required
           />
-          <Select multiple name="role" label="Role" options={roles} value={groups} required />
+          <Select name="role" label="Role" options={roles} value={group} required />
         </Formsy.Form>
       </Modal>
     );
