@@ -1,8 +1,18 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { MapAssessmentsView } from '../../components/MapAssessments';
+import Loadable from 'react-loadable';
+
+// import { MapAssessmentsView } from '../../components/MapAssessments';
 import { mapBoundariesToAssessments } from '../../actions';
+import { Loading } from '../../components/common';
+
+const MapAssessmentsView = Loadable({
+  loader: () => {
+    return import('../../components/MapAssessments/MapAssessments');
+  },
+  loading: Loading,
+});
 
 class ActiveSubmitButton extends Component {
   constructor() {

@@ -65,4 +65,4 @@ TeacherScreen.propTypes = {
   paths: PropTypes.array,
 };
 
-export { TeacherScreen };
+export default TeacherScreen;

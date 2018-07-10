@@ -82,4 +82,4 @@ MapAssessmentsView.propTypes = {
   error: PropTypes.object,
 };
 
-export { MapAssessmentsView };
+export default MapAssessmentsView;

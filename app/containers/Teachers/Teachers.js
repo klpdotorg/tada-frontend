@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import Loadable from 'react-loadable';
 import get from 'lodash.get';
 import isEmpty from 'lodash.isempty';
 import { DEFAULT_PARENT_NODE_ID } from 'config';
 
-import { TeacherScreen } from '../../components/Teachers';
+// import TeacherScreen from '../../components/Teachers';
 import {
   getBoundariesEntities,
   getTeachers,
@@ -14,6 +15,14 @@ import {
   showTeacherLoading,
 } from '../../actions';
 import { checkPermissions, getEntitiesPath } from '../../utils';
+import { Loading } from '../../components/common';
+
+const TeacherScreen = Loadable({
+  loader: () => {
+    return import('../../components/Teachers/ShowTeachers');
+  },
+  loading: Loading,
+});
 
 class GetTeachers extends Component {
   constructor(props) {

@@ -2,15 +2,18 @@ const path = require('path');
 const configFile = require('./settings/config.json');
 
 module.exports = {
-  mode: 'production',
+  mode: 'development',
   entry: [
-    path.resolve(__dirname, 'app/main.js')
+    path.resolve(__dirname, 'app/main.js'),
   ],
   devtool: '#cheap-eval-source-map',
   output: {
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/',
     filename: 'bundle.js',
+  },
+  devServer: {
+    historyApiFallback: true,
   },
   module: {
     rules: [
