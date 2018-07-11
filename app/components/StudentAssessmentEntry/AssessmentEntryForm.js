@@ -5,7 +5,11 @@ import flatten from 'lodash.flatten';
 
 import { Loading, Message } from '../common';
 import { AssessmentEntryColHeader, Header } from '../../containers/AssessmentEntry';
-import { AssessmentEntryRow, CreateEntryRow } from '../../containers/StudentAssessmentEntry';
+import {
+  AssessmentEntryRow,
+  CreateEntryRow,
+  Pagination,
+} from '../../containers/StudentAssessmentEntry';
 
 const RenderForm = (props) => {
   const { loading, params, uniqueId, rows, boundaryInfo, canView, noQuestions } = props;
@@ -123,6 +127,7 @@ class AssessmentEntryFormView extends Component {
             <div />
           )}
         </div>
+        <Pagination params={boundaryInfo} />
       </div>
     );
   }

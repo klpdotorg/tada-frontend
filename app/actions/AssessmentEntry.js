@@ -15,6 +15,7 @@ import {
   ON_CHANGE_GROUP_VALUE,
   ON_CHANGE_DATE_OF_VISITS,
   ON_CHANGE_COMMENTS,
+  SET_ANSWER_PAGINATION_COUNT,
 } from './types';
 import { get } from './requests';
 import {
@@ -193,7 +194,11 @@ export const fetchSelectedAssessmentBoundary = () => {
 };
 
 export const fetchStudentsForAssessmentEntry = (id) => {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    dispatch(showAssessmentEntryLoading());
+
+    const state = getState();
+    const { current } = state.answerPagination;
     let studentGroupId = '';
     if (typeof id === 'object') {
       studentGroupId = id.boundaryId;
@@ -201,12 +206,15 @@ export const fetchStudentsForAssessmentEntry = (id) => {
       studentGroupId = id;
     }
 
-    dispatch(showAssessmentEntryLoading());
-    const url = `${SERVER_API_BASE}studentgroups/${studentGroupId}/students/`;
+    const url = `${SERVER_API_BASE}studentgroups/${studentGroupId}/students/?per_page=10&page=${current}`;
     get(url).then(({ data }) => {
       dispatch({
         type: SET_ASSESSMENT_ENTRY_STUDENTS,
         value: data.results,
+      });
+      dispatch({
+        type: SET_ANSWER_PAGINATION_COUNT,
+        value: data.count,
       });
       dispatch(hideAssessmentEntryLoading());
       if (typeof id === 'object') {

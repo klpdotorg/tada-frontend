@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "node_modules/.bin/webpack-dev-server --config webpack.config.js",
     "deploy": "node_modules/.bin/webpack -p && cp index.html dist/index.html",
+    "prebuild": "rm -rf dist && mkdir dist",
     "build": "node_modules/.bin/webpack --config webpack.prod.js && cp index.html dist/index.html",
     "precommit": "lint-staged"
   },

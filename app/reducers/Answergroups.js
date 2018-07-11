@@ -1,7 +1,12 @@
-import { SET_ANSWER_GROUPS, FETCHING_ANSWER_GROUPS, RESET } from '../actions/types';
+import {
+  SET_ANSWER_GROUPS,
+  FETCHING_ANSWER_GROUPS,
+  RESET,
+  RESET_ANSWERGROUPS,
+} from '../actions/types';
 
 const INITIAL_STATE = {
-  answergroups: [],
+  answergroups: {},
   fetching: false,
 };
 
@@ -16,6 +21,11 @@ const Answergroups = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         fetching: action.value,
+      };
+    case RESET_ANSWERGROUPS:
+      return {
+        ...state,
+        answergroups: {},
       };
     case RESET:
       return INITIAL_STATE;

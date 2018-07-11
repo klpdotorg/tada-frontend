@@ -737,6 +737,10 @@ table.table-fixedwidth td, .table-fixedwidth th {
   flex: 1;
 }
 
+.answer-pagination {
+  position: absolute;
+  top: 585px;
+}
 .answer-table {
   border: 1px solid #c7c0c0;
   width: 97%;

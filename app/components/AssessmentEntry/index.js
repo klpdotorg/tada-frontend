@@ -5,3 +5,4 @@ export * from './AssessmentEntryRow';
 export * from './CreateEntryForm';
 export * from './CreateEntryRow';
 export * from './Header';
+export * from './Pagination';

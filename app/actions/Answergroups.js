@@ -5,7 +5,12 @@ import isEmpty from 'lodash.isempty';
 
 import { convertArrayToObject } from '../utils';
 import { get, put } from './requests';
-import { FETCHING_ANSWER_GROUPS, SET_ANSWER_GROUPS } from './types';
+import {
+  FETCHING_ANSWER_GROUPS,
+  SET_ANSWER_GROUPS,
+  SET_ANSWER_PAGINATION_COUNT,
+  RESET_ANSWERGROUPS,
+} from './types';
 import { fetchAnswers, editAnswers, showAnswerError, resetAnswerError } from './index';
 
 export const fetchingAnswergroups = (value) => {
@@ -15,11 +20,18 @@ export const fetchingAnswergroups = (value) => {
   };
 };
 
-export const getAnswerGroups = (params) => {
+export const getAnswerGroups = (params, current) => {
   const { assessmentId, programId, boundaryId, boundaryType } = params;
-  const url = `${SERVER_API_BASE}surveys/${programId}/questiongroup/${assessmentId}/answergroups/?${boundaryType}_id=${boundaryId}&per_page=12`;
+  let url = '';
+
+  if (!current) {
+    url = `${SERVER_API_BASE}surveys/${programId}/questiongroup/${assessmentId}/answergroups/?${boundaryType}_id=${boundaryId}`;
+  } else {
+    url = `${SERVER_API_BASE}surveys/${programId}/questiongroup/${assessmentId}/answergroups/?${boundaryType}_id=${boundaryId}&per_page=10&page=${current}`;
+  }
+
   return get(url).then(({ data }) => {
-    return data.results;
+    return data;
   });
 };
 
@@ -28,7 +40,11 @@ export const fetchAnswerGroups = (assessmentId, boundaryType, boundaryId) => {
     dispatch(fetchingAnswergroups(true));
 
     const state = getState();
+    const { current } = state.answerPagination;
     const { selectedProgram } = state.programs;
+    dispatch({
+      type: RESET_ANSWERGROUPS,
+    });
     if (isArray(boundaryId)) {
       const params = {
         assessmentId,
@@ -36,7 +52,7 @@ export const fetchAnswerGroups = (assessmentId, boundaryType, boundaryId) => {
         boundaryType,
       };
       const promises = boundaryId.map((id) => {
-        return getAnswerGroups({ ...params, boundaryId: id });
+        return getAnswerGroups({ ...params, boundaryId: id }, 0);
       });
 
       Promise.all(promises).then((value) => {
@@ -46,7 +62,7 @@ export const fetchAnswerGroups = (assessmentId, boundaryType, boundaryId) => {
             dispatch({
               type: SET_ANSWER_GROUPS,
               value: {
-                [studentId]: convertArrayToObject(item),
+                [studentId]: convertArrayToObject(item.results),
               },
             });
             dispatch(fetchAnswers(assessmentId, studentId));
@@ -61,12 +77,16 @@ export const fetchAnswerGroups = (assessmentId, boundaryType, boundaryId) => {
         boundaryType,
         boundaryId,
       };
-      getAnswerGroups(params).then((response) => {
+      getAnswerGroups(params, current).then((response) => {
         dispatch({
           type: SET_ANSWER_GROUPS,
           value: {
-            [boundaryId]: convertArrayToObject(response),
+            [boundaryId]: convertArrayToObject(response.results),
           },
+        });
+        dispatch({
+          type: SET_ANSWER_PAGINATION_COUNT,
+          value: response.count,
         });
         dispatch(fetchAnswers(assessmentId, boundaryId));
         dispatch(fetchingAnswergroups(false));

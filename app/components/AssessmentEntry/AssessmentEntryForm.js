@@ -9,6 +9,7 @@ import {
   CreateEntryForm,
   CreateEntryRow,
   Header,
+  Pagination,
 } from '../../containers/AssessmentEntry';
 
 const RenderForm = (props) => {
@@ -76,7 +77,6 @@ class AssessmentEntryFormView extends Component {
   }
 
   resetRow() {
-    console.log('asdfas');
     this.setState({
       elements: 0,
     });
@@ -84,7 +84,7 @@ class AssessmentEntryFormView extends Component {
 
   render() {
     const { elements } = this.state;
-    const { loading, rows, noQuestions, params, canView, error } = this.props;
+    const { loading, rows, noQuestions, params, canView, error, boundaryInfo } = this.props;
     const disabled = elements >= 1 || !rows.length;
     const { districtId, blockId, clusterId, institutionId, studentGroupId } = params;
 
@@ -134,6 +134,7 @@ class AssessmentEntryFormView extends Component {
             <div />
           )}
         </div>
+        <Pagination params={boundaryInfo} />
       </div>
     );
   }
@@ -146,6 +147,7 @@ AssessmentEntryFormView.propTypes = {
   noQuestions: PropTypes.bool,
   params: PropTypes.object,
   canView: PropTypes.bool,
+  boundaryInfo: PropTypes.object,
 };
 
 RenderForm.propTypes = {

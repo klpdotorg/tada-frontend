@@ -3,14 +3,14 @@ const configFile = require('./settings/config.json');
 
 module.exports = {
   mode: 'development',
-  entry: [
-    path.resolve(__dirname, 'app/main.js'),
-  ],
+  entry: {
+    app: path.resolve(__dirname, 'app/main.js'),
+  },
   devtool: '#cheap-eval-source-map',
   output: {
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/',
-    filename: 'bundle.js',
+    filename: '[name].bundle.js',
   },
   devServer: {
     historyApiFallback: true,

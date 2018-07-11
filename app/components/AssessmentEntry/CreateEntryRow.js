@@ -187,7 +187,9 @@ const CreateEntryRowView = (props) => {
               assessmentId,
               boundaryId: id,
             });
-            props.resetRow();
+            if (props.resetRow) {
+              props.resetRow();
+            }
           }}
           className="btn btn-primary"
         >
