@@ -8,6 +8,7 @@ import {
   RESET,
   SET_CREATE_BOUNDARY_ERROR,
   SET_EDIT_BOUNDARY_ERROR,
+  SELECT_BOUNDARY,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -21,6 +22,7 @@ const INITIAL_STATE = {
   uncollapsedEntities: {},
   createError: {},
   editError: {},
+  selectedBoundary: null,
 };
 
 const BoundariesNavTree = (state = INITIAL_STATE, action) => {
@@ -73,6 +75,11 @@ const BoundariesNavTree = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         editError: action.value,
+      };
+    case SELECT_BOUNDARY:
+      return {
+        ...state,
+        selectedBoundary: action.value,
       };
     case RESET:
       return INITIAL_STATE;

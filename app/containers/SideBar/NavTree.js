@@ -48,7 +48,7 @@ class NavTree extends Component {
     return [];
   }
 
-  renderLabel(node, depth, collapsed) {
+  renderLabel(node, depth, collapsed, selected) {
     const { entity } = node;
 
     const label = getLabel(entity);
@@ -56,6 +56,7 @@ class NavTree extends Component {
     return (
       <Link
         key={entity.name || entity.id}
+        className={selected ? 'selected-boundary' : ''}
         tabIndex="0"
         onClick={() => {
           if (!collapsed) {
@@ -70,7 +71,7 @@ class NavTree extends Component {
           this.props.openBoundary(node.uniqueId, depth);
         }}
       >
-        <span>{label}</span>
+        <span style={{ color: selected ? 'white' : '#337ab7' }}>{label}</span>
       </Link>
     );
   }
@@ -80,7 +81,8 @@ class NavTree extends Component {
     const { entity } = node;
     const treeNodes = this.getTreeNodes(newDepth);
     const collapsed = this.props.uncollapsed[newDepth] === node.uniqueId;
-    const name = this.renderLabel(node, newDepth, collapsed);
+    const selected = this.props.selectedBoundary === node.uniqueId;
+    const name = this.renderLabel(node, newDepth, collapsed, selected);
 
     return (
       <TreeView
@@ -136,11 +138,19 @@ class NavTree extends Component {
 }
 
 const mapStateToProps = (state) => {
+  const {
+    boundaryDetails,
+    boundariesByParentId,
+    selectedBoundary,
+    uncollapsedEntities,
+  } = state.boundaries;
+
   return {
-    entities: state.boundaries.boundaryDetails,
-    entitiesByParentId: state.boundaries.boundariesByParentId,
-    uncollapsed: state.boundaries.uncollapsedEntities,
+    entities: boundaryDetails,
+    entitiesByParentId: boundariesByParentId,
+    uncollapsed: uncollapsedEntities,
     loading: state.appstate.loadingBoundary,
+    selectedBoundary,
     selectedPrimary: state.schoolSelection.primarySchool,
   };
 };
@@ -153,6 +163,7 @@ NavTree.propTypes = {
   openBoundary: PropTypes.func,
   loading: PropTypes.bool,
   selectedPrimary: PropTypes.bool,
+  selectedBoundary: PropTypes.string,
 };
 
 const SchoolsNavTree = connect(mapStateToProps, {

@@ -875,6 +875,14 @@ table.table-fixedwidth td, .table-fixedwidth th {
 .permission-item-table td {
   height: 38px;
 }
+.selected-boundary {
+  background-color: #337abb;
+  padding-left: 10px;
+  padding-right: 15px;
+  flex: 1;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
 .selected-map-assessment {
   background-color: #337abb;
   padding-left: 10px;

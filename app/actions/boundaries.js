@@ -14,6 +14,7 @@ import {
   DELETE_BOUNDARY_NODE,
   SET_EDIT_BOUNDARY_ERROR,
   SET_CREATE_BOUNDARY_ERROR,
+  SELECT_BOUNDARY,
 } from './types';
 import {
   showBoundaryLoading,
@@ -94,6 +95,10 @@ export const openBoundary = (uniqueId, depth) => {
 
     dispatch(push(path));
     dispatch(resetEditBoundaryError());
+    dispatch({
+      type: SELECT_BOUNDARY,
+      value: uniqueId,
+    });
   };
 };
 

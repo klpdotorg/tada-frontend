@@ -157,3 +157,4 @@ export const GO_ANSWER_PAGINATION_NEXT = 'go_answer_pagination_next';
 export const CHANGE_ANSWER_PAGINATION_CURRENT = 'change_answer_pagination_current';
 export const SET_ANSWER_PAGINATION_COUNT = 'set_answer_pagination_count';
 export const RESET_ANSWERGROUPS = 'reset_answergroups';
+export const SELECT_BOUNDARY = 'select_boundary';
