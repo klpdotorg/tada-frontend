@@ -122,7 +122,6 @@ export const dateParser = (date) => {
 };
 
 export const convertArrayToObject = (entities) => {
-  console.log(new Error().stack, entities);
   return entities.reduce((soFar, entity) => {
     const result = soFar;
     result[entity.id] = entity;
