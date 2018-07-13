@@ -57,15 +57,14 @@ class EditQuestionForm extends Component {
   }
 
   getValue(field) {
-    const questionDetails = get(this.props.question, 'question_details', {});
-    return get(questionDetails, field, '');
+    return get(this.props.question, field, '');
   }
 
   disabledOptions(nextProps) {
-    const questionDetails = get(nextProps.question, 'question_details', {});
+    const { question_type_id } = nextProps.question;
 
-    const newVal = this.checkOptionPermission(questionDetails.question_type_id);
-    const scorePermission = this.checkScorePermission(questionDetails.question_type_id);
+    const newVal = this.checkOptionPermission(question_type_id);
+    const scorePermission = this.checkScorePermission(question_type_id);
     this.setState({
       disabledOptionsField: newVal,
       disabledScoreFields: scorePermission,

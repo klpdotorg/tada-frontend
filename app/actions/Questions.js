@@ -52,7 +52,7 @@ export const setQuestions = (value) => {
   return (dispatch) => {
     const entities = value.reduce((soFar, entity) => {
       const result = soFar;
-      const Id = getObject(entity, 'question_details.id', '');
+      const Id = getObject(entity, 'id', '');
       result[Id] = entity;
 
       return result;
@@ -123,7 +123,7 @@ export const createNewQuestion = (data, programId, assessmentId) => {
         dispatch({
           type: SET_QUESTION,
           value: {
-            [Id]: response.data,
+            [Id]: getObject(response.data, 'question_details', {}),
           },
         });
         dispatch({
@@ -153,9 +153,7 @@ export const saveQuestion = (question, programId, assessmentId, questionId) => {
         dispatch({
           type: SET_QUESTION,
           value: {
-            [data.id]: {
-              question_details: data,
-            },
+            [data.id]: data,
           },
         });
         dispatch({

@@ -67,7 +67,7 @@ const AssessmentEntryRowView = (props) => {
         />
       </td>
       {Object.keys(questions).map((questionId) => {
-        const question = get(questions, `${questionId}.question_details`, {});
+        const question = get(questions, questionId, {});
         const questionType = get(question, 'question_type');
         const currentVal = answers.find((answer) => {
           return answer.question === question.id;

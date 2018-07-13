@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import get from 'lodash.get';
 
 import { checkPermissions } from '../../checkPermissions';
 
 const QuestionView = (props) => {
   const { isAdmin, groups, question } = props;
-  const { question_text, display_text, key, question_type, id } = get(question, 'question_details');
+  const { question_text, display_text, key, question_type, id } = question;
   const editQuestion = isAdmin || checkPermissions(groups, 'editQuestion');
   const deleteQuestion = isAdmin || checkPermissions(groups, 'deleteQuestion');
 
