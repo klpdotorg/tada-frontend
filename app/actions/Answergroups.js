@@ -1,5 +1,4 @@
 import { SERVER_API_BASE } from 'config';
-import isArray from 'lodash.isarray';
 import getObject from 'lodash.get';
 import isEmpty from 'lodash.isempty';
 
@@ -38,27 +37,26 @@ export const getAnswerGroups = (params, current) => {
 export const fetchAnswerGroups = (assessmentId, boundaryType, boundaryId) => {
   return (dispatch, getState) => {
     dispatch(fetchingAnswergroups(true));
-
     const state = getState();
     const { current } = state.answerPagination;
-    const { selectedProgram } = state.programs;
-    dispatch({
-      type: RESET_ANSWERGROUPS,
-    });
-    if (isArray(boundaryId)) {
+    const { selectedProgram, programs } = state.programs;
+    const program = getObject(programs, selectedProgram, {});
+
+    if (program.survey_on === 'student') {
       const params = {
         assessmentId,
         programId: selectedProgram,
         boundaryType,
       };
-      const promises = boundaryId.map((id) => {
+      const boundaryIds = typeof boundaryId === 'object' ? boundaryId : [boundaryId];
+      const promises = boundaryIds.map((id) => {
         return getAnswerGroups({ ...params, boundaryId: id }, 0);
       });
 
       Promise.all(promises).then((value) => {
         value.forEach((item) => {
           if (!isEmpty(item)) {
-            const studentId = getObject(item, '[0].student', '');
+            const studentId = getObject(item.results, '[0].student', '');
             dispatch({
               type: SET_ANSWER_GROUPS,
               value: {
@@ -71,6 +69,9 @@ export const fetchAnswerGroups = (assessmentId, boundaryType, boundaryId) => {
         dispatch(fetchingAnswergroups(false));
       });
     } else {
+      dispatch({
+        type: RESET_ANSWERGROUPS,
+      });
       const params = {
         assessmentId,
         programId: selectedProgram,

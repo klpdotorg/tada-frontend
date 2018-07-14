@@ -38,7 +38,6 @@ const AssessmentEntryRowView = (props) => {
           type="text"
           required
           className="form-control"
-          style={{ padding: '0px' }}
           onChange={(e) => {
             props.onChangeGroupValue(answergroupId, e.target.value);
           }}
@@ -51,7 +50,6 @@ const AssessmentEntryRowView = (props) => {
           type="date"
           required
           className="form-control"
-          style={{ padding: '0px' }}
           onChange={(e) => {
             props.onChangeDateOfVisit(answergroupId, new Date(e.target.value));
           }}
@@ -92,7 +90,15 @@ const AssessmentEntryRowView = (props) => {
                   const filterVal = newVal.map((item) => {
                     return item.value;
                   });
-                  props.onChange(rowId, currentVal.id, filterVal);
+                  if (currentVal && currentVal.id) {
+                    props.onChange(rowId, currentVal.id, filterVal);
+                  } else {
+                    props.onChange(rowId, '', filterVal, question.id);
+                  }
+                  // const filterVal = newVal.map((item) => {
+                  //   return item.value;
+                  // });
+                  // props.onChange(rowId, currentVal.id, filterVal);
                 }}
                 options={options.map((val) => {
                   return {
@@ -114,8 +120,14 @@ const AssessmentEntryRowView = (props) => {
                 value={get(currentVal, 'answer', '')}
                 menuContainerStyle={{ zIndex: 9999 }}
                 onChange={(val) => {
+                  // const newVal = val ? val.value : '';
+                  // props.onChange(rowId, currentVal.id, newVal);
                   const newVal = val ? val.value : '';
-                  props.onChange(rowId, currentVal.id, newVal);
+                  if (currentVal && currentVal.id) {
+                    props.onChange(rowId, currentVal.id, newVal);
+                  } else {
+                    props.onChange(rowId, '', newVal, question.id);
+                  }
                 }}
                 options={options.map((val) => {
                   return {
@@ -163,7 +175,7 @@ const AssessmentEntryRowView = (props) => {
             <td key={question.id} className="answer-field">
               <input
                 id={question.id}
-                value={get(currentVal, 'answer', new Date())}
+                value={dateFormat(get(currentVal, 'answer', new Date()))}
                 type="date"
                 data-date-format="dd-mm-yyyy"
                 required
@@ -188,7 +200,6 @@ const AssessmentEntryRowView = (props) => {
               type="text"
               required
               className="form-control"
-              style={{ padding: '0px' }}
               onChange={(e) => {
                 if (currentVal && currentVal.id) {
                   props.onChange(rowId, currentVal.id, e.target.value);
