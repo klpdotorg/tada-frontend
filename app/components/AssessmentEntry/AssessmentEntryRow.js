@@ -18,6 +18,7 @@ const AssessmentEntryRowView = (props) => {
     answergroupId,
     boundaryInfo,
     comment,
+    commentRequired,
   } = props;
   return (
     <tr>
@@ -55,17 +56,21 @@ const AssessmentEntryRowView = (props) => {
           }}
         />
       </td>
-      <td>
-        <input
-          value={comment}
-          type="text"
-          required
-          className="form-control"
-          onChange={(e) => {
-            props.onChangeComments(answergroupId, e.target.value);
-          }}
-        />
-      </td>
+      {commentRequired ? (
+        <td>
+          <input
+            value={comment}
+            type="text"
+            required
+            className="form-control"
+            onChange={(e) => {
+              props.onChangeComments(answergroupId, e.target.value);
+            }}
+          />
+        </td>
+      ) : (
+        <td style={{ display: 'none' }} />
+      )}
       {Object.keys(questions).map((questionId) => {
         const question = get(questions, questionId, {});
         const questionType = get(question, 'question_type');
@@ -240,6 +245,7 @@ AssessmentEntryRowView.propTypes = {
   dateOfVisit: PropTypes.any,
   onChangeComments: PropTypes.func,
   rowId: PropTypes.any,
+  commentRequired: PropTypes.bool,
 };
 
 export { AssessmentEntryRowView };

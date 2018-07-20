@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import get from 'lodash.get';
 
-const AssessmentEntryColHeaderView = ({ questions }) => {
+const AssessmentEntryColHeaderView = ({ questions, commentRequired }) => {
   const values = Object.keys(questions);
 
   return (
@@ -11,7 +12,7 @@ const AssessmentEntryColHeaderView = ({ questions }) => {
       <td colSpan="2">Boundary Name</td>
       <td>Name</td>
       <td>Date of Visit</td>
-      <td>Comments</td>
+      {commentRequired ? <td>Comments</td> : <td style={{ display: 'none' }} />}
       {values.map((id, i) => {
         return (
           <td key={id} title={questions[id].question_text}>
@@ -26,11 +27,14 @@ const AssessmentEntryColHeaderView = ({ questions }) => {
 
 AssessmentEntryColHeaderView.propTypes = {
   questions: PropTypes.object,
+  commentRequired: PropTypes.bool,
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
+  const assessment = get(state.assessments.assessments, ownProps.assessmentId, {});
   return {
     questions: state.questions.questions,
+    commentRequired: get(assessment, 'comments_required'),
   };
 };
 

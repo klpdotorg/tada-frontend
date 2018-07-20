@@ -112,7 +112,7 @@ class AssessmentEntryFormView extends Component {
         <div className="answer-table">
           <table className="table table-striped" style={{ marginBottom: 0 }}>
             <thead>
-              <AssessmentEntryColHeader />
+              <AssessmentEntryColHeader assessmentId={params.questionGroupId} />
             </thead>
             <RenderForm {...this.props} elements={elements} resetRow={this.resetRow} />
           </table>

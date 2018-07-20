@@ -39,6 +39,7 @@ const mapStateToProps = (state, ownProps) => {
   const row = get(answergroups, [ownProps.boundaryInfo.boundaryId, rowId], {});
   const boundary = get(state.programDetails.programDetails, ownProps.uniqueId, {});
   const answers = get(state.answers.answers, rowId, []);
+  const assessment = get(state.assessments.assessments, ownProps.assessmentId, {});
 
   return {
     row,
@@ -51,6 +52,7 @@ const mapStateToProps = (state, ownProps) => {
     name: get(boundary, 'name', ''),
     answers,
     rowId,
+    commentRequired: get(assessment, 'comments_required'),
   };
 };
 

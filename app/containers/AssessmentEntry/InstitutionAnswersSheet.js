@@ -6,7 +6,12 @@ import isEmpty from 'lodash.isempty';
 import { DEFAULT_PROGRAM_NODE_ID } from 'config';
 
 import { AssessmentEntryFormView } from '../../components/AssessmentEntry';
-import { fetchAnswers, fetchAnswerGroups, fetchSelectedAssessmentQuestions } from '../../actions';
+import {
+  fetchAnswers,
+  fetchAnswerGroups,
+  fetchSelectedAssessmentQuestions,
+  getAssessments,
+} from '../../actions';
 import { checkAssessmentPermissions } from '../../utils';
 
 class FetchAnswersAndQuestions extends Component {
@@ -32,6 +37,7 @@ class FetchAnswersAndQuestions extends Component {
         depth: index,
       };
     });
+    this.props.getAssessments(programId);
     this.props.fetchSelectedAssessmentQuestions(assessmentId, entities, programId);
     if (!isEmpty(institution)) {
       this.props.fetchAnswerGroups(assessmentId, boundaryType, boundaryId);
@@ -53,6 +59,7 @@ FetchAnswersAndQuestions.propTypes = {
   institution: PropTypes.object,
   fetchSelectedAssessmentQuestions: PropTypes.func,
   selectProgram: PropTypes.func,
+  getAssessments: PropTypes.func,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -90,6 +97,7 @@ const InstitutionAnswersSheet = connect(mapStateToProps, {
   fetchAnswers,
   fetchAnswerGroups,
   fetchSelectedAssessmentQuestions,
+  getAssessments,
 })(FetchAnswersAndQuestions);
 
 export { InstitutionAnswersSheet };
