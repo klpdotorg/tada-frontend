@@ -15,6 +15,7 @@ const CreateEntryFormView = (props) => {
     dateOfVisits,
     boundaryInfo,
     comments,
+    commentRequired,
   } = props;
   return (
     <tbody>
@@ -58,17 +59,21 @@ const CreateEntryFormView = (props) => {
                 }}
               />
             </td>
-            <td>
-              <input
-                value={comment}
-                type="text"
-                required
-                className="form-control"
-                onChange={(e) => {
-                  props.onChangeComments(row.id, e.target.value);
-                }}
-              />
-            </td>
+            {commentRequired ? (
+              <td>
+                <input
+                  value={comment}
+                  type="text"
+                  required
+                  className="form-control"
+                  onChange={(e) => {
+                    props.onChangeComments(row.id, e.target.value);
+                  }}
+                />
+              </td>
+            ) : (
+              <td style={{ display: 'none' }} />
+            )}
             {Object.keys(questions).map((questionId) => {
               const question = get(questions, questionId, {});
               const questionType = get(question, 'question_type');
@@ -215,6 +220,7 @@ CreateEntryFormView.propTypes = {
   dateOfVisits: PropTypes.object,
   boundaryInfo: PropTypes.object,
   comments: PropTypes.object,
+  commentRequired: PropTypes.bool,
 };
 
 export { CreateEntryFormView };

@@ -168,12 +168,15 @@ export const getPath = (state, uniqueId, depth, boundaryType) => {
   });
 
   if (typeof uniqueId === 'object') {
-    if (!path.includes(uniqueId.uniqueId)) {
+    const pathSplit = path.split('/');
+    if (!pathSplit.includes(uniqueId.uniqueId)) {
       path += `/${uniqueId.type}/${uniqueId.uniqueId}`;
     }
   }
 
-  if (typeof uniqueId === 'string' && !path.includes(uniqueId)) {
+  const pathSplit = path.split('/');
+
+  if (typeof uniqueId === 'string' && !pathSplit.includes(uniqueId)) {
     const openEntity = boundaries[uniqueId];
     const type = getEntityType(openEntity);
     path += `/${type}/${uniqueId}`;

@@ -11,6 +11,7 @@ import {
   REMOVE_EXISTING_NODE,
   RESET_PROGRAM_NAV_TREE,
   SELECT_PROGRAM_ENTITY,
+  SELECT_ASSESSMENT_NODE,
 } from './types';
 import { convertEntitiesToObject, getPath } from '../utils';
 import {
@@ -29,6 +30,34 @@ const checkFilterByProgramUrl = (path, surveyOn) => {
   return path;
 };
 
+const handleMappingResult = (results) => {
+  return results.reduce((soFar, value) => {
+    const result = soFar;
+    let item = result[value.id];
+    if (!item) {
+      item = {
+        id: value.id,
+        'assessment-type': value['assessment-type'],
+        name: value.name,
+        assessments: [value.assessment],
+      };
+    } else {
+      item.assessments = [...item.assessments, value.assessment];
+    }
+
+    result[item.id] = item;
+
+    return result;
+  }, {});
+};
+
+export const selectProgramEntity = (value) => {
+  return {
+    type: SELECT_PROGRAM_ENTITY,
+    value,
+  };
+};
+
 export const openFilterByProgramEntity = (uniqueId, depth, assessmentId) => {
   return (dispatch, getState) => {
     const state = getState();
@@ -39,10 +68,7 @@ export const openFilterByProgramEntity = (uniqueId, depth, assessmentId) => {
     const path = `/filterprograms/${selectedProgram}/questiongroup/${assessmentId}${boundaryPath}`;
     const url = checkFilterByProgramUrl(path, survey.survey_on);
 
-    dispatch({
-      type: SELECT_PROGRAM_ENTITY,
-      value: uniqueId,
-    });
+    dispatch(selectProgramEntity(`${assessmentId}${uniqueId}`));
     dispatch(resetAnswerError());
     dispatch(push(url));
   };
@@ -194,7 +220,12 @@ const fetchAdmins = (entity, moreEntities) => {
     );
 
     get(url).then(({ data }) => {
-      const entities = convertEntitiesToObject(data.results);
+      let entities = {};
+      if (url.includes('mapping')) {
+        entities = handleMappingResult(data.results);
+      } else {
+        entities = convertEntitiesToObject(data.results);
+      }
 
       dispatch({
         type: SET_FITLER_PROGRAM_ENTITIES,
@@ -224,6 +255,24 @@ export const getProgramEntities = (Ids) => {
       });
     } else {
       dispatch(fetchProgramEntities(Ids));
+    }
+  };
+};
+
+export const selectAssessmentNode = (value) => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const { assessmentNode } = state.programDetails;
+    if (assessmentNode === value) {
+      dispatch({
+        type: SELECT_ASSESSMENT_NODE,
+        value: '',
+      });
+    } else {
+      dispatch({
+        type: SELECT_ASSESSMENT_NODE,
+        value,
+      });
     }
   };
 };

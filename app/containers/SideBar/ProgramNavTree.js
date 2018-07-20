@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import TreeView from 'react-treeview';
 import has from 'lodash.has';
-import get from 'lodash.get';
 
 import { capitalize } from '../../utils';
 import { filterBoundaries } from './utils';
@@ -15,13 +14,21 @@ import {
   getPrograms,
   selectProgram,
   openFilterByProgramEntity,
+  selectAssessmentNode,
+  selectProgramEntity,
 } from '../../actions/';
 import { Loading, Message } from '../../components/common';
 
 class NavTree extends Component {
   componentDidMount() {
-    if (this.props.selectedProgram) {
+    const { params, selectedProgram, entityIdentity } = this.props;
+    if (selectedProgram) {
       this.props.getProgramEntities([{ depth: 0, uniqueId: '1state' }]);
+    }
+
+    if (params.institutionId) {
+      this.props.selectAssessmentNode(params[entityIdentity]);
+      this.props.selectProgramEntity(`${params.questionGroupId}${params[entityIdentity]}`);
     }
   }
 
@@ -50,26 +57,37 @@ class NavTree extends Component {
     const newDepth = depth + 1;
     const treeNodes = this.getTreeNodes(newDepth);
     const collapsed = this.props.uncollapsed[newDepth] === node.uniqueId;
-    const selected = this.props.selectedEntityId === node.uniqueId;
-
     const label =
       capitalize(entity.label) || capitalize(entity.name) || capitalize(entity.first_name);
 
-    const contain = has(entity, ['assessment']);
+    const contain = has(entity, ['assessments']);
     if (contain) {
-      const id = get(entity, ['assessment', 'id'], '');
-
       return (
-        <button
+        <TreeView
           key={node.uniqueId}
+          nodeLabel={label}
           onClick={() => {
-            this.props.openBoundary(node.uniqueId, newDepth, id);
+            this.props.selectAssessmentNode(node.uniqueId);
           }}
-          className="filterbyprogram-link"
-          style={selected ? { background: '#3379b7', color: 'white' } : {}}
+          collapsed={Number(this.props.assessmentNode) !== Number(node.uniqueId)}
         >
-          {label} ({entity.assessment.name})
-        </button>
+          {node.entity.assessments.map((assessment) => {
+            const selected = this.props.selectedEntityId === `${assessment.id}${node.uniqueId}`;
+
+            return (
+              <button
+                key={assessment.id}
+                onClick={() => {
+                  this.props.openBoundary(node.uniqueId, newDepth, assessment.id);
+                }}
+                className="filterbyprogram-link"
+                style={selected ? { background: '#3379b7', color: 'white' } : {}}
+              >
+                {assessment.name}
+              </button>
+            );
+          })}
+        </TreeView>
       );
     }
 
@@ -155,6 +173,7 @@ const mapStateToProps = (state) => {
     selectedEntityId,
     entitiesByParentId,
     uncollapsedEntities,
+    assessmentNode,
   } = state.programDetails;
 
   return {
@@ -167,12 +186,13 @@ const mapStateToProps = (state) => {
     programs,
     programLoading: loading,
     selectedEntityId,
+    assessmentNode,
   };
 };
 
 NavTree.propTypes = {
   getProgramEntities: PropTypes.func,
-  selectedEntityId: PropTypes.string,
+  selectedEntityId: PropTypes.any,
   uncollapsed: PropTypes.object,
   entitiesByParentId: PropTypes.object,
   entities: PropTypes.object,
@@ -183,6 +203,11 @@ NavTree.propTypes = {
   programLoading: PropTypes.bool,
   programs: PropTypes.object,
   selectProgram: PropTypes.func,
+  assessmentNode: PropTypes.string,
+  selectAssessmentNode: PropTypes.func,
+  params: PropTypes.object,
+  selectProgramEntity: PropTypes.func,
+  entityIdentity: PropTypes.string,
 };
 
 const ProgramNavTree = connect(mapStateToProps, {
@@ -192,7 +217,9 @@ const ProgramNavTree = connect(mapStateToProps, {
   selectProgramAssessment,
   getPrograms,
   selectProgram,
+  selectAssessmentNode,
   openBoundary: openFilterByProgramEntity,
+  selectProgramEntity,
 })(NavTree);
 
 export { ProgramNavTree };

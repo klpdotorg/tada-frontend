@@ -6,6 +6,18 @@ import { SideBarWrapper } from '../../components/SideBar';
 import { SchoolsNavTree, PermissionsNavTree, ProgramNavTree, MapAssessmentTree } from './index';
 import { getEntity, setParentNode } from '../../actions';
 
+const urlAssociatedWith = (path) => {
+  if (path.includes('students')) {
+    return 'studentGroupId';
+  }
+
+  if (path.includes('studentgroup')) {
+    return 'studentGroupId';
+  }
+
+  return 'institutionId';
+};
+
 class SideBar extends Component {
   constructor() {
     super();
@@ -14,21 +26,26 @@ class SideBar extends Component {
   }
 
   renderNavTree() {
-    const { location } = this.props;
+    const { location, params } = this.props;
+    const entityIdentity = urlAssociatedWith(location.pathname);
+    const props = {
+      params,
+      entityIdentity,
+    };
 
     if (location.pathname.includes('permissions')) {
-      return <PermissionsNavTree />;
+      return <PermissionsNavTree {...props} />;
     }
 
     if (location.pathname.includes('filterprograms')) {
-      return <ProgramNavTree />;
+      return <ProgramNavTree {...props} />;
     }
 
     if (location.pathname.includes('mapassessments')) {
-      return <MapAssessmentTree />;
+      return <MapAssessmentTree {...props} />;
     }
 
-    return <SchoolsNavTree />;
+    return <SchoolsNavTree {...props} />;
   }
 
   render() {
@@ -41,6 +58,7 @@ class SideBar extends Component {
 SideBar.propTypes = {
   location: PropTypes.object,
   showSideBar: PropTypes.bool,
+  params: PropTypes.object,
 };
 
 const mapStateToProps = (state, ownProps) => {

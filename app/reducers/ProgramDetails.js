@@ -5,6 +5,7 @@ import {
   RESET_PROGRAM_NAV_TREE,
   RESET,
   SELECT_PROGRAM_ENTITY,
+  SELECT_ASSESSMENT_NODE,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -17,6 +18,7 @@ const INITIAL_STATE = {
   entitiesByParentId: {},
   uncollapsedEntities: {},
   selectedEntityId: '',
+  asessmentNode: '',
 };
 
 const ProgramDetails = (state = INITIAL_STATE, action) => {
@@ -58,6 +60,11 @@ const ProgramDetails = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         selectedEntityId: action.value,
+      };
+    case SELECT_ASSESSMENT_NODE:
+      return {
+        ...state,
+        assessmentNode: action.value,
       };
     case RESET:
       return INITIAL_STATE;

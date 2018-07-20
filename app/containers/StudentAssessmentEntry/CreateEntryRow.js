@@ -88,6 +88,7 @@ const mapStateToProps = (state, ownProps) => {
     return ownProps.boundaryId === student.id;
   });
   const program = get(programs, selectedProgram, {});
+  const assessment = get(state.assessments.assessments, ownProps.assessmentId, {});
 
   return {
     questions: state.questions.questions,
@@ -99,6 +100,7 @@ const mapStateToProps = (state, ownProps) => {
     groupValue: get(groupValues, ownProps.boundaryId, ''),
     dateOfVisit: get(dateOfVisits, ownProps.boundaryId, new Date()),
     comment: get(comments, ownProps.boundaryId, ''),
+    commentRequired: get(assessment, 'comments_required'),
   };
 };
 

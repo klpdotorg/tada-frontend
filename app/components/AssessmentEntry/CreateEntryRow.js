@@ -16,6 +16,7 @@ const CreateEntryRowView = (props) => {
     dateOfVisit,
     boundaryInfo,
     comment,
+    commentRequired,
   } = props;
   return (
     <tr key={id}>
@@ -53,17 +54,22 @@ const CreateEntryRowView = (props) => {
           }}
         />
       </td>
-      <td>
-        <input
-          value={comment}
-          type="text"
-          required
-          className="form-control"
-          onChange={(e) => {
-            props.onChangeComments(id, e.target.value);
-          }}
-        />
-      </td>
+      {commentRequired ? (
+        <td>
+          <input
+            value={comment}
+            type="text"
+            required
+            className="form-control"
+            onChange={(e) => {
+              props.onChangeComments(id, e.target.value);
+            }}
+          />
+        </td>
+      ) : (
+        <td style={{ display: 'none' }} />
+      )}
+
       {Object.keys(questions).map((questionId) => {
         const question = get(questions, questionId, {});
         const questionType = get(question, 'question_type');
@@ -215,6 +221,7 @@ CreateEntryRowView.propTypes = {
   onChangeGroupValue: PropTypes.func,
   resetRow: PropTypes.func,
   onChangeComments: PropTypes.func,
+  commentRequired: PropTypes.bool,
 };
 
 export { CreateEntryRowView };

@@ -43,7 +43,7 @@ class TadaContentContainer extends Component {
   }
 
   render() {
-    const { location, children, notifications } = this.props;
+    const { location, children, notifications, params } = this.props;
     const { showSideBar } = this.state;
 
     return (
@@ -53,7 +53,7 @@ class TadaContentContainer extends Component {
         <MainNavBar />
         <SecondaryNavBarCont />
         <div className="main__wrapper">
-          <SideBarContainer location={location} showSideBar={showSideBar} />
+          <SideBarContainer location={location} showSideBar={showSideBar} params={params} />
           <MainContentArea>{children}</MainContentArea>
           <div className="sidebar-toggler" style={{ left: showSideBar ? '22.3%' : '0px' }}>
             <a
@@ -80,6 +80,7 @@ TadaContentContainer.propTypes = {
   location: PropTypes.object,
   fetchPermissions: PropTypes.func,
   fetchStates: PropTypes.func,
+  params: PropTypes.object,
 };
 
 const App = connect(mapStateToProps, {

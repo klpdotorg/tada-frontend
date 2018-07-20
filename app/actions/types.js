@@ -158,3 +158,4 @@ export const CHANGE_ANSWER_PAGINATION_CURRENT = 'change_answer_pagination_curren
 export const SET_ANSWER_PAGINATION_COUNT = 'set_answer_pagination_count';
 export const RESET_ANSWERGROUPS = 'reset_answergroups';
 export const SELECT_BOUNDARY = 'select_boundary';
+export const SELECT_ASSESSMENT_NODE = 'select_assessment_node';

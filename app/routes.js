@@ -14,7 +14,6 @@ import { ViewStudents } from './containers/ViewStudents';
 import { DistrictPermissions, BlockPermissions } from './containers/Permissions';
 import RevertEntity from './containers/RevertEntity';
 import { MapAssessments } from './containers/MapAssessments';
-// import { ManageUsers } from './containers/Users/ManageUsers';
 import { NewSelect } from './components/common';
 import {
   InstitutionAnswersSheet,
