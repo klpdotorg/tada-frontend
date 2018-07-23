@@ -6,6 +6,11 @@ import { SideBarWrapper } from '../../components/SideBar';
 import { SchoolsNavTree, PermissionsNavTree, ProgramNavTree, MapAssessmentTree } from './index';
 import { getEntity, setParentNode } from '../../actions';
 
+/*
+  This function used to check which assessment entry form user is see
+  (student, studentGroup or institution assessment entry form)
+*/
+
 const urlAssociatedWith = (path) => {
   if (path.includes('students')) {
     return 'studentGroupId';
@@ -18,6 +23,7 @@ const urlAssociatedWith = (path) => {
   return 'institutionId';
 };
 
+// This display the sidebar in the filterByProgram page
 class SideBar extends Component {
   constructor() {
     super();
