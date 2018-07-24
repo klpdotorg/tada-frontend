@@ -169,6 +169,7 @@ export const createAnswerGroup = (params) => {
     const state = getState();
     const { assessmentId, boundaryId } = params;
     const { selectedProgram } = state.programs;
+    const { id } = state.profile;
     const name = getObject(state.assessmentEntry.groupValues, [boundaryId], '');
     const dateOfVisit = getObject(state.assessmentEntry.dateOfVisits, [boundaryId], new Date());
     const comment = getObject(state.assessmentEntry.comments, [boundaryId], '');
@@ -181,6 +182,7 @@ export const createAnswerGroup = (params) => {
       institution_images: [],
       questiongroup: assessmentId,
       comments: comment,
+      created_by: id,
       status: 'AC',
     }).then((response) => {
       if (response.status === 201) {
