@@ -101,6 +101,7 @@ const mapStateToProps = (state, ownProps) => {
     dateOfVisit: get(dateOfVisits, ownProps.boundaryId, new Date()),
     comment: get(comments, ownProps.boundaryId, ''),
     commentRequired: get(assessment, 'comments_required'),
+    groupText: get(assessment, 'group_text'),
   };
 };
 

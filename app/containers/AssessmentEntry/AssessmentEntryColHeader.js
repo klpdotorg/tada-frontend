@@ -15,14 +15,13 @@ const getHeaderName = (boundaryType) => {
   return 'Student Name';
 };
 
-const AssessmentEntryColHeaderView = ({ questions, commentRequired, boundaryType }) => {
+const AssessmentEntryColHeaderView = ({ questions, commentRequired, boundaryType, groupText }) => {
   const values = Object.keys(questions);
-
   return (
     <tr className="bg-info">
       <td>ID</td>
       <td colSpan="2">{getHeaderName(boundaryType)}</td>
-      <td>Name</td>
+      {groupText ? <td>{groupText}</td> : <td style={{ display: 'none' }} />}
       <td>Date of Visit</td>
       {commentRequired ? <td>Comments</td> : <td style={{ display: 'none' }} />}
       {values.map((id, i) => {
@@ -41,6 +40,7 @@ AssessmentEntryColHeaderView.propTypes = {
   questions: PropTypes.object,
   commentRequired: PropTypes.bool,
   boundaryType: PropTypes.string,
+  groupText: PropTypes.string,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -48,6 +48,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     questions: state.questions.questions,
     commentRequired: get(assessment, 'comments_required'),
+    groupText: get(assessment, 'group_text'),
   };
 };
 

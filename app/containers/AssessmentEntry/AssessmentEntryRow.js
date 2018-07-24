@@ -53,6 +53,7 @@ const mapStateToProps = (state, ownProps) => {
     answers,
     rowId,
     commentRequired: get(assessment, 'comments_required'),
+    groupText: get(assessment, 'group_text'),
   };
 };
 

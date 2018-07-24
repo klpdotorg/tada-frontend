@@ -19,6 +19,7 @@ const AssessmentEntryRowView = (props) => {
     boundaryInfo,
     comment,
     commentRequired,
+    groupText,
   } = props;
   return (
     <tr>
@@ -33,17 +34,21 @@ const AssessmentEntryRowView = (props) => {
       >
         {name}
       </td>
-      <td>
-        <input
-          value={groupValue}
-          type="text"
-          required
-          className="form-control"
-          onChange={(e) => {
-            props.onChangeGroupValue(answergroupId, e.target.value);
-          }}
-        />
-      </td>
+      {groupText ? (
+        <td>
+          <input
+            value={groupValue}
+            type="text"
+            required
+            className="form-control"
+            onChange={(e) => {
+              props.onChangeGroupValue(answergroupId, e.target.value);
+            }}
+          />
+        </td>
+      ) : (
+        <td style={{ display: 'none' }} />
+      )}
       <td>
         <input
           value={dateFormat(new Date(dateOfVisit))}
@@ -246,6 +251,7 @@ AssessmentEntryRowView.propTypes = {
   onChangeComments: PropTypes.func,
   rowId: PropTypes.any,
   commentRequired: PropTypes.bool,
+  groupText: PropTypes.string,
 };
 
 export { AssessmentEntryRowView };

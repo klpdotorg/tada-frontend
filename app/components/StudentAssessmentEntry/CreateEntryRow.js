@@ -17,6 +17,7 @@ const CreateEntryRowView = (props) => {
     boundaryInfo,
     comment,
     commentRequired,
+    groupText,
   } = props;
   return (
     <tr key={id}>
@@ -31,18 +32,22 @@ const CreateEntryRowView = (props) => {
       >
         {name}
       </td>
-      <td className="answer-field">
-        <input
-          value={groupValue}
-          type="text"
-          required
-          className="form-control"
-          style={{ padding: '0px' }}
-          onChange={(e) => {
-            props.onChangeGroupValue(id, e.target.value);
-          }}
-        />
-      </td>
+      {groupText ? (
+        <td className="answer-field">
+          <input
+            value={groupValue}
+            type="text"
+            required
+            className="form-control"
+            style={{ padding: '0px' }}
+            onChange={(e) => {
+              props.onChangeGroupValue(id, e.target.value);
+            }}
+          />
+        </td>
+      ) : (
+        <td style={{ display: 'none' }} />
+      )}
       <td className="answer-field">
         <input
           value={dateFormat(dateOfVisit)}
@@ -222,6 +227,7 @@ CreateEntryRowView.propTypes = {
   onChangeGroupValue: PropTypes.func,
   onChangeComments: PropTypes.func,
   commentRequired: PropTypes.bool,
+  groupText: PropTypes.string,
 };
 
 export { CreateEntryRowView };
