@@ -8,11 +8,22 @@ import { dateParser } from '../../utils';
 
 const StudentView = (props) => {
   const { student, selectedStudents, hasPermissions, canDelete, languages } = props;
-  const { id, first_name, last_name, uid, gender, dob, mt, mother_name, father_name } = student;
+  const {
+    id,
+    first_name,
+    last_name,
+    uid,
+    gender,
+    dob,
+    mt,
+    mother_name,
+    father_name,
+    middle_name,
+  } = student;
   const langVal = languages.find((lan) => {
     return lan.value === mt;
   });
-  const checked = includes(selectedStudents, props.studentNodeId);
+  // const checked = includes(selectedStudents, props.studentNodeId);
 
   if (isEmpty(student)) {
     return <tr />;
@@ -34,7 +45,7 @@ const StudentView = (props) => {
       </td>
       <td>
         <span>
-          {first_name} {last_name}
+          {first_name} {middle_name} {last_name}
         </span>
       </td>
       <td>

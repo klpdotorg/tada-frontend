@@ -76,6 +76,10 @@ export const addStudents = (groupNodeId, groupId, institutionId, depth) => {
           boundariesByParentId: { [depth]: Object.keys(entities) },
         });
         dispatch(openViewStudents(groupNodeId, depth));
+        dispatch({
+          type: RESET_ADD_STUDENTS_FORM,
+          value: {},
+        });
         dispatch(resetStudentError());
       } else {
         dispatch(showStudentError(response.data.results));
