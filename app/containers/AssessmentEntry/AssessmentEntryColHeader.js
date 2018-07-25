@@ -24,10 +24,10 @@ const AssessmentEntryColHeaderView = ({ questions, commentRequired, boundaryType
       {groupText ? <td>{groupText}</td> : <td style={{ display: 'none' }} />}
       <td>Date of Visit</td>
       {commentRequired ? <td>Comments</td> : <td style={{ display: 'none' }} />}
-      {values.map((id, i) => {
+      {values.map((id) => {
         return (
           <td key={id} title={questions[id].question_text}>
-            {i + 1}
+            {questions[id].display_text}
           </td>
         );
       })}
