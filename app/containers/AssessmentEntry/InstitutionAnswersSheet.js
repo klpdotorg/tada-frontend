@@ -5,7 +5,7 @@ import get from 'lodash.get';
 import isEmpty from 'lodash.isempty';
 import { DEFAULT_PROGRAM_NODE_ID } from 'config';
 
-import { AssessmentEntryFormView } from '../../components/AssessmentEntry';
+import { AssessmentEntryFormView, DefaultMessageView } from '../../components/AssessmentEntry';
 import {
   fetchAnswers,
   fetchAnswerGroups,
@@ -45,6 +45,11 @@ class FetchAnswersAndQuestions extends Component {
   }
 
   render() {
+    const { selectedProgram, params } = this.props;
+    if (selectedProgram !== params.programId) {
+      return <DefaultMessageView />;
+    }
+
     return <AssessmentEntryFormView {...this.props} />;
   }
 }
@@ -60,6 +65,7 @@ FetchAnswersAndQuestions.propTypes = {
   fetchSelectedAssessmentQuestions: PropTypes.func,
   selectProgram: PropTypes.func,
   getAssessments: PropTypes.func,
+  selectedProgram: PropTypes.string,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -75,6 +81,7 @@ const mapStateToProps = (state, ownProps) => {
   const { assessments } = state.userPermissions;
   const canView = checkAssessmentPermissions(isAdmin, assessments, questionGroupId);
   const { error } = state.answers;
+  const { selectedProgram } = state.programs;
 
   return {
     rows: Object.keys(get(answergroups, institution.id, {})),
@@ -90,6 +97,7 @@ const mapStateToProps = (state, ownProps) => {
     noQuestions: isEmpty(state.questions.questions),
     canView,
     error,
+    selectedProgram,
   };
 };
 
