@@ -65,9 +65,9 @@ export const onChangeAnswer = (answergroupId, answerId, value, questionId) => {
   };
 };
 
-export const createAnswergroup = (url, body) => {
-  return post(url, body);
-};
+// export const createAnswergroup = (url, body) => {
+//   return post(url, body);
+// };
 
 export const fetchAnswers = (assessmentId, boundaryId) => {
   return (dispatch, getState) => {
@@ -161,6 +161,23 @@ export const saveAnswer = (params) => {
   };
 };
 
+export const validateAnswergroup = (params, assessment) => {
+  const { name, comment } = params;
+  const commentRequired = getObject(assessment, 'comments_required');
+  const groupText = getObject(assessment, 'group_text');
+  const result = [];
+
+  if (groupText && !name) {
+    result.push('name');
+  }
+
+  if (commentRequired && !comment) {
+    result.push('comment');
+  }
+
+  return result;
+};
+
 // Create Answergroup for posting answers
 
 // http://localhost:8000/api/v1/surveys/3/questiongroup/1/answergroup/
@@ -173,25 +190,39 @@ export const createAnswerGroup = (params) => {
     const name = getObject(state.assessmentEntry.groupValues, [boundaryId], '');
     const dateOfVisit = getObject(state.assessmentEntry.dateOfVisits, [boundaryId], new Date());
     const comment = getObject(state.assessmentEntry.comments, [boundaryId], '');
+    const assessment = getObject(state.assessments.assessments, assessmentId, {});
     const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${assessmentId}/answergroups/`;
 
-    post(url, {
-      [params.boundaryType]: boundaryId,
-      group_value: name,
-      date_of_visit: dateOfVisit,
-      institution_images: [],
-      questiongroup: assessmentId,
-      comments: comment,
-      created_by: id,
-      status: 'AC',
-    }).then((response) => {
-      if (response.status === 201) {
-        dispatch(saveAnswer({ ...params, answergroupId: response.data.id }));
-        dispatch(resetAnswerError());
-      } else {
-        dispatch(showAnswerError(response.data));
-      }
-    });
+    const result = validateAnswergroup(
+      {
+        name,
+        comment,
+        assessmentId,
+      },
+      assessment,
+    );
+
+    if (isEmpty(result)) {
+      post(url, {
+        [params.boundaryType]: boundaryId,
+        group_value: name,
+        date_of_visit: dateOfVisit,
+        institution_images: [],
+        questiongroup: assessmentId,
+        comments: comment,
+        created_by: id,
+        status: 'AC',
+      }).then((response) => {
+        if (response.status === 201) {
+          dispatch(saveAnswer({ ...params, answergroupId: response.data.id }));
+          dispatch(resetAnswerError());
+        } else {
+          dispatch(showAnswerError(response.data));
+        }
+      });
+    } else {
+      dispatch(Notifications.error(errorNotification('Error!', `Please fill all these fields: ${result.join(', ')}.`)));
+    }
   };
 };
 

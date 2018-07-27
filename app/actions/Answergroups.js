@@ -1,6 +1,7 @@
 import { SERVER_API_BASE } from 'config';
 import getObject from 'lodash.get';
 import isEmpty from 'lodash.isempty';
+import Notifications from 'react-notification-system-redux';
 
 import { convertArrayToObject } from '../utils';
 import { get, put } from './requests';
@@ -10,7 +11,14 @@ import {
   SET_ANSWER_PAGINATION_COUNT,
   RESET_ANSWERGROUPS,
 } from './types';
-import { fetchAnswers, editAnswers, showAnswerError, resetAnswerError } from './index';
+import {
+  fetchAnswers,
+  editAnswers,
+  showAnswerError,
+  resetAnswerError,
+  validateAnswergroup,
+} from './index';
+import { errorNotification } from './notifications';
 
 export const fetchingAnswergroups = (value) => {
   return {
@@ -105,22 +113,36 @@ export const editAnswerGroup = (params) => {
     const dateOfVisit = getObject(state.assessmentEntry.dateOfVisits, [answergroupId], new Date());
     const comment = getObject(state.assessmentEntry.comments, [answergroupId], '');
     const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${assessmentId}/answergroups/${answergroupId}/`;
+    const assessment = getObject(state.assessments.assessments, assessmentId, {});
 
-    put(url, {
-      [params.boundaryType]: boundaryId,
-      group_value: name,
-      date_of_visit: dateOfVisit,
-      questiongroup: assessmentId,
-      comments: comment,
-      institution_images: [],
-      status: 'AC',
-    }).then((response) => {
-      if (response.status === 200) {
-        dispatch(editAnswers({ ...params, answergroupId: response.data.id }));
-        dispatch(resetAnswerError());
-      } else {
-        dispatch(showAnswerError(response.data));
-      }
-    });
+    const result = validateAnswergroup(
+      {
+        name,
+        comment,
+        assessmentId,
+      },
+      assessment,
+    );
+
+    if (isEmpty(result)) {
+      put(url, {
+        [params.boundaryType]: boundaryId,
+        group_value: name,
+        date_of_visit: dateOfVisit,
+        questiongroup: assessmentId,
+        comments: comment,
+        institution_images: [],
+        status: 'AC',
+      }).then((response) => {
+        if (response.status === 200) {
+          dispatch(editAnswers({ ...params, answergroupId: response.data.id }));
+          dispatch(resetAnswerError());
+        } else {
+          dispatch(showAnswerError(response.data));
+        }
+      });
+    } else {
+      dispatch(Notifications.error(errorNotification('Error!', `Please fill all these fields: ${result.join(', ')}.`)));
+    }
   };
 };

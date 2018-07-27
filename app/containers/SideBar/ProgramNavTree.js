@@ -59,8 +59,8 @@ class NavTree extends Component {
     const collapsed = this.props.uncollapsed[newDepth] === node.uniqueId;
     const label =
       capitalize(entity.label) || capitalize(entity.name) || capitalize(entity.first_name);
-
     const contain = has(entity, ['assessments']);
+
     if (contain) {
       return (
         <TreeView

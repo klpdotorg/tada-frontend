@@ -20,9 +20,12 @@ class FetchAnswersAndQuestions extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const nextId = get(nextProps, ['institution', 'id'], '');
-    const currentId = get(this.props, ['institution', 'id'], '');
-    if (nextId !== currentId) {
+    const nextBoundaryId = get(nextProps, ['boundaryInfo', 'boundaryId'], '');
+    const currentBoundaryId = get(this.props, ['boundaryInfo', 'boundaryId'], '');
+    const nextAssessmentId = get(nextProps, ['boundaryInfo', 'assessmentId'], '');
+    const currentAssessmentId = get(this.props, ['boundaryInfo', 'assessmentId'], '');
+
+    if (nextBoundaryId !== currentBoundaryId || nextAssessmentId !== currentAssessmentId) {
       this.fetchResources(nextProps);
     }
   }
