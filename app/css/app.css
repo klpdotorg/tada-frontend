@@ -801,7 +801,7 @@ table.table-fixedwidth td, .table-fixedwidth th {
 
 .remove-margin-padding {
   margin: 0;
-  padding: 0; 
+  padding: 0;
 }
 
 .permissions-cont table {
@@ -842,7 +842,7 @@ table.table-fixedwidth td, .table-fixedwidth th {
   border: none;
   text-align: left;
   background: none;
-  color: #3379b7; 
+  color: #3379b7;
   display: block;
   width: 100%;
 }
@@ -992,7 +992,7 @@ table.table-fixedwidth td, .table-fixedwidth th {
 }
 .selected-multiselect-item a:hover {
   background-image: none;
-  background-color: #337ab7 !important; 
+  background-color: #337ab7 !important;
 }
 .multiselect-text {
   text-align: left;
@@ -1033,9 +1033,10 @@ table.table-fixedwidth td, .table-fixedwidth th {
 .klpImage {
   width: 226px;
   height: 205px;
-  background: #FFD6B0;
+  background: #FFFFFF;
   padding: 12px;
   border-radius: 7px;
+
 }
 
 .logout-text {
