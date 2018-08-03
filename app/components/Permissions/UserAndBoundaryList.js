@@ -72,7 +72,7 @@ const UserAndBoundaryListView = (props) => {
                 return (
                   <tr key={index}>
                     <td>
-                      <span>{capitalize(name.trim() ? name : '')}</span>
+                      <span>{capitalize(name.trim() ? name : user.email)}</span>
                       {!isEmpty(user) ? (
                         <input
                           type="checkbox"
