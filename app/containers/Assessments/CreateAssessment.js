@@ -239,13 +239,13 @@ class CreateAssessmentForm extends Component {
             options={sources}
             required
           />
-          <Select
+          {/* <Select
             name="type_id"
             label="Survey Type"
             value={get(surveyTypes[0], 'value')}
             options={surveyTypes}
             required
-          />
+          /> */}
           <Checkbox
             label="Respondent Type Required"
             name="respondenttype_required"
@@ -260,13 +260,13 @@ class CreateAssessmentForm extends Component {
             disabled={!showRespondentTypes}
           />
           <Checkbox label="Comments Required" name="comments_required" id="comments_required" />
-          <Checkbox label="Image Required" name="image_required" id="image_required" />
+          {/* <Checkbox label="Image Required" name="image_required" id="image_required" />
           <Checkbox
             label="Double Entry"
             name="doubleEntry"
             id="doubleEntry"
             help="Check this box if this questiongroup will need double entry"
-          />
+          /> */}
         </Formsy.Form>
       </Modal>
     );
