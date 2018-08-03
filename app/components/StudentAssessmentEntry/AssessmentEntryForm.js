@@ -17,7 +17,6 @@ const RenderForm = (props) => {
   if (loading || noQuestions || !canView || isEmpty(boundaryInfo.students)) {
     return <tbody />;
   }
-
   return (
     <tbody>
       {flatten(boundaryInfo.students.map((Id) => {
@@ -100,7 +99,10 @@ class AssessmentEntryFormView extends Component {
         <div className="answer-table">
           <table className="table table-striped">
             <thead>
-              <AssessmentEntryColHeader />
+              <AssessmentEntryColHeader
+                assessmentId={params.questionGroupId}
+                boundaryType={boundaryInfo.boundaryType}
+              />
             </thead>
             <RenderForm {...this.props} elements={elements} />
           </table>
@@ -140,6 +142,7 @@ AssessmentEntryFormView.propTypes = {
   params: PropTypes.object,
   canView: PropTypes.bool,
   noQuestions: PropTypes.bool,
+  boundaryInfo: PropTypes.object,
 };
 
 RenderForm.propTypes = {

@@ -117,7 +117,9 @@ export const resetAssessmentsOfMA = () => {
 export const selectAllInstitutionsOfMA = (Ids) => {
   return (dispatch, getState) => {
     const state = getState();
-    const { selectedAssessmentType, selectedInstitutions } = state.mapAssessments;
+    const { selectedInstitutions } = state.mapAssessments;
+    const { programs, selectedProgram } = state.programs;
+    const program = getObject(programs, selectedProgram, {});
 
     if (isEqual(Ids, selectedInstitutions)) {
       dispatch({
@@ -128,7 +130,7 @@ export const selectAllInstitutionsOfMA = (Ids) => {
         type: RESET_STUDENTGROUPS_OF_MA,
       });
     } else {
-      if (Number(selectedAssessmentType) === 2) {
+      if (program.survey_on === 'student' || program.survey_on === 'studentgroup') {
         Ids.forEach((id) => {
           dispatch(fetchStudentGroupOfMA({ id }));
         });
@@ -175,8 +177,10 @@ export const selectAssessmentTypeOfMA = (value) => {
   return (dispatch, getState) => {
     const state = getState();
     const { selectedInstitutions } = state.mapAssessments;
+    const { programs, selectedProgram } = state.programs;
+    const program = getObject(programs, selectedProgram, {});
 
-    if (Number(value) === 2) {
+    if (program.survey_on === 'student' || program.survey_on === 'studentgroup') {
       selectedInstitutions.forEach((id) => {
         dispatch(fetchStudentGroupOfMA({ id }));
       });
@@ -222,7 +226,10 @@ export const selectClusterOfMA = (entity) => {
 export const selectInstitutionOfMA = (entity) => {
   return (dispatch, getState) => {
     const state = getState();
-    const { selectedInstitutions, selectedAssessmentType } = state.mapAssessments;
+    const { selectedInstitutions } = state.mapAssessments;
+    const { programs, selectedProgram } = state.programs;
+    const program = getObject(programs, selectedProgram, {});
+
     if (selectedInstitutions.includes(entity.id)) {
       dispatch({
         type: SELECT_INSTITUTION_OF_MA,
@@ -233,7 +240,7 @@ export const selectInstitutionOfMA = (entity) => {
         value: { [entity.id]: [] },
       });
     } else {
-      if (Number(selectedAssessmentType) === 2) {
+      if (program.survey_on === 'student' || program.survey_on === 'studentgroup') {
         dispatch(fetchStudentGroupOfMA(entity));
       }
 

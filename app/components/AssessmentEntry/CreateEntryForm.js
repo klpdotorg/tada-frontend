@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import get from 'lodash.get';
 import Select from 'react-select';
+import moment from 'moment';
 
 import { dateFormat, between } from '../../utils';
 
@@ -45,7 +46,10 @@ const CreateEntryFormView = (props) => {
                   required
                   className="form-control"
                   onChange={(e) => {
-                    props.onChangeGroupValue(row.id, e.target.value);
+                    props.onChangeGroupValue(
+                      row.id,
+                      moment(e.target.value).format('YYYY-MM-DDThh:mm'),
+                    );
                   }}
                 />
               </td>
@@ -55,12 +59,12 @@ const CreateEntryFormView = (props) => {
             <td className="answer-field">
               <input
                 value={dateFormat(dateOfVisit)}
-                data-date-format="dd-mm-yyyy"
+                // data-date-format="dd-mm-yyyy"
                 type="date"
                 required
                 className="form-control"
                 onChange={(e) => {
-                  props.onChangeDateOfVisit(row.id, new Date(e.target.value).toISOString());
+                  props.onChangeDateOfVisit(row.id, dateFormat(e.target.value));
                 }}
               />
             </td>
