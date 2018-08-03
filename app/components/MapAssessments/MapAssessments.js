@@ -5,7 +5,6 @@ import isEmpty from 'lodash.isempty';
 import { DefaultMessage } from './index';
 import {
   ShowPrograms,
-  ShowAssessmentTypes,
   ShowAssessments,
   ShowClasses,
   ShowInstitutions,
@@ -13,7 +12,7 @@ import {
 } from '../../containers/MapAssessments';
 
 const MapAssessmentsView = (props) => {
-  const { showClusters, showInstitutions, mapAssessments, assessmentType, error } = props;
+  const { showClusters, showInstitutions, mapAssessments, surveyOn, error } = props;
   const disabled = !props.activeSubmit();
 
   return (
@@ -53,9 +52,9 @@ const MapAssessmentsView = (props) => {
       </div>
       <div className="col-md-3">
         <ShowPrograms />
-        <ShowAssessmentTypes />
+        {/* <ShowAssessmentTypes /> */}
         <ShowAssessments />
-        {assessmentType === 2 ? <ShowClasses /> : <span />}
+        {surveyOn !== 'institution' ? <ShowClasses /> : <span />}
         <div className="row center-block">
           <div className="col-md-12">
             <button
@@ -78,7 +77,7 @@ MapAssessmentsView.propTypes = {
   showInstitutions: PropTypes.bool,
   mapAssessments: PropTypes.func,
   activeSubmit: PropTypes.func,
-  assessmentType: PropTypes.number,
+  surveyOn: PropTypes.string,
   error: PropTypes.object,
 };
 

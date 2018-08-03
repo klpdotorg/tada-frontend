@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Loadable from 'react-loadable';
+import get from 'lodash.get';
 
 // import { MapAssessmentsView } from '../../components/MapAssessments';
 import { mapBoundariesToAssessments } from '../../actions';
@@ -23,7 +24,7 @@ class ActiveSubmitButton extends Component {
 
   activeSubmit() {
     const {
-      assessmentType,
+      surveyOn,
       selectedInstitutions,
       selectedClasses,
       selectedAssessments,
@@ -34,11 +35,11 @@ class ActiveSubmitButton extends Component {
       return false;
     }
 
-    if (assessmentType === 1 && selectedInstitutions) {
+    if (surveyOn === 'institution' && selectedInstitutions) {
       return true;
     }
 
-    if (assessmentType === 2 && selectedClasses) {
+    if ((surveyOn === 'studentgroup' || surveyOn === 'student') && selectedClasses) {
       return true;
     }
 
@@ -60,19 +61,21 @@ ActiveSubmitButton.propTypes = {
   selectedClasses: PropTypes.bool,
   selectedAssessments: PropTypes.bool,
   institutionsIndex: PropTypes.any,
+  surveyOn: PropTypes.string,
 };
 
 const mapStateToProps = (state) => {
   const {
     institutionsIndex,
     clustersIndex,
-    selectedAssessmentType,
     selectedClusters,
     selectedInstitutions,
     selectedClasses,
     selectedAssessments,
     error,
   } = state.mapAssessments;
+  const { programs, selectedProgram } = state.programs;
+  const program = get(programs, selectedProgram, {});
 
   const showInstitutions = institutionsIndex > 0 || selectedClusters.length > 0;
   return {
@@ -82,8 +85,8 @@ const mapStateToProps = (state) => {
     selectedAssessments: selectedAssessments.length > 0,
     institutionsIndex,
     showInstitutions,
-    assessmentType: Number(selectedAssessmentType),
     error,
+    surveyOn: program.survey_on,
   };
 };
 
