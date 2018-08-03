@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import get from 'lodash.get';
 import Select from 'react-select';
+import moment from 'moment';
 
 import { dateFormat, between } from '../../utils';
 
@@ -50,12 +51,12 @@ const CreateEntryRowView = (props) => {
       <td className="answer-field">
         <input
           value={dateFormat(dateOfVisit)}
-          data-date-format="dd-mm-yyyy"
+          // data-date-format="dd-mm-yyyy"
           type="date"
           required
           className="form-control"
           onChange={(e) => {
-            props.onChangeDateOfVisit(id, new Date(e.target.value).toISOString());
+            props.onChangeDateOfVisit(id, moment(e.target.value).format('YYYY-MM-DDThh:mm'));
           }}
         />
       </td>
@@ -219,7 +220,7 @@ CreateEntryRowView.propTypes = {
   comment: PropTypes.string,
   assessmentId: PropTypes.any,
   groupValue: PropTypes.string,
-  dateOfVisit: PropTypes.object,
+  dateOfVisit: PropTypes.string,
   boundaryInfo: PropTypes.object,
   onChangeDateOfVisit: PropTypes.func,
   onSave: PropTypes.func,

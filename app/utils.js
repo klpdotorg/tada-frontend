@@ -3,6 +3,7 @@ import isEmpty from 'lodash.isempty';
 import includes from 'lodash.includes';
 import forEach from 'lodash.foreach';
 import range from 'lodash.range';
+import moment from 'moment';
 
 import { DEFAULT_PARENT_ID } from 'config';
 import { getBoundaryType } from './reducers/utils';
@@ -110,7 +111,7 @@ export const toggleSet = (set, val) => {
 };
 
 export const dateFormat = (date) => {
-  return new Date(date || new Date()).toISOString().slice(0, 10);
+  return moment(date).format('YYYY-MM-DD');
 };
 
 export const getNodeId = (id) => {
