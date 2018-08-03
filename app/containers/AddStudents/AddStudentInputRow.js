@@ -16,7 +16,7 @@ const getStudent = (values, languages) => {
     mother_name: get(values, 'mother_name', ''),
     uid: get(values, 'uid', ''),
     mt: lang,
-    academic_year: get(values, 'academic', '0607'),
+    academic_year: get(values, 'academic', '1718'),
     gender: get(values, 'gender', 'male'),
   };
 };

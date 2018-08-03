@@ -69,7 +69,7 @@ class CreateAssessmentForm extends Component {
       academic_year: myform.academic_year_id,
       inst_type: myform.inst_type_id,
       source: myform.source_id,
-      survey_on: myform.type_id,
+      // survey_on: myform.type_id,
       description: myform.description,
       lang_name: myform.lang_name,
       comments_required: myform.comments_required,
