@@ -66,9 +66,9 @@ class CreateQuestionForm extends Component {
         options: myform.options,
         max_score: myform.max_score || 0,
         pass_score: myform.pass_score,
-        sequence: myform.order,
         status: 'AC',
       },
+      sequence: myform.order,
     };
     this.props.save(question, programId, assessmentId);
   }
