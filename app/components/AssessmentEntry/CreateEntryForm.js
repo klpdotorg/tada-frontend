@@ -46,10 +46,7 @@ const CreateEntryFormView = (props) => {
                   required
                   className="form-control"
                   onChange={(e) => {
-                    props.onChangeGroupValue(
-                      row.id,
-                      moment(e.target.value).format('YYYY-MM-DDThh:mm'),
-                    );
+                    props.onChangeGroupValue(row.id, e.target.value);
                   }}
                 />
               </td>
@@ -64,7 +61,10 @@ const CreateEntryFormView = (props) => {
                 required
                 className="form-control"
                 onChange={(e) => {
-                  props.onChangeDateOfVisit(row.id, dateFormat(e.target.value));
+                  props.onChangeDateOfVisit(
+                    row.id,
+                    moment(e.target.value).format('YYYY-MM-DDThh:mm'),
+                  );
                 }}
               />
             </td>
