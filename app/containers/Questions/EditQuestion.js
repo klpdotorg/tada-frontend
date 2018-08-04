@@ -139,7 +139,7 @@ class EditQuestionForm extends Component {
 
   render() {
     const { disabledOptionsField, disabledScoreFields } = this.state;
-    const { isOpen, canSubmit, error } = this.props;
+    const { isOpen, canSubmit, error, question } = this.props;
     const featuredValues = [
       {
         value: true,
@@ -270,7 +270,7 @@ class EditQuestionForm extends Component {
           <Input
             name="order"
             id="order"
-            value={this.getValue('sequence')}
+            value={get(question, 'sequence', '')}
             label="Order"
             type="number"
             placeholder="Enter order"

@@ -1,13 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import isEmpty from 'lodash.isempty';
-import includes from 'lodash.includes';
 import get from 'lodash.get';
-
-import { dateParser } from '../../utils';
+import moment from 'moment';
 
 const StudentView = (props) => {
-  const { student, selectedStudents, hasPermissions, canDelete, languages } = props;
+  const { student, hasPermissions, canDelete, languages } = props;
   const {
     id,
     first_name,
@@ -58,7 +56,7 @@ const StudentView = (props) => {
         <span>{get(langVal, 'label', '')}</span>
       </td>
       <td>
-        <span>{dateParser(dob)}</span>
+        <span>{moment(dob).format('DD-MM-YYYY')}</span>
       </td>
       <td>
         <span>{father_name}</span>
