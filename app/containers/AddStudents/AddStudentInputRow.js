@@ -7,6 +7,7 @@ import { checkRequiredLengthFields, checkForRequiredFields } from './utils';
 
 const getStudent = (values, languages) => {
   const lang = get(languages, get(values, 'mt', ''), 'kan');
+
   return {
     first_name: get(values, 'first_name', ''),
     middle_name: get(values, 'middle_name', ''),
