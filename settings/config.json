@@ -2,7 +2,7 @@
 	"SERVER_API_BASE": "https://staging.ilp.org.in/api/v1/",
 	"SERVER_AUTH_BASE": "https://staging.ilp.org.in/",
 	"SERVER_STATE_BASE": "https://klp.org.in/api/v1/",
-	"REPORTS_EMAIL": "subha@klp.org.in",
+	"REPORTS_EMAIL": "dev@klp.org.in",
 	"DEFAULT_PARENT_ID": 2,
 	"STATE_CODE": "ka",
 	"DEFAULT_PARENT_NODE_ID": "2state",
