@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import get from 'lodash.get';
+import { DEFAULT_YEAR } from 'config';
 
 import { StudentInputRow } from '../common';
 import { addStudentsFormValueChanged, addStudent } from '../../actions';
@@ -17,7 +18,7 @@ const getStudent = (values, languages) => {
     mother_name: get(values, 'mother_name', ''),
     uid: get(values, 'uid', ''),
     mt: lang,
-    academic_year: get(values, 'academic', '1718'),
+    academic_year: get(values, 'academic', DEFAULT_YEAR),
     gender: get(values, 'gender', 'male'),
   };
 };

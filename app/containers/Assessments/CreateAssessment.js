@@ -6,6 +6,7 @@ import FRC from 'formsy-react-components';
 import get from 'lodash.get';
 import isEmpty from 'lodash.isempty';
 import capitalize from 'lodash.capitalize';
+import { DEFAULT_YEAR } from 'config';
 
 import {
   saveNewAssessment,
@@ -222,7 +223,7 @@ class CreateAssessmentForm extends Component {
           <Select
             name="academic_year_id"
             label="Academic Year"
-            value={'1718' || get(lastVerifiedYears[0], 'value')}
+            value={DEFAULT_YEAR || get(lastVerifiedYears[0], 'value')}
             options={lastVerifiedYears}
           />
           <Select

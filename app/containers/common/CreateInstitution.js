@@ -159,7 +159,7 @@ class CreateInstitutionForm extends Component {
           <Select
             name="institutionManagement"
             label="Management:"
-            value={get(managements[0], 'value')}
+            value={'1' || get(managements[0], 'value')}
             options={managements}
             required
           />
