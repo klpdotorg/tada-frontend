@@ -5,6 +5,7 @@ import FRC from 'formsy-react-components';
 import reduce from 'lodash.reduce';
 import get from 'lodash.get';
 import isEmpty from 'lodash.isempty';
+import { DEFAULT_YEAR } from 'config';
 
 import 'react-select/dist/react-select.css';
 import { Modal } from '../../components/Modal';
@@ -152,7 +153,7 @@ class CreateInstitutionForm extends Component {
             multiple
             name="institutionLang"
             label="Medium:"
-            value={[get(languages[0], 'value')]}
+            value={['kan' || get(languages[0], 'value')]}
             options={languages}
             required
           />
@@ -183,7 +184,7 @@ class CreateInstitutionForm extends Component {
           <Select
             name="last_verified_year"
             label="Last Verified Year:"
-            value={get(lastVerifiedYears[0], 'value')}
+            value={DEFAULT_YEAR || get(lastVerifiedYears[0], 'value')}
             options={lastVerifiedYears}
             required
           />
