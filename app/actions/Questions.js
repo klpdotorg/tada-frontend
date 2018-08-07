@@ -52,7 +52,7 @@ export const setQuestions = (value) => {
   return (dispatch) => {
     const entities = value.reduce((soFar, entity) => {
       const result = soFar;
-      const Id = getObject(entity, 'id', '');
+      const Id = getObject(entity, 'question_details.id', '');
       result[Id] = entity;
 
       return result;
@@ -85,7 +85,7 @@ export const getQuestions = (programId, assessmentId) => {
   return (dispatch) => {
     dispatch(showQuestionLoading());
 
-    const getQuestionsURL = `${SERVER_API_BASE}surveys/${programId}/questiongroup/${assessmentId}/questions/`;
+    const getQuestionsURL = `${SERVER_API_BASE}surveys/${programId}/questiongroup/${assessmentId}/questions/sequence/`;
     fetchQuestions(getQuestionsURL).then(({ data }) => {
       dispatch(setQuestions(data.results));
       dispatch(hideQuestionLoading());
@@ -150,10 +150,11 @@ export const saveQuestion = (question, programId, assessmentId, questionId) => {
     put(editQuestionURL, question).then((response) => {
       if (response.status === 200) {
         const { data } = response;
+        const { id } = data;
         dispatch({
           type: SET_QUESTION,
           value: {
-            [data.id]: data,
+            [id]: { question_details: data },
           },
         });
         dispatch({

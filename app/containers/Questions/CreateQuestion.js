@@ -187,7 +187,7 @@ class CreateQuestionForm extends Component {
             name="type"
             label="Type"
             options={this.getQuestionTypes()}
-            value="1"
+            value={get(this.props.types, '[0].id', '')}
             required
             onChange={this.handleTypeChange}
           />
