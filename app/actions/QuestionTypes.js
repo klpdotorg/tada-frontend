@@ -1,14 +1,17 @@
 import { SERVER_API_BASE } from 'config';
 import Notifications from 'react-notification-system-redux';
-import uniqBy from 'lodash.uniqby';
 
 import { SET_QUESTION_TYPES } from './types';
 
 import { get } from './requests';
 import { errorNotification } from './notifications';
 
+const ignoreIds = [4, 6, 7];
+
 const filterTypes = (types) => {
-  return uniqBy(types, 'display');
+  return types.filter((type) => {
+    return !ignoreIds.includes(type.id);
+  });
 };
 
 export const fetchQuestionTypes = () => {
