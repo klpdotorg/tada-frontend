@@ -74,7 +74,7 @@ class CreateQuestionForm extends Component {
   }
 
   checkOptionPermission(value) {
-    const Ids = [6, 2];
+    const Ids = [1, 2];
     if (Ids.includes(Number(value))) {
       return false;
     }
