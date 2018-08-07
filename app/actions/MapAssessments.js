@@ -362,6 +362,7 @@ export const mapAssessmentsToStudentgroups = (
     post(url, {
       questiongroup_ids: assessments,
       studentgroup_ids: studentgroups,
+      boundary_ids: institutions,
     })
       .then((response) => {
         if (response.status === 201) {
@@ -385,44 +386,46 @@ export const mapBoundariesToAssessments = () => {
   return (dispatch, getState) => {
     dispatch(toggleSubmitLoading(true));
     const state = getState();
-    const { selectedProgram } = state.programs;
+    const { selectedProgram, programs } = state.programs;
     const {
       selectedInstitutions,
       selectedAssessments,
       selectedClasses,
       selectedEntityId,
+      selectedClusters,
     } = state.mapAssessments;
-    const { uncollapsedEntities, boundaryDetails } = state.boundaries;
-    const district = getObject(boundaryDetails, [uncollapsedEntities['1']], {});
-    const Ids = selectedInstitutions.map((id) => {
-      const value = getObject(boundaryDetails, `${id}institution`, {});
-      const boundary = getObject(value, 'boundary', {});
-      return [boundary.id, boundary.parent];
-    });
-    const boundaryIds = uniq(flattenDeep([district.id, ...Ids]));
+    const { boundaryDetails } = state.boundaries;
+    const program = getObject(programs, selectedProgram, {});
 
-    if (!isEmpty(selectedClasses) || !isEmpty(selectedInstitutions)) {
-      if (isEmpty(selectedClasses)) {
-        dispatch(mapAssessmentsToInsitutions(
-          selectedProgram,
-          selectedAssessments,
-          selectedInstitutions,
-          boundaryIds,
-        ));
+    let boundaryIds = [];
+    let institutionIds = [];
+    if (!selectedInstitutions.length) {
+      if (selectedClusters.length) {
+        boundaryIds = selectedClusters.map((id) => {
+          return boundaryDetails[id].id;
+        });
       } else {
-        dispatch(mapAssessmentsToStudentgroups(
-          selectedProgram,
-          selectedInstitutions,
-          selectedClasses,
-          selectedAssessments,
-        ));
+        boundaryIds = [boundaryDetails[selectedEntityId].id];
       }
-    } else {
+    }
+
+    if (!selectedClasses.length) {
+      institutionIds = selectedInstitutions;
+    }
+
+    if (program.survey_on === 'institution') {
       dispatch(mapAssessmentsToInsitutions(
         selectedProgram,
         selectedAssessments,
-        [],
-        [boundaryDetails[selectedEntityId].id],
+        selectedInstitutions,
+        boundaryIds,
+      ));
+    } else {
+      dispatch(mapAssessmentsToStudentgroups(
+        selectedProgram,
+        institutionIds,
+        selectedClasses,
+        selectedAssessments,
       ));
     }
   };
