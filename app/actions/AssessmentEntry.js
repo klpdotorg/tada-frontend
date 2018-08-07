@@ -1,6 +1,7 @@
 import isEmpty from 'lodash.isempty';
 import getObject from 'lodash.get';
 import { SERVER_API_BASE } from 'config';
+import { push } from 'react-router-redux';
 
 import {
   SELECT_PROGRAM_ASSESSMENT,
@@ -225,5 +226,11 @@ export const fetchStudentsForAssessmentEntry = (id) => {
         dispatch(fetchAnswerGroups(assessmentId, 'student', Ids));
       }
     });
+  };
+};
+
+export const resetFilterByProgramRoute = () => {
+  return (dispatch) => {
+    dispatch(push('/filterprograms'));
   };
 };

@@ -16,6 +16,7 @@ import {
   openFilterByProgramEntity,
   selectAssessmentNode,
   selectProgramEntity,
+  resetFilterByProgramRoute,
 } from '../../actions/';
 import { Loading, Message } from '../../components/common';
 
@@ -147,6 +148,7 @@ class NavTree extends Component {
             onChange={(e) => {
               this.props.selectProgram(e.target.value);
               this.props.getProgramEntities([{ depth: 0, uniqueId: '1state' }]);
+              this.props.resetFilterByProgramRoute();
             }}
             value={selectedProgram}
           >
@@ -220,6 +222,7 @@ const ProgramNavTree = connect(mapStateToProps, {
   selectAssessmentNode,
   openBoundary: openFilterByProgramEntity,
   selectProgramEntity,
+  resetFilterByProgramRoute,
 })(NavTree);
 
 export { ProgramNavTree };
