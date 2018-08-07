@@ -4,6 +4,7 @@ import get from 'lodash.get';
 import PropTypes from 'prop-types';
 
 import { AssessmentEntryRowView } from '../../components/AssessmentEntry';
+import { checkAnswergroupPermission } from '../../utils';
 import {
   onChangeAnswer,
   editAnswerGroup,
@@ -40,7 +41,8 @@ const mapStateToProps = (state, ownProps) => {
   const boundary = get(state.programDetails.programDetails, ownProps.uniqueId, {});
   const answers = get(state.answers.answers, rowId, []);
   const assessment = get(state.assessments.assessments, ownProps.assessmentId, {});
-
+  const { isAdmin, id } = state.profile;
+  const canView = checkAnswergroupPermission(isAdmin, id, row.created_by);
   return {
     row,
     answergroupId: row.id,
@@ -54,6 +56,7 @@ const mapStateToProps = (state, ownProps) => {
     rowId,
     commentRequired: get(assessment, 'comments_required'),
     groupText: get(assessment, 'group_text'),
+    disabled: !canView,
   };
 };
 

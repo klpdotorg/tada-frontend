@@ -21,6 +21,7 @@ const AssessmentEntryRowView = (props) => {
     comment,
     commentRequired,
     groupText,
+    disabled,
   } = props;
   return (
     <tr>
@@ -42,6 +43,7 @@ const AssessmentEntryRowView = (props) => {
             type="text"
             required
             className="form-control"
+            disabled={disabled}
             onChange={(e) => {
               props.onChangeGroupValue(answergroupId, e.target.value);
             }}
@@ -57,6 +59,7 @@ const AssessmentEntryRowView = (props) => {
           type="date"
           required
           className="form-control"
+          disabled={disabled}
           onChange={(e) => {
             props.onChangeDateOfVisit(
               answergroupId,
@@ -71,6 +74,7 @@ const AssessmentEntryRowView = (props) => {
             value={comment}
             type="text"
             required
+            disabled={disabled}
             className="form-control"
             onChange={(e) => {
               props.onChangeComments(answergroupId, e.target.value);
@@ -101,6 +105,7 @@ const AssessmentEntryRowView = (props) => {
                 value={answerVal}
                 menuContainerStyle={{ zIndex: 9999 }}
                 multi
+                disabled={disabled}
                 onChange={(val) => {
                   const filterVal = val.map((item) => {
                     return item.value;
@@ -134,6 +139,7 @@ const AssessmentEntryRowView = (props) => {
                 })}
                 style={{ minWidth: 100 }}
                 value={get(currentVal, 'answer', '')}
+                disabled={disabled}
                 onChange={(val) => {
                   const newVal = val ? val.value : '';
                   if (currentVal && currentVal.id) {
@@ -158,6 +164,7 @@ const AssessmentEntryRowView = (props) => {
                 max={question.max_score}
                 required
                 className="form-control"
+                disabled={disabled}
                 onChange={(e) => {
                   if (between(e.target.value, 0, question.max_score)) {
                     if (currentVal && currentVal.id) {
@@ -186,6 +193,7 @@ const AssessmentEntryRowView = (props) => {
                 type="date"
                 data-date-format="dd-mm-yyyy"
                 required
+                disabled={disabled}
                 className="form-control"
                 onChange={(e) => {
                   if (currentVal && currentVal.id) {
@@ -206,6 +214,7 @@ const AssessmentEntryRowView = (props) => {
               value={get(currentVal, 'answer', '')}
               type="text"
               required
+              disabled={disabled}
               className="form-control"
               onChange={(e) => {
                 if (currentVal && currentVal.id) {
@@ -230,6 +239,7 @@ const AssessmentEntryRowView = (props) => {
             });
           }}
           className="btn btn-primary"
+          disabled={disabled}
         >
           Save
         </button>
@@ -256,6 +266,7 @@ AssessmentEntryRowView.propTypes = {
   rowId: PropTypes.any,
   commentRequired: PropTypes.bool,
   groupText: PropTypes.string,
+  disabled: PropTypes.bool,
 };
 
 export { AssessmentEntryRowView };

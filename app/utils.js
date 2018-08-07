@@ -221,6 +221,18 @@ export const generatePagination = (page, size, step) => {
   return result;
 };
 
+export const checkAnswergroupPermission = (isAdmin, userId, createdId) => {
+  if (isAdmin) {
+    return true;
+  }
+
+  if (userId === createdId) {
+    return true;
+  }
+
+  return false;
+};
+
 export const checkAssessmentPermissions = (isAdmin, assessments, assessmentId) => {
   if (isAdmin) {
     return true;

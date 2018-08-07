@@ -12,6 +12,7 @@ import {
   infoNotification,
   onChangeComments,
 } from '../../actions';
+import { checkAnswergroupPermission } from '../../utils';
 
 class SetDefaultValues extends Component {
   componentDidMount() {
@@ -37,8 +38,12 @@ const mapStateToProps = (state, ownProps) => {
   const boundary = state.assessmentEntry.students.find((student) => {
     return ownProps.boundaryId === student.id;
   });
+  const { answergroups } = state.answergroups;
+  const row = get(answergroups, [ownProps.boundaryId, ownProps.rowId], {});
   const answers = get(state.answers.answers, ownProps.rowId, []);
   const assessment = get(state.assessments.assessments, ownProps.assessmentId, {});
+  const { isAdmin, id } = state.profile;
+  const canView = checkAnswergroupPermission(isAdmin, id, row.created_by);
 
   return {
     groupValue: get(state.assessmentEntry, ['groupValues', ownProps.rowId], ''),
@@ -51,6 +56,7 @@ const mapStateToProps = (state, ownProps) => {
     answergroupId: ownProps.rowId,
     commentRequired: get(assessment, 'comments_required'),
     groupText: get(assessment, 'group_text'),
+    disabled: canView,
   };
 };
 
