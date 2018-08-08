@@ -142,7 +142,7 @@ const getURL = (type, boundaryId) => {
 };
 
 const fetchQuestions = (programId, assessmentId) => {
-  const url = `${SERVER_API_BASE}surveys/${programId}/questiongroup/${assessmentId}/questions/`;
+  const url = `${SERVER_API_BASE}surveys/${programId}/questiongroup/${assessmentId}/questions/sequence/`;
 
   return get(url);
 };
