@@ -123,7 +123,7 @@ export const createNewQuestion = (data, programId, assessmentId) => {
         dispatch({
           type: SET_QUESTION,
           value: {
-            [Id]: getObject(response.data, 'question_details', {}),
+            [Id]: response.data,
           },
         });
         dispatch({
