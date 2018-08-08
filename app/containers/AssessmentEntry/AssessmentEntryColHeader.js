@@ -25,9 +25,10 @@ const AssessmentEntryColHeaderView = ({ questions, commentRequired, boundaryType
       <td>Date of Visit</td>
       {commentRequired ? <td>Comments</td> : <td style={{ display: 'none' }} />}
       {values.map((id) => {
+        const { question_text, display_text } = get(questions, [id, 'question_details']);
         return (
-          <td key={id} title={questions[id].question_text}>
-            {questions[id].display_text}
+          <td key={id} title={question_text}>
+            {display_text}
           </td>
         );
       })}
