@@ -77,7 +77,7 @@ const CreateEntryRowView = (props) => {
       )}
 
       {Object.keys(questions).map((questionId) => {
-        const question = get(questions, questionId, {});
+        const question = get(questions, [questionId, 'question_details'], {});
         const questionType = get(question, 'question_type');
         const value = get(answers, [id, question.id, 'value'], '');
         const questionOptions = get(question, 'options', []) || [];
