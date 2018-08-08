@@ -23,6 +23,15 @@ class AddUserView extends Component {
     this.submitForm = this.submitForm.bind(this);
   }
 
+  getStates() {
+    return this.props.states.map((state) => {
+      return {
+        value: state.state_code,
+        label: state.name,
+      };
+    });
+  }
+
   submitForm() {
     const myform = this.myform.getModel();
     const user = {
@@ -34,7 +43,7 @@ class AddUserView extends Component {
       groups: [myform.role],
     };
 
-    this.props.save(user);
+    this.props.save(user, myform.stateCodes.join(','));
   }
 
   render() {
@@ -124,6 +133,14 @@ class AddUserView extends Component {
             validations="minLength:5"
           />
           <Select name="role" label="Role" options={roles} value="tada_deo" required />
+          <Select
+            multiple
+            name="stateCodes"
+            label="States"
+            value={['ka']}
+            options={this.getStates()}
+            required
+          />
         </Formsy.Form>
       </Modal>
     );
@@ -138,6 +155,7 @@ AddUserView.propTypes = {
   closeConfirmModal: PropTypes.func,
   save: PropTypes.func,
   error: PropTypes.object,
+  states: PropTypes.array,
 };
 
 const mapStateToProps = (state) => {
@@ -145,6 +163,7 @@ const mapStateToProps = (state) => {
     isOpen: state.modal.createUser,
     canSubmit: state.appstate.enableSubmitForm,
     error: state.users.error,
+    states: state.states.states,
   };
 };
 

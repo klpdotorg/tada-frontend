@@ -15,11 +15,9 @@ export const toggleAddUserModal = () => {
   };
 };
 
-export const saveNewUser = (user) => {
-  return (dispatch, getState) => {
-    const state = getState();
-    const { state_code } = state.profile;
-    const url = `${SERVER_API_BASE}tada/users/?state=${state_code}`;
+export const saveNewUser = (user, stateCodes) => {
+  return (dispatch) => {
+    const url = `${SERVER_API_BASE}tada/users/?state_codes=${stateCodes}`;
     post(url, user).then((response) => {
       if (response.status === 201) {
         dispatch({
