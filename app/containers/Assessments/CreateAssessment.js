@@ -7,6 +7,7 @@ import get from 'lodash.get';
 import isEmpty from 'lodash.isempty';
 import capitalize from 'lodash.capitalize';
 import { DEFAULT_YEAR } from 'config';
+import moment from 'moment';
 
 import {
   saveNewAssessment,
@@ -45,8 +46,9 @@ class CreateAssessmentForm extends Component {
   }
 
   setEndDate() {
-    const date = new Date();
-    return dateFormat(new Date(date.setFullYear(date.getFullYear() + 1)));
+    return moment()
+      .add(1, 'year')
+      .format('YYYY-MM-DD');
   }
 
   getSources() {

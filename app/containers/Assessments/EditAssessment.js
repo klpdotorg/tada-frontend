@@ -5,6 +5,7 @@ import get from 'lodash.get';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
 import capitalize from 'lodash.capitalize';
+import moment from 'moment';
 
 import {
   saveAssessment,
@@ -14,7 +15,6 @@ import {
 } from '../../actions';
 import { lastVerifiedYears } from '../../Data';
 import { Modal } from '../../components/Modal';
-import { dateFormat } from '../../utils';
 
 const { Input, Checkbox, Select } = FRC;
 
@@ -30,14 +30,18 @@ class EditAssessmentForm extends Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  setStartDate() {
-    const formatteddate = dateFormat(new Date());
-    return formatteddate;
+  setStartDate(date) {
+    return moment(date).format('YYYY-MM-DD');
   }
 
-  setEndDate() {
-    const date = new Date();
-    return dateFormat(date.setFullYear(date.getFullYear + 1));
+  setEndDate(date) {
+    if (!date) {
+      return moment()
+        .add(1, 'year')
+        .format('YYYY-MM-DD');
+    }
+
+    return moment(date).format('YYYY-MM-DD');
   }
 
   getSources() {
