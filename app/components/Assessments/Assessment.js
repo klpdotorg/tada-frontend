@@ -25,7 +25,7 @@ const AssessmentRow = (props) => {
       <td>{dateParser(get(assessment, 'start_date', new Date()))}</td>
       <td>{dateParser(get(assessment, 'end_date', new Date()))}</td>
       <td>{assessment.type}</td>
-      <td>{assessment.double_entry}</td>
+      <td>{assessment.double_entry ? 'True' : 'False'}</td>
       <td>{assessment.academic_year}</td>
       <td>
         <button

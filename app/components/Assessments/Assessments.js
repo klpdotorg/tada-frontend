@@ -28,7 +28,7 @@ const AssessmentTable = (props) => {
               <th>End Date</th>
               <th>Type</th>
               <th>Double Entry</th>
-              <th>Flexi-type</th>
+              <th>Academic year</th>
               <th>Edit</th>
               <th>Questions</th>
             </tr>
