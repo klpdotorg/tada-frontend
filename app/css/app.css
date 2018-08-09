@@ -1059,3 +1059,12 @@ table.table-fixedwidth td, .table-fixedwidth th {
 a {
   cursor: pointer;
 }
+
+.ma-student-group {
+  display: flex;
+}
+
+.ma-student-group-name {
+  flex: 1;
+  margin: 0px;
+}
