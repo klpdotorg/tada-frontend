@@ -135,6 +135,9 @@ class EditQuestionForm extends Component {
     };
 
     this.props.save(question, programId, assessmentId, questionId);
+    this.setState({
+      options: null,
+    });
   }
 
   render() {
