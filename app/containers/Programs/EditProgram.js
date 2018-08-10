@@ -140,6 +140,14 @@ class EditProgramForm extends Component {
             value={this.getValue(program.partner) || get(partners, '[0].value', '')}
             required
           />
+          <Select
+            name="survey_on"
+            label="Survey On Type"
+            options={this.getSurveyOns()}
+            value={this.getValue(program.survey_on)}
+            required
+            disabled
+          />
         </Formsy.Form>
       </Modal>
     );
