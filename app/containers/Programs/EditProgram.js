@@ -54,7 +54,6 @@ class EditProgramForm extends Component {
       name: myform.programName,
       description: myform.description,
       status: 'AC',
-      survey_on: myform.survey_on,
       partner: myform.partner,
       lang_name: myform.lang_name,
       admin0: DEFAULT_PARENT_ID,
@@ -139,13 +138,6 @@ class EditProgramForm extends Component {
             label="Partners"
             options={partners}
             value={this.getValue(program.partner) || get(partners, '[0].value', '')}
-            required
-          />
-          <Select
-            name="survey_on"
-            label="Survey On Type"
-            options={this.getSurveyOns()}
-            value={this.getValue(program.survey_on)}
             required
           />
         </Formsy.Form>
