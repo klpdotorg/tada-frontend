@@ -362,7 +362,7 @@ export const mapAssessmentsToStudentgroups = (
     post(url, {
       questiongroup_ids: assessments,
       studentgroup_ids: studentgroups,
-      boundary_ids: institutions,
+      institution_ids: institutions,
     })
       .then((response) => {
         if (response.status === 201) {
