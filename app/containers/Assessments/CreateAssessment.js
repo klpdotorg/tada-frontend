@@ -282,6 +282,7 @@ CreateAssessmentForm.propTypes = {
   respondentTypes: PropTypes.array,
   programId: PropTypes.any,
   types: PropTypes.array,
+  fetchQuestiongroupTypes: PropTypes.func,
 };
 
 const mapStateToProps = (state) => {

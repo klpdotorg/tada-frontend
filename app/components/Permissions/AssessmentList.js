@@ -51,7 +51,7 @@ const BoundaryAssessmentListView = (props) => {
             assessments.map((assessment) => {
               const checkedAssessments = selectedAssessments.includes(assessment.questiongroup_id);
               return (
-                <tr key={assessment.id}>
+                <tr key={assessment.questiongroup_id}>
                   <td>
                     <span>{capitalize(assessment.name || '')}</span>
                     <input
