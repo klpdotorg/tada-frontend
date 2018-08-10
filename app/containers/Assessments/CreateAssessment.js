@@ -16,6 +16,7 @@ import {
   fetchRespondentTypes,
   fetchSources,
   toggleCreateAssessmentModal,
+  fetchQuestiongroupTypes,
 } from '../../actions';
 import { Modal } from '../../components/Modal';
 import { dateFormat } from '../../utils';
@@ -38,6 +39,7 @@ class CreateAssessmentForm extends Component {
   componentDidMount() {
     this.props.fetchSources();
     this.props.fetchRespondentTypes();
+    this.props.fetchQuestiongroupTypes();
   }
 
   setStartDate() {
@@ -104,21 +106,11 @@ class CreateAssessmentForm extends Component {
 
   render() {
     const { showRespondentTypes } = this.state;
-    const { isOpen, canSubmit, error } = this.props;
+    const { isOpen, canSubmit, error, types } = this.props;
     const respondentTypes = this.filterRespondentTypes();
-    const surveyTypes = [
-      { value: 'institution', label: 'Institution' },
-      { value: 'class', label: 'Class' },
-      { value: 'student', label: 'Student' },
-    ];
     const institutionTypes = [
       { value: 'primary', label: 'Primary School' },
       { value: 'pre', label: 'Pre School' },
-    ];
-    const types = [
-      { value: 'assessment', label: 'Assessment' },
-      { value: 'preception', label: 'Perception' },
-      { value: 'monitor', label: 'Monitor' },
     ];
     const sources = this.getSources();
 
@@ -289,6 +281,7 @@ CreateAssessmentForm.propTypes = {
   fetchRespondentTypes: PropTypes.func,
   respondentTypes: PropTypes.array,
   programId: PropTypes.any,
+  types: PropTypes.array,
 };
 
 const mapStateToProps = (state) => {
@@ -300,6 +293,7 @@ const mapStateToProps = (state) => {
     error: state.assessments.error,
     respondentTypes: state.respondentTypes.types,
     sources,
+    types: state.questiongroupTypes.types,
   };
 };
 
@@ -310,6 +304,7 @@ const CreateAssessment = connect(mapStateToProps, {
   closeModal: toggleCreateAssessmentModal,
   fetchRespondentTypes,
   fetchSources,
+  fetchQuestiongroupTypes,
 })(CreateAssessmentForm);
 
 export { CreateAssessment };

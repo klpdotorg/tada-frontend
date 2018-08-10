@@ -41,6 +41,7 @@ import {
   Sources,
   QuestionTypes,
   AnswerPagination,
+  QuestionGroupTypes,
 } from './reducers';
 
 const reducer = combineReducers({
@@ -81,6 +82,7 @@ const reducer = combineReducers({
   sources: Sources,
   questionTypes: QuestionTypes,
   answerPagination: AnswerPagination,
+  questiongroupTypes: QuestionGroupTypes,
 });
 
 const middleware = compose(
