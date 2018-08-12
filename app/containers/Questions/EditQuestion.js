@@ -121,17 +121,19 @@ class EditQuestionForm extends Component {
     const { programId, assessmentId, questionId } = this.props;
     const myform = this.myform.getModel();
     const question = {
-      question_text: myform.qnText,
-      display_text: myform.displayText,
-      lang_name: myform.lang_name,
-      key: myform.key,
-      question_type_id: myform.type,
-      is_featured: myform.is_featured,
-      options: myform.options,
-      max_score: myform.max_score || 0,
-      pass_score: myform.pass_score,
+      question_details: {
+        question_text: myform.qnText,
+        display_text: myform.displayText,
+        lang_name: myform.lang_name,
+        key: myform.key,
+        question_type_id: myform.type,
+        is_featured: myform.is_featured,
+        options: myform.options,
+        max_score: myform.max_score || 0,
+        pass_score: myform.pass_score,
+        status: 'AC',
+      },
       sequence: myform.order,
-      status: 'AC',
     };
 
     this.props.save(question, programId, assessmentId, questionId);
