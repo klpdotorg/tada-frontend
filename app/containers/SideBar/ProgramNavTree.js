@@ -61,7 +61,6 @@ class NavTree extends Component {
     const label =
       capitalize(entity.label) || capitalize(entity.name) || capitalize(entity.first_name);
     const contain = has(entity, ['assessments']);
-
     if (contain) {
       return (
         <TreeView
@@ -69,6 +68,7 @@ class NavTree extends Component {
           nodeLabel={label}
           onClick={() => {
             this.props.selectAssessmentNode(node.uniqueId);
+            this.props.openBoundary(node.uniqueId, newDepth);
           }}
           collapsed={Number(this.props.assessmentNode) !== Number(node.uniqueId)}
         >
@@ -102,6 +102,7 @@ class NavTree extends Component {
               uniqueId: node.uniqueId,
             },
           ]);
+          this.props.openBoundary(node.uniqueId, newDepth);
         }}
         nodeLabel={label}
         collapsed={!collapsed}
@@ -148,7 +149,7 @@ class NavTree extends Component {
             onChange={(e) => {
               this.props.selectProgram(e.target.value);
               this.props.getProgramEntities([{ depth: 0, uniqueId: '1state' }]);
-              this.props.resetFilterByProgramRoute();
+              // this.props.resetFilterByProgramRoute();
             }}
             value={selectedProgram}
           >

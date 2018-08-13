@@ -69,6 +69,7 @@ FetchAnswersAndQuestions.propTypes = {
   selectProgram: PropTypes.func,
   getAssessments: PropTypes.func,
   selectedProgram: PropTypes.string,
+  selectAssessment: PropTypes.func,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -76,7 +77,7 @@ const mapStateToProps = (state, ownProps) => {
 
   const { answersLoading } = state.assessmentEntry;
   const { answergroups, fetching } = state.answergroups;
-  const answereFetching = state.answers.fetching;
+  const answerFetching = state.answers.fetching;
   const institution = get(state.programDetails.programDetails, institutionId, {});
   const { programs } = state.programs;
   const { loadingBoundary } = state.appstate;
@@ -89,7 +90,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     rows: Object.keys(get(answergroups, institution.id, {})),
     institution,
-    loading: answersLoading || fetching || answereFetching || loadingBoundary,
+    loading: answersLoading || fetching || answerFetching || loadingBoundary,
     uniqueId: institutionId,
     programsLength: Object.keys(programs).length,
     boundaryInfo: {
@@ -100,7 +101,7 @@ const mapStateToProps = (state, ownProps) => {
     noQuestions: isEmpty(state.questions.questions),
     canView,
     error,
-    selectedProgram,
+    selectedProgram: String(selectedProgram),
   };
 };
 

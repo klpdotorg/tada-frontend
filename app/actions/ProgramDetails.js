@@ -65,12 +65,19 @@ export const openFilterByProgramEntity = (uniqueId, depth, assessmentId) => {
     const survey = getObject(state.programs.programs, selectedProgram, {});
     const boundaryPath = getPath(state, uniqueId, depth, 'program');
 
-    const path = `/filterprograms/${selectedProgram}/questiongroup/${assessmentId}${boundaryPath}`;
-    const url = checkFilterByProgramUrl(path, survey.survey_on);
-
-    dispatch(selectProgramEntity(`${assessmentId}${uniqueId}`));
     dispatch(resetAnswerError());
-    dispatch(push(url));
+
+    if (assessmentId) {
+      const path = `/filterprograms/${selectedProgram}/questiongroup/${assessmentId}${boundaryPath}`;
+      const url = checkFilterByProgramUrl(path, survey.survey_on);
+
+      dispatch(selectProgramEntity(`${assessmentId}${uniqueId}`));
+      dispatch(push(url));
+    } else {
+      const path = `/filterprograms${boundaryPath}`;
+      const url = checkFilterByProgramUrl(path, survey.survey_on);
+      dispatch(push(url));
+    }
   };
 };
 
@@ -219,26 +226,30 @@ const fetchAdmins = (entity, moreEntities) => {
       programInfo.survey_on,
     );
 
-    get(url).then(({ data }) => {
-      let entities = {};
-      if (url.includes('mapping')) {
-        entities = handleMappingResult(data.results);
-      } else {
-        entities = convertEntitiesToObject(data.results);
-      }
+    if (url) {
+      get(url).then(({ data }) => {
+        let entities = {};
+        if (url.includes('mapping')) {
+          entities = handleMappingResult(data.results);
+        } else {
+          entities = convertEntitiesToObject(data.results);
+        }
 
-      dispatch({
-        type: SET_FITLER_PROGRAM_ENTITIES,
-        programDetails: entities,
-        entitiesByParentId: { [entity.depth]: Object.keys(entities) },
+        dispatch({
+          type: SET_FITLER_PROGRAM_ENTITIES,
+          programDetails: entities,
+          entitiesByParentId: { [entity.depth]: Object.keys(entities) },
+        });
+
+        if (moreEntities && moreEntities.length) {
+          dispatch(fetchProgramEntities(moreEntities));
+        } else {
+          dispatch(closeBoundaryLoading());
+        }
       });
-
-      if (moreEntities && moreEntities.length) {
-        dispatch(fetchProgramEntities(moreEntities));
-      } else {
-        dispatch(closeBoundaryLoading());
-      }
-    });
+    } else {
+      dispatch(closeBoundaryLoading());
+    }
   };
 };
 

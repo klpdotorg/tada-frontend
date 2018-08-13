@@ -177,6 +177,19 @@ export const routes = (
         <Route path="multiselect" component={NewSelect} />
         <Route path="programmes" component={Programs} />
         <Route path="filterprograms" component={DefaultMessage} />
+        <Route path="filterprograms/district/:districtId" component={DefaultMessage} />
+        <Route
+          path="filterprograms/district/:districtId/block/:blockId"
+          component={DefaultMessage}
+        />
+        <Route
+          path="filterprograms/district/:districtId/block/:blockId/cluster/:clusterId"
+          component={DefaultMessage}
+        />
+        <Route
+          path="filterprograms/district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId"
+          component={DefaultMessage}
+        />
         <Route
           path="filterprograms/:programId/questiongroup/:questionGroupId/district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId"
           component={InstitutionAnswersSheet}
