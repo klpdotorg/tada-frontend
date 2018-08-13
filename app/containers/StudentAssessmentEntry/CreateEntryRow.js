@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import get from 'lodash.get';
+import orderBy from 'lodash.orderby';
 
 import { CreateEntryRowView } from '../../components/AssessmentEntry';
 import {
@@ -26,7 +27,7 @@ class GetResources extends Component {
   componentDidMount() {
     const { id, questions } = this.props;
 
-    if (Object.values(questions).length) {
+    if (questions.length) {
       this.setDefaultValue([
         {
           id,
@@ -42,7 +43,7 @@ class GetResources extends Component {
     const { id, questions } = nextProps;
 
     if (!this.state.defaultValueSet) {
-      if (Object.values(questions).length) {
+      if (questions.length) {
         this.setDefaultValue([
           {
             id,
@@ -68,7 +69,7 @@ class GetResources extends Component {
 
 GetResources.propTypes = {
   boundaryId: PropTypes.number,
-  questions: PropTypes.object,
+  questions: PropTypes.array,
   onChange: PropTypes.func,
   onChangeDateOfVisit: PropTypes.func,
   onChangeGroupValue: PropTypes.func,
@@ -89,9 +90,11 @@ const mapStateToProps = (state, ownProps) => {
   });
   const program = get(programs, selectedProgram, {});
   const assessment = get(state.assessments.assessments, ownProps.assessmentId, {});
+  const questionValues = Object.values(state.questions.questions);
+  const questions = orderBy(questionValues, ['sequence'], ['asc']);
 
   return {
-    questions: state.questions.questions,
+    questions,
     id: get(boundary, 'id', ''),
     name: `${get(boundary, 'first_name', '')} ${get(boundary, 'last_name', '')}`,
     answers,

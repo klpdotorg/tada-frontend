@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import get from 'lodash.get';
 import PropTypes from 'prop-types';
+import orderBy from 'lodash.orderby';
 
 import { AssessmentEntryRowView } from '../../components/AssessmentEntry';
 import { checkAnswergroupPermission } from '../../utils';
@@ -43,13 +44,16 @@ const mapStateToProps = (state, ownProps) => {
   const assessment = get(state.assessments.assessments, ownProps.assessmentId, {});
   const { isAdmin, id } = state.profile;
   const canView = checkAnswergroupPermission(isAdmin, id, row.created_by);
+  const questionValues = Object.values(state.questions.questions);
+  const questions = orderBy(questionValues, ['sequence'], ['asc']);
+
   return {
     row,
     answergroupId: row.id,
     groupValue: get(state.assessmentEntry, ['groupValues', row.id], ''),
     dateOfVisit: get(state.assessmentEntry, ['dateOfVisits', row.id], new Date()),
     comment: get(state.assessmentEntry, ['comments', row.id], ''),
-    questions: state.questions.questions,
+    questions,
     id: get(boundary, 'id', ''),
     name: get(boundary, 'name', ''),
     answers,

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import get from 'lodash.get';
+import orderBy from 'lodash.orderby';
 
 const getHeaderName = (boundaryType) => {
   if (boundaryType === 'institution') {
@@ -16,7 +17,6 @@ const getHeaderName = (boundaryType) => {
 };
 
 const AssessmentEntryColHeaderView = ({ questions, commentRequired, boundaryType, groupText }) => {
-  const values = Object.keys(questions);
   return (
     <tr className="bg-info">
       <td>ID</td>
@@ -24,8 +24,8 @@ const AssessmentEntryColHeaderView = ({ questions, commentRequired, boundaryType
       {groupText ? <td>{groupText}</td> : <td style={{ display: 'none' }} />}
       <td>Date of Visit</td>
       {commentRequired ? <td>Comments</td> : <td style={{ display: 'none' }} />}
-      {values.map((id) => {
-        const { question_text, display_text } = get(questions, [id, 'question_details']);
+      {questions.map((question) => {
+        const { question_text, display_text, id } = question.question_details;
         return (
           <td key={id} title={question_text}>
             {display_text}
@@ -38,7 +38,7 @@ const AssessmentEntryColHeaderView = ({ questions, commentRequired, boundaryType
 };
 
 AssessmentEntryColHeaderView.propTypes = {
-  questions: PropTypes.object,
+  questions: PropTypes.array,
   commentRequired: PropTypes.bool,
   boundaryType: PropTypes.string,
   groupText: PropTypes.string,
@@ -46,8 +46,10 @@ AssessmentEntryColHeaderView.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const assessment = get(state.assessments.assessments, ownProps.assessmentId, {});
+  const questionValues = Object.values(state.questions.questions);
+  const questions = orderBy(questionValues, ['sequence'], ['asc']);
   return {
-    questions: state.questions.questions,
+    questions,
     commentRequired: get(assessment, 'comments_required'),
     groupText: get(assessment, 'group_text'),
   };

@@ -149,12 +149,13 @@ export const saveQuestion = (question, programId, assessmentId, questionId) => {
     const editQuestionURL = `${SERVER_API_BASE}surveys/${programId}/questiongroup/${assessmentId}/questions/${questionId}/`;
     put(editQuestionURL, question).then((response) => {
       if (response.status === 200) {
-        const { data } = response;
-        const { id } = data;
+        // const { data } = response;
+        // const { id } = data;
+        const Id = getObject(response, 'data.question_details.id', '');
         dispatch({
           type: SET_QUESTION,
           value: {
-            [id]: { question_details: data },
+            [Id]: response.data,
           },
         });
         dispatch({

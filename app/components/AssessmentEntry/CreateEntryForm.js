@@ -83,8 +83,8 @@ const CreateEntryFormView = (props) => {
             ) : (
               <td style={{ display: 'none' }} />
             )}
-            {Object.keys(questions).map((questionId) => {
-              const question = get(questions, [questionId, 'question_details'], {});
+            {questions.map((questionVal) => {
+              const question = get(questionVal, ['question_details'], {});
               const questionType = get(question, 'question_type');
               const value = get(answers, [row.id, question.id, 'value'], '');
               const questionOptions = get(question, 'options', []) || [];
@@ -221,7 +221,7 @@ const CreateEntryFormView = (props) => {
 };
 
 CreateEntryFormView.propTypes = {
-  questions: PropTypes.object,
+  questions: PropTypes.array,
   answers: PropTypes.object,
   assessmentId: PropTypes.any,
   groupValues: PropTypes.object,

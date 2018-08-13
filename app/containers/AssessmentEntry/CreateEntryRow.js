@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import get from 'lodash.get';
+import orderBy from 'lodash.orderby';
 
 import { CreateEntryRowView } from '../../components/AssessmentEntry';
 import {
@@ -26,7 +27,7 @@ class GetResources extends Component {
   componentDidMount() {
     const { id, questions } = this.props;
 
-    if (Object.values(questions).length) {
+    if (questions.length) {
       this.setDefaultValue([
         {
           id,
@@ -42,7 +43,7 @@ class GetResources extends Component {
     const { id, questions } = nextProps;
 
     if (!this.state.defaultValueSet) {
-      if (Object.values(questions).length) {
+      if (questions.length) {
         this.setDefaultValue([
           {
             id,
@@ -56,16 +57,7 @@ class GetResources extends Component {
   }
 
   setDefaultValue(rows) {
-    const { questions } = this.props;
-    const values = Object.values(questions);
     rows.forEach((row) => {
-      values.forEach((question) => {
-        const questionType = get(question, 'question_type');
-        const options = get(question, 'options', []);
-        if (questionType === 'CheckBox' || questionType === 'Radio') {
-          // this.props.onChange(options[0], row.id, question.id);
-        }
-      });
       this.props.onChangeDateOfVisit(row.id, new Date().toISOString());
     });
   }
@@ -76,7 +68,7 @@ class GetResources extends Component {
 }
 
 GetResources.propTypes = {
-  questions: PropTypes.object,
+  questions: PropTypes.array,
   onChange: PropTypes.func,
   onChangeDateOfVisit: PropTypes.func,
   surveyType: PropTypes.string,
@@ -94,9 +86,11 @@ const mapStateToProps = (state, ownProps) => {
   const program = get(programs, selectedProgram, {});
   const assessment = get(state.assessments.assessments, ownProps.assessmentId, {});
   const id = get(boundary, 'id', '');
+  const questionValues = Object.values(state.questions.questions);
+  const questions = orderBy(questionValues, ['sequence'], ['asc']);
 
   return {
-    questions: state.questions.questions,
+    questions,
     id,
     name: get(boundary, 'name', ''),
     answers,
