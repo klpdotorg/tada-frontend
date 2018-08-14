@@ -240,12 +240,12 @@ class EditAssessmentForm extends Component {
             id="comments_required"
             value={assessment.comments_required}
           />
-          <Checkbox
+          {/* <Checkbox
             label="Image Required"
             name="image_required"
             id="image_required"
             value={assessment.image_required}
-          />
+          /> */}
           {/* <Checkbox
             label="Double Entry"
             name="doubleEntry"
