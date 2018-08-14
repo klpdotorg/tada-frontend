@@ -83,7 +83,7 @@ export const programCreated = (value) => {
 };
 
 export const fetchAllPrograms = (stateCode) => {
-  const fetchProgramsUrl = `${serverApiBase}surveys/?state=${stateCode}&per_page=${PER_PAGE}`;
+  const fetchProgramsUrl = `${serverApiBase}surveys/?state=${stateCode}`;
 
   return get(fetchProgramsUrl).then(({ data }) => {
     return data.results;
