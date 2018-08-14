@@ -1,4 +1,4 @@
-import { SERVER_API_BASE as serverApiBase, PER_PAGE } from 'config';
+import { SERVER_API_BASE as serverApiBase } from 'config';
 
 import { get, post, patch, deleteRequest } from './requests';
 import {

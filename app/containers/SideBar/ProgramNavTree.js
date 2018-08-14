@@ -149,7 +149,7 @@ class NavTree extends Component {
             onChange={(e) => {
               this.props.selectProgram(e.target.value);
               this.props.getProgramEntities([{ depth: 0, uniqueId: '1state' }]);
-              // this.props.resetFilterByProgramRoute();
+              this.props.resetFilterByProgramRoute();
             }}
             value={selectedProgram}
           >

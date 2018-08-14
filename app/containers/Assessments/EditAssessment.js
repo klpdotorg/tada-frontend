@@ -30,6 +30,13 @@ class EditAssessmentForm extends Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { assessment } = nextProps;
+    if (assessment !== this.props.assessment) {
+      this.handleChange(null, assessment.respondenttype_required);
+    }
+  }
+
   setStartDate(date) {
     return moment(date).format('YYYY-MM-DD');
   }
@@ -70,8 +77,8 @@ class EditAssessmentForm extends Component {
       lang_name: myform.lang_name,
       comments_required: myform.comments_required,
       image_required: myform.image_required,
-      respondent_type_required: myform.respondent_type_required,
-      respondent_type: myform.respondent_type,
+      respondenttype_required: myform.respondenttype_required,
+      default_respondent_type: myform.default_respondent_type_id,
       type: myform.type,
       survey: this.props.programId,
       status: 'AC',
@@ -114,7 +121,6 @@ class EditAssessmentForm extends Component {
       { value: 'monitor', label: 'Monitor' },
     ];
     const sources = this.getSources();
-
     return (
       <Modal
         title="Edit QuestionGroup"
@@ -218,21 +224,21 @@ class EditAssessmentForm extends Component {
             label="Respondent Type Required"
             name="respondenttype_required"
             id="respondenttype_required"
-            value={assessment.respondent_type_required}
+            value={assessment.respondenttype_required}
             onChange={this.handleChange}
           />
           <Select
             name="default_respondent_type_id"
-            label="Respondent Type"
-            value={assessment.respondent_type}
-            options={respondentTypes}
+            label="Default Respondent Type"
+            value={assessment.default_respondent_type}
+            options={showRespondentTypes ? respondentTypes : []}
             disabled={!showRespondentTypes}
           />
           <Checkbox
             label="Comments Required"
             name="comments_required"
             id="comments_required"
-            value={assessment.comment_required}
+            value={assessment.comments_required}
           />
           <Checkbox
             label="Image Required"
@@ -240,13 +246,13 @@ class EditAssessmentForm extends Component {
             id="image_required"
             value={assessment.image_required}
           />
-          <Checkbox
+          {/* <Checkbox
             label="Double Entry"
             name="doubleEntry"
             id="doubleEntry"
             value={assessment.double_entry}
             help="Check this box if this questiongroup will need double entry"
-          />
+          /> */}
         </Formsy.Form>
       </Modal>
     );

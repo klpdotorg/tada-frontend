@@ -79,8 +79,8 @@ class CreateAssessmentForm extends Component {
       lang_name: myform.lang_name,
       comments_required: myform.comments_required,
       image_required: myform.image_required,
-      respondent_type_required: myform.respondent_type_required,
-      respondent_type: myform.respondent_type,
+      respondenttype_required: myform.respondenttype_required,
+      default_respondent_type: myform.default_respondent_type_id,
       type: myform.type,
       survey: this.props.programId,
       status: 'AC',
@@ -249,19 +249,19 @@ class CreateAssessmentForm extends Component {
           />
           <Select
             name="default_respondent_type_id"
-            label="Respondent Type"
-            // value={get(respondentTypes[0], 'value')}
-            options={respondentTypes}
+            label="Default Respondent Type"
+            value={showRespondentTypes ? respondentTypes : ''}
+            options={showRespondentTypes ? respondentTypes : []}
             disabled={!showRespondentTypes}
           />
           <Checkbox label="Comments Required" name="comments_required" id="comments_required" />
           {/* <Checkbox label="Image Required" name="image_required" id="image_required" /> */}
-          <Checkbox
+          {/* <Checkbox
             label="Double Entry"
             name="doubleEntry"
             id="doubleEntry"
             help="Check this box if this questiongroup will need double entry"
-          />
+          /> */}
         </Formsy.Form>
       </Modal>
     );

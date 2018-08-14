@@ -195,6 +195,10 @@ export const routes = (
           component={DefaultMessage}
         />
         <Route
+          path="filterprograms/district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId/students/:studentgroupId"
+          component={DefaultMessage}
+        />
+        <Route
           path="filterprograms/:programId/questiongroup/:questionGroupId/district/:districtId/block/:blockId/cluster/:clusterId/institution/:institutionId"
           component={InstitutionAnswersSheet}
         />
