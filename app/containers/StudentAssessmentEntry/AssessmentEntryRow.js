@@ -59,7 +59,7 @@ const mapStateToProps = (state, ownProps) => {
     answergroupId: ownProps.rowId,
     commentRequired: get(assessment, 'comments_required'),
     groupText: get(assessment, 'group_text'),
-    disabled: canView,
+    disabled: !canView,
   };
 };
 
