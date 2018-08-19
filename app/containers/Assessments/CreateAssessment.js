@@ -250,7 +250,7 @@ class CreateAssessmentForm extends Component {
           <Select
             name="default_respondent_type_id"
             label="Default Respondent Type"
-            value={showRespondentTypes ? respondentTypes : ''}
+            value={showRespondentTypes ? respondentTypes[0].value : ''}
             options={showRespondentTypes ? respondentTypes : []}
             disabled={!showRespondentTypes}
           />

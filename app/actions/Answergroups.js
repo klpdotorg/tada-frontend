@@ -112,6 +112,7 @@ export const editAnswerGroup = (params) => {
     const name = getObject(state.assessmentEntry.groupValues, [answergroupId], '');
     const dateOfVisit = getObject(state.assessmentEntry.dateOfVisits, [answergroupId], new Date());
     const comment = getObject(state.assessmentEntry.comments, [answergroupId], '');
+    const respondentType = getObject(state.assessmentEntry.respondentTypeVals, [answergroupId], '');
     const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${assessmentId}/answergroups/${answergroupId}/`;
     const assessment = getObject(state.assessments.assessments, assessmentId, {});
 
@@ -133,6 +134,7 @@ export const editAnswerGroup = (params) => {
         comments: comment,
         institution_images: [],
         status: 'AC',
+        respondent_type: respondentType,
       }).then((response) => {
         if (response.status === 200) {
           dispatch(editAnswers({ ...params, answergroupId: response.data.id }));

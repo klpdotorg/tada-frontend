@@ -189,6 +189,7 @@ export const createAnswerGroup = (params) => {
     const { id } = state.profile;
     const name = getObject(state.assessmentEntry.groupValues, [boundaryId], '');
     const dateOfVisit = getObject(state.assessmentEntry.dateOfVisits, [boundaryId], new Date());
+    const respondentType = getObject(state.assessmentEntry.respondentTypeVals, [boundaryId], '');
     const comment = getObject(state.assessmentEntry.comments, [boundaryId], '');
     const assessment = getObject(state.assessments.assessments, assessmentId, {});
     const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${assessmentId}/answergroups/`;
@@ -212,6 +213,7 @@ export const createAnswerGroup = (params) => {
         comments: comment,
         created_by: id,
         status: 'AC',
+        respondent_type: respondentType,
       }).then((response) => {
         if (response.status === 201) {
           dispatch(saveAnswer({ ...params, answergroupId: response.data.id }));

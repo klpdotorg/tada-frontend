@@ -230,7 +230,7 @@ class EditAssessmentForm extends Component {
           <Select
             name="default_respondent_type_id"
             label="Default Respondent Type"
-            value={assessment.default_respondent_type}
+            value={showRespondentTypes ? respondentTypes[0].value : ''}
             options={showRespondentTypes ? respondentTypes : []}
             disabled={!showRespondentTypes}
           />

@@ -17,6 +17,7 @@ import {
   ON_CHANGE_DATE_OF_VISITS,
   ON_CHANGE_COMMENTS,
   SET_ANSWER_PAGINATION_COUNT,
+  ON_CHANGE_RESPONDENT_TYPE,
 } from './types';
 import { get } from './requests';
 import {
@@ -73,6 +74,15 @@ export const onChangeDateOfVisit = (id, value) => {
 export const onChangeComments = (id, value) => {
   return {
     type: ON_CHANGE_COMMENTS,
+    value: {
+      [id]: value,
+    },
+  };
+};
+
+export const onChangeRespondentType = (id, value) => {
+  return {
+    type: ON_CHANGE_RESPONDENT_TYPE,
     value: {
       [id]: value,
     },

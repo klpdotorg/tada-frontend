@@ -15,6 +15,7 @@ import {
   RESET,
   RESET_CREATE_FORM_ENTRY,
   ON_CHANGE_COMMENTS,
+  ON_CHANGE_RESPONDENT_TYPE,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -26,6 +27,7 @@ const INITIAL_STATE = {
   students: [],
   groupValues: {},
   dateOfVisits: {},
+  respondentTypeVals: {},
   comments: {},
 };
 
@@ -52,6 +54,14 @@ const AssessmentEntry = (state = INITIAL_STATE, action) => {
         ...state,
         groupValues: {
           ...state.groupValues,
+          ...action.value,
+        },
+      };
+    case ON_CHANGE_RESPONDENT_TYPE:
+      return {
+        ...state,
+        respondentTypeVals: {
+          ...state.respondentTypeVals,
           ...action.value,
         },
       };

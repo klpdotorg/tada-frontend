@@ -160,3 +160,4 @@ export const RESET_ANSWERGROUPS = 'reset_answergroups';
 export const SELECT_BOUNDARY = 'select_boundary';
 export const SELECT_ASSESSMENT_NODE = 'select_assessment_node';
 export const SET_QUESTION_GROUP_TYPES = 'set_question_group_types';
+export const ON_CHANGE_RESPONDENT_TYPE = 'on_change_respondent_type';
