@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import orderBy from 'lodash.orderby';
 
 import { AssessmentEntryRowView } from '../../components/StudentAssessmentEntry';
+import { filterRespondentTypes } from '../AssessmentEntry/utils';
 import {
   onChangeAnswer,
   editAnswerGroup,
@@ -12,6 +13,7 @@ import {
   onChangeGroupValue,
   infoNotification,
   onChangeComments,
+  onChangeRespondentType,
 } from '../../actions';
 import { checkAnswergroupPermission } from '../../utils';
 
@@ -21,6 +23,7 @@ class SetDefaultValues extends Component {
     this.props.onChangeGroupValue(rowId, row.group_value);
     this.props.onChangeDateOfVisit(rowId, new Date(row.date_of_visit));
     this.props.onChangeComments(rowId, row.comments);
+    this.props.onChangeRespondentType(rowId, row.respondent_type);
   }
   render() {
     return <AssessmentEntryRowView {...this.props} />;
@@ -33,6 +36,8 @@ SetDefaultValues.propTypes = {
   onChangeGroupValue: PropTypes.func,
   onChangeDateOfVisit: PropTypes.func,
   onChangeComments: PropTypes.func,
+  onChangeRespondentType: PropTypes.func,
+  defaultRespondentType: PropTypes.string,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -52,6 +57,7 @@ const mapStateToProps = (state, ownProps) => {
     groupValue: get(state.assessmentEntry, ['groupValues', ownProps.rowId], ''),
     dateOfVisit: get(state.assessmentEntry, ['dateOfVisits', ownProps.rowId], new Date()),
     comment: get(state.assessmentEntry, ['comments', ownProps.rowId], ''),
+    respondentTypeVal: get(state.assessmentEntry, ['respondentTypeVals', ownProps.rowId], ''),
     questions,
     id: get(boundary, 'id', ''),
     name: `${get(boundary, 'first_name', '')} ${get(boundary, 'last_name', '')}`,
@@ -59,7 +65,9 @@ const mapStateToProps = (state, ownProps) => {
     answergroupId: ownProps.rowId,
     commentRequired: get(assessment, 'comments_required'),
     groupText: get(assessment, 'group_text'),
-    disabled: canView,
+    disabled: !canView,
+    respondentTypes: filterRespondentTypes(state.respondentTypes.types),
+    respondentTypeRequired: get(assessment, 'respondenttype_required'),
   };
 };
 
@@ -70,6 +78,7 @@ const AssessmentEntryRow = connect(mapStateToProps, {
   onChangeDateOfVisit,
   infoNotification,
   onChangeComments,
+  onChangeRespondentType,
 })(SetDefaultValues);
 
 export { AssessmentEntryRow };

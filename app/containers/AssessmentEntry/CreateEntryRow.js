@@ -13,7 +13,9 @@ import {
   onChangeComments,
   onChangeDateOfVisit,
   infoNotification,
+  onChangeRespondentType,
 } from '../../actions';
+import { filterRespondentTypes } from './utils';
 
 class GetResources extends Component {
   constructor() {
@@ -25,8 +27,8 @@ class GetResources extends Component {
   }
 
   componentDidMount() {
-    const { id, questions } = this.props;
-
+    const { id, questions, defaultRespondentType } = this.props;
+    console.log(id, defaultRespondentType);
     if (questions.length) {
       this.setDefaultValue([
         {
@@ -37,6 +39,7 @@ class GetResources extends Component {
         defaultValueSet: true,
       });
     }
+    this.props.onChangeRespondentType(id, defaultRespondentType);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -77,17 +80,27 @@ GetResources.propTypes = {
   name: PropTypes.string,
   id: PropTypes.any,
   boundaryInfo: PropTypes.object,
+  defaultRespondentType: PropTypes.string,
+  onChangeRespondentType: PropTypes.func,
 };
 
 const mapStateToProps = (state, ownProps) => {
   const { programs, selectedProgram } = state.programs;
-  const { students, answers, groupValues, dateOfVisits, comments } = state.assessmentEntry;
+  const {
+    students,
+    answers,
+    groupValues,
+    dateOfVisits,
+    comments,
+    respondentTypeVals,
+  } = state.assessmentEntry;
   const boundary = get(state.programDetails.programDetails, ownProps.uniqueId, {});
   const program = get(programs, selectedProgram, {});
   const assessment = get(state.assessments.assessments, ownProps.assessmentId, {});
   const id = get(boundary, 'id', '');
   const questionValues = Object.values(state.questions.questions);
   const questions = orderBy(questionValues, ['sequence'], ['asc']);
+  const defaultRespondentType = get(assessment, 'default_respondent_type');
 
   return {
     questions,
@@ -98,9 +111,13 @@ const mapStateToProps = (state, ownProps) => {
     students,
     groupValues,
     dateOfVisit: get(dateOfVisits, id, ''),
+    respondentTypeVal: get(respondentTypeVals, id, defaultRespondentType),
     comments,
     commentRequired: get(assessment, 'comments_required'),
+    respondentTypeRequired: get(assessment, 'respondenttype_required'),
     groupText: get(assessment, 'group_text'),
+    respondentTypes: filterRespondentTypes(state.respondentTypes.types),
+    defaultRespondentType,
   };
 };
 
@@ -112,6 +129,7 @@ const CreateEntryRow = connect(mapStateToProps, {
   onChangeDateOfVisit,
   infoNotification,
   onChangeComments,
+  onChangeRespondentType,
 })(GetResources);
 
 export { CreateEntryRow };

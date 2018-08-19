@@ -13,7 +13,9 @@ import {
   onChangeGroupValue,
   infoNotification,
   onChangeComments,
+  onChangeRespondentType,
 } from '../../actions';
+import { filterRespondentTypes } from './utils';
 
 class SetDefaultValues extends Component {
   componentDidMount() {
@@ -21,6 +23,7 @@ class SetDefaultValues extends Component {
     this.props.onChangeGroupValue(answergroupId, row.group_value);
     this.props.onChangeDateOfVisit(answergroupId, new Date(row.date_of_visit));
     this.props.onChangeComments(answergroupId, row.comments);
+    this.props.onChangeRespondentType(answergroupId, row.respondent_type);
   }
   render() {
     return <AssessmentEntryRowView {...this.props} />;
@@ -33,6 +36,7 @@ SetDefaultValues.propTypes = {
   onChangeGroupValue: PropTypes.func,
   onChangeDateOfVisit: PropTypes.func,
   onChangeComments: PropTypes.func,
+  onChangeRespondentType: PropTypes.func,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -47,18 +51,27 @@ const mapStateToProps = (state, ownProps) => {
   const questionValues = Object.values(state.questions.questions);
   const questions = orderBy(questionValues, ['sequence'], ['asc']);
 
+  const defaultRespondentType = get(assessment, 'default_respondent_type');
+
   return {
     row,
     answergroupId: row.id,
     groupValue: get(state.assessmentEntry, ['groupValues', row.id], ''),
     dateOfVisit: get(state.assessmentEntry, ['dateOfVisits', row.id], new Date()),
     comment: get(state.assessmentEntry, ['comments', row.id], ''),
+    respondentTypeVal: get(
+      state.assessmentEntry,
+      ['respondentTypeVals', row.id],
+      defaultRespondentType,
+    ),
     questions,
     id: get(boundary, 'id', ''),
     name: get(boundary, 'name', ''),
     answers,
     rowId,
     commentRequired: get(assessment, 'comments_required'),
+    respondentTypes: filterRespondentTypes(state.respondentTypes.types),
+    respondentTypeRequired: get(assessment, 'respondenttype_required'),
     groupText: get(assessment, 'group_text'),
     disabled: !canView,
   };
@@ -71,6 +84,7 @@ const AssessmentEntryRow = connect(mapStateToProps, {
   onChangeDateOfVisit,
   infoNotification,
   onChangeComments,
+  onChangeRespondentType,
 })(SetDefaultValues);
 
 export { AssessmentEntryRow };

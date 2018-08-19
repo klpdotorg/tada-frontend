@@ -5,6 +5,7 @@ import get from 'lodash.get';
 import orderBy from 'lodash.orderby';
 
 import { CreateEntryRowView } from '../../components/AssessmentEntry';
+import { filterRespondentTypes } from '../AssessmentEntry/utils';
 import {
   onChangeAssessmentEntry,
   createAnswerGroup,
@@ -13,6 +14,7 @@ import {
   onChangeDateOfVisit,
   onChangeComments,
   infoNotification,
+  onChangeRespondentType,
 } from '../../actions';
 
 class GetResources extends Component {
@@ -57,9 +59,12 @@ class GetResources extends Component {
   }
 
   setDefaultValue() {
-    this.props.onChangeDateOfVisit(this.props.boundaryId, new Date());
-    this.props.onChangeGroupValue(this.props.boundaryId, '');
-    this.props.onChangeComments(this.props.boundaryId, '');
+    const { boundaryId, defaultRespondentType } = this.props;
+
+    this.props.onChangeDateOfVisit(boundaryId, new Date());
+    this.props.onChangeGroupValue(boundaryId, '');
+    this.props.onChangeComments(boundaryId, '');
+    this.props.onChangeRespondentType(boundaryId, defaultRespondentType);
   }
 
   render() {
@@ -80,11 +85,20 @@ GetResources.propTypes = {
   id: PropTypes.any,
   boundaryInfo: PropTypes.object,
   onChangeComments: PropTypes.func,
+  onChangeRespondentType: PropTypes.func,
+  defaultRespondentType: PropTypes.string,
 };
 
 const mapStateToProps = (state, ownProps) => {
   const { programs, selectedProgram } = state.programs;
-  const { students, answers, groupValues, dateOfVisits, comments } = state.assessmentEntry;
+  const {
+    students,
+    answers,
+    groupValues,
+    dateOfVisits,
+    comments,
+    respondentTypeVals,
+  } = state.assessmentEntry;
   const boundary = state.assessmentEntry.students.find((student) => {
     return ownProps.boundaryId === student.id;
   });
@@ -92,6 +106,8 @@ const mapStateToProps = (state, ownProps) => {
   const assessment = get(state.assessments.assessments, ownProps.assessmentId, {});
   const questionValues = Object.values(state.questions.questions);
   const questions = orderBy(questionValues, ['sequence'], ['asc']);
+
+  const defaultRespondentType = get(assessment, 'default_respondent_type');
 
   return {
     questions,
@@ -103,8 +119,12 @@ const mapStateToProps = (state, ownProps) => {
     groupValue: get(groupValues, ownProps.boundaryId, ''),
     dateOfVisit: get(dateOfVisits, ownProps.boundaryId, new Date()),
     comment: get(comments, ownProps.boundaryId, ''),
+    respondentTypeVal: get(respondentTypeVals, ownProps.boundaryId, defaultRespondentType),
     commentRequired: get(assessment, 'comments_required'),
     groupText: get(assessment, 'group_text'),
+    respondentTypes: filterRespondentTypes(state.respondentTypes.types),
+    respondentTypeRequired: get(assessment, 'respondenttype_required'),
+    defaultRespondentType,
   };
 };
 
@@ -116,6 +136,7 @@ const CreateEntryRow = connect(mapStateToProps, {
   onChangeDateOfVisit,
   infoNotification,
   onChangeComments,
+  onChangeRespondentType,
 })(GetResources);
 
 export { CreateEntryRow };

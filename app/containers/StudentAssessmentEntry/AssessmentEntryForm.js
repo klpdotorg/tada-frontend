@@ -12,6 +12,7 @@ import {
   fetchSelectedAssessmentQuestions,
   fetchStudentsForAssessmentEntry,
   getAssessments,
+  fetchRespondentTypes,
 } from '../../actions';
 import { checkAssessmentPermissions } from '../../utils';
 
@@ -33,6 +34,7 @@ class FetchAnswersAndQuestions extends Component {
       };
     });
     this.props.getAssessments(programId);
+    this.props.fetchRespondentTypes();
     this.props.fetchSelectedAssessmentQuestions(assessmentId, entities, programId);
     if (!isEmpty(boundary)) {
       this.props.fetchStudentsForAssessmentEntry(boundaryInfo);
@@ -107,6 +109,7 @@ const StudentsAnswersSheet = connect(mapStateToProps, {
   fetchSelectedAssessmentQuestions,
   fetchStudentsForAssessmentEntry,
   getAssessments,
+  fetchRespondentTypes,
 })(FetchAnswersAndQuestions);
 
 export { StudentsAnswersSheet };

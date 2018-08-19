@@ -19,6 +19,9 @@ const CreateEntryRowView = (props) => {
     comment,
     commentRequired,
     groupText,
+    respondentTypeRequired,
+    respondentTypes,
+    respondentTypeVal,
   } = props;
   return (
     <tr key={id}>
@@ -60,6 +63,20 @@ const CreateEntryRowView = (props) => {
           }}
         />
       </td>
+      {respondentTypeRequired ? (
+        <td>
+          <Select
+            options={respondentTypes}
+            style={{ minWidth: 100 }}
+            value={respondentTypeVal}
+            onChange={(val) => {
+              props.onChangeRespondentType(id, val.value);
+            }}
+          />
+        </td>
+      ) : (
+        <td style={{ display: 'none' }} />
+      )}
       {commentRequired ? (
         <td>
           <input
@@ -229,6 +246,10 @@ CreateEntryRowView.propTypes = {
   onChangeComments: PropTypes.func,
   commentRequired: PropTypes.bool,
   groupText: PropTypes.string,
+  onChangeRespondentType: PropTypes.func,
+  respondentTypes: PropTypes.array,
+  respondentTypeVal: PropTypes.string,
+  respondentTypeRequired: PropTypes.bool,
 };
 
 export { CreateEntryRowView };

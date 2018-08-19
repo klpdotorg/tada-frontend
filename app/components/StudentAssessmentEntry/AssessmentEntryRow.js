@@ -22,6 +22,9 @@ const AssessmentEntryRowView = (props) => {
     comment,
     groupText,
     disabled,
+    respondentTypes,
+    respondentTypeRequired,
+    respondentTypeVal,
   } = props;
   return (
     <tr>
@@ -68,6 +71,21 @@ const AssessmentEntryRowView = (props) => {
           }}
         />
       </td>
+      {respondentTypeRequired ? (
+        <td>
+          <Select
+            options={respondentTypes}
+            style={{ minWidth: 100 }}
+            value={respondentTypeVal}
+            disabled={disabled}
+            onChange={(val) => {
+              props.onChangeRespondentType(answergroupId, val.value);
+            }}
+          />
+        </td>
+      ) : (
+        <td style={{ display: 'none' }} />
+      )}
       {commentRequired ? (
         <td>
           <input
@@ -271,6 +289,11 @@ AssessmentEntryRowView.propTypes = {
   onChangeComments: PropTypes.func,
   commentRequired: PropTypes.bool,
   groupText: PropTypes.string,
+  onChangeRespondentType: PropTypes.func,
+  respondentTypes: PropTypes.array,
+  respondentTypeVal: PropTypes.string,
+  respondentTypeRequired: PropTypes.bool,
+  disabled: PropTypes.bool,
 };
 
 export { AssessmentEntryRowView };

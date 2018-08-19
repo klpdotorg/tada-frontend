@@ -13,7 +13,9 @@ import {
   onChangeDateOfVisit,
   infoNotification,
   onChangeComments,
+  onChangeRespondentType,
 } from '../../actions';
+import { filterRespondentTypes } from './utils';
 
 class GetResources extends Component {
   constructor() {
@@ -57,6 +59,7 @@ class GetResources extends Component {
   setDefaultValue(rows) {
     rows.forEach((row) => {
       this.props.onChangeDateOfVisit(row.id, new Date().toISOString());
+      this.props.onChangeRespondentType(row.id, this.props.defaultRespondentType);
     });
   }
 
@@ -95,16 +98,26 @@ GetResources.propTypes = {
   name: PropTypes.string,
   id: PropTypes.any,
   boundaryInfo: PropTypes.object,
+  onChangeRespondentType: PropTypes.func,
+  defaultRespondentType: PropTypes.string,
 };
 
 const mapStateToProps = (state, ownProps) => {
   const { programs, selectedProgram } = state.programs;
-  const { students, answers, groupValues, dateOfVisits, comments } = state.assessmentEntry;
+  const {
+    students,
+    answers,
+    groupValues,
+    dateOfVisits,
+    comments,
+    respondentTypeVals,
+  } = state.assessmentEntry;
   const boundary = get(state.programDetails.programDetails, ownProps.uniqueId, {});
   const program = get(programs, selectedProgram, {});
   const assessment = get(state.assessments.assessments, ownProps.assessmentId, {});
   const questionValues = Object.values(state.questions.questions);
   const questions = orderBy(questionValues, ['sequence'], ['asc']);
+  const defaultRespondentType = get(assessment, 'default_respondent_type');
 
   return {
     questions,
@@ -115,9 +128,13 @@ const mapStateToProps = (state, ownProps) => {
     students,
     groupValues,
     dateOfVisits,
+    respondentTypeVals,
     comments,
     commentRequired: get(assessment, 'comments_required'),
+    respondentTypeRequired: get(assessment, 'respondenttype_required'),
     groupText: get(assessment, 'group_text'),
+    respondentTypes: filterRespondentTypes(state.respondentTypes.types),
+    defaultRespondentType,
   };
 };
 
@@ -129,6 +146,7 @@ const CreateEntryForm = connect(mapStateToProps, {
   onChangeDateOfVisit,
   infoNotification,
   onChangeComments,
+  onChangeRespondentType,
 })(GetResources);
 
 export { CreateEntryForm };

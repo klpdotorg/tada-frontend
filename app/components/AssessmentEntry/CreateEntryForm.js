@@ -18,6 +18,9 @@ const CreateEntryFormView = (props) => {
     comments,
     commentRequired,
     groupText,
+    respondentTypes,
+    respondentTypeRequired,
+    respondentTypeVals,
   } = props;
   return (
     <tbody>
@@ -25,6 +28,7 @@ const CreateEntryFormView = (props) => {
         const groupValue = get(groupValues, row.id, '');
         const dateOfVisit = get(dateOfVisits, row.id, new Date());
         const comment = get(comments, row.id, '');
+        const respondentTypeVal = get(respondentTypeVals, row.id, '');
         return (
           <tr key={row.id}>
             <td>{row.id}</td>
@@ -68,6 +72,20 @@ const CreateEntryFormView = (props) => {
                 }}
               />
             </td>
+            {respondentTypeRequired ? (
+              <td>
+                <Select
+                  options={respondentTypes}
+                  style={{ minWidth: 100 }}
+                  value={respondentTypeVal}
+                  onChange={(val) => {
+                    props.onChangeRespondentType(row.id, val.value);
+                  }}
+                />
+              </td>
+            ) : (
+              <td style={{ display: 'none' }} />
+            )}
             {commentRequired ? (
               <td>
                 <input
@@ -231,6 +249,9 @@ CreateEntryFormView.propTypes = {
   comments: PropTypes.object,
   commentRequired: PropTypes.bool,
   groupText: PropTypes.string,
+  respondentTypes: PropTypes.array,
+  respondentTypeRequired: PropTypes.bool,
+  respondentTypeVals: PropTypes.object,
 };
 
 export { CreateEntryFormView };
