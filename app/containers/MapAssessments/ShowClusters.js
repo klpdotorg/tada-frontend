@@ -1,8 +1,16 @@
 import { connect } from 'react-redux';
 import get from 'lodash.get';
+import Loadable from 'react-loadable';
 
 import { selectClusterOfMA, selectAllClustersOfMA } from '../../actions';
-import { ShowClustersView } from '../../components/MapAssessments';
+import { Loading } from '../../components/common';
+
+const ShowClustersView = Loadable({
+  loader: () => {
+    return import('../../components/MapAssessments/ShowClusters');
+  },
+  loading: Loading,
+});
 
 const getBoundaries = (state) => {
   const boundaryIds = get(

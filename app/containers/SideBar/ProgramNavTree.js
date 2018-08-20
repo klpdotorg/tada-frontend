@@ -226,4 +226,4 @@ const ProgramNavTree = connect(mapStateToProps, {
   resetFilterByProgramRoute,
 })(NavTree);
 
-export { ProgramNavTree };
+export default ProgramNavTree;

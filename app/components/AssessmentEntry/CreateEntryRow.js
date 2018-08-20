@@ -252,4 +252,4 @@ CreateEntryRowView.propTypes = {
   respondentTypeRequired: PropTypes.bool,
 };
 
-export { CreateEntryRowView };
+export default CreateEntryRowView;

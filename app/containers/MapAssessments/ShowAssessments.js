@@ -1,8 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { ShowAssessmentsView } from '../../components/MapAssessments';
+import Loadable from 'react-loadable';
 import { getAssessments, selectAssessmentOfMA, resetAssessmentsOfMA } from '../../actions';
+import { Loading } from '../../components/common';
+
+const ShowAssessmentsView = Loadable({
+  loader: () => {
+    return import('../../components/MapAssessments/ShowAssessments');
+  },
+  loading: Loading,
+});
 
 class GetAssessments extends Component {
   componentWillReceiveProps(nextProps) {

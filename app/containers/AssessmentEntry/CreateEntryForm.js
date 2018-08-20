@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import get from 'lodash.get';
 import orderBy from 'lodash.orderby';
+import Loadable from 'react-loadable';
 
-import { CreateEntryFormView } from '../../components/AssessmentEntry';
 import {
   onChangeAssessmentEntry,
   createAnswerGroup,
@@ -16,6 +16,14 @@ import {
   onChangeRespondentType,
 } from '../../actions';
 import { filterRespondentTypes } from './utils';
+import { Loading } from '../../components/common';
+
+const CreateEntryFormView = Loadable({
+  loader: () => {
+    return import('../../components/AssessmentEntry/CreateEntryForm');
+  },
+  loading: Loading,
+});
 
 class GetResources extends Component {
   constructor() {

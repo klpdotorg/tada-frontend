@@ -1,8 +1,16 @@
 import { connect } from 'react-redux';
 import get from 'lodash.get';
 import flatten from 'lodash.flatten';
-import { ShowClassesView } from '../../components/MapAssessments';
+import Loadable from 'react-loadable';
 import { selectClassOfMa } from '../../actions';
+import { Loading } from '../../components/common';
+
+const ShowClassesView = Loadable({
+  loader: () => {
+    return import('../../components/MapAssessments/ShowClasses');
+  },
+  loading: Loading,
+});
 
 const getBoundaries = (state) => {
   const { classes } = state.mapAssessments;

@@ -64,4 +64,4 @@ RenderClasses.propTypes = {
   loading: PropTypes.bool,
 };
 
-export { ShowClassesView };
+export default ShowClassesView;

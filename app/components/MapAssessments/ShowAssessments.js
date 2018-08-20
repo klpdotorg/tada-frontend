@@ -62,8 +62,7 @@ const ShowAssessmentsView = (props) => {
 AssessmentList.propTypes = {
   assessments: PropTypes.array,
   selectedAssessments: PropTypes.array,
-  selectAssessment: PropTypes.func,
   loading: PropTypes.bool,
 };
 
-export { ShowAssessmentsView };
+export default ShowAssessmentsView;

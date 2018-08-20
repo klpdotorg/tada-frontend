@@ -5,7 +5,7 @@ import TreeView from 'react-treeview';
 import { Link } from 'react-router';
 import { DEFAULT_PARENT_NODE_ID } from 'config';
 
-import { capitalize, getEntityType } from '../../utils';
+import { capitalize } from '../../utils';
 import { filterBoundaries } from './utils';
 import {
   collapsedProgramEntity,
@@ -156,4 +156,4 @@ const PermissionsNavTree = connect(mapStateToProps, {
   openBoundary: openPermissionBoundary,
 })(NavTree);
 
-export { PermissionsNavTree };
+export default PermissionsNavTree;

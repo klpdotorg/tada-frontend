@@ -292,4 +292,4 @@ AssessmentEntryRowView.propTypes = {
   respondentTypeVal: PropTypes.string,
 };
 
-export { AssessmentEntryRowView };
+export default AssessmentEntryRowView;

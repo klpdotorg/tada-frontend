@@ -172,4 +172,4 @@ const SchoolsNavTree = connect(mapStateToProps, {
   openBoundary,
 })(NavTree);
 
-export { SchoolsNavTree };
+export default SchoolsNavTree;

@@ -2,7 +2,6 @@ const webpack = require('webpack');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const CompressionPlugin = require("compression-webpack-plugin");
 const path = require('path');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const configFile = require('./settings/config.json');
 
@@ -17,9 +16,27 @@ module.exports = {
     }),
     new UglifyJSPlugin({
       sourceMap: true,
+      parallel: true,
+      uglifyOptions: {
+        mangle: true,
+        warnings: false, // Suppress uglification warnings
+        compress: {
+          pure_getters: true,
+          unsafe: true,
+          unsafe_comps: true,
+          conditionals: true,
+          unused: true,
+          comparisons: true,
+          sequences: true,
+          dead_code: true,
+          evaluate: true,
+          if_return: true,
+          join_vars: true,
+        },
+      },
     }),
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('production')
+      'process.env.NODE_ENV': JSON.stringify('production'),
     }),
     new CompressionPlugin({
       asset: '[path].gz[query]',

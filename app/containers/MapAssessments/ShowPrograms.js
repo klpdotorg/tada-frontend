@@ -2,9 +2,17 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import isEmpty from 'lodash.isempty';
+import Loadable from 'react-loadable';
 
-import { ShowProgramsView } from '../../components/MapAssessments';
 import { getPrograms, selectProgram } from '../../actions';
+import { Loading } from '../../components/common';
+
+const ShowProgramsView = Loadable({
+  loader: () => {
+    return import('../../components/MapAssessments/ShowPrograms');
+  },
+  loading: Loading,
+});
 
 class GetAllPrograms extends Component {
   componentDidMount = () => {

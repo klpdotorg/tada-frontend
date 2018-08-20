@@ -44,4 +44,4 @@ ShowProgramsView.propTypes = {
   selectProgram: PropTypes.func,
 };
 
-export { ShowProgramsView };
+export default ShowProgramsView;
