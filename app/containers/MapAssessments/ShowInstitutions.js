@@ -1,9 +1,17 @@
 import { connect } from 'react-redux';
 import get from 'lodash.get';
 import flatten from 'lodash.flatten';
+import Loadable from 'react-loadable';
 
 import { selectInstitutionOfMA, selectAllInstitutionsOfMA } from '../../actions';
-import { ShowInstitutionsView } from '../../components/MapAssessments';
+import { Loading } from '../../components/common';
+
+const ShowInstitutionsView = Loadable({
+  loader: () => {
+    return import('../../components/MapAssessments/ShowInstitutions');
+  },
+  loading: Loading,
+});
 
 const getBoundaries = (state) => {
   const { institutions } = state.mapAssessments;

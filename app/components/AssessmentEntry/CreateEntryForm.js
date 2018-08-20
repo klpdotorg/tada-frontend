@@ -254,4 +254,4 @@ CreateEntryFormView.propTypes = {
   respondentTypeVals: PropTypes.object,
 };
 
-export { CreateEntryFormView };
+export default CreateEntryFormView;

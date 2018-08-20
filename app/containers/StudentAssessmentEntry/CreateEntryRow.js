@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import get from 'lodash.get';
 import orderBy from 'lodash.orderby';
+import Loadable from 'react-loadable';
 
-import { CreateEntryRowView } from '../../components/AssessmentEntry';
 import { filterRespondentTypes } from '../AssessmentEntry/utils';
 import {
   onChangeAssessmentEntry,
@@ -16,6 +16,14 @@ import {
   infoNotification,
   onChangeRespondentType,
 } from '../../actions';
+import { Loading } from '../../components/common';
+
+const CreateEntryRowView = Loadable({
+  loader: () => {
+    return import('../../components/AssessmentEntry/CreateEntryRow');
+  },
+  loading: Loading,
+});
 
 class GetResources extends Component {
   constructor() {

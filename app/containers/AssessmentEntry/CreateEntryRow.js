@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import get from 'lodash.get';
 import orderBy from 'lodash.orderby';
+import Loadable from 'react-loadable';
 
-import { CreateEntryRowView } from '../../components/AssessmentEntry';
 import {
   onChangeAssessmentEntry,
   createAnswerGroup,
@@ -16,6 +16,14 @@ import {
   onChangeRespondentType,
 } from '../../actions';
 import { filterRespondentTypes } from './utils';
+import { Loading } from '../../components/common';
+
+const CreateEntryRowView = Loadable({
+  loader: () => {
+    return import('../../components/AssessmentEntry/CreateEntryRow');
+  },
+  loading: Loading,
+});
 
 class GetResources extends Component {
   constructor() {
@@ -28,7 +36,6 @@ class GetResources extends Component {
 
   componentDidMount() {
     const { id, questions, defaultRespondentType } = this.props;
-    console.log(id, defaultRespondentType);
     if (questions.length) {
       this.setDefaultValue([
         {

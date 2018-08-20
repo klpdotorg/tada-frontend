@@ -63,12 +63,10 @@ const ShowInstitutionsView = (props) => {
 };
 
 ShowInstitutionsView.propTypes = {
-  selectInstitution: PropTypes.func,
-  selectedAllInstitutions: PropTypes.bool,
   selectedInstitutions: PropTypes.array,
   institutions: PropTypes.array,
   selectAllInstitutions: PropTypes.func,
   loading: PropTypes.bool,
 };
 
-export { ShowInstitutionsView };
+export default ShowInstitutionsView;

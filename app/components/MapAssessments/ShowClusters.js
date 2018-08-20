@@ -76,9 +76,7 @@ ShowClustersView.propTypes = {
   clusters: PropTypes.array,
   selectedClusters: PropTypes.array,
   selectAllClusters: PropTypes.func,
-  selectCluster: PropTypes.func,
-  selectedAllClusters: PropTypes.bool,
   loading: PropTypes.bool,
 };
 
-export { ShowClustersView };
+export default ShowClustersView;

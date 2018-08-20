@@ -6,6 +6,7 @@ import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
 import capitalize from 'lodash.capitalize';
 import moment from 'moment';
+import isEmpty from 'lodash.isempty';
 
 import {
   saveAssessment,
@@ -104,7 +105,7 @@ class EditAssessmentForm extends Component {
 
   render() {
     const { showRespondentTypes } = this.state;
-    const { isOpen, canSubmit, assessment } = this.props;
+    const { isOpen, canSubmit, assessment, types, error } = this.props;
     const respondentTypes = this.filterRespondentTypes();
     // const surveyTypes = [
     //   { value: 'institution', label: 'Institution' },
@@ -115,11 +116,7 @@ class EditAssessmentForm extends Component {
       { value: 'primary', label: 'Primary School' },
       { value: 'pre', label: 'Pre School' },
     ];
-    const types = [
-      { value: 'assessment', label: 'Assessment' },
-      { value: 'preception', label: 'Perception' },
-      { value: 'monitor', label: 'Monitor' },
-    ];
+
     const sources = this.getSources();
     return (
       <Modal
@@ -141,6 +138,20 @@ class EditAssessmentForm extends Component {
             this.myform = ref;
           }}
         >
+          {!isEmpty(error) ? (
+            <div className="alert alert-danger">
+              {Object.keys(error).map((key) => {
+                const value = error[key];
+                return (
+                  <p key={key}>
+                    <strong>{key}:</strong> {value[0]}
+                  </p>
+                );
+              })}
+            </div>
+          ) : (
+            <span />
+          )}
           <Input
             name="assessmentName"
             id="assessmentName"
@@ -270,6 +281,8 @@ EditAssessmentForm.propTypes = {
   closeConfirmModal: PropTypes.func,
   sources: PropTypes.array,
   respondentTypes: PropTypes.array,
+  types: PropTypes.array,
+  error: PropTypes.object,
 };
 
 const mapStateToProps = (state) => {
@@ -284,6 +297,8 @@ const mapStateToProps = (state) => {
     assessment: get(state.assessments.assessments, editAssessmentId, {}),
     respondentTypes: state.respondentTypes.types,
     sources,
+    types: state.questiongroupTypes.types,
+    error: state.assessments.error,
   };
 };
 

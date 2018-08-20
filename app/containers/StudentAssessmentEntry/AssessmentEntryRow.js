@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import get from 'lodash.get';
 import PropTypes from 'prop-types';
 import orderBy from 'lodash.orderby';
+import Loadable from 'react-loadable';
 
-import { AssessmentEntryRowView } from '../../components/StudentAssessmentEntry';
 import { filterRespondentTypes } from '../AssessmentEntry/utils';
 import {
   onChangeAnswer,
@@ -16,6 +16,14 @@ import {
   onChangeRespondentType,
 } from '../../actions';
 import { checkAnswergroupPermission } from '../../utils';
+import { Loading } from '../../components/common';
+
+const AssessmentEntryRowView = Loadable({
+  loader: () => {
+    return import('../../components/StudentAssessmentEntry/AssessmentEntryRow');
+  },
+  loading: Loading,
+});
 
 class SetDefaultValues extends Component {
   componentDidMount() {

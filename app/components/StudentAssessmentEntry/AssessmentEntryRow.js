@@ -296,4 +296,4 @@ AssessmentEntryRowView.propTypes = {
   disabled: PropTypes.bool,
 };
 
-export { AssessmentEntryRowView };
+export default AssessmentEntryRowView;

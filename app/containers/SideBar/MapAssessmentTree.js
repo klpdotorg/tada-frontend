@@ -161,4 +161,4 @@ const MapAssessmentTree = connect(mapStateToProps, {
   fetchBoundariesOfMA,
 })(NavTree);
 
-export { MapAssessmentTree };
+export default MapAssessmentTree;
