@@ -160,13 +160,25 @@ export const saveAssessment = (options) => {
     const { editAssessmentId } = state.assessments;
     const editAssessmentURL = `${serverApiBase}surveys/${selectedProgram}/questiongroup/${editAssessmentId}/`;
 
-    patch(editAssessmentURL, options).then(({ data }) => {
-      dispatch(assessmentCreated(data));
-      dispatch({
-        type: TOGGLE_MODAL,
-        modal: 'editAssessment',
-      });
-      dispatch(closeAssessmentLoading());
+    dispatch({
+      type: CREATE_ASSESSMENT_ERROR,
+      value: {},
+    });
+
+    patch(editAssessmentURL, options).then((response) => {
+      if (response.status === 200) {
+        dispatch(assessmentCreated(response.data));
+        dispatch({
+          type: TOGGLE_MODAL,
+          modal: 'editAssessment',
+        });
+        dispatch(closeAssessmentLoading());
+      } else {
+        dispatch({
+          type: CREATE_ASSESSMENT_ERROR,
+          value: response.data,
+        });
+      }
     });
   };
 };
