@@ -112,7 +112,6 @@ white (#ffffff)
 /* Move down content because we have a fixed navbar that is 50px tall */
 body {
   font-family: Lato !important;
-  padding-top: 50px;
 }
 
 hr {
@@ -231,6 +230,7 @@ div.well{
 .inst-tabs {
   padding-top: 20px;
   padding-left: 20px;
+  margin-top: 45px;
 }
 
 .primary-school-tab-active {
@@ -1031,13 +1031,12 @@ table.table-fixedwidth td, .table-fixedwidth th {
   margin-top: 30px;
 }
 .klpImage {
-  width: 226px;
-  height: 205px;
+  width: 272px;
+  height: 250px;
   background: #FFFFFF;
-  padding: 12px;
+  padding: 40px;
   border-radius: 7px;
 }
-
 ::-webkit-scrollbar {
   -webkit-appearance: none;
   /*width: 7px;*/
@@ -1068,3 +1067,19 @@ a {
   flex: 1;
   margin: 0px;
 }
+
+/*table-fixed thead {
+  width: 97%;
+}
+.table-fixed tbody {
+  height: 230px;
+  overflow-y: auto;
+  width: 100%;
+}
+.table-fixed thead, .table-fixed tbody, .table-fixed tr, .table-fixed td, .table-fixed th {
+  display: block;
+}
+.table-fixed tbody td, .table-fixed thead > tr> th {
+  float: left;
+  border-bottom-width: 0;
+}*/

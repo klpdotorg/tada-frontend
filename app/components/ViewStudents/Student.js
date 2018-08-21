@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import isEmpty from 'lodash.isempty';
 import get from 'lodash.get';
-import moment from 'moment';
+import { DDMMYYYYFormat } from '../../utils';
 
 const StudentView = (props) => {
   const { student, hasPermissions, canDelete, languages } = props;
@@ -26,7 +26,7 @@ const StudentView = (props) => {
   if (isEmpty(student)) {
     return <tr />;
   }
-
+  console.log(DDMMYYYYFormat(dob));
   return (
     <tr>
       {/* <td>
@@ -56,7 +56,7 @@ const StudentView = (props) => {
         <span>{get(langVal, 'label', '')}</span>
       </td>
       <td>
-        <span>{moment(dob).format('DD-MM-YYYY')}</span>
+        <span>{DDMMYYYYFormat(dob)}</span>
       </td>
       <td>
         <span>{father_name}</span>
@@ -104,9 +104,7 @@ StudentView.propTypes = {
   hasPermissions: PropTypes.bool,
   canDelete: PropTypes.bool,
   student: PropTypes.object,
-  selectedStudents: PropTypes.array,
   openEditStudentModal: PropTypes.func,
-  selectStudent: PropTypes.func,
   deleteStudent: PropTypes.func,
   studentGroupNodeId: PropTypes.string,
   studentNodeId: PropTypes.string,

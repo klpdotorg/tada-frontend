@@ -3,7 +3,6 @@ import isEmpty from 'lodash.isempty';
 import includes from 'lodash.includes';
 import forEach from 'lodash.foreach';
 import range from 'lodash.range';
-import moment from 'moment';
 
 import { DEFAULT_PARENT_ID } from 'config';
 import { getBoundaryType } from './reducers/utils';
@@ -110,8 +109,96 @@ export const toggleSet = (set, val) => {
   return set;
 };
 
+export const getDateWithDateAndTime = (date) => {
+  let newDate = date;
+  if (!newDate) {
+    newDate = new Date();
+  } else {
+    newDate = new Date(newDate);
+  }
+
+  let dateVal = newDate.getDate();
+  if (dateVal < 10) {
+    dateVal = `0${dateVal}`;
+  }
+
+  let month = newDate.getMonth() + 1;
+  if (month < 10) {
+    month = `0${month}`;
+  }
+  let hours = newDate.getHours();
+
+  hours %= 12;
+
+  if (!hours) {
+    hours = 12;
+  }
+
+  if (month < 10) {
+    hours = `0${hours}`;
+  }
+
+  let minutes = newDate.getMinutes();
+  if (minutes < 10) {
+    minutes = `0${minutes}`;
+  }
+
+  return `${newDate.getFullYear()}-${month}-${dateVal}T${hours}:${minutes}`;
+};
+
+export const DDMMYYYYFormat = (date) => {
+  let newDate = date;
+  if (!newDate) {
+    newDate = new Date();
+  } else {
+    newDate = new Date(newDate);
+  }
+
+  let dateVal = newDate.getDate();
+  if (dateVal < 10) {
+    dateVal = `0${dateVal}`;
+  }
+
+  let month = newDate.getMonth() + 1;
+  if (month < 10) {
+    month = `0${month}`;
+  }
+
+  return `${dateVal}-${month}-${newDate.getFullYear()}`;
+};
+
+export const YYYYMMDDFormat = (date) => {
+  let newDate = date;
+  if (!newDate) {
+    newDate = new Date();
+  } else {
+    newDate = new Date(newDate);
+  }
+
+  let dateVal = newDate.getDate();
+  if (dateVal < 10) {
+    dateVal = `0${dateVal}`;
+  }
+
+  let month = newDate.getMonth() + 1;
+  if (month < 10) {
+    month = `0${month}`;
+  }
+
+  return `${newDate.getFullYear()}-${month}-${dateVal}`;
+};
+
+export const addYearToCurrentDate = () => {
+  const d = new Date();
+  const year = d.getFullYear();
+  const month = d.getMonth();
+  const day = d.getDate();
+
+  return new Date(year + 1, month, day);
+};
+
 export const dateFormat = (date) => {
-  return moment(date).format('YYYY-MM-DD');
+  return YYYYMMDDFormat(date);
 };
 
 export const getNodeId = (id) => {

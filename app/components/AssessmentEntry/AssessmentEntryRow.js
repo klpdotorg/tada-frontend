@@ -2,9 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import get from 'lodash.get';
 import Select from 'react-select';
-import moment from 'moment';
 
-import { dateFormat, between } from '../../utils';
+import { getDateWithDateAndTime, dateFormat, between } from '../../utils';
 
 const AssessmentEntryRowView = (props) => {
   const {
@@ -65,10 +64,7 @@ const AssessmentEntryRowView = (props) => {
           className="form-control"
           disabled={disabled}
           onChange={(e) => {
-            props.onChangeDateOfVisit(
-              answergroupId,
-              moment(e.target.value).format('YYYY-MM-DDThh:mm'),
-            );
+            props.onChangeDateOfVisit(answergroupId, getDateWithDateAndTime(e.target.value));
           }}
         />
       </td>
