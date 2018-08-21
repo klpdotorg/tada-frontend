@@ -2,9 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import get from 'lodash.get';
 import Select from 'react-select';
-import moment from 'moment';
 
-import { dateFormat, between } from '../../utils';
+import { getDateWithDateAndTime, dateFormat, between } from '../../utils';
 
 const CreateEntryFormView = (props) => {
   const {
@@ -65,10 +64,7 @@ const CreateEntryFormView = (props) => {
                 required
                 className="form-control"
                 onChange={(e) => {
-                  props.onChangeDateOfVisit(
-                    row.id,
-                    moment(e.target.value).format('YYYY-MM-DDThh:mm'),
-                  );
+                  props.onChangeDateOfVisit(row.id, getDateWithDateAndTime(e.target.value));
                 }}
               />
             </td>

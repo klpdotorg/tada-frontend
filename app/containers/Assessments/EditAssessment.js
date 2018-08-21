@@ -5,7 +5,6 @@ import get from 'lodash.get';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
 import capitalize from 'lodash.capitalize';
-import moment from 'moment';
 import isEmpty from 'lodash.isempty';
 
 import {
@@ -16,6 +15,7 @@ import {
 } from '../../actions';
 import { lastVerifiedYears } from '../../Data';
 import { Modal } from '../../components/Modal';
+import { dateFormat, addYearToCurrentDate } from '../../utils';
 
 const { Input, Checkbox, Select } = FRC;
 
@@ -39,17 +39,15 @@ class EditAssessmentForm extends Component {
   }
 
   setStartDate(date) {
-    return moment(date).format('YYYY-MM-DD');
+    return dateFormat(date);
   }
 
   setEndDate(date) {
     if (!date) {
-      return moment()
-        .add(1, 'year')
-        .format('YYYY-MM-DD');
+      return dateFormat(addYearToCurrentDate());
     }
 
-    return moment(date).format('YYYY-MM-DD');
+    return dateFormat(date);
   }
 
   getSources() {
@@ -107,11 +105,7 @@ class EditAssessmentForm extends Component {
     const { showRespondentTypes } = this.state;
     const { isOpen, canSubmit, assessment, types, error } = this.props;
     const respondentTypes = this.filterRespondentTypes();
-    // const surveyTypes = [
-    //   { value: 'institution', label: 'Institution' },
-    //   { value: 'class', label: 'Class' },
-    //   { value: 'student', label: 'Student' },
-    // ];
+
     const institutionTypes = [
       { value: 'primary', label: 'Primary School' },
       { value: 'pre', label: 'Pre School' },

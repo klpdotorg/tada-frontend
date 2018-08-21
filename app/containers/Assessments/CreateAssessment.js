@@ -7,7 +7,6 @@ import get from 'lodash.get';
 import isEmpty from 'lodash.isempty';
 import capitalize from 'lodash.capitalize';
 import { DEFAULT_YEAR } from 'config';
-import moment from 'moment';
 
 import {
   saveNewAssessment,
@@ -19,7 +18,7 @@ import {
   fetchQuestiongroupTypes,
 } from '../../actions';
 import { Modal } from '../../components/Modal';
-import { dateFormat } from '../../utils';
+import { dateFormat, addYearToCurrentDate } from '../../utils';
 import { lastVerifiedYears } from '../../Data';
 
 const { Input, Checkbox, Select } = FRC;
@@ -48,9 +47,7 @@ class CreateAssessmentForm extends Component {
   }
 
   setEndDate() {
-    return moment()
-      .add(1, 'year')
-      .format('YYYY-MM-DD');
+    return dateFormat(addYearToCurrentDate());
   }
 
   getSources() {
