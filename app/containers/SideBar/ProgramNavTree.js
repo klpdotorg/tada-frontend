@@ -62,6 +62,7 @@ class NavTree extends Component {
       capitalize(entity.label) || capitalize(entity.name) || capitalize(entity.first_name);
     const contain = has(entity, ['assessments']);
     if (contain) {
+      const selectedId = Number(this.props.assessmentNode) !== Number(node.uniqueId);
       return (
         <TreeView
           key={node.uniqueId}
@@ -70,24 +71,25 @@ class NavTree extends Component {
             this.props.selectAssessmentNode(node.uniqueId);
             this.props.openBoundary(node.uniqueId, newDepth);
           }}
-          collapsed={Number(this.props.assessmentNode) !== Number(node.uniqueId)}
+          collapsed={selectedId}
         >
-          {node.entity.assessments.map((assessment) => {
-            const selected = this.props.selectedEntityId === `${assessment.id}${node.uniqueId}`;
+          {!selectedId &&
+            node.entity.assessments.map((assessment) => {
+              const selected = this.props.selectedEntityId === `${assessment.id}${node.uniqueId}`;
 
-            return (
-              <button
-                key={assessment.id}
-                onClick={() => {
-                  this.props.openBoundary(node.uniqueId, newDepth, assessment.id);
-                }}
-                className="filterbyprogram-link"
-                style={selected ? { background: '#3379b7', color: 'white' } : {}}
-              >
-                {assessment.name}
-              </button>
-            );
-          })}
+              return (
+                <button
+                  key={assessment.id}
+                  onClick={() => {
+                    this.props.openBoundary(node.uniqueId, newDepth, assessment.id);
+                  }}
+                  className="filterbyprogram-link"
+                  style={selected ? { background: '#3379b7', color: 'white' } : {}}
+                >
+                  {assessment.name}
+                </button>
+              );
+            })}
         </TreeView>
       );
     }
@@ -107,9 +109,10 @@ class NavTree extends Component {
         nodeLabel={label}
         collapsed={!collapsed}
       >
-        {treeNodes.map((child, i) => {
-          return this.renderSubTree(child, i + 1, newDepth);
-        })}
+        {collapsed &&
+          treeNodes.map((child, i) => {
+            return this.renderSubTree(child, i + 1, newDepth);
+          })}
         {!treeNodes.length && this.props.loading ? <Loading /> : <span />}
       </TreeView>
     );
@@ -226,4 +229,4 @@ const ProgramNavTree = connect(mapStateToProps, {
   resetFilterByProgramRoute,
 })(NavTree);
 
-export default ProgramNavTree;
+export { ProgramNavTree };

@@ -1,5 +1,6 @@
 import { SERVER_API_BASE } from 'config';
 import Notifications from 'react-notification-system-redux';
+import isEmpty from 'lodash.isempty';
 
 import { SET_QUESTION_TYPES } from './types';
 
@@ -15,19 +16,22 @@ const filterTypes = (types) => {
 };
 
 export const fetchQuestionTypes = () => {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const state = getState();
     const url = `${SERVER_API_BASE}surveys/questiontype/`;
-    get(url).then((response) => {
-      if (response.status === 200) {
-        const { data } = response;
-        const types = filterTypes(data.results);
-        dispatch({
-          type: SET_QUESTION_TYPES,
-          value: types,
-        });
-      } else {
-        Notifications.error(errorNotification('Error!', 'Error in fetching question types'));
-      }
-    });
+    if (isEmpty(state.questionTypes.types)) {
+      get(url).then((response) => {
+        if (response.status === 200) {
+          const { data } = response;
+          const types = filterTypes(data.results);
+          dispatch({
+            type: SET_QUESTION_TYPES,
+            value: types,
+          });
+        } else {
+          Notifications.error(errorNotification('Error!', 'Error in fetching question types'));
+        }
+      });
+    }
   };
 };

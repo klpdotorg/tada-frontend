@@ -92,7 +92,7 @@ class NavTree extends Component {
         nodeLabel={name}
         collapsed={!collapsed}
       >
-        {depth <= 2 ? (
+        {depth <= 2 && collapsed ? (
           treeNodes.map((child, i) => {
             return this.renderSubTree(child, i + 1, newDepth);
           })
@@ -156,4 +156,4 @@ const PermissionsNavTree = connect(mapStateToProps, {
   openBoundary: openPermissionBoundary,
 })(NavTree);
 
-export default PermissionsNavTree;
+export { PermissionsNavTree };

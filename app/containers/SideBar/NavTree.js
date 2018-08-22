@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import TreeView from 'react-treeview';
@@ -23,7 +23,7 @@ const getLabel = (boundary) => {
   return capitalize(boundary.first_name);
 };
 
-class NavTree extends Component {
+class NavTree extends React.PureComponent {
   componentDidMount() {
     this.props.getBoundariesEntities([{ depth: 0, uniqueId: DEFAULT_PARENT_NODE_ID }]);
   }
@@ -99,7 +99,7 @@ class NavTree extends Component {
         nodeLabel={name}
         collapsed={!collapsed}
       >
-        {depth <= 3 ? (
+        {depth <= 3 && collapsed ? (
           treeNodes.map((child, i) => {
             return this.renderSubTree(child, i + 1, newDepth);
           })
@@ -172,4 +172,4 @@ const SchoolsNavTree = connect(mapStateToProps, {
   openBoundary,
 })(NavTree);
 
-export default SchoolsNavTree;
+export { SchoolsNavTree };

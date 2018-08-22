@@ -3,37 +3,38 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Loadable from 'react-loadable';
 
+import { SchoolsNavTree, PermissionsNavTree, ProgramNavTree, MapAssessmentTree } from './index';
 import { SideBarWrapper } from '../../components/SideBar';
 import { getEntity, setParentNode } from '../../actions';
 import { Loading } from '../../components/common';
 
-const SchoolsNavTree = Loadable({
-  loader: () => {
-    return import('./NavTree');
-  },
-  loading: Loading,
-});
+// const SchoolsNavTree = Loadable({
+//   loader: () => {
+//     return import('./NavTree');
+//   },
+//   loading: Loading,
+// });
 
-const PermissionsNavTree = Loadable({
-  loader: () => {
-    return import('./PermissionsNavTree');
-  },
-  loading: Loading,
-});
+// const PermissionsNavTree = Loadable({
+//   loader: () => {
+//     return import('./PermissionsNavTree');
+//   },
+//   loading: Loading,
+// });
 
-const ProgramNavTree = Loadable({
-  loader: () => {
-    return import('./ProgramNavTree');
-  },
-  loading: Loading,
-});
+// const ProgramNavTree = Loadable({
+//   loader: () => {
+//     return import('./ProgramNavTree');
+//   },
+//   loading: Loading,
+// });
 
-const MapAssessmentTree = Loadable({
-  loader: () => {
-    return import('./MapAssessmentTree');
-  },
-  loading: Loading,
-});
+// const MapAssessmentTree = Loadable({
+//   loader: () => {
+//     return import('./MapAssessmentTree');
+//   },
+//   loading: Loading,
+// });
 
 /*
   This function used to check which assessment entry form user is see
