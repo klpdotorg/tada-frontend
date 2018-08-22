@@ -23,7 +23,7 @@ const getLabel = (boundary) => {
   return capitalize(boundary.first_name);
 };
 
-class NavTree extends Component {
+class NavTree extends React.PureComponent {
   componentDidMount() {
     this.props.getBoundariesEntities([{ depth: 0, uniqueId: DEFAULT_PARENT_NODE_ID }]);
   }
@@ -172,4 +172,4 @@ const SchoolsNavTree = connect(mapStateToProps, {
   openBoundary,
 })(NavTree);
 
-export default SchoolsNavTree;
+export { SchoolsNavTree };

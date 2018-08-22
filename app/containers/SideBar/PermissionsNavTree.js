@@ -156,4 +156,4 @@ const PermissionsNavTree = connect(mapStateToProps, {
   openBoundary: openPermissionBoundary,
 })(NavTree);
 
-export default PermissionsNavTree;
+export { PermissionsNavTree };
