@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import TreeView from 'react-treeview';
@@ -99,7 +99,7 @@ class NavTree extends React.PureComponent {
         nodeLabel={name}
         collapsed={!collapsed}
       >
-        {depth <= 3 ? (
+        {depth <= 3 && collapsed ? (
           treeNodes.map((child, i) => {
             return this.renderSubTree(child, i + 1, newDepth);
           })

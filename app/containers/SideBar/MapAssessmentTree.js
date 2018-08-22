@@ -95,7 +95,7 @@ class NavTree extends Component {
         collapsed={!collapsed}
         itemClassName="mapassessment-treeNode-item"
       >
-        {depth <= 3
+        {depth <= 3 && collapsed
           ? treeNodes.map((child, i) => {
               return this.renderSubTree(child, i + 1, newDepth);
             })
