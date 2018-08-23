@@ -18,7 +18,7 @@ const mapStateToProps = (state, ownProps) => {
     mt: languages.find((lang) => {
       return lang.value === value.mt;
     }).value,
-    academic_year: value.academic_year,
+    // academic_year: value.academic_year,
     gender: value.gender,
   };
 

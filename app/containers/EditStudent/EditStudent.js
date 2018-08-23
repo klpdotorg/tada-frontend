@@ -38,7 +38,6 @@ class EditStudentForm extends Component {
       mt: myform.language,
       gender: myform.gender,
       dob: myform.dob,
-      academic_year: myform.academic_year,
       father_name: myform.father_name,
       mother_name: myform.mother_name,
       id: student.id,
@@ -59,7 +58,6 @@ class EditStudentForm extends Component {
       gender,
       mt,
       dob,
-      academic_year,
       father_name,
       mother_name,
     } = student;
@@ -190,7 +188,7 @@ class EditStudentForm extends Component {
               validations="minLength:1"
             />
           </div>
-          <div className="col-sm-12">
+          {/* <div className="col-sm-12">
             <Select
               name="academic_year"
               id="academic_year"
@@ -198,7 +196,7 @@ class EditStudentForm extends Component {
               value={this.getValue(academic_year) || '0607'}
               options={lastVerifiedYears}
             />
-          </div>
+          </div> */}
         </Formsy.Form>
       </Modal>
     );

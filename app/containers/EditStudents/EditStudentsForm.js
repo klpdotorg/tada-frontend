@@ -152,9 +152,9 @@ class EditStudentsFormView extends Component {
                 <th className="add-students-header-text">
                   Mother Tongue{this.setRequiredField('mt')}
                 </th>
-                <th className="add-students-header-text">
+                {/* <th className="add-students-header-text">
                   Academic Year{this.setRequiredField('academic_year')}
-                </th>
+                </th> */}
                 <th className="add-students-header-text">
                   Date of Birth{this.setRequiredField('dob')}
                 </th>

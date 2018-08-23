@@ -26,7 +26,6 @@ const StudentView = (props) => {
   if (isEmpty(student)) {
     return <tr />;
   }
-  console.log(DDMMYYYYFormat(dob));
   return (
     <tr>
       {/* <td>
