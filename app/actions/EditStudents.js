@@ -30,7 +30,6 @@ export const setEditStudents = (depth) => {
     const Ids = state.boundaries.boundariesByParentId[depth];
     Ids.forEach((id) => {
       const value = state.boundaries.boundaryDetails[id];
-      value.academic_year = '0607';
 
       dispatch({
         type: EDIT_STUDENTS_FORM_VALUE_CHANGED,

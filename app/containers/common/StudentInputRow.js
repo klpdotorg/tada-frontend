@@ -126,7 +126,7 @@ class StudentInputRow extends Component {
             })}
           </select>
         </td>
-        <td>
+        {/* <td>
           <select
             onChange={(e) => {
               this.changeVal(e, 'academic_year');
@@ -144,7 +144,7 @@ class StudentInputRow extends Component {
               );
             })}
           </select>
-        </td>
+        </td> */}
         <td>
           <input
             value={this.state.dob}

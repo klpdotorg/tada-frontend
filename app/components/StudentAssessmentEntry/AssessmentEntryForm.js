@@ -97,7 +97,7 @@ class AssessmentEntryFormView extends Component {
           <span />
         )}
         <div className="answer-table">
-          <table className="table table-striped">
+          <table className="table table-striped header-fixed" style={{ marginBottom: 0 }}>
             <thead>
               <AssessmentEntryColHeader
                 assessmentId={params.questionGroupId}

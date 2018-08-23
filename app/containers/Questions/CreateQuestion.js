@@ -37,7 +37,7 @@ class CreateQuestionForm extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.types !== this.props.types) {
+    if (nextProps.isOpen !== this.props.isOpen) {
       const Id = get(nextProps.types, '[0].id', '');
       this.handleTypeChange(null, Id);
     }

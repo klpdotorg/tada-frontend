@@ -24,9 +24,9 @@ const CreateEntryRowView = (props) => {
   } = props;
   return (
     <tr key={id}>
-      <td>{id}</td>
+      <td className="id-field">{id}</td>
       <td
-        className="td-student-name"
+        className="td-student-name text-field"
         colSpan="2"
         data-toggle="popover"
         data-trigger="focus"
@@ -36,7 +36,7 @@ const CreateEntryRowView = (props) => {
         {name}
       </td>
       {groupText ? (
-        <td className="answer-field">
+        <td className="answer-field input-field">
           <input
             value={groupValue}
             type="text"
@@ -50,7 +50,7 @@ const CreateEntryRowView = (props) => {
       ) : (
         <td style={{ display: 'none' }} />
       )}
-      <td className="answer-field">
+      <td className="answer-field multi-select">
         <input
           value={dateFormat(dateOfVisit)}
           // data-date-format="dd-mm-yyyy"
@@ -63,10 +63,9 @@ const CreateEntryRowView = (props) => {
         />
       </td>
       {respondentTypeRequired ? (
-        <td>
+        <td className="multi-select">
           <Select
             options={respondentTypes}
-            style={{ minWidth: 100 }}
             value={respondentTypeVal}
             onChange={(val) => {
               props.onChangeRespondentType(id, val.value);
@@ -77,7 +76,7 @@ const CreateEntryRowView = (props) => {
         <td style={{ display: 'none' }} />
       )}
       {commentRequired ? (
-        <td>
+        <td className="input-field">
           <input
             value={comment}
             type="text"
@@ -103,10 +102,9 @@ const CreateEntryRowView = (props) => {
 
         if (questionType === 'CheckBox') {
           return (
-            <td key={question.id} className="answer-field">
+            <td key={question.id} className="answer-field multi-select">
               <Select
                 name="form-field-name"
-                style={{ minWidth: 200 }}
                 value={value}
                 menuContainerStyle={{ zIndex: 9999 }}
                 multi
@@ -129,7 +127,7 @@ const CreateEntryRowView = (props) => {
 
         if (questionType === 'Radio') {
           return (
-            <td key={question.id} className="answer-field">
+            <td key={question.id} className="answer-field multi-select">
               <Select
                 options={options.map((val) => {
                   return {
@@ -137,7 +135,6 @@ const CreateEntryRowView = (props) => {
                     value: val,
                   };
                 })}
-                style={{ minWidth: 100 }}
                 value={value}
                 onChange={(val) => {
                   const newVal = val ? val.value : '';
@@ -150,7 +147,7 @@ const CreateEntryRowView = (props) => {
 
         if (questionType === 'NumericBox') {
           return (
-            <td key={question.id} className="answer-field">
+            <td key={question.id} className="answer-field input-field">
               <input
                 id={question.id}
                 value={value}
@@ -176,7 +173,7 @@ const CreateEntryRowView = (props) => {
 
         if (questionType === 'Date') {
           return (
-            <td key={question.id} className="answer-field">
+            <td key={question.id} className="answer-field multi-select">
               <input
                 id={question.id}
                 value={value}
@@ -193,7 +190,7 @@ const CreateEntryRowView = (props) => {
         }
 
         return (
-          <td key={question.id} className="answer-field">
+          <td key={question.id} className="answer-field input-field">
             <input
               id={question.id}
               value={value}
@@ -207,7 +204,7 @@ const CreateEntryRowView = (props) => {
           </td>
         );
       })}
-      <td>
+      <td className="input-field">
         <button
           onClick={() => {
             props.onSave({
