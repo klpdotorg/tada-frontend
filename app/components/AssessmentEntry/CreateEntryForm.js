@@ -30,9 +30,9 @@ const CreateEntryFormView = (props) => {
         const respondentTypeVal = get(respondentTypeVals, row.id, '');
         return (
           <tr key={row.id}>
-            <td>{row.id}</td>
+            <td className="id-field">{row.id}</td>
             <td
-              className="td-student-name"
+              className="td-student-name text-field"
               colSpan="2"
               data-toggle="popover"
               data-trigger="focus"
@@ -42,7 +42,7 @@ const CreateEntryFormView = (props) => {
               {row.name}
             </td>
             {groupText ? (
-              <td className="answer-field">
+              <td className="answer-field input-field">
                 <input
                   value={groupValue}
                   type="text"
@@ -56,7 +56,7 @@ const CreateEntryFormView = (props) => {
             ) : (
               <td style={{ display: 'none' }} />
             )}
-            <td className="answer-field">
+            <td className="answer-field multi-select">
               <input
                 value={dateFormat(dateOfVisit)}
                 // data-date-format="dd-mm-yyyy"
@@ -69,10 +69,9 @@ const CreateEntryFormView = (props) => {
               />
             </td>
             {respondentTypeRequired ? (
-              <td>
+              <td className="multi-select">
                 <Select
                   options={respondentTypes}
-                  style={{ minWidth: 100 }}
                   value={respondentTypeVal}
                   onChange={(val) => {
                     props.onChangeRespondentType(row.id, val.value);
@@ -83,7 +82,7 @@ const CreateEntryFormView = (props) => {
               <td style={{ display: 'none' }} />
             )}
             {commentRequired ? (
-              <td>
+              <td className="input-field">
                 <input
                   value={comment}
                   type="text"
@@ -108,10 +107,9 @@ const CreateEntryFormView = (props) => {
 
               if (questionType === 'CheckBox') {
                 return (
-                  <td key={question.id} className="answer-field">
+                  <td key={question.id} className="answer-field multi-select">
                     <Select
                       name="form-field-name"
-                      style={{ minWidth: 200 }}
                       value={value}
                       menuContainerStyle={{ zIndex: 9999 }}
                       multi
@@ -134,10 +132,9 @@ const CreateEntryFormView = (props) => {
 
               if (questionType === 'Radio') {
                 return (
-                  <td key={question.id} className="answer-field">
+                  <td key={question.id} className="answer-field multi-select">
                     <Select
                       name="form-field-name"
-                      style={{ minWidth: 200 }}
                       value={value}
                       menuContainerStyle={{ zIndex: 9999 }}
                       onChange={(val) => {
@@ -157,7 +154,7 @@ const CreateEntryFormView = (props) => {
 
               if (questionType === 'NumericBox') {
                 return (
-                  <td key={question.id} className="answer-field">
+                  <td key={question.id} className="answer-field input-field">
                     <input
                       id={question.id}
                       value={value}
@@ -183,7 +180,7 @@ const CreateEntryFormView = (props) => {
 
               if (questionType === 'Date') {
                 return (
-                  <td key={question.id} className="answer-field">
+                  <td key={question.id} className="answer-field multi-select">
                     <input
                       id={question.id}
                       value={value}
@@ -199,7 +196,7 @@ const CreateEntryFormView = (props) => {
               }
 
               return (
-                <td key={question.id} className="answer-field">
+                <td key={question.id} className="answer-field input-field">
                   <input
                     id={question.id}
                     value={value}
@@ -213,7 +210,7 @@ const CreateEntryFormView = (props) => {
                 </td>
               );
             })}
-            <td>
+            <td className="input-field">
               <button
                 onClick={() => {
                   props.onSave({

@@ -1083,3 +1083,74 @@ a {
   float: left;
   border-bottom-width: 0;
 }*/
+
+
+.header-fixed .date-field {
+  width: 175px;
+}
+
+.header-fixed .multi-select {
+  width: 175px;
+}
+
+.header-fixed .input-field {
+  width: 120px;
+}
+
+.header-fixed .text-field {
+  width: 170px
+}
+
+.header-fixed .id-field {
+  width: 70px;
+}
+
+.header-fixed tr {
+  width: 100%;
+  display: inline-table;
+  table-layout: fixed;
+}
+
+.header-fixed {
+  height: 530px;
+  display: -moz-groupbox;
+}
+
+.header-fixed tbody {
+  overflow-y: scroll;
+  height: 495px;
+  /*width: 100%;*/
+  position: absolute;
+}
+
+/*.header-fixed {
+    width: 100%
+}
+
+.header-fixed > thead,
+.header-fixed > tbody,
+.header-fixed > thead > tr,
+.header-fixed > tbody > tr,
+.header-fixed > thead > tr > th,
+.header-fixed > tbody > tr > td {
+    display: block;
+}
+
+.header-fixed > tbody > tr:after,
+.header-fixed > thead > tr:after {
+    content: ' ';
+    display: block;
+    visibility: hidden;
+    clear: both;
+}
+
+.header-fixed > tbody {
+    overflow-y: auto;
+    height: 150px;
+}
+
+.header-fixed > tbody > tr > td,
+.header-fixed > thead > tr > th {
+    width: 20%;
+    float: left;
+}*/

@@ -28,9 +28,9 @@ const AssessmentEntryRowView = (props) => {
 
   return (
     <tr>
-      <td>{id}</td>
+      <td className="id-field">{id}</td>
       <td
-        className="td-student-name"
+        className="td-student-name text-field"
         colSpan="2"
         data-toggle="popover"
         data-trigger="focus"
@@ -40,7 +40,7 @@ const AssessmentEntryRowView = (props) => {
         {name}
       </td>
       {groupText ? (
-        <td>
+        <td className="input-field">
           <input
             value={groupValue}
             type="text"
@@ -55,7 +55,7 @@ const AssessmentEntryRowView = (props) => {
       ) : (
         <td style={{ display: 'none' }} />
       )}
-      <td>
+      <td className="date-field">
         <input
           value={dateFormat(dateOfVisit)}
           // data-date-format="dd-mm-yyyy"
@@ -69,7 +69,7 @@ const AssessmentEntryRowView = (props) => {
         />
       </td>
       {respondentTypeRequired ? (
-        <td>
+        <td className="multi-select">
           <Select
             options={respondentTypes}
             style={{ minWidth: 100 }}
@@ -84,7 +84,7 @@ const AssessmentEntryRowView = (props) => {
         <td style={{ display: 'none' }} />
       )}
       {commentRequired ? (
-        <td>
+        <td className="input-field">
           <input
             value={comment}
             type="text"
@@ -113,10 +113,9 @@ const AssessmentEntryRowView = (props) => {
         if (questionType === 'CheckBox') {
           const answerVal = get(currentVal, 'answer', []);
           return (
-            <td key={question.id} className="answer-field">
+            <td key={question.id} className="answer-field multi-select">
               <Select
                 name="form-field-name"
-                style={{ minWidth: 200 }}
                 value={answerVal}
                 menuContainerStyle={{ zIndex: 9999 }}
                 multi
@@ -144,7 +143,7 @@ const AssessmentEntryRowView = (props) => {
 
         if (questionType === 'Radio') {
           return (
-            <td key={question.id} className="answer-field">
+            <td key={question.id} className="answer-field multi-select">
               <Select
                 options={options.map((val) => {
                   return {
@@ -152,7 +151,6 @@ const AssessmentEntryRowView = (props) => {
                     value: val,
                   };
                 })}
-                style={{ minWidth: 100 }}
                 value={get(currentVal, 'answer', '')}
                 disabled={disabled}
                 onChange={(val) => {
@@ -170,7 +168,7 @@ const AssessmentEntryRowView = (props) => {
 
         if (questionType === 'NumericBox') {
           return (
-            <td key={question.id} className="answer-field">
+            <td key={question.id} className="answer-field input-field">
               <input
                 id={question.id}
                 value={get(currentVal, 'answer', '')}
@@ -201,7 +199,7 @@ const AssessmentEntryRowView = (props) => {
 
         if (questionType === 'Date') {
           return (
-            <td key={question.id} className="answer-field">
+            <td key={question.id} className="answer-field multi-select">
               <input
                 id={question.id}
                 value={get(currentVal, 'answer', '')}
@@ -223,7 +221,7 @@ const AssessmentEntryRowView = (props) => {
         }
 
         return (
-          <td key={question.id} className="answer-field">
+          <td key={question.id} className="answer-field input-field">
             <input
               id={question.id}
               value={get(currentVal, 'answer', '')}
@@ -242,7 +240,7 @@ const AssessmentEntryRowView = (props) => {
           </td>
         );
       })}
-      <td>
+      <td className="input-field">
         <button
           id={`save_${id}`}
           onClick={() => {
