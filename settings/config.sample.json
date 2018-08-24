@@ -1,0 +1,12 @@
+{
+  "SERVER_API_BASE": "",    // "{base_url}/api/v1/",
+  "SERVER_AUTH_BASE": "",   // "{base_url}/",
+  "SERVER_STATE_BASE": "",  // "https://klp.org.in/api/v1/",
+  "REPORTS_EMAIL": "dev@klp.org.in",
+  "DEFAULT_PARENT_ID": 2,
+  "STATE_CODE": "ka",
+  "DEFAULT_PARENT_NODE_ID": "2state",
+  "DEFAULT_PROGRAM_NODE_ID": "1state",
+  "PER_PAGE": 20,
+  "DEFAULT_YEAR": "1819"
+}
