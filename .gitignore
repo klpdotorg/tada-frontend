@@ -1,6 +1,9 @@
 # Build files
 dist/
 
+#Config file
+settings/*
+
 # nightwatch
 test/integration/reports/*
 
@@ -18,9 +21,6 @@ Desktop.ini
 
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
-
-# Config file
-settings/config.json
 
 # Windows Installer files
 *.cab
