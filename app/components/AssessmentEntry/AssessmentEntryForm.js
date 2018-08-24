@@ -16,7 +16,7 @@ const RenderForm = (props) => {
   const { loading, params, uniqueId, rows, boundaryInfo, elements, noQuestions, canView } = props;
 
   if (loading || noQuestions || !canView) {
-    return <tbody />;
+    return <tbody style={{ height: window.innerHeight - 350 }} />;
   }
 
   if (!rows.length) {
@@ -31,7 +31,7 @@ const RenderForm = (props) => {
   }
 
   return (
-    <tbody>
+    <tbody style={{ height: window.innerHeight - 350 }}>
       {rows.map((rowId) => {
         return (
           <AssessmentEntryRow
@@ -109,8 +109,11 @@ class AssessmentEntryFormView extends Component {
         ) : (
           <span />
         )}
-        <div className="answer-table">
-          <table className="table table-striped header-fixed" style={{ marginBottom: 0 }}>
+        <div className="answer-table" style={{ height: window.innerHeight - 300 + 10 }}>
+          <table
+            className="table table-striped header-fixed"
+            style={{ marginBottom: 0, height: window.innerHeight - 300 }}
+          >
             <thead>
               <AssessmentEntryColHeader
                 assessmentId={params.questionGroupId}

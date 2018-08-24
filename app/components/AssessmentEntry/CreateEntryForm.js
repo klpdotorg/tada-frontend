@@ -22,7 +22,7 @@ const CreateEntryFormView = (props) => {
     respondentTypeVals,
   } = props;
   return (
-    <tbody>
+    <tbody style={{ height: window.innerHeight - 350 }}>
       {rows.map((row) => {
         const groupValue = get(groupValues, row.id, '');
         const dateOfVisit = get(dateOfVisits, row.id, new Date());

@@ -9,7 +9,11 @@ const PaginationView = (props) => {
   const values = generatePagination(current, numbers, 4);
 
   return (
-    <nav aria-label="Page navigation" className="answer-pagination">
+    <nav
+      aria-label="Page navigation"
+      className="answer-pagination"
+      style={{ top: window.innerHeight - 250 }}
+    >
       <ul className="pagination">
         <li className={current <= 1 ? 'disabled' : ''}>
           <a
