@@ -134,7 +134,7 @@ export const openEditStudentModal = (value) => {
 
 export const modifyStudent = (groupId, options) => {
   return (dispatch) => {
-    const editStudentURL = `${SERVER_API_BASE}studentgroups/${groupId}/students/bulk-update/`; // `${SERVER_API_BASE}studentgroups/${groupId}/student/${options.id}`;
+    const editStudentURL = `${SERVER_API_BASE}studentgroups/${groupId}/students/`; // `${SERVER_API_BASE}studentgroups/${groupId}/student/${options.id}`;
 
     put(editStudentURL, [options]).then((response) => {
       if (response.status === 200) {

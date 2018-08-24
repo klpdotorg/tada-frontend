@@ -70,10 +70,7 @@ export const editStudents = (groupNodeId, groupId, institutionId, depth) => {
 
     dispatch(toggleSpinner(true));
 
-    put(
-      `${SERVER_API_BASE}studentgroups/${groupId}/students/bulk-update/`,
-      newValues,
-    ).then((response) => {
+    put(`${SERVER_API_BASE}studentgroups/${groupId}/students/`, newValues).then((response) => {
       if (response.status === 200) {
         const { data } = response;
         const entities = convertEntitiesToObject(data.results);
