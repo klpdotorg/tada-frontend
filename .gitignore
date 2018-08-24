@@ -2,7 +2,9 @@
 dist/
 
 #Config file
-settings/*
+settings/config.json
+
+stats.json
 
 # nightwatch
 test/integration/reports/*
