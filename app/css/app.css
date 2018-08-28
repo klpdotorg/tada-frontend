@@ -1154,3 +1154,22 @@ a {
     width: 20%;
     float: left;
 }*/
+
+.forgot-password-header {
+  text-align: center;
+  font-weight: bold;
+  padding-bottom: 30px;
+  font-size: 19px;
+}
+
+.forgot-password-button-cont {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 30px;
+}
+
+.forgot-password-error {
+  text-align: center;
+  color: red;
+}

@@ -35,3 +35,4 @@ export * from './Sources';
 export * from './QuestionTypes';
 export * from './AnswerPagination';
 export * from './QuestionGroupTypes';
+export * from './ForgotPassword';

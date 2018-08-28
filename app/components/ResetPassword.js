@@ -13,19 +13,19 @@ class ResetPasswordUI extends Component {
     this.goToLoginPage = this.goToLoginPage.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { dispatch, authenticated, token, error } = nextProps;
-    'Reset password receiving props', dispatch;
-    if (nextProps.resetRequestSuccess) {
-      this.email.value = '';
-      $('#pwdResetRequestSuccessModal').modal('show');
-    }
+  // componentWillReceiveProps(nextProps) {
+  //   const { dispatch, authenticated, token, error } = nextProps;
+  //   'Reset password receiving props', dispatch;
+  //   if (nextProps.resetRequestSuccess) {
+  //     this.email.value = '';
+  //     $('#pwdResetRequestSuccessModal').modal('show');
+  //   }
 
-    if (nextProps.resetRequestFailed) {
-      this.email.value = '';
-      $('#pwdResetRequestFailedModal').modal('show');
-    }
-  }
+  //   if (nextProps.resetRequestFailed) {
+  //     this.email.value = '';
+  //     $('#pwdResetRequestFailedModal').modal('show');
+  //   }
+  // }
 
   goToLoginPage() {
     this.props.dispatch(push('/login'));
@@ -46,6 +46,7 @@ class ResetPasswordUI extends Component {
   }
 
   render() {
+    console.log('Comming here');
     return (
       <div id="login-page">
         <nav className="main__header navbar navbar-white navbar-fixed-top">
@@ -179,13 +180,11 @@ class ResetPasswordUI extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    resetRequestSuccess: state.passwordreset.reset_request_successful,
-    resetRequestFailed: state.passwordreset.reset_request_failed,
-  };
+const mapStateToProps = () => {
+  return {};
 };
 
 // This will just connect it to the store
 const ResetPassword = connect(mapStateToProps)(ResetPasswordUI);
+
 export default ResetPassword;

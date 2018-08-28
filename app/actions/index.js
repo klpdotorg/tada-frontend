@@ -42,3 +42,4 @@ export * from './Partners';
 export * from './QuestionTypes';
 export * from './AnswerPagination';
 export * from './QuestionGroupTypes';
+export * from './ForgotPassword';

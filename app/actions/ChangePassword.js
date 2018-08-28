@@ -66,28 +66,3 @@ export const updatePassword = (body) => {
     });
   };
 };
-
-// export const resetPassword = (otp) => {
-//   return (dispatch, getState) => {
-//     const state = getState();
-//     const { password } = state.changePassword;
-//     const { mobileNo } = state.profile;
-
-//     const url = `${SERVER_API_BASE}users/otp-password-reset/`;
-//     post(url, {
-//       mobile_no: mobileNo,
-//       password,
-//       otp,
-//     }).then((res) => {
-//       dispatch({
-//         type: TOGGLE_MODAL,
-//         modal: 'changeOTP',
-//       });
-//       dispatch(Notifications.success({
-//         ...baseNotification,
-//         title: 'Password Reset',
-//         message: 'User password reset successfully!',
-//       }));
-//     });
-//   };
-// };

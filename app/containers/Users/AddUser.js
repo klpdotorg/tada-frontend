@@ -41,9 +41,10 @@ class AddUserView extends Component {
       email: myform.email,
       password: myform.password,
       groups: [myform.role],
+      userboundaries: myform.stateCodes,
     };
 
-    this.props.save(user, myform.stateCodes.join(','));
+    this.props.save(user);
   }
 
   render() {

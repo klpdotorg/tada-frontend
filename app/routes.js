@@ -23,6 +23,7 @@ import {
 import { StudentsAnswersSheet } from './containers/StudentAssessmentEntry';
 
 import { AssignPermissionMessage } from './components/Permissions';
+import { ForgotPassword } from './containers/ForgotPassword';
 
 const Loading = ({ error }) => {
   if (error) {
@@ -136,12 +137,12 @@ const Logout = Loadable({
   loading: Loading,
 });
 
-const ResetPassword = Loadable({
-  loader: () => {
-    return import('./components/ResetPassword');
-  },
-  loading: Loading,
-});
+// const ResetPassword = Loadable({
+//   loader: () => {
+//     return import('./components/ResetPassword');
+//   },
+//   loading: Loading,
+// });
 
 const SetNewPassword = Loadable({
   loader: () => {
@@ -169,7 +170,7 @@ export const routes = (
     <Router history={history}>
       <Route path="login" component={LoginContainer} />
       <Route path="logout" component={Logout} />
-      <Route path="password/reset" component={ResetPassword} />
+      <Route path="password/reset" component={ForgotPassword} />
       <Route path="password/reset/confirm/:uid/:token" component={SetNewPassword} />
       <Route path="/" component={App} onEnter={isUserAuthenticated}>
         <IndexRoute component={Dashboard} onEnter={isUserAuthenticated} />
