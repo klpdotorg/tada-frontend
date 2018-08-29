@@ -1,7 +1,7 @@
 import { SET_STATES, SELECT_STATE, STATES_LOADING, RESET } from '../actions/types';
 
 const INITIAL_STATE = {
-  loading: false,
+  loading: true,
   states: [],
   selectedState: 'ka',
 };

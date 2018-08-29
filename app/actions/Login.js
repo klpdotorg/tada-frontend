@@ -5,7 +5,6 @@ import { REQUEST_LOGIN, LOGIN_FAILED, LOGIN_SUCCESS, SET_USER_PROFILE } from './
 
 export const getDataFromLocalstorage = () => {
   const data = sessionStorage.getItem('user');
-
   if (!data) {
     return {};
   }
@@ -16,6 +15,9 @@ export const getDataFromLocalstorage = () => {
 export const setDataInLocalStorage = (user) => {
   return (dispatch, getState) => {
     const state = getState();
+    const stateVal = state.states.states.find((val) => {
+      return val.char_id === state.states.selectedState;
+    });
 
     const newUser = {
       id: user.id,
@@ -27,6 +29,8 @@ export const setDataInLocalStorage = (user) => {
       token: user.token,
       groups: user.groups,
       state_code: state.states.selectedState,
+      parentId: stateVal.boundary_id,
+      parentNodeId: `${stateVal.boundary_id}state`,
     };
 
     dispatch({

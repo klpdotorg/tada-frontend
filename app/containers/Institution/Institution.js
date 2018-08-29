@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import get from 'lodash.get';
 import isEmpty from 'lodash.isempty';
 
-import { DEFAULT_PARENT_NODE_ID } from 'config';
 import { InstitutionView } from '../../components/Institution';
 import {
   getBoundariesEntities,
@@ -18,15 +17,9 @@ import { checkPermissions, getEntitiesPath } from '../../utils';
 
 class FetchInstitutionEntity extends Component {
   componentDidMount() {
-    const { params, institution } = this.props;
+    const { params, institution, parentId } = this.props;
     const { blockNodeId, districtNodeId, clusterNodeId, institutionNodeId } = params;
-    const path = [
-      DEFAULT_PARENT_NODE_ID,
-      districtNodeId,
-      blockNodeId,
-      clusterNodeId,
-      institutionNodeId,
-    ];
+    const path = [parentId, districtNodeId, blockNodeId, clusterNodeId, institutionNodeId];
 
     if (isEmpty(institution)) {
       const entities = path.map((id, i) => {
@@ -57,6 +50,7 @@ FetchInstitutionEntity.propTypes = {
   getInstitutionCats: PropTypes.func,
   getManagements: PropTypes.func,
   hasPermissions: PropTypes.bool,
+  parentId: PropTypes.string,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -85,6 +79,7 @@ const mapStateToProps = (state, ownProps) => {
     isAdmin,
     hasPermissions,
     paths,
+    parentId: state.profile.parentNodeId,
   };
 };
 

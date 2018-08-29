@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import Loadable from 'react-loadable';
 import get from 'lodash.get';
 import isEmpty from 'lodash.isempty';
-import { DEFAULT_PARENT_NODE_ID } from 'config';
 
 // import TeacherScreen from '../../components/Teachers';
 import {
@@ -56,10 +55,10 @@ class GetTeachers extends Component {
   }
 
   getEntities() {
-    const { params } = this.props;
+    const { params, parentId } = this.props;
     const { blockNodeId, districtNodeId, clusterNodeId } = params;
 
-    return [DEFAULT_PARENT_NODE_ID, districtNodeId, blockNodeId, clusterNodeId].map((id, i) => {
+    return [parentId, districtNodeId, blockNodeId, clusterNodeId].map((id, i) => {
       return { depth: i, uniqueId: id };
     });
   }
@@ -100,6 +99,7 @@ const mapStateToProps = (state, ownProps) => {
     teacherLoading: state.teachers.loading,
     hasPermissions,
     paths,
+    parentId: state.profile.parentNodeId,
   };
 };
 
@@ -112,6 +112,7 @@ GetTeachers.propTypes = {
   getLanguages: PropTypes.func,
   primary: PropTypes.bool,
   showTeacherLoading: PropTypes.func,
+  parentId: PropTypes.string,
 };
 
 const Teachers = connect(mapStateToProps, {

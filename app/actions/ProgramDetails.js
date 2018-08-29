@@ -1,4 +1,4 @@
-import { SERVER_API_BASE, DEFAULT_PARENT_ID } from 'config';
+import { SERVER_API_BASE } from 'config';
 import { push } from 'react-router-redux';
 
 import getObject from 'lodash.get';
@@ -99,8 +99,8 @@ export const collapsedProgramEntity = (value) => {
   };
 };
 
-const getUrlForFilterProgram = (entity, surveyId, surveyOn) => {
-  const admin1 = `${SERVER_API_BASE}survey/${surveyId}/boundary-associations/?boundary_id=${DEFAULT_PARENT_ID}&boundary_type=admin1`;
+const getUrlForFilterProgram = (entity, surveyId, surveyOn, parentId) => {
+  const admin1 = `${SERVER_API_BASE}survey/${surveyId}/boundary-associations/?boundary_id=${parentId}&boundary_type=admin1`;
   const admin2 = `${SERVER_API_BASE}survey/${surveyId}/boundary-associations/?boundary_id=${entity.id}&boundary_type=admin2`;
   const admin3 = `${SERVER_API_BASE}survey/${surveyId}/boundary-associations/?boundary_id=${entity.id}&boundary_type=admin3`;
   const institutions = `${SERVER_API_BASE}survey/${surveyId}/institution-associations/?boundary_id=${entity.id}`;
@@ -224,6 +224,7 @@ const fetchAdmins = (entity, moreEntities) => {
       { ...entity, id: boundary.id },
       selectedProgram,
       programInfo.survey_on,
+      state.profile.parentId,
     );
 
     if (url) {

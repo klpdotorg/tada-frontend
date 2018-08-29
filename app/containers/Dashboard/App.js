@@ -6,12 +6,14 @@ import { connect } from 'react-redux';
 import { setUserProfile, fetchUserPermissions, fetchStates } from '../../actions/';
 import { MainHeader, MainNavBar, SecondaryNavBarCont } from '../Header';
 import { LoadingBoundary } from '../common';
+import { Loading } from '../../components/common';
 import { SideBarContainer } from '../SideBar';
 import { MainContentArea, TreeTogglerSpacing } from '../../components/Dashboard';
 
 const mapStateToProps = (state) => {
   return {
     notifications: state.notifications,
+    stateLoading: state.states.loading,
   };
 };
 
@@ -43,8 +45,11 @@ class TadaContentContainer extends Component {
   }
 
   render() {
-    const { location, children, notifications, params } = this.props;
+    const { location, children, notifications, params, stateLoading } = this.props;
     const { showSideBar } = this.state;
+    if (stateLoading) {
+      return <Loading />;
+    }
 
     return (
       <div>
@@ -81,6 +86,7 @@ TadaContentContainer.propTypes = {
   fetchPermissions: PropTypes.func,
   fetchStates: PropTypes.func,
   params: PropTypes.object,
+  stateLoading: PropTypes.bool,
 };
 
 const App = connect(mapStateToProps, {

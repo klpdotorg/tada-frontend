@@ -3,17 +3,15 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import isEmpty from 'lodash.isempty';
 
-import { DEFAULT_PARENT_NODE_ID } from 'config';
-
 import { PrimaryDistrictView } from '../../components/PrimaryDistrict';
 import { getBoundariesEntities } from '../../actions';
 
 class GetEntity extends Component {
   componentDidMount() {
-    const { district, districtNodeId } = this.props;
+    const { district, districtNodeId, parentId } = this.props;
 
     if (isEmpty(district)) {
-      const entities = [DEFAULT_PARENT_NODE_ID, districtNodeId].map((id, i) => {
+      const entities = [parentId, districtNodeId].map((id, i) => {
         return { depth: i, uniqueId: id };
       });
 
@@ -30,6 +28,7 @@ GetEntity.propTypes = {
   district: PropTypes.object,
   districtNodeId: PropTypes.number,
   getBoundariesEntities: PropTypes.func,
+  parentId: PropTypes.string,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -41,6 +40,7 @@ const mapStateToProps = (state, ownProps) => {
     districtNodeId,
     isLoading: state.appstate.loadingBoundary,
     isAdmin,
+    parentId: state.profile.parentId,
   };
 };
 

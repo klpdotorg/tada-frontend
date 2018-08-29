@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import get from 'lodash.get';
 import isEmpty from 'lodash.isempty';
 import { connect } from 'react-redux';
-import { DEFAULT_PARENT_NODE_ID } from 'config';
 
 import {
   getBoundariesEntities,
@@ -18,7 +17,7 @@ import { checkPermissions, getEntitiesPath } from '../../utils';
 
 class FetchStudents extends Component {
   componentDidMount() {
-    const { params, studentGroup } = this.props;
+    const { params, studentGroup, parentId } = this.props;
 
     const {
       blockNodeId,
@@ -30,7 +29,7 @@ class FetchStudents extends Component {
 
     if (isEmpty(studentGroup)) {
       const entities = [
-        DEFAULT_PARENT_NODE_ID,
+        parentId,
         districtNodeId,
         blockNodeId,
         clusterNodeId,
@@ -59,6 +58,7 @@ FetchStudents.propTypes = {
   studentIds: PropTypes.array,
   studentGroup: PropTypes.object,
   fetchStudentBoundaries: PropTypes.func,
+  parentId: PropTypes.string,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -111,6 +111,7 @@ const mapStateToProps = (state, ownProps) => {
     canMapStudents: !isEmpty(selectedStudents) && !isEmpty(centers),
     hasPermissions,
     paths,
+    parentId: state.profile.parentNodeId,
   };
 };
 

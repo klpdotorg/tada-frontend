@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import TreeView from 'react-treeview';
 import { Link } from 'react-router';
-import { DEFAULT_PARENT_NODE_ID } from 'config';
 
 import { capitalize } from '../../utils';
 import { filterBoundaries } from './utils';
@@ -17,7 +16,7 @@ import { Loading, Message } from '../../components/common';
 
 class NavTree extends Component {
   componentDidMount() {
-    this.props.getBoundariesEntities([{ depth: 0, uniqueId: DEFAULT_PARENT_NODE_ID }]);
+    this.props.getBoundariesEntities([{ depth: 0, uniqueId: this.props.parentId }]);
   }
 
   getTreeNodes(index) {
@@ -139,6 +138,7 @@ const mapStateToProps = (state) => {
     loading: state.appstate.loadingBoundary,
     selectedPrimary: state.schoolSelection.primarySchool,
     selectedEntityId,
+    parentId: state.profile.parentNodeId,
   };
 };
 
@@ -152,6 +152,7 @@ NavTree.propTypes = {
   loading: PropTypes.bool,
   selectedPrimary: PropTypes.bool,
   selectedEntityId: PropTypes.any,
+  parentId: PropTypes.string,
 };
 
 const MapAssessmentTree = connect(mapStateToProps, {

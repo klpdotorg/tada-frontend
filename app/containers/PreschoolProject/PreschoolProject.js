@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import isEmpty from 'lodash.isempty';
 import get from 'lodash.get';
 
-import { DEFAULT_PARENT_NODE_ID } from 'config';
 import { PreschoolProjectView } from '../../components/PreschoolProject';
 import { getBoundariesEntities } from '../../actions';
 import { getEntitiesPath } from '../../utils';
@@ -17,11 +16,11 @@ class FetchProjectEntity extends Component {
   }
 
   componentDidMount() {
-    const { params, project } = this.props;
+    const { params, project, parentId } = this.props;
     const { districtNodeId, projectNodeId } = params;
 
     if (isEmpty(project)) {
-      const entities = [DEFAULT_PARENT_NODE_ID, districtNodeId, projectNodeId].map((id, i) => {
+      const entities = [parentId, districtNodeId, projectNodeId].map((id, i) => {
         return { depth: i, uniqueId: id };
       });
 
@@ -38,6 +37,7 @@ FetchProjectEntity.propTypes = {
   params: PropTypes.object,
   project: PropTypes.object,
   getBoundariesEntities: PropTypes.func,
+  parentId: PropTypes.string,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -52,6 +52,7 @@ const mapStateToProps = (state, ownProps) => {
     isLoading: state.appstate.loadingBoundary,
     isAdmin,
     paths,
+    parentId: state.profile.parentNodeId,
   };
 };
 

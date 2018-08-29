@@ -4,15 +4,13 @@ import get from 'lodash.get';
 import isEmpty from 'lodash.isempty';
 import { connect } from 'react-redux';
 
-import { DEFAULT_PARENT_NODE_ID } from 'config';
-
 import { AddStudentsView } from '../../components/AddStudents';
 import { getBoundariesEntities, getLanguages } from '../../actions';
 import { checkPermissions, getEntitiesPath } from '../../utils';
 
 class FetchAddStudentResources extends Component {
   componentDidMount() {
-    const { params, studentGroup } = this.props;
+    const { params, studentGroup, parentId } = this.props;
 
     const {
       blockNodeId,
@@ -24,7 +22,7 @@ class FetchAddStudentResources extends Component {
 
     if (isEmpty(studentGroup)) {
       const entities = [
-        DEFAULT_PARENT_NODE_ID,
+        parentId,
         districtNodeId,
         blockNodeId,
         clusterNodeId,
@@ -63,6 +61,7 @@ FetchAddStudentResources.propTypes = {
   studentGroup: PropTypes.object,
   getBoundariesEntities: PropTypes.func,
   getLanguages: PropTypes.func,
+  parentId: PropTypes.string,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -102,6 +101,7 @@ const mapStateToProps = (state, ownProps) => {
     isLoading: state.appstate.loadingBoundary,
     hasPermissions,
     paths,
+    parentId: state.profile.parentNodeId,
   };
 };
 

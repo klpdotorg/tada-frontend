@@ -77,8 +77,8 @@ class Login extends Component {
                 >
                   {states.map((state) => {
                     return (
-                      <option key={state.state_code} value={state.state_code}>
-                        {state.name}
+                      <option key={state.char_id} value={state.char_id}>
+                        {state.state_name}
                       </option>
                     );
                   })}

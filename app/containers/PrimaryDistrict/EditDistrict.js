@@ -28,6 +28,7 @@ const mapStateToProps = (state, ownProps) => {
     primary: state.schoolSelection.primarySchool,
     hasPermissions,
     error: boundaries.editError,
+    parentId: state.profile.parentNodeId,
   };
 };
 

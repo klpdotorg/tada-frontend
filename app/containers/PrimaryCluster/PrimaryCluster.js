@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import get from 'lodash.get';
 import isEmpty from 'lodash.isempty';
 
-import { DEFAULT_PARENT_NODE_ID } from 'config';
 import {
   getBoundariesEntities,
   getInstitutionCategories,
@@ -16,15 +15,10 @@ import { getEntitiesPath } from '../../utils';
 
 class FetchClusterEntity extends Component {
   componentWillMount() {
-    const { params, cluster } = this.props;
+    const { params, cluster, parentId } = this.props;
     const { districtNodeId, blockNodeId, clusterNodeId } = params;
     if (isEmpty(cluster)) {
-      const entities = [
-        DEFAULT_PARENT_NODE_ID,
-        districtNodeId,
-        blockNodeId,
-        clusterNodeId,
-      ].map((id, i) => {
+      const entities = [parentId, districtNodeId, blockNodeId, clusterNodeId].map((id, i) => {
         return { depth: i, uniqueId: id };
       });
 
@@ -48,6 +42,7 @@ FetchClusterEntity.propTypes = {
   getInstitutionCategories: PropTypes.func,
   getLanguages: PropTypes.func,
   getManagements: PropTypes.func,
+  parentId: PropTypes.string,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -63,6 +58,7 @@ const mapStateToProps = (state, ownProps) => {
     isLoading: state.appstate.loadingBoundary,
     isAdmin,
     paths,
+    parentId: state.profile.parentNodeId,
   };
 };
 

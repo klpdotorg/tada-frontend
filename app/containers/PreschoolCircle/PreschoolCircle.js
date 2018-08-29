@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import get from 'lodash.get';
 import isEmpty from 'lodash.isempty';
 
-import { DEFAULT_PARENT_NODE_ID } from 'config';
 import {
   getBoundariesEntities,
   getInstitutionCategories,
@@ -16,16 +15,11 @@ import { getEntitiesPath } from '../../utils';
 
 class FetchCircleEntity extends Component {
   componentWillMount() {
-    const { params, circle } = this.props;
+    const { params, circle, parentId } = this.props;
     const { districtNodeId, projectNodeId, circleNodeId } = params;
 
     if (isEmpty(circle)) {
-      const entities = [
-        DEFAULT_PARENT_NODE_ID,
-        districtNodeId,
-        projectNodeId,
-        circleNodeId,
-      ].map((id, i) => {
+      const entities = [parentId, districtNodeId, projectNodeId, circleNodeId].map((id, i) => {
         return { depth: i, uniqueId: id };
       });
 
@@ -49,6 +43,7 @@ FetchCircleEntity.propTypes = {
   getInstitutionCategories: PropTypes.func,
   getLanguages: PropTypes.func,
   getManagements: PropTypes.func,
+  parentId: PropTypes.string,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -64,6 +59,7 @@ const mapStateToProps = (state, ownProps) => {
     isLoading: state.appstate.loadingBoundary,
     paths,
     isAdmin,
+    parentId: state.profile.parentNodeId,
   };
 };
 

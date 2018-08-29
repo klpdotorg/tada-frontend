@@ -219,7 +219,6 @@ const fetchBoundaries = (Ids) => {
       const { uncollapsedEntities } = state.boundaries;
       const currentNode = getObject(uncollapsedEntities, entity.depth);
       const existing = currentNode === entity.uniqueId;
-
       if (!existing && entity.depth <= 5) {
         dispatch(fetchBoundary(entity, entities));
       } else {

@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
-import { DEFAULT_PARENT_ID } from 'config';
 import isEmpty from 'lodash.isempty';
 import get from 'lodash.get';
 
@@ -58,7 +57,7 @@ class CreateProgramForm extends Component {
       survey_on: myform.survey_on,
       partner: myform.partner,
       lang_name: myform.lang_name,
-      admin0: DEFAULT_PARENT_ID,
+      admin0: this.props.parentId,
     };
 
     this.props.save(program);
@@ -159,6 +158,7 @@ CreateProgramForm.propTypes = {
   disableSubmitForm: PropTypes.func,
   toggleModal: PropTypes.func,
   error: PropTypes.object,
+  parentId: PropTypes.string,
 };
 
 const mapStateToProps = (state) => {
@@ -168,6 +168,7 @@ const mapStateToProps = (state) => {
     canSubmit: state.appstate.enableSubmitForm,
     error: state.programs.error,
     partners,
+    parentId: state.profile.parentId,
   };
 };
 

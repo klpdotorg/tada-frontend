@@ -4,14 +4,13 @@ import { connect } from 'react-redux';
 import get from 'lodash.get';
 import isEmpty from 'lodash.isempty';
 
-import { DEFAULT_PARENT_NODE_ID } from 'config';
 import { StudentGroupView } from '../../components/StudentGroup';
 import { getBoundariesEntities, openViewStudents, openAddStudents } from '../../actions';
 import { checkPermissions, getEntitiesPath } from '../../utils';
 
 class FetchStudentGroupEntity extends Component {
   componentDidMount() {
-    const { params, studentGroup } = this.props;
+    const { params, studentGroup, parentId } = this.props;
 
     const {
       blockNodeId,
@@ -23,7 +22,7 @@ class FetchStudentGroupEntity extends Component {
 
     if (isEmpty(studentGroup)) {
       const entities = [
-        DEFAULT_PARENT_NODE_ID,
+        parentId,
         districtNodeId,
         blockNodeId,
         clusterNodeId,
@@ -61,6 +60,7 @@ FetchStudentGroupEntity.propTypes = {
   studentGroup: PropTypes.object,
   getBoundariesEntities: PropTypes.func,
   permissions: PropTypes.object,
+  parentId: PropTypes.string,
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -101,6 +101,7 @@ const mapStateToProps = (state, ownProps) => {
     isPrimary: state.schoolSelection.primarySchool,
     hasPermissions,
     paths,
+    parentId: state.profile.parentNodeId,
   };
 };
 

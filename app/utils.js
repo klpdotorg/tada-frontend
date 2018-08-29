@@ -4,7 +4,6 @@ import includes from 'lodash.includes';
 import forEach from 'lodash.foreach';
 import range from 'lodash.range';
 
-import { DEFAULT_PARENT_ID } from 'config';
 import { getBoundaryType } from './reducers/utils';
 
 export const getEntityDepth = (boundary) => {
@@ -89,14 +88,6 @@ export const capitalize = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
   }
   return null;
-};
-
-export const alphabeticalOrder = (obj, details) => {
-  return obj[`${DEFAULT_PARENT_ID}state`].sort((a, b) => {
-    const aName = capitalize(details[a].name);
-    const bName = capitalize(details[b].name);
-    return aName < bName ? -1 : aName > bName ? 1 : 0;
-  });
 };
 
 export const toggleSet = (set, val) => {

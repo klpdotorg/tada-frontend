@@ -4,7 +4,6 @@ import get from 'lodash.get';
 import PropTypes from 'prop-types';
 import Formsy from 'formsy-react';
 import FRC from 'formsy-react-components';
-import { DEFAULT_PARENT_ID } from 'config';
 import isEmpty from 'lodash.isempty';
 
 import { Loading } from '../../components/common';
@@ -56,7 +55,7 @@ class EditProgramForm extends Component {
       status: 'AC',
       partner: myform.partner,
       lang_name: myform.lang_name,
-      admin0: DEFAULT_PARENT_ID,
+      admin0: this.props.parentId,
     };
     // Save program
     this.props.save(program);
@@ -164,11 +163,13 @@ EditProgramForm.propTypes = {
   closeConfirmModal: PropTypes.func,
   partners: PropTypes.array,
   error: PropTypes.object,
+  parentId: PropTypes.string,
 };
 
 const mapStateToProps = (state) => {
   const { selectedProgram } = state.programs;
   const { partners } = state.partners;
+  const { parentId } = state.profile;
 
   return {
     isOpen: state.modal.editProgram,
@@ -176,6 +177,7 @@ const mapStateToProps = (state) => {
     program: get(state.programs.programs, selectedProgram),
     partners,
     error: state.programs.error,
+    parentId,
   };
 };
 
