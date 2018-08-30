@@ -140,19 +140,19 @@ export const selectProgramAssessment = (value, depth) => {
   };
 };
 
-const getURL = (type, boundaryId) => {
+const getURL = (type, boundaryId, stateCode) => {
   switch (type) {
     case 'institution':
-      return `${SERVER_API_BASE}institutions/${boundaryId}/studentgroups/`;
+      return `${SERVER_API_BASE}institutions/${boundaryId}/studentgroups/?state=${stateCode}`;
     case 'class':
-      return `${SERVER_API_BASE}studentgroups/${boundaryId}/students/`;
+      return `${SERVER_API_BASE}studentgroups/${boundaryId}/students/?state=${stateCode}`;
     default:
       return null;
   }
 };
 
-const fetchQuestions = (programId, assessmentId) => {
-  const url = `${SERVER_API_BASE}surveys/${programId}/questiongroup/${assessmentId}/questions/sequence/`;
+const fetchQuestions = (programId, assessmentId, stateCode) => {
+  const url = `${SERVER_API_BASE}surveys/${programId}/questiongroup/${assessmentId}/questions/sequence/?state=${stateCode}`;
 
   return get(url);
 };
@@ -169,13 +169,13 @@ export const fetchSelectedAssessmentQuestions = (assessmentId, entities, program
         dispatch(getProgramEntities(entities));
 
         const id = getObject(results[0], 'id', '');
-        fetchQuestions(id, assessmentId).then(({ data }) => {
+        fetchQuestions(id, assessmentId, state_code).then(({ data }) => {
           dispatch(setQuestions(data.results, assessmentId));
           dispatch(hideAnswersLoading());
         });
       });
     } else {
-      fetchQuestions(selectedProgram, assessmentId).then(({ data }) => {
+      fetchQuestions(selectedProgram, assessmentId, state_code).then(({ data }) => {
         dispatch(setQuestions(data.results, assessmentId));
         dispatch(hideAnswersLoading());
       });
@@ -187,7 +187,12 @@ export const fetchSelectedAssessmentBoundary = () => {
   return (dispatch, getState) => {
     const state = getState();
     const { selectedProgramAssess } = state.assessmentEntry;
-    const url = getURL(selectedProgramAssess.boundaryType, selectedProgramAssess.boundaryId);
+    const { state_code } = state.profile;
+    const url = getURL(
+      selectedProgramAssess.boundaryType,
+      selectedProgramAssess.boundaryId,
+      state_code,
+    );
 
     get(url).then(({ data }) => {
       const entities = convertEntitiesToObject(data.results);
@@ -210,6 +215,7 @@ export const fetchStudentsForAssessmentEntry = (id) => {
 
     const state = getState();
     const { current } = state.answerPagination;
+    const { state_code } = state.profile;
     let studentGroupId = '';
     if (typeof id === 'object') {
       studentGroupId = id.boundaryId;
@@ -217,7 +223,7 @@ export const fetchStudentsForAssessmentEntry = (id) => {
       studentGroupId = id;
     }
 
-    const url = `${SERVER_API_BASE}studentgroups/${studentGroupId}/students/?per_page=10&page=${current}`;
+    const url = `${SERVER_API_BASE}studentgroups/${studentGroupId}/students/?per_page=10&page=${current}&state=${state_code}`;
     get(url).then(({ data }) => {
       dispatch({
         type: SET_ASSESSMENT_ENTRY_STUDENTS,

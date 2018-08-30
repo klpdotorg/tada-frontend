@@ -66,7 +66,6 @@ export const openFilterByProgramEntity = (uniqueId, depth, assessmentId) => {
     const boundaryPath = getPath(state, uniqueId, depth, 'program');
 
     dispatch(resetAnswerError());
-
     if (assessmentId) {
       const path = `/filterprograms/${selectedProgram}/questiongroup/${assessmentId}${boundaryPath}`;
       const url = checkFilterByProgramUrl(path, survey.survey_on);
@@ -99,13 +98,13 @@ export const collapsedProgramEntity = (value) => {
   };
 };
 
-const getUrlForFilterProgram = (entity, surveyId, surveyOn, parentId) => {
-  const admin1 = `${SERVER_API_BASE}survey/${surveyId}/boundary-associations/?boundary_id=${parentId}&boundary_type=admin1`;
-  const admin2 = `${SERVER_API_BASE}survey/${surveyId}/boundary-associations/?boundary_id=${entity.id}&boundary_type=admin2`;
-  const admin3 = `${SERVER_API_BASE}survey/${surveyId}/boundary-associations/?boundary_id=${entity.id}&boundary_type=admin3`;
-  const institutions = `${SERVER_API_BASE}survey/${surveyId}/institution-associations/?boundary_id=${entity.id}`;
-  const institutionMapping = `${SERVER_API_BASE}surveys/${surveyId}/questiongroup/mappings/?boundary_id=${entity.id}`;
-  const studentgroupMapping = `${SERVER_API_BASE}surveys/${surveyId}/questiongroup/mappings/?institution_id=${entity.id}`;
+const getUrlForFilterProgram = (entity, surveyId, surveyOn, parentId, stateCode) => {
+  const admin1 = `${SERVER_API_BASE}survey/${surveyId}/boundary-associations/?boundary_id=${parentId}&boundary_type=admin1&state=${stateCode}`;
+  const admin2 = `${SERVER_API_BASE}survey/${surveyId}/boundary-associations/?boundary_id=${entity.id}&boundary_type=admin2&state=${stateCode}`;
+  const admin3 = `${SERVER_API_BASE}survey/${surveyId}/boundary-associations/?boundary_id=${entity.id}&boundary_type=admin3&state=${stateCode}`;
+  const institutions = `${SERVER_API_BASE}survey/${surveyId}/institution-associations/?boundary_id=${entity.id}&state=${stateCode}`;
+  const institutionMapping = `${SERVER_API_BASE}surveys/${surveyId}/questiongroup/mappings/?boundary_id=${entity.id}&state=${stateCode}`;
+  const studentgroupMapping = `${SERVER_API_BASE}surveys/${surveyId}/questiongroup/mappings/?institution_id=${entity.id}&state=${stateCode}`;
 
   if (surveyOn === 'institution') {
     switch (entity.depth) {
@@ -220,11 +219,14 @@ const fetchAdmins = (entity, moreEntities) => {
     const { selectedProgram, programs } = state.programs;
     const boundary = getObject(state.programDetails, ['programDetails', entity.uniqueId], {});
     const programInfo = getObject(programs, selectedProgram);
+    const { state_code } = state.profile;
+
     const url = getUrlForFilterProgram(
       { ...entity, id: boundary.id },
       selectedProgram,
       programInfo.survey_on,
       state.profile.parentId,
+      state_code,
     );
 
     if (url) {

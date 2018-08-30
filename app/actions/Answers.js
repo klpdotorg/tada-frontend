@@ -78,10 +78,11 @@ export const fetchAnswers = (assessmentId, boundaryId) => {
     const state = getState();
     const { answergroups } = state.answergroups;
     const { selectedProgram } = state.programs;
+    const { state_code } = state.profile;
 
     const Ids = Object.keys(getObject(answergroups, boundaryId, {}));
     const promises = Ids.map((Id) => {
-      const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${assessmentId}/answergroups/${Id}/answers/`;
+      const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${assessmentId}/answergroups/${Id}/answers/?state=${state_code}`;
       return get(url).then(({ data }) => {
         return {
           id: Id,
@@ -146,8 +147,9 @@ export const saveAnswer = (params) => {
     const { answers } = state.assessmentEntry;
     const { selectedProgram } = state.programs;
     const filteredAnswers = filterAnswers(answers[boundaryId]);
+    const { state_code } = state.profile;
 
-    const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${assessmentId}/answergroups/${answergroupId}/answers/?per_page=10`;
+    const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${assessmentId}/answergroups/${answergroupId}/answers/?per_page=10&state=${state_code}`;
     post(url, filteredAnswers).then((response) => {
       if (response.status === 201) {
         dispatch(fetchAnswerGroups(assessmentId, boundaryType, boundaryId));
@@ -186,13 +188,14 @@ export const createAnswerGroup = (params) => {
     const state = getState();
     const { assessmentId, boundaryId } = params;
     const { selectedProgram } = state.programs;
+    const { state_code } = state.profile;
     const { id } = state.profile;
     const name = getObject(state.assessmentEntry.groupValues, [boundaryId], '');
     const dateOfVisit = getObject(state.assessmentEntry.dateOfVisits, [boundaryId], new Date());
     const respondentType = getObject(state.assessmentEntry.respondentTypeVals, [boundaryId], '');
     const comment = getObject(state.assessmentEntry.comments, [boundaryId], '');
     const assessment = getObject(state.assessments.assessments, assessmentId, {});
-    const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${assessmentId}/answergroups/`;
+    const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${assessmentId}/answergroups/?state=${state_code}`;
 
     const result = validateAnswergroup(
       {
@@ -251,9 +254,10 @@ export const editAnswers = (params) => {
     const state = getState();
     const { selectedProgram } = state.programs;
     const { answergroupId, assessmentId, boundaryId, boundaryType } = params;
+    const { state_code } = state.profile;
     const answers = getObject(state.answers.answers, answergroupId, []);
     const { existingAnswers, newAnswers } = filterExistingAnswers(answers);
-    const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${assessmentId}/answergroups/${answergroupId}/answers/`;
+    const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${assessmentId}/answergroups/${answergroupId}/answers/?state=${state_code}`;
     if (!isEmpty(existingAnswers)) {
       put(url, existingAnswers).then((response) => {
         if (response.status === 201 || response.status === 200) {

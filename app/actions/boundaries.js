@@ -116,11 +116,11 @@ const getUrlForBoundary = (entity, stateCode) => {
 
   switch (entity.depth) {
     case 3:
-      return `${SERVER_API_BASE}institutions/?admin3=${entity.id}&per_page=${PER_PAGE}`;
+      return `${SERVER_API_BASE}institutions/?admin3=${entity.id}&per_page=${PER_PAGE}&state=${stateCode}`;
     case 4:
-      return `${SERVER_API_BASE}institutions/${entity.id}/studentgroups/`;
+      return `${SERVER_API_BASE}institutions/${entity.id}/studentgroups/?state=${stateCode}`;
     case 5:
-      return `${SERVER_API_BASE}studentgroups/${entity.id}/students/`;
+      return `${SERVER_API_BASE}studentgroups/${entity.id}/students/?state=${stateCode}`;
     default:
       return null;
   }

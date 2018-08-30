@@ -82,10 +82,13 @@ export const fetchQuestions = (getQuestionsURL) => {
 };
 
 export const getQuestions = (programId, assessmentId) => {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const { state_code } = state.profile;
+
     dispatch(showQuestionLoading());
 
-    const getQuestionsURL = `${SERVER_API_BASE}surveys/${programId}/questiongroup/${assessmentId}/questions/sequence/`;
+    const getQuestionsURL = `${SERVER_API_BASE}surveys/${programId}/questiongroup/${assessmentId}/questions/sequence/?state=${state_code}`;
     fetchQuestions(getQuestionsURL).then(({ data }) => {
       dispatch(setQuestions(data.results));
       dispatch(hideQuestionLoading());
@@ -94,7 +97,10 @@ export const getQuestions = (programId, assessmentId) => {
 };
 
 export const getQuestionParentEntities = (programId, assessmentId) => {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const { state_code } = state.profile;
+
     dispatch(showQuestionLoading());
 
     const fetchProgramsUrl = `${SERVER_API_BASE}surveys/`;
@@ -103,7 +109,7 @@ export const getQuestionParentEntities = (programId, assessmentId) => {
       dispatch(setPrograms(data.results));
       dispatch(selectProgram(programId));
 
-      const fetchAssessmentsURL = `${SERVER_API_BASE}surveys/${programId}/questiongroup/`;
+      const fetchAssessmentsURL = `${SERVER_API_BASE}surveys/${programId}/questiongroup/?state=${state_code}`;
       get(fetchAssessmentsURL).then((response) => {
         const { results } = response.data;
         dispatch(setAssessments(results));
@@ -115,8 +121,11 @@ export const getQuestionParentEntities = (programId, assessmentId) => {
 };
 
 export const createNewQuestion = (data, programId, assessmentId) => {
-  return (dispatch) => {
-    const createQuestionURL = `${SERVER_API_BASE}surveys/${programId}/questiongroup/${assessmentId}/questions/`;
+  return (dispatch, getState) => {
+    const state = getState();
+    const { state_code } = state.profile;
+
+    const createQuestionURL = `${SERVER_API_BASE}surveys/${programId}/questiongroup/${assessmentId}/questions/?state=${state_code}`;
     post(createQuestionURL, data).then((response) => {
       if (response.status === 201) {
         const Id = getObject(response, 'data.question_details.id', '');
@@ -145,8 +154,10 @@ export const createNewQuestion = (data, programId, assessmentId) => {
 };
 
 export const saveQuestion = (question, programId, assessmentId, questionId) => {
-  return (dispatch) => {
-    const editQuestionURL = `${SERVER_API_BASE}surveys/${programId}/questiongroup/${assessmentId}/questions/${questionId}/`;
+  return (dispatch, getState) => {
+    const state = getState();
+    const { state_code } = state.profile;
+    const editQuestionURL = `${SERVER_API_BASE}surveys/${programId}/questiongroup/${assessmentId}/questions/${questionId}/?state=${state_code}`;
     put(editQuestionURL, question).then((response) => {
       if (response.status === 200) {
         // const { data } = response;
@@ -181,8 +192,9 @@ export const deleteQuestion = (assessmentId, questionId) => {
     dispatch(showQuestionLoading());
     const state = getState();
     const { selectedProgram } = state.programs;
+    const { state_code } = state.profile;
 
-    const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${assessmentId}/questions/${questionId}/`;
+    const url = `${SERVER_API_BASE}surveys/${selectedProgram}/questiongroup/${assessmentId}/questions/${questionId}/?state=${state_code}`;
     deleteRequest(url).then(() => {
       dispatch({
         type: DELETE_QUESTION,

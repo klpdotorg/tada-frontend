@@ -1,9 +1,6 @@
 import { SERVER_API_BASE, PER_PAGE } from 'config';
 import isEqual from 'lodash.isequal';
 import getObject from 'lodash.get';
-import isEmpty from 'lodash.isempty';
-import flattenDeep from 'lodash.flattendeep';
-import uniq from 'lodash.uniq';
 import pull from 'lodash.pull';
 
 import Notifications from 'react-notification-system-redux';
@@ -58,9 +55,11 @@ const resetMappingError = () => {
 };
 
 const fetchStudentGroupOfMA = (entity) => {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const { state_code } = state.profile;
     dispatch(showClassesLoadingInMA());
-    const url = `${SERVER_API_BASE}institutions/${entity.id}/studentgroups/?&per_page=${PER_PAGE}`;
+    const url = `${SERVER_API_BASE}institutions/${entity.id}/studentgroups/?&per_page=${PER_PAGE}&state=${state_code}`;
 
     get(url).then(({ data }) => {
       const entities = convertEntitiesToObject(data.results);
@@ -83,9 +82,11 @@ const fetchStudentGroupOfMA = (entity) => {
 };
 
 const fetchInstitutionOfMA = (entity) => {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const { state_code } = state.profile;
     dispatch(showInstitutionLoadingInMa());
-    const url = `${SERVER_API_BASE}institutions/?admin3=${entity.id}&per_page=${PER_PAGE}`;
+    const url = `${SERVER_API_BASE}institutions/?admin3=${entity.id}&per_page=${PER_PAGE}&state=${state_code}`;
 
     get(url).then(({ data }) => {
       const entities = convertEntitiesToObject(data.results);
@@ -325,8 +326,10 @@ export const openBoundaryOfMa = (id, depth) => {
 };
 
 export const mapAssessmentsToInsitutions = (surveyId, assessments, institutions, boundaryIds) => {
-  return (dispatch) => {
-    const url = `${SERVER_API_BASE}surveys/${surveyId}/questiongroup/map-institution/`;
+  return (dispatch, getState) => {
+    const state = getState();
+    const { state_code } = state.profile;
+    const url = `${SERVER_API_BASE}surveys/${surveyId}/questiongroup/map-institution/?state=${state_code}`;
 
     post(url, {
       questiongroup_ids: assessments,
@@ -357,8 +360,10 @@ export const mapAssessmentsToStudentgroups = (
   studentgroups,
   assessments,
 ) => {
-  return (dispatch) => {
-    const url = `${SERVER_API_BASE}surveys/${surveyId}/questiongroup/map-studentgroup/`;
+  return (dispatch, getState) => {
+    const state = getState();
+    const { state_code } = state.profile;
+    const url = `${SERVER_API_BASE}surveys/${surveyId}/questiongroup/map-studentgroup/?state=${state_code}`;
     post(url, {
       questiongroup_ids: assessments,
       studentgroup_ids: studentgroups,

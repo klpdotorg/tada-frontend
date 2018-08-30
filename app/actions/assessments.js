@@ -90,9 +90,12 @@ export const setAssessments = (value) => {
 };
 
 export const getAssessments = (programId) => {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const { state_code } = state.profile;
+
     dispatch(showAssessmentLoading());
-    const fetchAssessmentsURL = `${serverApiBase}surveys/${programId}/questiongroup/`;
+    const fetchAssessmentsURL = `${serverApiBase}surveys/${programId}/questiongroup/?state=${state_code}`;
     get(fetchAssessmentsURL).then(({ data }) => {
       dispatch(setAssessments(data.results));
       dispatch(closeAssessmentLoading());
@@ -129,7 +132,9 @@ export const saveNewAssessment = (options) => {
 
     const state = getState();
     const programId = state.programs.selectedProgram;
-    const createAssessmentURL = `${serverApiBase}surveys/${programId}/questiongroup/`;
+    const { state_code } = state.profile;
+    const createAssessmentURL = `${serverApiBase}surveys/${programId}/questiongroup/?state=${state_code}`;
+
     post(createAssessmentURL, options).then((response) => {
       if (response.status === 201) {
         dispatch(assessmentCreated(response.data));
@@ -158,7 +163,8 @@ export const saveAssessment = (options) => {
     const state = getState();
     const { selectedProgram } = state.programs;
     const { editAssessmentId } = state.assessments;
-    const editAssessmentURL = `${serverApiBase}surveys/${selectedProgram}/questiongroup/${editAssessmentId}/`;
+    const { state_code } = state.profile;
+    const editAssessmentURL = `${serverApiBase}surveys/${selectedProgram}/questiongroup/${editAssessmentId}/?state=${state_code}`;
 
     dispatch({
       type: CREATE_ASSESSMENT_ERROR,
@@ -191,8 +197,10 @@ export const deactivateAssessments = () => {
     const state = getState();
     const { selectedProgram } = state.programs;
     const { selectedAssessments } = state.assessments;
+    const { state_code } = state.profile;
+
     const promises = selectedAssessments.map((id) => {
-      const url = `${serverApiBase}surveys/${selectedProgram}/questiongroup/${id}/`;
+      const url = `${serverApiBase}surveys/${selectedProgram}/questiongroup/${id}/?state=${state_code}`;
       return patch(url, {
         status: 'IA',
       });
@@ -216,8 +224,9 @@ export const deleteAssessments = () => {
     const state = getState();
     const { selectedProgram } = state.programs;
     const { selectedAssessments } = state.assessments;
+    const { state_code } = state.profile;
     const promises = selectedAssessments.map((id) => {
-      const url = `${serverApiBase}surveys/${selectedProgram}/questiongroup/${id}/`;
+      const url = `${serverApiBase}surveys/${selectedProgram}/questiongroup/${id}/?state=${state_code}`;
       return deleteRequest(url);
     });
 

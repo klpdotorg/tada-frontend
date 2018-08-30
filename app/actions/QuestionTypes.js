@@ -18,7 +18,8 @@ const filterTypes = (types) => {
 export const fetchQuestionTypes = () => {
   return (dispatch, getState) => {
     const state = getState();
-    const url = `${SERVER_API_BASE}surveys/questiontype/`;
+    const { state_code } = state.profile;
+    const url = `${SERVER_API_BASE}surveys/questiontype/?state=${state_code}`;
     if (isEmpty(state.questionTypes.types)) {
       get(url).then((response) => {
         if (response.status === 200) {

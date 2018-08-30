@@ -27,14 +27,14 @@ export const fetchingAnswergroups = (value) => {
   };
 };
 
-export const getAnswerGroups = (params, current) => {
+export const getAnswerGroups = (params, current, stateCode) => {
   const { assessmentId, programId, boundaryId, boundaryType } = params;
   let url = '';
 
   if (!current) {
-    url = `${SERVER_API_BASE}surveys/${programId}/questiongroup/${assessmentId}/answergroups/?${boundaryType}_id=${boundaryId}`;
+    url = `${SERVER_API_BASE}surveys/${programId}/questiongroup/${assessmentId}/answergroups/?${boundaryType}_id=${boundaryId}&state=${stateCode}`;
   } else {
-    url = `${SERVER_API_BASE}surveys/${programId}/questiongroup/${assessmentId}/answergroups/?${boundaryType}_id=${boundaryId}&per_page=10&page=${current}`;
+    url = `${SERVER_API_BASE}surveys/${programId}/questiongroup/${assessmentId}/answergroups/?${boundaryType}_id=${boundaryId}&per_page=10&page=${current}&state=${stateCode}`;
   }
 
   return get(url).then(({ data }) => {
@@ -49,6 +49,7 @@ export const fetchAnswerGroups = (assessmentId, boundaryType, boundaryId) => {
     const { current } = state.answerPagination;
     const { selectedProgram, programs } = state.programs;
     const program = getObject(programs, selectedProgram, {});
+    const { state_code } = state.profile;
 
     if (program.survey_on === 'student') {
       const params = {
@@ -58,7 +59,7 @@ export const fetchAnswerGroups = (assessmentId, boundaryType, boundaryId) => {
       };
       const boundaryIds = typeof boundaryId === 'object' ? boundaryId : [boundaryId];
       const promises = boundaryIds.map((id) => {
-        return getAnswerGroups({ ...params, boundaryId: id }, 0);
+        return getAnswerGroups({ ...params, boundaryId: id }, 0, state_code);
       });
 
       Promise.all(promises).then((value) => {

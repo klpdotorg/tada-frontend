@@ -103,8 +103,11 @@ export const getPrograms = () => {
 };
 
 export const saveNewProgram = (options) => {
-  return (dispatch) => {
-    const createProgramURL = `${serverApiBase}surveys/`;
+  return (dispatch, getState) => {
+    const state = getState();
+    const { state_code } = state.profile;
+
+    const createProgramURL = `${serverApiBase}surveys/?state=${state_code}`;
 
     post(createProgramURL, options).then((response) => {
       if (response.status === 201) {
@@ -130,10 +133,12 @@ export const saveNewProgram = (options) => {
 
 export const saveProgram = (options) => {
   return (dispatch, getState) => {
+    const state = getState();
     dispatch(showProgramLoading());
 
-    const { selectedProgram } = getState().programs;
-    const editProgramURL = `${serverApiBase}surveys/${selectedProgram}/`;
+    const { selectedProgram } = state.programs;
+    const { state_code } = state.profile;
+    const editProgramURL = `${serverApiBase}surveys/${selectedProgram}/?state=${state_code}`;
 
     patch(editProgramURL, options).then((response) => {
       if (response.status === 200) {
@@ -159,13 +164,14 @@ export const deactivateProgram = (Id) => {
     dispatch(closeConfirmModal());
 
     const state = getState();
+    const { state_code } = state.profile;
     const program = state.programs.programs[Id];
     const newProgram = {
       name: program.name,
       status: 'IA',
     };
 
-    const programURL = `${serverApiBase}surveys/${Id}/`;
+    const programURL = `${serverApiBase}surveys/${Id}/?state=${state_code}`;
     patch(programURL, newProgram)
       .then(() => {
         dispatch(getPrograms());
@@ -182,7 +188,8 @@ export const deleteProgram = (Id) => {
     dispatch(closeConfirmModal());
 
     const state = getState();
-    const url = `${serverApiBase}surveys/${Id}/`;
+    const { state_code } = state.profile;
+    const url = `${serverApiBase}surveys/${Id}/?state=${state_code}`;
 
     deleteRequest(url).then(() => {
       dispatch({
